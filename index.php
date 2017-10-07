@@ -35,8 +35,6 @@
 	Debugger::$onFatalError[] = function ($e) {
 		Debugger::log($e);
 	};
-	file_put_contents(__DIR__ . '/.storage/kfgjkf', 'dfdf');
-	file_put_contents(__DIR__ . '/.assets/dkfjdkj', 'dfdf');
 
 	/**
 	 * Container factory is the simplest way how to create dependency container; in this particular case container is also
