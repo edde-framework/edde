@@ -1,0 +1,10 @@
+languages:
+    PHP: true
+
+ratings:
+    paths:
+        - './src/**'
+
+exclude_paths:
+    - '*'
+    - '!./src/**'

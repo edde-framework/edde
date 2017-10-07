@@ -1,0 +1,70 @@
+version: '2'
+services:
+  # a client is the routing service for the server (nginx routing everything non-existent to the php-fpm)
+  # this service is also used for testing http based subsystems
+  client:
+    build:
+      context: ./client
+      dockerfile: ./.docker/Dockerfile
+    ports:
+      - "32768:80"
+    volumes:
+      - ./client:/client
+      - ./client/.docker/nginx.default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - server-network
+
+  server:
+    build:
+      context: ./server
+      dockerfile: ./.docker/Dockerfile
+    environment:
+      - "HOST_IP=${HOST_IP}"
+    volumes:
+      - ./server:/server
+      - ./server/.docker/xdebug.ini:/etc/php/7.1/fpm/conf.d/21-xdebug-custom.ini
+      - ./server/.docker/php-fpm.conf:/usr/local/etc/php-fpm.d/zz-php-fpm.conf
+      - ./server/.docker/mod-disable.ini:/etc/php/7.1/fpm/conf.d/10-opcache.ini
+      - ./server/.docker/mod-disable.ini:/etc/php/7.1/fpm/conf.d/20-apcu.ini
+      - ./server/.docker/mod-disable.ini:/etc/php/7.1/fpm/conf.d/20-apcu_bc.ini
+      - ./server/.docker/mod-disable.ini:/etc/php/7.1/fpm/conf.d/20-ftp.ini
+      - ./server/.docker/mod-disable.ini:/etc/php/7.1/fpm/conf.d/20-gettext.ini
+      - ./server/.docker/mod-disable.ini:/etc/php/7.1/fpm/conf.d/20-sysvmsg.ini
+      - ./server/.docker/mod-disable.ini:/etc/php/7.1/fpm/conf.d/20-sysvsem.ini
+      - ./server/.docker/mod-disable.ini:/etc/php/7.1/fpm/conf.d/20-sysvshm.ini
+      - ./server/.docker/mod-disable.ini:/etc/php/7.1/fpm/conf.d/20-wddx.ini
+      - ./server/.docker/mod-disable.ini:/etc/php/7.1/fpm/conf.d/20-xmlreader.ini
+      - ./server/.docker/mod-disable.ini:/etc/php/7.1/fpm/conf.d/20-xmlwriter.ini
+      - ./server/.docker/mod-disable.ini:/etc/php/7.1/fpm/conf.d/20-readline.ini
+    networks:
+      - server-network
+#      - redis-network
+#      - neo4j-network
+#
+#  redis:
+#    build:
+#      context: ./redis
+#      dockerfile: ./.docker/Dockerfile
+#    networks:
+#      - redis-network
+#
+#  neo4j:
+#    image: neo4j:3.2
+#    volumes:
+#      - ./.storage/neo4j:/data
+#    environment:
+#      - NEO4J_AUTH=none
+#    ports:
+#      - "17474:7474"
+#      - "17473:7473"
+#      - "17687:7687"
+#    networks:
+#      - neo4j-network
+#
+networks:
+  server-network:
+    driver: bridge
+#  redis-network:
+#    driver: bridge
+#  neo4j-network:
+#    driver: bridge
