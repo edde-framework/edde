@@ -1,4 +1,5 @@
 /.idea/workspace.xml
+/logs
 *.log
 /lib
 /.assets

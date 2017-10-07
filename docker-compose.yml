@@ -38,6 +38,7 @@ services:
       - .:/server
       - assets:/server/.assets
       - storage:/server/.storage
+      - ./logs:/server/logs
       - ./.docker/server/xdebug.ini:/etc/php/7.1/fpm/conf.d/21-xdebug-custom.ini
       - ./.docker/server/mod-disable.ini:/etc/php/7.1/fpm/conf.d/10-opcache.ini
       - ./.docker/server/mod-disable.ini:/etc/php/7.1/fpm/conf.d/20-apcu.ini
