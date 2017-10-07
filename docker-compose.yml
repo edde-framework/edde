@@ -13,18 +13,18 @@ services:
       - ./.storage/assets:/client/.assets
       - ./client/.docker/nginx.default.conf:/etc/nginx/conf.d/default.conf
     networks:
-      - server-client-network
+      - client-server-network
 
-  server-client:
+  client-server:
     build:
-      context: ./server-client
+      context: ./client-server
       dockerfile: ./.docker/Dockerfile
     ports:
       - "32768:80"
     volumes:
-      - ./server-client/.docker/nginx.default.conf:/etc/nginx/conf.d/default.conf
+      - ./client-server/.docker/nginx.default.conf:/etc/nginx/conf.d/default.conf
     networks:
-      - server-client-network
+      - client-server-network
       - server-network
 
   server:
@@ -78,7 +78,7 @@ services:
 networks:
   server-network:
     driver: bridge
-  server-client-network:
+  client-server-network:
     driver: bridge
   redis-network:
     driver: bridge
