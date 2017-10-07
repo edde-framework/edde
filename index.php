@@ -8,9 +8,7 @@
 	 */
 	declare(strict_types=1);
 	use App\Common\Application\Context;
-	use App\Common\Router\RouterServiceConfigurator;
 	use Edde\Api\Application\IContext;
-	use Edde\Api\Router\IRouterService;
 	use Edde\Common\Container\Factory\CascadeFactory;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
@@ -37,6 +35,9 @@
 	Debugger::$onFatalError[] = function ($e) {
 		Debugger::log($e);
 	};
+	file_put_contents(__DIR__ . '/.storage/kfgjkf', 'dfdf');
+	file_put_contents(__DIR__ . '/.assets/dkfjdkj', 'dfdf');
+
 	/**
 	 * Container factory is the simplest way how to create dependency container; in this particular case container is also
 	 * configured to get "default" set of services defined in Edde.
@@ -57,7 +58,7 @@
 			 */
 			new ClassFactory(),
 		]), [
-			IRouterService::class => RouterServiceConfigurator::class,
+//			IRouterService::class => RouterServiceConfigurator::class,
 		]);
 		/**
 		 * This one is one of the most magical: this factory uses IContext::cascade() to search for class; this is quite
