@@ -8,6 +8,7 @@ services:
       dockerfile: ./.docker/Dockerfile
     ports:
       - "80:80"
+    working_dir: /client
     volumes:
       - ./client:/client
       - ./.storage/assets:/client/.assets
@@ -15,6 +16,8 @@ services:
     networks:
       - client-server-network
 
+  # the client server mapping provides direct access to php engine, there are no static files, so everything is routed
+  # directly into php; this service should not be called directly; only by a client
   client-server:
     build:
       context: ./client-server
@@ -27,14 +30,16 @@ services:
       - client-server-network
       - server-network
 
+  # just fast-cgi php engine; server side implementation
   server:
     build:
-      context: ./server
-      dockerfile: ./.docker/Dockerfile
+      context: ./
+      dockerfile: ./server/.docker/Dockerfile
+    working_dir: /server
     environment:
       - "HOST_IP=${HOST_IP}"
     volumes:
-      - ./server:/server
+      - .:/server
       - ./.storage/assets:/server/.assets
       - ./server/.docker/xdebug.ini:/etc/php/7.1/fpm/conf.d/21-xdebug-custom.ini
       - ./server/.docker/php-fpm.conf:/usr/local/etc/php-fpm.d/zz-php-fpm.conf
@@ -80,7 +85,7 @@ networks:
     driver: bridge
   client-server-network:
     driver: bridge
-  redis-network:
-    driver: bridge
-  neo4j-network:
-    driver: bridge
+#  redis-network:
+#    driver: bridge
+#  neo4j-network:
+#    driver: bridge
