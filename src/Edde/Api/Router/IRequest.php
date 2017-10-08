@@ -12,6 +12,11 @@
 	 */
 	interface IRequest {
 		/**
+		 * @return IResponse
+		 */
+		public function getResponse(): IResponse;
+
+		/**
 		 * return current element being executed
 		 *
 		 * @return IElement

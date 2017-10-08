@@ -10,6 +10,7 @@
 	use Edde\Api\Http\IHostUrl;
 	use Edde\Api\Http\IHttpService;
 	use Edde\Api\Log\ILogService;
+	use Edde\Api\Protocol\IProtocolService;
 	use Edde\Api\Router\IRequestService;
 	use Edde\Api\Router\IResponseService;
 	use Edde\Api\Router\IRouterService;
@@ -29,6 +30,7 @@
 	use Edde\Common\Http\HttpService;
 	use Edde\Common\Log\LogService;
 	use Edde\Common\Object\Object;
+	use Edde\Common\Protocol\ProtocolService;
 	use Edde\Common\Router\RequestService;
 	use Edde\Common\Router\ResponseService;
 	use Edde\Common\Router\RouterService;
@@ -180,6 +182,10 @@
 				IRouterService::class   => RouterService::class,
 				IRequestService::class  => RequestService::class,
 				IResponseService::class => ResponseService::class,
+				/**
+				 * The Protocol specification related stuff
+				 */
+				IProtocolService::class => ProtocolService::class,
 				/**
 				 * general service for http request/response
 				 */
