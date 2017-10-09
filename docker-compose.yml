@@ -5,7 +5,7 @@ services:
   client:
     image: nginx:latest
     ports:
-      - 80:80
+      - 8088:80
     working_dir: /client
     volumes:
       - ./client:/client
@@ -84,9 +84,9 @@ services:
     environment:
       - NEO4J_AUTH=none
     ports:
-      - 17474:7474
-      - 17473:7473
-      - 17687:7687
+      - 7474:7474
+      - 7473:7473
+      - 7687:7687
     networks:
       - neo4j-network
 
@@ -105,8 +105,8 @@ services:
   postgres:
     image: postgres:latest
     environment:
-            POSTGRES_USER: edde
-            POSTGRES_PASSWORD: edde
+      POSTGRES_USER: edde
+      POSTGRES_PASSWORD: edde
     volumes:
       - postgres:/var/lib/postgresql/data
     networks:
