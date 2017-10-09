@@ -14,7 +14,7 @@
 			/**
 			 * @var int
 			 */
-			protected $code = 0;
+			protected $exitCode = 0;
 
 			public function __construct(IElement $element = null) {
 				$this->element = $element;
@@ -23,7 +23,15 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getCode(): int {
-				return $this->code;
+			public function setExitCode(int $exitCode): IResponse {
+				$this->exitCode = $exitCode;
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getExitCode(): int {
+				return $this->exitCode;
 			}
 		}
