@@ -2,6 +2,6 @@
 	declare(strict_types=1);
 	namespace App;
 
-	use Edde\Common\Autoloader;
+		use Edde\Common\Autoloader;
 
-	Autoloader::register(__NAMESPACE__, __DIR__);
+		Autoloader::register(__NAMESPACE__, __DIR__);

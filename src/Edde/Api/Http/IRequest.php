@@ -2,55 +2,55 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Http;
 
-	use Edde\Api\Url\IUrl;
-
-	/**
-	 * Low level implementation of HTTP request.
-	 */
-	interface IRequest extends IHttp {
-		/**
-		 * set the request method
-		 *
-		 * @param string $method
-		 *
-		 * @return IRequest
-		 */
-		public function setMethod(string $method): IRequest;
+		use Edde\Api\Url\IUrl;
 
 		/**
-		 * @return string
+		 * Low level implementation of HTTP request.
 		 */
-		public function getMethod(): string;
+		interface IRequest extends IHttp {
+			/**
+			 * set the request method
+			 *
+			 * @param string $method
+			 *
+			 * @return IRequest
+			 */
+			public function setMethod(string $method): IRequest;
 
-		/**
-		 * @param string $method
-		 *
-		 * @return bool
-		 */
-		public function isMethod(string $method): bool;
+			/**
+			 * @return string
+			 */
+			public function getMethod(): string;
 
-		/**
-		 * @return null|string
-		 */
-		public function getRemoteAddress();
+			/**
+			 * @param string $method
+			 *
+			 * @return bool
+			 */
+			public function isMethod(string $method): bool;
 
-		/**
-		 * @return null|string
-		 */
-		public function getRemoteHost();
+			/**
+			 * @return null|string
+			 */
+			public function getRemoteAddress();
 
-		/**
-		 * @return IUrl
-		 */
-		public function getRequestUrl(): IUrl;
+			/**
+			 * @return null|string
+			 */
+			public function getRemoteHost();
 
-		/**
-		 * @return IUrl|null
-		 */
-		public function getReferer();
+			/**
+			 * @return IUrl
+			 */
+			public function getRequestUrl(): IUrl;
 
-		/**
-		 * @return bool
-		 */
-		public function isSecured(): bool;
-	}
+			/**
+			 * @return IUrl|null
+			 */
+			public function getReferer();
+
+			/**
+			 * @return bool
+			 */
+			public function isSecured(): bool;
+		}

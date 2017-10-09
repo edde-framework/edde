@@ -17,56 +17,56 @@
 	 * The next day, Little Johnny was eating cookies. His grandpa asked, "Can I have some of your cookies?" Little Johnny replied, "Can your penis reach your asshole?"
 	 * His grandpa replied, "It most certainly can!" Little Johnny replied, "Then go fuck yourself."
 	 */
-	interface ITreeTraversal {
-		/**
-		 * ability to change tree traversal based on the node; by default the current instance
-		 *
-		 * @param INode $node
-		 * @param array $parameters parameters passed to open/content/close
-		 *
-		 * @return ITreeTraversal
-		 */
-		public function select(INode $node, ...$parameters): ITreeTraversal;
+		interface ITreeTraversal {
+			/**
+			 * ability to change tree traversal based on the node; by default the current instance
+			 *
+			 * @param INode $node
+			 * @param array $parameters parameters passed to open/content/close
+			 *
+			 * @return ITreeTraversal
+			 */
+			public function select(INode $node, ...$parameters): ITreeTraversal;
 
-		/**
-		 * execute common workflow of traversal (enter/node/leave) with traverse selection
-		 *
-		 * @param INode     $node
-		 * @param \Iterator $iterator
-		 * @param array     ...$parameters
-		 */
-		public function traverse(INode $node, \Iterator $iterator, ...$parameters);
+			/**
+			 * execute common workflow of traversal (enter/node/leave) with traverse selection
+			 *
+			 * @param INode     $node
+			 * @param \Iterator $iterator
+			 * @param array     ...$parameters
+			 */
+			public function traverse(INode $node, \Iterator $iterator, ...$parameters);
 
-		/**
-		 * open node event (when traversal enters the node)
-		 *
-		 * @param INode     $node
-		 * @param \Iterator $iterator
-		 * @param array     ...$parameters
-		 *
-		 * @return mixed
-		 */
-		public function enter(INode $node, \Iterator $iterator, ...$parameters);
+			/**
+			 * open node event (when traversal enters the node)
+			 *
+			 * @param INode     $node
+			 * @param \Iterator $iterator
+			 * @param array     ...$parameters
+			 *
+			 * @return mixed
+			 */
+			public function enter(INode $node, \Iterator $iterator, ...$parameters);
 
-		/**
-		 * content of node (usually main logic, another tree traversals, ...)
-		 *
-		 * @param INode     $node
-		 * @param \Iterator $iterator
-		 * @param array     ...$parameters
-		 *
-		 * @return mixed
-		 */
-		public function node(INode $node, \Iterator $iterator, ...$parameters);
+			/**
+			 * content of node (usually main logic, another tree traversals, ...)
+			 *
+			 * @param INode     $node
+			 * @param \Iterator $iterator
+			 * @param array     ...$parameters
+			 *
+			 * @return mixed
+			 */
+			public function node(INode $node, \Iterator $iterator, ...$parameters);
 
-		/**
-		 * close the node (executed when leaving; for example draw closing tag ;))
-		 *
-		 * @param INode     $node
-		 * @param \Iterator $iterator
-		 * @param array     ...$parameters
-		 *
-		 * @return mixed
-		 */
-		public function leave(INode $node, \Iterator $iterator, ...$parameters);
-	}
+			/**
+			 * close the node (executed when leaving; for example draw closing tag ;))
+			 *
+			 * @param INode     $node
+			 * @param \Iterator $iterator
+			 * @param array     ...$parameters
+			 *
+			 * @return mixed
+			 */
+			public function leave(INode $node, \Iterator $iterator, ...$parameters);
+		}

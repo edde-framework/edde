@@ -2,42 +2,42 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Http;
 
-	use Edde\Api\Config\IConfigurable;
-
-	/**
-	 * Service providing access to request and response in http context. If used
-	 * in cli mode, it should throw an exception.
-	 *
-	 * This class should maintain current http state.
-	 */
-	interface IHttpService extends IConfigurable {
-		/**
-		 * create http request; should be singleton
-		 *
-		 * @return IRequest
-		 */
-		public function createRequest(): IRequest;
+		use Edde\Api\Config\IConfigurable;
 
 		/**
-		 * create http response; should be singleton
+		 * Service providing access to request and response in http context. If used
+		 * in cli mode, it should throw an exception.
 		 *
-		 * @return IResponse
+		 * This class should maintain current http state.
 		 */
-		public function createResponse(): IResponse;
+		interface IHttpService extends IConfigurable {
+			/**
+			 * create http request; should be singleton
+			 *
+			 * @return IRequest
+			 */
+			public function createRequest(): IRequest;
 
-		/**
-		 * override current http response
-		 *
-		 * @param IResponse $response
-		 *
-		 * @return IHttpService
-		 */
-		public function setResponse(IResponse $response): IHttpService;
+			/**
+			 * create http response; should be singleton
+			 *
+			 * @return IResponse
+			 */
+			public function createResponse(): IResponse;
 
-		/**
-		 * send current http response
-		 *
-		 * @return IHttpService
-		 */
-		public function send(): IHttpService;
-	}
+			/**
+			 * override current http response
+			 *
+			 * @param IResponse $response
+			 *
+			 * @return IHttpService
+			 */
+			public function setResponse(IResponse $response): IHttpService;
+
+			/**
+			 * send current http response
+			 *
+			 * @return IHttpService
+			 */
+			public function send(): IHttpService;
+		}

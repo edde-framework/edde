@@ -2,16 +2,22 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Protocol;
 
-	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Element\IElement;
+		interface IProtocolService extends IProtocolHandler {
+			/**
+			 * register the given protocol handler
+			 *
+			 * @param IProtocolHandler $protocolHandler
+			 *
+			 * @return IProtocolService
+			 */
+			public function registerProtocolHandler(IProtocolHandler $protocolHandler): IProtocolService;
 
-	interface IProtocolService extends IConfigurable {
-		/**
-		 * execute the given element and return eventual result
-		 *
-		 * @param IElement $element
-		 *
-		 * @return IElement|null
-		 */
-		public function execute(IElement $element): ?IElement;
-	}
+			/**
+			 * register set of protocol handlers
+			 *
+			 * @param IProtocolHandler[] $protocolHandlerList
+			 *
+			 * @return IProtocolService
+			 */
+			public function registerProtocolHandlerList(array $protocolHandlerList): IProtocolService;
+		}

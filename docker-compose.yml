@@ -5,7 +5,7 @@ services:
   client:
     image: nginx:latest
     ports:
-      - 8088:80
+      - 8080:80
     working_dir: /client
     volumes:
       - ./client:/client
@@ -115,7 +115,7 @@ services:
   adminer:
     image: adminer
     ports:
-      - 8080:8080
+      - 8088:8080
     networks:
       - mysql-network
       - postgres-network

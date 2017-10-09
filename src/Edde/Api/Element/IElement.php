@@ -2,5 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Element;
 
-	interface IElement {
-	}
+		interface IElement {
+			/**
+			 * get the element type according to the protocol specification
+			 *
+			 * @return string
+			 */
+			public function getType(): string;
+		}
