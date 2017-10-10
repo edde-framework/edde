@@ -4,7 +4,6 @@
 
 		use Edde\Api\Element\IElement;
 		use Edde\Api\Router\IRequest;
-		use Edde\Api\Router\IResponse;
 		use Edde\Common\Object\Object;
 
 		class Request extends Object implements IRequest {
@@ -12,14 +11,9 @@
 			 * @var IElement
 			 */
 			protected $element;
-			/**
-			 * @var IResponse
-			 */
-			protected $response;
 
-			public function __construct(IElement $element, IResponse $response) {
+			public function __construct(IElement $element) {
 				$this->element = $element;
-				$this->response = $response;
 			}
 
 			/**
@@ -27,12 +21,5 @@
 			 */
 			public function getElement(): IElement {
 				return $this->element;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getResponse(): IResponse {
-				return $this->response;
 			}
 		}

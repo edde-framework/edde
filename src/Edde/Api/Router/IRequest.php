@@ -17,9 +17,4 @@
 			 * @return IElement
 			 */
 			public function getElement(): IElement;
-
-			/**
-			 * @return IResponse
-			 */
-			public function getResponse(): IResponse;
 		}
