@@ -4,26 +4,35 @@
 
 		use Edde\Api\Http\IContentType;
 		use Edde\Api\Http\IHeaderList;
+		use Edde\Api\Utils\Inject\HttpUtils;
 		use Edde\Common\Collection\AbstractList;
-		use Edde\Common\Utils\HttpUtils;
 
 		/**
 		 * Simple header list implementation over an array.
 		 */
 		class HeaderList extends AbstractList implements IHeaderList {
+			use HttpUtils;
 			/**
-			 * @var IContentType
+			 * @var IContentType|null
 			 */
 			protected $contentType;
 			/**
-			 * @var array
+			 * @var string[]
 			 */
 			protected $acceptList;
+			/**
+			 * @var string[]
+			 */
+			protected $languageList;
+			/**
+			 * @var string[]
+			 */
+			protected $charsetList;
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getContentType() {
+			public function getContentType():?IContentType {
 				if ($this->contentType === null && ($contentType = $this->get('Content-Type'))) {
 					$this->contentType = new ContentType((string)$contentType);
 				}
@@ -41,7 +50,7 @@
 			 * @inheritdoc
 			 */
 			public function getAcceptList(): array {
-				return $this->acceptList ?: $this->acceptList = HttpUtils::accept($this->get('Accept'));
+				return $this->acceptList ?: $this->acceptList = $this->httpUtils->accept($this->get('Accept'));
 			}
 
 			/**
@@ -55,7 +64,7 @@
 			 * @inheritdoc
 			 */
 			public function getAcceptLanguageList(string $default): array {
-				return HttpUtils::language($this->get('Accept-Language'), $default);
+				return $this->languageList ?: $this->languageList = $this->httpUtils->language($this->get('Accept-Language'), $default);
 			}
 
 			/**
@@ -69,7 +78,7 @@
 			 * @inheritdoc
 			 */
 			public function getAcceptCharsetList(string $default): array {
-				return HttpUtils::charset($this->get('Accept-Charset'), $default);
+				return $this->charsetList ?: $this->charsetList = $this->httpUtils->charset($this->get('Accept-Charset'), $default);
 			}
 
 			/**

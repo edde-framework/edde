@@ -16,14 +16,14 @@
 			 *
 			 * @return IRequest
 			 */
-			public function createRequest(): IRequest;
+			public function getRequest(): IRequest;
 
 			/**
 			 * create http response; should be singleton
 			 *
 			 * @return IResponse
 			 */
-			public function createResponse(): IResponse;
+			public function getResponse(): IResponse;
 
 			/**
 			 * override current http response

@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Http;
 
-		use Edde\Api\Converter\IContent;
+		use Edde\Api\Content\IContent;
 		use Edde\Api\Http\ICookieList;
 		use Edde\Api\Http\IHeaderList;
 		use Edde\Api\Http\IHttp;
@@ -18,7 +18,7 @@
 			 */
 			protected $cookieList;
 			/**
-			 * @var IContent
+			 * @var IContent|null
 			 */
 			protected $content;
 
@@ -64,7 +64,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getContent() {
+			public function getContent():?IContent {
 				return $this->content;
 			}
 		}

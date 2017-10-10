@@ -13,7 +13,7 @@
 			 *
 			 * @return IContentType|null
 			 */
-			public function getContentType();
+			public function getContentType():?IContentType;
 
 			/**
 			 * return user agent

@@ -7,7 +7,6 @@
 		use Edde\Api\Http\IHttpService;
 		use Edde\Api\Http\IRequest;
 		use Edde\Api\Http\IResponse;
-		use Edde\Common\Converter\Content;
 		use Edde\Common\Object\Object;
 		use Edde\Common\Url\Url;
 
@@ -24,12 +23,12 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function createRequest(): IRequest {
+			public function getRequest(): IRequest {
 				if ($this->request) {
 					return $this->request;
 				}
 				$this->request = new Request(Url::create((isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']), $this->createHeaderList(), $this->createCookieList());
-				$input = fopen('php://input', 'r');
+				$input = fopen('php://input', 'rb');
 				$content = null;
 				if (empty($_POST) === false) {
 					$content = new Content($_POST, 'post');
@@ -92,7 +91,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function createResponse(): IResponse {
+			public function getResponse(): IResponse {
 				if ($this->response) {
 					return $this->response;
 				}
@@ -110,7 +109,7 @@
 			 * @inheritdoc
 			 */
 			public function send(): IHttpService {
-				$response = $this->createResponse();
+				$response = $this->getResponse();
 				$response->send();
 				return $this;
 			}

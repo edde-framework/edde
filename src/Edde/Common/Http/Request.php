@@ -80,15 +80,15 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getRemoteAddress() {
+			public function getRemoteAddress():?string {
 				return $this->remoteAddress ?: $this->remoteAddress = $_SERVER['REMOTE_ADDR'];
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getRemoteHost() {
-				$this->remoteHost === null && $this->remoteAddress !== null ? $this->remoteHost = gethostbyaddr($this->remoteAddress) : null;
+			public function getRemoteHost():?string {
+				return $this->remoteHost === null && $this->remoteAddress !== null ? $this->remoteHost = gethostbyaddr($this->remoteAddress) : null;
 			}
 
 			/**

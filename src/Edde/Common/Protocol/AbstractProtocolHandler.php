@@ -4,5 +4,5 @@
 		use Edde\Api\Protocol\IProtocolHandler;
 		use Edde\Common\Object\Object;
 
-		class AbstractProtocolHandler extends Object implements IProtocolHandler {
+		abstract class AbstractProtocolHandler extends Object implements IProtocolHandler {
 		}

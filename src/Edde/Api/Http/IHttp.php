@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Http;
 
-		use Edde\Api\Converter\IContent;
+		use Edde\Api\Content\IContent;
 
 		/**
 		 * "Abstract" interface holding common stuff between request and response.
@@ -42,5 +42,5 @@
 			 *
 			 * @return IContent|null
 			 */
-			public function getContent();
+			public function getContent():?IContent;
 		}

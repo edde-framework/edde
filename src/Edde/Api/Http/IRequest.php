@@ -32,12 +32,12 @@
 			/**
 			 * @return null|string
 			 */
-			public function getRemoteAddress();
+			public function getRemoteAddress():?string;
 
 			/**
 			 * @return null|string
 			 */
-			public function getRemoteHost();
+			public function getRemoteHost():?string;
 
 			/**
 			 * @return IUrl
