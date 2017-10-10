@@ -1,10 +1,10 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Router;
+	namespace Edde\Ext\Router;
 
 		use Edde\Api\Container\Inject\Container;
-		use Edde\Api\Router\IRequest;
 		use Edde\Api\Router\IRouter;
+		use Edde\Common\Router\AbstractRouter;
 
 		class ProxyRouter extends AbstractRouter {
 			use Container;
@@ -33,7 +33,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function createRequest(): IRequest {
+			public function createRequest(): \Edde\Api\Request\IRequest {
 				return $this->router->createRequest();
 			}
 

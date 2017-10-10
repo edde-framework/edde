@@ -1,9 +1,11 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Router;
+	namespace Edde\Ext\Router;
 
 		use Edde\Api\Element\IElement;
-		use Edde\Api\Router\IRequest;
+		use Edde\Api\Request\IRequest;
+		use Edde\Common\Request\Request;
+		use Edde\Common\Router\AbstractRouter;
 
 		/**
 		 * Static router all the times returns same request.

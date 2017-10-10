@@ -3,8 +3,8 @@
 	namespace Edde\Common\Router;
 
 		use Edde\Api\Log\Inject\LogService;
+		use Edde\Api\Request\IRequest;
 		use Edde\Api\Router\Exception\BadRequestException;
-		use Edde\Api\Router\IRequest;
 		use Edde\Api\Router\IRouter;
 		use Edde\Api\Router\IRouterService;
 

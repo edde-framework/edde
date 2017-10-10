@@ -2,10 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Router;
 
-		use Edde\Api\Router\IResponse;
 		use Edde\Api\Router\IRouter;
 		use Edde\Api\Runtime\Inject\Runtime;
 		use Edde\Common\Object\Object;
+		use Edde\Common\Response\Response;
 
 		abstract class AbstractRouter extends Object implements IRouter {
 			use Runtime;
@@ -17,9 +17,9 @@
 			/**
 			 * this method should prepare basic response with proper response type
 			 *
-			 * @return IResponse
+			 * @return \Edde\Api\Response\IResponse
 			 */
-			public function createResponse(): IResponse {
+			public function createResponse(): \Edde\Api\Response\IResponse {
 				return new Response();
 			}
 		}

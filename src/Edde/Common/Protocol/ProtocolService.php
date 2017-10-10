@@ -38,18 +38,6 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function accept(IElement $element): bool {
-				foreach ($this->protocolHandlerList as $protocolHandler) {
-					if ($protocolHandler->setup() && $protocolHandler->accept($element)) {
-						return true;
-					}
-				}
-				return false;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
 			public function canHandle(IElement $element): bool {
 				foreach ($this->protocolHandlerList as $protocolHandler) {
 					if ($protocolHandler->setup() && $protocolHandler->canHandle($element)) {

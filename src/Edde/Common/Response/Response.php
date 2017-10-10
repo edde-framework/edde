@@ -1,9 +1,9 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Router;
+	namespace Edde\Common\Response;
 
 		use Edde\Api\Element\IElement;
-		use Edde\Api\Router\IResponse;
+		use Edde\Api\Response\IResponse;
 		use Edde\Common\Object\Object;
 
 		class Response extends Object implements IResponse {

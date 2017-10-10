@@ -1,12 +1,13 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Router;
+	namespace Edde\Common\Request;
 
 		use Edde\Api\Protocol\Inject\ProtocolService;
-		use Edde\Api\Router\IRequest;
-		use Edde\Api\Router\IRequestService;
-		use Edde\Api\Router\IResponse;
+		use Edde\Api\Request\IRequest;
+		use Edde\Api\Request\IRequestService;
+		use Edde\Api\Response\IResponse;
 		use Edde\Common\Object\Object;
+		use Edde\Common\Response\Response;
 
 		class RequestService extends Object implements IRequestService {
 			use ProtocolService;

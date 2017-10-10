@@ -4,15 +4,13 @@
 
 	use Edde\Api\Application\IApplication;
 		use Edde\Api\Log\Inject\LogService;
-		use Edde\Api\Router\Inject\RequestService;
-		use Edde\Api\Router\Inject\ResponseService;
 		use Edde\Api\Router\Inject\RouterService;
 		use Edde\Common\Object\Object;
 
 		class Application extends Object implements IApplication {
 		use RouterService;
-		use RequestService;
-		use ResponseService;
+			use Edde\Api\Request\Inject\RequestService;
+			use Edde\Api\Request\Inject\ResponseService;
 		use LogService;
 
 		/**

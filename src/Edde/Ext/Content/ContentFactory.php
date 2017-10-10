@@ -3,6 +3,8 @@
 	namespace Edde\Ext\Content;
 
 		use Edde\Api\Content\IContent;
+		use Edde\Api\Element\IElement;
+		use Edde\Common\Content\ElementContent;
 		use Edde\Common\Content\JsonContent;
 		use Edde\Common\Content\TextContent;
 
@@ -36,5 +38,16 @@
 			 */
 			public function text(string $content): IContent {
 				return new TextContent($content);
+			}
+
+			/**
+			 * create an element content, usually related to the protocol stuff
+			 *
+			 * @param IElement $element
+			 *
+			 * @return IContent
+			 */
+			public function element(IElement $element): IContent {
+				return new ElementContent($element);
 			}
 		}

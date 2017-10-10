@@ -3,6 +3,7 @@
 	namespace Edde\Api\Router;
 
 		use Edde\Api\Config\IConfigurable;
+		use Edde\Api\Request\IRequest;
 		use Edde\Api\Router\Exception\BadRequestException;
 
 		/**

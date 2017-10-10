@@ -8,7 +8,7 @@
 		use Edde\Api\Router\IRouterService;
 		use Edde\Common\Config\AbstractConfigurator;
 		use Edde\Common\Element\Message;
-		use Edde\Common\Router\StaticRouter;
+		use Edde\Ext\Router\StaticRouter;
 
 		class RouterServiceConfigurator extends AbstractConfigurator {
 			use Container;

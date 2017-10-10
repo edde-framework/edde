@@ -7,16 +7,6 @@
 
 		interface IProtocolHandler extends IConfigurable {
 			/**
-			 * check if this protocol handler accepts the given element (just formal check; more deep
-			 * check should be done in canHandle()); this should check only element type
-			 *
-			 * @param IElement $element
-			 *
-			 * @return bool
-			 */
-			public function accept(IElement $element): bool;
-
-			/**
 			 * check if the given element is possible to execute by this protocol handler
 			 *
 			 * @param IElement $element

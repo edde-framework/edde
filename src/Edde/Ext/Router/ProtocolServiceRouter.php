@@ -1,9 +1,10 @@
 <?php
-	namespace Edde\Common\Router;
+	namespace Edde\Ext\Router;
 
 		use Edde\Api\Element\IElement;
 		use Edde\Api\Protocol\Inject\ProtocolService;
-		use Edde\Api\Router\IRequest;
+		use Edde\Api\Request\IRequest;
+		use Edde\Common\Router\AbstractRouter;
 
 		class ProtocolServiceRouter extends AbstractRouter {
 			use ProtocolService;
