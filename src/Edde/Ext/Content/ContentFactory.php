@@ -22,7 +22,7 @@
 			 *
 			 * @return IContent
 			 */
-			public function json($content): IContent {
+			public function contentJson($content) : IContent {
 				return new JsonContent($content);
 			}
 
@@ -36,7 +36,7 @@
 			 *
 			 * @return IContent
 			 */
-			public function text(string $content): IContent {
+			public function contentText(string $content) : IContent {
 				return new TextContent($content);
 			}
 
@@ -47,7 +47,7 @@
 			 *
 			 * @return IContent
 			 */
-			public function element(IElement $element): IContent {
+			public function contentElement(IElement $element) : IContent {
 				return new ElementContent($element);
 			}
 		}

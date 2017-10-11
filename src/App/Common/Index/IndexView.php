@@ -9,7 +9,7 @@
 			use ResponseFactory;
 
 			public function actionIndex() {
-				$this->json([
+				$this->sendJson([
 					'foo',
 					'bar',
 				]);

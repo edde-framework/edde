@@ -6,6 +6,7 @@
 		use Edde\Api\Converter\Inject\ConverterManager;
 		use Edde\Api\Element\IElement;
 		use Edde\Api\Request\Inject\RequestService;
+		use Edde\Ext\Content\ContentFactory;
 
 		/**
 		 * Response factory is helper trait to send the response; whole workflow is now
@@ -13,16 +14,20 @@
 		 * in an application.
 		 */
 		trait ResponseFactory {
+			use ContentFactory;
 			use RequestService;
 			use ConverterManager;
 
-			public function json($content) {
+			public function sendJson($content) {
+				$this->send($this->contentJson($content));
 			}
 
-			public function text(string $content) {
+			public function sendText(string $content) {
+				$this->send($this->contentText($content));
 			}
 
-			public function element(IElement $element) {
+			public function sendElement(IElement $element) {
+				$this->send($this->contentElement($element));
 			}
 
 			public function send(IContent $content) {
