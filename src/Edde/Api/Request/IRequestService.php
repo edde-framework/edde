@@ -11,9 +11,23 @@
 		 */
 		interface IRequestService extends IConfigurable {
 			/**
+			 * shortened method to execute current request (basically run(getRequest()))
+			 *
+			 * @return IResponse
+			 */
+			public function execute(): IResponse;
+
+			/**
 			 * @param IRequest $request
 			 *
-			 * @return \Edde\Api\Response\IResponse
+			 * @return IResponse
 			 */
-			public function execute(IRequest $request): IResponse;
+			public function run(IRequest $request): IResponse;
+
+			/**
+			 * get current request (current is during and after execute)
+			 *
+			 * @return IRequest
+			 */
+			public function getRequest(): IRequest;
 		}

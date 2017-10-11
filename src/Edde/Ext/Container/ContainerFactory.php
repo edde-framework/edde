@@ -7,6 +7,7 @@
 		use Edde\Api\Container\Exception\FactoryException;
 		use Edde\Api\Container\IContainer;
 		use Edde\Api\Container\IFactory;
+		use Edde\Api\Converter\IConverterManager;
 		use Edde\Api\Http\IHostUrl;
 		use Edde\Api\Http\IHttpService;
 		use Edde\Api\Log\ILogService;
@@ -26,6 +27,7 @@
 		use Edde\Common\Container\Factory\InterfaceFactory;
 		use Edde\Common\Container\Factory\LinkFactory;
 		use Edde\Common\Container\Factory\ProxyFactory;
+		use Edde\Common\Converter\ConverterManager;
 		use Edde\Common\Http\HostUrl;
 		use Edde\Common\Http\HttpService;
 		use Edde\Common\Log\LogService;
@@ -158,46 +160,51 @@
 					/**
 					 * utils
 					 */
-					IHttpUtils::class       => HttpUtils::class,
-					IStringUtils::class     => StringUtils::class,
+					IHttpUtils::class        => HttpUtils::class,
+					IStringUtils::class      => StringUtils::class,
 					/**
 					 * container implementation
 					 */
-					IContainer::class       => Container::class,
+					IContainer::class        => Container::class,
 					/**
 					 * runtime info provider
 					 */
-					IRuntime::class         => Runtime::class,
+					IRuntime::class          => Runtime::class,
 					/**
 					 * if needed, host url provider (host name is used for absolute links)
 					 */
-					IHostUrl::class         => HostUrl::class . '::factory',
+					IHostUrl::class          => HostUrl::class . '::factory',
 					/**
 					 * log support
 					 */
-					ILogService::class      => LogService::class,
+					ILogService::class       => LogService::class,
 					/**
 					 * user request into protocol element translation
 					 */
-					IRouterService::class   => RouterService::class,
-					IRequestService::class  => RequestService::class,
-					IResponseService::class => ResponseService::class,
+					IRouterService::class    => RouterService::class,
+					IRequestService::class   => RequestService::class,
+					IResponseService::class  => ResponseService::class,
+					/**
+					 * content conversion implementation (mainly useful for server content
+					 * negotation)
+					 */
+					IConverterManager::class => ConverterManager::class,
 					/**
 					 * The Protocol specification related stuff
 					 */
-					IProtocolService::class => ProtocolService::class,
+					IProtocolService::class  => ProtocolService::class,
 					/**
 					 * general service for http request/response
 					 */
-					IHttpService::class     => HttpService::class,
+					IHttpService::class      => HttpService::class,
 					/**
 					 * an application handles lifecycle workflow
 					 */
-					IApplication::class     => Application::class,
+					IApplication::class      => Application::class,
 					/**
 					 * magical factory for an application execution
 					 */
-					'run'                   => IApplication::class . '::run',
+					'run'                    => IApplication::class . '::run',
 				];
 			}
 

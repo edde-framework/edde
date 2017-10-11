@@ -6,11 +6,9 @@
 		use Edde\Api\Log\Inject\LogService;
 		use Edde\Api\Request\Inject\RequestService;
 		use Edde\Api\Response\Inject\ResponseService;
-		use Edde\Api\Router\Inject\RouterService;
 		use Edde\Common\Object\Object;
 
 		class Application extends Object implements IApplication {
-			use RouterService;
 			use RequestService;
 			use ResponseService;
 			use LogService;
@@ -26,7 +24,7 @@
 					 * - we have request, so it's time to translate it into response (just data, computation, no output)
 					 * - and at the end we can send http headers, if required, echo the things, do heavy processing, do output, kill devil kitten, whatever, ...
 					 */
-					return $this->responseService->execute($this->requestService->execute($this->routerService->createRequest()))->getExitCode();
+					return $this->responseService->execute($this->requestService->execute())->getExitCode();
 				} catch (\Throwable $exception) {
 					$this->logService->exception($exception, [
 						'edde',
