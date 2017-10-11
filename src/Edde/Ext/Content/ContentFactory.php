@@ -6,6 +6,7 @@
 		use Edde\Api\Element\IElement;
 		use Edde\Common\Content\ElementContent;
 		use Edde\Common\Content\JsonContent;
+		use Edde\Common\Content\ScalarContent;
 		use Edde\Common\Content\TextContent;
 
 		/**
@@ -15,14 +16,25 @@
 		 */
 		trait ContentFactory {
 			/**
-			 * create an application/json content type; that means raw data are on input,
-			 * encoded content should be on output
+			 * send scalar content; useful for conversion to json, serialization or whatever other output
 			 *
 			 * @param mixed $content
 			 *
 			 * @return IContent
 			 */
-			public function contentJson($content) : IContent {
+			public function contentScalar($content) : IContent {
+				return new ScalarContent($content);
+			}
+
+			/**
+			 * create an application/json content type; that means raw data are on input,
+			 * encoded content should be on output
+			 *
+			 * @param string $content
+			 *
+			 * @return IContent
+			 */
+			public function contentJson(string $content) : IContent {
 				return new JsonContent($content);
 			}
 

@@ -18,7 +18,11 @@
 			use RequestService;
 			use ConverterManager;
 
-			public function sendJson($content) {
+			public function sendScalar($content) {
+				$this->send($this->contentScalar($content));
+			}
+
+			public function sendJson(string $content) {
 				$this->send($this->contentJson($content));
 			}
 

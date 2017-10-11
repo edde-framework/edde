@@ -1,15 +1,15 @@
 <?php
 	declare(strict_types=1);
-	namespace App\Common\Index;
+	namespace App\Common\Index\Http;
 
-		use Edde\Common\Object\Object;
+		use App\Common\Index\AbstractIndexView;
 		use Edde\Ext\Response\ResponseFactory;
 
-		class IndexView extends Object {
+		class IndexView extends AbstractIndexView {
 			use ResponseFactory;
 
 			public function actionIndex() {
-				$this->sendJson([
+				$this->sendScalar([
 					'foo',
 					'bar',
 				]);
