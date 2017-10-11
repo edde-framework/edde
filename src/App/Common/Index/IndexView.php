@@ -3,12 +3,15 @@
 	namespace App\Common\Index;
 
 		use Edde\Common\Object\Object;
-		use Edde\Ext\Content\ContentFactory;
+		use Edde\Ext\Response\ResponseFactory;
 
 		class IndexView extends Object {
-			use ContentFactory;
+			use ResponseFactory;
 
 			public function actionIndex() {
-				return $this->json(['abc']);
+				$this->json([
+					'foo',
+					'bar',
+				]);
 			}
 		}
