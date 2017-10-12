@@ -9,7 +9,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function cascade(string $delimiter, string $name = null): array {
+			public function cascade(string $delimiter, string $name = null) : array {
 				return ['App' . $delimiter . 'Common' . ($name ? $delimiter . $name : '')];
 			}
 		}

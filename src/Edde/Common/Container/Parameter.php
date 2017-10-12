@@ -33,21 +33,21 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getName(): string {
+			public function getName() : string {
 				return $this->name;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function isOptional(): bool {
+			public function isOptional() : bool {
 				return $this->optional;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getClass(): string {
+			public function getClass() : string {
 				return $this->class;
 			}
 		}

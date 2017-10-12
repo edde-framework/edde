@@ -16,7 +16,7 @@
 			 *
 			 * @return ILogService
 			 */
-			public function registerContentFilter(array $tagList, IFilter $filter): ILogService;
+			public function registerContentFilter(array $tagList, IFilter $filter) : ILogService;
 
 			/**
 			 * register the given log to the given set of tags
@@ -26,5 +26,5 @@
 			 *
 			 * @return ILogService
 			 */
-			public function registerLog(ILog $log, array $tagList = null): ILogService;
+			public function registerLog(ILog $log, array $tagList = null) : ILogService;
 		}

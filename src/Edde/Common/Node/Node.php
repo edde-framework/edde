@@ -47,14 +47,14 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getAttributeList(): IAttributeList {
+			public function getAttributeList() : IAttributeList {
 				return $this->attributeList;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function hasAttribute(string $name): bool {
+			public function hasAttribute(string $name) : bool {
 				return $this->attributeList->has($name);
 			}
 
@@ -68,7 +68,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function setAttribute(string $name, $value): INode {
+			public function setAttribute(string $name, $value) : INode {
 				$this->attributeList->set($name, $value);
 				return $this;
 			}
@@ -76,7 +76,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function putAttributeList(array $attributeList): INode {
+			public function putAttributeList(array $attributeList) : INode {
 				$this->attributeList->put($attributeList);
 				return $this;
 			}
@@ -92,7 +92,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getMetaList(): IAttributeList {
+			public function getMetaList() : IAttributeList {
 				return $this->metaList;
 			}
 
@@ -106,7 +106,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function setMeta(string $name, $value): INode {
+			public function setMeta(string $name, $value) : INode {
 				$this->metaList->set($name, $value);
 				return $this;
 			}
@@ -114,7 +114,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function putMetaList(array $metaList): INode {
+			public function putMetaList(array $metaList) : INode {
 				$this->metaList->put($metaList);
 				return $this;
 			}

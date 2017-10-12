@@ -35,28 +35,28 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getParameterList(): array {
+			public function getParameterList() : array {
 				return $this->parameterList;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getInjectList(): array {
+			public function getInjectList() : array {
 				return $this->injectList;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getLazyList(): array {
+			public function getLazyList() : array {
 				return $this->lazyInjectList;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getConfiguratorList(): array {
+			public function getConfiguratorList() : array {
 				return $this->configuratorList;
 			}
 		}

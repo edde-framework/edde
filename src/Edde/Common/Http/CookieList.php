@@ -26,7 +26,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function setupCookieList(): ICookieList {
+			public function setupCookieList() : ICookieList {
 				foreach ($this->cookieList as $cookie) {
 					$cookie->setupCookie();
 				}

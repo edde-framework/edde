@@ -44,7 +44,7 @@
 					/** @var $container IContainer */
 					list($container, $dependency, $parameterList) = $this->tLazyList[$name];
 					/** @var $instance IConfigurable */
-					if (($instance = $this->{$name} = $container->create($dependency, $parameterList, static::class)) instanceof IConfigurable) {
+					if (($instance = $this->{$name} = $container->create($dependency, $parameterList, static::class)) instanceof IConfigurable && $instance->isSetup() === false) {
 						$instance->setup();
 					}
 					return $instance;

@@ -10,5 +10,5 @@
 			 *
 			 * @return bool
 			 */
-			public function hasAttributeList(string $name): bool;
+			public function hasAttributeList(string $name) : bool;
 		}

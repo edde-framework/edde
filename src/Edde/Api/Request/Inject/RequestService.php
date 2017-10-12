@@ -13,7 +13,7 @@
 			/**
 			 * @param IRequestService $requestService
 			 */
-			public function lazyRequestService(IRequestService $requestService): void {
+			public function lazyRequestService(IRequestService $requestService) : void {
 				$this->requestService = $requestService;
 			}
 		}

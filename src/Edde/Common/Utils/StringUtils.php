@@ -78,4 +78,45 @@
 				}
 				return $match;
 			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function extract(string $source, string $separator = '\\', int $index = -1) : string {
+				$sourceList = explode($separator, $source);
+				return isset($sourceList[$index = $index < 0 ? count($sourceList) + $index : $index]) ? $sourceList[$index] : '';
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function normalize(string $string) : string {
+				$string = $this->normalizeNewLines($string);
+				$string = preg_replace('~[\x00-\x08\x0B-\x1F\x7F-\x9F]+~u', '', $string);
+				$string = preg_replace('~[\t ]+$~m', '', $string);
+				$string = trim($string, "\n");
+				return $string;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function normalizeNewLines(string $string) : string {
+				return str_replace([
+					"\r\n",
+					"\r",
+				], "\n", $string);
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function createIterator(string $string) : \Generator {
+				$length = mb_strlen($string = $this->normalizeNewLines($string));
+				while ($length) {
+					yield mb_substr($string, 0, 1);
+					$string = mb_substr($string, 1, $length);
+					$length = mb_strlen($string);
+				}
+			}
 		}

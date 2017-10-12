@@ -15,19 +15,19 @@
 			 *
 			 * @return IResponse
 			 */
-			public function execute(): IResponse;
+			public function execute() : IResponse;
 
 			/**
 			 * @param IRequest $request
 			 *
 			 * @return IResponse
 			 */
-			public function run(IRequest $request): IResponse;
+			public function run(IRequest $request) : IResponse;
 
 			/**
 			 * get current request (current is during and after execute)
 			 *
 			 * @return IRequest
 			 */
-			public function getRequest(): IRequest;
+			public function getRequest() : IRequest;
 		}

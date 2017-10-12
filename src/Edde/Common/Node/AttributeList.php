@@ -9,7 +9,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function hasAttributeList(string $name): bool {
+			public function hasAttributeList(string $name) : bool {
 				return isset($this->list[$name]) && $this->list[$name] instanceof IAttributeList;
 			}
 		}

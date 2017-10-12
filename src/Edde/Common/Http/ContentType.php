@@ -36,7 +36,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getCharset(string $default = 'utf-8'): string {
+			public function getCharset(string $default = 'utf-8') : string {
 				return (string)$this->get('charset', $default);
 			}
 
@@ -50,14 +50,14 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getParameterList(): array {
+			public function getParameterList() : array {
 				return $this->array();
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function __toString(): string {
+			public function __toString() : string {
 				return $this->getMime();
 			}
 		}

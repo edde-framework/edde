@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Container\Factory\Exception;
 
-	use Edde\Api\Container\Exception\FactoryException;
+		use Edde\Api\Container\Exception\FactoryException;
 
-	class MissingClassException extends FactoryException {
-	}
+		class MissingClassException extends FactoryException {
+		}

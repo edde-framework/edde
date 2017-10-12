@@ -12,7 +12,7 @@
 			 *
 			 * @return array
 			 */
-			public function accept(string $accept = null): array;
+			public function accept(string $accept = null) : array;
 
 			/**
 			 * parse an input language string (Accept-Language header) and return langauge order
@@ -22,7 +22,7 @@
 			 *
 			 * @return array
 			 */
-			public function language(string $language = null, string $default = 'en'): array;
+			public function language(string $language = null, string $default = 'en') : array;
 
 			/**
 			 * return ordered list of accepted charsets
@@ -32,7 +32,7 @@
 			 *
 			 * @return array
 			 */
-			public function charset(string $charset = null, $default = 'utf-8'): array;
+			public function charset(string $charset = null, $default = 'utf-8') : array;
 
 			/**
 			 * this method does some really dark magic, so if the output is wrong, try to look here and report a bug
@@ -41,7 +41,7 @@
 			 *
 			 * @return \stdClass
 			 */
-			public function contentType(string $contentType): \stdClass;
+			public function contentType(string $contentType) : \stdClass;
 
 			/**
 			 * parse cookie and return simple cookie object
@@ -50,7 +50,7 @@
 			 *
 			 * @return \stdClass
 			 */
-			public function cookie(string $cookie): \stdClass;
+			public function cookie(string $cookie) : \stdClass;
 
 			/**
 			 * return pure array of headers
@@ -60,7 +60,7 @@
 			 *
 			 * @return array
 			 */
-			public function headerList(string $headers, bool $process = true): array;
+			public function headerList(string $headers, bool $process = true) : array;
 
 			/**
 			 * return array of headers with known headers processed to another structures (like parsed Content-Type)
@@ -69,7 +69,7 @@
 			 *
 			 * @return array
 			 */
-			public function headers(array $headerList): array;
+			public function headers(array $headerList) : array;
 
 			/**
 			 * parse http header (http request or http response)
@@ -78,5 +78,5 @@
 			 *
 			 * @return \stdClass
 			 */
-			public function http(string $http): \stdClass;
+			public function http(string $http) : \stdClass;
 		}

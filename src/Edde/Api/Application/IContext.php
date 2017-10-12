@@ -8,14 +8,14 @@
 			 *
 			 * @return string
 			 */
-			public function getId(): string;
+			public function getId() : string;
 
 			/**
 			 * should return "hash" of id (could be arbitrary simple string)
 			 *
 			 * @return string
 			 */
-			public function getGuid(): string;
+			public function getGuid() : string;
 
 			/**
 			 * return set of "base" namespaces where to search for the result
@@ -25,5 +25,5 @@
 			 *
 			 * @return array
 			 */
-			public function cascade(string $delimiter, string $name = null): array;
+			public function cascade(string $delimiter, string $name = null) : array;
 		}

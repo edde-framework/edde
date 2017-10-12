@@ -15,7 +15,7 @@
 			 *
 			 * @return callable
 			 */
-			static public function register($namespace, $path, $root = true): callable {
+			static public function register($namespace, $path, $root = true) : callable {
 				$namespace .= '\\';
 				/** @noinspection CallableParameterUseCaseInTypeContextInspection */
 				$root = $root ? null : $namespace;

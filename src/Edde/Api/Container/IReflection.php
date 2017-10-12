@@ -12,26 +12,26 @@
 			 *
 			 * @return IParameter[]
 			 */
-			public function getParameterList(): array;
+			public function getParameterList() : array;
 
 			/**
 			 * get list of injectable parameters
 			 *
 			 * @return IParameter[]
 			 */
-			public function getInjectList(): array;
+			public function getInjectList() : array;
 
 			/**
 			 * get list of lazy parameters
 			 *
 			 * @return IParameter[]
 			 */
-			public function getLazyList(): array;
+			public function getLazyList() : array;
 
 			/**
 			 * return list of configurator names
 			 *
 			 * @return string[]
 			 */
-			public function getConfiguratorList(): array;
+			public function getConfiguratorList() : array;
 		}

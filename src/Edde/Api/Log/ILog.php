@@ -16,14 +16,14 @@
 			 *
 			 * @return ILog
 			 */
-			public function log($log, array $tagList = null): ILog;
+			public function log($log, array $tagList = null) : ILog;
 
 			/**
 			 * @param ILogRecord $logRecord
 			 *
 			 * @return ILog
 			 */
-			public function record(ILogRecord $logRecord): ILog;
+			public function record(ILogRecord $logRecord) : ILog;
 
 			/**
 			 * adds informative tag
@@ -33,7 +33,7 @@
 			 *
 			 * @return ILog
 			 */
-			public function info(string $log, array $tagList = null): ILog;
+			public function info(string $log, array $tagList = null) : ILog;
 
 			/**
 			 * adds warning tag
@@ -43,7 +43,7 @@
 			 *
 			 * @return ILog
 			 */
-			public function warning(string $log, array $tagList = null): ILog;
+			public function warning(string $log, array $tagList = null) : ILog;
 
 			/**
 			 * adds error tag
@@ -53,7 +53,7 @@
 			 *
 			 * @return ILog
 			 */
-			public function error(string $log, array $tagList = null): ILog;
+			public function error(string $log, array $tagList = null) : ILog;
 
 			/**
 			 * adds critical tag
@@ -63,7 +63,7 @@
 			 *
 			 * @return ILog
 			 */
-			public function critical(string $log, array $tagList = null): ILog;
+			public function critical(string $log, array $tagList = null) : ILog;
 
 			/**
 			 * log an exception
@@ -73,5 +73,5 @@
 			 *
 			 * @return ILog
 			 */
-			public function exception(\Throwable $exception, array $tagList = null): ILog;
+			public function exception(\Throwable $exception, array $tagList = null) : ILog;
 		}

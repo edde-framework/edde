@@ -55,7 +55,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function setMethod(string $method): IRequest {
+			public function setMethod(string $method) : IRequest {
 				/**
 				 * here is safe to use PHP function because $method is (should be) simple string
 				 */
@@ -66,35 +66,35 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getMethod(): string {
+			public function getMethod() : string {
 				return $this->method ?: $this->method = $_SERVER['REQUEST_METHOD'] ?? '';
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function isMethod(string $method): bool {
+			public function isMethod(string $method) : bool {
 				return strcasecmp($this->getMethod(), $method) === 0;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getRemoteAddress():?string {
+			public function getRemoteAddress() :?string {
 				return $this->remoteAddress ?: $this->remoteAddress = $_SERVER['REMOTE_ADDR'];
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getRemoteHost():?string {
+			public function getRemoteHost() :?string {
 				return $this->remoteHost === null && $this->remoteAddress !== null ? $this->remoteHost = gethostbyaddr($this->remoteAddress) : null;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getRequestUrl(): IUrl {
+			public function getRequestUrl() : IUrl {
 				return $this->url;
 			}
 
@@ -108,7 +108,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function isSecured(): bool {
+			public function isSecured() : bool {
 				return $this->url->getScheme() === 'https';
 			}
 		}

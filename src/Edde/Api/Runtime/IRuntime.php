@@ -8,7 +8,7 @@
 			/***
 			 * @return bool
 			 */
-			public function isConsoleMode(): bool;
+			public function isConsoleMode() : bool;
 
 			/**
 			 * return argument list
@@ -17,5 +17,5 @@
 			 *
 			 * @throws MissingArgvException
 			 */
-			public function getArgumentList(): array;
+			public function getArgumentList() : array;
 		}

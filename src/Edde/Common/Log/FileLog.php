@@ -45,7 +45,7 @@
 			 *
 			 * @return ILog
 			 */
-			public function record(ILogRecord $logRecord): ILog {
+			public function record(ILogRecord $logRecord) : ILog {
 				$this->file->write(sprintf("[%s] %s\n", date('Y-m-d H:i:s'), $logRecord->getLog()));
 				return $this;
 			}

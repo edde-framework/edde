@@ -24,14 +24,14 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getElement(): IElement {
+			public function getElement() : IElement {
 				return $this->element;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getTargetList(): array {
+			public function getTargetList() : array {
 				return $this->targetList;
 			}
 		}

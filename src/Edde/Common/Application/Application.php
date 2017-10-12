@@ -16,7 +16,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function run(): int {
+			public function run() : int {
 				try {
 					/**
 					 * the flow is simple:

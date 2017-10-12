@@ -15,7 +15,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function accept(string $accept = null): array {
+			public function accept(string $accept = null) : array {
 				if ($accept === null) {
 					return ['*/*'];
 				}
@@ -66,7 +66,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function language(string $language = null, string $default = 'en'): array {
+			public function language(string $language = null, string $default = 'en') : array {
 				if ($language === null) {
 					return [$default];
 				}
@@ -96,7 +96,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function charset(string $charset = null, $default = 'utf-8'): array {
+			public function charset(string $charset = null, $default = 'utf-8') : array {
 				if ($charset === null) {
 					return [$default];
 				}
@@ -126,7 +126,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function contentType(string $contentType): \stdClass {
+			public function contentType(string $contentType) : \stdClass {
 				/**
 				 * this is fuckin' trick how to parse mime using native php's csv parser
 				 *
@@ -166,7 +166,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function cookie(string $cookie): \stdClass {
+			public function cookie(string $cookie) : \stdClass {
 				$cookie = $this->stringUtils->match($cookie, '~(?<name>[^\s()<>@,;:\"/\\[\\]?={}]+)=(?<value>[^=;\s]+)\s*(?<misc>.*)?~', true);
 				if (isset($cookie['misc'])) {
 					if ($match = $this->stringUtils->match($cookie['misc'], '~path=(?<path>[a-z0-9/._-]+);?~i', true)) {
@@ -188,7 +188,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function headerList(string $headers, bool $process = true): array {
+			public function headerList(string $headers, bool $process = true) : array {
 				$headers = explode("\r\n", $headers);
 				$headerList = [];
 				if ($this->stringUtils->match($headers[0], '~HTTP/[0-9.]+~')) {
@@ -206,7 +206,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function headers(array $headerList): array {
+			public function headers(array $headerList) : array {
 				$map = [
 					'Content-Type'    => [
 						$this,
@@ -237,7 +237,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function http(string $http): \stdClass {
+			public function http(string $http) : \stdClass {
 				if ($match = $this->stringUtils->match($http, '~(?<method>[A-Z]+)\s+(?<path>.*?)\s+HTTP/(?<http>[0-9.]+)~', true)) {
 					return (object)$match;
 				}

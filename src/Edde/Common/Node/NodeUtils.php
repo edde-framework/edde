@@ -17,7 +17,7 @@
 			 * @return INode
 			 * @throws NodeException
 			 */
-			static public function node(INode $root, $source): INode {
+			static public function node(INode $root, $source) : INode {
 				$callback = null;
 				if (is_array($source) === false && is_object($source) === false) {
 					throw new NodeException('Source must be array or stdClass object.');
@@ -87,8 +87,8 @@
 			 * @return INode
 			 * @throws NodeException
 			 */
-			static public function toNode(\stdClass $stdClass, INode $node = null, string $class = null): INode {
-				$createNode = function (string $class, string $name = null): INode {
+			static public function toNode(\stdClass $stdClass, INode $node = null, string $class = null) : INode {
+				$createNode = function (string $class, string $name = null) : INode {
 					/** @var $node INode */
 					if (($node = new $class()) instanceof INode === false) {
 						throw new ClassMismatchException(sprintf('Class specified [%s] is not instance of [%s].', $class, INode::class));
@@ -134,7 +134,7 @@
 			 *
 			 * @return \stdClass
 			 */
-			static public function fromNode(INode $root): \stdClass {
+			static public function fromNode(INode $root) : \stdClass {
 				$object = new \stdClass();
 				$attributeList = $root->getAttributeList();
 				if (($value = $root->getValue()) !== null) {

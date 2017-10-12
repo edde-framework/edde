@@ -16,12 +16,12 @@
 			 *
 			 * @return IElement
 			 */
-			public function getElement(): IElement;
+			public function getElement() : IElement;
 
 			/**
 			 * return list of types (could be mime type) to which conversion should be done
 			 *
 			 * @return string[]
 			 */
-			public function getTargetList(): array;
+			public function getTargetList() : array;
 		}

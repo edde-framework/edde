@@ -11,12 +11,12 @@
 			/**
 			 * @return IHeaderList
 			 */
-			public function getHeaderList(): IHeaderList;
+			public function getHeaderList() : IHeaderList;
 
 			/**
 			 * @return ICookieList|ICookie[]
 			 */
-			public function getCookieList(): ICookieList;
+			public function getCookieList() : ICookieList;
 
 			/**
 			 * shortcut to header list
@@ -26,7 +26,7 @@
 			 *
 			 * @return IHttp
 			 */
-			public function header(string $header, string $value): IHttp;
+			public function header(string $header, string $value) : IHttp;
 
 			/**
 			 * set content of the request/response
@@ -35,12 +35,12 @@
 			 *
 			 * @return IHttp
 			 */
-			public function setContent(IContent $content = null): IHttp;
+			public function setContent(IContent $content = null) : IHttp;
 
 			/**
 			 * retrieve current content
 			 *
 			 * @return IContent|null
 			 */
-			public function getContent():?IContent;
+			public function getContent() :?IContent;
 		}

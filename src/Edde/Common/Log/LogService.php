@@ -23,7 +23,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function registerContentFilter(array $tagList, IFilter $filter): ILogService {
+			public function registerContentFilter(array $tagList, IFilter $filter) : ILogService {
 				foreach ($tagList as $tag) {
 					$this->contentFilterList[$tag] = $filter;
 				}
@@ -33,7 +33,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function registerLog(ILog $log, array $tagList = null): ILogService {
+			public function registerLog(ILog $log, array $tagList = null) : ILogService {
 				$tagList = $tagList ?: [null];
 				foreach ($tagList as $tag) {
 					$this->logList[$tag] = $log;
@@ -44,7 +44,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function record(ILogRecord $logRecord): ILog {
+			public function record(ILogRecord $logRecord) : ILog {
 				$tagList = array_unique(($tagList = $logRecord->getTagList()) ? $tagList : [null]);
 				if (empty($this->contentFilterList) !== true) {
 					$log = $logRecord->getLog();

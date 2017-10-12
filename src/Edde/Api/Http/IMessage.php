@@ -13,7 +13,7 @@
 			 *
 			 * @return IHeaderList
 			 */
-			public function getHeaderList(): IHeaderList;
+			public function getHeaderList() : IHeaderList;
 
 			/**
 			 * return content type from input headers
@@ -22,7 +22,7 @@
 			 *
 			 * @return null|string
 			 */
-			public function getContentType(string $default = ''): string;
+			public function getContentType(string $default = '') : string;
 
 			/**
 			 * content id of multipart message (must have Content-ID header)
@@ -36,14 +36,14 @@
 			 *
 			 * @return string[]
 			 */
-			public function getContentList(): array;
+			public function getContentList() : array;
 
 			/**
 			 * return array of messages if this message is mutliparted
 			 *
 			 * @return array
 			 */
-			public function getMessageList(): array;
+			public function getMessageList() : array;
 
 			/**
 			 * return message by the given content id
@@ -52,12 +52,12 @@
 			 *
 			 * @return IMessage
 			 */
-			public function getMessage(string $contentId): IMessage;
+			public function getMessage(string $contentId) : IMessage;
 
 			/**
 			 * return message body
 			 *
 			 * @return string
 			 */
-			public function getBody(): string;
+			public function getBody() : string;
 		}

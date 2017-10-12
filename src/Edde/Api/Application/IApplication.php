@@ -15,5 +15,5 @@
 			 *
 			 * @return int
 			 */
-			public function run(): int;
+			public function run() : int;
 		}

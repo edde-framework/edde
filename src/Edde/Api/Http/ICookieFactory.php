@@ -6,5 +6,5 @@
 			/**
 			 * @return ICookieList
 			 */
-			public function create(): ICookieList;
+			public function create() : ICookieList;
 		}

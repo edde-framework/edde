@@ -13,14 +13,14 @@
 			 *
 			 * @return bool
 			 */
-			public function isEmpty(): bool;
+			public function isEmpty() : bool;
 
 			/**
 			 * @param array $array
 			 *
 			 * @return IList
 			 */
-			public function put(array $array): IList;
+			public function put(array $array) : IList;
 
 			/**
 			 * merge the given array
@@ -29,7 +29,7 @@
 			 *
 			 * @return IList
 			 */
-			public function merge(array $array): IList;
+			public function merge(array $array) : IList;
 
 			/**
 			 * @param string $name
@@ -37,7 +37,7 @@
 			 *
 			 * @return IList
 			 */
-			public function set(string $name, $value): IList;
+			public function set(string $name, $value) : IList;
 
 			/**
 			 * add a value as an array value
@@ -48,7 +48,7 @@
 			 *
 			 * @return IList
 			 */
-			public function add(string $name, $value, $key = null): IList;
+			public function add(string $name, $value, $key = null) : IList;
 
 			/**
 			 * return true if the given name is set (present) even with null value
@@ -57,7 +57,7 @@
 			 *
 			 * @return bool
 			 */
-			public function has(string $name): bool;
+			public function has(string $name) : bool;
 
 			/**
 			 * @param string               $name
@@ -70,17 +70,17 @@
 			/**
 			 * @return array
 			 */
-			public function array(): array;
+			public function array() : array;
 
 			/**
 			 * @param string $name
 			 *
 			 * @return IList
 			 */
-			public function remove(string $name): IList;
+			public function remove(string $name) : IList;
 
 			/**
 			 * @return IList
 			 */
-			public function clear(): IList;
+			public function clear() : IList;
 		}

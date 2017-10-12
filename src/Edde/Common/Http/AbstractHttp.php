@@ -34,21 +34,21 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getHeaderList(): IHeaderList {
+			public function getHeaderList() : IHeaderList {
 				return $this->headerList;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getCookieList(): ICookieList {
+			public function getCookieList() : ICookieList {
 				return $this->cookieList;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function header(string $header, string $value): IHttp {
+			public function header(string $header, string $value) : IHttp {
 				$this->headerList->set($header, $value);
 				return $this;
 			}
@@ -56,7 +56,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function setContent(IContent $content = null): IHttp {
+			public function setContent(IContent $content = null) : IHttp {
 				$this->content = $content;
 				return $this;
 			}
@@ -64,7 +64,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getContent():?IContent {
+			public function getContent() :?IContent {
 				return $this->content;
 			}
 		}

@@ -35,7 +35,7 @@
 			 *
 			 * @return IUrl
 			 */
-			public function setPath(string $path): IUrl;
+			public function setPath(string $path) : IUrl;
 
 			/**
 			 * @param bool $query
@@ -54,7 +54,7 @@
 			 *
 			 * @return string
 			 */
-			public function getBasePath(): string;
+			public function getBasePath() : string;
 
 			/**
 			 * return last part of path, if available, as resource name (commonly filename)
@@ -77,7 +77,7 @@
 			 *
 			 * @return IUrl
 			 */
-			public function setQuery(string $query): IUrl;
+			public function setQuery(string $query) : IUrl;
 
 			/**
 			 * @return string
@@ -87,21 +87,21 @@
 			/**
 			 * @return array
 			 */
-			public function getParameterList(): array;
+			public function getParameterList() : array;
 
 			/**
 			 * @param array $parameterList
 			 *
 			 * @return IUrl
 			 */
-			public function setParameterList(array $parameterList): IUrl;
+			public function setParameterList(array $parameterList) : IUrl;
 
 			/**
 			 * @param array $parameterList
 			 *
 			 * @return IUrl
 			 */
-			public function addParameterList(array $parameterList): IUrl;
+			public function addParameterList(array $parameterList) : IUrl;
 
 			/**
 			 * update the given parameter
@@ -111,7 +111,7 @@
 			 *
 			 * @return IUrl
 			 */
-			public function setParameter(string $name, $value): IUrl;
+			public function setParameter(string $name, $value) : IUrl;
 
 			/**
 			 * @param string      $name
@@ -129,7 +129,7 @@
 			/**
 			 * @return string
 			 */
-			public function getAbsoluteUrl(): string;
+			public function getAbsoluteUrl() : string;
 
 			/**
 			 * @param string $url

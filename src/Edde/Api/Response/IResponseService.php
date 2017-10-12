@@ -11,5 +11,5 @@
 			 *
 			 * @return IResponse
 			 */
-			public function execute(IResponse $response): IResponse;
+			public function execute(IResponse $response) : IResponse;
 		}

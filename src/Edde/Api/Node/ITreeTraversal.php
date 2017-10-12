@@ -26,7 +26,7 @@
 			 *
 			 * @return ITreeTraversal
 			 */
-			public function select(INode $node, ...$parameters): ITreeTraversal;
+			public function select(INode $node, ...$parameters) : ITreeTraversal;
 
 			/**
 			 * execute common workflow of traversal (enter/node/leave) with traverse selection

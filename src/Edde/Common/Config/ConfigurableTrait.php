@@ -62,9 +62,16 @@
 				return $this;
 			}
 
-			protected function handleInit(): void {
+			/**
+			 * @inheritdoc
+			 */
+			public function isSetup() : bool {
+				return $this->tSetup;
 			}
 
-			protected function handleSetup(): void {
+			protected function handleInit() : void {
+			}
+
+			protected function handleSetup() : void {
 			}
 		}

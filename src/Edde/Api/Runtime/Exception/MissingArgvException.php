@@ -5,5 +5,5 @@
 	/**
 	 * Should be thrown when there is an attempt to read $argv when it's not available.
 	 */
-	class MissingArgvException extends RuntimeException {
-	}
+		class MissingArgvException extends RuntimeException {
+		}

@@ -21,23 +21,23 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function execute(): IResponse {
+			public function execute() : IResponse {
 				return $this->run($this->getRequest());
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function run(IRequest $request): IResponse {
+			public function run(IRequest $request) : IResponse {
 				$this->request = $request;
-				$element = $this->protocolService->execute($request->getElement());
+				$this->protocolService->execute($request->getElement());
 				return new Response($request);
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getRequest(): IRequest {
+			public function getRequest() : IRequest {
 				if ($this->request) {
 					return $this->request;
 				}

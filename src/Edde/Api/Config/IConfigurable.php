@@ -39,4 +39,11 @@
 			 * @return $this
 			 */
 			public function setup();
+
+			/**
+			 * has the configurable already been configured?
+			 *
+			 * @return bool
+			 */
+			public function isSetup() : bool;
 		}

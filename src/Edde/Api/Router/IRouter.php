@@ -16,7 +16,7 @@
 			 *
 			 * @return bool
 			 */
-			public function canHandle(): bool;
+			public function canHandle() : bool;
 
 			/**
 			 * create an application request
@@ -25,5 +25,5 @@
 			 *
 			 * @throws BadRequestException
 			 */
-			public function createRequest(): IRequest;
+			public function createRequest() : IRequest;
 		}

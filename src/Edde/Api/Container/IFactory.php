@@ -14,7 +14,7 @@
 			 *
 			 * @return bool
 			 */
-			public function canHandle(IContainer $container, string $dependency): bool;
+			public function canHandle(IContainer $container, string $dependency) : bool;
 
 			/**
 			 * create a reflection for the given dependency
@@ -24,7 +24,7 @@
 			 *
 			 * @return IReflection
 			 */
-			public function getReflection(IContainer $container, string $dependency): IReflection;
+			public function getReflection(IContainer $container, string $dependency) : IReflection;
 
 			/**
 			 * 90% usecase is to return self, but in some rare cases factory can return another factory
@@ -33,7 +33,7 @@
 			 *
 			 * @return IFactory
 			 */
-			public function getFactory(IContainer $container): IFactory;
+			public function getFactory(IContainer $container) : IFactory;
 
 			/**
 			 * try to prefetch dependency before heavy computations are done

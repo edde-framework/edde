@@ -10,7 +10,7 @@
 			 *
 			 * @return IResponse
 			 */
-			public function setExitCode(int $exitCode): IResponse;
+			public function setExitCode(int $exitCode) : IResponse;
 
 			/**
 			 * even an application is executed in http mode, it could return
@@ -18,5 +18,5 @@
 			 *
 			 * @return int
 			 */
-			public function getExitCode(): int;
+			public function getExitCode() : int;
 		}

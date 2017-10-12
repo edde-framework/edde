@@ -24,19 +24,19 @@
 			 *
 			 * @return string
 			 */
-			public function getCharset(string $default = 'utf-8'): string;
+			public function getCharset(string $default = 'utf-8') : string;
 
 			/**
 			 * return set of parameters of content type
 			 *
 			 * @return array
 			 */
-			public function getParameterList(): array;
+			public function getParameterList() : array;
 
 			/**
 			 * return mime type of this content type
 			 *
 			 * @return string
 			 */
-			public function __toString(): string;
+			public function __toString() : string;
 		}

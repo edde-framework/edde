@@ -42,7 +42,7 @@
 			 * @return RecursiveIteratorIterator|INode[]
 			 * @throws NodeException
 			 */
-			static public function recursive(IAbstractNode $abstractNode, bool $root = false): RecursiveIteratorIterator {
+			static public function recursive(IAbstractNode $abstractNode, bool $root = false) : RecursiveIteratorIterator {
 				if ($root === true) {
 					$rootNode = new Node();
 					$rootNode->pushNode($abstractNode);

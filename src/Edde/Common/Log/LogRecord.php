@@ -42,7 +42,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getTagList():?array {
+			public function getTagList() :?array {
 				return $this->tagList;
 			}
 		}

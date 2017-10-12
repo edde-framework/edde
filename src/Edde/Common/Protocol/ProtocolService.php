@@ -20,7 +20,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function registerProtocolHandler(IProtocolHandler $protocolHandler): IProtocolService {
+			public function registerProtocolHandler(IProtocolHandler $protocolHandler) : IProtocolService {
 				$this->protocolHandlerList[] = $protocolHandler;
 				return $this;
 			}
@@ -28,7 +28,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function registerProtocolHandlerList(array $protocolHandlerList): IProtocolService {
+			public function registerProtocolHandlerList(array $protocolHandlerList) : IProtocolService {
 				foreach ($protocolHandlerList as $protocolHandler) {
 					$this->registerProtocolHandler($protocolHandler);
 				}
@@ -38,10 +38,13 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function canHandle(IElement $element): bool {
+			public function canHandle(IElement $element) : bool {
 				foreach ($this->protocolHandlerList as $protocolHandler) {
 					if ($protocolHandler->setup() && $protocolHandler->canHandle($element)) {
-						return true;
+						/**
+						 * a little trick to keep this thing one line instead of assignment and return true
+						 */
+						return (bool)$this->protocolHandlerCache[$element->getType()] = $protocolHandler;
 					}
 				}
 				return false;
@@ -50,7 +53,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function execute(IElement $element): ?IElement {
+			public function execute(IElement $element) : ?IElement {
 				if (isset($this->protocolHandlerCache[$type = $element->getType()])) {
 					return $this->protocolHandlerCache[$type]->execute($element);
 				}

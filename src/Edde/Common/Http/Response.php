@@ -20,7 +20,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function setCode(int $code): IResponse {
+			public function setCode(int $code) : IResponse {
 				$this->code = $code;
 				return $this;
 			}
@@ -28,14 +28,14 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getCode(): int {
+			public function getCode() : int {
 				return $this->code;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function redirect(string $redirect): IResponse {
+			public function redirect(string $redirect) : IResponse {
 				$this->headerList->set('location', $redirect);
 				return $this;
 			}
@@ -43,7 +43,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function send(): IResponse {
+			public function send() : IResponse {
 				http_response_code($this->code);
 				$this->headerList->setupHeaderList();
 				$this->cookieList->setupCookieList();

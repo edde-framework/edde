@@ -17,7 +17,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function select(INode $node, ...$parameters): ITreeTraversal {
+			public function select(INode $node, ...$parameters) : ITreeTraversal {
 				return $this;
 			}
 

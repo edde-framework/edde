@@ -62,7 +62,7 @@
 			 * @inheritdoc
 			 * @throws FactoryException
 			 */
-			public function getFactory(string $dependency, string $source = null): IFactory {
+			public function getFactory(string $dependency, string $source = null) : IFactory {
 				/**
 				 * searching for dependency could be quite expensive task, so it's necessary
 				 * to cache results; real cache is not used to keep container implementation

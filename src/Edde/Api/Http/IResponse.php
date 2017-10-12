@@ -17,14 +17,14 @@
 			 *
 			 * @return IResponse
 			 */
-			public function setCode(int $code): IResponse;
+			public function setCode(int $code) : IResponse;
 
 			/**
 			 * return http response code
 			 *
 			 * @return int
 			 */
-			public function getCode(): int;
+			public function getCode() : int;
 
 			/**
 			 * set a location header
@@ -33,12 +33,12 @@
 			 *
 			 * @return IResponse
 			 */
-			public function redirect(string $redirect): IResponse;
+			public function redirect(string $redirect) : IResponse;
 
 			/**
 			 * send current response
 			 *
 			 * @return IResponse
 			 */
-			public function send(): IResponse;
+			public function send() : IResponse;
 		}

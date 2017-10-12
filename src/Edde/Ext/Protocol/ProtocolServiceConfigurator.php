@@ -6,7 +6,6 @@
 		use Edde\Api\Container\Inject\Container;
 		use Edde\Api\Protocol\IProtocolService;
 		use Edde\Common\Config\AbstractConfigurator;
-		use Edde\Common\Request\RequestHandler;
 
 		class ProtocolServiceConfigurator extends AbstractConfigurator {
 			use Container;
@@ -20,7 +19,7 @@
 			public function configure($instance) {
 				parent::configure($instance);
 				$instance->registerProtocolHandlerList([
-					$this->container->create(RequestHandler::class, [], __METHOD__),
+					$this->container->create(StaticHandler::class, [], __METHOD__),
 				]);
 			}
 		}

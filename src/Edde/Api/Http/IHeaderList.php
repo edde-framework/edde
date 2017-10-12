@@ -13,7 +13,7 @@
 			 *
 			 * @return IContentType|null
 			 */
-			public function getContentType():?IContentType;
+			public function getContentType() :?IContentType;
 
 			/**
 			 * return user agent
@@ -29,7 +29,7 @@
 			 *
 			 * @return array
 			 */
-			public function getAcceptList(): array;
+			public function getAcceptList() : array;
 
 			/**
 			 * return prioritized language from the current header set or default one
@@ -38,7 +38,7 @@
 			 *
 			 * @return string
 			 */
-			public function getAcceptLanguage(string $default): string;
+			public function getAcceptLanguage(string $default) : string;
 
 			/**
 			 * return an ordered array of accept-lang
@@ -47,7 +47,7 @@
 			 *
 			 * @return array
 			 */
-			public function getAcceptLanguageList(string $default): array;
+			public function getAcceptLanguageList(string $default) : array;
 
 			/**
 			 * return preferred charset
@@ -56,7 +56,7 @@
 			 *
 			 * @return string
 			 */
-			public function getAcceptCharset(string $default): string;
+			public function getAcceptCharset(string $default) : string;
 
 			/**
 			 * return an ordered list of accept charsets
@@ -65,19 +65,19 @@
 			 *
 			 * @return array
 			 */
-			public function getAcceptCharsetList(string $default): array;
+			public function getAcceptCharsetList(string $default) : array;
 
 			/**
 			 * return array of "compiled" headers
 			 *
 			 * @return array
 			 */
-			public function headers(): array;
+			public function headers() : array;
 
 			/**
 			 * send headers
 			 *
 			 * @return IHeaderList
 			 */
-			public function setupHeaderList(): IHeaderList;
+			public function setupHeaderList() : IHeaderList;
 		}

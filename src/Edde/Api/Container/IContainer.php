@@ -18,7 +18,7 @@
 			 *
 			 * @return IContainer
 			 */
-			public function registerFactory(IFactory $factory, string $id = null): IContainer;
+			public function registerFactory(IFactory $factory, string $id = null) : IContainer;
 
 			/**
 			 * shorthand for cache registration
@@ -27,7 +27,7 @@
 			 *
 			 * @return IContainer
 			 */
-			public function registerFactoryList(array $factoryList): IContainer;
+			public function registerFactoryList(array $factoryList) : IContainer;
 
 			/**
 			 * register a new config handler for the given dependency
@@ -37,7 +37,7 @@
 			 *
 			 * @return IContainer
 			 */
-			public function registerConfigurator(string $name, IConfigurator $configurator): IContainer;
+			public function registerConfigurator(string $name, IConfigurator $configurator) : IContainer;
 
 			/**
 			 * register list of config handlers bound to the given factories (key is factory name, value is config handler)
@@ -46,7 +46,7 @@
 			 *
 			 * @return IContainer
 			 */
-			public function registerConfiguratorList(array $configuratorList): IContainer;
+			public function registerConfiguratorList(array $configuratorList) : IContainer;
 
 			/**
 			 * do container have a factory for the given dependency? - only check if dependency is available, but
@@ -56,7 +56,7 @@
 			 *
 			 * @return bool
 			 */
-			public function canHandle(string $dependency): bool;
+			public function canHandle(string $dependency) : bool;
 
 			/**
 			 * get factory which is able to create the given dependency
@@ -67,7 +67,7 @@
 			 * @return IFactory
 			 * @throws UnknownFactoryException
 			 */
-			public function getFactory(string $dependency, string $source = null): IFactory;
+			public function getFactory(string $dependency, string $source = null) : IFactory;
 
 			/**
 			 * create the dependency by it's identifier (name)

@@ -75,4 +75,42 @@
 			 * @return array|null
 			 */
 			public function match(string $string, string $pattern, bool $named = false, bool $trim = false);
+
+			/**
+			 * extract particular string from another simply formatted string (for example class name from namespace, ...)
+			 *
+			 * @param string $source
+			 * @param string $separator
+			 * @param int    $index
+			 *
+			 * @return string
+			 */
+			public function extract(string $source, string $separator = '\\', int $index = -1) : string;
+
+			/**
+			 * translate an inconsistent newlines to the standard "\n"
+			 *
+			 * @param string $string
+			 *
+			 * @return string
+			 */
+			public function normalizeNewLines(string $string) : string;
+
+			/**
+			 * normalize input string, trim newlines, ...
+			 *
+			 * @param string $string
+			 *
+			 * @return string
+			 */
+			public function normalize(string $string) : string;
+
+			/**
+			 * create an iterator over the given string
+			 *
+			 * @param string $string
+			 *
+			 * @return \Generator
+			 */
+			public function createIterator(string $string) : \Generator;
 		}

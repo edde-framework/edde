@@ -23,7 +23,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function setExitCode(int $exitCode): IResponse {
+			public function setExitCode(int $exitCode) : IResponse {
 				$this->exitCode = $exitCode;
 				return $this;
 			}
@@ -31,7 +31,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getExitCode(): int {
+			public function getExitCode() : int {
 				return $this->exitCode;
 			}
 		}

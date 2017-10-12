@@ -22,5 +22,5 @@
 			 *
 			 * @return ICookieList
 			 */
-			public function setupCookieList(): ICookieList;
+			public function setupCookieList() : ICookieList;
 		}

@@ -15,14 +15,14 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function isConsoleMode(): bool {
+			public function isConsoleMode() : bool {
 				return PHP_SAPI === 'cli';
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getArgumentList(): array {
+			public function getArgumentList() : array {
 				if ($this->argumentList) {
 					return $this->argumentList;
 				}

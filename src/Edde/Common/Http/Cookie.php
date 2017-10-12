@@ -57,7 +57,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getName(): string {
+			public function getName() : string {
 				return $this->name;
 			}
 
@@ -71,7 +71,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getExpire(): int {
+			public function getExpire() : int {
 				return $this->expire;
 			}
 
@@ -92,21 +92,21 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function isSecure(): bool {
+			public function isSecure() : bool {
 				return $this->secure;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function isHttpOnly(): bool {
+			public function isHttpOnly() : bool {
 				return $this->httpOnly;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function setupCookie(): ICookie {
+			public function setupCookie() : ICookie {
 				setcookie($this->name, $this->value, $this->expire, $this->path, $this->domain, $this->secure, $this->httpOnly);
 				return $this;
 			}

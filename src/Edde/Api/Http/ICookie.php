@@ -8,7 +8,7 @@
 			 *
 			 * @return string
 			 */
-			public function getName(): string;
+			public function getName() : string;
 
 			/**
 			 * a value of the cookie
@@ -20,7 +20,7 @@
 			/**
 			 * @return int
 			 */
-			public function getExpire(): int;
+			public function getExpire() : int;
 
 			/**
 			 * defaults to a "/"
@@ -41,19 +41,19 @@
 			 *
 			 * @return bool
 			 */
-			public function isSecure(): bool;
+			public function isSecure() : bool;
 
 			/**
 			 * cookie is available only in the http protocol (excluding JavaScript, ...)
 			 *
 			 * @return bool
 			 */
-			public function isHttpOnly(): bool;
+			public function isHttpOnly() : bool;
 
 			/**
 			 * set a cookie (setcoookie())
 			 *
 			 * @return ICookie
 			 */
-			public function setupCookie(): ICookie;
+			public function setupCookie() : ICookie;
 		}

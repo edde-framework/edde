@@ -15,7 +15,7 @@
 			 *
 			 * @return IAbstractNode
 			 */
-			public function addNode(IAbstractNode $abstractNode, bool $move = false, bool $soft = false): IAbstractNode;
+			public function addNode(IAbstractNode $abstractNode, bool $move = false, bool $soft = false) : IAbstractNode;
 
 			/**
 			 * prepend the given node to the current node list
@@ -25,7 +25,7 @@
 			 *
 			 * @return IAbstractNode
 			 */
-			public function prepend(IAbstractNode $abstractNode, bool $move = false): IAbstractNode;
+			public function prepend(IAbstractNode $abstractNode, bool $move = false) : IAbstractNode;
 
 			/**
 			 * push the given node into current node list; parent of $abstractNode is not changed
@@ -34,7 +34,7 @@
 			 *
 			 * @return IAbstractNode
 			 */
-			public function pushNode(IAbstractNode $abstractNode): IAbstractNode;
+			public function pushNode(IAbstractNode $abstractNode) : IAbstractNode;
 
 			/**
 			 * add list of given nodes to the current node
@@ -54,7 +54,7 @@
 			 *
 			 * @return IAbstractNode
 			 */
-			public function setNodeList($nodeList, bool $move = false): IAbstractNode;
+			public function setNodeList($nodeList, bool $move = false) : IAbstractNode;
 
 			/**
 			 * move set of nodes to current node; if $move is true, parent of moved nodes is changed
@@ -64,7 +64,7 @@
 			 *
 			 * @return IAbstractNode
 			 */
-			public function moveNodeList(IAbstractNode $sourceNode, bool $move = false): IAbstractNode;
+			public function moveNodeList(IAbstractNode $sourceNode, bool $move = false) : IAbstractNode;
 
 			/**
 			 * remove the given node from the list of this node; if node is not found (by object comparsion), exception is thrown
@@ -74,24 +74,24 @@
 			 *
 			 * @return IAbstractNode
 			 */
-			public function removeNode(IAbstractNode $abstractNode, bool $soft = false): IAbstractNode;
+			public function removeNode(IAbstractNode $abstractNode, bool $soft = false) : IAbstractNode;
 
 			/**
 			 * @return IAbstractNode[]
 			 */
-			public function getNodeList(): array;
+			public function getNodeList() : array;
 
 			/**
 			 * @return IAbstractNode
 			 */
-			public function clearNodeList(): IAbstractNode;
+			public function clearNodeList() : IAbstractNode;
 
 			/**
 			 * @param IAbstractNode $abstractNode
 			 *
 			 * @return IAbstractNode
 			 */
-			public function setParent(IAbstractNode $abstractNode = null): IAbstractNode;
+			public function setParent(IAbstractNode $abstractNode = null) : IAbstractNode;
 
 			/**
 			 * @return IAbstractNode|null
@@ -105,54 +105,54 @@
 			 *
 			 * @return IAbstractNode[]
 			 */
-			public function getParentList(IAbstractNode $root = null): array;
+			public function getParentList(IAbstractNode $root = null) : array;
 
 			/**
 			 * @return IAbstractNode
 			 */
-			public function getRoot(): IAbstractNode;
+			public function getRoot() : IAbstractNode;
 
 			/**
 			 * @return IAbstractNode[]
 			 */
-			public function getAncestorList(): array;
+			public function getAncestorList() : array;
 
 			/**
 			 * @return bool
 			 */
-			public function isRoot(): bool;
+			public function isRoot() : bool;
 
 			/**
 			 * @return bool
 			 */
-			public function isChild(): bool;
+			public function isChild() : bool;
 
 			/**
 			 * @return bool
 			 */
-			public function isLeaf(): bool;
+			public function isLeaf() : bool;
 
 			/**
 			 * is this node last in the parent's node list? Throw an exception if this node is root
 			 *
 			 * @return bool
 			 */
-			public function isLast(): bool;
+			public function isLast() : bool;
 
 			/**
 			 * @return int
 			 */
-			public function getLevel(): int;
+			public function getLevel() : int;
 
 			/**
 			 * @return int
 			 */
-			public function getTreeHeight(): int;
+			public function getTreeHeight() : int;
 
 			/**
 			 * @return int
 			 */
-			public function getTreeSize(): int;
+			public function getTreeSize() : int;
 
 			/**
 			 * check, if this node can accept given node as child ({@see self::addNode()})
@@ -168,7 +168,7 @@
 			 *
 			 * @return int
 			 */
-			public function getNodeCount(): int;
+			public function getNodeCount() : int;
 
 			/**
 			 * insert the given node under current one (current one will have excatly one children)
@@ -177,7 +177,7 @@
 			 *
 			 * @return IAbstractNode
 			 */
-			public function insert(IAbstractNode $abstractNode): IAbstractNode;
+			public function insert(IAbstractNode $abstractNode) : IAbstractNode;
 
 			/**
 			 * @param IAbstractNode $abstractNode
@@ -185,7 +185,7 @@
 			 *
 			 * @return IAbstractNode return newly switched node
 			 */
-			public function switch(IAbstractNode $abstractNode, bool $soft = false): IAbstractNode;
+			public function switch(IAbstractNode $abstractNode, bool $soft = false) : IAbstractNode;
 
 			/**
 			 * replace the given child node by the list of nodes
@@ -196,5 +196,5 @@
 			 *
 			 * @return IAbstractNode
 			 */
-			public function replaceNode(IAbstractNode $abstractNode, array $nodeList, bool $soft = false): IAbstractNode;
+			public function replaceNode(IAbstractNode $abstractNode, array $nodeList, bool $soft = false) : IAbstractNode;
 		}

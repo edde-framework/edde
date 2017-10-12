@@ -7,7 +7,7 @@
 				$this->setAttribute('request', $request);
 			}
 
-			public function getRequest(): string {
+			public function getRequest() : string {
 				return $this->getAttribute('request');
 			}
 		}

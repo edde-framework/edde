@@ -10,7 +10,7 @@
 			 *
 			 * @return IProtocolService
 			 */
-			public function registerProtocolHandler(IProtocolHandler $protocolHandler): IProtocolService;
+			public function registerProtocolHandler(IProtocolHandler $protocolHandler) : IProtocolService;
 
 			/**
 			 * register set of protocol handlers
@@ -19,5 +19,5 @@
 			 *
 			 * @return IProtocolService
 			 */
-			public function registerProtocolHandlerList(array $protocolHandlerList): IProtocolService;
+			public function registerProtocolHandlerList(array $protocolHandlerList) : IProtocolService;
 		}

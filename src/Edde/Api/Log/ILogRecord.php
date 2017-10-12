@@ -18,5 +18,5 @@
 			 *
 			 * @return array|null
 			 */
-			public function getTagList():?array;
+			public function getTagList() :?array;
 		}

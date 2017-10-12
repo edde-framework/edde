@@ -13,7 +13,7 @@
 			/**
 			 * @param IResponseService $responseService
 			 */
-			public function lazyResponseService(IResponseService $responseService): void {
+			public function lazyResponseService(IResponseService $responseService) : void {
 				$this->responseService = $responseService;
 			}
 		}

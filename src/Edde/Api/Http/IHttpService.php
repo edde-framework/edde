@@ -16,14 +16,14 @@
 			 *
 			 * @return IRequest
 			 */
-			public function getRequest(): IRequest;
+			public function getRequest() : IRequest;
 
 			/**
 			 * create http response; should be singleton
 			 *
 			 * @return IResponse
 			 */
-			public function getResponse(): IResponse;
+			public function getResponse() : IResponse;
 
 			/**
 			 * override current http response
@@ -32,12 +32,12 @@
 			 *
 			 * @return IHttpService
 			 */
-			public function setResponse(IResponse $response): IHttpService;
+			public function setResponse(IResponse $response) : IHttpService;
 
 			/**
 			 * send current http response
 			 *
 			 * @return IHttpService
 			 */
-			public function send(): IHttpService;
+			public function send() : IHttpService;
 		}

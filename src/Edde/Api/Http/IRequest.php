@@ -15,34 +15,34 @@
 			 *
 			 * @return IRequest
 			 */
-			public function setMethod(string $method): IRequest;
+			public function setMethod(string $method) : IRequest;
 
 			/**
 			 * @return string
 			 */
-			public function getMethod(): string;
+			public function getMethod() : string;
 
 			/**
 			 * @param string $method
 			 *
 			 * @return bool
 			 */
-			public function isMethod(string $method): bool;
+			public function isMethod(string $method) : bool;
 
 			/**
 			 * @return null|string
 			 */
-			public function getRemoteAddress():?string;
+			public function getRemoteAddress() :?string;
 
 			/**
 			 * @return null|string
 			 */
-			public function getRemoteHost():?string;
+			public function getRemoteHost() :?string;
 
 			/**
 			 * @return IUrl
 			 */
-			public function getRequestUrl(): IUrl;
+			public function getRequestUrl() : IUrl;
 
 			/**
 			 * @return IUrl|null
@@ -52,5 +52,5 @@
 			/**
 			 * @return bool
 			 */
-			public function isSecured(): bool;
+			public function isSecured() : bool;
 		}
