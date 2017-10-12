@@ -8,6 +8,7 @@
 		use Edde\Api\Router\IRouterService;
 		use Edde\Common\Config\AbstractConfigurator;
 		use Edde\Common\Element\Message;
+		use Edde\Ext\Router\ProtocolServiceRouter;
 		use Edde\Ext\Router\StaticRouter;
 
 		class RouterServiceConfigurator extends AbstractConfigurator {
@@ -21,9 +22,16 @@
 			 */
 			public function configure($instance) {
 				parent::configure($instance);
-				/**
-				 * last router is considered as a default
-				 */
-				$instance->registerRouter($this->container->create(StaticRouter::class, [new Message('index.index-view/action-index')], __METHOD__));
+				$instance->registerRouterList([
+					/**
+					 * because whole application is built around The Protocol implementation, also router is bound to one of
+					 * protocol's services to check, if the system is able to handle current request
+					 */
+					$this->container->create(ProtocolServiceRouter::class, [], __METHOD__),
+					/**
+					 * last router is considered as a default
+					 */
+					$this->container->create(StaticRouter::class, [new Message('index.index-view/action-index')], __METHOD__),
+				]);
 			}
 		}

@@ -16,6 +16,7 @@
 		use Edde\Api\Response\IResponseService;
 		use Edde\Api\Router\IRouterService;
 		use Edde\Api\Runtime\IRuntime;
+		use Edde\Api\Utils\ICliUtils;
 		use Edde\Api\Utils\IHttpUtils;
 		use Edde\Api\Utils\IStringUtils;
 		use Edde\Common\Application\Application;
@@ -37,6 +38,7 @@
 		use Edde\Common\Response\ResponseService;
 		use Edde\Common\Router\RouterService;
 		use Edde\Common\Runtime\Runtime;
+		use Edde\Common\Utils\CliUtils;
 		use Edde\Common\Utils\HttpUtils;
 		use Edde\Common\Utils\StringUtils;
 		use ReflectionMethod;
@@ -57,7 +59,7 @@
 			 * @return IFactory[]
 			 * @throws FactoryException
 			 */
-			static public function createFactoryList(array $factoryList): array {
+			static public function createFactoryList(array $factoryList) : array {
 				$factories = [];
 				foreach ($factoryList as $name => $factory) {
 					$current = null;
@@ -109,7 +111,7 @@
 			 * @throws ContainerException
 			 * @throws FactoryException
 			 */
-			static public function create(array $factoryList = [], array $configuratorList = []): IContainer {
+			static public function create(array $factoryList = [], array $configuratorList = []) : IContainer {
 				/** @var $container IContainer */
 				$container = new Container();
 				/**
@@ -134,7 +136,7 @@
 			 * @throws ContainerException
 			 * @throws FactoryException
 			 */
-			static public function container(array $factoryList = [], array $configuratorList = []): IContainer {
+			static public function container(array $factoryList = [], array $configuratorList = []) : IContainer {
 				return self::create(array_merge(self::getDefaultFactoryList(), $factoryList), array_filter(array_merge(self::getDefaultConfiguratorList(), $configuratorList)));
 			}
 
@@ -149,19 +151,20 @@
 			 * @throws ContainerException
 			 * @throws FactoryException
 			 */
-			static public function inject($instance, array $factoryList = [], array $configuratorList = []): IContainer {
+			static public function inject($instance, array $factoryList = [], array $configuratorList = []) : IContainer {
 				$container = self::container(empty($factoryList) ? [new ClassFactory()] : $factoryList, $configuratorList);
 				$container->inject($instance);
 				return $container;
 			}
 
-			static public function getDefaultFactoryList(): array {
+			static public function getDefaultFactoryList() : array {
 				return [
 					/**
 					 * utils
 					 */
 					IHttpUtils::class        => HttpUtils::class,
 					IStringUtils::class      => StringUtils::class,
+					ICliUtils::class         => CliUtils::class,
 					/**
 					 * container implementation
 					 */
@@ -186,7 +189,7 @@
 					IResponseService::class  => ResponseService::class,
 					/**
 					 * content conversion implementation (mainly useful for server content
-					 * negotation)
+					 * negotiation)
 					 */
 					IConverterManager::class => ConverterManager::class,
 					/**
@@ -208,7 +211,7 @@
 				];
 			}
 
-			static public function getDefaultConfiguratorList(): array {
+			static public function getDefaultConfiguratorList() : array {
 				return [];
 			}
 		}

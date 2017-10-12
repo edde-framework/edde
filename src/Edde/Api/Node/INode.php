@@ -81,7 +81,7 @@
 			 *
 			 * @return INode
 			 */
-			public function appendAttributeList(array $attributeList): INode;
+			public function mergeAttributeList(array $attributeList) : INode;
 
 			/**
 			 * return list of meta data
@@ -120,7 +120,7 @@
 			 *
 			 * @return INode
 			 */
-			public function appendMetaList(array $metaList): INode;
+			public function mergeMetaList(array $metaList) : INode;
 
 			/**
 			 * generate materialized path from node names

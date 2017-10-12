@@ -84,8 +84,8 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function appendAttributeList(array $attributeList): INode {
-				$this->attributeList->append($attributeList);
+			public function mergeAttributeList(array $attributeList) : INode {
+				$this->attributeList->merge($attributeList);
 				return $this;
 			}
 
@@ -122,8 +122,8 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function appendMetaList(array $metaList): INode {
-				$this->metaList->append($metaList);
+			public function mergeMetaList(array $metaList) : INode {
+				$this->metaList->merge($metaList);
 				return $this;
 			}
 

@@ -9,9 +9,6 @@
 			use ResponseFactory;
 
 			public function actionIndex() {
-				$this->sendScalar([
-					'foo',
-					'bar',
-				]);
+				$this->sendText('Looks like the things is working!');
 			}
 		}

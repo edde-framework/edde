@@ -7,8 +7,9 @@
 		use Edde\Api\Router\Exception\BadRequestException;
 		use Edde\Api\Router\IRouter;
 		use Edde\Api\Router\IRouterService;
+		use Edde\Common\Object\Object;
 
-		class RouterService extends AbstractRouter implements IRouterService {
+		class RouterService extends Object implements IRouterService {
 			use LogService;
 			/**
 			 * @var IRouter[]
@@ -26,7 +27,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function registerRouter(IRouter $router): IRouterService {
+			public function registerRouter(IRouter $router) : IRouterService {
 				$this->routerList[] = $router;
 				return $this;
 			}
@@ -34,7 +35,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function registerRouterList(array $routerList): IRouterService {
+			public function registerRouterList(array $routerList) : IRouterService {
 				foreach ($routerList as $router) {
 					$this->registerRouter($router);
 				}
@@ -44,7 +45,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getRouter(): ?IRouter {
+			public function getRouter() : ?IRouter {
 				foreach ($this->routerList as $router) {
 					if ($router->setup() && $router->canHandle()) {
 						return $router;
@@ -56,7 +57,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function canHandle(): bool {
+			public function canHandle() : bool {
 				try {
 					return ($this->router = $this->getRouter()) !== null;
 				} catch (\Exception $exception) {
@@ -71,7 +72,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function createRequest(): IRequest {
+			public function createRequest() : IRequest {
 				if ($this->request) {
 					return $this->request;
 				}

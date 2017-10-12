@@ -5,7 +5,7 @@ services:
   client:
     image: nginx:latest
     ports:
-      - 8080:80
+      - 4080:80
     working_dir: /client
     volumes:
       - ./client:/client
@@ -21,7 +21,7 @@ services:
   client-server:
     image: nginx:latest
     ports:
-      - 32768:80
+      - 4180:80
     volumes:
       - ./.docker/client-server.nginx.conf:/etc/nginx/conf.d/default.conf
     networks:
@@ -115,7 +115,7 @@ services:
   adminer:
     image: adminer
     ports:
-      - 8088:8080
+      - 4280:8080
     networks:
       - mysql-network
       - postgres-network

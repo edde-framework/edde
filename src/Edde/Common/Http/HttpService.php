@@ -2,6 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Http;
 
+		use Edde\Api\Container\Exception\ContainerException;
+		use Edde\Api\Container\Inject\Container;
 		use Edde\Api\Http\ICookieList;
 		use Edde\Api\Http\IHeaderList;
 		use Edde\Api\Http\IHttpService;
@@ -11,6 +13,7 @@
 		use Edde\Common\Url\Url;
 
 		class HttpService extends Object implements IHttpService {
+			use Container;
 			/**
 			 * @var IRequest
 			 */
@@ -23,7 +26,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getRequest(): IRequest {
+			public function getRequest() : IRequest {
 				if ($this->request) {
 					return $this->request;
 				}
@@ -44,8 +47,10 @@
 
 			/**
 			 * create header list from incoming request
+			 *
+			 * @throws ContainerException
 			 */
-			protected function createHeaderList(): IHeaderList {
+			protected function createHeaderList() : IHeaderList {
 				$headers = [];
 				$mysticList = [
 					'CONTENT_TYPE'   => 'Content-Type',
@@ -77,10 +82,10 @@
 						$headers['Authorization'] = $_SERVER['PHP_AUTH_DIGEST'];
 					}
 				}
-				return new HeaderList($headers);
+				return $this->container->create(HeaderList::class, [$headers], __METHOD__);
 			}
 
-			protected function createCookieList(): ICookieList {
+			protected function createCookieList() : ICookieList {
 				$cookieList = new CookieList();
 				foreach ($_COOKIE as $name => $value) {
 					$cookieList->add(new Cookie($name, $value, 0, null, null));
@@ -91,7 +96,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getResponse(): IResponse {
+			public function getResponse() : IResponse {
 				if ($this->response) {
 					return $this->response;
 				}
@@ -100,7 +105,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function setResponse(IResponse $response): IHttpService {
+			public function setResponse(IResponse $response) : IHttpService {
 				$this->response = $response;
 				return $this;
 			}
@@ -108,7 +113,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function send(): IHttpService {
+			public function send() : IHttpService {
 				$response = $this->getResponse();
 				$response->send();
 				return $this;

@@ -23,14 +23,14 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function canHandle(): bool {
+			public function canHandle() : bool {
 				return true;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function createRequest(): IRequest {
-				return new Request($this->element, $this->getTargetList());
+			public function createRequest() : IRequest {
+				return $this->request ?: $this->request = new Request($this->element, $this->getTargetList());
 			}
 		}
