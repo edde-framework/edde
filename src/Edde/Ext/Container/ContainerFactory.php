@@ -41,6 +41,7 @@
 		use Edde\Common\Utils\CliUtils;
 		use Edde\Common\Utils\HttpUtils;
 		use Edde\Common\Utils\StringUtils;
+		use Edde\Ext\Protocol\ProtocolServiceConfigurator;
 		use ReflectionMethod;
 
 		/**
@@ -212,6 +213,8 @@
 			}
 
 			static public function getDefaultConfiguratorList() : array {
-				return [];
+				return [
+					IProtocolService::class => ProtocolServiceConfigurator::class,
+				];
 			}
 		}

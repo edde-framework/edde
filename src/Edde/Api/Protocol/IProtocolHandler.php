@@ -3,6 +3,7 @@
 
 		use Edde\Api\Config\IConfigurable;
 		use Edde\Api\Element\IElement;
+		use Edde\Api\Protocol\Exception\IncompatibleElementException;
 		use Edde\Api\Protocol\Exception\UnsupportedElementException;
 
 		interface IProtocolHandler extends IConfigurable {
@@ -13,7 +14,18 @@
 			 *
 			 * @return bool
 			 */
-			public function canHandle(IElement $element): bool;
+			public function canHandle(IElement $element) : bool;
+
+			/**
+			 * check if the element is compatible with this handler
+			 *
+			 * @param IElement $element
+			 *
+			 * @return IProtocolHandler
+			 *
+			 * @throws IncompatibleElementException
+			 */
+			public function check(IElement $element) : IProtocolHandler;
 
 			/**
 			 * execute the given element and return eventual result
@@ -24,5 +36,5 @@
 			 *
 			 * @throws UnsupportedElementException
 			 */
-			public function execute(IElement $element): ?IElement;
+			public function execute(IElement $element) : ?IElement;
 		}
