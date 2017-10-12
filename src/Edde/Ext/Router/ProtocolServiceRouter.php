@@ -31,14 +31,19 @@
 			 * @inheritdoc
 			 */
 			public function createRequest() : IRequest {
-				return $this->isHttp() ? $this->createHttpRequest() : $this->createCliRequest();
+				return $this->request ?: $this->request = ($this->isHttp() ? $this->createHttpRequest() : $this->createCliRequest());
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			protected function createHttpRequest() : IRequest {
-				return $this->createRouteRequest(($requestUrl = $this->httpService->getRequest()->getRequestUrl())->getPath(false), $requestUrl->getParameterList(), 'Http');
+				if ($match = $this->stringUtils->match($path = ($requestUrl = ($request = $this->httpService->getRequest())->getRequestUrl())->getPath(false), self::PREG_REST, true, true)) {
+					return $this->factory($match['class'], strtolower($request->getMethod()), 'Rest', $requestUrl->getParameterList());
+				} else if ($match = $this->stringUtils->match($path, self::PREG_CONTROLLER, true, true)) {
+					return $this->factory($match['class'], $match['method'], 'Http', $requestUrl->getParameterList());
+				}
+				throw new RouterException('Cannot handle current HTTP request.');
 			}
 
 			/**
@@ -59,39 +64,25 @@
 				if (isset($parameterList[1]) === false || is_string($parameterList[1]) === false) {
 					throw new RouterException('First argument must be plain (just string)!');
 				}
-				return $this->createRouteRequest($parameterList[1], array_slice($parameterList, 2), 'Cli');
+				if ($match = $this->stringUtils->match($parameterList[1], self::PREG_CONTROLLER, true, true)) {
+					return $this->factory($match['class'], $match['method'], 'Cli', array_slice($parameterList, 2));
+				}
+				throw new RouterException('Cannot handle current Cli request.');
 			}
 
-			/**
-			 * @param string $path
-			 * @param array  $parameterList
-			 * @param string $type
-			 *
-			 * @return IRequest
-			 * @throws RouterException
-			 */
-			protected function createRouteRequest(string $path, array $parameterList, string $type) : IRequest {
-				if ($this->isHttp() && ($match = $this->stringUtils->match($path, self::PREG_REST, true, true))) {
-					$match['method'] = strtolower($this->httpService->getRequest()->getMethod());
-					$type = 'Rest';
-				} else if (($match = $this->stringUtils->match($path, self::PREG_CONTROLLER, true, true)) === null) {
-					throw new RouterException(sprintf('Cannot handle current url path [%s].', $path));
-				}
-				/**
-				 * assignment is intentional
-				 */
+			protected function factory(string $class, string $method, string $type, array $parameterList) : IRequest {
 				$class = explode('\\', str_replace([
 					' ',
 					'-',
 				], [
 					'\\',
 					'',
-				], $this->stringUtils->capitalize(str_replace('.', ' ', $match['class']))));
+				], $this->stringUtils->capitalize(str_replace('.', ' ', $class))));
 				array_splice($class, -1, 0, $type);
-				$element = $this->createElement($path, $parameterList);
+				$element = $this->createElement($class = implode('\\', $class), $parameterList);
 				$element->mergeMetaList([
-					'::class'  => implode('\\', $class),
-					'::method' => 'action' . $this->stringUtils->toCamelCase($match['method']),
+					'::class'  => $class,
+					'::method' => 'action' . $this->stringUtils->toCamelCase($method),
 				]);
 				return new Request($element, $this->getTargetList());
 			}

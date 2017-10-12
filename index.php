@@ -37,7 +37,6 @@
 	Debugger::$onFatalError[] = function ($e) {
 		Debugger::log($e);
 	};
-
 	/**
 	 * Container factory is the simplest way how to create dependency container; in this particular case container is also
 	 * configured to get "default" set of services defined in Edde.

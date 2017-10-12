@@ -23,10 +23,7 @@
 			}
 
 			public function getTargetList() : array {
-				if ($this->isHttp()) {
-					return $this->httpService->getRequest()->getHeaderList()->getAcceptList();
-				}
-				return [];
+				return $this->isHttp() ? $this->httpService->getRequest()->getHeaderList()->getAcceptList() : [];
 			}
 
 			protected function createElement(string $request, array $parameterList) : IElement {

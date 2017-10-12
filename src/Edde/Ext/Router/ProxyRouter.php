@@ -35,7 +35,7 @@
 			 * @inheritdoc
 			 */
 			public function createRequest() : IRequest {
-				return $this->router->createRequest();
+				return $this->request ?: $this->request = $this->router->createRequest();
 			}
 
 			/**
