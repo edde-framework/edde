@@ -8,4 +8,7 @@
 		 * for example actionGet, actionPost, .... Content negotiation is working too.
 		 */
 		class IndexControl extends AbstractIndexControl {
+			public function actionGet() {
+				echo json_encode('yumiii!');
+			}
 		}

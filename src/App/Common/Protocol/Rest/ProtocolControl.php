@@ -2,17 +2,20 @@
 	namespace App\Common\Protocol\Rest;
 
 		use App\Common\Protocol\AbstractProtocolControl;
-		use Edde\Ext\Response\ResponseFactory;
 
 		class ProtocolControl extends AbstractProtocolControl {
-			use ResponseFactory;
-
 			public function actionGet() {
-				$this->sendScalar([
+				echo json_encode([
 					'hello',
 					'the protocol',
 					'is',
 					'here!!',
 				]);
+//				$this->sendScalar([
+//					'hello',
+//					'the protocol',
+//					'is',
+//					'here!!',
+//				]);
 			}
 		}

@@ -31,6 +31,6 @@
 			 * @inheritdoc
 			 */
 			public function createRequest() : IRequest {
-				return $this->request ?: $this->request = new Request($this->element, $this->getTargetList());
+				return new Request($this->element, $this->getTargetList());
 			}
 		}

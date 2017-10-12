@@ -10,7 +10,8 @@
 		use Edde\Common\Router\AbstractRouter;
 
 		class ProtocolServiceRouter extends AbstractRouter {
-			const PREG = '~^/?(?<class>[.a-z0-9-]+)/(?<method>[a-z0-9-]+)$~';
+			const PREG_CONTROLLER = '~^/?(?<class>[.a-z0-9-]+)/(?<method>[a-z0-9-]+)$~';
+			const PREG_REST = '~^/?rest/(?<class>[.a-z0-9-]+)$~';
 			use ProtocolService;
 			use CliUtils;
 			use StringUtils;
@@ -24,6 +25,13 @@
 				} catch (\Throwable $exception) {
 					return false;
 				}
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function createRequest() : IRequest {
+				return $this->isHttp() ? $this->createHttpRequest() : $this->createCliRequest();
 			}
 
 			/**
@@ -57,14 +65,21 @@
 			/**
 			 * @param string $path
 			 * @param array  $parameterList
+			 * @param string $type
 			 *
 			 * @return IRequest
 			 * @throws RouterException
 			 */
 			protected function createRouteRequest(string $path, array $parameterList, string $type) : IRequest {
-				if (($match = $this->stringUtils->match($path, self::PREG, true)) === null) {
+				if ($this->isHttp() && ($match = $this->stringUtils->match($path, self::PREG_REST, true, true))) {
+					$match['method'] = strtolower($this->httpService->getRequest()->getMethod());
+					$type = 'Rest';
+				} else if (($match = $this->stringUtils->match($path, self::PREG_CONTROLLER, true, true)) === null) {
 					throw new RouterException(sprintf('Cannot handle current url path [%s].', $path));
 				}
+				/**
+				 * assignment is intentional
+				 */
 				$class = explode('\\', str_replace([
 					' ',
 					'-',
