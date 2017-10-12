@@ -5,18 +5,16 @@
 		use Edde\Api\Application\IApplication;
 		use Edde\Api\Log\Inject\LogService;
 		use Edde\Api\Request\Inject\RequestService;
-		use Edde\Api\Response\Inject\ResponseService;
 		use Edde\Common\Object\Object;
 
 		class Application extends Object implements IApplication {
 			use RequestService;
-			use ResponseService;
 			use LogService;
 
 			/**
 			 * @inheritdoc
 			 */
-			public function run() : int {
+			public function run(): int {
 				try {
 					/**
 					 * the flow is simple:
@@ -24,7 +22,7 @@
 					 * - we have request, so it's time to translate it into response (just data, computation, no output)
 					 * - and at the end we can send http headers, if required, echo the things, do heavy processing, do output, kill devil kitten, whatever, ...
 					 */
-					return $this->responseService->execute($this->requestService->execute())->getExitCode();
+					return $this->requestService->execute()->getExitCode();
 				} catch (\Throwable $exception) {
 					$this->logService->exception($exception, [
 						'edde',
