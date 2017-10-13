@@ -67,7 +67,10 @@
 		 * necessary to register cascade factory by container as it has some dependencies.
 		 */
 		$container->registerFactory($container->create(CascadeFactory::class, [], __FILE__));
-		$container->create('run');
+		/**
+		 * an application is the only magical factory intended to execute an IApplication interface
+		 */
+		$container->create('application');
 	} catch (\Throwable $e) {
 		Debugger::log($e);
 		die(sprintf('Critical application Exception [%s]; see logs.', get_class($e)));

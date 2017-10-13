@@ -4,8 +4,8 @@
 
 		use Edde\Api\Container\Exception\ContainerException;
 		use Edde\Api\Container\Inject\Container;
-		use Edde\Api\Http\ICookieList;
-		use Edde\Api\Http\IHeaderList;
+		use Edde\Api\Http\ICookies;
+		use Edde\Api\Http\IHeaders;
 		use Edde\Api\Http\IHttpService;
 		use Edde\Api\Http\IRequest;
 		use Edde\Api\Http\IResponse;
@@ -26,18 +26,18 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getRequest() : IRequest {
+			public function getRequest(): IRequest {
 				if ($this->request) {
 					return $this->request;
 				}
-				$this->request = new Request(Url::create((isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']), $this->createHeaderList(), $this->createCookieList());
+				$this->request = new Request(Url::create((isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']), $this->createHeaders(), $this->createCookies());
 				$input = fopen('php://input', 'rb');
 				$content = null;
 				if (empty($_POST) === false) {
 					$content = new Content($_POST, 'post');
 				} else if (fgetc($input) !== false) {
-					$headerList = $this->request->getHeaderList();
-					$contentType = $headerList->getContentType();
+					$headers = $this->request->getHeaders();
+					$contentType = $headers->getContentType();
 					$content = new Content('php://input', 'stream+' . $contentType->getMime());
 				}
 				fclose($input);
@@ -50,7 +50,7 @@
 			 *
 			 * @throws ContainerException
 			 */
-			protected function createHeaderList() : IHeaderList {
+			protected function createHeaders(): IHeaders {
 				$headers = [];
 				$mysticList = [
 					'CONTENT_TYPE'   => 'Content-Type',
@@ -82,30 +82,31 @@
 						$headers['Authorization'] = $_SERVER['PHP_AUTH_DIGEST'];
 					}
 				}
-				return $this->container->create(HeaderList::class, [$headers], __METHOD__);
+				return $this->container->create(Headers::class, [$headers], __METHOD__);
 			}
 
-			protected function createCookieList() : ICookieList {
-				$cookieList = new CookieList();
+			protected function createCookies(): ICookies {
+				$cookies = new Cookies();
 				foreach ($_COOKIE as $name => $value) {
-					$cookieList->add(new Cookie($name, $value, 0, null, null));
+					$cookies->add(new Cookie($name, $value, 0, null, null));
 				}
-				return $cookieList;
+				return $cookies;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getResponse() : IResponse {
+			public function getResponse(): IResponse {
 				if ($this->response) {
 					return $this->response;
 				}
+				return $this->response = new Response(200, $this->container->create(Headers::class, [], __METHOD__), $this->container->create(Cookies::class, [], __METHOD__));
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function setResponse(IResponse $response) : IHttpService {
+			public function setResponse(IResponse $response): IHttpService {
 				$this->response = $response;
 				return $this;
 			}
@@ -113,7 +114,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function send() : IHttpService {
+			public function send(): IHttpService {
 				$response = $this->getResponse();
 				$response->send();
 				return $this;

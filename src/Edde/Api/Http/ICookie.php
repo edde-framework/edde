@@ -55,5 +55,5 @@
 			 *
 			 * @return ICookie
 			 */
-			public function setupCookie() : ICookie;
+			public function send(): ICookie;
 		}

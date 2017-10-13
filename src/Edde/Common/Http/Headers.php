@@ -3,15 +3,13 @@
 	namespace Edde\Common\Http;
 
 		use Edde\Api\Http\IContentType;
-		use Edde\Api\Http\IHeaderList;
-		use Edde\Api\Utils\Inject\HttpUtils;
+		use Edde\Api\Http\IHeaders;
 		use Edde\Common\Collection\AbstractList;
 
 		/**
 		 * Simple header list implementation over an array.
 		 */
-		class HeaderList extends AbstractList implements IHeaderList {
-			use HttpUtils;
+		class Headers extends AbstractList implements IHeaders {
 			/**
 			 * @var IContentType|null
 			 */
@@ -32,7 +30,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getContentType() :?IContentType {
+			public function getContentType():?IContentType {
 				if ($this->contentType === null && ($contentType = $this->get('Content-Type'))) {
 					$this->contentType = new ContentType((string)$contentType);
 				}
@@ -49,42 +47,42 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getAcceptList() : array {
+			public function getAcceptList(): array {
 				return $this->acceptList ?: $this->acceptList = $this->httpUtils->accept($this->get('Accept'));
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getAcceptLanguage(string $default) : string {
+			public function getAcceptLanguage(string $default): string {
 				return $this->getAcceptLanguageList($default)[0];
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getAcceptLanguageList(string $default) : array {
+			public function getAcceptLanguageList(string $default): array {
 				return $this->languageList ?: $this->languageList = $this->httpUtils->language($this->get('Accept-Language'), $default);
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getAcceptCharset(string $default) : string {
+			public function getAcceptCharset(string $default): string {
 				return $this->getAcceptCharsetList($default)[0];
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getAcceptCharsetList(string $default) : array {
+			public function getAcceptCharsetList(string $default): array {
 				return $this->charsetList ?: $this->charsetList = $this->httpUtils->charset($this->get('Accept-Charset'), $default);
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function headers() : array {
+			public function headers(): array {
 				$headers = [];
 				foreach ($this->list as $header => $value) {
 					$headers[] = $header . ': ' . $value;
@@ -95,7 +93,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function setupHeaderList() : IHeaderList {
+			public function send(): IHeaders {
 				foreach ($this as $header => $value) {
 					header("$header: $value");
 				}

@@ -7,7 +7,7 @@
 		/**
 		 * Explicit interface for http header list; missing array access interface is intentional.
 		 */
-		interface IHeaderList extends IList {
+		interface IHeaders extends IList {
 			/**
 			 * return content type from header
 			 *
@@ -77,7 +77,7 @@
 			/**
 			 * send headers
 			 *
-			 * @return IHeaderList
+			 * @return IHeaders
 			 */
-			public function setupHeaderList() : IHeaderList;
+			public function send(): IHeaders;
 		}

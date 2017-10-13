@@ -3,13 +3,13 @@
 	namespace Edde\Common\Http;
 
 		use Edde\Api\Http\ICookie;
-		use Edde\Api\Http\ICookieList;
+		use Edde\Api\Http\ICookies;
 		use Edde\Common\Object\Object;
 
 		/**
 		 * Class holding set of cookies.
 		 */
-		class CookieList extends Object implements ICookieList {
+		class Cookies extends Object implements ICookies {
 			/**
 			 * @var ICookie[]
 			 */
@@ -26,9 +26,9 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function setupCookieList() : ICookieList {
+			public function send(): ICookies {
 				foreach ($this->cookieList as $cookie) {
-					$cookie->setupCookie();
+					$cookie->send();
 				}
 				return $this;
 			}

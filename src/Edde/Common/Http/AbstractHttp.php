@@ -3,60 +3,60 @@
 	namespace Edde\Common\Http;
 
 		use Edde\Api\Content\IContent;
-		use Edde\Api\Http\ICookieList;
-		use Edde\Api\Http\IHeaderList;
+		use Edde\Api\Http\ICookies;
+		use Edde\Api\Http\IHeaders;
 		use Edde\Api\Http\IHttp;
 		use Edde\Common\Object\Object;
 
 		abstract class AbstractHttp extends Object implements IHttp {
 			/**
-			 * @var IHeaderList
+			 * @var IHeaders
 			 */
-			protected $headerList;
+			protected $headers;
 			/**
-			 * @var ICookieList
+			 * @var ICookies
 			 */
-			protected $cookieList;
+			protected $cookies;
 			/**
 			 * @var IContent|null
 			 */
 			protected $content;
 
 			/**
-			 * @param IHeaderList $headerList
-			 * @param ICookieList $cookieList
+			 * @param IHeaders $headers
+			 * @param ICookies $cookies
 			 */
-			public function __construct(IHeaderList $headerList, ICookieList $cookieList) {
-				$this->headerList = $headerList;
-				$this->cookieList = $cookieList;
+			public function __construct(IHeaders $headers, ICookies $cookies) {
+				$this->headers = $headers;
+				$this->cookies = $cookies;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getHeaderList() : IHeaderList {
-				return $this->headerList;
+			public function getHeaders(): IHeaders {
+				return $this->headers;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getCookieList() : ICookieList {
-				return $this->cookieList;
+			public function getCookies(): ICookies {
+				return $this->cookies;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function header(string $header, string $value) : IHttp {
-				$this->headerList->set($header, $value);
+			public function header(string $header, string $value): IHttp {
+				$this->headers->set($header, $value);
 				return $this;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function setContent(IContent $content = null) : IHttp {
+			public function setContent(IContent $content = null): IHttp {
 				$this->content = $content;
 				return $this;
 			}
@@ -64,7 +64,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getContent() :?IContent {
+			public function getContent():?IContent {
 				return $this->content;
 			}
 		}

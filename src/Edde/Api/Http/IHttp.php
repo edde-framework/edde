@@ -9,14 +9,14 @@
 		 */
 		interface IHttp {
 			/**
-			 * @return IHeaderList
+			 * @return IHeaders
 			 */
-			public function getHeaderList() : IHeaderList;
+			public function getHeaders(): IHeaders;
 
 			/**
-			 * @return ICookieList|ICookie[]
+			 * @return ICookies|ICookie[]
 			 */
-			public function getCookieList() : ICookieList;
+			public function getCookies(): ICookies;
 
 			/**
 			 * shortcut to header list

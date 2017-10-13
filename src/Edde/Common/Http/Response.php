@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Http;
 
-		use Edde\Api\Http\ICookieList;
-		use Edde\Api\Http\IHeaderList;
+		use Edde\Api\Http\ICookies;
+		use Edde\Api\Http\IHeaders;
 		use Edde\Api\Http\IResponse;
 
 		class Response extends AbstractHttp implements IResponse {
@@ -12,15 +12,15 @@
 			 */
 			protected $code;
 
-			public function __construct(int $code, IHeaderList $headerList, ICookieList $cookieList) {
-				parent::__construct($headerList, $cookieList);
+			public function __construct(int $code, IHeaders $headers, ICookies $cookies) {
+				parent::__construct($headers, $cookies);
 				$this->code = $code;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function setCode(int $code) : IResponse {
+			public function setCode(int $code): IResponse {
 				$this->code = $code;
 				return $this;
 			}
@@ -28,27 +28,19 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getCode() : int {
+			public function getCode(): int {
 				return $this->code;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function redirect(string $redirect) : IResponse {
-				$this->headerList->set('location', $redirect);
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function send() : IResponse {
+			public function send(): IResponse {
 				http_response_code($this->code);
-				$this->headerList->setupHeaderList();
-				$this->cookieList->setupCookieList();
+				$this->headers->send();
+				$this->cookies->send();
 				if ($this->content) {
-					$this->headerList->has('Content-Type') ? null : header('Content-Type: ' . $this->content->getMime());
+					$this->headers->has('Content-Type') ? null : header('Content-Type: ' . $this->content->getType());
 					ob_start();
 					echo $this->content->getContent();
 					header('Content-Length: ' . ob_get_length());

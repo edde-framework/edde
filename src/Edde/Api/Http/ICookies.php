@@ -7,7 +7,7 @@
 		/**
 		 * Formal interface for a cookie list implementation.
 		 */
-		interface ICookieList extends IConfigurable {
+		interface ICookies extends IConfigurable {
 			/**
 			 * set a cookie
 			 *
@@ -20,7 +20,7 @@
 			/**
 			 * setup cookies
 			 *
-			 * @return ICookieList
+			 * @return ICookies
 			 */
-			public function setupCookieList() : ICookieList;
+			public function send(): ICookies;
 		}

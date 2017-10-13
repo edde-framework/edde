@@ -8,7 +8,6 @@
 		use Edde\Api\Container\IContainer;
 		use Edde\Api\Container\IFactory;
 		use Edde\Api\Converter\IConverterManager;
-		use Edde\Api\Http\IHostUrl;
 		use Edde\Api\Http\IHttpService;
 		use Edde\Api\Log\ILogService;
 		use Edde\Api\Protocol\IProtocolService;
@@ -29,7 +28,6 @@
 		use Edde\Common\Container\Factory\LinkFactory;
 		use Edde\Common\Container\Factory\ProxyFactory;
 		use Edde\Common\Converter\ConverterManager;
-		use Edde\Common\Http\HostUrl;
 		use Edde\Common\Http\HttpService;
 		use Edde\Common\Log\LogService;
 		use Edde\Common\Object\Object;
@@ -60,7 +58,7 @@
 			 * @return IFactory[]
 			 * @throws FactoryException
 			 */
-			static public function createFactoryList(array $factoryList) : array {
+			static public function createFactoryList(array $factoryList): array {
 				$factories = [];
 				foreach ($factoryList as $name => $factory) {
 					$current = null;
@@ -112,7 +110,7 @@
 			 * @throws ContainerException
 			 * @throws FactoryException
 			 */
-			static public function create(array $factoryList = [], array $configuratorList = []) : IContainer {
+			static public function create(array $factoryList = [], array $configuratorList = []): IContainer {
 				/** @var $container IContainer */
 				$container = new Container();
 				/**
@@ -137,7 +135,7 @@
 			 * @throws ContainerException
 			 * @throws FactoryException
 			 */
-			static public function container(array $factoryList = [], array $configuratorList = []) : IContainer {
+			static public function container(array $factoryList = [], array $configuratorList = []): IContainer {
 				return self::create(array_merge(self::getDefaultFactoryList(), $factoryList), array_filter(array_merge(self::getDefaultConfiguratorList(), $configuratorList)));
 			}
 
@@ -152,13 +150,13 @@
 			 * @throws ContainerException
 			 * @throws FactoryException
 			 */
-			static public function inject($instance, array $factoryList = [], array $configuratorList = []) : IContainer {
+			static public function inject($instance, array $factoryList = [], array $configuratorList = []): IContainer {
 				$container = self::container(empty($factoryList) ? [new ClassFactory()] : $factoryList, $configuratorList);
 				$container->inject($instance);
 				return $container;
 			}
 
-			static public function getDefaultFactoryList() : array {
+			static public function getDefaultFactoryList(): array {
 				return [
 					/**
 					 * utils
@@ -174,10 +172,6 @@
 					 * runtime info provider
 					 */
 					IRuntime::class          => Runtime::class,
-					/**
-					 * if needed, host url provider (host name is used for absolute links)
-					 */
-					IHostUrl::class          => HostUrl::class . '::factory',
 					/**
 					 * log support
 					 */
@@ -208,11 +202,11 @@
 					/**
 					 * magical factory for an application execution
 					 */
-					'run'                    => IApplication::class . '::run',
+					'application'            => IApplication::class . '::run',
 				];
 			}
 
-			static public function getDefaultConfiguratorList() : array {
+			static public function getDefaultConfiguratorList(): array {
 				return [
 					IProtocolService::class => ProtocolServiceConfigurator::class,
 				];

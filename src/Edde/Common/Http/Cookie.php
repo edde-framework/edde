@@ -106,7 +106,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function setupCookie() : ICookie {
+			public function send(): ICookie {
 				setcookie($this->name, $this->value, $this->expire, $this->path, $this->domain, $this->secure, $this->httpOnly);
 				return $this;
 			}
