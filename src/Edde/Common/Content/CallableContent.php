@@ -1,8 +1,8 @@
 <?php
 	namespace Edde\Common\Content;
 
-		class IterableContent extends Content {
+		class CallableContent extends Content {
 			public function __construct(callable $content) {
-				parent::__construct($content(), \Iterator::class);
+				parent::__construct($content, 'callable');
 			}
 		}

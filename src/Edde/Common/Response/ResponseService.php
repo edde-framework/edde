@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Response;
 
+		use Edde\Api\Response\Exception\NotCallableException;
 		use Edde\Api\Response\Exception\NotIterableException;
 		use Edde\Api\Response\IResponse;
 		use Edde\Api\Response\IResponseService;
@@ -12,7 +13,9 @@
 			 * @inheritdoc
 			 */
 			public function execute(IResponse $response): IResponseService {
-				if (is_iterable($iterable = ($content = $response->getContent())->getContent()) === false) {
+				if (is_callable($iterable = ($content = $response->getContent())->getContent()) === false) {
+					throw new NotCallableException(sprintf('Content type [%s] of response is not callable.', $content->getType()));
+				} else if (is_iterable($iterable = $iterable()) === false) {
 					throw new NotIterableException(sprintf('Content type [%s] of response is not iterable.', $content->getType()));
 				}
 				foreach ($iterable as $chunk) {
