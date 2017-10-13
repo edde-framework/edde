@@ -68,7 +68,7 @@
 			 * @inheritdoc
 			 */
 			public function getMethod(): string {
-				return $this->method ?: $this->method = $_SERVER['REQUEST_METHOD'] ?? '';
+				return $this->method ?: $this->method = strtoupper($_SERVER['REQUEST_METHOD']);
 			}
 
 			/**
@@ -95,7 +95,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getRequestUrl(): IUrl {
+			public function getUrl(): IUrl {
 				return $this->url;
 			}
 

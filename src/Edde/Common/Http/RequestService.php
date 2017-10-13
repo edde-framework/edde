@@ -1,10 +1,12 @@
 <?php
 	namespace Edde\Common\Http;
 
+		use Edde\Api\Http\IContentType;
 		use Edde\Api\Http\ICookies;
 		use Edde\Api\Http\IHeaders;
 		use Edde\Api\Http\IRequest;
 		use Edde\Api\Http\IRequestService;
+		use Edde\Api\Url\IUrl;
 		use Edde\Common\Content\InputContent;
 		use Edde\Common\Content\PostContent;
 		use Edde\Common\Object\Object;
@@ -39,8 +41,33 @@
 			}
 
 			/**
-			 * create header list from incoming request
+			 * @inheritdoc
 			 */
+			public function getUrl(): IUrl {
+				return $this->getRequest()->getUrl();
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getMethod(): string {
+				return $this->getRequest()->getMethod();
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getHeaders(): IHeaders {
+				return $this->getRequest()->getHeaders();
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getContentType():?IContentType {
+				return $this->getHeaders()->getContentType();
+			}
+
 			protected function createHeaders(): IHeaders {
 				$headers = [];
 				$mysticList = [

@@ -1,6 +1,7 @@
 <?php
 	namespace Edde\Ext\Router;
 
+		use Edde\Api\Http\Exception\NoHttpException;
 		use Edde\Api\Protocol\Inject\ProtocolService;
 		use Edde\Api\Request\IRequest;
 		use Edde\Api\Router\Exception\RouterException;
@@ -19,7 +20,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function canHandle() : bool {
+			public function canHandle(): bool {
 				try {
 					return $this->protocolService->canHandle($this->createRequest()->getElement());
 				} catch (\Throwable $exception) {
@@ -30,16 +31,16 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function createRequest() : IRequest {
+			public function createRequest(): IRequest {
 				return $this->request ?: $this->request = ($this->isHttp() ? $this->createHttpRequest() : $this->createCliRequest());
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			protected function createHttpRequest() : IRequest {
-				if ($match = $this->stringUtils->match($path = ($requestUrl = ($request = $this->httpService->getRequest())->getRequestUrl())->getPath(false), self::PREG_REST, true, true)) {
-					return $this->factory($match['class'], strtolower($request->getMethod()), 'Rest', $requestUrl->getParameterList());
+			protected function createHttpRequest(): IRequest {
+				if ($match = $this->stringUtils->match($path = ($requestUrl = $this->requestService->getUrl())->getPath(false), self::PREG_REST, true, true)) {
+					return $this->factory($match['class'], strtolower($this->requestService->getMethod()), 'Rest', $requestUrl->getParameterList());
 				} else if ($match = $this->stringUtils->match($path, self::PREG_CONTROLLER, true, true)) {
 					return $this->factory($match['class'], $match['method'], 'Http', $requestUrl->getParameterList());
 				}
@@ -49,7 +50,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			protected function createCliRequest() : IRequest {
+			protected function createCliRequest(): IRequest {
 				/**
 				 * it's better to not relay on the global argc/v; they can be
 				 * safely accessed from globals array
@@ -70,7 +71,16 @@
 				throw new RouterException('Cannot handle current Cli request.');
 			}
 
-			protected function factory(string $class, string $method, string $type, array $parameterList) : IRequest {
+			/**
+			 * @param string $class
+			 * @param string $method
+			 * @param string $type
+			 * @param array  $parameterList
+			 *
+			 * @return IRequest
+			 * @throws NoHttpException
+			 */
+			protected function factory(string $class, string $method, string $type, array $parameterList): IRequest {
 				$class = explode('\\', str_replace([
 					' ',
 					'-',

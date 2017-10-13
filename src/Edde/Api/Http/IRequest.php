@@ -42,7 +42,7 @@
 			/**
 			 * @return IUrl
 			 */
-			public function getRequestUrl() : IUrl;
+			public function getUrl(): IUrl;
 
 			/**
 			 * @return IUrl|null
