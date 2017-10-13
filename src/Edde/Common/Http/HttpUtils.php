@@ -1,10 +1,17 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Utils;
+	namespace Edde\Common\Http;
 
-		use Edde\Api\Utils\IHttpUtils;
+		use Edde\Api\Http\Exception\HttpUtilsException;
+		use Edde\Api\Http\IContentType;
+		use Edde\Api\Http\ICookie;
+		use Edde\Api\Http\IHeaders;
+		use Edde\Api\Http\IHttpUtils;
+		use Edde\Api\Http\IRequestHeader;
+		use Edde\Api\Http\IResponseHeader;
 		use Edde\Api\Utils\Inject\StringUtils;
 		use Edde\Common\Object\Object;
+		use Edde\Common\Url\Url;
 
 		/**
 		 * Static set of helper functions around http protocol.
@@ -15,7 +22,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function accept(string $accept = null) : array {
+			public function accept(string $accept = null): array {
 				if ($accept === null) {
 					return ['*/*'];
 				}
@@ -66,7 +73,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function language(string $language = null, string $default = 'en') : array {
+			public function language(string $language = null, string $default = 'en'): array {
 				if ($language === null) {
 					return [$default];
 				}
@@ -96,7 +103,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function charset(string $charset = null, $default = 'utf-8') : array {
+			public function charset(string $charset = null, $default = 'utf-8'): array {
 				if ($charset === null) {
 					return [$default];
 				}
@@ -126,7 +133,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function contentType(string $contentType) : \stdClass {
+			public function contentType(string $contentType): IContentType {
 				/**
 				 * this is fuckin' trick how to parse mime using native php's csv parser
 				 *
@@ -152,21 +159,20 @@
 					 */
 					fclose($handle);
 				}
-				$stdClass = new \stdClass();
-				$stdClass->mime = strtolower(trim(array_shift($type)));
-				$stdClass->params = [];
+				$mime = strtolower(trim(array_shift($type)));
+				$parameterList = [];
 				foreach ($type as $part) {
 					$key = trim(substr($part, 0, $index = strpos($part, '=')));
 					$value = trim(trim(substr($part, $index + 1)), '"');
-					$stdClass->params[$key] = $value;
+					$parameterList[$key] = $value;
 				}
-				return $stdClass;
+				return new ContentType($mime, $parameterList);
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function cookie(string $cookie) : \stdClass {
+			public function cookie(string $cookie): ICookie {
 				$cookie = $this->stringUtils->match($cookie, '~(?<name>[^\s()<>@,;:\"/\\[\\]?={}]+)=(?<value>[^=;\s]+)\s*(?<misc>.*)?~', true);
 				if (isset($cookie['misc'])) {
 					if ($match = $this->stringUtils->match($cookie['misc'], '~path=(?<path>[a-z0-9/._-]+);?~i', true)) {
@@ -179,68 +185,68 @@
 						$cookie['expires'] = $match['expires'];
 					}
 				}
-				$cookie['secure'] = strpos($cookie['misc'], 'secure') !== false;
-				$cookie['httpOnly'] = stripos($cookie['misc'], 'httponly') !== false;
+				$misc = $cookie['misc'];
+				$cookie['expires'] = strtotime($cookie['expires'] ?? '1.1.1970');
 				unset($cookie['misc']);
-				return (object)$cookie;
+				return new Cookie($cookie['name'], $cookie['value'], $cookie['expires'], $cookie['path'] ?? '/', $cookie['domain'] ?? null, strpos($misc, 'secure') !== false, stripos($misc, 'httponly') !== false);
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function headerList(string $headers, bool $process = true) : array {
-				$headers = explode("\r\n", $headers);
-				$headerList = [];
-				if ($this->stringUtils->match($headers[0], '~HTTP/[0-9.]+~')) {
-					$headerList['http'] = array_shift($headers);
+			public function headers(string $headers): IHeaders {
+				$headerList = explode("\r\n", $headers);
+				$headers = new Headers();
+				try {
+					$headers->add('http-request', $this->requestHeader($headerList[0]));
+				} catch (HttpUtilsException $e) {
+					try {
+						$headers->add('http-response', $this->responseHeader($headerList[0]));
+					} catch (HttpUtilsException $e) {
+					}
 				}
-				foreach ($headers as $header) {
+				foreach ($headerList as $header) {
 					if (($index = strpos($header, ':')) === false) {
 						continue;
 					}
-					$headerList[substr($header, 0, $index)] = trim(substr($header, $index + 1));
-				}
-				return $process ? self::headers($headerList) : $headerList;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function headers(array $headerList) : array {
-				$map = [
-					'Content-Type'    => [
-						$this,
-						'contentType',
-					],
-					'http'            => [
-						$this,
-						'http',
-					],
-					'Accept'          => [
-						$this,
-						'accept',
-					],
-					'Accept-Language' => [
-						$this,
-						'language',
-					],
-				];
-				foreach ($headerList as $name => &$header) {
-					if (isset($map[$name]) === false) {
-						continue;
+					$name = substr($header, 0, $index);
+					$value = trim(substr($header, $index + 1));
+					switch (strtolower($name)) {
+						case 'content-type':
+							$value = $this->contentType($value);
+							break;
+						case 'host':
+							$value = Url::create($value);
+							break;
+						case 'accept':
+							$value = $this->accept($value);
+							break;
+						case 'accept-language':
+							$value = $this->language($value);
+							break;
 					}
-					$header = $map[$name]($header);
+					$headers->add($name, $value);
 				}
-				return $headerList;
+				return $headers;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function http(string $http) : \stdClass {
-				if ($match = $this->stringUtils->match($http, '~(?<method>[A-Z]+)\s+(?<path>.*?)\s+HTTP/(?<http>[0-9.]+)~', true)) {
-					return (object)$match;
+			public function requestHeader(string $http): IRequestHeader {
+				if ($match = $this->stringUtils->match($http, '~(?<method>[A-Z]+)\s+(?<path>.*?)\s+HTTP/(?<version>[0-9.]+)~', true)) {
+					return new RequestHeader($match['method'], $match['path'], $match['version']);
 				}
-				return (object)$this->stringUtils->match($http, '~^HTTP/(?<http>[0-9.]+)\s(?<status>\d+)(\s(?<message>.*))?$~', true);
+				throw new HttpUtilsException(sprintf('Cannot parse http request header [%s].', $http));
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function responseHeader(string $http): IResponseHeader {
+				if ($match = $this->stringUtils->match($http, '~^HTTP/(?<version>[0-9.]+)\s(?<status>\d+)(\s(?<message>.*))?$~', true)) {
+					return new ResponseHeader($match['version'], (int)$match['status'], $match['message']);
+				}
+				throw new HttpUtilsException(sprintf('Cannot parse http response header [%s].', $http));
 			}
 		}

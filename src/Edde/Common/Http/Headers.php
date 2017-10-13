@@ -2,101 +2,38 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Http;
 
-		use Edde\Api\Http\IContentType;
 		use Edde\Api\Http\IHeaders;
-		use Edde\Common\Collection\AbstractList;
+		use Edde\Common\Object\Object;
 
 		/**
 		 * Simple header list implementation over an array.
 		 */
-		class Headers extends AbstractList implements IHeaders {
-			/**
-			 * @var IContentType|null
-			 */
-			protected $contentType;
-			/**
-			 * @var string[]
-			 */
-			protected $acceptList;
-			/**
-			 * @var string[]
-			 */
-			protected $languageList;
-			/**
-			 * @var string[]
-			 */
-			protected $charsetList;
+		class Headers extends Object implements IHeaders {
+			protected $headers = [];
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getContentType():?IContentType {
-				if ($this->contentType === null && ($contentType = $this->get('Content-Type'))) {
-					$this->contentType = new ContentType((string)$contentType);
+			public function add(string $name, $value): IHeaders {
+				/**
+				 * more same headers force the original value to became an array with
+				 * embedded headers
+				 */
+				if (isset($this->headers[$name])) {
+					if (is_array($this->headers[$name]) === false) {
+						$this->headers[$name] = [$this->headers[$name]];
+					}
+					$this->headers[$name][] = $value;
+					return $this;
 				}
-				return $this->contentType;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getUserAgent(string $default = null) {
-				return $this->get('User-Agent', $default);
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getAcceptList(): array {
-				return $this->acceptList ?: $this->acceptList = $this->httpUtils->accept($this->get('Accept'));
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getAcceptLanguage(string $default): string {
-				return $this->getAcceptLanguageList($default)[0];
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getAcceptLanguageList(string $default): array {
-				return $this->languageList ?: $this->languageList = $this->httpUtils->language($this->get('Accept-Language'), $default);
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getAcceptCharset(string $default): string {
-				return $this->getAcceptCharsetList($default)[0];
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getAcceptCharsetList(string $default): array {
-				return $this->charsetList ?: $this->charsetList = $this->httpUtils->charset($this->get('Accept-Charset'), $default);
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function headers(): array {
-				$headers = [];
-				foreach ($this->list as $header => $value) {
-					$headers[] = $header . ': ' . $value;
-				}
-				return $headers;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function send(): IHeaders {
-				foreach ($this as $header => $value) {
-					header("$header: $value");
-				}
+				$this->headers[$name] = $value;
 				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function toArray(): array {
+				return $this->headers;
 			}
 		}

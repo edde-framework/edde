@@ -8,7 +8,7 @@
 			 *
 			 * @return string
 			 */
-			public function getName() : string;
+			public function getName(): string;
 
 			/**
 			 * a value of the cookie
@@ -18,42 +18,44 @@
 			public function getValue();
 
 			/**
+			 * return a timestamp of expire date or null of not set
+			 *
 			 * @return int
 			 */
-			public function getExpire() : int;
+			public function getExpire(): ?int;
 
 			/**
 			 * defaults to a "/"
 			 *
 			 * @return string
 			 */
-			public function getPath();
+			public function getPath(): string;
 
 			/**
 			 * domain restriction of cookie
 			 *
 			 * @return string
 			 */
-			public function getDomain();
+			public function getDomain(): ?string;
 
 			/**
 			 * send this cookie only when on a secured connection
 			 *
 			 * @return bool
 			 */
-			public function isSecure() : bool;
+			public function isSecure(): bool;
 
 			/**
 			 * cookie is available only in the http protocol (excluding JavaScript, ...)
 			 *
 			 * @return bool
 			 */
-			public function isHttpOnly() : bool;
+			public function isHttpOnly(): bool;
 
 			/**
-			 * set a cookie (setcoookie())
+			 * return cookie data as an array
 			 *
-			 * @return ICookie
+			 * @return array
 			 */
-			public function send(): ICookie;
+			public function toArray(): array;
 		}

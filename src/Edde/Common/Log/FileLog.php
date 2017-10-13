@@ -45,12 +45,12 @@
 			 *
 			 * @return ILog
 			 */
-			public function record(ILogRecord $logRecord) : ILog {
+			public function record(ILogRecord $logRecord): ILog {
 				$this->file->write(sprintf("[%s] %s\n", date('Y-m-d H:i:s'), $logRecord->getLog()));
 				return $this;
 			}
 
-			protected function handleInit() {
+			protected function handleInit(): void {
 				parent::handleInit();
 				$this->logDirectory->create();
 				$this->file = $this->logDirectory->file(date('Y-m-d-') . $this->name . '.log');

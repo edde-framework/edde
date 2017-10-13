@@ -7,33 +7,9 @@
 
 		class Cookie extends Object implements ICookie {
 			/**
-			 * @var string
+			 * @var array
 			 */
-			protected $name;
-			/**
-			 * @var string
-			 */
-			protected $value;
-			/**
-			 * @var int
-			 */
-			protected $expire;
-			/**
-			 * @var string
-			 */
-			protected $path;
-			/**
-			 * @var string
-			 */
-			protected $domain;
-			/**
-			 * @var bool
-			 */
-			protected $secure;
-			/**
-			 * @var bool
-			 */
-			protected $httpOnly;
+			protected $cookie;
 
 			/**
 			 * @param string $name
@@ -44,70 +20,71 @@
 			 * @param bool   $secure
 			 * @param bool   $httpOnly
 			 */
-			public function __construct(string $name, $value, $expire, $path, $domain, $secure = false, $httpOnly = false) {
-				$this->name = $name;
-				$this->value = $value;
-				$this->expire = $expire;
-				$this->path = $path;
-				$this->domain = $domain;
-				$this->secure = $secure;
-				$this->httpOnly = $httpOnly;
+			public function __construct(string $name, $value, int $expire = null, string $path = '/', string $domain = null, bool $secure = false, bool $httpOnly = false) {
+				$this->cookie = [
+					'name'     => $name,
+					'value'    => $value,
+					'expire'   => $expire,
+					'path'     => $path,
+					'domain'   => $domain,
+					'secure'   => $secure,
+					'httpOnly' => $httpOnly,
+				];
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getName() : string {
-				return $this->name;
+			public function getName(): string {
+				return $this->cookie['name'];
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function getValue() {
-				return $this->value;
+				return $this->cookie['value'];
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getExpire() : int {
-				return $this->expire;
+			public function getExpire(): ?int {
+				return $this->cookie['expire'];
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getPath() {
-				return $this->path;
+			public function getPath(): string {
+				return $this->cookie['path'];
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getDomain() {
-				return $this->domain;
+			public function getDomain(): ?string {
+				return $this->cookie['domain'];
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function isSecure() : bool {
-				return $this->secure;
+			public function isSecure(): bool {
+				return $this->cookie['secure'];
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function isHttpOnly() : bool {
-				return $this->httpOnly;
+			public function isHttpOnly(): bool {
+				return $this->cookie['httpOnly'];
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function send(): ICookie {
-				setcookie($this->name, $this->value, $this->expire, $this->path, $this->domain, $this->secure, $this->httpOnly);
-				return $this;
+			public function toArray(): array {
+				return $this->cookie;
 			}
 		}

@@ -1,8 +1,8 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Utils\Inject;
+	namespace Edde\Api\Http\Inject;
 
-		use Edde\Api\Utils\IHttpUtils;
+		use Edde\Api\Http\IHttpUtils;
 
 		trait HttpUtils {
 			/**

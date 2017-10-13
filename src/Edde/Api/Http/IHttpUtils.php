@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Utils;
+	namespace Edde\Api\Http;
 
 		use Edde\Api\Config\IConfigurable;
 
@@ -12,7 +12,7 @@
 			 *
 			 * @return array
 			 */
-			public function accept(string $accept = null) : array;
+			public function accept(string $accept = null): array;
 
 			/**
 			 * parse an input language string (Accept-Language header) and return langauge order
@@ -22,7 +22,7 @@
 			 *
 			 * @return array
 			 */
-			public function language(string $language = null, string $default = 'en') : array;
+			public function language(string $language = null, string $default = 'en'): array;
 
 			/**
 			 * return ordered list of accepted charsets
@@ -32,51 +32,50 @@
 			 *
 			 * @return array
 			 */
-			public function charset(string $charset = null, $default = 'utf-8') : array;
+			public function charset(string $charset = null, $default = 'utf-8'): array;
 
 			/**
 			 * this method does some really dark magic, so if the output is wrong, try to look here and report a bug
 			 *
 			 * @param string $contentType
 			 *
-			 * @return \stdClass
+			 * @return IContentType
 			 */
-			public function contentType(string $contentType) : \stdClass;
+			public function contentType(string $contentType): IContentType;
 
 			/**
 			 * parse cookie and return simple cookie object
 			 *
 			 * @param string $cookie
 			 *
-			 * @return \stdClass
+			 * @return ICookie
 			 */
-			public function cookie(string $cookie) : \stdClass;
+			public function cookie(string $cookie): ICookie;
 
 			/**
-			 * return pure array of headers
+			 * process input headers as a header implementation getting all known structures as parsed helper classes
 			 *
 			 * @param string $headers
-			 * @param bool   $process
 			 *
-			 * @return array
+			 * @return IHeaders
 			 */
-			public function headerList(string $headers, bool $process = true) : array;
+			public function headers(string $headers): IHeaders;
 
 			/**
-			 * return array of headers with known headers processed to another structures (like parsed Content-Type)
-			 *
-			 * @param array $headerList
-			 *
-			 * @return array
-			 */
-			public function headers(array $headerList) : array;
-
-			/**
-			 * parse http header (http request or http response)
+			 * parse http request header
 			 *
 			 * @param string $http
 			 *
-			 * @return \stdClass
+			 * @return IRequestHeader
 			 */
-			public function http(string $http) : \stdClass;
+			public function requestHeader(string $http): IRequestHeader;
+
+			/**
+			 * parse http response header
+			 *
+			 * @param string $http
+			 *
+			 * @return IResponseHeader
+			 */
+			public function responseHeader(string $http): IResponseHeader;
 		}

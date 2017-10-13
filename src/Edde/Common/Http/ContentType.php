@@ -3,61 +3,48 @@
 	namespace Edde\Common\Http;
 
 		use Edde\Api\Http\IContentType;
-		use Edde\Common\Collection\AbstractList;
-		use Edde\Common\Utils\HttpUtils;
+		use Edde\Common\Object\Object;
 
-		class ContentType extends AbstractList implements IContentType {
+		class ContentType extends Object implements IContentType {
 			/**
-			 * source content type
-			 *
 			 * @var string
 			 */
-			protected $contentType;
+			protected $mime;
 			/**
-			 * parsed content type
-			 *
-			 * @var \stdClass
+			 * @var array
 			 */
-			protected $object;
+			protected $parameterList;
 
-			/**
-			 * ContentType constructor.
-			 *
-			 * @param string $contentType can be only content type part or whole content type header
-			 */
-			public function __construct(string $contentType) {
-				parent::__construct();
-				if ($this->contentType = $contentType) {
-					$this->object = HttpUtils::contentType($this->contentType);
-					$this->put($this->object->params);
-				}
+			public function __construct(string $mime, array $parameterList = []) {
+				$this->mime = $mime;
+				$this->parameterList = $parameterList;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getCharset(string $default = 'utf-8') : string {
-				return (string)$this->get('charset', $default);
+			public function getCharset(string $default = 'utf-8'): string {
+				return $this->parameterList['charset'] ?? $default;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getMime(string $default = null) {
-				return $this->object ? $this->object->mime : $default;
+			public function getMime(): string {
+				return $this->mime;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getParameterList() : array {
-				return $this->array();
+			public function getParameterList(): array {
+				return $this->parameterList;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function __toString() : string {
+			public function __toString(): string {
 				return $this->getMime();
 			}
 		}

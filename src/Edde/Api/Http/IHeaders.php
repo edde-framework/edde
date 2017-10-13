@@ -2,82 +2,25 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Http;
 
-		use Edde\Api\Collection\IList;
-
-		/**
-		 * Explicit interface for http header list; missing array access interface is intentional.
-		 */
-		interface IHeaders extends IList {
+	/**
+	 * Explicit interface for http header list.
+	 */
+		interface IHeaders {
 			/**
-			 * return content type from header
+			 * add a header; value could be even prepared helper object (like IContentType, ...)
 			 *
-			 * @return IContentType|null
-			 */
-			public function getContentType() :?IContentType;
-
-			/**
-			 * return user agent
-			 *
-			 * @param string $default
-			 *
-			 * @return string
-			 */
-			public function getUserAgent(string $default = null);
-
-			/**
-			 * return an ordered array of accepted mime types
-			 *
-			 * @return array
-			 */
-			public function getAcceptList() : array;
-
-			/**
-			 * return prioritized language from the current header set or default one
-			 *
-			 * @param string $default
-			 *
-			 * @return string
-			 */
-			public function getAcceptLanguage(string $default) : string;
-
-			/**
-			 * return an ordered array of accept-lang
-			 *
-			 * @param string $default
-			 *
-			 * @return array
-			 */
-			public function getAcceptLanguageList(string $default) : array;
-
-			/**
-			 * return preferred charset
-			 *
-			 * @param string $default
-			 *
-			 * @return string
-			 */
-			public function getAcceptCharset(string $default) : string;
-
-			/**
-			 * return an ordered list of accept charsets
-			 *
-			 * @param string $default
-			 *
-			 * @return array
-			 */
-			public function getAcceptCharsetList(string $default) : array;
-
-			/**
-			 * return array of "compiled" headers
-			 *
-			 * @return array
-			 */
-			public function headers() : array;
-
-			/**
-			 * send headers
+			 * @param string $name
+			 * @param mixed  $value
 			 *
 			 * @return IHeaders
 			 */
-			public function send(): IHeaders;
+			public function add(string $name, $value): IHeaders;
+
+			/**
+			 * return a simple array with headers; if there is more values per one headers,
+			 * they would added to sub array
+			 *
+			 * @return array
+			 */
+			public function toArray(): array;
 		}
