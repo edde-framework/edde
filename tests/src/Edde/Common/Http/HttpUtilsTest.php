@@ -117,6 +117,6 @@ Accept-Language: cs,en;q=0.8');
 						'cs',
 						'en',
 					],
-				], $this->httpUtils->headers($headers)->toArray());
+				], $this->httpUtils->parseHeaders($headers)->toArray());
 			}
 		}

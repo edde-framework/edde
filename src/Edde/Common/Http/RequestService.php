@@ -4,6 +4,7 @@
 		use Edde\Api\Http\IContentType;
 		use Edde\Api\Http\ICookies;
 		use Edde\Api\Http\IHeaders;
+		use Edde\Api\Http\Inject\HttpUtils;
 		use Edde\Api\Http\IRequest;
 		use Edde\Api\Http\IRequestService;
 		use Edde\Api\Url\IUrl;
@@ -13,6 +14,7 @@
 		use Edde\Common\Url\Url;
 
 		class RequestService extends Object implements IRequestService {
+			use HttpUtils;
 			/**
 			 * @var IRequest
 			 */
@@ -25,15 +27,23 @@
 				if ($this->request) {
 					return $this->request;
 				}
-				$this->request = new Request(Url::create((isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']), $this->createHeaders(), $this->createCookies());
+				$this->request = new Request(
+					Url::create((isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']),
+					$this->createHeaders(),
+					$this->createCookies()
+				);
 				$input = fopen('php://input', 'rb');
 				$content = null;
 				if (empty($_POST) === false) {
 					$content = new PostContent($_POST);
 				} else if (fgetc($input) !== false) {
 					$headers = $this->request->getHeaders();
-					$contentType = $headers->getContentType();
-					$content = new InputContent('stream://' . $contentType->getMime());
+					$mime = 'application/octet-stream';
+					if ($headers->has('Content-Type')) {
+						$contentType = $headers->getContentType();
+						$mime = $contentType->getMime();
+					}
+					$content = new InputContent('stream://' . $mime);
 				}
 				fclose($input);
 				$this->request->setContent($content);
@@ -75,7 +85,6 @@
 					'CONTENT_LENGTH' => 'Content-Length',
 					'CONTENT_MD5'    => 'Content-Md5',
 				];
-				/** @noinspection ForeachSourceInspection */
 				foreach ($_SERVER as $key => $value) {
 					if (empty($value)) {
 						continue;
@@ -100,13 +109,13 @@
 						$headers['Authorization'] = $_SERVER['PHP_AUTH_DIGEST'];
 					}
 				}
-				return new Headers($headers);
+				return $this->httpUtils->headers($headers);
 			}
 
 			protected function createCookies(): ICookies {
 				$cookies = new Cookies();
 				foreach ($_COOKIE as $name => $value) {
-					$cookies->add(new Cookie($name, $value, 0, null, null));
+					$cookies->add(new Cookie($name, $value));
 				}
 				return $cookies;
 			}

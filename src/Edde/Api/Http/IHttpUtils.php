@@ -59,7 +59,16 @@
 			 *
 			 * @return IHeaders
 			 */
-			public function headers(string $headers): IHeaders;
+			public function parseHeaders(string $headers): IHeaders;
+
+			/**
+			 * same as parse headers, but headers are already in an array
+			 *
+			 * @param array $headerList
+			 *
+			 * @return IHeaders
+			 */
+			public function headers(array $headerList): IHeaders;
 
 			/**
 			 * parse http request header

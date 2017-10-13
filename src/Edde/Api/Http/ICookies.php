@@ -16,11 +16,4 @@
 			 * @return $this
 			 */
 			public function add(ICookie $cookie);
-
-			/**
-			 * setup cookies
-			 *
-			 * @return ICookies
-			 */
-			public function send(): ICookies;
 		}

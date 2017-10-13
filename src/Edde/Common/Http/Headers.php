@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Http;
 
+		use Edde\Api\Http\IContentType;
 		use Edde\Api\Http\IHeaders;
 		use Edde\Common\Object\Object;
 
@@ -28,6 +29,34 @@
 				}
 				$this->headers[$name] = $value;
 				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function has(string $name): bool {
+				return isset($this->headers[$name]);
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function get(string $name, $default = null) {
+				return $this->headers[$name] ?? $default;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getContentType():?IContentType {
+				return $this->get('Content-Type');
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getAcceptList(): array {
+				return $this->get('Accept', []);
 			}
 
 			/**

@@ -194,15 +194,23 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function headers(string $headers): IHeaders {
-				$headerList = explode("\r\n", $headers);
+			public function parseHeaders(string $headers): IHeaders {
+				return $this->headers(explode("\r\n", $headers));
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function headers(array $headerList): IHeaders {
 				$headers = new Headers();
-				try {
-					$headers->add('http-request', $this->requestHeader($headerList[0]));
-				} catch (HttpUtilsException $e) {
+				if (isset($headerList[0])) {
 					try {
-						$headers->add('http-response', $this->responseHeader($headerList[0]));
+						$headers->add('http-request', $this->requestHeader($headerList[0]));
 					} catch (HttpUtilsException $e) {
+						try {
+							$headers->add('http-response', $this->responseHeader($headerList[0]));
+						} catch (HttpUtilsException $e) {
+						}
 					}
 				}
 				foreach ($headerList as $header) {

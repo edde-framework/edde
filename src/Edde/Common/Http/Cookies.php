@@ -13,23 +13,13 @@
 			/**
 			 * @var ICookie[]
 			 */
-			protected $cookieList = [];
+			protected $cookies = [];
 
 			/**
 			 * @inheritdoc
 			 */
 			public function add(ICookie $cookie) {
-				$this->cookieList[] = $cookie;
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function send(): ICookies {
-				foreach ($this->cookieList as $cookie) {
-					$cookie->send();
-				}
+				$this->cookies[] = $cookie;
 				return $this;
 			}
 		}
