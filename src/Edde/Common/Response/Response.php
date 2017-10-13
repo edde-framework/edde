@@ -3,7 +3,6 @@
 	namespace Edde\Common\Response;
 
 		use Edde\Api\Content\IContent;
-		use Edde\Api\Element\IElement;
 		use Edde\Api\Response\IResponse;
 		use Edde\Common\Object\Object;
 
@@ -17,9 +16,16 @@
 			 */
 			protected $exitCode;
 
-			public function __construct(IElement $element = null, int $exitCode = 0) {
-				$this->element = $element;
+			public function __construct(IContent $content, int $exitCode = 0) {
+				$this->content = $content;
 				$this->exitCode = $exitCode;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getContent(): IContent {
+				return $this->content;
 			}
 
 			/**
