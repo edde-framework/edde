@@ -26,10 +26,6 @@
 				return new Response(new CallableContent($generator), new Headers(), new Cookies());
 			}
 
-			public function execute(IResponse $response) {
-				$this->responseService->execute($response);
-			}
-
 			/**
 			 * directly send a response without messing with http headers
 			 *
@@ -43,7 +39,7 @@
 				$response = $this->http($generator);
 				$response->setCode($code);
 				$response->setContentType(new ContentType($mime, ['charset' => 'utf-8']));
-				$this->execute($response);
+				$this->responseService->execute($response);
 				return $response;
 			}
 		}

@@ -3,9 +3,14 @@
 	namespace App\Common\Index\Http;
 
 		use App\Common\Index\AbstractIndexControl;
+		use Edde\Ext\Control\HttpControl;
 
 		class IndexControl extends AbstractIndexControl {
+			use HttpControl;
+
 			public function actionIndex() {
-				echo 'yummi!';
+				$this->send(function () {
+					yield 'yumiii!';
+				}, 'text/html');
 			}
 		}
