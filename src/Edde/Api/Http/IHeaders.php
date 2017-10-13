@@ -5,7 +5,18 @@
 	/**
 	 * Explicit interface for http header list.
 	 */
-		interface IHeaders {
+		interface IHeaders extends \IteratorAggregate {
+			/**
+			 * set exactly the value to the header; it replaces the original value (even if it was more
+			 * values of the same header)
+			 *
+			 * @param string $name
+			 * @param mixed  $value
+			 *
+			 * @return IHeaders
+			 */
+			public function set(string $name, $value): IHeaders;
+
 			/**
 			 * add a header; value could be even prepared helper object (like IContentType, ...)
 			 *
@@ -35,6 +46,15 @@
 			 * @return mixed
 			 */
 			public function get(string $name, $default = null);
+
+			/**
+			 * set content type of current header set
+			 *
+			 * @param IContentType $contentType
+			 *
+			 * @return IHeaders
+			 */
+			public function setContentType(IContentType $contentType): IHeaders;
 
 			/**
 			 * return a content type object if the content type is available

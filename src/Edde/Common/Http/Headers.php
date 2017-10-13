@@ -15,6 +15,14 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function set(string $name, $value): IHeaders {
+				$this->headers[$name] = $value;
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function add(string $name, $value): IHeaders {
 				/**
 				 * more same headers force the original value to became an array with
@@ -48,6 +56,14 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function setContentType(IContentType $contentType): IHeaders {
+				$this->set('Content-Type', $contentType);
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function getContentType():?IContentType {
 				return $this->get('Content-Type');
 			}
@@ -64,5 +80,17 @@
 			 */
 			public function toArray(): array {
 				return $this->headers;
+			}
+
+			public function getIterator() {
+				foreach ($this->headers as $name => $value) {
+					if (is_array($value)) {
+						foreach ($value as $v) {
+							yield $name => (string)$v;
+						}
+						continue;
+					}
+					yield $name => (string)$value;
+				}
 			}
 		}
