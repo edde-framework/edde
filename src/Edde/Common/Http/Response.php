@@ -1,10 +1,7 @@
 <?php
 	namespace Edde\Common\Http;
 
-		use Edde\Api\Content\IContent;
 		use Edde\Api\Http\IContentType;
-		use Edde\Api\Http\ICookies;
-		use Edde\Api\Http\IHeaders;
 		use Edde\Api\Http\IResponse;
 
 		class Response extends AbstractHttp implements IResponse {
@@ -13,9 +10,8 @@
 			 */
 			protected $code;
 
-			public function __construct(IContent $content = null, IHeaders $headers = null, ICookies $cookies = null) {
-				parent::__construct($headers ?: new Headers(), $cookies ?: new Cookies());
-				$this->content = $content;
+			public function __construct() {
+				parent::__construct(new Headers(), new Cookies());
 				$this->code = self::R200_OK;
 				$this->setContentType(new ContentType('text/plain', ['charset' => 'utf-8']));
 			}

@@ -3,15 +3,18 @@
 	namespace App\Common\Index\Http;
 
 		use App\Common\Index\AbstractIndexControl;
-			use Edde\Api\Response\Inject\ResponseService;
+			use Edde\Api\Response\Exception\NotCallableException;
+			use Edde\Api\Response\Exception\NotIterableException;
 			use Edde\Common\Content\CallableContent;
 			use Edde\Common\Response\Response;
 
 			class IndexControl extends AbstractIndexControl {
-				use ResponseService;
-
+							/**
+							 * @throws NotCallableException
+							 * @throws NotIterableException
+							 */
 			public function actionIndex() {
-							$this->responseService->execute(new Response(new CallableContent(function () {
+							(new Response(new CallableContent(function () {
 								?>
 				    <!DOCTYPE html>
 				    <html lang="en">
@@ -41,6 +44,6 @@
 					    </body>
 				    </html>
 								<?php
-							})));
+							})))->execute();
 			}
 		}

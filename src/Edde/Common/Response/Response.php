@@ -3,6 +3,8 @@
 	namespace Edde\Common\Response;
 
 		use Edde\Api\Content\IContent;
+		use Edde\Api\Response\Exception\NotCallableException;
+		use Edde\Api\Response\Exception\NotIterableException;
 		use Edde\Api\Response\IResponse;
 		use Edde\Common\Object\Object;
 
@@ -11,35 +13,23 @@
 			 * @var IContent
 			 */
 			protected $content;
-			/**
-			 * @var int
-			 */
-			protected $exitCode;
 
-			public function __construct(IContent $content, int $exitCode = 0) {
+			public function __construct(IContent $content) {
 				$this->content = $content;
-				$this->exitCode = $exitCode;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getContent(): IContent {
-				return $this->content;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function setExitCode(int $exitCode): IResponse {
-				$this->exitCode = $exitCode;
+			public function execute(): IResponse {
+				if (is_callable($iterable = $this->content->getContent()) === false) {
+					throw new NotCallableException(sprintf('Content type [%s] of response is not callable.', $this->content->getType()));
+				} else if (is_iterable($iterable = $iterable()) === false) {
+					throw new NotIterableException(sprintf('Content type [%s] of response is not iterable.', $this->content->getType()));
+				}
+				foreach ($iterable as $chunk) {
+					echo $chunk;
+				}
 				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getExitCode(): int {
-				return $this->exitCode;
 			}
 		}

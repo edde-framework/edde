@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Application;
 
+		use Edde\Api\Application\Exception\AbortException;
 		use Edde\Api\Application\IApplication;
 		use Edde\Api\Log\Inject\LogService;
 		use Edde\Api\Request\Inject\RequestService;
@@ -10,19 +11,35 @@
 		class Application extends Object implements IApplication {
 			use RequestService;
 			use LogService;
+			protected $exitCode = 0;
+
+			/**
+			 * @inheritdoc
+			 */
+			public function setExitCode(int $exitCode): IApplication {
+				$this->exitCode = $exitCode;
+				return $this;
+			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function run(): int {
 				try {
+					$this->requestService->execute();
+					return $this->exitCode;
+				} catch (AbortException $exception) {
+					if ($previous = $exception->getPrevious()) {
+						$this->logService->exception($previous, [
+							'edde',
+							'application',
+						]);
+					}
+					echo $exception->getMessage();
 					/**
-					 * the flow is simple:
-					 * - router service is responsible for "global space" request resolution (are we cli? Are we in http mode? Is there a devil kitten?, ...)
-					 * - we have request, so it's time to translate it into response (just data, computation, no output)
-					 * - and at the end we can send http headers, if required, echo the things, do heavy processing, do output, kill devil kitten, whatever, ...
+					 * when there is an abort exception, it's code is used as primary response
 					 */
-					return $this->requestService->execute()->getExitCode();
+					return ($code = $exception->getCode()) === 0 ? -1 : $code;
 				} catch (\Throwable $exception) {
 					$this->logService->exception($exception, [
 						'edde',
