@@ -13,7 +13,6 @@
 		use Edde\Api\Log\ILogService;
 		use Edde\Api\Protocol\IProtocolService;
 		use Edde\Api\Request\IRequestService;
-		use Edde\Api\Response\IResponseService;
 		use Edde\Api\Router\IRouterService;
 		use Edde\Api\Runtime\IRuntime;
 		use Edde\Api\Utils\ICliUtils;
@@ -34,7 +33,6 @@
 		use Edde\Common\Object\Object;
 		use Edde\Common\Protocol\ProtocolService;
 		use Edde\Common\Request\RequestService;
-		use Edde\Common\Response\ResponseService;
 		use Edde\Common\Router\RouterService;
 		use Edde\Common\Runtime\Runtime;
 		use Edde\Common\Utils\CliUtils;
@@ -181,7 +179,6 @@
 					 */
 					IRouterService::class      => RouterService::class,
 					IRequestService::class     => RequestService::class,
-					IResponseService::class    => ResponseService::class,
 					/**
 					 * content conversion implementation (mainly useful for server content
 					 * negotiation)

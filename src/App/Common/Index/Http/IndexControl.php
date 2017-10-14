@@ -3,12 +3,12 @@
 	namespace App\Common\Index\Http;
 
 		use App\Common\Index\AbstractIndexControl;
-			use Edde\Common\Content\CallableContent;
+			use Edde\Common\Content\GeneratorContent;
 			use Edde\Common\Response\Response;
 
 			class IndexControl extends AbstractIndexControl {
 			public function actionIndex() {
-							(new Response(new CallableContent(function () {
+							(new Response(new GeneratorContent(function () {
 								?>
 				    <!DOCTYPE html>
 				    <html lang="en">
