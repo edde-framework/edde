@@ -13,7 +13,7 @@
 			public function __call(string $name, $arguments) {
 				$response = new Response();
 				$response->setCode(IResponse::R400_BAD_REQUEST);
-				return $response->execute();
+				$response->execute();
 			}
 
 			/**

@@ -22,6 +22,8 @@
 			 */
 			public function configure($instance) {
 				parent::configure($instance);
+				$controller = 'Index\Http\IndexController';
+				$method = 'actionIndex';
 				$instance->registerRouterList([
 					/**
 					 * because whole application is built around The Protocol implementation, also router is bound to one of
@@ -31,7 +33,12 @@
 					/**
 					 * last router is considered as a default
 					 */
-					$this->container->create(StaticRouter::class, [new Message('index.index-view/action-index')], __METHOD__),
+					$this->container->create(StaticRouter::class, [
+						(new Message($controller . '::' . $method))->mergeMetaList([
+							'::class'  => $controller,
+							'::method' => $method,
+						]),
+					], __METHOD__),
 				]);
 			}
 		}
