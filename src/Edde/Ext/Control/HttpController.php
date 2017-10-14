@@ -2,6 +2,7 @@
 	namespace Edde\Ext\Control;
 
 		use Edde\Api\Http\IResponse;
+		use Edde\Common\Content\HtmlContent;
 		use Edde\Common\Content\JsonContent;
 		use Edde\Common\Http\Response;
 
@@ -24,6 +25,24 @@
 			 * @return IResponse
 			 */
 			public function json($content, int $code = IResponse::R200_OK): IResponse {
-				return (new Response(new JsonContent(json_encode($content))))->setCode($code)->execute();
+				$response = new Response(new JsonContent(json_encode($content)));
+				$response->header('X-Powered-By', 'Edde Framework');
+				$response->setCode($code);
+				return $response->execute();
+			}
+
+			/**
+			 * execute response with html based data
+			 *
+			 * @param mixed $content
+			 * @param int   $code
+			 *
+			 * @return IResponse
+			 */
+			public function html(string $content, int $code = IResponse::R200_OK): IResponse {
+				$response = new Response(new HtmlContent($content));
+				$response->header('X-Powered-By', 'Edde Framework');
+				$response->setCode($code);
+				return $response->execute();
 			}
 		}

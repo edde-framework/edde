@@ -3,15 +3,13 @@
 	namespace App\Common\Index\Http;
 
 		use App\Common\Index\AbstractIndexController;
-		use Edde\Common\Content\HtmlContent;
-		use Edde\Common\Http\Response;
 		use Edde\Ext\Control\HttpController;
 
 		class IndexController extends AbstractIndexController {
 			use HttpController;
 
 			public function actionIndex() {
-				(new Response(new HtmlContent('<!DOCTYPE html>
+				$this->html('<!DOCTYPE html>
 <html lang="en">
 	<head>
 		<title>Edde Framework</title>
@@ -36,8 +34,6 @@
 	<body>
 		<div class="hello-world">This is a beautiful response from a http view!</div>
 	</body>
-</html>')))->headers([
-					'X-Powered-By' => 'Edde Framework',
-				])->execute();
+</html>');
 			}
 		}
