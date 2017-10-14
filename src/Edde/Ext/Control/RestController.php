@@ -3,7 +3,7 @@
 
 		use Edde\Api\Http\IResponse;
 		use Edde\Api\Utils\Inject\StringUtils;
-		use Edde\Common\Content\TextContent;
+		use Edde\Common\Content\JsonContent;
 		use Edde\Common\Http\Response;
 
 		/**
@@ -17,7 +17,7 @@
 				$response = new Response();
 				$response->setCode(IResponse::R400_BAD_REQUEST);
 				if ($match = $this->stringUtils->match($name, '~^action(?<method>[a-z]+)$~i', true)) {
-					$response->setContent(new TextContent(sprintf('Requested method [%s] is not allowed.', strtoupper($match['method']))));
+					$response->setContent(new JsonContent(sprintf('Requested method [%s] is not allowed.', strtoupper($match['method']))));
 					$response->setCode(IResponse::R400_NOT_ALLOWED);
 				}
 				return $response->execute();
