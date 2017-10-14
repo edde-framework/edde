@@ -89,6 +89,11 @@
 					'',
 				], $this->stringUtils->capitalize(str_replace('.', ' ', $class))));
 				array_splice($class, -1, 0, $type);
+				/**
+				 * this is syntetic restriction to keep requests just for controller classes
+				 */
+				$count = (count($class) - 1);
+				$class[$count] = $class[$count] . 'Controller';
 				$element = $this->createElement($class = implode('\\', $class), $parameterList);
 				$element->mergeMetaList([
 					'::class'  => $class,

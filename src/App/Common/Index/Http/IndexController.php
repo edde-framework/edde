@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace App\Common\Index\Http;
 
-		use App\Common\Index\AbstractIndexControl;
+		use App\Common\Index\AbstractIndexController;
 		use Edde\Common\Content\HtmlContent;
 		use Edde\Common\Http\Response;
 
-		class IndexControl extends AbstractIndexControl {
+		class IndexController extends AbstractIndexController {
 			public function actionIndex() {
 				(new Response(new HtmlContent('<!DOCTYPE html>
 <html lang="en">

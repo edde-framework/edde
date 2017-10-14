@@ -1,7 +1,7 @@
 <?php
 	namespace App\Common\Index\Rest;
 
-		use App\Common\Index\AbstractIndexControl;
+		use App\Common\Index\AbstractIndexController;
 		use Edde\Api\Http\IResponse;
 		use Edde\Common\Content\JsonContent;
 		use Edde\Common\Http\Response;
@@ -11,7 +11,7 @@
 		 * Rest like view is able to handle standard http method mapping into individual actions,
 		 * for example actionGet, actionPost, .... Content negotiation is working too.
 		 */
-		class IndexControl extends AbstractIndexControl {
+		class IndexController extends AbstractIndexController {
 			use HttpControl;
 
 			public function actionGet() {

@@ -1,10 +1,10 @@
 <?php
 	namespace App\Common\Index\Cli;
 
-		use App\Common\Index\AbstractIndexControl;
+		use App\Common\Index\AbstractIndexController;
 		use Edde\Ext\Control\CliControl;
 
-		class IndexControl extends AbstractIndexControl {
+		class IndexController extends AbstractIndexController {
 			use CliControl;
 
 			public function actionIndex() {

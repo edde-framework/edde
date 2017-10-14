@@ -10,5 +10,5 @@
 		 * However it should not be proprietary for view type (for example this class should not
 		 * hold any http related stuff).
 		 */
-		abstract class AbstractIndexControl extends Object {
+		abstract class AbstractIndexController extends Object {
 		}

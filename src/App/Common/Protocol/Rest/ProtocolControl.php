@@ -11,11 +11,5 @@
 					'is',
 					'here!!',
 				]);
-//				$this->sendScalar([
-//					'hello',
-//					'the protocol',
-//					'is',
-//					'here!!',
-//				]);
 			}
 		}
