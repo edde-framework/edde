@@ -2,6 +2,9 @@
 	namespace App\Common\Index\Rest;
 
 		use App\Common\Index\AbstractIndexControl;
+		use Edde\Api\Http\IResponse;
+		use Edde\Common\Content\JsonContent;
+		use Edde\Common\Http\Response;
 		use Edde\Ext\Control\HttpControl;
 
 		/**
@@ -12,8 +15,6 @@
 			use HttpControl;
 
 			public function actionGet() {
-				$this->send(function () {
-					yield json_encode('yumiii!');
-				});
+				(new Response(new JsonContent(json_encode('tasty cake was made just for you!'))))->setCode(IResponse::R200_OK_CREATED)->execute();
 			}
 		}
