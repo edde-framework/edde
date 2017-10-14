@@ -2,10 +2,15 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Content;
 
-	/**
-	 * Simple interface describing some "content" with it's mime type.
-	 */
-		interface IContent {
+		use IteratorAggregate;
+
+		/**
+		 * Simple interface describing some "content" with it's mime type.
+		 *
+		 * Content supports streaming (iterator aggregate), even if it is a simple
+		 * content, it should stream itself by iterator.
+		 */
+		interface IContent extends IteratorAggregate {
 			/**
 			 * return the raw content
 			 *
@@ -19,5 +24,5 @@
 			 *
 			 * @return string
 			 */
-			public function getType() : string;
+			public function getType(): string;
 		}

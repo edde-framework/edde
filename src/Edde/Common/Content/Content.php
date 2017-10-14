@@ -34,7 +34,14 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getType() : string {
+			public function getType(): string {
 				return $this->type;
+			}
+
+			/**
+			 * simplies form of content throws just content outside
+			 */
+			public function getIterator() {
+				yield $this->content;
 			}
 		}
