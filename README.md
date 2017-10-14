@@ -35,6 +35,11 @@ Edde is now using Docker to build the stack in very simple way.
 #### Installation
 
 ```text
+// put your host IP into environment variable HOST_IP; this is necessary to enable
+// xdebug support (as it needs the connect back address working)
+// for example
+$ vim /etc/environment
+
 // install dependencies for composer on the "server" service 
 $ sudo docker-compose run server composer update
 
