@@ -28,6 +28,16 @@
 			public function add(string $name, $value): IHeaders;
 
 			/**
+			 * add an array of headers (add not set); when there is an name with array of values,
+			 * it's added as more headers of the same name (for example multiple Set-Cookie)
+			 *
+			 * @param array $headers
+			 *
+			 * @return IHeaders
+			 */
+			public function put(array $headers): IHeaders;
+
+			/**
 			 * is the given header name present?
 			 *
 			 * @param string $name
@@ -61,7 +71,7 @@
 			 *
 			 * @return IContentType|null
 			 */
-			public function getContentType():?IContentType;
+			public function getContentType(): ?IContentType;
 
 			/**
 			 * return an array with accept mime types or an empty array if not available

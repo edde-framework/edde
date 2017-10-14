@@ -42,6 +42,22 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function put(array $headers): IHeaders {
+				foreach ($headers as $name => $header) {
+					if (is_array($header)) {
+						foreach ($header as $v) {
+							$this->add($name, $v);
+						}
+						continue;
+					}
+					$this->add($name, $header);
+				}
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function has(string $name): bool {
 				return isset($this->headers[$name]);
 			}
@@ -64,7 +80,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getContentType():?IContentType {
+			public function getContentType(): ?IContentType {
 				return $this->get('Content-Type');
 			}
 

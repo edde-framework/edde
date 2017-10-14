@@ -3,6 +3,7 @@
 	namespace Edde\Common\Http;
 
 		use Edde\Api\Content\IContent;
+		use Edde\Api\Http\IContentType;
 		use Edde\Api\Http\ICookies;
 		use Edde\Api\Http\IHeaders;
 		use Edde\Api\Http\IHttp;
@@ -49,7 +50,15 @@
 			 * @inheritdoc
 			 */
 			public function header(string $header, string $value): IHttp {
-				$this->headers->set($header, $value);
+				$this->headers->add($header, $value);
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function headers(array $headers): IHttp {
+				$this->headers->put($headers);
 				return $this;
 			}
 
@@ -66,5 +75,20 @@
 			 */
 			public function getContent(): ?IContent {
 				return $this->content;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function setContentType(IContentType $contentType): IHttp {
+				$this->headers->setContentType($contentType);
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getContentType(): ?IContentType {
+				return $this->headers->getContentType();
 			}
 		}

@@ -1,7 +1,7 @@
 <?php
 	namespace Edde\Common\Http;
 
-		use Edde\Api\Http\IContentType;
+		use Edde\Api\Content\IContent;
 		use Edde\Api\Http\IResponse;
 
 		class Response extends AbstractHttp implements IResponse {
@@ -10,10 +10,10 @@
 			 */
 			protected $code;
 
-			public function __construct() {
+			public function __construct(IContent $content = null) {
 				parent::__construct(new Headers(), new Cookies());
+				$this->content = $content;
 				$this->code = self::R200_OK;
-				$this->setContentType(new ContentType('text/plain', ['charset' => 'utf-8']));
 			}
 
 			/**
@@ -34,25 +34,16 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function setContentType(IContentType $contentType): IResponse {
-				$this->headers->setContentType($contentType);
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getContentType(): IContentType {
-				return $this->headers->getContentType();
-			}
-
-			/**
-			 * @inheritdoc
-			 */
 			public function execute(): IResponse {
 				http_response_code($this->code);
+				if ($this->content && $this->headers->has('Content-Type') === false) {
+					$this->headers->setContentType(new ContentType($this->content->getType()));
+				}
 				foreach ($this->headers as $name => $header) {
 					header("$name: $header", false);
+				}
+				foreach ($this->content ?: [] as $chunk) {
+					echo $chunk;
 				}
 				return $this;
 			}

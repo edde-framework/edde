@@ -28,22 +28,6 @@
 			public function getCode(): int;
 
 			/**
-			 * set content type of the response
-			 *
-			 * @param IContentType $contentType
-			 *
-			 * @return IResponse
-			 */
-			public function setContentType(IContentType $contentType): IResponse;
-
-			/**
-			 * return current content type; defaults to text/plain
-			 *
-			 * @return IContentType
-			 */
-			public function getContentType(): IContentType;
-
-			/**
 			 * execute this response (that means all the http stuff will be sent)
 			 *
 			 * @return IResponse

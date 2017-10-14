@@ -19,14 +19,23 @@
 			public function getCookies(): ICookies;
 
 			/**
-			 * shortcut to header list
+			 * shortcut to header list; this will add a new header (not replace)
 			 *
 			 * @param string $header
 			 * @param string $value
 			 *
 			 * @return IHttp
 			 */
-			public function header(string $header, string $value) : IHttp;
+			public function header(string $header, string $value): IHttp;
+
+			/**
+			 * add an array of headers at once
+			 *
+			 * @param array $headers
+			 *
+			 * @return IHttp
+			 */
+			public function headers(array $headers): IHttp;
 
 			/**
 			 * set content of the request/response
@@ -35,12 +44,28 @@
 			 *
 			 * @return IHttp
 			 */
-			public function setContent(IContent $content = null) : IHttp;
+			public function setContent(IContent $content = null): IHttp;
 
 			/**
 			 * retrieve current content
 			 *
 			 * @return IContent|null
 			 */
-			public function getContent() :?IContent;
+			public function getContent(): ?IContent;
+
+			/**
+			 * set content type of the response
+			 *
+			 * @param IContentType $contentType
+			 *
+			 * @return IHttp
+			 */
+			public function setContentType(IContentType $contentType): IHttp;
+
+			/**
+			 * return current content type; defaults to text/plain
+			 *
+			 * @return IContentType
+			 */
+			public function getContentType(): ?IContentType;
 		}

@@ -4,15 +4,13 @@
 
 		use App\Common\Index\AbstractIndexControl;
 		use Edde\Common\Content\HtmlContent;
-		use Edde\Common\Response\Response;
+		use Edde\Common\Http\Response;
 
 		class IndexControl extends AbstractIndexControl {
 			public function actionIndex() {
-				(new Response(new HtmlContent('
-<!DOCTYPE html>
+				(new Response(new HtmlContent('<!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="UTF-8">
 		<title>Edde Framework</title>
 		<style>
 			body {
@@ -35,7 +33,8 @@
 	<body>
 		<div class="hello-world">This is a beautiful response from a http view!</div>
 	</body>
-</html>
-				')))->execute();
+</html>')))->headers([
+					'X-Powered-By' => 'Edde Framework',
+				])->execute();
 			}
 		}

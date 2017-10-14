@@ -81,14 +81,14 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getRemoteAddress():?string {
+			public function getRemoteAddress(): ?string {
 				return $this->remoteAddress ?: $this->remoteAddress = $_SERVER['REMOTE_ADDR'];
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getRemoteHost():?string {
+			public function getRemoteHost(): ?string {
 				return $this->remoteHost === null && $this->remoteAddress !== null ? $this->remoteHost = gethostbyaddr($this->remoteAddress) : null;
 			}
 
@@ -102,8 +102,8 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getReferer() {
-				$this->referer === null && $this->headers->has('referer') ? $this->referer = Url::create($this->headers->get('referer')) : null;
+			public function getReferer(): ?IUrl {
+				return $this->referer === null && $this->headers->has('referer') ? $this->referer = Url::create($this->headers->get('referer')) : null;
 			}
 
 			/**
