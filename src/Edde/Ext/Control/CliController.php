@@ -6,7 +6,7 @@
 		/**
 		 * Control used for a command line content rendering.
 		 */
-		trait CliControl {
+		trait CliController {
 			/**
 			 * just "nicier" way, how to send an abort exception
 			 *

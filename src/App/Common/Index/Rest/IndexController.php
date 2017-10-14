@@ -2,19 +2,16 @@
 	namespace App\Common\Index\Rest;
 
 		use App\Common\Index\AbstractIndexController;
-		use Edde\Api\Http\IResponse;
-		use Edde\Common\Content\JsonContent;
-		use Edde\Common\Http\Response;
-		use Edde\Ext\Control\HttpControl;
+		use Edde\Ext\Control\RestController;
 
 		/**
 		 * Rest like view is able to handle standard http method mapping into individual actions,
 		 * for example actionGet, actionPost, .... Content negotiation is working too.
 		 */
 		class IndexController extends AbstractIndexController {
-			use HttpControl;
+			use RestController;
 
 			public function actionGet() {
-				(new Response(new JsonContent(json_encode('tasty cake was made just for you!'))))->setCode(IResponse::R200_OK_CREATED)->execute();
+//				'tasty cake was made just for you!'
 			}
 		}

@@ -24,7 +24,7 @@
 			 * @param string $header
 			 * @param string $value
 			 *
-			 * @return IHttp
+			 * @return $this
 			 */
 			public function header(string $header, string $value): IHttp;
 
@@ -33,7 +33,7 @@
 			 *
 			 * @param array $headers
 			 *
-			 * @return IHttp
+			 * @return $this
 			 */
 			public function headers(array $headers): IHttp;
 
@@ -42,7 +42,7 @@
 			 *
 			 * @param IContent|null $content
 			 *
-			 * @return IHttp
+			 * @return $this
 			 */
 			public function setContent(IContent $content = null): IHttp;
 
@@ -58,7 +58,7 @@
 			 *
 			 * @param IContentType $contentType
 			 *
-			 * @return IHttp
+			 * @return $this
 			 */
 			public function setContentType(IContentType $contentType): IHttp;
 

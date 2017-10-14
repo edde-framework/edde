@@ -5,8 +5,11 @@
 		use App\Common\Index\AbstractIndexController;
 		use Edde\Common\Content\HtmlContent;
 		use Edde\Common\Http\Response;
+		use Edde\Ext\Control\HttpController;
 
 		class IndexController extends AbstractIndexController {
+			use HttpController;
+
 			public function actionIndex() {
 				(new Response(new HtmlContent('<!DOCTYPE html>
 <html lang="en">
