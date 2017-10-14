@@ -13,8 +13,8 @@
 			 */
 			protected $code;
 
-			public function __construct(IContent $content, IHeaders $headers, ICookies $cookies) {
-				parent::__construct($headers, $cookies);
+			public function __construct(IContent $content = null, IHeaders $headers = null, ICookies $cookies = null) {
+				parent::__construct($headers ?: new Headers(), $cookies ?: new Cookies());
 				$this->content = $content;
 				$this->code = self::R200_OK;
 				$this->setContentType(new ContentType('text/plain', ['charset' => 'utf-8']));
@@ -48,5 +48,16 @@
 			 */
 			public function getContentType(): IContentType {
 				return $this->headers->getContentType();
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function execute(): IResponse {
+				http_response_code($this->code);
+				foreach ($this->headers as $name => $header) {
+					header("$name: $header", false);
+				}
+				return $this;
 			}
 		}

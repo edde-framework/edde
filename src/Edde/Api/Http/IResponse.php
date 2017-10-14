@@ -42,4 +42,11 @@
 			 * @return IContentType
 			 */
 			public function getContentType(): IContentType;
+
+			/**
+			 * execute this response (that means all the http stuff will be sent)
+			 *
+			 * @return IResponse
+			 */
+			public function execute(): IResponse;
 		}

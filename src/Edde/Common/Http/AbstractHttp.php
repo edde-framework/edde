@@ -64,7 +64,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getContent():?IContent {
+			public function getContent(): ?IContent {
 				return $this->content;
 			}
 		}

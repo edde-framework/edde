@@ -3,14 +3,44 @@
 	namespace App\Common\Index\Http;
 
 		use App\Common\Index\AbstractIndexControl;
-		use Edde\Ext\Control\HttpControl;
+			use Edde\Api\Response\Inject\ResponseService;
+			use Edde\Common\Content\CallableContent;
+			use Edde\Common\Response\Response;
 
-		class IndexControl extends AbstractIndexControl {
-			use HttpControl;
+			class IndexControl extends AbstractIndexControl {
+				use ResponseService;
 
 			public function actionIndex() {
-				$this->send(function () {
-					yield 'yumiii!';
-				}, 'text/html');
+							$this->responseService->execute(new Response(new CallableContent(function () {
+								?>
+				    <!DOCTYPE html>
+				    <html lang="en">
+					    <head>
+						    <meta charset="UTF-8">
+						    <title>Edde Framework</title>
+						    <style>
+							    body {
+								    position: relative;
+								    overflow: hidden;
+							    }
+
+							    .hello-world {
+								    position: relative;
+								    top: -100px;
+								    height: 100vh;
+								    display: flex;
+								    align-items: center;
+								    justify-content: center;
+								    font-size: 80px;
+								    color: #333;
+							    }
+						    </style>
+					    </head>
+					    <body>
+						    <div class="hello-world">This is a beautiful response from a http view!</div>
+					    </body>
+				    </html>
+								<?php
+							})));
 			}
 		}
