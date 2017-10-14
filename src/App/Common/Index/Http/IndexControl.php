@@ -3,16 +3,10 @@
 	namespace App\Common\Index\Http;
 
 		use App\Common\Index\AbstractIndexControl;
-			use Edde\Api\Response\Exception\NotCallableException;
-			use Edde\Api\Response\Exception\NotIterableException;
 			use Edde\Common\Content\CallableContent;
 			use Edde\Common\Response\Response;
 
 			class IndexControl extends AbstractIndexControl {
-							/**
-							 * @throws NotCallableException
-							 * @throws NotIterableException
-							 */
 			public function actionIndex() {
 							(new Response(new CallableContent(function () {
 								?>
