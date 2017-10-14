@@ -70,7 +70,7 @@
 		/**
 		 * an application is the only magical factory intended to execute an IApplication interface
 		 */
-		$container->create('application');
+		exit($container->create('application'));
 	} catch (\Throwable $e) {
 		Debugger::log($e);
 		die(sprintf('Critical application Exception [%s]; see logs.', get_class($e)));

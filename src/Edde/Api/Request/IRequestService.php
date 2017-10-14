@@ -3,7 +3,6 @@
 	namespace Edde\Api\Request;
 
 		use Edde\Api\Config\IConfigurable;
-		use Edde\Api\Response\IResponse;
 
 		/**
 		 * Request service is responsible for request to response translation; it should
@@ -13,21 +12,21 @@
 			/**
 			 * shortened method to execute current request (basically run(getRequest()))
 			 *
-			 * @return IResponse
+			 * @return IRequestService
 			 */
-			public function execute() : IResponse;
+			public function execute(): IRequestService;
 
 			/**
 			 * @param IRequest $request
 			 *
-			 * @return IResponse
+			 * @return IRequestService
 			 */
-			public function run(IRequest $request) : IResponse;
+			public function run(IRequest $request): IRequestService;
 
 			/**
 			 * get current request (current is during and after execute)
 			 *
 			 * @return IRequest
 			 */
-			public function getRequest() : IRequest;
+			public function getRequest(): IRequest;
 		}

@@ -6,4 +6,8 @@
 
 		class IndexControl extends AbstractIndexControl {
 			use CliControl;
+
+			public function actionIndex() {
+				echo "hello from a CLI control!";
+			}
 		}
