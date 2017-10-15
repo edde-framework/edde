@@ -247,8 +247,6 @@
 						case '"':
 						case "'":
 							if ($char === $quote) {
-								$iterator->next();
-								$iterator->setSkipNext();
 								return [$name => $value];
 							}
 							if ($quote !== null) {
