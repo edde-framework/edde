@@ -207,7 +207,6 @@
 				while ($iterator->valid()) {
 					switch ($char = $iterator->current()) {
 						case '/':
-							return $attributeList;
 						case '>':
 							return $attributeList;
 						case "\n":
