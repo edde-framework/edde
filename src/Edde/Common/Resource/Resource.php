@@ -43,35 +43,35 @@
 			 * @inheritdoc
 			 */
 			public function getPath(): string {
-				return $this->url->getPath();
+				return $this->getUrl()->getPath();
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function getExtension(): ?string {
-				return $this->url->getExtension();
+				return $this->getUrl()->getExtension();
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function getName(): string {
-				return $this->name ?: $this->name = $this->url->getResourceName();
+				return $this->name ?: $this->name = $this->getUrl()->getResourceName();
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function isAvailable(): bool {
-				return file_exists($url = $this->url->getAbsoluteUrl()) && is_readable($url);
+				return file_exists($url = $this->getUrl()->getAbsoluteUrl()) && is_readable($url);
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function get(): string {
-				return file_get_contents($this->url->getAbsoluteUrl());
+				return file_get_contents($this->getUrl()->getAbsoluteUrl());
 			}
 
 			/**

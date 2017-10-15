@@ -53,9 +53,9 @@
 					if ($exclusive === false) {
 						return $this;
 					}
-					throw new FileException(sprintf('Current file [%s] is already opened.', $this->url));
+					throw new FileException(sprintf('Current file [%s] is already opened.', $this->getUrl()));
 				}
-				if (($this->handle = @fopen($path = $this->url->getPath(), $mode)) === false) {
+				if (($this->handle = @fopen($path = $this->getPath(), $mode)) === false) {
 					throw new FileException(sprintf('Cannot open file [%s (%s)].', $path, $mode));
 				}
 				return $this;
@@ -103,7 +103,7 @@
 				if ($this->isOpen()) {
 					$this->close();
 				}
-				unlink($this->url->getPath());
+				unlink($this->getPath());
 				return $this;
 			}
 
@@ -126,7 +126,7 @@
 					$this->openForWrite();
 				}
 				if (($count = $length ? fwrite($this->getHandle(), $write, $length) : fwrite($this->getHandle(), $write)) !== ($length = strlen($write))) {
-					throw new FileWriteException(sprintf('Failed to write into file [%s]: expected %d bytes, %d has been written.', $this->url->getPath(), $length, $count));
+					throw new FileWriteException(sprintf('Failed to write into file [%s]: expected %d bytes, %d has been written.', $this->getPath(), $length, $count));
 				}
 				return $this;
 			}
@@ -137,7 +137,7 @@
 			 */
 			public function getHandle() {
 				if ($this->isOpen() === false) {
-					throw new FileException(sprintf('Current file [%s] is not opened or has been already closed.', $this->url->getPath()));
+					throw new FileException(sprintf('Current file [%s] is not opened or has been already closed.', $this->getPath()));
 				}
 				return $this->handle;
 			}
@@ -150,7 +150,7 @@
 				if ($this->isOpen()) {
 					throw new FileException(sprintf('Cannot write (save) content to aready opened file [%s].', $this->getPath()));
 				}
-				file_put_contents($this->url->getPath(), $content);
+				file_put_contents($this->getPath(), $content);
 				return $this;
 			}
 
@@ -159,7 +159,7 @@
 			 * @throws FileException
 			 */
 			public function rename(string $rename): IFile {
-				if (@rename($src = $this->url->getPath(), $dst = ($this->url->getBasePath() . '/' . $rename)) === false) {
+				if (@rename($src = $this->getPath(), $dst = ($this->getUrl()->getBasePath() . '/' . $rename)) === false) {
 					throw new FileException("Unable to rename file or directory [$src] to [$dst].");
 				}
 				return $this;
