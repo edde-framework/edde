@@ -47,6 +47,13 @@
 			 * @throws XmlParserException
 			 */
 			public function parse(IResource $resource, IXmlHandler $xmlHandler): IXmlParser {
+				/**
+				 * this complicated piece of shit is here because resource is returning line based data,
+				 * but parser needs to go through a stream of characters; string utils provides character
+				 * based iteration and chunk iterator connects everything together and maintains proper
+				 * line iteration; quite complicated, but this enables to stream data and it's memory
+				 * efficient
+				 */
 				$this->iterate(new ChunkIterator([
 					$this->stringUtils,
 					'createIterator',

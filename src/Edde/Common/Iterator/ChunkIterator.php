@@ -19,8 +19,8 @@
 			protected $sourceIterator;
 
 			/**
-			 * @param callable  $chunkIteratorCallback
-			 * @param \Iterator $sourceIterator
+			 * @param callable     $chunkIteratorCallback
+			 * @param \Traversable $sourceIterator
 			 */
 			public function __construct(callable $chunkIteratorCallback, \Traversable $sourceIterator) {
 				$this->chunkIteratorCallback = $chunkIteratorCallback;
