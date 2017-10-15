@@ -63,7 +63,6 @@
 			protected function iterate(Iterator $iterator, IXmlHandler $xmlHandler) {
 				$value = '';
 				foreach ($iterator as $char) {
-					/** @noinspection DegradedSwitchInspection */
 					switch ($char) {
 						case '<':
 							if ($value !== '') {

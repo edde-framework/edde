@@ -2,9 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Xml;
 
-		use Edde\Api\Node\INode;
 		use Edde\Api\Xml\Inject\XmlParser;
-		use Edde\Common\File\File;
 		use Edde\Ext\Test\TestCase;
 
 		require_once(__DIR__ . '/assets/assets.php');
@@ -197,28 +195,23 @@
 					],
 				], $handler->getTagList());
 			}
-
-			public function testMimeType() {
-				$file = new File(__DIR__ . '/assets/simple.xml');
-				self::assertEquals('text/xml', $file->getMime());
-			}
-
-			public function testParserNode() {
-				/** @var $node INode */
-				$node = $this->resourceManager->file(__DIR__ . '/assets/a-bit-less-simple.xml');
-				self::assertEquals('root', $node->getName());
-				self::assertEquals(['r' => 'oot'], $node->getAttributeList()
-					->array());
-				self::assertCount(3, $node->getNodeList());
-				$nodeIterator = new \ArrayIterator($node->getNodeList());
-				$nodeIterator->rewind();
-				self::assertEquals('item', $nodeIterator->current()
-					->getName());
-				$nodeIterator->next();
-				self::assertEquals('item2', $nodeIterator->current()
-					->getName());
-				$nodeIterator->next();
-				self::assertEquals('internal', $nodeIterator->current()
-					->getName());
-			}
+//
+//			public function testParserNode() {
+//				/** @var $node INode */
+//				$node = $this->resourceManager->file(__DIR__ . '/assets/a-bit-less-simple.xml');
+//				self::assertEquals('root', $node->getName());
+//				self::assertEquals(['r' => 'oot'], $node->getAttributeList()
+//					->array());
+//				self::assertCount(3, $node->getNodeList());
+//				$nodeIterator = new \ArrayIterator($node->getNodeList());
+//				$nodeIterator->rewind();
+//				self::assertEquals('item', $nodeIterator->current()
+//					->getName());
+//				$nodeIterator->next();
+//				self::assertEquals('item2', $nodeIterator->current()
+//					->getName());
+//				$nodeIterator->next();
+//				self::assertEquals('internal', $nodeIterator->current()
+//					->getName());
+//			}
 		}
