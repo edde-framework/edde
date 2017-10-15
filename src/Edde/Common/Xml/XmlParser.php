@@ -273,7 +273,6 @@
 					}
 					$iterator->next();
 				}
-				$iterator->setSkipNext();
 				return null;
 			}
 		}
