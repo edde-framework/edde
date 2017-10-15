@@ -125,7 +125,8 @@
 			 * @inheritdoc
 			 */
 			public function getPermission() {
-				clearstatcache(true, $this->realpath());
+				$this->realpath();
+				clearstatcache(true, $this->directory);
 				return octdec(substr(decoct(fileperms($this->directory)), 1));
 			}
 
@@ -147,7 +148,8 @@
 			 */
 			public function delete(): IDirectory {
 				try {
-					$path = $this->realpath();
+					$this->realpath();
+					$path = $this->directory;
 					for ($i = 0; $i < 3; $i++) {
 						try {
 							if (is_file($path) || is_link($path)) {

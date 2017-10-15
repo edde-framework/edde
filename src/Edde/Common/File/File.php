@@ -130,7 +130,7 @@
 				if ($this->isOpen()) {
 					$this->close();
 				}
-				FileUtils::delete($this->url->getPath());
+				unlink($this->url->getPath());
 				return $this;
 			}
 
@@ -230,14 +230,25 @@
 			 * @inheritdoc
 			 */
 			public function getSize(): float {
-				return FileUtils::size($this->getPath());
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function match(string $match, bool $filename = true) {
-				return StringUtils::match($filename ? $this->getName() : $this->url->getAbsoluteUrl(), $match);
+				$index = 0;
+				$size = 1073741824;
+				$this->openForRead();
+				fseek($handle = $this->getHandle(), 0, SEEK_SET);
+				while ($size > 1) {
+					fseek($handle, $size, SEEK_CUR);
+					if (fgetc($handle) === false) {
+						fseek($handle, -$size, SEEK_CUR);
+						$size = (int)($size / 2);
+						continue;
+					}
+					fseek($handle, -1, SEEK_CUR);
+					$index += $size;
+				}
+				while (fgetc($handle) !== false) {
+					$index++;
+				}
+				$this->close();
+				return (float)$index;
 			}
 
 			/**

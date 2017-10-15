@@ -141,16 +141,6 @@
 			public function getSize(): float;
 
 			/**
-			 * run regexp against file path
-			 *
-			 * @param string $match
-			 * @param bool   $filename
-			 *
-			 * @return mixed
-			 */
-			public function match(string $match, bool $filename = true);
-
-			/**
 			 * create a file and do an exclusive lock or lock an existing file; if lock cannot be acquired, exception should be thrown
 			 *
 			 * @param bool $exclusive

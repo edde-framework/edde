@@ -2,27 +2,15 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Xml;
 
-		use Edde\Api\File\IRootDirectory;
 		use Edde\Api\Node\INode;
-		use Edde\Api\Resource\IResourceManager;
-		use Edde\Api\Xml\IXmlParser;
-		use Edde\Common\Container\Factory\ClassFactory;
+		use Edde\Api\Xml\Inject\XmlParser;
 		use Edde\Common\File\File;
-		use Edde\Common\File\RootDirectory;
-		use Edde\Ext\Container\ContainerFactory;
 		use phpunit\framework\TestCase;
 
 		require_once(__DIR__ . '/assets/assets.php');
 
 		class XmlParserTest extends TestCase {
-			/**
-			 * @var IXmlParser
-			 */
-			protected $xmlParser;
-			/**
-			 * @var IResourceManager
-			 */
-			protected $resourceManager;
+			use XmlParser;
 
 			public function testSimple() {
 				$this->xmlParser->file(__DIR__ . '/assets/simple.xml', $handler = new \TestXmlHandler());
@@ -232,14 +220,5 @@
 				$nodeIterator->next();
 				self::assertEquals('internal', $nodeIterator->current()
 					->getName());
-			}
-
-			protected function setUp() {
-				$container = ContainerFactory::container([
-					IRootDirectory::class => ContainerFactory::instance(RootDirectory::class, [__DIR__]),
-					new ClassFactory(),
-				]);
-				$this->xmlParser = $container->create(IXmlParser::class);
-				$this->resourceManager = $container->create(IResourceManager::class);
 			}
 		}
