@@ -138,7 +138,7 @@
 						case ' ':
 							if ($type === self::XML_TYPE_OPENTAG) {
 								$attributeList = $this->parseAttributes($iterator);
-								break;
+								continue 2;
 							}
 							$name .= $char;
 							break;
@@ -207,10 +207,8 @@
 				while ($iterator->valid()) {
 					switch ($char = $iterator->current()) {
 						case '/':
-							$iterator->setSkipNext();
 							return $attributeList;
 						case '>':
-							$iterator->setSkipNext();
 							return $attributeList;
 						case "\n":
 						case "\t":
