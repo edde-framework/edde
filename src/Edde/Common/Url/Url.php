@@ -77,7 +77,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getResourceName() {
+			public function getResourceName(): string {
 				$pathList = $this->getPathList();
 				return end($pathList);
 			}
@@ -92,7 +92,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getBasePath() : string {
+			public function getBasePath(): string {
 				$pathList = $this->getPathList();
 				array_pop($pathList);
 				return implode('/', $pathList);
@@ -101,7 +101,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getExtension() {
+			public function getExtension(): ?string {
 				$path = $this->getPath();
 				$subpath = substr($path, strrpos($path, '/'));
 				if (($index = strrpos($subpath, '.')) === false) {
@@ -120,7 +120,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function setPath(string $path) : IUrl {
+			public function setPath(string $path): IUrl {
 				$this->path = $path;
 				return $this;
 			}
@@ -128,7 +128,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getAbsoluteUrl() : string {
+			public function getAbsoluteUrl(): string {
 				$scheme = $this->getScheme();
 				$url = '';
 				if ($scheme !== '') {
@@ -226,7 +226,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function setQuery(string $query) : IUrl {
+			public function setQuery(string $query): IUrl {
 				$this->query = $query;
 				return $this;
 			}
@@ -234,7 +234,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function setParameterList(array $parameterList) : IUrl {
+			public function setParameterList(array $parameterList): IUrl {
 				$this->parameterList = $parameterList;
 				return $this;
 			}
@@ -242,7 +242,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function addParameterList(array $parameterList) : IUrl {
+			public function addParameterList(array $parameterList): IUrl {
 				$this->parameterList = array_merge($this->parameterList, $parameterList);
 				return $this;
 			}
@@ -250,14 +250,14 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getParameterList() : array {
+			public function getParameterList(): array {
 				return $this->parameterList;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function setParameter(string $name, $value) : IUrl {
+			public function setParameter(string $name, $value): IUrl {
 				$this->parameterList[$name] = $value;
 				return $this;
 			}

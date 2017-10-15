@@ -63,7 +63,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getExtension() {
+			public function getExtension(): ?string {
 				return $this->url->getExtension();
 			}
 
