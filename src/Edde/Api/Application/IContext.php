@@ -2,6 +2,14 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Application;
 
+	/**
+	 * A context is feature which enables support for cascade factory, thus dynamically replace
+	 * classes for example from Edde to the application.
+	 *
+	 * The context could be for example an user as an administrator, guest, and so on, which is
+	 * quite cool, because only particular classes could be exchanged, thus code could be simpler
+	 * and faster.
+	 */
 		interface IContext {
 			/**
 			 * return current id of context; could be any type of string

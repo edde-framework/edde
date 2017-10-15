@@ -37,14 +37,11 @@ services:
       dockerfile: ./.docker/server/Dockerfile
     working_dir: /server
     environment:
-      - "HOST_IP=${HOST_IP}"
+      - HOST_IP=${HOST_IP}
     volumes:
       - .:/server
       - ./.storage/assets:/server/.assets
       - ./.storage/storage:/server/.storage
-      - ./logs:/server/logs
-      - ./temp:/server/temp
-      - ./cache:/server/cache
       - ./.docker/server/xdebug.ini:/etc/php/7.1/fpm/conf.d/21-xdebug-custom.ini
       - ./.docker/server/mod-disable.ini:/etc/php/7.1/fpm/conf.d/10-opcache.ini
       - ./.docker/server/mod-disable.ini:/etc/php/7.1/fpm/conf.d/20-apcu.ini
