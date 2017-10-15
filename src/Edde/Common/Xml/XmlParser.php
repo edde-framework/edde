@@ -62,35 +62,40 @@
 			 */
 			protected function iterate(Iterator $iterator, IXmlHandler $xmlHandler) {
 				$value = '';
-				foreach ($iterator as $char) {
-					switch ($char) {
+				$iterator->rewind();
+				while ($iterator->valid()) {
+					/**
+					 * switch is here intentionally to force same "language" in whole file
+					 */
+					switch ($char = $iterator->current()) {
 						case '<':
 							if ($value !== '') {
 								$xmlHandler->onTextEvent($value);
 							}
-							$this->parseTag($iterator->setContinue(), $xmlHandler);
+							$this->parseTag($iterator, $xmlHandler);
 							$value = '';
 							break;
 						default:
 							$value .= $char;
 					}
+					$iterator->next();
 				}
 				return $this;
 			}
 
 			/**
-			 * @param Iterator    $iterator
+			 * @param \Iterator   $iterator
 			 * @param IXmlHandler $xmlHandler
 			 *
 			 * @throws XmlParserException
 			 */
-			protected function parseTag(Iterator $iterator, IXmlHandler $xmlHandler) {
+			protected function parseTag(\Iterator $iterator, IXmlHandler $xmlHandler) {
 				$last = null;
 				$name = '';
 				$attributeList = [];
 				$type = self::XML_TYPE_WARP;
-				foreach ($iterator as $char) {
-					switch ($char) {
+				while ($iterator->valid()) {
+					switch ($char = $iterator->current()) {
 						case '<':
 							$type = self::XML_TYPE_OPENTAG;
 							$name = '';
@@ -119,7 +124,7 @@
 									break;
 								case self::XML_TYPE_OPEN_COMMENT:
 									$iterator->next();
-									$this->parseComment($iterator->setContinue());
+									$this->parseComment($iterator);
 									$name = null;
 									break;
 								default:
@@ -132,7 +137,7 @@
 						case "\n":
 						case ' ':
 							if ($type === self::XML_TYPE_OPENTAG) {
-								$attributeList = $this->parseAttributes($iterator->setContinue());
+								$attributeList = $this->parseAttributes($iterator);
 								break;
 							}
 							$name .= $char;
@@ -160,14 +165,15 @@
 							$name .= $char;
 					}
 					$last = $char;
+					$iterator->next();
 				}
 			}
 
-			protected function parseComment(Iterator $iterator) {
+			protected function parseComment(\Iterator $iterator) {
 				$type = self::XML_TYPE_COMMENT;
 				$close = false;
-				foreach ($iterator as $char) {
-					switch ($char) {
+				while ($iterator->valid()) {
+					switch ($char = $iterator->current()) {
 						case '-':
 							switch ($type) {
 								case self::XML_TYPE_COMMENT:
@@ -187,18 +193,19 @@
 							$close = false;
 							$type = self::XML_TYPE_COMMENT;
 					}
+					$iterator->next();
 				}
 			}
 
 			/**
-			 * @param Iterator $iterator
+			 * @param \Iterator $iterator
 			 *
 			 * @return array
 			 */
-			protected function parseAttributes(Iterator $iterator) {
+			protected function parseAttributes(\Iterator $iterator) {
 				$attributeList = [];
-				foreach ($iterator as $char) {
-					switch ($char) {
+				while ($iterator->valid()) {
+					switch ($char = $iterator->current()) {
 						case '/':
 							$iterator->setSkipNext();
 							return $attributeList;
@@ -210,24 +217,25 @@
 						case ' ':
 							continue 2;
 						default:
-							$attributeList = array_merge($attributeList, $this->parseAttribute($iterator->setContinue()));
+							$attributeList = array_merge($attributeList, $this->parseAttribute($iterator));
 					}
+					$iterator->next();
 				}
 				return $attributeList;
 			}
 
 			/**
-			 * @param Iterator $iterator
+			 * @param \Iterator $iterator
 			 *
 			 * @return array
 			 */
-			protected function parseAttribute(Iterator $iterator) {
+			protected function parseAttribute(\Iterator $iterator) {
 				$name = null;
 				$open = false;
 				$quote = null;
 				$value = null;
-				foreach ($iterator as $char) {
-					switch ($char) {
+				while ($iterator->valid()) {
+					switch ($char = $iterator->current()) {
 						case '=':
 							if ($open !== true) {
 								$open = true;
@@ -262,6 +270,7 @@
 								$name .= $char;
 							}
 					}
+					$iterator->next();
 				}
 				$iterator->setSkipNext();
 				return [];
