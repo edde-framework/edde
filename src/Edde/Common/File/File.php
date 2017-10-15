@@ -3,11 +3,12 @@
 	namespace Edde\Common\File;
 
 		use Edde\Api\File\Exception\FileException;
+		use Edde\Api\File\Exception\FileLockException;
+		use Edde\Api\File\Exception\FileWriteException;
 		use Edde\Api\File\IDirectory;
 		use Edde\Api\File\IFile;
 		use Edde\Api\Url\IUrl;
 		use Edde\Common\Resource\Resource;
-		use Edde\Common\Url\Url;
 
 		/**
 		 * File class; this is just file. Simple good old classic file. Really.
@@ -27,48 +28,20 @@
 			protected $handle;
 
 			/**
-			 * @param string|IUrl $file
-			 * @param string|null $base
-			 */
-			public function __construct($file, $base = null) {
-				if (strpos($file, 'file:///') === false) {
-					$file = 'file:///' . ltrim($file, '/');
-				}
-				parent::__construct(Url::create($file), $base);
-			}
-
-			/**
 			 * @inheritdoc
 			 */
-			public function getName(): string {
-				if ($this->name === null) {
-					$this->name = $this->url->getResourceName();
+			public function getUrl(): IUrl {
+				if (strpos($this->url, 'file:///') === false) {
+					$this->url = 'file:///' . ltrim($this->url, '/');
 				}
-				return $this->name;
+				return parent::getUrl();
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function getDirectory(): IDirectory {
-				if ($this->directory === null) {
-					$this->directory = new Directory(dirname($this->getPath()));
-				}
-				return $this->directory;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getPath(): string {
-				return $this->url->getPath();
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getExtension(): ?string {
-				return $this->url->getExtension();
+				return $this->directory ?: $this->directory = new Directory(dirname($this->getPath()));
 			}
 
 			/**
@@ -93,7 +66,7 @@
 			 * @throws FileException
 			 */
 			public function openForRead(bool $exclusive = false): IFile {
-				$this->open('r+', $exclusive);
+				$this->open('rb+', $exclusive);
 				return $this;
 			}
 
@@ -147,14 +120,13 @@
 
 			/**
 			 * @inheritdoc
-			 * @throws FileException
 			 */
 			public function write($write, int $length = null): IFile {
 				if ($this->isOpen() === false) {
 					$this->openForWrite();
 				}
 				if (($count = $length ? fwrite($this->getHandle(), $write, $length) : fwrite($this->getHandle(), $write)) !== ($length = strlen($write))) {
-					throw new FileException(sprintf('Failed to write into file [%s]: expected %d bytes, %d has been written.', $this->url->getPath(), $length, $count));
+					throw new FileWriteException(sprintf('Failed to write into file [%s]: expected %d bytes, %d has been written.', $this->url->getPath(), $length, $count));
 				}
 				return $this;
 			}
@@ -256,11 +228,11 @@
 			 */
 			public function lock(bool $exclusive = true, bool $block = true): IFile {
 				if ($this->isOpen()) {
-					throw new FileException(sprintf('File being lock must not be opened.'));
+					throw new FileLockException(sprintf('File being lock must not be opened.'));
 				}
 				$exclusive ? $this->openForWrite() : $this->openForRead();
 				if (flock($this->getHandle(), $exclusive ? (LOCK_EX | ($block ? 0 : LOCK_NB)) : LOCK_SH) === false) {
-					throw new FileException(sprintf('Cannot execute lock on file [%s].', $this->getPath()));
+					throw new FileLockException(sprintf('Cannot execute lock on file [%s].', $this->getPath()));
 				}
 				return $this;
 			}
@@ -298,7 +270,6 @@
 
 			/**
 			 * @inheritdoc
-			 * @throws FileException
 			 */
 			public function getIterator() {
 				$autoclose = false;

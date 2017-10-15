@@ -2,6 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Api\File;
 
+		use Edde\Api\File\Exception\FileLockException;
+		use Edde\Api\File\Exception\FileWriteException;
 		use Edde\Api\Resource\IResource;
 
 		interface IFile extends IResource {
@@ -13,16 +15,6 @@
 			 * @return IFile
 			 */
 			public function setAutoClose(bool $autoClose = true): IFile;
-
-			/**
-			 * @return string
-			 */
-			public function getPath(): string;
-
-			/**
-			 * @return string|null
-			 */
-			public function getExtension(): ?string;
 
 			/**
 			 * return directory of this file
@@ -111,6 +103,8 @@
 			 * @param int   $length
 			 *
 			 * @return IFile
+			 *
+			 * @throws FileWriteException
 			 */
 			public function write($write, int $length = null): IFile;
 
@@ -147,6 +141,8 @@
 			 * @param bool $block
 			 *
 			 * @return IFile
+			 *
+			 * @throws FileLockException
 			 */
 			public function lock(bool $exclusive = true, bool $block = true): IFile;
 

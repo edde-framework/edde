@@ -6,6 +6,7 @@
 		use Edde\Api\Resource\IResource;
 		use Edde\Api\Url\IUrl;
 		use Edde\Common\Object\Object;
+		use Edde\Common\Url\Url;
 
 		/**
 		 * Abstract definition of some "resource".
@@ -16,66 +17,47 @@
 			 */
 			protected $url;
 			/**
-			 * @var string|null
-			 */
-			protected $base;
-			/**
 			 * friendly name of this resource
 			 *
 			 * @var string
 			 */
 			protected $name;
-			/**
-			 * @var string
-			 */
-			protected $mime;
 
 			/**
-			 * @param IUrl        $url
-			 * @param string|null $base
+			 * @param string      $url
 			 * @param string|null $name
-			 * @param string|null $mime
 			 */
-			public function __construct(IUrl $url, string $base = null, string $name = null, string $mime = null) {
+			public function __construct(string $url, string $name = null) {
 				$this->url = $url;
-				$this->base = $base;
 				$this->name = $name;
-				$this->mime = $mime;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function getUrl(): IUrl {
-				return $this->url;
-			}
-
-			/**
-			 * @inheritdoc
-			 * @throws ResourceException
-			 */
-			public function getRelativePath(string $base = null): string {
-				if (($base = $base ?: $this->base) === null) {
-					throw new ResourceException(sprintf('Cannot compute relative path of a resource [%s]; there is not base path.', $this->url->getPath()));
-				}
-				if (strpos($path = $this->url->getPath(), $base) === false) {
-					throw new ResourceException(sprintf('Cannot compute relative path of resource; given base path [%s] is not subset of the current path [%s].', $base, $path));
-				}
-				return str_replace($base, null, $path);
+				return $this->url instanceof IUrl ? $this->url : Url::create($this->url);
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getBase(): ?string {
-				return $this->base;
+			public function getPath(): string {
+				return $this->url->getPath();
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getExtension(): ?string {
+				return $this->url->getExtension();
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function getName(): string {
-				return $this->name;
+				return $this->name ?: $this->name = $this->url->getResourceName();
 			}
 
 			/**

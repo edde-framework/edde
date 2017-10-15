@@ -17,20 +17,18 @@
 			public function getUrl(): IUrl;
 
 			/**
-			 * return relative path; if there is no base dir either in a resource or specified in parameter, exception should be thrown; if base dir is not subset of path, exception should be thrown
-			 *
-			 * @param string|null $base
+			 * return resource's path
 			 *
 			 * @return string
 			 */
-			public function getRelativePath(string $base = null): string;
+			public function getPath(): string;
 
 			/**
-			 * return base path if set
+			 * return an extension of a resource if available
 			 *
 			 * @return string|null
 			 */
-			public function getBase(): ?string;
+			public function getExtension(): ?string;
 
 			/**
 			 * return firendy name of this resource; this can be arbitrary string
