@@ -7,6 +7,7 @@
 		use Edde\Api\File\IFile;
 		use Edde\Api\Url\IUrl;
 		use Edde\Common\Resource\Resource;
+		use Edde\Common\Url\Url;
 
 		/**
 		 * File class; this is just file. Simple good old classic file. Really.
@@ -30,7 +31,10 @@
 			 * @param string|null $base
 			 */
 			public function __construct($file, $base = null) {
-				parent::__construct($file instanceof IUrl ? $file : FileUtils::url($file), $base);
+				if (strpos($file, 'file:///') === false) {
+					$file = 'file:///' . ltrim($file, '/');
+				}
+				parent::__construct(Url::create($file), $base);
 			}
 
 			/**
@@ -98,7 +102,6 @@
 			 * @throws FileException
 			 */
 			public function openForWrite(bool $exclusive = false): IFile {
-				FileUtils::createDir(dirname($this->url->getPath()));
 				$this->open('w+', $exclusive);
 				return $this;
 			}

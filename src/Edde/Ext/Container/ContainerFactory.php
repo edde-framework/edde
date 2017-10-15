@@ -17,6 +17,7 @@
 		use Edde\Api\Runtime\IRuntime;
 		use Edde\Api\Utils\ICliUtils;
 		use Edde\Api\Utils\IStringUtils;
+		use Edde\Api\Xml\IXmlExport;
 		use Edde\Common\Application\Application;
 		use Edde\Common\Container\Container;
 		use Edde\Common\Container\Factory\CallbackFactory;
@@ -37,6 +38,7 @@
 		use Edde\Common\Runtime\Runtime;
 		use Edde\Common\Utils\CliUtils;
 		use Edde\Common\Utils\StringUtils;
+		use Edde\Common\Xml\XmlExport;
 		use Edde\Ext\Protocol\ProtocolServiceConfigurator;
 		use ReflectionMethod;
 
@@ -192,6 +194,10 @@
 					 * general service for http request/response
 					 */
 					IHttpRequestService::class => HttpRequestService::class,
+					/**
+					 * Xml support
+					 */
+					IXmlExport::class          => XmlExport::class,
 					/**
 					 * an application handles lifecycle workflow
 					 */
