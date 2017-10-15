@@ -5,7 +5,7 @@
 		use Edde\Api\Node\INode;
 		use Edde\Api\Xml\Inject\XmlParser;
 		use Edde\Common\File\File;
-		use phpunit\framework\TestCase;
+		use Edde\Ext\Test\TestCase;
 
 		require_once(__DIR__ . '/assets/assets.php');
 
