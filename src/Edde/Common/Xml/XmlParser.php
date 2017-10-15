@@ -8,7 +8,6 @@
 		use Edde\Api\Xml\IXmlHandler;
 		use Edde\Api\Xml\IXmlParser;
 		use Edde\Common\File\File;
-		use Edde\Common\Iterator\ChunkIterator;
 		use Edde\Common\Object\Object;
 
 		/**
@@ -48,16 +47,16 @@
 			 */
 			public function parse(IResource $resource, IXmlHandler $xmlHandler): IXmlParser {
 				/**
-				 * this complicated piece of shit is here because resource is returning line based data,
-				 * but parser needs to go through a stream of characters; string utils provides character
-				 * based iteration and chunk iterator connects everything together and maintains proper
-				 * line iteration; quite complicated, but this enables to stream data and it's memory
-				 * efficient
+				 * this interesting piece of things is reading line based data from $resource and
+				 * streaming character per character to the iterator
 				 */
-				$this->iterate(new ChunkIterator([
-					$this->stringUtils,
-					'createIterator',
-				], $resource->getIterator()), $xmlHandler);
+				$this->iterate((function (IResource $resource) {
+					foreach ($resource as $line) {
+						foreach ($this->stringUtils->createIterator($line) as $character) {
+							yield $character;
+						}
+					}
+				})($resource), $xmlHandler);
 				return $this;
 			}
 
