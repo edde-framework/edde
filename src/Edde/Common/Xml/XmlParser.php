@@ -3,18 +3,19 @@
 	namespace Edde\Common\Xml;
 
 		use Edde\Api\Resource\IResource;
+		use Edde\Api\Utils\Inject\StringUtils;
 		use Edde\Api\Xml\Exception\XmlParserException;
 		use Edde\Api\Xml\IXmlHandler;
 		use Edde\Api\Xml\IXmlParser;
 		use Edde\Common\File\File;
 		use Edde\Common\Iterator\ChunkIterator;
-		use Edde\Common\Iterator\StringIterator;
 		use Edde\Common\Object\Object;
 
 		/**
 		 * Simple and fast event based xml parser.
 		 */
 		class XmlParser extends Object implements IXmlParser {
+			use StringUtils;
 			const XML_TYPE_WARP = null;
 			const XML_TYPE_OPENTAG = 1;
 			const XML_TYPE_CLOSETAG = 2;
@@ -38,7 +39,7 @@
 			 * @inheritdoc
 			 */
 			public function string(string $string, IXmlHandler $xmlHandler): IXmlParser {
-				return $this->iterate((new StringIterator($string))->getIterator(), $xmlHandler);
+				return $this->iterate($this->stringUtils->createIterator($string), $xmlHandler);
 			}
 
 			/**
@@ -46,9 +47,10 @@
 			 * @throws XmlParserException
 			 */
 			public function parse(IResource $resource, IXmlHandler $xmlHandler): IXmlParser {
-				$this->iterate(new ChunkIterator(function (string $string) {
-					return (new StringIterator($string))->getIterator();
-				}, $resource->getIterator()), $xmlHandler);
+				$this->iterate(new ChunkIterator([
+					$this->stringUtils,
+					'createIterator',
+				], $resource->getIterator()), $xmlHandler);
 				return $this;
 			}
 
