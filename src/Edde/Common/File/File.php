@@ -301,7 +301,9 @@
 			 * @throws FileException
 			 */
 			public function getIterator() {
+				$autoclose = false;
 				if ($this->isOpen() === false) {
+					$autoclose = true;
 					$this->openForRead();
 				}
 				$this->rewind();
@@ -309,6 +311,7 @@
 				while ($line = $this->read()) {
 					yield $count++ => $line;
 				}
+				$autoclose ? $this->close() : null;
 			}
 
 			public function __toString() {
