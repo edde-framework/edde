@@ -212,8 +212,7 @@
 						case "\n":
 						case "\t":
 						case ' ':
-							$iterator->next();
-							continue 2;
+							break;
 						default:
 							$attributeList = array_merge($attributeList, $this->parseAttribute($iterator));
 					}
