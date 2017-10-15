@@ -214,7 +214,9 @@
 						case ' ':
 							break;
 						default:
-							$attributeList = array_merge($attributeList, $this->parseAttribute($iterator));
+							if ($attribute = $this->parseAttribute($iterator)) {
+								$attributeList[$attribute[0]] = $attribute[1];
+							}
 					}
 					$iterator->next();
 				}
@@ -243,7 +245,10 @@
 						case '"':
 						case "'":
 							if ($char === $quote) {
-								return [$name => $value];
+								return [
+									$name,
+									$value,
+								];
 							}
 							if ($quote !== null) {
 								$value .= $char;
@@ -269,6 +274,6 @@
 					$iterator->next();
 				}
 				$iterator->setSkipNext();
-				return [];
+				return null;
 			}
 		}
