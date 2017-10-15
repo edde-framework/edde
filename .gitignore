@@ -1,11 +1,7 @@
 /.idea/workspace.xml
-/logs
 *.log
 /lib
 /.assets
-/.storage
-/temp
-/cache
 /loader.local.php
 /build
 /doc

@@ -71,14 +71,14 @@ services:
   redis:
     image: redis:alpine
     volumes:
-      - ./.storage/redis:/data
+      - redis:/data
     networks:
       - redis-network
 
   neo4j:
     image: neo4j:3.2
     volumes:
-      - ./.storage/neo4j:/data
+      - neo4j:/data
     environment:
       - NEO4J_AUTH=none
     ports:
@@ -122,6 +122,10 @@ volumes:
   mysql:
     driver: local
   postgres:
+    driver: local
+  neo4j:
+    driver: local
+  redis:
     driver: local
 
 networks:
