@@ -159,7 +159,9 @@
 			 * @throws FileException
 			 */
 			public function rename(string $rename): IFile {
-				FileUtils::rename($this->url->getPath(), $this->url->getBasePath() . '/' . $rename);
+				if (@rename($src = $this->url->getPath(), $dst = ($this->url->getBasePath() . '/' . $rename)) === false) {
+					throw new FileException("Unable to rename file or directory [$src] to [$dst].");
+				}
 				return $this;
 			}
 
