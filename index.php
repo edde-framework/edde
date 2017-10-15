@@ -31,7 +31,7 @@
 	 * transparent configuration through properties (this is the only example of acceptable
 	 * scripted thing in this file).
 	 */
-	Debugger::enable(($isLocal = file_exists($local = __DIR__ . '/loader.local.php')) ? Debugger::DEVELOPMENT : Debugger::PRODUCTION, __DIR__ . '/logs');
+	Debugger::enable(($isLocal = file_exists($local = __DIR__ . '/loader.local.php')) ? Debugger::DEVELOPMENT : Debugger::PRODUCTION, __DIR__ . '/.assets/logs');
 	Debugger::$strictMode = true;
 	Debugger::$showBar = $isLocal;
 	Debugger::$onFatalError[] = function ($e) {
