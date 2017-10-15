@@ -215,6 +215,7 @@
 						case "\n":
 						case "\t":
 						case ' ':
+							$iterator->next();
 							continue 2;
 						default:
 							$attributeList = array_merge($attributeList, $this->parseAttribute($iterator));
@@ -262,6 +263,7 @@
 							if ($open) {
 								$value .= $char;
 							}
+							$iterator->next();
 							continue 2;
 						default:
 							if ($open) {
