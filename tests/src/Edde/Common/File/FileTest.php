@@ -17,4 +17,15 @@
 				$directory->delete();
 				self::assertFalse($directory->exists(), 'directory has not been deleted!');
 			}
+
+			public function testFileIterator() {
+				$file = File::create(__DIR__ . '/assets/text-file.txt');
+				self::assertFalse($file->isOpen(), 'file is new, but it is already opened!');
+				self::assertSame([
+					"abc\n",
+					"cde\n",
+					"fgh\n",
+				], iterator_to_array($file));
+				self::assertFalse($file->isOpen(), 'file is still opened!');
+			}
 		}
