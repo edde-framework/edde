@@ -3,5 +3,5 @@
 
 		use Edde\Common\Object\Object;
 
-		abstract class AbstractProtocolControl extends Object {
+		abstract class AbstractProtocolController extends Object {
 		}
