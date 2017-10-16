@@ -8,25 +8,11 @@
 
 		interface IFile extends IResource {
 			/**
-			 * enable auto close after file is read
-			 *
-			 * @param bool|true $autoClose
-			 *
-			 * @return IFile
-			 */
-			public function setAutoClose(bool $autoClose = true): IFile;
-
-			/**
 			 * return directory of this file
 			 *
 			 * @return IDirectory
 			 */
 			public function getDirectory(): IDirectory;
-
-			/**
-			 * @return bool
-			 */
-			public function isAutoClose(): bool;
 
 			/**
 			 * rename a file
@@ -126,13 +112,6 @@
 			 * @return IFile
 			 */
 			public function delete(): IFile;
-
-			/**
-			 * return a file size
-			 *
-			 * @return float
-			 */
-			public function getSize(): float;
 
 			/**
 			 * create a file and do an exclusive lock or lock an existing file; if lock cannot be acquired, exception should be thrown

@@ -19,20 +19,9 @@
 			 */
 			protected $directory;
 			/**
-			 * @var bool
-			 */
-			protected $autoClose = true;
-			/**
 			 * @var resource
 			 */
 			protected $handle;
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getDirectory(): IDirectory {
-				return $this->directory ?: $this->directory = new Directory(dirname($this->getPath()));
-			}
 
 			/**
 			 * @inheritdoc
@@ -53,6 +42,13 @@
 
 			/**
 			 * @inheritdoc
+			 */
+			public function getDirectory(): IDirectory {
+				return $this->directory ?: $this->directory = new Directory(dirname($this->getPath()));
+			}
+
+			/**
+			 * @inheritdoc
 			 * @throws FileException
 			 */
 			public function openForRead(bool $exclusive = false): IFile {
@@ -65,7 +61,7 @@
 			 * @throws FileException
 			 */
 			public function openForWrite(bool $exclusive = false): IFile {
-				$this->open('w+', $exclusive);
+				$this->open('wb+', $exclusive);
 				return $this;
 			}
 
@@ -170,50 +166,10 @@
 			 * @throws FileException
 			 */
 			public function read(int $length = null) {
-				if (($line = ($length ? fgets($this->getHandle(), $length) : fgets($this->getHandle()))) === false && $this->isAutoClose()) {
+				if (($line = ($length ? fgets($this->getHandle(), $length) : fgets($this->getHandle()))) === false) {
 					$this->close();
 				}
 				return $line;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function isAutoClose(): bool {
-				return $this->autoClose;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function setAutoClose(bool $autoClose = true): IFile {
-				$this->autoClose = $autoClose;
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getSize(): float {
-				$index = 0;
-				$size = 1073741824;
-				$this->openForRead();
-				fseek($handle = $this->getHandle(), 0, SEEK_SET);
-				while ($size > 1) {
-					fseek($handle, $size, SEEK_CUR);
-					if (fgetc($handle) === false) {
-						fseek($handle, -$size, SEEK_CUR);
-						$size = (int)($size / 2);
-						continue;
-					}
-					fseek($handle, -1, SEEK_CUR);
-					$index += $size;
-				}
-				while (fgetc($handle) !== false) {
-					$index++;
-				}
-				$this->close();
-				return (float)$index;
 			}
 
 			/**
