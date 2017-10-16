@@ -4,6 +4,7 @@
 
 		use Edde\Api\File\Exception\FileException;
 		use Edde\Api\File\Exception\FileLockException;
+		use Edde\Api\File\Exception\FileOpenException;
 		use Edde\Api\File\Exception\FileWriteException;
 		use Edde\Api\File\IDirectory;
 		use Edde\Api\File\IFile;
@@ -25,17 +26,16 @@
 
 			/**
 			 * @inheritdoc
-			 * @throws FileException
 			 */
 			public function open(string $mode, bool $exclusive = false): IFile {
 				if ($this->isOpen()) {
 					if ($exclusive === false) {
 						return $this;
 					}
-					throw new FileException(sprintf('Current file [%s] is already opened.', $this->getUrl()));
+					throw new FileOpenException(sprintf('Current file [%s] is already opened.', $this->getUrl()));
 				}
 				if (($this->handle = @fopen($path = $this->getPath(), $mode)) === false) {
-					throw new FileException(sprintf('Cannot open file [%s (%s)].', $path, $mode));
+					throw new FileOpenException(sprintf('Cannot open file [%s (%s)].', $path, $mode));
 				}
 				return $this;
 			}
@@ -123,7 +123,7 @@
 			 */
 			public function getHandle() {
 				if ($this->isOpen() === false) {
-					throw new FileException(sprintf('Current file [%s] is not opened or has been already closed.', $this->getPath()));
+					throw new FileOpenException(sprintf('Current file [%s] is not opened or has been already closed.', $this->getPath()));
 				}
 				return $this->handle;
 			}
@@ -134,7 +134,7 @@
 			 */
 			public function save(string $content): IFile {
 				if ($this->isOpen()) {
-					throw new FileException(sprintf('Cannot write (save) content to aready opened file [%s].', $this->getPath()));
+					throw new FileOpenException(sprintf('Cannot write (save) content to already opened file [%s].', $this->getPath()));
 				}
 				$this->getDirectory()->create();
 				file_put_contents($this->getPath(), $content);
@@ -146,6 +146,9 @@
 			 * @throws FileException
 			 */
 			public function rename(string $rename): IFile {
+				if ($this->isOpen()) {
+					throw new FileOpenException(sprintf('Cannot rename already opened file [%s].', $this->getPath()));
+				}
 				if (@rename($src = $this->getPath(), $dst = ($this->getUrl()->getBasePath() . '/' . $rename)) === false) {
 					throw new FileException("Unable to rename file or directory [$src] to [$dst].");
 				}

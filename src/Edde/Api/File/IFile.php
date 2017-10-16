@@ -3,6 +3,7 @@
 	namespace Edde\Api\File;
 
 		use Edde\Api\File\Exception\FileLockException;
+		use Edde\Api\File\Exception\FileOpenException;
 		use Edde\Api\File\Exception\FileWriteException;
 		use Edde\Api\Resource\IResource;
 
@@ -30,6 +31,8 @@
 			 * @param bool   $exclusive if the file is already opened, exception should be thrown
 			 *
 			 * @return IFile
+			 *
+			 * @throws FileOpenException
 			 */
 			public function open(string $mode, bool $exclusive = false): IFile;
 
