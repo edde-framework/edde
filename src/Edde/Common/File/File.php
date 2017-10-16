@@ -42,13 +42,6 @@
 
 			/**
 			 * @inheritdoc
-			 */
-			public function getDirectory(): IDirectory {
-				return $this->directory ?: $this->directory = new Directory(dirname($this->getPath()));
-			}
-
-			/**
-			 * @inheritdoc
 			 * @throws FileException
 			 */
 			public function openForRead(bool $exclusive = false): IFile {
@@ -85,23 +78,11 @@
 			 * @inheritdoc
 			 * @throws FileException
 			 */
-			public function delete(): IFile {
-				if ($this->isOpen()) {
+			public function read(int $length = null) {
+				if (($line = ($length ? fgets($this->getHandle(), $length) : fgets($this->getHandle()))) === false) {
 					$this->close();
 				}
-				unlink($this->getPath());
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 * @throws FileException
-			 */
-			public function close(): IFile {
-				fflush($handle = $this->getHandle());
-				fclose($handle);
-				$this->handle = null;
-				return $this;
+				return $line;
 			}
 
 			/**
@@ -119,13 +100,42 @@
 
 			/**
 			 * @inheritdoc
-			 * @throws FileException
+			 */
+			public function rewind(): IFile {
+				rewind($this->getHandle());
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
 			 */
 			public function getHandle() {
 				if ($this->isOpen() === false) {
 					throw new FileOpenException(sprintf('Current file [%s] is not opened or has been already closed.', $this->getPath()));
 				}
 				return $this->handle;
+			}
+
+			/**
+			 * @inheritdoc
+			 * @throws FileException
+			 */
+			public function close(): IFile {
+				fflush($handle = $this->getHandle());
+				fclose($handle);
+				$this->handle = null;
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function delete(): IFile {
+				if ($this->isOpen()) {
+					$this->close();
+				}
+				unlink($this->getPath());
+				return $this;
 			}
 
 			/**
@@ -153,26 +163,6 @@
 					throw new FileException("Unable to rename file or directory [$src] to [$dst].");
 				}
 				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 * @throws FileException
-			 */
-			public function rewind(): IFile {
-				rewind($this->getHandle());
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 * @throws FileException
-			 */
-			public function read(int $length = null) {
-				if (($line = ($length ? fgets($this->getHandle(), $length) : fgets($this->getHandle()))) === false) {
-					$this->close();
-				}
-				return $line;
 			}
 
 			/**
@@ -223,6 +213,13 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function getDirectory(): IDirectory {
+				return $this->directory ?: $this->directory = new Directory(dirname($this->getPath()));
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function getIterator() {
 				if ($this->isOpen() === false) {
 					$this->openForRead();
@@ -232,10 +229,6 @@
 				while ($line = $this->read()) {
 					yield $count++ => $line;
 				}
-			}
-
-			public function __toString() {
-				return $this->getPath();
 			}
 
 			static public function create(string $file): IFile {

@@ -9,22 +9,6 @@
 
 		interface IFile extends IResource {
 			/**
-			 * return directory of this file
-			 *
-			 * @return IDirectory
-			 */
-			public function getDirectory(): IDirectory;
-
-			/**
-			 * rename a file
-			 *
-			 * @param string $rename
-			 *
-			 * @return IFile
-			 */
-			public function rename(string $rename): IFile;
-
-			/**
 			 * create file handle; if the file is not availble, exceptio nshould be thrown
 			 *
 			 * @param string $mode
@@ -63,20 +47,6 @@
 			public function isOpen(): bool;
 
 			/**
-			 * return file's resource; if it is not open, exception should be thrown
-			 *
-			 * @return resource
-			 */
-			public function getHandle();
-
-			/**
-			 * close the current file handle
-			 *
-			 * @return IFile
-			 */
-			public function close(): IFile;
-
-			/**
 			 * read bunch of data
 			 *
 			 * @param int $length
@@ -98,6 +68,45 @@
 			public function write($write, int $length = null): IFile;
 
 			/**
+			 * @return IFile
+			 *
+			 * @throws FileOpenException
+			 */
+			public function rewind(): IFile;
+
+			/**
+			 * return file's resource; if it is not open, exception should be thrown
+			 *
+			 * @return resource
+			 *
+			 * @throws FileOpenException
+			 */
+			public function getHandle();
+
+			/**
+			 * close the current file handle
+			 *
+			 * @return IFile
+			 *
+			 * @throws FileOpenException
+			 */
+			public function close(): IFile;
+
+			/**
+			 * @return IFile
+			 */
+			public function delete(): IFile;
+
+			/**
+			 * rename a file
+			 *
+			 * @param string $rename
+			 *
+			 * @return IFile
+			 */
+			public function rename(string $rename): IFile;
+
+			/**
 			 * override current file with the given content
 			 *
 			 * @param string $content
@@ -105,16 +114,6 @@
 			 * @return IFile
 			 */
 			public function save(string $content): IFile;
-
-			/**
-			 * @return IFile
-			 */
-			public function rewind(): IFile;
-
-			/**
-			 * @return IFile
-			 */
-			public function delete(): IFile;
 
 			/**
 			 * create a file and do an exclusive lock or lock an existing file; if lock cannot be acquired, exception should be thrown
@@ -155,4 +154,11 @@
 			 * @return IFile
 			 */
 			public function touch(): IFile;
+
+			/**
+			 * return directory of this file
+			 *
+			 * @return IDirectory
+			 */
+			public function getDirectory(): IDirectory;
 		}
