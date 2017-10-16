@@ -7,8 +7,8 @@
 		use Edde\Api\File\Exception\FileWriteException;
 		use Edde\Api\File\IDirectory;
 		use Edde\Api\File\IFile;
-		use Edde\Api\Url\IUrl;
 		use Edde\Common\Resource\Resource;
+		use Edde\Common\Url\Url;
 
 		/**
 		 * File class; this is just file. Simple good old classic file. Really.
@@ -26,16 +26,6 @@
 			 * @var resource
 			 */
 			protected $handle;
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getUrl(): IUrl {
-				if (strpos($this->url, 'file:///') === false) {
-					$this->url = 'file:///' . ltrim($this->url, '/');
-				}
-				return parent::getUrl();
-			}
 
 			/**
 			 * @inheritdoc
@@ -150,6 +140,7 @@
 				if ($this->isOpen()) {
 					throw new FileException(sprintf('Cannot write (save) content to aready opened file [%s].', $this->getPath()));
 				}
+				$this->getDirectory()->create();
 				file_put_contents($this->getPath(), $content);
 				return $this;
 			}
@@ -286,5 +277,9 @@
 
 			public function __toString() {
 				return $this->getPath();
+			}
+
+			static public function create(string $file): IFile {
+				return new static(Url::create('file:///' . ltrim($file, '/')));
 			}
 		}

@@ -31,7 +31,7 @@
 			 * @inheritdoc
 			 */
 			public function file(string $file, IXmlHandler $xmlHandler): IXmlParser {
-				return $this->parse(new File($file), $xmlHandler);
+				return $this->parse(File::create($file), $xmlHandler);
 			}
 
 			/**
