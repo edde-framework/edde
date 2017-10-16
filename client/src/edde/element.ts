@@ -157,7 +157,7 @@ export class EventElement extends ProtocolElement {
 export class PacketElement extends ProtocolElement {
 	public constructor(origin: string, id?: string) {
 		super('packet', id);
-		this.setAttribute('version', '1.1');
+		this.setAttribute('version', '1.2');
 		this.setAttribute('origin', origin);
 	}
 

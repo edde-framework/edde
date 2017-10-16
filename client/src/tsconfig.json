@@ -13,7 +13,7 @@
 		"inlineSourceMap": true,
 		"skipDefaultLibCheck": true,
 		"skipLibCheck": true,
-		"target": "es2015",
+		"target": "es3",
 		"removeComments": true,
 		"allowUnreachableCode": false,
 		"allowUnusedLabels": false,

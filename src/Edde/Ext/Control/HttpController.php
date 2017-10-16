@@ -2,6 +2,7 @@
 	namespace Edde\Ext\Control;
 
 		use Edde\Api\File\IFile;
+		use Edde\Api\Http\Inject\RequestService;
 		use Edde\Api\Http\IResponse;
 		use Edde\Common\Content\HtmlContent;
 		use Edde\Common\Content\JsonContent;
@@ -11,6 +12,8 @@
 		 * Http control provides helpers for a http response style.
 		 */
 		trait HttpController {
+			use RequestService;
+
 			public function __call(string $name, $arguments) {
 				$response = new Response();
 				$response->setCode(IResponse::R400_BAD_REQUEST);

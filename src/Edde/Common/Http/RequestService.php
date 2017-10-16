@@ -74,7 +74,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getContentType():?IContentType {
+			public function getContentType(): ?IContentType {
 				return $this->getHeaders()->getContentType();
 			}
 
@@ -93,20 +93,10 @@
 						$key = substr($key, 5);
 						if (isset($mysticList[$key]) === false || isset($_SERVER[$key]) === false) {
 							$key = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', $key))));
-							$headers[$key] = $value;
+							$headers[] = $key . ':' . $value;
 						}
 					} else if (isset($mysticList[$key])) {
-						$headers[$mysticList[$key]] = $value;
-					}
-				}
-				if (isset($headers['Authorization']) === false) {
-					if (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
-						$headers['Authorization'] = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
-					} else if (isset($_SERVER['PHP_AUTH_USER'])) {
-						$password = $_SERVER['PHP_AUTH_PW'] ?? '';
-						$headers['Authorization'] = 'Basic ' . base64_encode($_SERVER['PHP_AUTH_USER'] . ':' . $password);
-					} else if (isset($_SERVER['PHP_AUTH_DIGEST'])) {
-						$headers['Authorization'] = $_SERVER['PHP_AUTH_DIGEST'];
+						$headers[] = $mysticList[$key] . ':' . $value;
 					}
 				}
 				return $this->httpUtils->headers($headers);
