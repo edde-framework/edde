@@ -27,7 +27,7 @@ export class e3 {
 	protected static heartbeatId: any;
 
 	public version() {
-		return '3.1.2.78';
+		return '4.0.0.0';
 	}
 
 	public static EventBus(): IEventBus {
