@@ -1,6 +1,7 @@
 <?php
 	namespace Edde\Ext\Control;
 
+		use Edde\Api\File\IFile;
 		use Edde\Api\Http\IResponse;
 		use Edde\Common\Content\HtmlContent;
 		use Edde\Common\Content\JsonContent;
@@ -34,12 +35,12 @@
 			/**
 			 * execute response with html based data
 			 *
-			 * @param mixed $content
-			 * @param int   $code
+			 * @param string|IFile $content
+			 * @param int          $code
 			 *
 			 * @return IResponse
 			 */
-			public function html(string $content, int $code = IResponse::R200_OK): IResponse {
+			public function html($content, int $code = IResponse::R200_OK): IResponse {
 				$response = new Response(new HtmlContent($content));
 				$response->header('X-Powered-By', 'Edde Framework');
 				$response->setCode($code);

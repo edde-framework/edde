@@ -106,7 +106,7 @@
 			 * @inheritdoc
 			 */
 			public function file(string $file): IFile {
-				return new File($this->filename($file));
+				return File::create($this->filename($file));
 			}
 
 			/**
@@ -211,7 +211,7 @@
 			 */
 			public function getIterator() {
 				foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->directory, RecursiveDirectoryIterator::SKIP_DOTS)) as $splFileInfo) {
-					yield new File((string)$splFileInfo);
+					yield File::create((string)$splFileInfo);
 				}
 			}
 

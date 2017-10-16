@@ -10,7 +10,9 @@
 	use App\Common\Application\Context;
 	use App\Common\Router\RouterServiceConfigurator;
 	use Edde\Api\Application\IContext;
+	use Edde\Api\Application\IRootDirectory;
 	use Edde\Api\Router\IRouterService;
+	use Edde\Common\Application\RootDirectory;
 	use Edde\Common\Container\Factory\CascadeFactory;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
@@ -46,10 +48,11 @@
 	 */
 	try {
 		$container = ContainerFactory::container($factoryList = array_merge([
+			IRootDirectory::class => ContainerFactory::instance(RootDirectory::class, [__DIR__]),
 			/**
 			 * This application is using specific contexts to separate user experience
 			 */
-			IContext::class => Context::class,
+			IContext::class       => Context::class,
 		], is_array($local = @include $local) ? $local : [], [
 			/**
 			 * This stranger here must (should be) be last, because it's canHandle method is able to kill a lot of dependencies and

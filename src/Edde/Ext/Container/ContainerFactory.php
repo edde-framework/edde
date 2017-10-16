@@ -3,11 +3,15 @@
 	namespace Edde\Ext\Container;
 
 		use Edde\Api\Application\IApplication;
+		use Edde\Api\Application\IRootDirectory;
+		use Edde\Api\Application\ITempDirectory;
+		use Edde\Api\Assets\IAssetsDirectory;
 		use Edde\Api\Container\Exception\ContainerException;
 		use Edde\Api\Container\Exception\FactoryException;
 		use Edde\Api\Container\IContainer;
 		use Edde\Api\Container\IFactory;
 		use Edde\Api\Converter\IConverterManager;
+		use Edde\Api\EddeException;
 		use Edde\Api\Http\IHttpUtils;
 		use Edde\Api\Http\IRequestService as IHttpRequestService;
 		use Edde\Api\Log\ILogService;
@@ -20,6 +24,8 @@
 		use Edde\Api\Xml\IXmlExport;
 		use Edde\Api\Xml\IXmlParser;
 		use Edde\Common\Application\Application;
+		use Edde\Common\Application\TempDirectory;
+		use Edde\Common\Assets\AssetsDirectory;
 		use Edde\Common\Container\Container;
 		use Edde\Common\Container\Factory\CallbackFactory;
 		use Edde\Common\Container\Factory\ClassFactory;
@@ -128,6 +134,58 @@
 			}
 
 			/**
+			 * create instance factory
+			 *
+			 * @param string $class
+			 * @param array  $parameterList
+			 * @param bool   $cloneable
+			 *
+			 * @return object
+			 */
+			static public function instance(string $class, array $parameterList, bool $cloneable = false) {
+				return (object)[
+					'type'          => __FUNCTION__,
+					'class'         => $class,
+					'parameterList' => $parameterList,
+					'cloneable'     => $cloneable,
+				];
+			}
+
+			/**
+			 * special kind of factory which will thrown an exception of the given message; it's useful for say which internal dependencies are not met
+			 *
+			 * @param string      $message
+			 * @param string|null $class
+			 *
+			 * @return object
+			 */
+			static public function exception(string $message, string $class = null) {
+				return (object)[
+					'type'    => __FUNCTION__,
+					'message' => $message,
+					'class'   => $class ?: EddeException::class,
+				];
+			}
+
+			/**
+			 * create proxy call factory
+			 *
+			 * @param string $factory
+			 * @param string $method
+			 * @param array  $parameterList
+			 *
+			 * @return object
+			 */
+			static public function proxy(string $factory, string $method, array $parameterList) {
+				return (object)[
+					'type'          => __FUNCTION__,
+					'factory'       => $factory,
+					'method'        => $method,
+					'parameterList' => $parameterList,
+				];
+			}
+
+			/**
 			 * create a default container with set of services from Edde; they can be simply redefined
 			 *
 			 * @param array    $factoryList
@@ -160,24 +218,33 @@
 
 			static public function getDefaultFactoryList(): array {
 				return [
+					IRootDirectory::class   => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
+					IAssetsDirectory::class => self::proxy(IRootDirectory::class, 'directory', [
+						'.assets',
+						AssetsDirectory::class,
+					]),
+					ITempDirectory::class   => self::proxy(IAssetsDirectory::class, 'directory', [
+						'temp',
+						TempDirectory::class,
+					]),
 					/**
 					 * utils
 					 */
-					IHttpUtils::class          => HttpUtils::class,
-					IStringUtils::class        => StringUtils::class,
-					ICliUtils::class           => CliUtils::class,
+					IHttpUtils::class       => HttpUtils::class,
+					IStringUtils::class     => StringUtils::class,
+					ICliUtils::class        => CliUtils::class,
 					/**
 					 * container implementation
 					 */
-					IContainer::class          => Container::class,
+					IContainer::class       => Container::class,
 					/**
 					 * runtime info provider
 					 */
-					IRuntime::class            => Runtime::class,
+					IRuntime::class         => Runtime::class,
 					/**
 					 * log support
 					 */
-					ILogService::class         => LogService::class,
+					ILogService::class      => LogService::class,
 					/**
 					 * user request into protocol element translation
 					 */
