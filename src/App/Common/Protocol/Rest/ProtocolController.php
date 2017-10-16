@@ -7,6 +7,6 @@
 		class ProtocolController extends AbstractProtocolController {
 			use RestController;
 
-			public function actionGet() {
+			public function actionPost() {
 			}
 		}

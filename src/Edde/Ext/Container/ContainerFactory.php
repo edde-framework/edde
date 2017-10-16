@@ -47,6 +47,7 @@
 		use Edde\Common\Utils\StringUtils;
 		use Edde\Common\Xml\XmlExport;
 		use Edde\Common\Xml\XmlParser;
+		use Edde\Ext\Converter\ConverterManagerConfigurator;
 		use Edde\Ext\Protocol\ProtocolServiceConfigurator;
 		use Edde\Ext\Router\RouterServiceConfigurator;
 		use ReflectionMethod;
@@ -219,47 +220,47 @@
 
 			static public function getDefaultFactoryList(): array {
 				return [
-					IRootDirectory::class    => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
-					IAssetsDirectory::class  => self::proxy(IRootDirectory::class, 'directory', [
+					IRootDirectory::class      => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
+					IAssetsDirectory::class    => self::proxy(IRootDirectory::class, 'directory', [
 						'.assets',
 						AssetsDirectory::class,
 					]),
-					ITempDirectory::class    => self::proxy(IAssetsDirectory::class, 'directory', [
+					ITempDirectory::class      => self::proxy(IAssetsDirectory::class, 'directory', [
 						'temp',
 						TempDirectory::class,
 					]),
 					/**
 					 * utils
 					 */
-					IHttpUtils::class        => HttpUtils::class,
-					IStringUtils::class      => StringUtils::class,
-					ICliUtils::class         => CliUtils::class,
+					IHttpUtils::class          => HttpUtils::class,
+					IStringUtils::class        => StringUtils::class,
+					ICliUtils::class           => CliUtils::class,
 					/**
 					 * container implementation
 					 */
-					IContainer::class        => Container::class,
+					IContainer::class          => Container::class,
 					/**
 					 * runtime info provider
 					 */
-					IRuntime::class          => Runtime::class,
+					IRuntime::class            => Runtime::class,
 					/**
 					 * log support
 					 */
-					ILogService::class       => LogService::class,
+					ILogService::class         => LogService::class,
 					/**
 					 * user request into protocol element translation
 					 */
-					IRouterService::class    => RouterService::class,
-					IRequestService::class   => RequestService::class,
+					IRouterService::class      => RouterService::class,
+					IRequestService::class     => RequestService::class,
 					/**
 					 * content conversion implementation (mainly useful for server content
 					 * negotiation)
 					 */
-					IConverterManager::class => ConverterManager::class,
+					IConverterManager::class   => ConverterManager::class,
 					/**
 					 * The Protocol specification related stuff
 					 */
-					IProtocolService::class  => ProtocolService::class,
+					IProtocolService::class    => ProtocolService::class,
 					/**
 					 * general service for http request/response
 					 */
@@ -267,23 +268,24 @@
 					/**
 					 * Xml support
 					 */
-					IXmlExport::class        => XmlExport::class,
-					IXmlParser::class        => XmlParser::class,
+					IXmlExport::class          => XmlExport::class,
+					IXmlParser::class          => XmlParser::class,
 					/**
 					 * an application handles lifecycle workflow
 					 */
-					IApplication::class      => Application::class,
+					IApplication::class        => Application::class,
 					/**
 					 * magical factory for an application execution
 					 */
-					'application'            => IApplication::class . '::run',
+					'application'              => IApplication::class . '::run',
 				];
 			}
 
 			static public function getDefaultConfiguratorList(): array {
 				return [
-					IProtocolService::class => ProtocolServiceConfigurator::class,
-					IRouterService::class   => RouterServiceConfigurator::class,
+					IProtocolService::class  => ProtocolServiceConfigurator::class,
+					IRouterService::class    => RouterServiceConfigurator::class,
+					IConverterManager::class => ConverterManagerConfigurator::class,
 				];
 			}
 		}

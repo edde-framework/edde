@@ -1,6 +1,8 @@
 <?php
 	namespace Edde\Common\Http;
 
+		use Edde\Api\Converter\Inject\ConverterManager;
+		use Edde\Api\Http\Exception\EmptyBodyException;
 		use Edde\Api\Http\IContentType;
 		use Edde\Api\Http\ICookies;
 		use Edde\Api\Http\IHeaders;
@@ -15,6 +17,7 @@
 
 		class RequestService extends Object implements IRequestService {
 			use HttpUtils;
+			use ConverterManager;
 			/**
 			 * @var IRequest
 			 */
@@ -48,6 +51,16 @@
 				fclose($input);
 				$this->request->setContent($content);
 				return $this->request;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getContent(...$targetList) {
+				if (($content = $this->getRequest()->getContent()) === null) {
+					throw new EmptyBodyException('Current request has no content.');
+				}
+				return $this->converterManager->convert($content, $targetList)->getContent();
 			}
 
 			/**

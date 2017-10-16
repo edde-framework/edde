@@ -16,6 +16,15 @@
 			public function getRequest(): IRequest;
 
 			/**
+			 * try to get content with the acceptable list of targets (like array, object, ...)
+			 *
+			 * @param array ...$targetList
+			 *
+			 * @return mixed
+			 */
+			public function getContent(...$targetList);
+
+			/**
 			 * get current request url
 			 *
 			 * @return IUrl
@@ -49,5 +58,5 @@
 			 *
 			 * @throws NoHttpException
 			 */
-			public function getContentType():?IContentType;
+			public function getContentType(): ?IContentType;
 		}

@@ -5,23 +5,30 @@
 
 		interface IConvertable {
 			/**
-			 * get content being converted
-			 *
-			 * @return IContent
-			 */
-			public function getContent() : IContent;
-
-			/**
-			 * converter choosen to convert the given input content to the output content
+			 * who will do the conversion
 			 *
 			 * @return IConverter
 			 */
-			public function getConverter() : IConverter;
+			public function getConverter(): IConverter;
 
 			/**
-			 * convert source content to the target content
+			 * return subject content
 			 *
 			 * @return IContent
 			 */
-			public function convert() : IContent;
+			public function getContent(): IContent;
+
+			/**
+			 * return target mime type; if target is not specified, source should not be converted
+			 *
+			 * @return string|null
+			 */
+			public function getTarget();
+
+			/**
+			 * try to convert an input
+			 *
+			 * @return IContent
+			 */
+			public function convert(): IContent;
 		}

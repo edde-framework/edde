@@ -2,6 +2,8 @@
 	namespace Edde\Api\Converter;
 
 		use Edde\Api\Config\IConfigurable;
+		use Edde\Api\Content\IContent;
+		use Edde\Api\Converter\Exception\UnsupportedConversionException;
 
 		/**
 		 * A Converter is an implementation of converter from one type to another one; the core
@@ -24,4 +26,17 @@
 			 * @return string[]
 			 */
 			public function getTargetList(): array;
+
+			/**
+			 * do the conversion; it could event be direct streamed conversion from one
+			 * type to another being actually done when target content is iterated
+			 *
+			 * @param IContent    $content
+			 * @param string|null $target
+			 *
+			 * @return IContent
+			 *
+			 * @throws UnsupportedConversionException
+			 */
+			public function convert(IContent $content, string $target = null): IContent;
 		}

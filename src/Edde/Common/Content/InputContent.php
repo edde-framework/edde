@@ -8,4 +8,11 @@
 			public function __construct(string $type) {
 				parent::__construct('php://input', $type);
 			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getContent() {
+				return file_get_contents('php://input');
+			}
 		}
