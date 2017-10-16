@@ -52,9 +52,7 @@
 				 */
 				$this->iterate((function (IResource $resource) {
 					foreach ($resource as $line) {
-						foreach ($this->stringUtils->createIterator($line) as $character) {
-							yield $character;
-						}
+						yield from $this->stringUtils->createIterator($line);
 					}
 				})($resource), $xmlHandler);
 				return $this;
