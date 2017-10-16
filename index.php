@@ -8,10 +8,8 @@
 	 */
 	declare(strict_types=1);
 	use App\Common\Application\Context;
-	use App\Common\Router\RouterServiceConfigurator;
 	use Edde\Api\Application\IContext;
 	use Edde\Api\Application\IRootDirectory;
-	use Edde\Api\Router\IRouterService;
 	use Edde\Common\Application\RootDirectory;
 	use Edde\Common\Container\Factory\CascadeFactory;
 	use Edde\Common\Container\Factory\ClassFactory;
@@ -60,7 +58,6 @@
 			 */
 			new ClassFactory(),
 		]), [
-			IRouterService::class => RouterServiceConfigurator::class,
 		]);
 		/**
 		 * This one is one of the most magical: this factory uses IContext::cascade() to search for class; this is quite
