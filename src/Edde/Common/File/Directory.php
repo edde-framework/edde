@@ -31,9 +31,7 @@
 			 * @inheritdoc
 			 */
 			public function getFileList() {
-				foreach (new \RecursiveDirectoryIterator($this->directory, \RecursiveDirectoryIterator::SKIP_DOTS) as $path) {
-					yield $path;
-				}
+				yield from (new \RecursiveDirectoryIterator($this->directory, \RecursiveDirectoryIterator::SKIP_DOTS));
 			}
 
 			/**
@@ -78,8 +76,9 @@
 			 * @inheritdoc
 			 */
 			public function save(string $file, string $content): IFile {
-				file_put_contents($file = $this->filename($file), $content);
-				return new File($file);
+				$file = $this->file($file);
+				$file->save($content);
+				return $file;
 			}
 
 			/**
