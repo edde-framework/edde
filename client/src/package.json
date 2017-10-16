@@ -1,0 +1,35 @@
+{
+	"name": "application",
+	"version": "1.0.0",
+	"description": "Edde Framework Sample Application",
+	"scripts": {
+		"lint": "node_modules/.bin/tslint -c src/tslint.json 'src/**/*.{ts,tsx}'",
+		"pretest": "node_modules/.bin/tsc -p test",
+		"test": "node_modules/.bin/nyc node_modules/.bin/ava",
+		"compile": "node_modules/.bin/tsc -p ./src"
+	},
+	"author": "Marek Hanzal",
+	"license": "Apache-2.0",
+	"devDependencies": {
+		"@types/jsdom": "^11.0.1",
+		"ava": "^0.21.0",
+		"jsdom": "^11.1.0",
+		"nyc": "^11.1.0",
+		"tslint": "^5.5.0",
+		"typescript": "^2.4.2"
+	},
+	"ava": {
+		"files": [
+			"test/**/*.spec.js"
+		],
+		"source": [
+			"src/**"
+		],
+		"concurrency": 8,
+		"failFast": true,
+		"failWithoutAssertions": true
+	},
+	"dependencies": {
+		"google-closure-compiler-js": "^20170806.0.0"
+	}
+}

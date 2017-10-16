@@ -5,3 +5,5 @@
 /loader.local.php
 /build
 /doc
+**/node_modules/
+**/temp/
