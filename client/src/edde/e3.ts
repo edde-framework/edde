@@ -8,6 +8,7 @@ import {Ajax, IAjax} from "./ajax";
 import {IJobManager, JobManager} from "./job";
 import {IPromise} from "./promise";
 import {ConverterManager, IContent, IConverterManager, JsonConverter} from "./converter";
+import {ControlFactory, IControlFactory} from "./control";
 
 declare function require(module: string): any;
 
@@ -23,6 +24,7 @@ export class e3 {
 	protected static elementQueue: IElementQueue;
 	protected static jobManager: IJobManager;
 	protected static converterManager: IConverterManager;
+	protected static controlFactory: IControlFactory;
 	protected static classList: IHashMap<any> = e3.hashMap();
 	protected static heartbeatId: any;
 
@@ -59,6 +61,10 @@ export class e3 {
 		this.converterManager.registerConverter(new NodeConverter());
 		this.converterManager.registerConverter(new ElementConverter());
 		return this.converterManager;
+	}
+
+	public static ControlFactory(): IControlFactory {
+		return this.controlFactory ? this.controlFactory : this.controlFactory = e3.listener(new ControlFactory());
 	}
 
 	public static Event(event: string, data: Object = {}): IElement {

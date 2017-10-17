@@ -203,7 +203,7 @@ declare module "edde/dom" {
 	import {IHtmlElement, IHtmlElementCollection, ISelector} from "edde/dom";
 	import {IAjax} from "edde/ajax";
 	import {IJobManager} from "edde/job";
-	import {AbstractControl} from "edde/control";
+	import {AbstractControl, IControlFactory} from "edde/control";
 
 	export interface IAbstractHtmlElement<T> {
 		event(name: string, callback: (event: any) => void): T;
@@ -624,6 +624,42 @@ declare module "edde/node" {
 		convert<S, T>(content: S, mime: string, target: string | null): IContent<T>;
 	}
 }
+declare module "edde/promise" {
+	export interface IPromise {
+		success(callback: (value?: any) => void): IPromise;
+
+		onSuccess(value?: any): IPromise;
+
+		fail(callback: (value?: any) => void): IPromise;
+
+		onFail(value?: any): IPromise;
+
+		always(callback: (value?: any) => void): IPromise;
+
+		onAlways(value?: any): IPromise;
+	}
+
+	export class AbstractPromise implements IPromise {
+		protected promiseList: IHashMapCollection<(value?: any) => void>;
+		protected resultList: IHashMap<any>;
+
+		protected register(name: string, callback: (value?: any) => void): IPromise;
+
+		protected execute(name: string, value?: any): IPromise;
+
+		success(callback: (value?: any) => void): IPromise;
+
+		onSuccess(value?: any): IPromise;
+
+		fail(callback: (value?: any) => void): IPromise;
+
+		onFail(value?: any): IPromise;
+
+		always(callback: (value?: any) => void): IPromise;
+
+		onAlways(value?: any): IPromise;
+	}
+}
 declare module "edde/protocol" {
 	export interface IElement extends INode {
 		getType(): string;
@@ -815,6 +851,78 @@ declare module "edde/event" {
 		emit(event: string, data?: Object): IEventBus;
 	}
 }
+declare module "edde/ajax" {
+	export interface IAjaxHandler extends IPromise {
+		serverFail(callback: (xmlHttpRequest: XMLHttpRequest) => void): IAjaxHandler;
+
+		onServerFail(xmlHttpRequest: XMLHttpRequest): IAjaxHandler;
+
+		clientFail(callback: (xmlHttpRequest: XMLHttpRequest) => void): IAjaxHandler;
+
+		onClientFail(xmlHttpRequest: XMLHttpRequest): IAjaxHandler;
+
+		timeout(callback: (xmlHttpRequest: XMLHttpRequest) => void): IAjaxHandler;
+
+		onTimeout(xmlHttpRequest: XMLHttpRequest): IAjaxHandler;
+
+		error(callback: (xmlHttpRequest: XMLHttpRequest) => void): IAjaxHandler;
+
+		onError(xmlHttpRequest: XMLHttpRequest): IAjaxHandler;
+	}
+
+	export interface IAjax {
+		setAccept(accept: string): IAjax;
+
+		setAsync(async: boolean): IAjax;
+
+		setTimeout(timeout: number): IAjax;
+
+		getAjaxHandler(): IAjaxHandler;
+
+		execute<T>(content?: IContent<T>): IAjaxHandler;
+	}
+
+	export class AjaxHandler extends AbstractPromise implements IAjaxHandler {
+		serverFail(callback: (xmlHttpRequest: XMLHttpRequest) => void): IAjaxHandler;
+
+		onServerFail(xmlHttpRequest: XMLHttpRequest): IAjaxHandler;
+
+		clientFail(callback: (xmlHttpRequest: XMLHttpRequest) => void): IAjaxHandler;
+
+		onClientFail(xmlHttpRequest: XMLHttpRequest): IAjaxHandler;
+
+		timeout(callback: (xmlHttpRequest: XMLHttpRequest) => void): IAjaxHandler;
+
+		onTimeout(xmlHttpRequest: XMLHttpRequest): IAjaxHandler;
+
+		error(callback: (xmlHttpRequest: XMLHttpRequest) => void): IAjaxHandler;
+
+		onError(xmlHttpRequest: XMLHttpRequest): IAjaxHandler;
+	}
+
+	export class Ajax implements IAjax {
+		protected url: string;
+		protected method: string;
+		protected accept: string;
+		protected async: boolean;
+		protected timeout: number;
+		protected ajaxHandler: IAjaxHandler;
+
+		constructor(url: string);
+
+		setMethod(method: string): IAjax;
+
+		setAccept(accept: string): IAjax;
+
+		setAsync(async: boolean): IAjax;
+
+		setTimeout(timeout: number): IAjax;
+
+		getAjaxHandler(): IAjaxHandler;
+
+		execute<T>(content: IContent<T>): IAjaxHandler;
+	}
+}
 declare module "edde/job" {
 	export interface IJobManager {
 		queue(element: IElement): IJobManager;
@@ -831,6 +939,62 @@ declare module "edde/job" {
 		execute(): IJobManager;
 	}
 }
+declare module "edde/decorator" {
+	export class Listen {
+		static To(event: string | null, weight?: number, cancelable?: boolean): (target: any, property: string) => void;
+
+		static ToNative(event: string): (target: any, property: string) => void;
+	}
+}
+declare module "edde/control" {
+	export interface IControl {
+		attach(element: IHtmlElement): IHtmlElement;
+
+		attachHtml(html: string): IHtmlElement;
+
+		attachTo(root: IHtmlElement): IControl;
+
+		build(): IHtmlElement;
+
+		render(): IHtmlElement;
+
+		getElement(): IHtmlElement | null;
+
+		update(element: IElement): IControl;
+
+		isListening(): boolean;
+	}
+
+	export interface IControlFactory {
+	}
+
+	export abstract class AbstractControl implements IControl {
+		protected name: string;
+		protected element: IHtmlElement | null;
+
+		constructor(name: string);
+
+		attach(element: IHtmlElement): IHtmlElement;
+
+		attachHtml(html: string): IHtmlElement;
+
+		attachTo(root: IHtmlElement): IControl;
+
+		render(): IHtmlElement;
+
+		getElement(): IHtmlElement | any;
+
+		update(element: IElement): IControl;
+
+		isListening(): boolean;
+
+		abstract build(): IHtmlElement;
+	}
+
+	export class ControlFactory implements IControlFactory {
+		eventControlCreate(element: IElement): void;
+	}
+}
 declare module "edde/e3" {
 	export class e3 {
 		protected static eventBus: IEventBus;
@@ -839,6 +1003,7 @@ declare module "edde/e3" {
 		protected static elementQueue: IElementQueue;
 		protected static jobManager: IJobManager;
 		protected static converterManager: IConverterManager;
+		protected static controlFactory: IControlFactory;
 		protected static classList: IHashMap<any>;
 		protected static heartbeatId: any;
 
@@ -855,6 +1020,8 @@ declare module "edde/e3" {
 		static JobManager(): IJobManager;
 
 		static ConverterManager(): IConverterManager;
+
+		static ControlFactory(): IControlFactory;
 
 		static Event(event: string, data?: Object): IElement;
 
@@ -951,119 +1118,20 @@ declare module "edde/e3" {
 		static guid(glue?: string, a?: any, b?: any): any;
 	}
 }
-declare module "edde/promise" {
-	export interface IPromise {
-		success(callback: (value?: any) => void): IPromise;
+declare module "app/app" {
+}
+declare module "app/loader/LoaderView" {
+	export class LoaderView extends AbstractControl {
+		constructor();
 
-		onSuccess(value?: any): IPromise;
-
-		fail(callback: (value?: any) => void): IPromise;
-
-		onFail(value?: any): IPromise;
-
-		always(callback: (value?: any) => void): IPromise;
-
-		onAlways(value?: any): IPromise;
-	}
-
-	export class AbstractPromise implements IPromise {
-		protected promiseList: IHashMapCollection<(value?: any) => void>;
-		protected resultList: IHashMap<any>;
-
-		protected register(name: string, callback: (value?: any) => void): IPromise;
-
-		protected execute(name: string, value?: any): IPromise;
-
-		success(callback: (value?: any) => void): IPromise;
-
-		onSuccess(value?: any): IPromise;
-
-		fail(callback: (value?: any) => void): IPromise;
-
-		onFail(value?: any): IPromise;
-
-		always(callback: (value?: any) => void): IPromise;
-
-		onAlways(value?: any): IPromise;
+		build(): IHtmlElement;
 	}
 }
-declare module "edde/ajax" {
-	export interface IAjaxHandler extends IPromise {
-		serverFail(callback: (xmlHttpRequest: XMLHttpRequest) => void): IAjaxHandler;
+declare module "app/login/LoginView" {
+	export class LoginView extends AbstractControl {
+		constructor();
 
-		onServerFail(xmlHttpRequest: XMLHttpRequest): IAjaxHandler;
-
-		clientFail(callback: (xmlHttpRequest: XMLHttpRequest) => void): IAjaxHandler;
-
-		onClientFail(xmlHttpRequest: XMLHttpRequest): IAjaxHandler;
-
-		timeout(callback: (xmlHttpRequest: XMLHttpRequest) => void): IAjaxHandler;
-
-		onTimeout(xmlHttpRequest: XMLHttpRequest): IAjaxHandler;
-
-		error(callback: (xmlHttpRequest: XMLHttpRequest) => void): IAjaxHandler;
-
-		onError(xmlHttpRequest: XMLHttpRequest): IAjaxHandler;
-	}
-
-	export interface IAjax {
-		setAccept(accept: string): IAjax;
-
-		setAsync(async: boolean): IAjax;
-
-		setTimeout(timeout: number): IAjax;
-
-		getAjaxHandler(): IAjaxHandler;
-
-		execute<T>(content?: IContent<T>): IAjaxHandler;
-	}
-
-	export class AjaxHandler extends AbstractPromise implements IAjaxHandler {
-		serverFail(callback: (xmlHttpRequest: XMLHttpRequest) => void): IAjaxHandler;
-
-		onServerFail(xmlHttpRequest: XMLHttpRequest): IAjaxHandler;
-
-		clientFail(callback: (xmlHttpRequest: XMLHttpRequest) => void): IAjaxHandler;
-
-		onClientFail(xmlHttpRequest: XMLHttpRequest): IAjaxHandler;
-
-		timeout(callback: (xmlHttpRequest: XMLHttpRequest) => void): IAjaxHandler;
-
-		onTimeout(xmlHttpRequest: XMLHttpRequest): IAjaxHandler;
-
-		error(callback: (xmlHttpRequest: XMLHttpRequest) => void): IAjaxHandler;
-
-		onError(xmlHttpRequest: XMLHttpRequest): IAjaxHandler;
-	}
-
-	export class Ajax implements IAjax {
-		protected url: string;
-		protected method: string;
-		protected accept: string;
-		protected async: boolean;
-		protected timeout: number;
-		protected ajaxHandler: IAjaxHandler;
-
-		constructor(url: string);
-
-		setMethod(method: string): IAjax;
-
-		setAccept(accept: string): IAjax;
-
-		setAsync(async: boolean): IAjax;
-
-		setTimeout(timeout: number): IAjax;
-
-		getAjaxHandler(): IAjaxHandler;
-
-		execute<T>(content: IContent<T>): IAjaxHandler;
-	}
-}
-declare module "edde/decorator" {
-	export class Listen {
-		static To(event: string | null, weight?: number, cancelable?: boolean): (target: any, property: string) => void;
-
-		static ToNative(event: string): (target: any, property: string) => void;
+		build(): IHtmlElement;
 	}
 }
 declare module "edde/client" {
@@ -1087,63 +1155,5 @@ declare module "edde/client" {
 
 	export abstract class AbstractButton extends AbstractClientClass {
 		onClick(event?: any): void;
-	}
-}
-declare module "edde/control" {
-	export interface IControl {
-		attach(element: IHtmlElement): IHtmlElement;
-
-		attachHtml(html: string): IHtmlElement;
-
-		attachTo(root: IHtmlElement): IControl;
-
-		build(): IHtmlElement;
-
-		render(): IHtmlElement;
-
-		getElement(): IHtmlElement | null;
-
-		update(element: IElement): IControl;
-
-		isListening(): boolean;
-	}
-
-	export abstract class AbstractControl implements IControl {
-		protected name: string;
-		protected element: IHtmlElement | null;
-
-		constructor(name: string);
-
-		attach(element: IHtmlElement): IHtmlElement;
-
-		attachHtml(html: string): IHtmlElement;
-
-		attachTo(root: IHtmlElement): IControl;
-
-		render(): IHtmlElement;
-
-		getElement(): IHtmlElement | any;
-
-		update(element: IElement): IControl;
-
-		isListening(): boolean;
-
-		abstract build(): IHtmlElement;
-	}
-}
-declare module "app/loader/LoaderView" {
-	export class LoaderView extends AbstractControl {
-		constructor();
-
-		build(): IHtmlElement;
-	}
-}
-declare module "app/app" {
-}
-declare module "app/login/LoginView" {
-	export class LoginView extends AbstractControl {
-		constructor();
-
-		build(): IHtmlElement;
 	}
 }

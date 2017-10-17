@@ -1,6 +1,7 @@
 import {IHtmlElement} from "./dom";
 import {IElement} from "./protocol";
 import {e3} from "./e3";
+import {Listen} from "./decorator";
 
 export interface IControl {
 	attach(element: IHtmlElement): IHtmlElement;
@@ -36,6 +37,9 @@ export interface IControl {
 	 * if the control is listening, it will be registered as a listener when attached
 	 */
 	isListening(): boolean;
+}
+
+export interface IControlFactory {
 }
 
 export abstract class AbstractControl implements IControl {
@@ -100,4 +104,16 @@ export abstract class AbstractControl implements IControl {
 	 * @inheritDoc
 	 */
 	public abstract build(): IHtmlElement;
+}
+
+/**
+ * This class is listening for control creation requests.
+ */
+export class ControlFactory implements IControlFactory {
+	@Listen.To('control/create', 0)
+	public eventControlCreate(element: IElement) {
+		const control = e3.create<IControl>(element.getMeta('control'));
+		control.attachTo(element.getMeta('root'));
+		element.setMeta('instance', control);
+	}
 }
