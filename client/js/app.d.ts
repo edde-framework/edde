@@ -203,6 +203,7 @@ declare module "edde/dom" {
 	import {IHtmlElement, IHtmlElementCollection, ISelector} from "edde/dom";
 	import {IAjax} from "edde/ajax";
 	import {IJobManager} from "edde/job";
+	import {AbstractControl} from "edde/control";
 
 	export interface IAbstractHtmlElement<T> {
 		event(name: string, callback: (event: any) => void): T;
@@ -1130,5 +1131,19 @@ declare module "edde/control" {
 		abstract build(): IHtmlElement;
 	}
 }
+declare module "app/loader/LoaderView" {
+	export class LoaderView extends AbstractControl {
+		constructor();
+
+		build(): IHtmlElement;
+	}
+}
 declare module "app/app" {
+}
+declare module "app/login/LoginView" {
+	export class LoginView extends AbstractControl {
+		constructor();
+
+		build(): IHtmlElement;
+	}
 }
