@@ -112,8 +112,6 @@ export abstract class AbstractControl implements IControl {
 export class ControlFactory implements IControlFactory {
 	@Listen.To('control/create', 0)
 	public eventControlCreate(element: IElement) {
-		const control = e3.create<IControl>(element.getMeta('control'));
-		control.attachTo(element.getMeta('root'));
-		element.setMeta('instance', control);
+		element.setMeta('instance', e3.create<IControl>(element.getMeta('control')).attachTo(element.getMeta('root')));
 	}
 }
