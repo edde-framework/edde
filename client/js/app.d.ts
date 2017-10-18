@@ -1219,9 +1219,15 @@ declare module "app/login/EmailInput" {
 
 		build(): IHtmlElement;
 
-		onKeypress(): void;
+		getValue(): string;
 
 		isValid(): boolean;
+
+		validate(): boolean;
+
+		onKeypress(): void;
+
+		eventRegisterViewRegister(element: IElement): void;
 	}
 }
 declare module "app/login/RegisterCancelButton" {
@@ -1251,6 +1257,8 @@ declare module "app/login/RegisterView" {
 		constructor();
 
 		build(): IHtmlElement;
+
+		eventRegisterViewRegister(element: IElement): void;
 	}
 }
 declare module "app/login/LoginView" {

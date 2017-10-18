@@ -5,6 +5,8 @@ import {MainBarControl} from "../index/MainBarControl";
 import {EmailInput} from "./EmailInput";
 import {RegisterCancelButton} from "./RegisterCancelButton";
 import {RegisterButton} from "./RegisterButton";
+import {Listen} from "../../edde/decorator";
+import {IElement} from "../../edde/protocol";
 
 export class RegisterView extends AbstractControl {
 	public constructor() {
@@ -38,5 +40,10 @@ export class RegisterView extends AbstractControl {
 				]),
 			]))),
 		]);
+	}
+
+	@Listen.To('register-view/register', 0)
+	public eventRegisterViewRegister(element: IElement) {
+		alert('wanna register ' + element.getMeta('email'));
 	}
 }

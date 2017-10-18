@@ -17,12 +17,14 @@ export class RegisterButton extends AbstractControl {
 
 	@Listen.ToNative('click')
 	public onClick() {
-		alert('Do the registration!');
+		this.button.addClass('is-loading');
+		e3.emit('register-view/register');
 	}
 
 	@Listen.To('email-input/is-valid')
 	public eventEmailInputIsValid(element: IElement) {
 		this.button.attr('disabled', 'disabled');
+		this.button.removeClass('is-loading');
 		if (element.getMeta('valid', false)) {
 			this.button.removeAttribute('disabled');
 		}
