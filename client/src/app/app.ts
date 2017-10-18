@@ -12,6 +12,6 @@ e3.ControlFactory();
  * attachTo also do the rendering
  */
 e3.emit('control/create', {
-	'control': 'app/loader/LoaderView:LoaderView',
+	'control': 'app/index/IndexView:IndexView',
 	'root': e3.el(document.body)
 });
