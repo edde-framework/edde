@@ -8,20 +8,8 @@ export interface IControl {
 	/**
 	 * use the given control; this should build the control and attach the given control to current one;
 	 * when the parent control is mounted, all dependant controls should be mounted too
-	 *
-	 * @param {IControl} control
-	 * @returns {IHtmlElement}
 	 */
 	use(control: IControl): IHtmlElement;
-
-	/**
-	 * mount a control to specified html element; this should happen just
-	 * once when an element is renedered/created
-	 *
-	 * @param {IHtmlElement} element
-	 * @returns {IHtmlElement}
-	 */
-	mount(element: IHtmlElement): IHtmlElement;
 
 	/**
 	 * attach this control to the given element; this should trigger render if control wasn't rendered yet
@@ -30,8 +18,6 @@ export interface IControl {
 
 	/**
 	 * create an html element for this control (just once event per multiple calls)
-	 *
-	 * @returns {IHtmlElement}
 	 */
 	create(): IHtmlElement;
 
@@ -67,7 +53,7 @@ export interface IControlFactory {
 export abstract class AbstractControl implements IControl {
 	protected name: string;
 	protected element: IHtmlElement | null;
-	protected isMounted: boolean = false;
+	protected rendered: boolean = false;
 	protected controlList: ICollection<IControl> = e3.collection();
 
 	public constructor(name: string) {
@@ -86,19 +72,6 @@ export abstract class AbstractControl implements IControl {
 	/**
 	 * @inheritDoc
 	 */
-	public mount(element: IHtmlElement): IHtmlElement {
-		this.isMounted = true;
-		const dom = (this.element = element).getElement();
-		e3.$$(this, (name: string, value: any[]) => name.indexOf('::NativeListenerList/', 0) !== -1 ? e3.$(value, (listener: { event: string, handler: string }) => dom.addEventListener(listener.event, event => (<any>this)[listener.handler].call(this, event), false)) : null);
-		if (this.isListening()) {
-			e3.listener(this);
-		}
-		return this.element;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
 	public attachTo(root: IHtmlElement): IControl {
 		root.attach(this.render());
 		return this;
@@ -108,15 +81,16 @@ export abstract class AbstractControl implements IControl {
 	 * @inheritDoc
 	 */
 	public render(): IHtmlElement {
-		if (this.element && this.isMounted) {
+		if (this.element && this.rendered) {
 			return this.element;
 		}
-		/**
-		 * create method already assigne element to this.element
-		 * @type {IHtmlElement}
-		 */
 		const element = this.create();
-		this.mount(element);
+		this.rendered = true;
+		const dom = (this.element = element).getElement();
+		e3.$$(this, (name: string, value: any[]) => name.indexOf('::NativeListenerList/', 0) !== -1 ? e3.$(value, (listener: { event: string, handler: string }) => dom.addEventListener(listener.event, event => (<any>this)[listener.handler].call(this, event), false)) : null);
+		if (this.isListening()) {
+			e3.listener(this);
+		}
 		this.controlList.each(control => control.render());
 		return element;
 	}

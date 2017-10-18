@@ -950,8 +950,6 @@ declare module "edde/control" {
 	export interface IControl {
 		use(control: IControl): IHtmlElement;
 
-		mount(element: IHtmlElement): IHtmlElement;
-
 		attachTo(root: IHtmlElement): IControl;
 
 		create(): IHtmlElement;
@@ -973,14 +971,12 @@ declare module "edde/control" {
 	export abstract class AbstractControl implements IControl {
 		protected name: string;
 		protected element: IHtmlElement | null;
-		protected isMounted: boolean;
+		protected rendered: boolean;
 		protected controlList: ICollection<IControl>;
 
 		constructor(name: string);
 
 		use(control: IControl): IHtmlElement;
-
-		mount(element: IHtmlElement): IHtmlElement;
 
 		attachTo(root: IHtmlElement): IControl;
 
@@ -1125,20 +1121,6 @@ declare module "edde/e3" {
 	}
 }
 declare module "app/app" {
-}
-declare module "app/loader/LoaderView" {
-	export class LoaderView extends AbstractControl {
-		constructor();
-
-		build(): IHtmlElement;
-	}
-}
-declare module "app/login/LoginView" {
-	export class LoginView extends AbstractControl {
-		constructor();
-
-		build(): IHtmlElement;
-	}
 }
 declare module "edde/client" {
 	export interface IClientClass {
