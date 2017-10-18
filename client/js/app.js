@@ -1613,7 +1613,7 @@ define("edde/control", ["require", "exports", "edde/e3", "edde/decorator"], func
 			this.element = null;
 		}
 
-		AbstractControl.prototype.attach = function (element) {
+		AbstractControl.prototype.mount = function (element) {
 			var _this = this;
 			var dom = (this.element = element).getElement();
 			e3_9.e3.$$(this, function (name, value) {
@@ -1629,14 +1629,14 @@ define("edde/control", ["require", "exports", "edde/e3", "edde/decorator"], func
 			return this.element;
 		};
 		AbstractControl.prototype.attachHtml = function (html) {
-			return this.attach(e3_9.e3.html(html));
+			return this.mount(e3_9.e3.html(html));
 		};
 		AbstractControl.prototype.attachTo = function (root) {
 			root.attach(this.render());
 			return this;
 		};
 		AbstractControl.prototype.render = function () {
-			return this.element ? this.element : this.attach(this.element = this.build());
+			return this.element ? this.element : this.mount(this.element = this.build());
 		};
 		AbstractControl.prototype.getElement = function () {
 			return this.element;
@@ -2190,11 +2190,11 @@ define("app/index/RegisterButton", ["require", "exports", "edde/control", "edde/
 		__extends(RegisterButton, _super);
 
 		function RegisterButton() {
-			return _super !== null && _super.apply(this, arguments) || this;
+			return _super.call(this, 'register-button') || this;
 		}
 
 		RegisterButton.prototype.build = function () {
-			return e3_15.e3.html('<p class="control"><span class="button"><span class="icon"><i class="fa fa-user-circle"></i></span><span>Register</span></span></p>');
+			return e3_15.e3.html("\n\t\t\t<p class=\"control\">\n\t\t\t\t<span class=\"button\">\n\t\t\t\t\t<span class=\"icon\"><i class=\"fa fa-user-circle\"></i></span>\n\t\t\t\t\t<span>Register</span>\n\t\t\t\t</span>\n\t\t\t</p>\n\t\t");
 		};
 		RegisterButton.prototype.onClick = function () {
 			alert('yapee!');
@@ -2206,7 +2206,7 @@ define("app/index/RegisterButton", ["require", "exports", "edde/control", "edde/
 	}(control_5.AbstractControl));
 	exports.RegisterButton = RegisterButton;
 });
-define("app/index/IndexView", ["require", "exports", "edde/control", "edde/e3"], function (require, exports, control_6, e3_16) {
+define("app/index/IndexView", ["require", "exports", "edde/control", "edde/e3", "app/index/RegisterButton"], function (require, exports, control_6, e3_16, RegisterButton_1) {
 	"use strict";
 	exports.__esModule = true;
 	var IndexView = (function (_super) {
@@ -2217,8 +2217,8 @@ define("app/index/IndexView", ["require", "exports", "edde/control", "edde/e3"],
 		}
 
 		IndexView.prototype.build = function () {
-			var registerButton = "<p class=\"control\">\n\t\t\t\t<span class=\"button\">\n\t\t\t\t\t<span class=\"icon\"><i class=\"fa fa-user-circle\"/></span>\n\t\t\t\t\t<span>Register</span>\n\t\t\t\t</span>\n\t\t\t</p>";
-			return e3_16.e3.html("<nav class=\"navbar is-white\">\n\t\t\t\t<div class=\"container\">\n\t\t\t\t\t<div class=\"navbar-brand\">\n\t\t\t\t\t\t<a class=\"navbar-item\">\n\t\t\t\t\t\t\t<div class=\"field is-grouped\">\n\t\t\t\t\t\t\t\t<p class=\"control\">\n\t\t\t\t\t\t\t\t\t<img src=\"/img/logo.png\"/>\n\t\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t\t\t<p class=\"control\">\n\t\t\t\t\t\t\t\t\t<span>Edde Framework</span>\n\t\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"navbar-menu\">\n\t\t\t\t\t\t<div class=\"navbar-end\">\n\t\t\t\t\t\t\t<span class=\"navbar-item\">\n\t\t\t\t\t\t\t\t<div class=\"field is-grouped\">\n\t\t\t\t\t\t\t\t\t" + registerButton + "\n\t\t\t\t\t\t\t\t\t<p class=\"control\">\n\t\t\t\t\t\t\t\t\t\t<span class=\"button is-primary\">\n\t\t\t\t\t\t\t\t\t\t\t<span class=\"icon\"><i class=\"fa fa-lock\"/></span>\n\t\t\t\t\t\t\t\t\t\t\t<span>Login</span>\n\t\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</nav>\n\t\t\t<section class=\"hero is-small is-bold is-info\">\n\t\t\t\t<div class=\"hero-body\">\n\t\t\t\t\t<div class=\"container\">\n\t\t\t\t\t\t<div class=\"columns is-vcentered\">\n\t\t\t\t\t\t\t<div class=\"column\">\n\t\t\t\t\t\t\t\t<p class=\"title\">Welcome to Edde Framework</p>\n\t\t\t\t\t\t\t\t<p class=\"subtitle\">...epic, fast and modern Framework</p>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</section>");
+			var registerButton = "\n\t\t\t<p class=\"control\">\n\t\t\t\t<span class=\"button\">\n\t\t\t\t\t<span class=\"icon\"><i class=\"fa fa-user-circle\"/></span>\n\t\t\t\t\t<span>Register</span>\n\t\t\t\t</span>\n\t\t\t</p>";
+			return e3_16.e3.html("\n\t\t\t<nav class=\"navbar is-white\">\n\t\t\t\t<div class=\"container\">\n\t\t\t\t\t<div class=\"navbar-brand\">\n\t\t\t\t\t\t<a class=\"navbar-item\">\n\t\t\t\t\t\t\t<div class=\"field is-grouped\">\n\t\t\t\t\t\t\t\t<p class=\"control\">\n\t\t\t\t\t\t\t\t\t<img src=\"/img/logo.png\"/>\n\t\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t\t\t<p class=\"control\">\n\t\t\t\t\t\t\t\t\t<span>Edde Framework</span>\n\t\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"navbar-menu\">\n\t\t\t\t\t\t<div class=\"navbar-end\">\n\t\t\t\t\t\t\t<span class=\"navbar-item\">\n\t\t\t\t\t\t\t\t<div class=\"field is-grouped\">\n\t\t\t\t\t\t\t\t\t" + new RegisterButton_1.RegisterButton('dd').build() + "\n\t\t\t\t\t\t\t\t\t<p class=\"control\">\n\t\t\t\t\t\t\t\t\t\t<span class=\"button is-primary\">\n\t\t\t\t\t\t\t\t\t\t\t<span class=\"icon\"><i class=\"fa fa-lock\"/></span>\n\t\t\t\t\t\t\t\t\t\t\t<span>Login</span>\n\t\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</nav>\n\t\t\t<section class=\"hero is-small is-bold is-info\">\n\t\t\t\t<div class=\"hero-body\">\n\t\t\t\t\t<div class=\"container\">\n\t\t\t\t\t\t<div class=\"columns is-vcentered\">\n\t\t\t\t\t\t\t<div class=\"column\">\n\t\t\t\t\t\t\t\t<p class=\"title\">Welcome to Edde Framework</p>\n\t\t\t\t\t\t\t\t<p class=\"subtitle\">...epic, fast and modern Framework</p>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</section>\n\t\t");
 		};
 		return IndexView;
 	}(control_6.AbstractControl));

@@ -1,18 +1,19 @@
 import {AbstractControl} from "../../edde/control";
 import {IHtmlElement} from "../../edde/dom";
 import {e3} from "../../edde/e3";
+import {RegisterButton} from "./RegisterButton";
 
 export class IndexView extends AbstractControl {
 	public build(): IHtmlElement {
-		const registerButton =
-			`<p class="control">
+		const registerButton = `
+			<p class="control">
 				<span class="button">
 					<span class="icon"><i class="fa fa-user-circle"/></span>
 					<span>Register</span>
 				</span>
 			</p>`;
-		return e3.html(
-			`<nav class="navbar is-white">
+		return e3.html(`
+			<nav class="navbar is-white">
 				<div class="container">
 					<div class="navbar-brand">
 						<a class="navbar-item">
@@ -30,7 +31,7 @@ export class IndexView extends AbstractControl {
 						<div class="navbar-end">
 							<span class="navbar-item">
 								<div class="field is-grouped">
-									${registerButton}
+									${new RegisterButton('dd').build()}
 									<p class="control">
 										<span class="button is-primary">
 											<span class="icon"><i class="fa fa-lock"/></span>
@@ -54,6 +55,7 @@ export class IndexView extends AbstractControl {
 						</div>
 					</div>
 				</div>
-			</section>`);
+			</section>
+		`);
 	}
 }

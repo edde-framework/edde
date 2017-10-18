@@ -948,7 +948,7 @@ declare module "edde/decorator" {
 }
 declare module "edde/control" {
 	export interface IControl {
-		attach(element: IHtmlElement): IHtmlElement;
+		mount(element: IHtmlElement): IHtmlElement;
 
 		attachHtml(html: string): IHtmlElement;
 
@@ -974,7 +974,7 @@ declare module "edde/control" {
 
 		constructor(name: string);
 
-		attach(element: IHtmlElement): IHtmlElement;
+		mount(element: IHtmlElement): IHtmlElement;
 
 		attachHtml(html: string): IHtmlElement;
 
@@ -1166,6 +1166,8 @@ declare module "app/index/MainBarControl" {
 }
 declare module "app/index/RegisterButton" {
 	export class RegisterButton extends AbstractControl {
+		constructor();
+
 		build(): IHtmlElement;
 
 		onClick(): void;

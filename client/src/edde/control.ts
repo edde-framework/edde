@@ -4,7 +4,14 @@ import {e3} from "./e3";
 import {Listen} from "./decorator";
 
 export interface IControl {
-	attach(element: IHtmlElement): IHtmlElement;
+	/**
+	 * mount a control to specified html element; this should happen just
+	 * once when an element is renedered/created
+	 *
+	 * @param {IHtmlElement} element
+	 * @returns {IHtmlElement}
+	 */
+	mount(element: IHtmlElement): IHtmlElement;
 
 	attachHtml(html: string): IHtmlElement;
 
@@ -54,7 +61,7 @@ export abstract class AbstractControl implements IControl {
 	/**
 	 * @inheritDoc
 	 */
-	public attach(element: IHtmlElement): IHtmlElement {
+	public mount(element: IHtmlElement): IHtmlElement {
 		const dom = (this.element = element).getElement();
 		e3.$$(this, (name: string, value: any[]) => name.indexOf('::NativeListenerList/', 0) !== -1 ? e3.$(value, (listener: { event: string, handler: string }) => dom.addEventListener(listener.event, event => (<any>this)[listener.handler].call(this, event), false)) : null);
 		if (this.isListening()) {
@@ -64,7 +71,7 @@ export abstract class AbstractControl implements IControl {
 	}
 
 	public attachHtml(html: string): IHtmlElement {
-		return this.attach(e3.html(html));
+		return this.mount(e3.html(html));
 	}
 
 	/**
@@ -79,7 +86,7 @@ export abstract class AbstractControl implements IControl {
 	 * @inheritDoc
 	 */
 	public render(): IHtmlElement {
-		return this.element ? this.element : this.attach(this.element = this.build());
+		return this.element ? this.element : this.mount(this.element = this.build());
 	}
 
 	/**
