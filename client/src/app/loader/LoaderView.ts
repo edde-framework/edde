@@ -11,6 +11,6 @@ export class LoaderView extends AbstractControl {
 	 * @inheritDoc
 	 */
 	public build(): IHtmlElement {
-		return e3.html('<div>loader!</div>');
+		return e3.html('<div class="columns"><div class="column"><div class="loader"></div></div></div>');
 	}
 }
