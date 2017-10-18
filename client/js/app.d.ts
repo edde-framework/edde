@@ -203,7 +203,7 @@ declare module "edde/dom" {
 	import {IHtmlElement, IHtmlElementCollection, ISelector} from "edde/dom";
 	import {IAjax} from "edde/ajax";
 	import {IJobManager} from "edde/job";
-	import {AbstractControl, IControlFactory} from "edde/control";
+	import {AbstractControl, IControlFactory, IViewManager} from "edde/control";
 
 	export interface IAbstractHtmlElement<T> {
 		event(name: string, callback: (event: any) => void): T;
@@ -825,7 +825,7 @@ declare module "edde/event" {
 
 		event(element: IElement): IEventBus;
 
-		emit(event: string, data: Object): IEventBus;
+		emit(event: string, data: Object): IElement;
 	}
 
 	export interface IListener {
@@ -848,7 +848,7 @@ declare module "edde/event" {
 
 		event(event: IElement): IEventBus;
 
-		emit(event: string, data?: Object): IEventBus;
+		emit(event: string, data?: Object): IElement;
 	}
 }
 declare module "edde/ajax" {
@@ -963,9 +963,16 @@ declare module "edde/control" {
 		update(element: IElement): IControl;
 
 		isListening(): boolean;
+
+		show(): IControl;
+
+		hide(): IControl;
 	}
 
 	export interface IControlFactory {
+	}
+
+	export interface IViewManager {
 	}
 
 	export abstract class AbstractControl implements IControl {
@@ -990,11 +997,25 @@ declare module "edde/control" {
 
 		isListening(): boolean;
 
+		show(): IControl;
+
+		hide(): IControl;
+
 		abstract build(): IHtmlElement;
 	}
 
 	export class ControlFactory implements IControlFactory {
 		eventControlCreate(element: IElement): void;
+	}
+
+	export class ViewManager implements IViewManager {
+		protected registerList: IHashMap<IElement>;
+		protected viewList: IHashMap<IControl>;
+		protected current: IControl;
+
+		eventViewRegister(element: IElement): void;
+
+		eventViewChange(element: IElement): void;
 	}
 }
 declare module "edde/e3" {
@@ -1006,6 +1027,7 @@ declare module "edde/e3" {
 		protected static jobManager: IJobManager;
 		protected static converterManager: IConverterManager;
 		protected static controlFactory: IControlFactory;
+		protected static viewManager: IViewManager;
 		protected static classList: IHashMap<any>;
 		protected static heartbeatId: any;
 
@@ -1024,6 +1046,8 @@ declare module "edde/e3" {
 		static ConverterManager(): IConverterManager;
 
 		static ControlFactory(): IControlFactory;
+
+		static ViewManager(): IViewManager;
 
 		static Event(event: string, data?: Object): IElement;
 
@@ -1069,7 +1093,7 @@ declare module "edde/e3" {
 
 		static event(event: IElement): IEventBus;
 
-		static emit(event: string, data?: Object): IEventBus;
+		static emit(event: string, data?: Object): IElement;
 
 		static request(element: IElement, callback?: (element: IElement) => void): IPromise;
 
@@ -1170,6 +1194,13 @@ declare module "app/index/MainBarControl" {
 }
 declare module "app/index/IndexView" {
 	export class IndexView extends AbstractControl {
+		build(): IHtmlElement;
+	}
+}
+declare module "app/register/RegisterView" {
+	export class RegisterView extends AbstractControl {
+		constructor();
+
 		build(): IHtmlElement;
 	}
 }

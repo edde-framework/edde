@@ -2,7 +2,7 @@ import {IHtmlElement} from "./dom";
 import {IElement} from "./protocol";
 import {e3} from "./e3";
 import {Listen} from "./decorator";
-import {ICollection} from "./collection";
+import {ICollection, IHashMap} from "./collection";
 
 export interface IControl {
 	/**
@@ -45,9 +45,27 @@ export interface IControl {
 	 * if the control is listening, it will be registered as a listener when attached
 	 */
 	isListening(): boolean;
+
+	/**
+	 * show this control
+	 */
+	show(): IControl;
+
+	/**
+	 * hide this control
+	 */
+	hide(): IControl;
 }
 
 export interface IControlFactory {
+}
+
+/**
+ * View is the whole one page with all contents; this implementation
+ * is responsible for managing views and listening to events related to
+ * showing/hiding view and theirs's eventual workflow.
+ */
+export interface IViewManager {
 }
 
 export abstract class AbstractControl implements IControl {
@@ -116,8 +134,27 @@ export abstract class AbstractControl implements IControl {
 		return this;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public isListening(): boolean {
 		return true;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public show(): IControl {
+		(<IHtmlElement>this.element).removeClass('is-hidden');
+		return this;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public hide(): IControl {
+		(<IHtmlElement>this.element).addClass('is-hidden');
+		return this;
 	}
 
 	/**
@@ -133,5 +170,29 @@ export class ControlFactory implements IControlFactory {
 	@Listen.To('control/create', 0)
 	public eventControlCreate(element: IElement) {
 		element.setMeta('instance', e3.create<IControl>(element.getMeta('control')).attachTo(element.getMeta('root')));
+	}
+}
+
+export class ViewManager implements IViewManager {
+	protected registerList: IHashMap<IElement> = e3.hashMap();
+	protected viewList: IHashMap<IControl> = e3.hashMap();
+	protected current: IControl;
+
+	@Listen.To('view/register', 0)
+	public eventViewRegister(element: IElement) {
+		this.registerList.set(element.getMeta('view'), element);
+	}
+
+	@Listen.To('view/change', 0)
+	public eventViewChange(element: IElement) {
+		const view = element.getMeta('view');
+		if (this.viewList.has(view) === false) {
+			this.viewList.set(view, e3.emit('control/create', this.registerList.get(view).getMetaList().toObject()).getMeta('instance'));
+		}
+		if (this.current) {
+			this.current.hide();
+		}
+		this.current = this.viewList.get(view);
+		this.current.show();
 	}
 }

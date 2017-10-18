@@ -34,7 +34,7 @@ export interface IEventBus {
 	 */
 	event(element: IElement): IEventBus;
 
-	emit(event: string, data: Object): IEventBus;
+	emit(event: string, data: Object): IElement;
 }
 
 export interface IListener {
@@ -94,8 +94,9 @@ export class EventBus implements IEventBus {
 	/**
 	 * @inheritDoc
 	 */
-	public emit(event: string, data: Object = {}): IEventBus {
-		this.event(new EventElement(event).data(data));
-		return this;
+	public emit(event: string, data: Object = {}): IElement {
+		const element = new EventElement(event).data(data);
+		this.event(element);
+		return element;
 	}
 }

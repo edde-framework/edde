@@ -21,6 +21,8 @@ export class RegisterButton extends AbstractControl {
 
 	@Listen.ToNative('click')
 	public onClick() {
-		alert('yapee!');
+		e3.emit('view/change', {
+			'view': 'register-view',
+		});
 	}
 }
