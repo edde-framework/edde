@@ -19,6 +19,7 @@
 		use Edde\Api\Request\IRequestService;
 		use Edde\Api\Router\IRouterService;
 		use Edde\Api\Runtime\IRuntime;
+		use Edde\Api\Upgrade\IUpgradeManager;
 		use Edde\Api\Utils\ICliUtils;
 		use Edde\Api\Utils\IStringUtils;
 		use Edde\Api\Xml\IXmlExport;
@@ -43,6 +44,7 @@
 		use Edde\Common\Request\RequestService;
 		use Edde\Common\Router\RouterService;
 		use Edde\Common\Runtime\Runtime;
+		use Edde\Common\Upgrade\AbstractUpgradeManager;
 		use Edde\Common\Utils\CliUtils;
 		use Edde\Common\Utils\StringUtils;
 		use Edde\Common\Xml\XmlExport;
@@ -265,6 +267,10 @@
 					 * general service for http request/response
 					 */
 					IHttpRequestService::class => HttpRequestService::class,
+					/**
+					 * an application upgrades support
+					 */
+					IUpgradeManager::class     => self::exception(sprintf('You have to privide you own implementation of [%s]; you can use [%s] to get some little help.', IUpgradeManager::class, AbstractUpgradeManager::class)),
 					/**
 					 * Xml support
 					 */
