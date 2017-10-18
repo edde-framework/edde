@@ -214,6 +214,8 @@ declare module "edde/dom" {
 
 		attrList(attrList: Object): T;
 
+		removeAttribute(name: string): T;
+
 		toggleClass(name: string | string[], toggle?: boolean): T;
 
 		toggleClassList(nameList: string[], toggle?: boolean): T;
@@ -328,6 +330,8 @@ declare module "edde/dom" {
 
 		attrList(attrList: Object): IHtmlElement;
 
+		removeAttribute(name: string): IHtmlElement;
+
 		getInnerHtml(): string;
 
 		getOuterHtml(): string;
@@ -388,6 +392,8 @@ declare module "edde/dom" {
 		attr(name: string, value: string): IHtmlElementCollection;
 
 		attrList(attrList: Object): IHtmlElementCollection;
+
+		removeAttribute(name: string): IHtmlElementCollection;
 
 		html(html: string): IHtmlElementCollection;
 
@@ -1201,9 +1207,21 @@ declare module "edde/client" {
 }
 declare module "app/login/EmailInput" {
 	export class EmailInput extends AbstractControl {
+		protected input: IHtmlElement;
+		protected icon: IHtmlElement;
+		protected iconElement: IHtmlElement;
+		protected hint: string;
+		protected help: IHtmlElement;
+
 		constructor();
 
+		setHint(hint: string): EmailInput;
+
 		build(): IHtmlElement;
+
+		onKeypress(): void;
+
+		isValid(): boolean;
 	}
 }
 declare module "app/login/RegisterCancelButton" {
@@ -1217,11 +1235,26 @@ declare module "app/login/RegisterCancelButton" {
 }
 declare module "app/login/RegisterButton" {
 	export class RegisterButton extends AbstractControl {
+		protected button: IHtmlElement;
+
 		constructor();
 
 		build(): IHtmlElement;
 
 		onClick(): void;
+
+		eventEmailInputIsValid(element: IElement): void;
+	}
+}
+declare module "app/login/PasswordInput" {
+	export class PasswordInput extends AbstractControl {
+		protected placeholder: string;
+		protected input: IHtmlElement;
+		protected tick: IHtmlElement;
+
+		constructor(placeholder: string);
+
+		build(): IHtmlElement;
 	}
 }
 declare module "app/login/RegisterView" {

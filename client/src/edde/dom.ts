@@ -29,6 +29,11 @@ export interface IAbstractHtmlElement<T> {
 	attrList(attrList: Object): T;
 
 	/**
+	 * remove the given attribute name
+	 */
+	removeAttribute(name: string): T;
+
+	/**
 	 * toggle class by state or by the given flag
 	 */
 	toggleClass(name: string | string[], toggle?: boolean): T;
@@ -358,6 +363,14 @@ export class HtmlElement implements IHtmlElement {
 	/**
 	 * @inheritDoc
 	 */
+	public removeAttribute(name: string): IHtmlElement {
+		this.element.removeAttribute(name);
+		return this;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public getInnerHtml(): string {
 		return this.element.innerHTML;
 	}
@@ -588,6 +601,14 @@ export class HtmlElementCollection implements IHtmlElementCollection {
 	 */
 	public attrList(attrList: Object): IHtmlElementCollection {
 		this.each(element => element.attrList(attrList));
+		return this;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public removeAttribute(name: string): IHtmlElementCollection {
+		this.each(element => element.removeAttribute(name));
 		return this;
 	}
 
