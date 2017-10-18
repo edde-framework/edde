@@ -10,7 +10,7 @@
 		"noImplicitAny": true,
 		"noFallthroughCasesInSwitch": true,
 		"rootDir": ".",
-		"inlineSourceMap": true,
+		"inlineSourceMap": false,
 		"skipDefaultLibCheck": true,
 		"skipLibCheck": true,
 		"target": "es3",

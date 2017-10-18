@@ -125,7 +125,7 @@ export class e3 {
 
 	public static html(html: string): IHtmlElement {
 		const node = document.createElement('div');
-		node.innerHTML = html;
+		node.innerHTML = html.trim();
 		return e3.el(<HTMLElement>node.firstChild);
 	}
 

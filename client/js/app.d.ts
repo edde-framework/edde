@@ -1164,15 +1164,15 @@ declare module "app/index/MainBarControl" {
 		build(): IHtmlElement;
 	}
 }
-declare module "app/index/IndexView" {
-	export class IndexView extends AbstractControl {
-		build(): IHtmlElement;
-	}
-}
 declare module "app/index/RegisterButton" {
 	export class RegisterButton extends AbstractControl {
 		build(): IHtmlElement;
 
 		onClick(): void;
+	}
+}
+declare module "app/index/IndexView" {
+	export class IndexView extends AbstractControl {
+		build(): IHtmlElement;
 	}
 }
