@@ -2,8 +2,18 @@ import {IHtmlElement} from "./dom";
 import {IElement} from "./protocol";
 import {e3} from "./e3";
 import {Listen} from "./decorator";
+import {ICollection} from "./collection";
 
 export interface IControl {
+	/**
+	 * use the given control; this should build the control and attach the given control to current one;
+	 * when the parent control is mounted, all dependant controls should be mounted too
+	 *
+	 * @param {IControl} control
+	 * @returns {IHtmlElement}
+	 */
+	use(control: IControl): IHtmlElement;
+
 	/**
 	 * mount a control to specified html element; this should happen just
 	 * once when an element is renedered/created
@@ -52,10 +62,19 @@ export interface IControlFactory {
 export abstract class AbstractControl implements IControl {
 	protected name: string;
 	protected element: IHtmlElement | null;
+	protected controlList: ICollection<IControl> = e3.collection();
 
 	public constructor(name: string) {
 		this.name = name;
 		this.element = null;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public use(control: IControl): IHtmlElement {
+		this.controlList.add(control);
+		return control.build();
 	}
 
 	/**
@@ -67,6 +86,7 @@ export abstract class AbstractControl implements IControl {
 		if (this.isListening()) {
 			e3.listener(this);
 		}
+
 		return this.element;
 	}
 

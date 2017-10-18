@@ -1609,10 +1609,15 @@ define("edde/control", ["require", "exports", "edde/e3", "edde/decorator"], func
 	exports.__esModule = true;
 	var AbstractControl = (function () {
 		function AbstractControl(name) {
+			this.controlList = e3_9.e3.collection();
 			this.name = name;
 			this.element = null;
 		}
 
+		AbstractControl.prototype.use = function (control) {
+			this.controlList.add(control);
+			return control.build();
+		};
 		AbstractControl.prototype.mount = function (element) {
 			var _this = this;
 			var dom = (this.element = element).getElement();
@@ -2203,8 +2208,8 @@ define("app/index/MainBarControl", ["require", "exports", "edde/control", "edde/
 			return e3_16.e3.html('<nav class="navbar is-white"></nav>').attach(e3_16.e3.html('<div class="container"></div>').attachList([
 				e3_16.e3.html("\n\t\t\t\t\t<div class=\"navbar-brand\">\n\t\t\t\t\t\t<a class=\"navbar-item\" href=\"/\">\n\t\t\t\t\t\t\t<div class=\"field is-grouped\">\n\t\t\t\t\t\t\t\t<p class=\"control\">\n\t\t\t\t\t\t\t\t\t<img src=\"/img/logo.png\"/>\n\t\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t\t\t<p class=\"control\">\n\t\t\t\t\t\t\t\t\t<span>Edde Framework</span>\n\t\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</div>\n\t\t\t\t"),
 				e3_16.e3.html('<div class="navbar-menu"></div>').attach(e3_16.e3.html('<div class="navbar-end"></div>').attach(e3_16.e3.html('<span class="navbar-item">').attach(e3_16.e3.html('<div class="field is-grouped"></div>').attachList([
-					new RegisterButton_1.RegisterButton().build(),
-					new LoginButton_1.LoginButton().build(),
+					this.use(new RegisterButton_1.RegisterButton()),
+					this.use(new LoginButton_1.LoginButton()),
 				]))))
 			]));
 		};

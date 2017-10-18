@@ -948,6 +948,8 @@ declare module "edde/decorator" {
 }
 declare module "edde/control" {
 	export interface IControl {
+		use(control: IControl): IHtmlElement;
+
 		mount(element: IHtmlElement): IHtmlElement;
 
 		attachHtml(html: string): IHtmlElement;
@@ -971,8 +973,11 @@ declare module "edde/control" {
 	export abstract class AbstractControl implements IControl {
 		protected name: string;
 		protected element: IHtmlElement | null;
+		protected controlList: ICollection<IControl>;
 
 		constructor(name: string);
+
+		use(control: IControl): IHtmlElement;
 
 		mount(element: IHtmlElement): IHtmlElement;
 

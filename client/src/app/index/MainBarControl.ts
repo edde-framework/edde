@@ -30,8 +30,8 @@ export class MainBarControl extends AbstractControl {
 					e3.html('<div class="navbar-end"></div>').attach(
 						e3.html('<span class="navbar-item">').attach(
 							e3.html('<div class="field is-grouped"></div>').attachList([
-								new RegisterButton().build(),
-								new LoginButton().build(),
+								this.use(new RegisterButton()),
+								this.use(new LoginButton()),
 							]))))
 			]));
 	}
