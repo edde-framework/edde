@@ -5,9 +5,9 @@ import {MainBarControl} from "./MainBarControl";
 
 export class IndexView extends AbstractControl {
 	public build(): IHtmlElement {
-		return e3.html(`
-			<div>
-				${new MainBarControl().render()}
+		return e3.El('div').attachList([
+			new MainBarControl().build(),
+			e3.html(`
 				<section class="hero is-small is-bold is-info">
 					<div class="hero-body">
 						<div class="container">
@@ -20,7 +20,7 @@ export class IndexView extends AbstractControl {
 						</div>
 					</div>
 				</section>
-			</div>
-		`);
+			`)
+		]);
 	}
 }

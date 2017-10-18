@@ -2172,7 +2172,24 @@ define("app/index/RegisterButton", ["require", "exports", "edde/control", "edde/
 	}(control_4.AbstractControl));
 	exports.RegisterButton = RegisterButton;
 });
-define("app/index/MainBarControl", ["require", "exports", "edde/control", "edde/e3", "app/index/RegisterButton"], function (require, exports, control_5, e3_15, RegisterButton_1) {
+define("app/index/LoginButton", ["require", "exports", "edde/control", "edde/e3"], function (require, exports, control_5, e3_15) {
+	"use strict";
+	exports.__esModule = true;
+	var LoginButton = (function (_super) {
+		__extends(LoginButton, _super);
+
+		function LoginButton() {
+			return _super.call(this, 'login-button') || this;
+		}
+
+		LoginButton.prototype.build = function () {
+			return e3_15.e3.html("\n\t\t\t<p class=\"control\">\n\t\t\t\t<span class=\"button is-primary\">\n\t\t\t\t\t<span class=\"icon\"><i class=\"fa fa-lock\"></i></span>\n\t\t\t\t\t<span>Login</span>\n\t\t\t\t</span>\n\t\t\t</p>\n\t\t");
+		};
+		return LoginButton;
+	}(control_5.AbstractControl));
+	exports.LoginButton = LoginButton;
+});
+define("app/index/MainBarControl", ["require", "exports", "edde/control", "edde/e3", "app/index/RegisterButton", "app/index/LoginButton"], function (require, exports, control_6, e3_16, RegisterButton_1, LoginButton_1) {
 	"use strict";
 	exports.__esModule = true;
 	var MainBarControl = (function (_super) {
@@ -2183,13 +2200,19 @@ define("app/index/MainBarControl", ["require", "exports", "edde/control", "edde/
 		}
 
 		MainBarControl.prototype.build = function () {
-			return e3_15.e3.html("\n\t\t\t<nav class=\"navbar is-white\">\n\t\t\t\t<div class=\"container\">\n\t\t\t\t\t<div class=\"navbar-brand\">\n\t\t\t\t\t\t<a class=\"navbar-item\">\n\t\t\t\t\t\t\t<div class=\"field is-grouped\">\n\t\t\t\t\t\t\t\t<p class=\"control\">\n\t\t\t\t\t\t\t\t\t<img src=\"/img/logo.png\"/>\n\t\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t\t\t<p class=\"control\">\n\t\t\t\t\t\t\t\t\t<span>Edde Framework</span>\n\t\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"navbar-menu\">\n\t\t\t\t\t\t<div class=\"navbar-end\">\n\t\t\t\t\t\t\t<span class=\"navbar-item\">\n\t\t\t\t\t\t\t\t<div class=\"field is-grouped\">\n\t\t\t\t\t\t\t\t\t" + new RegisterButton_1.RegisterButton().build() + "\n\t\t\t\t\t\t\t\t\t<p class=\"control\">\n\t\t\t\t\t\t\t\t\t\t<span class=\"button is-primary\">\n\t\t\t\t\t\t\t\t\t\t\t<span class=\"icon\"><i class=\"fa fa-lock\"/></span>\n\t\t\t\t\t\t\t\t\t\t\t<span>Login</span>\n\t\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</nav>\n\t\t");
+			return e3_16.e3.html('<nav class="navbar is-white"></nav>').attach(e3_16.e3.html('<div class="container"></div>').attachList([
+				e3_16.e3.html("\n\t\t\t\t\t<div class=\"navbar-brand\">\n\t\t\t\t\t\t<a class=\"navbar-item\" href=\"/\">\n\t\t\t\t\t\t\t<div class=\"field is-grouped\">\n\t\t\t\t\t\t\t\t<p class=\"control\">\n\t\t\t\t\t\t\t\t\t<img src=\"/img/logo.png\"/>\n\t\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t\t\t<p class=\"control\">\n\t\t\t\t\t\t\t\t\t<span>Edde Framework</span>\n\t\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</div>\n\t\t\t\t"),
+				e3_16.e3.html('<div class="navbar-menu"></div>').attach(e3_16.e3.html('<div class="navbar-end"></div>').attach(e3_16.e3.html('<span class="navbar-item">').attach(e3_16.e3.html('<div class="field is-grouped"></div>').attachList([
+					new RegisterButton_1.RegisterButton().build(),
+					new LoginButton_1.LoginButton().build(),
+				]))))
+			]));
 		};
 		return MainBarControl;
-	}(control_5.AbstractControl));
+	}(control_6.AbstractControl));
 	exports.MainBarControl = MainBarControl;
 });
-define("app/index/IndexView", ["require", "exports", "edde/control", "edde/e3", "app/index/MainBarControl"], function (require, exports, control_6, e3_16, MainBarControl_1) {
+define("app/index/IndexView", ["require", "exports", "edde/control", "edde/e3", "app/index/MainBarControl"], function (require, exports, control_7, e3_17, MainBarControl_1) {
 	"use strict";
 	exports.__esModule = true;
 	var IndexView = (function (_super) {
@@ -2200,9 +2223,12 @@ define("app/index/IndexView", ["require", "exports", "edde/control", "edde/e3", 
 		}
 
 		IndexView.prototype.build = function () {
-			return e3_16.e3.html("\n\t\t\t<div>\n\t\t\t\t" + new MainBarControl_1.MainBarControl().render() + "\n\t\t\t\t<section class=\"hero is-small is-bold is-info\">\n\t\t\t\t\t<div class=\"hero-body\">\n\t\t\t\t\t\t<div class=\"container\">\n\t\t\t\t\t\t\t<div class=\"columns is-vcentered\">\n\t\t\t\t\t\t\t\t<div class=\"column\">\n\t\t\t\t\t\t\t\t\t<p class=\"title\">Welcome to Edde Framework</p>\n\t\t\t\t\t\t\t\t\t<p class=\"subtitle\">...epic, fast and modern Framework</p>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</section>\n\t\t\t</div>\n\t\t");
+			return e3_17.e3.El('div').attachList([
+				new MainBarControl_1.MainBarControl().build(),
+				e3_17.e3.html("\n\t\t\t\t<section class=\"hero is-small is-bold is-info\">\n\t\t\t\t\t<div class=\"hero-body\">\n\t\t\t\t\t\t<div class=\"container\">\n\t\t\t\t\t\t\t<div class=\"columns is-vcentered\">\n\t\t\t\t\t\t\t\t<div class=\"column\">\n\t\t\t\t\t\t\t\t\t<p class=\"title\">Welcome to Edde Framework</p>\n\t\t\t\t\t\t\t\t\t<p class=\"subtitle\">...epic, fast and modern Framework</p>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</section>\n\t\t\t")
+			]);
 		};
 		return IndexView;
-	}(control_6.AbstractControl));
+	}(control_7.AbstractControl));
 	exports.IndexView = IndexView;
 });

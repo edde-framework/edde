@@ -1166,6 +1166,13 @@ declare module "app/index/RegisterButton" {
 		onClick(): void;
 	}
 }
+declare module "app/index/LoginButton" {
+	export class LoginButton extends AbstractControl {
+		constructor();
+
+		build(): IHtmlElement;
+	}
+}
 declare module "app/index/MainBarControl" {
 	export class MainBarControl extends AbstractControl {
 		constructor();

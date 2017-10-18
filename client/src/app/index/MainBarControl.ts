@@ -2,6 +2,7 @@ import {AbstractControl} from "../../edde/control";
 import {IHtmlElement} from "../../edde/dom";
 import {e3} from "../../edde/e3";
 import {RegisterButton} from "./RegisterButton";
+import {LoginButton} from "./LoginButton";
 
 export class MainBarControl extends AbstractControl {
 	public constructor() {
@@ -9,11 +10,11 @@ export class MainBarControl extends AbstractControl {
 	}
 
 	public build(): IHtmlElement {
-		return e3.html(`
-			<nav class="navbar is-white">
-				<div class="container">
+		return e3.html('<nav class="navbar is-white"></nav>').attach(
+			e3.html('<div class="container"></div>').attachList([
+				e3.html(`
 					<div class="navbar-brand">
-						<a class="navbar-item">
+						<a class="navbar-item" href="/">
 							<div class="field is-grouped">
 								<p class="control">
 									<img src="/img/logo.png"/>
@@ -24,23 +25,14 @@ export class MainBarControl extends AbstractControl {
 							</div>
 						</a>
 					</div>
-					<div class="navbar-menu">
-						<div class="navbar-end">
-							<span class="navbar-item">
-								<div class="field is-grouped">
-									${new RegisterButton().build()}
-									<p class="control">
-										<span class="button is-primary">
-											<span class="icon"><i class="fa fa-lock"/></span>
-											<span>Login</span>
-										</span>
-									</p>
-								</div>
-							</span>
-						</div>
-					</div>
-				</div>
-			</nav>
-		`);
+				`),
+				e3.html('<div class="navbar-menu"></div>').attach(
+					e3.html('<div class="navbar-end"></div>').attach(
+						e3.html('<span class="navbar-item">').attach(
+							e3.html('<div class="field is-grouped"></div>').attachList([
+								new RegisterButton().build(),
+								new LoginButton().build(),
+							]))))
+			]));
 	}
 }
