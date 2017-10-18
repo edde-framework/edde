@@ -1,5 +1,7 @@
 <?php
 	namespace App\Common\Upgrade;
 
-//		class UpgradeManager extends Ab{
-//		}
+		use Edde\Common\Upgrade\AbstractUpgradeManager;
+
+		class UpgradeManager extends AbstractUpgradeManager {
+		}

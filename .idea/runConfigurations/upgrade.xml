@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="upgrade" type="PhpLocalRunConfigurationType" factoryName="PHP Console" singleton="true" path="$PROJECT_DIR$/index.php" scriptParameters="upgrade.upgrade/upgrade">
+    <method />
+  </configuration>
+</component>

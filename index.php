@@ -8,8 +8,10 @@
 	 */
 	declare(strict_types=1);
 	use App\Common\Application\Context;
+	use App\Common\Upgrade\UpgradeManager;
 	use Edde\Api\Application\IContext;
 	use Edde\Api\Application\IRootDirectory;
+	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Application\RootDirectory;
 	use Edde\Common\Container\Factory\CascadeFactory;
 	use Edde\Common\Container\Factory\ClassFactory;
@@ -46,11 +48,12 @@
 	 */
 	try {
 		$container = ContainerFactory::container($factoryList = array_merge([
-			IRootDirectory::class => ContainerFactory::instance(RootDirectory::class, [__DIR__]),
+			IRootDirectory::class  => ContainerFactory::instance(RootDirectory::class, [__DIR__]),
 			/**
 			 * This application is using specific contexts to separate user experience
 			 */
-			IContext::class       => Context::class,
+			IContext::class        => Context::class,
+			IUpgradeManager::class => UpgradeManager::class,
 		], is_array($local = @include $local) ? $local : [], [
 			/**
 			 * This stranger here must (should be) be last, because it's canHandle method is able to kill a lot of dependencies and
