@@ -42,10 +42,11 @@
 				foreach ($reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $reflectionMethod) {
 					if (strpos($name = $reflectionMethod->getName(), 'action') !== false && strlen($name) > 6) {
 						printf("- %s:", strtolower(substr($name, 6)));
-						if (($match = $this->stringUtils->match($reflectionMethod->getDocComment(), '~@help\s+(?<help>.*)~', true)) !== null) {
-							echo "\n\t" . $match['help'];
+						if (($match = $this->stringUtils->matchAll($reflectionMethod->getDocComment(), '~@help\s+(?<help>.*)~', true)) !== null) {
+							echo "\n\t";
+							echo implode("\n\t", $match['help']);
 						}
-						echo "\n";
+						echo "\n\n";
 					}
 				}
 			}
