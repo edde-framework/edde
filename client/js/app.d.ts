@@ -1146,6 +1146,43 @@ declare module "edde/e3" {
 }
 declare module "app/app" {
 }
+declare module "app/index/RegisterButton" {
+	export class RegisterButton extends AbstractControl {
+		constructor();
+
+		build(): IHtmlElement;
+
+		onClick(): void;
+	}
+}
+declare module "app/index/LoginButton" {
+	export class LoginButton extends AbstractControl {
+		constructor();
+
+		build(): IHtmlElement;
+
+		onClick(): void;
+	}
+}
+declare module "app/index/MainBarControl" {
+	export class MainBarControl extends AbstractControl {
+		constructor();
+
+		build(): IHtmlElement;
+	}
+}
+declare module "app/index/IndexView" {
+	export class IndexView extends AbstractControl {
+		build(): IHtmlElement;
+	}
+}
+declare module "app/register/RegisterView" {
+	export class RegisterView extends AbstractControl {
+		constructor();
+
+		build(): IHtmlElement;
+	}
+}
 declare module "edde/client" {
 	export interface IClientClass {
 		attach(htmlElement: IHtmlElement): IHtmlElement;
@@ -1167,40 +1204,5 @@ declare module "edde/client" {
 
 	export abstract class AbstractButton extends AbstractClientClass {
 		onClick(event?: any): void;
-	}
-}
-declare module "app/index/RegisterButton" {
-	export class RegisterButton extends AbstractControl {
-		constructor();
-
-		build(): IHtmlElement;
-
-		onClick(): void;
-	}
-}
-declare module "app/index/LoginButton" {
-	export class LoginButton extends AbstractControl {
-		constructor();
-
-		build(): IHtmlElement;
-	}
-}
-declare module "app/index/MainBarControl" {
-	export class MainBarControl extends AbstractControl {
-		constructor();
-
-		build(): IHtmlElement;
-	}
-}
-declare module "app/index/IndexView" {
-	export class IndexView extends AbstractControl {
-		build(): IHtmlElement;
-	}
-}
-declare module "app/register/RegisterView" {
-	export class RegisterView extends AbstractControl {
-		constructor();
-
-		build(): IHtmlElement;
 	}
 }

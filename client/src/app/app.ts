@@ -12,14 +12,16 @@ e3.ControlFactory();
  */
 e3.ViewManager();
 
-/**
- * register default view
- */
-e3.emit('view/register', {
-	'view': 'index-view',
-	'control': 'app/index/IndexView:IndexView',
-	'root': e3.el(document.body)
-});
+const body = e3.el(document.body);
+
+e3.hashMap({
+	'index-view': 'app/index/IndexView:IndexView',
+	'register-view': 'app/register/RegisterView:RegisterView',
+}).each((view, control) => e3.emit('view/register', {
+	'view': view,
+	'control': control,
+	'root': body
+}));
 /**
  * switch to a new created view
  */

@@ -5,7 +5,7 @@ import {MainBarControl} from "./MainBarControl";
 
 export class IndexView extends AbstractControl {
 	public build(): IHtmlElement {
-		return e3.html('<div class="is-hidden"></div>').attachList([
+		return e3.html('<div class="view is-hidden"></div>').attachList([
 			this.use(new MainBarControl()),
 			e3.html(`
 				<section class="hero is-small is-bold is-info">
