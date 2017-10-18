@@ -1157,13 +1157,6 @@ declare module "edde/client" {
 		onClick(event?: any): void;
 	}
 }
-declare module "app/index/MainBarControl" {
-	export class MainBarControl extends AbstractControl {
-		constructor();
-
-		build(): IHtmlElement;
-	}
-}
 declare module "app/index/RegisterButton" {
 	export class RegisterButton extends AbstractControl {
 		constructor();
@@ -1171,6 +1164,13 @@ declare module "app/index/RegisterButton" {
 		build(): IHtmlElement;
 
 		onClick(): void;
+	}
+}
+declare module "app/index/MainBarControl" {
+	export class MainBarControl extends AbstractControl {
+		constructor();
+
+		build(): IHtmlElement;
 	}
 }
 declare module "app/index/IndexView" {

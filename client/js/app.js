@@ -2149,41 +2149,7 @@ define("edde/client", ["require", "exports", "edde/e3", "edde/decorator"], funct
 	}(AbstractClientClass));
 	exports.AbstractButton = AbstractButton;
 });
-define("app/index/MainBarControl", ["require", "exports", "edde/control", "edde/e3"], function (require, exports, control_4, e3_14) {
-	"use strict";
-	exports.__esModule = true;
-	var MainBarControl = (function (_super) {
-		__extends(MainBarControl, _super);
-
-		function MainBarControl() {
-			return _super.call(this, 'main-bar-control') || this;
-		}
-
-		MainBarControl.prototype.build = function () {
-			return e3_14.e3.html('<nav class="navbar is-white"><div class="container">' +
-				'<div class="navbar-brand">' +
-				'<a class="navbar-item">' +
-				'<div class="field is-grouped">' +
-				'<p class="control"><img src="/img/logo.png"></p>' +
-				'<p class="control"><span>Edde Framework</span></p>' +
-				'</div>' +
-				'</div>' +
-				'</div>' +
-				'<div class="navbar-menu">' +
-				'<div class="navbar-end">' +
-				'<span class="navbar-item">' +
-				'<div class="field is-grouped">' +
-				'</div>' +
-				'</span>' +
-				'</div>' +
-				'</div>' +
-				'</nav>');
-		};
-		return MainBarControl;
-	}(control_4.AbstractControl));
-	exports.MainBarControl = MainBarControl;
-});
-define("app/index/RegisterButton", ["require", "exports", "edde/control", "edde/e3", "edde/decorator"], function (require, exports, control_5, e3_15, decorator_3) {
+define("app/index/RegisterButton", ["require", "exports", "edde/control", "edde/e3", "edde/decorator"], function (require, exports, control_4, e3_14, decorator_3) {
 	"use strict";
 	exports.__esModule = true;
 	var RegisterButton = (function (_super) {
@@ -2194,7 +2160,7 @@ define("app/index/RegisterButton", ["require", "exports", "edde/control", "edde/
 		}
 
 		RegisterButton.prototype.build = function () {
-			return e3_15.e3.html("\n\t\t\t<p class=\"control\">\n\t\t\t\t<span class=\"button\">\n\t\t\t\t\t<span class=\"icon\"><i class=\"fa fa-user-circle\"></i></span>\n\t\t\t\t\t<span>Register</span>\n\t\t\t\t</span>\n\t\t\t</p>\n\t\t");
+			return e3_14.e3.html("\n\t\t\t<p class=\"control\">\n\t\t\t\t<span class=\"button\">\n\t\t\t\t\t<span class=\"icon\"><i class=\"fa fa-user-circle\"></i></span>\n\t\t\t\t\t<span>Register</span>\n\t\t\t\t</span>\n\t\t\t</p>\n\t\t");
 		};
 		RegisterButton.prototype.onClick = function () {
 			alert('yapee!');
@@ -2203,10 +2169,27 @@ define("app/index/RegisterButton", ["require", "exports", "edde/control", "edde/
 			decorator_3.Listen.ToNative('click')
 		], RegisterButton.prototype, "onClick");
 		return RegisterButton;
-	}(control_5.AbstractControl));
+	}(control_4.AbstractControl));
 	exports.RegisterButton = RegisterButton;
 });
-define("app/index/IndexView", ["require", "exports", "edde/control", "edde/e3", "app/index/RegisterButton"], function (require, exports, control_6, e3_16, RegisterButton_1) {
+define("app/index/MainBarControl", ["require", "exports", "edde/control", "edde/e3", "app/index/RegisterButton"], function (require, exports, control_5, e3_15, RegisterButton_1) {
+	"use strict";
+	exports.__esModule = true;
+	var MainBarControl = (function (_super) {
+		__extends(MainBarControl, _super);
+
+		function MainBarControl() {
+			return _super.call(this, 'main-bar-control') || this;
+		}
+
+		MainBarControl.prototype.build = function () {
+			return e3_15.e3.html("\n\t\t\t<nav class=\"navbar is-white\">\n\t\t\t\t<div class=\"container\">\n\t\t\t\t\t<div class=\"navbar-brand\">\n\t\t\t\t\t\t<a class=\"navbar-item\">\n\t\t\t\t\t\t\t<div class=\"field is-grouped\">\n\t\t\t\t\t\t\t\t<p class=\"control\">\n\t\t\t\t\t\t\t\t\t<img src=\"/img/logo.png\"/>\n\t\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t\t\t<p class=\"control\">\n\t\t\t\t\t\t\t\t\t<span>Edde Framework</span>\n\t\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"navbar-menu\">\n\t\t\t\t\t\t<div class=\"navbar-end\">\n\t\t\t\t\t\t\t<span class=\"navbar-item\">\n\t\t\t\t\t\t\t\t<div class=\"field is-grouped\">\n\t\t\t\t\t\t\t\t\t" + new RegisterButton_1.RegisterButton().build() + "\n\t\t\t\t\t\t\t\t\t<p class=\"control\">\n\t\t\t\t\t\t\t\t\t\t<span class=\"button is-primary\">\n\t\t\t\t\t\t\t\t\t\t\t<span class=\"icon\"><i class=\"fa fa-lock\"/></span>\n\t\t\t\t\t\t\t\t\t\t\t<span>Login</span>\n\t\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</nav>\n\t\t");
+		};
+		return MainBarControl;
+	}(control_5.AbstractControl));
+	exports.MainBarControl = MainBarControl;
+});
+define("app/index/IndexView", ["require", "exports", "edde/control", "edde/e3", "app/index/MainBarControl"], function (require, exports, control_6, e3_16, MainBarControl_1) {
 	"use strict";
 	exports.__esModule = true;
 	var IndexView = (function (_super) {
@@ -2217,8 +2200,7 @@ define("app/index/IndexView", ["require", "exports", "edde/control", "edde/e3", 
 		}
 
 		IndexView.prototype.build = function () {
-			var registerButton = "\n\t\t\t<p class=\"control\">\n\t\t\t\t<span class=\"button\">\n\t\t\t\t\t<span class=\"icon\"><i class=\"fa fa-user-circle\"/></span>\n\t\t\t\t\t<span>Register</span>\n\t\t\t\t</span>\n\t\t\t</p>";
-			return e3_16.e3.html("\n\t\t\t<nav class=\"navbar is-white\">\n\t\t\t\t<div class=\"container\">\n\t\t\t\t\t<div class=\"navbar-brand\">\n\t\t\t\t\t\t<a class=\"navbar-item\">\n\t\t\t\t\t\t\t<div class=\"field is-grouped\">\n\t\t\t\t\t\t\t\t<p class=\"control\">\n\t\t\t\t\t\t\t\t\t<img src=\"/img/logo.png\"/>\n\t\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t\t\t<p class=\"control\">\n\t\t\t\t\t\t\t\t\t<span>Edde Framework</span>\n\t\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</a>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"navbar-menu\">\n\t\t\t\t\t\t<div class=\"navbar-end\">\n\t\t\t\t\t\t\t<span class=\"navbar-item\">\n\t\t\t\t\t\t\t\t<div class=\"field is-grouped\">\n\t\t\t\t\t\t\t\t\t" + new RegisterButton_1.RegisterButton('dd').build() + "\n\t\t\t\t\t\t\t\t\t<p class=\"control\">\n\t\t\t\t\t\t\t\t\t\t<span class=\"button is-primary\">\n\t\t\t\t\t\t\t\t\t\t\t<span class=\"icon\"><i class=\"fa fa-lock\"/></span>\n\t\t\t\t\t\t\t\t\t\t\t<span>Login</span>\n\t\t\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t\t\t</p>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</nav>\n\t\t\t<section class=\"hero is-small is-bold is-info\">\n\t\t\t\t<div class=\"hero-body\">\n\t\t\t\t\t<div class=\"container\">\n\t\t\t\t\t\t<div class=\"columns is-vcentered\">\n\t\t\t\t\t\t\t<div class=\"column\">\n\t\t\t\t\t\t\t\t<p class=\"title\">Welcome to Edde Framework</p>\n\t\t\t\t\t\t\t\t<p class=\"subtitle\">...epic, fast and modern Framework</p>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</section>\n\t\t");
+			return e3_16.e3.html("\n\t\t\t<div>\n\t\t\t\t" + new MainBarControl_1.MainBarControl().render() + "\n\t\t\t\t<section class=\"hero is-small is-bold is-info\">\n\t\t\t\t\t<div class=\"hero-body\">\n\t\t\t\t\t\t<div class=\"container\">\n\t\t\t\t\t\t\t<div class=\"columns is-vcentered\">\n\t\t\t\t\t\t\t\t<div class=\"column\">\n\t\t\t\t\t\t\t\t\t<p class=\"title\">Welcome to Edde Framework</p>\n\t\t\t\t\t\t\t\t\t<p class=\"subtitle\">...epic, fast and modern Framework</p>\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t</section>\n\t\t\t</div>\n\t\t");
 		};
 		return IndexView;
 	}(control_6.AbstractControl));
