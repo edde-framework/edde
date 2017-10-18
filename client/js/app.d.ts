@@ -1246,17 +1246,6 @@ declare module "app/login/RegisterButton" {
 		eventEmailInputIsValid(element: IElement): void;
 	}
 }
-declare module "app/login/PasswordInput" {
-	export class PasswordInput extends AbstractControl {
-		protected placeholder: string;
-		protected input: IHtmlElement;
-		protected tick: IHtmlElement;
-
-		constructor(placeholder: string);
-
-		build(): IHtmlElement;
-	}
-}
 declare module "app/login/RegisterView" {
 	export class RegisterView extends AbstractControl {
 		constructor();

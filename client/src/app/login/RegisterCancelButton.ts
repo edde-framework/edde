@@ -18,6 +18,8 @@ export class RegisterCancelButton extends AbstractControl {
 
 	@Listen.ToNative('click')
 	public onClick() {
-		alert('Do the registration!');
+		e3.emit('view/change', {
+			'view': 'index-view'
+		});
 	}
 }
