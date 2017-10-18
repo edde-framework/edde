@@ -1176,13 +1176,6 @@ declare module "app/index/IndexView" {
 		build(): IHtmlElement;
 	}
 }
-declare module "app/register/RegisterView" {
-	export class RegisterView extends AbstractControl {
-		constructor();
-
-		build(): IHtmlElement;
-	}
-}
 declare module "edde/client" {
 	export interface IClientClass {
 		attach(htmlElement: IHtmlElement): IHtmlElement;
@@ -1204,5 +1197,42 @@ declare module "edde/client" {
 
 	export abstract class AbstractButton extends AbstractClientClass {
 		onClick(event?: any): void;
+	}
+}
+declare module "app/login/EmailInput" {
+	export class EmailInput extends AbstractControl {
+		constructor();
+
+		build(): IHtmlElement;
+	}
+}
+declare module "app/login/RegisterCancelButton" {
+	export class RegisterCancelButton extends AbstractControl {
+		constructor();
+
+		build(): IHtmlElement;
+
+		onClick(): void;
+	}
+}
+declare module "app/login/RegisterButton" {
+	export class RegisterButton extends AbstractControl {
+		constructor();
+
+		build(): IHtmlElement;
+
+		onClick(): void;
+	}
+}
+declare module "app/login/RegisterView" {
+	export class RegisterView extends AbstractControl {
+		constructor();
+
+		build(): IHtmlElement;
+	}
+}
+declare module "app/login/LoginView" {
+	export class LoginView extends AbstractControl {
+		build(): IHtmlElement;
 	}
 }

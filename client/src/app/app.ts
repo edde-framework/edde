@@ -16,7 +16,8 @@ const body = e3.el(document.body);
 
 e3.hashMap({
 	'index-view': 'app/index/IndexView:IndexView',
-	'register-view': 'app/register/RegisterView:RegisterView',
+	'register-view': 'app/login/RegisterView:RegisterView',
+	'login-view': 'app/login/LoginView:LoginView',
 }).each((view, control) => e3.emit('view/register', {
 	'view': view,
 	'control': control,

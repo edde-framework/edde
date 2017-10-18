@@ -10,7 +10,7 @@ export class LoginButton extends AbstractControl {
 
 	public build(): IHtmlElement {
 		return e3.html(`
-			<p class="control test">
+			<p class="control">
 				<span class="button is-primary">
 					<span class="icon"><i class="fa fa-lock"></i></span>
 					<span>Login</span>
@@ -21,6 +21,8 @@ export class LoginButton extends AbstractControl {
 
 	@Listen.ToNative('click')
 	public onClick() {
-		(<IHtmlElement>this.element).addClass('move');
+		e3.emit('view/change', {
+			'view': 'login-view',
+		});
 	}
 }
