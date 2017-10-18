@@ -23,15 +23,20 @@ export interface IControl {
 	 */
 	mount(element: IHtmlElement): IHtmlElement;
 
-	attachHtml(html: string): IHtmlElement;
-
 	/**
 	 * attach this control to the given element; this should trigger render if control wasn't rendered yet
 	 */
 	attachTo(root: IHtmlElement): IControl;
 
 	/**
-	 * create html element of this control; this method should return all the times new HTML element
+	 * create an html element for this control (just once event per multiple calls)
+	 *
+	 * @returns {IHtmlElement}
+	 */
+	create(): IHtmlElement;
+
+	/**
+	 * create html element of this control; this method should build this control just once
 	 */
 	build(): IHtmlElement;
 
@@ -62,6 +67,7 @@ export interface IControlFactory {
 export abstract class AbstractControl implements IControl {
 	protected name: string;
 	protected element: IHtmlElement | null;
+	protected isMounted: boolean = false;
 	protected controlList: ICollection<IControl> = e3.collection();
 
 	public constructor(name: string) {
@@ -74,24 +80,20 @@ export abstract class AbstractControl implements IControl {
 	 */
 	public use(control: IControl): IHtmlElement {
 		this.controlList.add(control);
-		return control.build();
+		return control.create();
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public mount(element: IHtmlElement): IHtmlElement {
+		this.isMounted = true;
 		const dom = (this.element = element).getElement();
 		e3.$$(this, (name: string, value: any[]) => name.indexOf('::NativeListenerList/', 0) !== -1 ? e3.$(value, (listener: { event: string, handler: string }) => dom.addEventListener(listener.event, event => (<any>this)[listener.handler].call(this, event), false)) : null);
 		if (this.isListening()) {
 			e3.listener(this);
 		}
-
 		return this.element;
-	}
-
-	public attachHtml(html: string): IHtmlElement {
-		return this.mount(e3.html(html));
 	}
 
 	/**
@@ -106,7 +108,24 @@ export abstract class AbstractControl implements IControl {
 	 * @inheritDoc
 	 */
 	public render(): IHtmlElement {
-		return this.element ? this.element : this.mount(this.element = this.build());
+		if (this.element && this.isMounted) {
+			return this.element;
+		}
+		/**
+		 * create method already assigne element to this.element
+		 * @type {IHtmlElement}
+		 */
+		const element = this.create();
+		this.mount(element);
+		this.controlList.each(control => control.render());
+		return element;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public create(): IHtmlElement {
+		return this.element ? this.element : this.element = this.build();
 	}
 
 	/**

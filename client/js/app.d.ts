@@ -952,9 +952,9 @@ declare module "edde/control" {
 
 		mount(element: IHtmlElement): IHtmlElement;
 
-		attachHtml(html: string): IHtmlElement;
-
 		attachTo(root: IHtmlElement): IControl;
+
+		create(): IHtmlElement;
 
 		build(): IHtmlElement;
 
@@ -973,6 +973,7 @@ declare module "edde/control" {
 	export abstract class AbstractControl implements IControl {
 		protected name: string;
 		protected element: IHtmlElement | null;
+		protected isMounted: boolean;
 		protected controlList: ICollection<IControl>;
 
 		constructor(name: string);
@@ -981,11 +982,11 @@ declare module "edde/control" {
 
 		mount(element: IHtmlElement): IHtmlElement;
 
-		attachHtml(html: string): IHtmlElement;
-
 		attachTo(root: IHtmlElement): IControl;
 
 		render(): IHtmlElement;
+
+		create(): IHtmlElement;
 
 		getElement(): IHtmlElement | any;
 
