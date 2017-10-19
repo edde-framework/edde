@@ -44,18 +44,8 @@
 			 * @throws NativeQueryException
 			 */
 			public function testSelectQuery() {
-				$query = new SelectQuery();
-				/**
-				 * SELECT
-				 *  "abc"."foo",
-				 *  "abc".*
-				 *  "def"."bar"
-				 * FROM
-				 *  "some-table-name" AS "abc",
-				 *  "another-table" AS "def"
-				 */
 				// @formatter:off
-				$query->
+				$nativeQuery = $this->driver->toNative((new SelectQuery())->
 					table('some-table-name')->
 						column('foo')->
 						all()->
@@ -68,13 +58,12 @@
 							group()->
 								gt('a')->than(5)->and()->
 								neq('foo')->to('bar')->
-							end()->
+							end()->or()->
 						gt('blah')->than('foo')->and()->
 						in('enum-column')->select(
 							(new SelectQuery())->table('moo')->all()->query()
-						);
+				)->query());
 				// @formatter:on
-				$nativeQuery = $this->driver->toNative($query);
 			}
 
 			/**

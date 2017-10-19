@@ -13,9 +13,15 @@
 			protected $node;
 
 			public function table(string $name): TableFragment {
+				$this->init();
+				$this->node->addNode($node = new Node('table', $name));
+				return new TableFragment($this->node, $node);
 			}
 
 			public function where(): WhereFragment {
+			}
+
+			public function getQuery(): INode {
 			}
 
 			protected function handleInit(): void {

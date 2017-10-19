@@ -17,6 +17,7 @@
 			protected $node;
 
 			/**
+			 * @param INode $root
 			 * @param INode $node
 			 */
 			public function __construct(INode $root, INode $node = null) {
