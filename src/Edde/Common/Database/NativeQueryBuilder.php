@@ -80,21 +80,24 @@
 				$selectList = [];
 				$parameterList = [];
 				$sql[] = 'SELECT';
-				foreach ($root->getNodeList() as $table) {
-					switch ($table->getName()) {
+				foreach ($root->getNodeList() as $node) {
+					switch ($node->getName()) {
 						case 'table':
-							$name = $this->delimite($table->getValue());
-							if (($alias = $table->getAttribute('alias')) !== null) {
+							$name = $this->delimite($node->getValue());
+							if (($alias = $node->getAttribute('alias')) !== null) {
 								$name .= ' AS ' . ($alias = $this->delimite($alias));
 							}
 							$tableList[] = $name;
 							$prefix = ($alias ? $alias . '.' : '');
-							if ($table->getAttribute('all')) {
+							if ($node->getAttribute('all')) {
 								$selectList[] = $prefix . '*';
 							}
-							foreach ($table->getNodeList() as $column) {
+							foreach ($node->getNodeList() as $column) {
 								$selectList[] = $prefix . $this->delimite($column->getValue());
 							}
+							break;
+						case 'parameter':
+							$parameterList[$node->getAttribute('name')] = $node->getValue();
 							break;
 					}
 				}

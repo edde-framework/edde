@@ -13,6 +13,6 @@
 			}
 
 			public function end(): WhereRelationFragment {
-				return new WhereRelationFragment($this->root, $this->node->getParent()->getParent());
+				return new WhereRelationFragment($this->root, $this->node->getParent());
 			}
 		}
