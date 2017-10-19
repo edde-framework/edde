@@ -1,7 +1,7 @@
 <?php
 	namespace Edde\Common\Query\Fragment;
 
-		class WhereThenFragment extends AbstractFragment {
+		class WhereThanFragment extends AbstractFragment {
 			public function than(string $name): WhereRelationFragment {
 			}
 
