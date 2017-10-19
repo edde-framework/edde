@@ -14,8 +14,8 @@
 				return $this;
 			}
 
-			public function table(string $name): TableFragment {
-				$this->root->addNode($node = new Node('table', $name));
+			public function table(string $name, string $alias = null): TableFragment {
+				$this->root->addNode($node = new Node('table', $name, ['alias' => $alias]));
 				return new TableFragment($this->root, $node);
 			}
 

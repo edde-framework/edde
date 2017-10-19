@@ -16,9 +16,9 @@
 			 */
 			protected $whereFragment;
 
-			public function table(string $name): TableFragment {
+			public function table(string $name, string $alias = null): TableFragment {
 				$this->init();
-				$this->node->addNode($node = new Node('table', $name));
+				$this->node->addNode($node = new Node('table', $name, ['alias' => $alias]));
 				return new TableFragment($this->node, $node);
 			}
 
