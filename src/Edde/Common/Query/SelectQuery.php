@@ -11,6 +11,10 @@
 			 * @var INode
 			 */
 			protected $node;
+			/**
+			 * @var WhereFragment
+			 */
+			protected $whereFragment;
 
 			public function table(string $name): TableFragment {
 				$this->init();
@@ -19,9 +23,12 @@
 			}
 
 			public function where(): WhereFragment {
+				if ($this->whereFragment) {
+					return $this->whereFragment;
+				}
 				$this->init();
 				$this->node->addNode($node = new Node('where'));
-				return new WhereFragment($this->node, $node);
+				return $this->whereFragment = new WhereFragment($this->node, $node);
 			}
 
 			public function getQuery(): INode {

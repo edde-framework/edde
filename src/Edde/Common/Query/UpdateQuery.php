@@ -19,6 +19,10 @@
 			 * @var INode
 			 */
 			protected $node;
+			/**
+			 * @var WhereFragment
+			 */
+			protected $whereFragment;
 
 			public function __construct(ISchema $schema, array $source) {
 				$this->schema = $schema;
@@ -26,21 +30,24 @@
 			}
 
 			public function where(): WhereFragment {
-				$this->setup();
-				$this->node->addNode($node = new Node('where', null, ['relation' => 'and']));
-				return new WhereFragment($node);
+				if ($this->whereFragment) {
+					return $this->whereFragment;
+				}
+				$this->init();
+				$this->node->addNode($node = new Node('where'));
+				return $this->whereFragment = new WhereFragment($node);
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function getQuery(): INode {
-				$this->setup();
+				$this->init();
 				return $this->node;
 			}
 
-			protected function handleSetup(): void {
-				parent::handleSetup();
+			protected function handleInit(): void {
+				parent::handleInit();
 				$this->node = new Node('update', $this->schema->getName(), $this->source);
 			}
 		}

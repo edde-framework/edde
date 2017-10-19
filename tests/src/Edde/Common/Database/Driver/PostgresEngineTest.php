@@ -42,6 +42,7 @@
 
 			/**
 			 * @throws NativeQueryException
+			 * @throws \Exception
 			 */
 			public function testSelectQuery() {
 				// @formatter:off
@@ -62,7 +63,9 @@
 						gt('blah')->than('foo')->and()->
 						in('enum-column')->select(
 							(new SelectQuery())->table('moo')->all()->query()
-				)->query());
+						)->and()->
+						eq('a')->to('b')->
+					query());
 				// @formatter:on
 			}
 
