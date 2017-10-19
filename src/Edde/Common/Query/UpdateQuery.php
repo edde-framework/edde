@@ -28,7 +28,7 @@
 			public function where(): WhereFragment {
 				$this->setup();
 				$this->node->addNode($node = new Node('where', null, ['relation' => 'and']));
-				return new WhereFragment($this->schema, $node);
+				return new WhereFragment($node);
 			}
 
 			/**

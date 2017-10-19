@@ -4,6 +4,7 @@
 		use Edde\Api\Container\Exception\ContainerException;
 		use Edde\Api\Container\Exception\FactoryException;
 		use Edde\Api\Database\Exception\DriverQueryException;
+		use Edde\Api\Database\Exception\NativeQueryException;
 		use Edde\Api\Database\IDriver;
 		use Edde\Api\Database\Inject\Driver;
 		use Edde\Api\Schema\ISchema;
@@ -13,6 +14,7 @@
 		use Edde\Common\Query\CreateSchemaQuery;
 		use Edde\Common\Query\InsertQuery;
 		use Edde\Common\Query\NativeQuery;
+		use Edde\Common\Query\SelectQuery;
 		use Edde\Common\Query\UpdateQuery;
 		use Edde\Common\Schema\Schema;
 		use Edde\Ext\Container\ContainerFactory;
@@ -36,6 +38,40 @@
 				$this->driver->native(new NativeQuery('DROP SCHEMA IF EXISTS "test" CASCADE'));
 				$this->driver->native(new NativeQuery('CREATE SCHEMA "test" AUTHORIZATION "edde"'));
 				$this->assertTrue(true, 'everything looks nice here!');
+			}
+
+			/**
+			 * @throws NativeQueryException
+			 */
+			public function testSelectQuery() {
+				$query = new SelectQuery();
+				/**
+				 * SELECT
+				 *  "abc"."foo",
+				 *  "abc".*
+				 *  "def"."bar"
+				 * FROM
+				 *  "some-table-name" AS "abc",
+				 *  "another-table" AS "def"
+				 */
+				// @formatter:off
+				$query->
+					table('some-table-name')->
+						column('foo')->
+						all()->
+					table('another-table')->
+						column('bar')->
+					where()->
+						eq('foo')->to('bound parameter!')->and()->
+						eq('foo')->toColumn('bar')->
+							where()->gt('foo')->than(4)->
+						neq('franta')->to('betka')->or()->
+						gt('blah')->then('foo')->and()->
+						in('enum-column')->select(
+							(new SelectQuery())->table('moo')->all()->query()
+						);
+				// @formatter:on
+				$nativeQuery = $this->driver->toNative($query);
 			}
 
 			/**
