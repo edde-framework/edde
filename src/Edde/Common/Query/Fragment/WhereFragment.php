@@ -40,11 +40,13 @@
 
 			protected function createToFragment(string $type, string $name): WhereToFragment {
 				$this->node->setAttribute('type', $type);
+				$this->node->setAttribute('where', $name);
 				return new WhereToFragment($this->root, $this->node);
 			}
 
 			protected function createThanFragment(string $type, string $name): WhereThanFragment {
 				$this->node->setAttribute('type', $type);
+				$this->node->setAttribute('where', $name);
 				return new WhereThanFragment($this->root, $this->node);
 			}
 		}

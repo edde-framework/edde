@@ -78,6 +78,7 @@
 			protected function fragmentSelect(INode $root) {
 				$tableList = null;
 				$selectList = [];
+				$whereList = [];
 				$parameterList = [];
 				$sql[] = 'SELECT';
 				foreach ($root->getNodeList() as $node) {
@@ -99,6 +100,11 @@
 						case 'parameter':
 							$parameterList[$node->getAttribute('name')] = $node->getValue();
 							break;
+						case 'where':
+							$whereList[] = ($query = $this->formatWhere($node))->getQuery();
+							$parameterList = array_merge($parameterList, $query->getParameterList());
+							$whereList[] = strtoupper($node->getAttribute('relation'));
+							break;
 					}
 				}
 				$sql[] = implode(', ', $selectList);
@@ -107,5 +113,18 @@
 					$sql[] = implode(', ', $tableList);
 				}
 				return new NativeQuery(implode("\n", $sql), $parameterList);
+			}
+
+			protected function formatWhere(INode $root): INativeQuery {
+				switch ($root->getAttribute('type')) {
+					case 'eq':
+						switch ($root->getAttribute('target', 'column')) {
+							case 'column':
+								break;
+							case 'parameter':
+								break;
+						}
+						break;
+				}
 			}
 		}
