@@ -18,7 +18,7 @@
 
 			public function table(string $name, string $alias = null): TableFragment {
 				$this->init();
-				$this->node->addNode($node = new Node('table', $name, ['alias' => $alias]));
+				$this->node->addNode($node = new Node('table', $name, $alias ? ['alias' => $alias] : []));
 				return new TableFragment($this->node, $node);
 			}
 
