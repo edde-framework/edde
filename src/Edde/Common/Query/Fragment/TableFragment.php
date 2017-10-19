@@ -20,5 +20,7 @@
 			}
 
 			public function where(): WhereFragment {
+				$this->root->addNode($node = new Node('where'));
+				return new WhereFragment($this->root, $node);
 			}
 		}

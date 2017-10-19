@@ -19,9 +19,14 @@
 			}
 
 			public function where(): WhereFragment {
+				$this->init();
+				$this->node->addNode($node = new Node('where'));
+				return new WhereFragment($this->node, $node);
 			}
 
 			public function getQuery(): INode {
+				$this->init();
+				return $this->node;
 			}
 
 			protected function handleInit(): void {
