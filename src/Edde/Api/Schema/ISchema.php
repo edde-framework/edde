@@ -12,6 +12,15 @@
 			public function getName(): string;
 
 			/**
+			 * create a new property with the given name
+			 *
+			 * @param string $name
+			 *
+			 * @return IProperty
+			 */
+			public function property(string $name): IProperty;
+
+			/**
 			 * create a primary propery on the schema
 			 *
 			 * @param string $name

@@ -3,6 +3,13 @@
 
 		interface IProperty {
 			/**
+			 * shortcut for required
+			 *
+			 * @return IProperty
+			 */
+			public function primary(): IProperty;
+
+			/**
 			 * set property value generator; if a value is not set, this generator should be used
 			 * to get a property value
 			 *
@@ -18,4 +25,13 @@
 			 * @return IProperty
 			 */
 			public function required(): IProperty;
+
+			/**
+			 * property type
+			 *
+			 * @param string $type
+			 *
+			 * @return IProperty
+			 */
+			public function type(string $type): IProperty;
 		}
