@@ -74,4 +74,7 @@
 				$sql .= implode(',', $nameList) . ') VALUES (';
 				return new NativeQuery($sql . implode(', ', $columnList) . ')', $parameterList);
 			}
+
+			protected function fragmentSelect(INode $root) {
+			}
 		}

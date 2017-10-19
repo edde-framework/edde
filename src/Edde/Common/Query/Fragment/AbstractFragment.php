@@ -21,6 +21,7 @@
 			 * @param INode $node
 			 */
 			public function __construct(INode $root, INode $node = null) {
+				$this->root = $root;
 				$this->node = $node;
 			}
 
