@@ -95,6 +95,8 @@ services:
       MYSQL_DATABASE: edde
       MYSQL_USER: edde
       MYSQL_PASSWORD: edde
+    ports:
+      - 3306:3306
     volumes:
       - mysql:/var/lib/mysql
     networks:
@@ -105,6 +107,8 @@ services:
     environment:
       POSTGRES_USER: edde
       POSTGRES_PASSWORD: edde
+    ports:
+      - 5432:5432
     volumes:
       - postgres:/var/lib/postgresql/data
     networks:
