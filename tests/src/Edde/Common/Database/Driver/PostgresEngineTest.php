@@ -28,25 +28,13 @@
 			protected $schema;
 
 			/**
-			 * @throws DriverQueryException
-			 * @throws IntegrityException
-			 */
-			public function testNativeQuery() {
-				/**
-				 * cleanup public schema by dropping
-				 */
-				$this->driver->native(new NativeQuery('DROP SCHEMA IF EXISTS "test" CASCADE'));
-				$this->driver->native(new NativeQuery('CREATE SCHEMA "test" AUTHORIZATION "edde"'));
-				$this->assertTrue(true, 'everything looks nice here!');
-			}
-
-			/**
 			 * @throws NativeQueryException
 			 * @throws \Exception
 			 */
 			public function testSelectQuery() {
 				// @formatter:off
-				$nativeQuery = $this->driver->toNative((new SelectQuery())->
+				$query = new SelectQuery();
+				$query->
 					table('some-table-name', 'aaa')->
 						column('foo')->
 						all()->
@@ -64,9 +52,24 @@
 						in('enum-column')->select(
 							(new SelectQuery())->table('moo')->all()->query()
 						)->and()->
-						eq('a')->to('b')->
-					query());
+						eq('a')->to('b');
+				$query->where()->
+					eq('external-where')->to(42);
+				$nativeQuery = $this->driver->toNative($query);
 				// @formatter:on
+			}
+
+			/**
+			 * @throws DriverQueryException
+			 * @throws IntegrityException
+			 */
+			public function testNativeQuery() {
+				/**
+				 * cleanup public schema by dropping
+				 */
+				$this->driver->native(new NativeQuery('DROP SCHEMA IF EXISTS "test" CASCADE'));
+				$this->driver->native(new NativeQuery('CREATE SCHEMA "test" AUTHORIZATION "edde"'));
+				$this->assertTrue(true, 'everything looks nice here!');
 			}
 
 			/**
