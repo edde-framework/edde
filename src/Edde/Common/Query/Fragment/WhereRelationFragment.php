@@ -1,15 +1,25 @@
 <?php
 	namespace Edde\Common\Query\Fragment;
 
+		use Edde\Common\Node\Node;
+
 		class WhereRelationFragment extends AbstractFragment {
 			public function and (): WhereFragment {
-				$this->node->setAttribute('relation', 'and');
-				return new WhereFragment($this->root, $this->node->getParent());
+				return $this->createRelation(__FUNCTION__);
 			}
 
 			public function or (): WhereFragment {
-				$this->node->setAttribute('relation', 'and');
-				return new WhereFragment($this->root, $this->node->getParent());
+				return $this->createRelation(__FUNCTION__);
+			}
+
+			protected function createRelation(string $relation): WhereFragment {
+				$this->node->setAttribute('relation', $relation);
+				$root = $this->root;
+				if ($this->node->getAttribute('group')) {
+					$root = $this->node->getParent();
+				}
+				$root->addNode($node = new Node('where'));
+				return new WhereFragment($this->root, $node);
 			}
 
 			public function end(): WhereRelationFragment {

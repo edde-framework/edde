@@ -5,7 +5,7 @@
 
 		class WhereToFragment extends AbstractFragment {
 			public function to($value): WhereRelationFragment {
-				$this->node->setAttribute('type', 'to');
+				$this->node->setAttribute('target', 'parameter');
 				/** @noinspection PhpUnhandledExceptionInspection */
 				$this->node->setAttribute('parameter', $id = (sha1(random_bytes(64) . microtime(true))));
 				$this->root->addNode(new Node('parameter', $value, [
@@ -15,7 +15,7 @@
 			}
 
 			public function toColumn(string $name): WhereRelationFragment {
-				$this->node->setAttribute('type', 'to-column');
+				$this->node->setAttribute('target', 'column');
 				$this->node->setAttribute('column', $name);
 				return new WhereRelationFragment($this->root, $this->node);
 			}

@@ -34,17 +34,17 @@
 			}
 
 			public function group(): WhereFragment {
-				$this->node->addNode($node = new Node('group'));
+				$this->node->addNode($node = new Node('where', null, ['group' => true]));
 				return new WhereFragment($this->root, $node);
 			}
 
-			protected function createToFragment(string $relation, string $name): WhereToFragment {
-				$this->node->addNode($node = new Node($relation, $name));
-				return new WhereToFragment($this->root, $node);
+			protected function createToFragment(string $type, string $name): WhereToFragment {
+				$this->node->setAttribute('type', $type);
+				return new WhereToFragment($this->root, $this->node);
 			}
 
-			protected function createThanFragment(string $relation, string $name): WhereThanFragment {
-				$this->node->addNode($node = new Node($relation, $name));
-				return new WhereThanFragment($this->root, $node);
+			protected function createThanFragment(string $type, string $name): WhereThanFragment {
+				$this->node->setAttribute('type', $type);
+				return new WhereThanFragment($this->root, $this->node);
 			}
 		}
