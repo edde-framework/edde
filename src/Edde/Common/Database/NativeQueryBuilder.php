@@ -76,9 +76,10 @@
 			}
 
 			protected function fragmentSelect(INode $root) {
-				$tableList = [];
+				$tableList = null;
 				$selectList = [];
-				$sql = 'SELECT';
+				$parameterList = [];
+				$sql[] = 'SELECT';
 				foreach ($root->getNodeList() as $table) {
 					switch ($table->getName()) {
 						case 'table':
@@ -97,5 +98,11 @@
 							break;
 					}
 				}
+				$sql[] = implode(', ', $selectList);
+				if ($tableList) {
+					$sql[] = 'FROM';
+					$sql[] = implode(', ', $tableList);
+				}
+				return new NativeQuery(implode("\n", $sql), $parameterList);
 			}
 		}
