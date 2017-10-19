@@ -61,6 +61,21 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function fromCamelCase(string $string, int $index = null): array {
+				$camel = preg_split('~(?=[A-Z])~', $string, -1, PREG_SPLIT_NO_EMPTY);
+				return $index !== null ? array_slice($camel, $index) : $camel;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function recamel(string $string, string $glue = '-', int $index = 0): string {
+				return mb_strtolower(implode($glue, $this->fromCamelCase($string, $index)));
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function match(string $string, string $pattern, bool $named = false, bool $trim = false): ?array {
 				$match = null;
 				if (($match = preg_match($pattern, $string, $match) ? $match : null) === null) {

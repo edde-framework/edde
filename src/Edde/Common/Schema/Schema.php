@@ -12,8 +12,8 @@
 			 */
 			protected $node;
 
-			public function __construct(INode $node = null) {
-				$this->node = $node ?: new Node();
+			public function __construct(INode $node) {
+				$this->node = $node;
 			}
 
 			/**
@@ -21,5 +21,9 @@
 			 */
 			public function getName(): string {
 				return $this->node->getName();
+			}
+
+			static public function create(string $name): ISchema {
+				return new Schema(new Node($name));
 			}
 		}

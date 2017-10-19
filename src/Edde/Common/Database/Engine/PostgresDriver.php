@@ -1,18 +1,11 @@
 <?php
 	namespace Edde\Common\Database\Engine;
 
-		use Edde\Api\Database\Exception\EngineQueryException;
+		use Edde\Api\Database\Exception\DriverQueryException;
 		use Edde\Api\Query\INativeQuery;
-		use Edde\Api\Query\IQuery;
-		use Edde\Common\Database\AbstractPdoEngine;
+		use Edde\Common\Database\AbstractPdoDriver;
 
-		class PostgresEngine extends AbstractPdoEngine {
-			/**
-			 * @inheritdoc
-			 */
-			public function execute(IQuery $query) {
-			}
-
+		class PostgresDriver extends AbstractPdoDriver {
 			/**
 			 * @inheritdoc
 			 */
@@ -22,7 +15,7 @@
 					$prepared->execute($nativeQuery->getParameterList());
 					return $prepared;
 				} catch (\PDOException $exception) {
-					throw new EngineQueryException($exception->getMessage(), 0, $exception);
+					throw new DriverQueryException($exception->getMessage(), 0, $exception);
 				}
 			}
 		}

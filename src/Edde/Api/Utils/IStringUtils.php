@@ -65,6 +65,27 @@
 			public function toCamelCase($input): string;
 
 			/**
+			 * split the given string by capital letters (e.g. FooBar will became [Foo, Bar])
+			 *
+			 * @param string $string
+			 * @param int    $index
+			 *
+			 * @return array
+			 */
+			public function fromCamelCase(string $string, int $index = null): array;
+
+			/**
+			 * split given string by capital letters and glue them by the given glue - e.g. FooBar will became foo-bar
+			 *
+			 * @param string $string
+			 * @param string $glue
+			 * @param int    $index
+			 *
+			 * @return string
+			 */
+			public function recamel(string $string, string $glue = '-', int $index = 0): string;
+
+			/**
 			 * preg_match on steroids
 			 *
 			 * @param string $string
