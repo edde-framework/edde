@@ -5,8 +5,9 @@
 
 		class WhereThanFragment extends AbstractFragment {
 			public function than($value): WhereRelationFragment {
+				$this->node->setAttribute('type', 'than');
 				/** @noinspection PhpUnhandledExceptionInspection */
-				$this->node->setAttribute('than', $id = (sha1(random_bytes(64) . microtime(true))));
+				$this->node->setAttribute('parameter', $id = (sha1(random_bytes(64) . microtime(true))));
 				$this->root->addNode(new Node('parameter', null, [
 					'name'  => $id,
 					'value' => $value,
@@ -15,7 +16,8 @@
 			}
 
 			public function thanColumn(string $name): WhereRelationFragment {
-				$this->node->setAttribute('than-column', $name);
+				$this->node->setAttribute('type', 'than-column');
+				$this->node->setAttribute('column', $name);
 				return new WhereRelationFragment($this->root, $this->node);
 			}
 		}
