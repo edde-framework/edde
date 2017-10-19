@@ -6,6 +6,7 @@
 		use Edde\Api\Database\Exception\NativeQueryException;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\IQuery;
+		use Edde\Api\Storage\Exception\IntegrityException;
 
 		/**
 		 * Database driver implementation.
@@ -19,6 +20,7 @@
 			 * @return mixed
 			 *
 			 * @throws DriverQueryException
+			 * @throws IntegrityException
 			 */
 			public function execute(IQuery $query);
 
@@ -41,6 +43,7 @@
 			 * @return mixed
 			 *
 			 * @throws DriverQueryException
+			 * @throws IntegrityException
 			 */
 			public function native(INativeQuery $nativeQuery);
 

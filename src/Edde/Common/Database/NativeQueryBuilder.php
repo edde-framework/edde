@@ -3,10 +3,8 @@
 
 		use Edde\Api\Database\Exception\DriverQueryException;
 		use Edde\Api\Node\INode;
-		use Edde\Api\Node\INodeQuery;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Utils\Inject\StringUtils;
-		use Edde\Common\Node\NodeQuery;
 		use Edde\Common\Query\NativeQuery;
 		use ReflectionClass;
 		use ReflectionMethod;
@@ -17,10 +15,6 @@
 		trait NativeQueryBuilder {
 			use StringUtils;
 			protected $fragmentList = [];
-			/**
-			 * @var INodeQuery[]
-			 */
-			protected $nodeQueryList = [];
 
 			/**
 			 * @param INode $node
@@ -47,32 +41,37 @@
 						$name,
 					];
 				}
-				$this->nodeQueryList = [
-					'select'        => new NodeQuery('/select/select/*'),
-					'from'          => new NodeQuery('/select/from/*'),
-					'where'         => new NodeQuery('/select/where/*'),
-					'order'         => new NodeQuery('/select/order/*'),
-					'create-schema' => new NodeQuery('/create-schema/*'),
-					'update'        => new NodeQuery('/update/update/*'),
-					'update-where'  => new NodeQuery('/update/where/*'),
-				];
 			}
 
-			protected function fragmentCreateSchema(INode $node) {
-				$sql = 'CREATE TABLE IF NOT EXISTS ' . $this->delimite($node->getValue()) . ' (';
+			protected function fragmentCreateSchema(INode $root) {
+				$sql = 'CREATE TABLE IF NOT EXISTS ' . $this->delimite($root->getValue()) . ' (';
 				$columnList = [];
-				foreach ($this->nodeQueryList['create-schema']->filter($node) as $node) {
+				foreach ($root->getNodeList() as $node) {
 					$column = $this->delimite($node->getName()) . ' ' . $this->type($node->getAttribute('type'));
-					if ($node->getAttribute('identifier', false)) {
+					if ($node->getAttribute('primary', false)) {
 						$column .= ' PRIMARY KEY';
 					} else if ($node->getAttribute('unique', false)) {
 						$column .= ' UNIQUE';
 					}
-					if ($node->getAttribute('required', true)) {
+					if ($node->getAttribute('required', false)) {
 						$column .= ' NOT NULL';
 					}
 					$columnList[] = $column;
 				}
 				return new NativeQuery($sql . implode(',', $columnList) . ')');
+			}
+
+			protected function fragmentInsert(INode $root) {
+				$parameterList = [];
+				$nameList = [];
+				$columnList = [];
+				foreach ($root->getAttributeList() as $k => $v) {
+					$parameterList[$parameter = sha1($k)] = $v;
+					$nameList[] = $this->delimite($k);
+					$columnList[] = ':' . $parameter;
+				}
+				$sql = 'INSERT INTO ' . $this->delimite($root->getValue()) . ' (';
+				$sql .= implode(',', $nameList) . ') VALUES (';
+				return new NativeQuery($sql . implode(', ', $columnList) . ')', $parameterList);
 			}
 		}

@@ -2,6 +2,7 @@
 	namespace Edde\Api\Schema;
 
 		use Edde\Api\Config\IConfigurable;
+		use Edde\Api\Node\INode;
 
 		interface ISchema extends IConfigurable {
 			/**
@@ -10,6 +11,20 @@
 			 * @return string
 			 */
 			public function getName(): string;
+
+			/**
+			 * return list of properties of this schema
+			 *
+			 * @return IProperty[]
+			 */
+			public function getPropertyList(): array;
+
+			/**
+			 * return list of property nodes
+			 *
+			 * @return INode[]
+			 */
+			public function getNodeList(): array;
 
 			/**
 			 * create a new property with the given name
@@ -37,4 +52,22 @@
 			 * @return IProperty
 			 */
 			public function string(string $name): IProperty;
+
+			/**
+			 * create a text type property (should be unlimited text field)
+			 *
+			 * @param string $name
+			 *
+			 * @return IProperty
+			 */
+			public function text(string $name): IProperty;
+
+			/**
+			 * create a common integer property
+			 *
+			 * @param string $name
+			 *
+			 * @return IProperty
+			 */
+			public function integer(string $name): IProperty;
 		}

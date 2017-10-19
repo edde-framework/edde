@@ -18,8 +18,25 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function getNode(): INode {
+				return $this->node;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function primary(): IProperty {
 				$this->node->setAttribute('primary', true);
+				$this->required();
+				$this->unique();
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function unique(): IProperty {
+				$this->node->setAttribute('unique', true);
 				return $this;
 			}
 
