@@ -13,6 +13,7 @@
 		use Edde\Common\Query\CreateSchemaQuery;
 		use Edde\Common\Query\InsertQuery;
 		use Edde\Common\Query\NativeQuery;
+		use Edde\Common\Query\UpdateQuery;
 		use Edde\Common\Schema\Schema;
 		use Edde\Ext\Container\ContainerFactory;
 		use Edde\Ext\Test\TestCase;
@@ -60,8 +61,25 @@
 				$this->driver->execute(new InsertQuery($this->schema, [
 					'guid'                     => '1235',
 					'property-for-this-table'  => 'string',
+					'this-one-is-not-required' => 24,
+				]));
+				$this->driver->execute(new InsertQuery($this->schema, [
+					'guid'                     => '1236',
+					'property-for-this-table'  => 'string',
 					'this-one-is-not-required' => 12,
 				]));
+			}
+
+			/**
+			 * @throws DriverQueryException
+			 * @throws IntegrityException
+			 */
+			public function testUpdateQuery() {
+				$update = new UpdateQuery($this->schema, [
+					'property-for-this-table'  => 'string-ex',
+					'this-one-is-not-required' => null,
+				]);
+				$this->driver->execute($update);
 			}
 
 			/**
