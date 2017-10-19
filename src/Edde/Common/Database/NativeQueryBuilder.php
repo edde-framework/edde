@@ -76,5 +76,26 @@
 			}
 
 			protected function fragmentSelect(INode $root) {
+				$tableList = [];
+				$selectList = [];
+				$sql = 'SELECT';
+				foreach ($root->getNodeList() as $table) {
+					switch ($table->getName()) {
+						case 'table':
+							$name = $this->delimite($table->getValue());
+							if (($alias = $table->getAttribute('alias')) !== null) {
+								$name .= ' AS ' . ($alias = $this->delimite($alias));
+							}
+							$tableList[] = $name;
+							$prefix = ($alias ? $alias . '.' : '');
+							if ($table->getAttribute('all')) {
+								$selectList[] = $prefix . '*';
+							}
+							foreach ($table->getNodeList() as $column) {
+								$selectList[] = $prefix . $this->delimite($column->getValue());
+							}
+							break;
+					}
+				}
 			}
 		}

@@ -82,6 +82,9 @@
 				return $iterator->valid() === false;
 			}
 
+			/**
+			 * @inheritdoc
+			 */
 			public function filter(INode $node) {
 				return $this->query(NodeIterator::recursive($node));
 			}

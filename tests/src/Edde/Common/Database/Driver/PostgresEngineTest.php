@@ -47,7 +47,7 @@
 			public function testSelectQuery() {
 				// @formatter:off
 				$nativeQuery = $this->driver->toNative((new SelectQuery())->
-					table('some-table-name')->
+					table('some-table-name', 'aaa')->
 						column('foo')->
 						all()->
 					table('another-table')->
