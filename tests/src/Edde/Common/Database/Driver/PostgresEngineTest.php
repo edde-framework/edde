@@ -34,6 +34,8 @@
 			 */
 			public function testCreateSchema() {
 				$schema = Schema::create('some-cool-schema');
+				$schema->primary('guid');
+				$schema->string('property-for-this-table')->required();
 				$this->driver->execute(new CreateSchemaQuery($schema));
 			}
 

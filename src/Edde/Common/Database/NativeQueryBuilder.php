@@ -31,7 +31,7 @@
 			 */
 			public function fragment(INode $node): INativeQuery {
 				if (isset($this->fragmentList[$name = $node->getName()]) === false) {
-					throw new DriverQueryException(sprintf('Unsupported fragment type [%s].', $name));
+					throw new DriverQueryException(sprintf('Unsupported fragment type [%s] in [%s].', $name, static::class));
 				}
 				return $this->fragmentList[$name]($node);
 			}

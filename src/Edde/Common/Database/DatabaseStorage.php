@@ -1,6 +1,7 @@
 <?php
 	namespace Edde\Common\Database;
 
+		use Edde\Api\Database\Inject\Driver;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\IQuery;
 		use Edde\Common\Storage\AbstractStorage;

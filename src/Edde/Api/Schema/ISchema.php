@@ -10,4 +10,22 @@
 			 * @return string
 			 */
 			public function getName(): string;
+
+			/**
+			 * create a primary propery on the schema
+			 *
+			 * @param string $name
+			 *
+			 * @return IProperty
+			 */
+			public function primary(string $name): IProperty;
+
+			/**
+			 * create a string type property with the given name
+			 *
+			 * @param string $name
+			 *
+			 * @return IProperty
+			 */
+			public function string(string $name): IProperty;
 		}
