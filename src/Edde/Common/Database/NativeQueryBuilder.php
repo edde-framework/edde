@@ -12,7 +12,7 @@
 		use ReflectionMethod;
 
 		/**
-		 * Helper trait to share common SQL generation code between engines.
+		 * Helper trait to share common SQL generation code between driverss.
 		 */
 		trait NativeQueryBuilder {
 			use StringUtils;

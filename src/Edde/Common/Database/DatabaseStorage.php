@@ -6,7 +6,7 @@
 		use Edde\Common\Storage\AbstractStorage;
 
 		class DatabaseStorage extends AbstractStorage {
-			use Engine;
+			use Driver;
 
 			/**
 			 * @inheritdoc

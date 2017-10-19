@@ -1,6 +1,7 @@
 <?php
-	namespace Edde\Common\Database\Engine;
+	namespace Edde\Common\Database\Driver;
 
+		use Edde\Api\Database\Exception\DriverException;
 		use Edde\Api\Database\Exception\DriverQueryException;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Common\Database\AbstractPdoDriver;
@@ -17,5 +18,14 @@
 				} catch (\PDOException $exception) {
 					throw new DriverQueryException($exception->getMessage(), 0, $exception);
 				}
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function type(string $type): string {
+				switch ($type) {
+				}
+				throw new DriverException(sprintf('Unknown type [%s] for driver [%s]', $type, static::class));
 			}
 		}
