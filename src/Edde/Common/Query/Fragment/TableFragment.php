@@ -1,11 +1,25 @@
 <?php
 	namespace Edde\Common\Query\Fragment;
 
+		use Edde\Api\Node\NodeException;
+		use Edde\Api\Query\IQuery;
 		use Edde\Common\Node\Node;
 
 		class TableFragment extends AbstractFragment {
 			public function column(string $name): TableFragment {
-				$this->node->addNode(new Node('column', $name));
+				$this->node->addNode(new Node('column', $name, ['type' => 'column']));
+				return $this;
+			}
+
+			/**
+			 * @param IQuery $query
+			 *
+			 * @return TableFragment
+			 * @throws NodeException
+			 */
+			public function select(IQuery $query): TableFragment {
+				$this->node->addNode($node = new Node('column', null, ['type' => $query]));
+				$node->addNode($query->getQuery());
 				return $this;
 			}
 
