@@ -17,8 +17,11 @@
 			 * @return TableFragment
 			 * @throws NodeException
 			 */
-			public function select(IQuery $query): TableFragment {
-				$this->node->addNode($node = new Node('column', null, ['type' => $query]));
+			public function select(IQuery $query, string $alias): TableFragment {
+				$this->node->addNode($node = new Node('column', null, [
+					'type'  => $query,
+					'alias' => $alias,
+				]));
 				$node->addNode($query->getQuery());
 				return $this;
 			}
