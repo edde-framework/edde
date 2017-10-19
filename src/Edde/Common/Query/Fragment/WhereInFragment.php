@@ -6,8 +6,9 @@
 
 		class WhereInFragment extends AbstractFragment {
 			public function values(array $values): WhereRelationFragment {
+				$this->node->setAttribute('type', 'parameter');
 				/** @noinspection PhpUnhandledExceptionInspection */
-				$this->node->setAttribute('values', $id = (sha1(random_bytes(64) . microtime(true))));
+				$this->node->setAttribute('parameter', $id = (sha1(random_bytes(64) . microtime(true))));
 				$this->root->addNode(new Node('parameter', null, [
 					'name'  => $id,
 					'value' => $values,
@@ -16,5 +17,8 @@
 			}
 
 			public function select(IQuery $query): WhereRelationFragment {
+				$this->node->setAttribute('type', 'query');
+				$this->node->addNode($query->getQuery());
+				return new WhereRelationFragment($this->root, $this->node);
 			}
 		}
