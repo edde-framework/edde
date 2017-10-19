@@ -2,6 +2,7 @@
 	namespace Edde\Api\Database;
 
 		use Edde\Api\Config\IConfigurable;
+		use Edde\Api\Database\Exception\EngineQueryException;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\IQuery;
 
@@ -15,6 +16,8 @@
 			 * @param IQuery $query
 			 *
 			 * @return mixed
+			 *
+			 * @throws EngineQueryException
 			 */
 			public function execute(IQuery $query);
 
@@ -24,6 +27,8 @@
 			 * @param INativeQuery $nativeQuery
 			 *
 			 * @return mixed
+			 *
+			 * @throws EngineQueryException
 			 */
 			public function native(INativeQuery $nativeQuery);
 		}

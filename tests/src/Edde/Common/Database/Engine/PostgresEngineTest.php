@@ -3,6 +3,7 @@
 
 		use Edde\Api\Container\Exception\ContainerException;
 		use Edde\Api\Container\Exception\FactoryException;
+		use Edde\Api\Database\Exception\EngineQueryException;
 		use Edde\Api\Database\IEngine;
 		use Edde\Api\Database\Inject\Engine;
 		use Edde\Common\Container\Factory\ClassFactory;
@@ -13,9 +14,15 @@
 		class PostgresEngineTest extends TestCase {
 			use Engine;
 
+			/**
+			 * @throws EngineQueryException
+			 */
 			public function testNativeQuery() {
-				$this->engine->native(new NativeQuery('DROP SCHEMA "public" CASCADE'));
-				$this->engine->native(new NativeQuery('CREATE SCHEMA "public" AUTHORIZATION "edde"'));
+				/**
+				 * cleanup public schema by dropping
+				 */
+				$this->engine->native(new NativeQuery('DROP SCHEMA IF EXISTS "test" CASCADE'));
+				$this->engine->native(new NativeQuery('CREATE SCHEMA "test" AUTHORIZATION "edde"'));
 			}
 
 			public function testCreateSchema() {
