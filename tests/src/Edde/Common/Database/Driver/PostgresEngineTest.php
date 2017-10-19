@@ -63,10 +63,13 @@
 						column('bar')->
 					where()->
 						eq('foo')->to('bound parameter!')->and()->
-						eq('foo')->toColumn('bar')->
-							where()->gt('foo')->than(4)->
+						eq('foo')->toColumn('bar')->or()->
 						neq('franta')->to('betka')->or()->
-						gt('blah')->then('foo')->and()->
+							group()->
+								gt('a')->than(5)->and()->
+								neq('foo')->to('bar')->
+							end()->
+						gt('blah')->than('foo')->and()->
 						in('enum-column')->select(
 							(new SelectQuery())->table('moo')->all()->query()
 						);

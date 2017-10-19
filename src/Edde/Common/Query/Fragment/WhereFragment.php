@@ -23,6 +23,6 @@
 			public function in(string $name): WhereInFragment {
 			}
 
-			public function where(): WhereFragment {
+			public function group(): WhereFragment {
 			}
 		}

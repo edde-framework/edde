@@ -8,6 +8,6 @@
 			public function or (): WhereFragment {
 			}
 
-			public function where(): WhereFragment {
+			public function end(): WhereFragment {
 			}
 		}
