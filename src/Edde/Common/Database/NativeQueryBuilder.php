@@ -82,43 +82,28 @@
 			 * @throws DriverQueryException
 			 */
 			protected function fragmentSelect(INode $root) {
-				$tableList = null;
-				$selectList = [];
-				$whereList = null;
+				$sql = [];
 				$parameterList = [];
-				$sql[] = 'SELECT';
 				foreach ($root->getNodeList() as $node) {
-					switch ($node->getName()) {
-						case 'table':
-							$name = $this->delimite($node->getValue());
-							if (($alias = $node->getAttribute('alias')) !== null) {
-								$name .= ' AS ' . ($alias = $this->delimite($alias));
-							}
-							$tableList[] = $name;
-							if ($node->getAttribute('all')) {
-								$selectList[] = ($alias ? $alias . '.' : '') . '*';
-							}
-							foreach ($node->getNodeList() as $column) {
-								$query = $this->fragment($column);
-								$selectList[] = $query->getQuery();
-								$parameterList = array_merge($parameterList, $query->getParameterList());
-							}
-							break;
-						case 'parameter':
-							$parameterList[$node->getAttribute('name')] = $node->getValue();
-							break;
+					$query = $this->fragment($node);
+					$sql[] = $query->getQuery();
+					$parameterList = array_merge($parameterList, $query->getParameterList());
+				}
+				$sql = implode('', $sql);
+				return new NativeQuery($sql, $parameterList);
+			}
+
+			protected function fragmentTableList(INode $root): INativeQuery {
+			}
+
+			protected function fragmentParameterList(INode $root): INativeQuery {
+				$parameterList = [];
+				if (($node = $root->getNode('parameter-list'))->isLeaf() === false) {
+					foreach ($node->getNodeList() as $node) {
+						$parameterList[$node->getAttribute('name')] = $node->getValue();
 					}
 				}
-				$sql[] = implode(', ', $selectList);
-				if ($tableList) {
-					$sql[] = 'FROM';
-					$sql[] = implode(', ', $tableList);
-				}
-				if ($whereList) {
-					$sql[] = 'WHERE';
-					$sql[] = implode('', $whereList);
-				}
-				return new NativeQuery(sprintf($root->isRoot() ? '%s' : ('(%s)' . (($alias = $root->getAttribute('alias')) ? ' AS ' . $this->delimite($alias) : '')), implode(' ', $sql)), $parameterList);
+				return new NativeQuery('', $parameterList);
 			}
 
 			/**
