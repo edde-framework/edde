@@ -35,7 +35,8 @@
 			}
 
 			public function group(): WhereFragment {
-				$this->node->addNode($node = new Node('where', null, ['group' => true]));
+				$this->node->setAttribute('type', 'group');
+				$this->node->addNode($node = new Node('where'));
 				return new WhereFragment($this->root, $node);
 			}
 
