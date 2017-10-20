@@ -141,4 +141,14 @@
 			 * @return INode[]
 			 */
 			public function getNodeList() : array;
+
+			/**
+			 * stranger between the others: get the node with the given name; if node does not
+			 * exists, new one is created
+			 *
+			 * @param string $name
+			 *
+			 * @return INode
+			 */
+			public function getNode(string $name): INode;
 		}

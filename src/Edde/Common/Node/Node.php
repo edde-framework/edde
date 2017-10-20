@@ -28,6 +28,10 @@
 			 * @var IAttributeList
 			 */
 			protected $metaList;
+			/**
+			 * @var INode[]
+			 */
+			protected $nameList = [];
 
 			/**
 			 * FORTRAN is not a language. It's a way of turning a multi-million dollar mainframe into a $50 programmable scientific calculator.
@@ -47,14 +51,14 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getAttributeList() : IAttributeList {
+			public function getAttributeList(): IAttributeList {
 				return $this->attributeList;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function hasAttribute(string $name) : bool {
+			public function hasAttribute(string $name): bool {
 				return $this->attributeList->has($name);
 			}
 
@@ -68,7 +72,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function setAttribute(string $name, $value) : INode {
+			public function setAttribute(string $name, $value): INode {
 				$this->attributeList->set($name, $value);
 				return $this;
 			}
@@ -76,7 +80,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function putAttributeList(array $attributeList) : INode {
+			public function putAttributeList(array $attributeList): INode {
 				$this->attributeList->put($attributeList);
 				return $this;
 			}
@@ -84,7 +88,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function mergeAttributeList(array $attributeList) : INode {
+			public function mergeAttributeList(array $attributeList): INode {
 				$this->attributeList->merge($attributeList);
 				return $this;
 			}
@@ -92,7 +96,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getMetaList() : IAttributeList {
+			public function getMetaList(): IAttributeList {
 				return $this->metaList;
 			}
 
@@ -106,7 +110,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function setMeta(string $name, $value) : INode {
+			public function setMeta(string $name, $value): INode {
 				$this->metaList->set($name, $value);
 				return $this;
 			}
@@ -114,7 +118,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function putMetaList(array $metaList) : INode {
+			public function putMetaList(array $metaList): INode {
 				$this->metaList->put($metaList);
 				return $this;
 			}
@@ -122,7 +126,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function mergeMetaList(array $metaList) : INode {
+			public function mergeMetaList(array $metaList): INode {
 				$this->metaList->merge($metaList);
 				return $this;
 			}
@@ -185,6 +189,23 @@
 			 */
 			public function accept(IAbstractNode $abstractNode) {
 				return $abstractNode instanceof INode;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getNode(string $name): INode {
+				if (isset($this->nameList[$name])) {
+					return $this->nameList[$name];
+				}
+				/** @var $node INode */
+				foreach ($this->nodeList as $node) {
+					if ($node->getName() === $name) {
+						return $this->nameList[$name] = $node;
+					}
+				}
+				$this->addNode($this->nameList[$name] = $node = new Node($name));
+				return $node;
 			}
 
 			public function __clone() {
