@@ -116,10 +116,10 @@
 				$parameterList = [];
 				foreach ($root->getNodeList() as $node) {
 					$query = $this->fragment($node);
-					$columnList[] = "\t" . $query->getQuery() . "\n";
+					$columnList[] = "\t" . $query->getQuery();
 					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
-				return new NativeQuery(implode('', $columnList), $parameterList);
+				return new NativeQuery(implode(",\n", $columnList) . "\n", $parameterList);
 			}
 
 			/**
@@ -154,10 +154,10 @@
 				$parameterList = [];
 				foreach ($root->getNodeList() as $node) {
 					$query = $this->fragment($node);
-					$tableList[] = "\t" . $query->getQuery() . "\n";
+					$tableList[] = "\t" . $query->getQuery();
 					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
-				return new NativeQuery(implode(',', $tableList), $parameterList);
+				return new NativeQuery(implode(",\n", $tableList) . "\n", $parameterList);
 			}
 
 			protected function fragmentTable(INode $root): INativeQuery {
@@ -177,11 +177,15 @@
 				$parameterList = [];
 				foreach ($root->getNodeList() as $node) {
 					$query = $this->fragment($node);
-					$whereList[] = "\t" . $query->getQuery();
-					$whereList[] = strtoupper($node->getAttribute('relation')) . "\n";
+					$where = null;
+					if ($relationTo = $node->getAttribute('relation-to')) {
+						$where .= ' ' . strtoupper($relationTo);
+					}
+					$where .= $query->getQuery();
+					$whereList[] = $where . ' ' . strtoupper($node->getAttribute('relation'));
 					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
-				return new NativeQuery(implode('', $whereList), $parameterList);
+				return new NativeQuery("\t" . implode("\n\t", $whereList), $parameterList);
 			}
 
 			/**
@@ -214,11 +218,11 @@
 				}
 				switch ($type) {
 					case 'group':
-						return new NativeQuery("(\n" . ($query = $this->fragmentWhereList($root))->getQuery() . ')', $query->getParameterList());
+						return new NativeQuery("(\n" . ($query = $this->fragmentWhereList($root))->getQuery() . "\t)", $query->getParameterList());
 					case 'in':
 						switch ($target = $root->getAttribute('target')) {
 							case 'query':
-								return new NativeQuery($this->delimite($root->getAttribute('where')) . ' IN (' . ($query = $this->fragment($root->getNode('select')))->getQuery() . ')', $query->getParameterList());
+								return new NativeQuery($this->delimite($root->getAttribute('where')) . " IN (\n" . ($query = $this->fragment($root->getNode('select')))->getQuery() . ')', $query->getParameterList());
 						}
 						throw new DriverQueryException(sprintf('Unknown where IN target type [%s].', $target));
 				}
