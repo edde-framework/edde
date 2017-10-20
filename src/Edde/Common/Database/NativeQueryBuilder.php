@@ -94,20 +94,13 @@
 					$sql[] = $query->getQuery();
 					array_merge($parameterList, $query->getParameterList());
 				}
-//				static $nodeList = [
-//					'column-list',
-//					'table-list',
-//					'where-list',
-//					'parameter-list',
-//				];
-//				foreach ($nodeList as $name) {
-//					if ($root->hasNode($name) === false) {
-//						continue;
-//					}
-//					$query = $this->fragment($root->getNode($name));
-//					$sql[] = $query->getQuery();
-//					$parameterList = array_merge($parameterList, $query->getParameterList());
-//				}
+				if ($root->hasNode('where-list')) {
+					$sql[] = "WHERE\n";
+					$query = $this->fragment($root->getNode('where-list'));
+					$sql[] = $query->getQuery();
+					array_merge($parameterList, $query->getParameterList());
+				}
+				array_merge($parameterList, ($this->fragment($root->getNode('parameter-list')))->getParameterList());
 				$sql = implode('', $sql);
 				return new NativeQuery($sql, $parameterList);
 			}
@@ -173,17 +166,25 @@
 				return new NativeQuery($table);
 			}
 
-			protected function fragmentParameterList(INode $root): INativeQuery {
+			/**
+			 * @param INode $root
+			 *
+			 * @return INativeQuery
+			 * @throws DriverQueryException
+			 */
+			protected function fragmentWhereList(INode $root): INativeQuery {
+				$whereList = [];
 				$parameterList = [];
-				if (($node = $root->getNode('parameter-list'))->isLeaf() === false) {
-					foreach ($node->getNodeList() as $node) {
-						$parameterList[$node->getAttribute('name')] = $node->getValue();
-					}
+				foreach ($root->getNodeList() as $node) {
+					$query = $this->fragment($node);
+					$whereList[] = "\t" . $query->getQuery();
+					$whereList[] = strtoupper($node->getAttribute('relation')) . "\n";
+					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
-				return new NativeQuery('', $parameterList);
+				return new NativeQuery(implode('', $whereList), $parameterList);
 			}
 
-			protected function formatWhereExpression(INode $root): INativeQuery {
+			protected function fragmentWhere(INode $root): INativeQuery {
 				$where = null;
 				static $expressions = [
 					'eq'  => '=',
@@ -205,5 +206,15 @@
 					}
 					return new NativeQuery($where);
 				}
+			}
+
+			protected function fragmentParameterList(INode $root): INativeQuery {
+				$parameterList = [];
+				if (($node = $root->getNode('parameter-list'))->isLeaf() === false) {
+					foreach ($node->getNodeList() as $node) {
+						$parameterList[$node->getAttribute('name')] = $node->getValue();
+					}
+				}
+				return new NativeQuery('', $parameterList);
 			}
 		}
