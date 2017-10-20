@@ -218,10 +218,7 @@
 					case 'in':
 						switch ($target = $root->getAttribute('target')) {
 							case 'query':
-								$query = $this->fragment($root->getNode('select'));
-								$where = $this->delimite($root->getAttribute('where'));
-								$where .= ' IN (' . $query->getQuery() . ')';
-								return new NativeQuery($where, $query->getParameterList());
+								return new NativeQuery($this->delimite($root->getAttribute('where')) . ' IN (' . ($query = $this->fragment($root->getNode('select')))->getQuery() . ')', $query->getParameterList());
 						}
 						throw new DriverQueryException(sprintf('Unknown where IN target type [%s].', $target));
 				}
