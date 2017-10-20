@@ -16,13 +16,16 @@
 				$this->node->setAttribute('relation', $relation);
 				$root = $this->root;
 				if ($this->node->getAttribute('group')) {
-					$root = $this->node->getParent();
+					/**
+					 * first parent should be where-list, second where itself
+					 */
+					$root = $this->node->getParent()->getParent();
 				}
 				$root->getNode('where-list')->addNode($node = new Node('where'));
 				return new WhereFragment($this->root, $node);
 			}
 
 			public function end(): WhereRelationFragment {
-				return new WhereRelationFragment($this->root, $this->node->getParent());
+				return new WhereRelationFragment($this->root, $this->node->getParent()->getParent());
 			}
 		}
