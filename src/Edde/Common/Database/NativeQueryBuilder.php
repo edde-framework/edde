@@ -75,6 +75,12 @@
 				return new NativeQuery($sql . implode(', ', $columnList) . ')', $parameterList);
 			}
 
+			/**
+			 * @param INode $root
+			 *
+			 * @return NativeQuery
+			 * @throws DriverQueryException
+			 */
 			protected function fragmentSelect(INode $root) {
 				$tableList = null;
 				$selectList = [];
@@ -104,7 +110,7 @@
 							if ($whereList && ($relationTo = $node->getAttribute('relation-to'))) {
 								$whereList[] = strtoupper($relationTo);
 							}
-							$whereList[] = ($query = $this->formatWhereExpression($node))->getQuery() . ' ';
+							$whereList[] = ($query = $this->fragmentWhere($node))->getQuery() . ' ';
 							$parameterList = array_merge($parameterList, $query->getParameterList());
 							$whereList[] = strtoupper($node->getAttribute('relation')) . "\n";
 							break;
@@ -116,28 +122,50 @@
 					$sql[] = implode(', ', $tableList);
 				}
 				if ($whereList) {
-					array_pop($whereList);
 					$sql[] = 'WHERE';
 					$sql[] = implode('', $whereList);
 				}
-				return new NativeQuery(implode("\n", $sql), $parameterList);
+				return new NativeQuery(sprintf($root->isRoot() ? '%s' : ('(%s)' . (($alias = $root->getAttribute('alias')) ? ' AS ' . $this->delimite($alias) : '')), implode(' ', $sql)), $parameterList);
+			}
+
+			/**
+			 * @param INode $root
+			 *
+			 * @return INativeQuery
+			 * @throws DriverQueryException
+			 */
+			protected function fragmentWhere(INode $root): INativeQuery {
+				$whereList = [];
+				$parameterList = [];
+				foreach ($root->getNodeList() as $node) {
+					$whereList[] = ($query = $this->formatWhereExpression($node))->getQuery();
+					$parameterList = array_merge($parameterList, $query->getParameterList());
+					$whereList[] = strtoupper($node->getAttribute('relation')) . "\n";
+				}
+				return new NativeQuery("(\n" . implode('', $whereList) . ')', $parameterList);
 			}
 
 			protected function formatWhereExpression(INode $root): INativeQuery {
 				$where = null;
-				switch ($root->getAttribute('type')) {
-					case 'eq':
-						$where = $this->delimite($root->getAttribute('where')) . ' = ';
-						switch ($root->getAttribute('target', 'column')) {
-							case 'column':
-								$where .= $this->delimite($root->getAttribute('column'));
-								break;
-							case 'parameter':
-								$where .= ':' . $root->getAttribute('parameter');
-								break;
-						}
-						break;
+				static $expressions = [
+					'eq'  => '=',
+					'neq' => '!=',
+					'gt'  => '>',
+					'gte' => '>=',
+					'lt'  => '<',
+					'lte' => '<=',
+				];
+				if (isset($expressions[$type = $root->getAttribute('type')])) {
+					$where = $this->delimite($root->getAttribute('where')) . ' ' . $expressions[$type] . ' ';
+					switch ($root->getAttribute('target', 'column')) {
+						case 'column':
+							$where .= $this->delimite($root->getAttribute('column'));
+							break;
+						case 'parameter':
+							$where .= ':' . $root->getAttribute('parameter');
+							break;
+					}
+					return new NativeQuery($where);
 				}
-				return new NativeQuery($where);
 			}
 		}

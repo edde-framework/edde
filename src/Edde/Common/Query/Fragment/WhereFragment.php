@@ -29,8 +29,9 @@
 			}
 
 			public function in(string $name): WhereInFragment {
-				$this->node->addNode($node = new Node('in', $name));
-				return new WhereInFragment($this->root, $node);
+				$this->node->setAttribute('type', 'in');
+				$this->node->setAttribute('where', $name);
+				return new WhereInFragment($this->root, $this->node);
 			}
 
 			public function group(): WhereFragment {
