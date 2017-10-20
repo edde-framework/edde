@@ -38,6 +38,19 @@
 				return new WhereFragment($this->root, $node);
 			}
 
+			public function and (): WhereFragment {
+				return $this->createRelation(__FUNCTION__);
+			}
+
+			public function or (): WhereFragment {
+				return $this->createRelation(__FUNCTION__);
+			}
+
+			protected function createRelation(string $relation): WhereFragment {
+				$this->node->setAttribute('relation-to', $relation);
+				return new WhereFragment($this->root, $this->node);
+			}
+
 			protected function createToFragment(string $type, string $name): WhereToFragment {
 				$this->node->setAttribute('type', $type);
 				$this->node->setAttribute('where', $name);

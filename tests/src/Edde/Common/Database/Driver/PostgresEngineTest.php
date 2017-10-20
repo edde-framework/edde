@@ -53,8 +53,8 @@
 							(new SelectQuery())->table('moo')->all()->query()
 						)->and()->
 						eq('a')->to('b');
-				$query->where()->
-					eq('external-where')->to(42);
+				$query->where()->or()->
+					eq('answer-to-life')->to(42);
 				$nativeQuery = $this->driver->toNative($query);
 				// @formatter:on
 			}

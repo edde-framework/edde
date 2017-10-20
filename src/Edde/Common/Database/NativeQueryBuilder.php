@@ -78,7 +78,7 @@
 			protected function fragmentSelect(INode $root) {
 				$tableList = null;
 				$selectList = [];
-				$whereList = [];
+				$whereList = null;
 				$parameterList = [];
 				$sql[] = 'SELECT';
 				foreach ($root->getNodeList() as $node) {
@@ -101,9 +101,12 @@
 							$parameterList[$node->getAttribute('name')] = $node->getValue();
 							break;
 						case 'where':
-							$whereList[] = ($query = $this->formatWhere($node))->getQuery();
+							if ($whereList && ($relationTo = $node->getAttribute('relation-to'))) {
+								$whereList[] = strtoupper($relationTo);
+							}
+							$whereList[] = ($query = $this->formatWhereExpression($node))->getQuery() . ' ';
 							$parameterList = array_merge($parameterList, $query->getParameterList());
-							$whereList[] = strtoupper($node->getAttribute('relation'));
+							$whereList[] = strtoupper($node->getAttribute('relation')) . "\n";
 							break;
 					}
 				}
@@ -112,19 +115,29 @@
 					$sql[] = 'FROM';
 					$sql[] = implode(', ', $tableList);
 				}
+				if ($whereList) {
+					array_pop($whereList);
+					$sql[] = 'WHERE';
+					$sql[] = implode('', $whereList);
+				}
 				return new NativeQuery(implode("\n", $sql), $parameterList);
 			}
 
-			protected function formatWhere(INode $root): INativeQuery {
+			protected function formatWhereExpression(INode $root): INativeQuery {
+				$where = null;
 				switch ($root->getAttribute('type')) {
 					case 'eq':
+						$where = $this->delimite($root->getAttribute('where')) . ' = ';
 						switch ($root->getAttribute('target', 'column')) {
 							case 'column':
+								$where .= $this->delimite($root->getAttribute('column'));
 								break;
 							case 'parameter':
+								$where .= ':' . $root->getAttribute('parameter');
 								break;
 						}
 						break;
 				}
+				return new NativeQuery($where);
 			}
 		}
