@@ -14,13 +14,13 @@
 
 			public function table(string $name, string $alias = null): TableFragment {
 				$this->init();
-				$this->node->addNode($node = new Node('table', $name, $alias ? ['alias' => $alias] : []));
+				$this->node->getNode('table-list')->addNode($node = new Node('table', $name, $alias ? ['alias' => $alias] : []));
 				return new TableFragment($this->node, $node);
 			}
 
 			public function where(): WhereFragment {
 				$this->init();
-				$this->node->addNode($node = new Node('where'));
+				$this->node->getNode('where-list')->addNode($node = new Node('where'));
 				return new WhereFragment($this->node, $node);
 			}
 

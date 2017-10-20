@@ -18,7 +18,7 @@
 				if ($this->node->getAttribute('group')) {
 					$root = $this->node->getParent();
 				}
-				$root->addNode($node = new Node('where'));
+				$root->getNode('where-list')->addNode($node = new Node('where'));
 				return new WhereFragment($this->root, $node);
 			}
 

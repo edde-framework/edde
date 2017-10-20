@@ -7,7 +7,7 @@
 
 		class TableFragment extends AbstractFragment {
 			public function column(string $name): TableFragment {
-				$this->node->addNode(new Node('column', $name, ['type' => 'column']));
+				$this->node->getNode('column-list')->addNode(new Node('column', $name, ['type' => 'column']));
 				return $this;
 			}
 
@@ -19,7 +19,7 @@
 			 * @throws NodeException
 			 */
 			public function select(IQuery $query, string $alias): TableFragment {
-				$this->node->addNode($node = new Node('column', null, [
+				$this->node->getNode('column-list')->addNode($node = new Node('column', null, [
 					'type'  => 'query',
 					'alias' => $alias,
 				]));
@@ -33,12 +33,12 @@
 			}
 
 			public function table(string $name, string $alias = null): TableFragment {
-				$this->root->addNode($node = new Node('table', $name, $alias ? ['alias' => $alias] : []));
+				$this->root->getNode('table-list')->addNode($node = new Node('table', $name, $alias ? ['alias' => $alias] : []));
 				return new TableFragment($this->root, $node);
 			}
 
 			public function where(): WhereFragment {
-				$this->root->addNode($node = new Node('where'));
+				$this->root->getNode('where-list')->addNode($node = new Node('where'));
 				return new WhereFragment($this->root, $node);
 			}
 		}

@@ -8,7 +8,7 @@
 				$this->node->setAttribute('target', 'parameter');
 				/** @noinspection PhpUnhandledExceptionInspection */
 				$this->node->setAttribute('parameter', $id = (sha1(random_bytes(64) . microtime(true))));
-				$this->root->addNode(new Node('parameter', $value, [
+				$this->root->getNode('parameter-list')->addNode(new Node('parameter', $value, [
 					'name' => $id,
 				]));
 				return new WhereRelationFragment($this->root, $this->node);
