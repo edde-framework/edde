@@ -95,24 +95,17 @@
 								$name .= ' AS ' . ($alias = $this->delimite($alias));
 							}
 							$tableList[] = $name;
-							$prefix = ($alias ? $alias . '.' : '');
 							if ($node->getAttribute('all')) {
-								$selectList[] = $prefix . '*';
+								$selectList[] = ($alias ? $alias . '.' : '') . '*';
 							}
 							foreach ($node->getNodeList() as $column) {
-								$selectList[] = $prefix . $this->delimite($column->getValue());
+								$query = $this->fragment($column);
+								$selectList[] = $query->getQuery();
+								$parameterList = array_merge($parameterList, $query->getParameterList());
 							}
 							break;
 						case 'parameter':
 							$parameterList[$node->getAttribute('name')] = $node->getValue();
-							break;
-						case 'where':
-							if ($whereList && ($relationTo = $node->getAttribute('relation-to'))) {
-								$whereList[] = strtoupper($relationTo);
-							}
-							$whereList[] = ($query = $this->fragmentWhere($node))->getQuery() . ' ';
-							$parameterList = array_merge($parameterList, $query->getParameterList());
-							$whereList[] = strtoupper($node->getAttribute('relation')) . "\n";
 							break;
 					}
 				}
@@ -134,15 +127,16 @@
 			 * @return INativeQuery
 			 * @throws DriverQueryException
 			 */
-			protected function fragmentWhere(INode $root): INativeQuery {
-				$whereList = [];
-				$parameterList = [];
-				foreach ($root->getNodeList() as $node) {
-					$whereList[] = ($query = $this->formatWhereExpression($node))->getQuery();
-					$parameterList = array_merge($parameterList, $query->getParameterList());
-					$whereList[] = strtoupper($node->getAttribute('relation')) . "\n";
+			protected function fragmentColumn(INode $root): INativeQuery {
+				switch ($type = $root->getAttribute('type')) {
+					case 'column':
+						$table = $root->getParent();
+						$column = ($alias = $table->getAttribute('alias')) ? $this->delimite($alias) . '.' : '';
+						$column .= $this->delimite($root->getValue());
+						$column .= ($alias = $root->getAttribute('alias')) ? ' AS ' . $this->delimite($alias) : '';
+						return new NativeQuery($column);
 				}
-				return new NativeQuery("(\n" . implode('', $whereList) . ')', $parameterList);
+				throw new DriverQueryException(sprintf('Unknown column type [%s].', $type));
 			}
 
 			protected function formatWhereExpression(INode $root): INativeQuery {

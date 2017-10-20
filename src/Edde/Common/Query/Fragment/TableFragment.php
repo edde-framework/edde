@@ -13,13 +13,14 @@
 
 			/**
 			 * @param IQuery $query
+			 * @param string $alias
 			 *
 			 * @return TableFragment
 			 * @throws NodeException
 			 */
 			public function select(IQuery $query, string $alias): TableFragment {
 				$this->node->addNode($node = new Node('column', null, [
-					'type'  => $query,
+					'type'  => 'query',
 					'alias' => $alias,
 				]));
 				$node->addNode($query->getQuery());
