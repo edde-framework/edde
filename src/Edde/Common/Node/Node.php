@@ -194,6 +194,22 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function hasNode(string $name): bool {
+				if (isset($this->nameList[$name])) {
+					return true;
+				}
+				/** @var $node INode */
+				foreach ($this->nodeList as $node) {
+					if ($node->getName() === $name) {
+						return (bool)($this->nameList[$name] = $node);
+					}
+				}
+				return false;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function getNode(string $name): INode {
 				if (isset($this->nameList[$name])) {
 					return $this->nameList[$name];

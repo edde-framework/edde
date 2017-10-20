@@ -7,7 +7,10 @@
 
 		class TableFragment extends AbstractFragment {
 			public function column(string $name): TableFragment {
-				$this->node->getNode('column-list')->addNode(new Node('column', $name, ['type' => 'column']));
+				$this->root->getNode('column-list')->addNode($node = new Node('column', $name, ['type' => 'column']));
+				if (($alis = $this->node->getAttribute('alias')) !== null) {
+					$node->setAttribute('prefix', $alis);
+				}
 				return $this;
 			}
 
@@ -19,7 +22,7 @@
 			 * @throws NodeException
 			 */
 			public function select(IQuery $query, string $alias): TableFragment {
-				$this->node->getNode('column-list')->addNode($node = new Node('column', null, [
+				$this->root->getNode('column-list')->addNode($node = new Node('column', null, [
 					'type'  => 'query',
 					'alias' => $alias,
 				]));
@@ -28,7 +31,8 @@
 			}
 
 			public function all(): TableFragment {
-				$this->node->setAttribute('all', true);
+				$this->root->getNode('column-list')->addNode($node = new Node('column', null, ['type' => 'asterisk']));
+				$node->setAttribute('prefix', $this->node->getAttribute('alias', $this->node->getValue()));
 				return $this;
 			}
 

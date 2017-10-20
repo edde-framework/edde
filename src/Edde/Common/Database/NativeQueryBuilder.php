@@ -84,13 +84,64 @@
 			protected function fragmentSelect(INode $root) {
 				$sql = [];
 				$parameterList = [];
-				foreach ($root->getNodeList() as $node) {
-					$query = $this->fragment($node);
-					$sql[] = $query->getQuery();
-					$parameterList = array_merge($parameterList, $query->getParameterList());
-				}
+				$sql[] = "SELECT\n";
+				$query = $this->fragment($root->getNode('column-list'));
+				$sql[] = $query->getQuery();
+				array_merge($parameterList, $query->getParameterList());
+//				static $nodeList = [
+//					'column-list',
+//					'table-list',
+//					'where-list',
+//					'parameter-list',
+//				];
+//				foreach ($nodeList as $name) {
+//					if ($root->hasNode($name) === false) {
+//						continue;
+//					}
+//					$query = $this->fragment($root->getNode($name));
+//					$sql[] = $query->getQuery();
+//					$parameterList = array_merge($parameterList, $query->getParameterList());
+//				}
 				$sql = implode('', $sql);
 				return new NativeQuery($sql, $parameterList);
+			}
+
+			/**
+			 * @param INode $root
+			 *
+			 * @return INativeQuery
+			 * @throws DriverQueryException
+			 */
+			protected function fragmentColumnList(INode $root): INativeQuery {
+				$columnList = [];
+				$parameterList = [];
+				foreach ($root->getNodeList() as $node) {
+					$query = $this->fragment($node);
+					$columnList[] = "\t" . $query->getQuery() . "\n";
+					$parameterList = array_merge($parameterList, $query->getParameterList());
+				}
+				return new NativeQuery(implode('', $columnList), $parameterList);
+			}
+
+			/**
+			 * @param INode $root
+			 *
+			 * @return INativeQuery
+			 * @throws DriverQueryException
+			 */
+			protected function fragmentColumn(INode $root): INativeQuery {
+				switch ($type = $root->getAttribute('type')) {
+					case 'column':
+						$column = ($prefix = $root->getAttribute('prefix')) ? $this->delimite($prefix) . '.' : '';
+						$column .= $this->delimite($root->getValue());
+						$column .= ($alis = $root->getAttribute('alias')) ? ' AS ' . $this->delimite($alis) : '';
+						return new NativeQuery($column);
+					case 'asterisk':
+						$column = ($prefix = $root->getAttribute('prefix')) ? $this->delimite($prefix) . '.' : '';
+						$column .= '*';
+						return new NativeQuery($column);
+				}
+				throw new DriverQueryException(sprintf('Unknown column type [%s].', $type));
 			}
 
 			protected function fragmentTableList(INode $root): INativeQuery {
@@ -104,24 +155,6 @@
 					}
 				}
 				return new NativeQuery('', $parameterList);
-			}
-
-			/**
-			 * @param INode $root
-			 *
-			 * @return INativeQuery
-			 * @throws DriverQueryException
-			 */
-			protected function fragmentColumn(INode $root): INativeQuery {
-				switch ($type = $root->getAttribute('type')) {
-					case 'column':
-						$table = $root->getParent();
-						$column = ($alias = $table->getAttribute('alias')) ? $this->delimite($alias) . '.' : '';
-						$column .= $this->delimite($root->getValue());
-						$column .= ($alias = $root->getAttribute('alias')) ? ' AS ' . $this->delimite($alias) : '';
-						return new NativeQuery($column);
-				}
-				throw new DriverQueryException(sprintf('Unknown column type [%s].', $type));
 			}
 
 			protected function formatWhereExpression(INode $root): INativeQuery {

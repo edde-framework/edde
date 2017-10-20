@@ -38,7 +38,7 @@
 			 *
 			 * @return IAttributeList
 			 */
-			public function getAttributeList() : IAttributeList;
+			public function getAttributeList(): IAttributeList;
 
 			/**
 			 * is the given attribute name present?
@@ -47,7 +47,7 @@
 			 *
 			 * @return bool
 			 */
-			public function hasAttribute(string $name) : bool;
+			public function hasAttribute(string $name): bool;
 
 			/**
 			 * return attribute
@@ -67,28 +67,28 @@
 			 *
 			 * @return INode
 			 */
-			public function setAttribute(string $name, $value) : INode;
+			public function setAttribute(string $name, $value): INode;
 
 			/**
 			 * @param array $attributeList
 			 *
 			 * @return INode
 			 */
-			public function putAttributeList(array $attributeList) : INode;
+			public function putAttributeList(array $attributeList): INode;
 
 			/**
 			 * @param array $attributeList
 			 *
 			 * @return INode
 			 */
-			public function mergeAttributeList(array $attributeList) : INode;
+			public function mergeAttributeList(array $attributeList): INode;
 
 			/**
 			 * return list of meta data
 			 *
 			 * @return IAttributeList
 			 */
-			public function getMetaList() : IAttributeList;
+			public function getMetaList(): IAttributeList;
 
 			/**
 			 * get meta from node
@@ -106,21 +106,21 @@
 			 *
 			 * @return INode
 			 */
-			public function setMeta(string $name, $value) : INode;
+			public function setMeta(string $name, $value): INode;
 
 			/**
 			 * @param array $metaList
 			 *
 			 * @return INode
 			 */
-			public function putMetaList(array $metaList) : INode;
+			public function putMetaList(array $metaList): INode;
 
 			/**
 			 * @param array $metaList
 			 *
 			 * @return INode
 			 */
-			public function mergeMetaList(array $metaList) : INode;
+			public function mergeMetaList(array $metaList): INode;
 
 			/**
 			 * generate materialized path from node names
@@ -140,7 +140,16 @@
 			/**
 			 * @return INode[]
 			 */
-			public function getNodeList() : array;
+			public function getNodeList(): array;
+
+			/**
+			 * is node with the given name in current node list?
+			 *
+			 * @param string $name
+			 *
+			 * @return bool
+			 */
+			public function hasNode(string $name): bool;
 
 			/**
 			 * stranger between the others: get the node with the given name; if node does not
