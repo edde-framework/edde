@@ -88,6 +88,12 @@
 				$query = $this->fragment($root->getNode('column-list'));
 				$sql[] = $query->getQuery();
 				array_merge($parameterList, $query->getParameterList());
+				if ($root->hasNode('table-list')) {
+					$sql[] = "FROM\n";
+					$query = $this->fragment($root->getNode('table-list'));
+					$sql[] = $query->getQuery();
+					array_merge($parameterList, $query->getParameterList());
+				}
 //				static $nodeList = [
 //					'column-list',
 //					'table-list',
@@ -144,7 +150,27 @@
 				throw new DriverQueryException(sprintf('Unknown column type [%s].', $type));
 			}
 
+			/**
+			 * @param INode $root
+			 *
+			 * @return INativeQuery
+			 * @throws DriverQueryException
+			 */
 			protected function fragmentTableList(INode $root): INativeQuery {
+				$tableList = [];
+				$parameterList = [];
+				foreach ($root->getNodeList() as $node) {
+					$query = $this->fragment($node);
+					$tableList[] = "\t" . $query->getQuery() . "\n";
+					$parameterList = array_merge($parameterList, $query->getParameterList());
+				}
+				return new NativeQuery(implode(',', $tableList), $parameterList);
+			}
+
+			protected function fragmentTable(INode $root): INativeQuery {
+				$table = $this->delimite($root->getValue());
+				$table .= (($alias = $root->getAttribute('alias')) ? ' ' . $this->delimite($alias) : '');
+				return new NativeQuery($table);
 			}
 
 			protected function fragmentParameterList(INode $root): INativeQuery {
