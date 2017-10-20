@@ -27,8 +27,8 @@
 
 			public function where(): WhereFragment {
 				$this->init();
-				$this->node->addNode($node = new Node('where'));
-				return new WhereFragment($node);
+				$this->node->getNode('where-list')->addNode($node = new Node('where'));
+				return new WhereFragment($this->node, $node);
 			}
 
 			/**
@@ -36,11 +36,20 @@
 			 */
 			public function getQuery(): INode {
 				$this->init();
+				$parameterList = $this->node->getNode('parameter-list');
+				$setList = $this->node->getNode('set-list');
+				foreach ($this->source as $k => $v) {
+					$setList->addNode(new Node('set', null, [
+						'column'    => $k,
+						'parameter' => $parameterId = (sha1($k . microtime(true) . random_bytes(64))),
+					]));
+					$parameterList->addNode(new Node('parameter', $v, ['name' => $parameterId]));
+				}
 				return $this->node;
 			}
 
 			protected function handleInit(): void {
 				parent::handleInit();
-				$this->node = new Node('update', $this->schema->getName(), $this->source);
+				$this->node = new Node('update', null, ['table' => $this->schema->getName()]);
 			}
 		}

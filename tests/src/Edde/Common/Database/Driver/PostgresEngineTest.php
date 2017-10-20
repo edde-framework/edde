@@ -4,7 +4,6 @@
 		use Edde\Api\Container\Exception\ContainerException;
 		use Edde\Api\Container\Exception\FactoryException;
 		use Edde\Api\Database\Exception\DriverQueryException;
-		use Edde\Api\Database\Exception\NativeQueryException;
 		use Edde\Api\Database\IDriver;
 		use Edde\Api\Database\Inject\Driver;
 		use Edde\Api\Schema\ISchema;
@@ -14,7 +13,6 @@
 		use Edde\Common\Query\CreateSchemaQuery;
 		use Edde\Common\Query\InsertQuery;
 		use Edde\Common\Query\NativeQuery;
-		use Edde\Common\Query\SelectQuery;
 		use Edde\Common\Query\UpdateQuery;
 		use Edde\Common\Schema\Schema;
 		use Edde\Ext\Container\ContainerFactory;
@@ -26,38 +24,6 @@
 			 * @var ISchema
 			 */
 			protected $schema;
-
-			/**
-			 * @throws NativeQueryException
-			 * @throws \Exception
-			 */
-			public function testSelectQuery() {
-				// @formatter:off
-				$query = new SelectQuery();
-				$query->
-					table('some-table-name', 'aaa')->
-						column('foo')->
-						all()->
-					table('another-table')->
-						column('bar')->
-					where()->
-						eq('foo')->to('bound parameter!')->and()->
-						eq('foo')->toColumn('bar')->or()->
-						neq('franta')->to('betka')->or()->
-							group()->
-								gt('a')->than(5)->and()->
-								neq('foo')->to('bar')->
-							end()->or()->
-						gt('blah')->than('foo')->and()->
-						in('enum-column')->select(
-							(new SelectQuery())->table('moo')->all()->query()
-						)->and()->
-						eq('a')->to('b');
-				$query->where()->or()->
-					eq('answer-to-life')->to(42);
-				$nativeQuery = $this->driver->toNative($query);
-				// @formatter:on
-			}
 
 			/**
 			 * @throws DriverQueryException
@@ -107,12 +73,14 @@
 			/**
 			 * @throws DriverQueryException
 			 * @throws IntegrityException
+			 * @throws \Exception
 			 */
 			public function testUpdateQuery() {
 				$update = new UpdateQuery($this->schema, [
 					'property-for-this-table'  => 'string-ex',
 					'this-one-is-not-required' => null,
 				]);
+				$update->where()->eq('guid')->to('1235');
 				$this->driver->execute($update);
 			}
 

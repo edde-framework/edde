@@ -43,7 +43,7 @@
 				}
 			}
 
-			protected function fragmentCreateSchema(INode $root) {
+			protected function fragmentCreateSchema(INode $root): INativeQuery {
 				$sql = 'CREATE TABLE IF NOT EXISTS ' . $this->delimite($root->getValue()) . ' (';
 				$columnList = [];
 				foreach ($root->getNodeList() as $node) {
@@ -61,7 +61,7 @@
 				return new NativeQuery($sql . implode(',', $columnList) . ')');
 			}
 
-			protected function fragmentInsert(INode $root) {
+			protected function fragmentInsert(INode $root): INativeQuery {
 				$parameterList = [];
 				$nameList = [];
 				$columnList = [];
@@ -73,6 +73,22 @@
 				$sql = 'INSERT INTO ' . $this->delimite($root->getValue()) . ' (';
 				$sql .= implode(',', $nameList) . ') VALUES (';
 				return new NativeQuery($sql . implode(', ', $columnList) . ')', $parameterList);
+			}
+
+			/**
+			 * @param INode $root
+			 *
+			 * @return INativeQuery
+			 * @throws DriverQueryException
+			 */
+			protected function fragmentUpdate(INode $root): INativeQuery {
+				$sql = 'UPDATE ' . $this->delimite($root->getAttribute('table')) . ' SET ';
+				$setList = [];
+				foreach ($root->getNode('set-list')->getNodeList() as $node) {
+					$setList[] = $this->delimite($node->getAttribute('column')) . ' = :' . $node->getAttribute('parameter');
+				}
+				$sql .= implode(', ', $setList);
+				return new NativeQuery($sql, $this->fragment($root->getNode('parameter-list'))->getParameterList());
 			}
 
 			/**
