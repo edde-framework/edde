@@ -184,6 +184,12 @@
 				return new NativeQuery(implode('', $whereList), $parameterList);
 			}
 
+			/**
+			 * @param INode $root
+			 *
+			 * @return INativeQuery
+			 * @throws DriverQueryException
+			 */
 			protected function fragmentWhere(INode $root): INativeQuery {
 				$where = null;
 				static $expressions = [
@@ -206,6 +212,20 @@
 					}
 					return new NativeQuery($where);
 				}
+				switch ($type) {
+					case 'group':
+						return new NativeQuery("(\n" . ($query = $this->fragmentWhereList($root))->getQuery() . ')', $query->getParameterList());
+					case 'in':
+						switch ($target = $root->getAttribute('target')) {
+							case 'query':
+								$query = $this->fragment($root->getNode('select'));
+								$where = $this->delimite($root->getAttribute('where'));
+								$where .= ' IN (' . $query->getQuery() . ')';
+								return new NativeQuery($where, $query->getParameterList());
+						}
+						throw new DriverQueryException(sprintf('Unknown where IN target type [%s].', $target));
+				}
+				throw new DriverQueryException(sprintf('Unknown where type [%s].', $type));
 			}
 
 			protected function fragmentParameterList(INode $root): INativeQuery {
