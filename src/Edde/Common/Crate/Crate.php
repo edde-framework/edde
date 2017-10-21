@@ -14,6 +14,20 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function update(array $source): ICrate {
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function push(array $source): ICrate {
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function isDirty(): bool {
 				foreach ($this->propertyList as $property) {
 					if ($property->isDirty()) {

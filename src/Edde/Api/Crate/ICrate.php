@@ -7,6 +7,25 @@
 	 */
 		interface ICrate {
 			/**
+			 * update the crate with the given data; the crate will be dirty after
+			 *
+			 * @param array $source
+			 *
+			 * @return $this
+			 */
+			public function update(array $source): ICrate;
+
+			/**
+			 * push given data to the crate without making it dirty (if it was already dirty,
+			 * it could be "cleaned")
+			 *
+			 * @param array $source
+			 *
+			 * @return $this
+			 */
+			public function push(array $source): ICrate;
+
+			/**
 			 * is state of a crate changed (any property is changed?)?
 			 *
 			 * @return bool

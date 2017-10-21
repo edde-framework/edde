@@ -6,6 +6,8 @@
 		use Edde\Api\Database\IDriver;
 		use Edde\Api\Schema\Exception\UnknownSchemaException;
 		use Edde\Api\Schema\Inject\SchemaManager;
+		use Edde\Api\Storage\Exception\IntegrityException;
+		use Edde\Api\Storage\Exception\StorageException;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Container\Factory\ClassFactory;
 		use Edde\Common\Database\Driver\PostgresDriver;
@@ -31,7 +33,22 @@
 				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->getSchema(SimpleSchema::class)));
 			}
 
+			/**
+			 * @throws UnknownSchemaException
+			 * @throws IntegrityException
+			 * @throws StorageException
+			 */
 			public function testSave() {
+				$entity = $this->storage->createEntity(SimpleSchema::class, [
+					'name'     => 'some name for this entity',
+					'optional' => 'this string is optional, but I wanna fill it!',
+				]);
+				$this->storage->save($entity);
+				$entity = $this->storage->createEntity(SimpleSchema::class, [
+					'name'     => 'another name',
+					'optional' => null,
+				]);
+				$this->storage->save($entity);
 			}
 
 			/**
