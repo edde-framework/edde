@@ -20,6 +20,8 @@
 		use Edde\Api\Request\IRequestService;
 		use Edde\Api\Router\IRouterService;
 		use Edde\Api\Runtime\IRuntime;
+		use Edde\Api\Schema\ISchemaManager;
+		use Edde\Api\Schema\ISchemaReflectionService;
 		use Edde\Api\Storage\IStorage;
 		use Edde\Api\Upgrade\IUpgradeManager;
 		use Edde\Api\Utils\ICliUtils;
@@ -47,6 +49,8 @@
 		use Edde\Common\Request\RequestService;
 		use Edde\Common\Router\RouterService;
 		use Edde\Common\Runtime\Runtime;
+		use Edde\Common\Schema\SchemaManager;
+		use Edde\Common\Schema\SchemaReflectionService;
 		use Edde\Common\Upgrade\AbstractUpgradeManager;
 		use Edde\Common\Utils\CliUtils;
 		use Edde\Common\Utils\StringUtils;
@@ -225,73 +229,75 @@
 
 			static public function getDefaultFactoryList(): array {
 				return [
-					IRootDirectory::class      => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
-					IAssetsDirectory::class    => self::proxy(IRootDirectory::class, 'directory', [
+					IRootDirectory::class           => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
+					IAssetsDirectory::class         => self::proxy(IRootDirectory::class, 'directory', [
 						'.assets',
 						AssetsDirectory::class,
 					]),
-					ITempDirectory::class      => self::proxy(IAssetsDirectory::class, 'directory', [
+					ITempDirectory::class           => self::proxy(IAssetsDirectory::class, 'directory', [
 						'temp',
 						TempDirectory::class,
 					]),
 					/**
 					 * utils
 					 */
-					IHttpUtils::class          => HttpUtils::class,
-					IStringUtils::class        => StringUtils::class,
-					ICliUtils::class           => CliUtils::class,
+					IHttpUtils::class               => HttpUtils::class,
+					IStringUtils::class             => StringUtils::class,
+					ICliUtils::class                => CliUtils::class,
 					/**
 					 * container implementation
 					 */
-					IContainer::class          => Container::class,
+					IContainer::class               => Container::class,
 					/**
 					 * runtime info provider
 					 */
-					IRuntime::class            => Runtime::class,
+					IRuntime::class                 => Runtime::class,
 					/**
 					 * log support
 					 */
-					ILogService::class         => LogService::class,
+					ILogService::class              => LogService::class,
 					/**
 					 * user request into protocol element translation
 					 */
-					IRouterService::class      => RouterService::class,
-					IRequestService::class     => RequestService::class,
+					IRouterService::class           => RouterService::class,
+					IRequestService::class          => RequestService::class,
 					/**
 					 * content conversion implementation (mainly useful for server content
 					 * negotiation)
 					 */
-					IConverterManager::class   => ConverterManager::class,
+					IConverterManager::class        => ConverterManager::class,
 					/**
 					 * The Protocol specification related stuff
 					 */
-					IProtocolService::class    => ProtocolService::class,
+					IProtocolService::class         => ProtocolService::class,
 					/**
 					 * general service for http request/response
 					 */
-					IHttpRequestService::class => HttpRequestService::class,
+					IHttpRequestService::class      => HttpRequestService::class,
+					ISchemaManager::class           => SchemaManager::class,
+					ISchemaReflectionService::class => SchemaReflectionService::class,
 					/**
 					 * storage support
 					 */
-					IStorage::class            => DatabaseStorage::class,
-					IDriver::class             => self::exception('Please register driver to use Database Storage (or whatever storage is using [%s] implementation).', IDriver::class),
+					IStorage::class                 => DatabaseStorage::class,
+					IDriver::class                  => self::exception('Please register driver to use Database Storage (or whatever storage is using [%s] implementation).', IDriver::class),
 					/**
 					 * an application upgrades support
 					 */
-					IUpgradeManager::class     => self::exception(sprintf('You have to privide you own implementation of [%s]; you can use [%s] to get some little help.', IUpgradeManager::class, AbstractUpgradeManager::class)),
+					IUpgradeManager::class          => self::exception(sprintf('You have to privide you own implementation of [%s]; you can use [%s] to get some little help.', IUpgradeManager::class, AbstractUpgradeManager::class)),
 					/**
 					 * Xml support
 					 */
-					IXmlExport::class          => XmlExport::class,
-					IXmlParser::class          => XmlParser::class,
+					IXmlExport::class               => XmlExport::class,
+					IXmlParser::class               => XmlParser::class,
 					/**
 					 * an application handles lifecycle workflow
 					 */
-					IApplication::class        => Application::class,
+					IApplication::class             => Application::class,
 					/**
 					 * magical factory for an application execution
 					 */
-					'application'              => IApplication::class . '::run',
+					'application'                   => IApplication::class . '::run',
 				];
 			}
 
