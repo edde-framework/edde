@@ -42,6 +42,9 @@
 			 * @inheritdoc
 			 */
 			public function push(array $source): ICrate {
+				foreach ($source as $k => $v) {
+					$this->getProperty($k)->setValue($v);
+				}
 				return $this;
 			}
 
@@ -65,9 +68,9 @@
 				if ($this->isDirty() === false) {
 					return [];
 				}
-				foreach ($this->propertyList as $property) {
+				foreach ($this->propertyList as $name => $property) {
 					if ($property->isDirty()) {
-						$dirtyList[] = $property;
+						$dirtyList[$name] = $property;
 					}
 				}
 				return $dirtyList;
