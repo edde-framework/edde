@@ -13,6 +13,29 @@
 			public function getName(): string;
 
 			/**
+			 * set alias to this schema; later in queries name or alias could be used
+			 *
+			 * @param string $alias
+			 *
+			 * @return ISchema
+			 */
+			public function alias(string $alias): ISchema;
+
+			/**
+			 * has this schema alias?
+			 *
+			 * @return bool
+			 */
+			public function hasAlias(): bool;
+
+			/**
+			 * return schema alias
+			 *
+			 * @return string|null
+			 */
+			public function getAlias(): ?string;
+
+			/**
 			 * return list of properties of this schema
 			 *
 			 * @return IProperty[]

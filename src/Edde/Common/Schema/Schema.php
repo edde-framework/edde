@@ -31,6 +31,28 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function alias(string $alias): ISchema {
+				$this->node->setAttribute('alias', $alias);
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function hasAlias(): bool {
+				return $this->node->hasAttribute('alias');
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getAlias(): ?string {
+				return $this->node->getAttribute('alias');
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function getPropertyList(): array {
 				if ($this->propertyList) {
 					return $this->propertyList;
