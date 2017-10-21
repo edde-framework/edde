@@ -9,20 +9,21 @@
 		use Edde\Api\Storage\Exception\IntegrityException;
 
 		/**
-		 * Database driver implementation.
+		 * Database driver implementation based on PDO; if there should be another type of driver,
+		 * like neo4j, use standalone Storage implementation.
 		 */
 		interface IDriver extends IConfigurable {
 			/**
-			 * translates and executes the given query
+			 * executes native query on this engine
 			 *
-			 * @param IQuery $query
+			 * @param INativeQuery $nativeQuery
 			 *
 			 * @return mixed
 			 *
 			 * @throws DriverQueryException
 			 * @throws IntegrityException
 			 */
-			public function execute(IQuery $query);
+			public function native(INativeQuery $nativeQuery): \PDOStatement;
 
 			/**
 			 * try to translate the given query to native query
@@ -36,16 +37,16 @@
 			public function toNative(IQuery $query): INativeQuery;
 
 			/**
-			 * executes native query on this engine
+			 * translates and executes the given query
 			 *
-			 * @param INativeQuery $nativeQuery
+			 * @param IQuery $query
 			 *
 			 * @return mixed
 			 *
 			 * @throws DriverQueryException
 			 * @throws IntegrityException
 			 */
-			public function native(INativeQuery $nativeQuery);
+			public function execute(IQuery $query): \PDOStatement;
 
 			/**
 			 * delimite input string

@@ -5,9 +5,9 @@
 		use Edde\Api\Database\Exception\DriverQueryException;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\NullValueException;
-		use Edde\Common\Database\AbstractPdoDriver;
+		use Edde\Common\Database\AbstractDriver;
 
-		class MysqlDriver extends AbstractPdoDriver {
+		class MysqlDriver extends AbstractDriver {
 			public function delimite(string $delimite): string {
 				return '`' . str_replace('`', '``', $delimite) . '`';
 			}
