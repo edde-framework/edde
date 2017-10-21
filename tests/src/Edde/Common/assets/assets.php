@@ -84,7 +84,7 @@
 
 		interface AbstractGuidSchema {
 			/**
-			 * @schema-property primary
+			 * @schema primary
 			 */
 			function guid(): string;
 		}
@@ -94,42 +94,47 @@
 		 */
 		interface AnotherSchema extends AbstractGuidSchema {
 			/**
-			 * @schema-property
+			 * @schema
 			 */
 			function justName(): int;
 		}
 
 		interface MoreSchemasLikeThis extends AbstractGuidSchema {
 			/**
-			 * @schema-property unique
+			 * @schema
+			 * @unique
 			 */
 			function foo(): string;
 		}
 
 		interface ThisWillRepresentSchema extends AbstractGuidSchema {
 			/**
-			 * @schema-property
+			 * @schema
 			 */
-			function property(): string;
+			function property();
 
 			/**
-			 * @return null|string
+			 * @schema
 			 */
 			function something(): ?string;
 
 			/**
-			 * link creates a simple relation ($this to AnotherSchema)
+			 * @schema link
 			 *
-			 * @schema-link
+			 * link creates a simple relation ($this to AnotherSchema)
 			 */
 			function linkToSchema(): AnotherSchema;
 
 			/**
 			 * relation creates a M:N relation ($this could have multiple AnotherSchemas)
 			 *
-			 * @schema-relation
+			 * @schema relation
 			 */
 			function multiLink(): AnotherSchema;
+
+			function bar();
+
+			function notExported();
 		}
 	}
 	namespace Foo {

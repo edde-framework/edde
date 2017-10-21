@@ -25,18 +25,18 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function primary(): IProperty {
-				$this->node->setAttribute('primary', true);
-				$this->required();
-				$this->unique();
+			public function primary(bool $primary = true): IProperty {
+				$this->node->setAttribute('primary', $primary);
+				$this->required($primary);
+				$this->unique($primary);
 				return $this;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function unique(): IProperty {
-				$this->node->setAttribute('unique', true);
+			public function unique(bool $unique = true): IProperty {
+				$this->node->setAttribute('unique', $unique);
 				return $this;
 			}
 
@@ -51,8 +51,8 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function required(): IProperty {
-				$this->node->setAttribute('required', true);
+			public function required(bool $required = true): IProperty {
+				$this->node->setAttribute('required', $required);
 				return $this;
 			}
 

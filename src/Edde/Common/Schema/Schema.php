@@ -25,7 +25,7 @@
 			 * @inheritdoc
 			 */
 			public function getName(): string {
-				return $this->node->getName();
+				return $this->node->getAttribute('name');
 			}
 
 			/**
@@ -75,7 +75,7 @@
 			 */
 			public function property(string $name): IProperty {
 				$this->propertyList = null;
-				$this->node->addNode($node = new Node($name));
+				$this->node->addNode($node = new Node('property', null, ['name' => $name]));
 				return new Property($node);
 			}
 
@@ -108,6 +108,6 @@
 			}
 
 			static public function create(string $name): ISchema {
-				return new static(new Node($name));
+				return new static(new Node('schema', null, ['name' => $name]));
 			}
 		}

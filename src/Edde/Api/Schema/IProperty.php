@@ -14,16 +14,20 @@
 			/**
 			 * shortcut for required and unique
 			 *
+			 * @param bool $primary
+			 *
 			 * @return IProperty
 			 */
-			public function primary(): IProperty;
+			public function primary(bool $primary = true): IProperty;
 
 			/**
 			 * set a property as it's value is unique in it's schema
 			 *
+			 * @param bool $unique
+			 *
 			 * @return IProperty
 			 */
-			public function unique(): IProperty;
+			public function unique(bool $unique = true): IProperty;
 
 			/**
 			 * set property value generator; if a value is not set, this generator should be used
@@ -38,9 +42,11 @@
 			/**
 			 * set property as it's required
 			 *
+			 * @param bool $required
+			 *
 			 * @return IProperty
 			 */
-			public function required(): IProperty;
+			public function required(bool $required = true): IProperty;
 
 			/**
 			 * property type
