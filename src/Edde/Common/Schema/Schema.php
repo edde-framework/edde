@@ -66,6 +66,20 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function getPrimaryList(): array {
+				$primaryList = [];
+				/** @var $property IProperty */
+				foreach ($this->getPrimaryList() as $property) {
+					if ($property->isPrimary()) {
+						$primaryList[] = $property;
+					}
+				}
+				return $primaryList;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function getNodeList(): array {
 				return $this->node->getNodeList();
 			}

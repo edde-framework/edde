@@ -21,6 +21,13 @@
 			public function primary(bool $primary = true): IProperty;
 
 			/**
+			 * is this property marked as primary?
+			 *
+			 * @return bool
+			 */
+			public function isPrimary(): bool;
+
+			/**
 			 * set a property as it's value is unique in it's schema
 			 *
 			 * @param bool $unique
@@ -28,6 +35,13 @@
 			 * @return IProperty
 			 */
 			public function unique(bool $unique = true): IProperty;
+
+			/**
+			 * is this property marked as unique?
+			 *
+			 * @return bool
+			 */
+			public function isUnique(): bool;
 
 			/**
 			 * set property value generator; if a value is not set, this generator should be used

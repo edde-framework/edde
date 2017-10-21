@@ -35,9 +35,23 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function isPrimary(): bool {
+				return $this->node->getAttribute('primary', false);
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function unique(bool $unique = true): IProperty {
 				$this->node->setAttribute('unique', $unique);
 				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function isUnique(): bool {
+				return $this->node->getAttribute('unique', false);
 			}
 
 			/**

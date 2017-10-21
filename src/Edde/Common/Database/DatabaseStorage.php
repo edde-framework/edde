@@ -44,6 +44,7 @@
 				if ($entity->isDirty() === false) {
 					return $this;
 				}
+				$schema = $entity->getSchema();
 				return $this;
 			}
 

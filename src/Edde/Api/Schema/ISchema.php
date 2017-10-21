@@ -43,6 +43,13 @@
 			public function getPropertyList(): array;
 
 			/**
+			 * return an array with all primary properties
+			 *
+			 * @return IProperty[]
+			 */
+			public function getPrimaryList(): array;
+
+			/**
 			 * return list of property nodes
 			 *
 			 * @return INode[]
