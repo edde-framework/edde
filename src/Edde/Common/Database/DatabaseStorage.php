@@ -13,11 +13,13 @@
 			 * @inheritdoc
 			 */
 			public function execute(IQuery $query) {
+				return $this->driver->execute($query);
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function native(INativeQuery $nativeQuery) {
+				return $this->driver->native($nativeQuery);
 			}
 		}
