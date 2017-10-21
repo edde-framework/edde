@@ -26,9 +26,17 @@
 				return $this->node;
 			}
 
+			public function setDescription(string $description): AbstractQuery {
+				$this->init();
+				$this->node->setAttribute('description', $description);
+				return $this;
+			}
+
 			/**
 			 * @inheritdoc
 			 */
 			public function getDescription(): ?string {
+				$this->init();
+				return $this->node->getAttribute('description', static::class);
 			}
 		}

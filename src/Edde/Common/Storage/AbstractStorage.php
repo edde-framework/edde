@@ -8,10 +8,13 @@
 		use Edde\Common\Object\Object;
 
 		abstract class AbstractStorage extends Object implements IStorage {
+			/**
+			 * @inheritdoc
+			 */
 			public function load(IQuery $query): IEntity {
 				foreach ($this->collection($query) as $entity) {
 					return $entity;
 				}
-				throw new EntityNotFoundException('Cannot ');
+				throw new EntityNotFoundException(sprintf('Cannot load any Entity by query [%s].', $query->getDescription()));
 			}
 		}
