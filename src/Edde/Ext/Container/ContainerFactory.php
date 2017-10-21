@@ -11,6 +11,7 @@
 		use Edde\Api\Container\IContainer;
 		use Edde\Api\Container\IFactory;
 		use Edde\Api\Converter\IConverterManager;
+		use Edde\Api\Database\IDriver;
 		use Edde\Api\EddeException;
 		use Edde\Api\Http\IHttpUtils;
 		use Edde\Api\Http\IRequestService as IHttpRequestService;
@@ -19,6 +20,7 @@
 		use Edde\Api\Request\IRequestService;
 		use Edde\Api\Router\IRouterService;
 		use Edde\Api\Runtime\IRuntime;
+		use Edde\Api\Storage\IStorage;
 		use Edde\Api\Upgrade\IUpgradeManager;
 		use Edde\Api\Utils\ICliUtils;
 		use Edde\Api\Utils\IStringUtils;
@@ -36,6 +38,7 @@
 		use Edde\Common\Container\Factory\LinkFactory;
 		use Edde\Common\Container\Factory\ProxyFactory;
 		use Edde\Common\Converter\ConverterManager;
+		use Edde\Common\Database\DatabaseStorage;
 		use Edde\Common\Http\HttpUtils;
 		use Edde\Common\Http\RequestService as HttpRequestService;
 		use Edde\Common\Log\LogService;
@@ -267,6 +270,11 @@
 					 * general service for http request/response
 					 */
 					IHttpRequestService::class => HttpRequestService::class,
+					/**
+					 * storage support
+					 */
+					IStorage::class            => DatabaseStorage::class,
+					IDriver::class             => self::exception('Please register driver to use Database Storage (or whatever storage is using [%s] implementation).', IDriver::class),
 					/**
 					 * an application upgrades support
 					 */
