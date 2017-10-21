@@ -5,6 +5,10 @@
 
 		class Property implements IProperty {
 			/**
+			 * @var string
+			 */
+			protected $name;
+			/**
 			 * the original value of the property
 			 *
 			 * @var mixed
@@ -18,9 +22,23 @@
 			protected $value;
 
 			/**
+			 * @param string $name
+			 */
+			public function __construct(string $name) {
+				$this->name = $name;
+			}
+
+			/**
 			 * @inheritdoc
 			 */
-			public function default($value): IProperty {
+			public function getName(): string {
+				return $this->name;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function setDefault($value): IProperty {
 				$this->default = $value;
 				return $this;
 			}
@@ -35,18 +53,29 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function set($value): IProperty {
+			public function setValue($value): IProperty {
+				$this->value = $value;
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getValue($default = null) {
+				return $this->value ?: $default;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function get($default = null) {
+				return $this->value ?: $this->default ?: $default;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function isDirty(): bool {
+				return $this->default !== $this->value;
 			}
 		}

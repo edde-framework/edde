@@ -6,13 +6,20 @@
 	 */
 		interface IProperty {
 			/**
+			 * get the name of a property
+			 *
+			 * @return string
+			 */
+			public function getName(): string;
+
+			/**
 			 * set this value as default
 			 *
 			 * @param mixed $value
 			 *
 			 * @return IProperty
 			 */
-			public function default($value): IProperty;
+			public function setDefault($value): IProperty;
 
 			/**
 			 * return default value of this property
@@ -28,10 +35,19 @@
 			 *
 			 * @return IProperty
 			 */
-			public function set($value): IProperty;
+			public function setValue($value): IProperty;
 
 			/**
 			 * get a (current) value from this property
+			 *
+			 * @param mixed $default
+			 *
+			 * @return mixed
+			 */
+			public function getValue($default = null);
+
+			/**
+			 * resolve value; if current value is empty/null, default is checked; if same, default parameter is used
 			 *
 			 * @param mixed $default
 			 *

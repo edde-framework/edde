@@ -23,6 +23,7 @@
 			 */
 			public function getProperty(string $name): IProperty {
 				if (isset($this->propertyList[$name]) === false) {
+					$this->propertyList[$name] = new Property($name);
 				}
 				return $this->propertyList[$name];
 			}
@@ -32,7 +33,7 @@
 			 */
 			public function update(array $source): ICrate {
 				foreach ($source as $k => $v) {
-					$this->getProperty($k)->default($v);
+					$this->getProperty($k)->setDefault($v);
 				}
 				return $this;
 			}
