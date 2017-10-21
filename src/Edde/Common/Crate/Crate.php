@@ -14,7 +14,26 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function hasProperty(string $name): bool {
+				return isset($this->propertyList[$name]);
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getProperty(string $name): IProperty {
+				if (isset($this->propertyList[$name]) === false) {
+				}
+				return $this->propertyList[$name];
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function update(array $source): ICrate {
+				foreach ($source as $k => $v) {
+					$this->getProperty($k)->default($v);
+				}
 				return $this;
 			}
 

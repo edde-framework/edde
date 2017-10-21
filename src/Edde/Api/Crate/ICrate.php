@@ -7,6 +7,24 @@
 	 */
 		interface ICrate {
 			/**
+			 * does property with the given name exists in this crate?
+			 *
+			 * @param string $name
+			 *
+			 * @return bool
+			 */
+			public function hasProperty(string $name): bool;
+
+			/**
+			 * return or create property with the given name
+			 *
+			 * @param string $name
+			 *
+			 * @return IProperty
+			 */
+			public function getProperty(string $name): IProperty;
+
+			/**
 			 * update the crate with the given data; the crate will be dirty after
 			 *
 			 * @param array $source
