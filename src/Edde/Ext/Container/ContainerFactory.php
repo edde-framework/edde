@@ -280,7 +280,7 @@
 					 * storage support
 					 */
 					IStorage::class                 => DatabaseStorage::class,
-					IDriver::class                  => self::exception('Please register driver to use Database Storage (or whatever storage is using [%s] implementation).', IDriver::class),
+					IDriver::class                  => self::exception(sprintf('Please register driver to use Database Storage (or whatever storage is using [%s] implementation).', IDriver::class)),
 					/**
 					 * an application upgrades support
 					 */

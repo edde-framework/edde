@@ -17,6 +17,16 @@
 			public function execute(IQuery $query);
 
 			/**
+			 * shorthand to execute native query on a storage
+			 *
+			 * @param string|mixed $query
+			 * @param array        $parameterList
+			 *
+			 * @return mixed
+			 */
+			public function query($query, array $parameterList = []);
+
+			/**
 			 * executes native query on this storage
 			 *
 			 * @param INativeQuery $nativeQuery

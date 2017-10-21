@@ -19,6 +19,6 @@
 			 * @inheritdoc
 			 */
 			public function getQuery(): INode {
-				return (new Node('create-schema', $this->schema->getName()))->addNodeList($this->schema->getNodeList());
+				return (new Node('create-schema', null, ['name' => $this->schema->getName()]))->addNodeList($this->schema->getNodeList());
 			}
 		}

@@ -44,10 +44,10 @@
 			}
 
 			protected function fragmentCreateSchema(INode $root): INativeQuery {
-				$sql = 'CREATE TABLE IF NOT EXISTS ' . $this->delimite($root->getValue()) . ' (';
+				$sql = 'CREATE TABLE ' . $this->delimite($root->getAttribute('name')) . ' (';
 				$columnList = [];
 				foreach ($root->getNodeList() as $node) {
-					$column = $this->delimite($node->getName()) . ' ' . $this->type($node->getAttribute('type'));
+					$column = $this->delimite($node->getAttribute('name')) . ' ' . $this->type($node->getAttribute('type'));
 					if ($node->getAttribute('primary', false)) {
 						$column .= ' PRIMARY KEY';
 					} else if ($node->getAttribute('unique', false)) {

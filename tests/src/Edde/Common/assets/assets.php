@@ -89,6 +89,18 @@
 			function guid(): string;
 		}
 
+		interface SimpleSchema {
+			/**
+			 * @schema
+			 */
+			function name(): string;
+
+			/**
+			 * @schema
+			 */
+			function optional(): ?string;
+		}
+
 		/**
 		 * @schema-alias another name for this schema
 		 */
