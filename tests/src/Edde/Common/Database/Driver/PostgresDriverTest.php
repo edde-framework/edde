@@ -5,6 +5,7 @@
 		use Edde\Api\Database\Exception\DriverQueryException;
 		use Edde\Api\Storage\Exception\IntegrityException;
 		use Edde\Common\Query\NativeQuery;
+		use Edde\Ext\Container\ContainerFactory;
 
 		class PostgresDriverTest extends AbstractDriverTest {
 			/**
@@ -28,5 +29,9 @@
 			protected function setUp() {
 				parent::setUp();
 				$this->driver->native(new NativeQuery('SET search_path TO "test"'));
+			}
+
+			protected function getDriverFactory() {
+				return ContainerFactory::instance(PostgresDriver::class, ['pgsql:dbname=edde;user=edde;password=edde;host=172.17.0.1']);
 			}
 		}

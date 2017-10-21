@@ -2,9 +2,16 @@
 	namespace Edde\Common\Database\Driver;
 
 		use Edde\Api\Database\Exception\DriverException;
+		use Edde\Api\Database\Exception\DriverQueryException;
+		use Edde\Api\Storage\Exception\DuplicateEntryException;
+		use Edde\Api\Storage\Exception\NullValueException;
 		use Edde\Common\Database\AbstractPdoDriver;
 
 		class MysqlDriver extends AbstractPdoDriver {
+			public function delimite(string $delimite): string {
+				return '`' . str_replace('`', '``', $delimite) . '`';
+			}
+
 			/**
 			 * @inheritdoc
 			 */
@@ -26,5 +33,17 @@
 						return 'DATETIME(6)';
 				}
 				throw new DriverException(sprintf('Unknown type [%s] for driver [%s]', $type, static::class));
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			protected function exception(\Throwable $throwable) {
+				if (stripos($message = $throwable->getMessage(), 'duplicate') !== false) {
+					throw new DuplicateEntryException($message, 0, $throwable);
+				} else if (stripos($message, 'cannot be null') !== false) {
+					throw new NullValueException($message, 0, $throwable);
+				}
+				throw new DriverQueryException($message, 0, $throwable);
 			}
 		}

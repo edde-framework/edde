@@ -17,7 +17,7 @@
 		use Edde\Ext\Container\ContainerFactory;
 		use Edde\Ext\Test\TestCase;
 
-		class AbstractDriverTest extends TestCase {
+		abstract class AbstractDriverTest extends TestCase {
 			use Driver;
 			/**
 			 * @var ISchema
@@ -81,7 +81,7 @@
 				 * parent missing intentionally
 				 */
 				ContainerFactory::inject($this, [
-					IDriver::class => ContainerFactory::instance(PostgresDriver::class, ['pgsql:dbname=edde;user=edde;password=edde;host=172.17.0.1']),
+					IDriver::class => $this->getDriverFactory(),
 					new ClassFactory(),
 				]);
 				$this->schema = $schema = Schema::create('some-cool-schema');
@@ -89,4 +89,6 @@
 				$schema->string('property-for-this-table')->required();
 				$schema->integer('this-one-is-not-required')->unique();
 			}
+
+			abstract protected function getDriverFactory();
 		}
