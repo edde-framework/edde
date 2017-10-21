@@ -6,4 +6,17 @@
 	 * usually ORM objects do, but in abstract way. Crate with a Schema is an Entity.
 	 */
 		interface ICrate {
+			/**
+			 * is state of a crate changed (any property is changed?)?
+			 *
+			 * @return bool
+			 */
+			public function isDirty(): bool;
+
+			/**
+			 * return an array with dirty properties
+			 *
+			 * @return IProperty[]
+			 */
+			public function getDirtyList(): array;
 		}

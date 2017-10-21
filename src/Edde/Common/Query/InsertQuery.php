@@ -1,33 +1,45 @@
 <?php
 	namespace Edde\Common\Query;
 
-		use Edde\Api\Node\INode;
-		use Edde\Api\Schema\ISchema;
 		use Edde\Common\Node\Node;
 
 		class InsertQuery extends AbstractQuery {
 			/**
-			 * @var ISchema
+			 * @var string
 			 */
-			protected $schema;
+			protected $table;
 			/**
 			 * @var array
 			 */
 			protected $source;
-
 			/**
-			 * @param ISchema $schema
-			 * @param array   $source
+			 * @var string
 			 */
-			public function __construct(ISchema $schema, array $source) {
-				$this->schema = $schema;
+			protected $type;
+
+			public function __construct(string $table, array $source) {
+				$this->table = $table;
 				$this->source = $source;
+				/**
+				 * type in constructor is missing intentionally as it's not allowed for user to change this variable
+				 */
+				$this->type = 'insert';
 			}
 
 			/**
-			 * @inheritdoc
+			 * @throws \Exception
 			 */
-			public function getQuery(): INode {
-				return new Node('insert', $this->schema->getName(), $this->source);
+			protected function handleInit(): void {
+				parent::handleInit();
+				$this->node = new Node($this->type, null, ['table' => $this->table]);
+				$parameterList = $this->node->getNode('parameter-list');
+				$setList = $this->node->getNode('column-list');
+				foreach ($this->source as $k => $v) {
+					$setList->addNode(new Node('set', null, [
+						'column'    => $k,
+						'parameter' => $parameterId = (sha1($k . microtime(true) . random_bytes(64))),
+					]));
+					$parameterList->addNode(new Node('parameter', $v, ['name' => $parameterId]));
+				}
 			}
 		}
