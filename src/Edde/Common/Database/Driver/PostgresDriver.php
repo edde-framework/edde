@@ -5,6 +5,7 @@
 		use Edde\Api\Database\Exception\DriverQueryException;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
+		use Edde\Api\Storage\Exception\NullValueException;
 		use Edde\Common\Database\AbstractPdoDriver;
 
 		class PostgresDriver extends AbstractPdoDriver {
@@ -19,6 +20,8 @@
 				} catch (\PDOException $exception) {
 					if (stripos($message = $exception->getMessage(), 'unique') !== false) {
 						throw new DuplicateEntryException($message, 0, $exception);
+					} else if (stripos($message, 'not null') !== false) {
+						throw new NullValueException($message, 0, $exception);
 					}
 					throw new DriverQueryException($message, 0, $exception);
 				}

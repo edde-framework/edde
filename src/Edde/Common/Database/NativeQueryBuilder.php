@@ -82,13 +82,20 @@
 			 * @throws DriverQueryException
 			 */
 			protected function fragmentUpdate(INode $root): INativeQuery {
-				$sql = 'UPDATE ' . $this->delimite($root->getAttribute('table')) . ' SET ';
+				$sql[] = "UPDATE\n\t" . $this->delimite($root->getAttribute('table')) . "\nSET\n\t";
+				$parameterList = $this->fragment($root->getNode('parameter-list'))->getParameterList();
 				$setList = [];
 				foreach ($root->getNode('set-list')->getNodeList() as $node) {
 					$setList[] = $this->delimite($node->getAttribute('column')) . ' = :' . $node->getAttribute('parameter');
 				}
-				$sql .= implode(', ', $setList);
-				return new NativeQuery($sql, $this->fragment($root->getNode('parameter-list'))->getParameterList());
+				$sql[] = implode(",\n\t", $setList) . "\n";
+				if ($root->hasNode('where-list')) {
+					$sql[] = "WHERE\n";
+					$query = $this->fragment($root->getNode('where-list'));
+					$sql[] = $query->getQuery();
+					array_merge($parameterList, $query->getParameterList());
+				}
+				return new NativeQuery(implode('', $sql), $parameterList);
 			}
 
 			/**
@@ -247,10 +254,8 @@
 
 			protected function fragmentParameterList(INode $root): INativeQuery {
 				$parameterList = [];
-				if (($node = $root->getNode('parameter-list'))->isLeaf() === false) {
-					foreach ($node->getNodeList() as $node) {
-						$parameterList[$node->getAttribute('name')] = $node->getValue();
-					}
+				foreach ($root->getNodeList() as $node) {
+					$parameterList[$node->getAttribute('name')] = $node->getValue();
 				}
 				return new NativeQuery('', $parameterList);
 			}

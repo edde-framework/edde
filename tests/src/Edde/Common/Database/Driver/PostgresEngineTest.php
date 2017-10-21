@@ -9,6 +9,7 @@
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\IntegrityException;
+		use Edde\Api\Storage\Exception\NullValueException;
 		use Edde\Common\Container\Factory\ClassFactory;
 		use Edde\Common\Query\CreateSchemaQuery;
 		use Edde\Common\Query\InsertQuery;
@@ -76,12 +77,15 @@
 			 * @throws \Exception
 			 */
 			public function testUpdateQuery() {
-				$update = new UpdateQuery($this->schema, [
+				$this->expectException(NullValueException::class);
+				$this->driver->execute((new UpdateQuery($this->schema, [
 					'property-for-this-table'  => 'string-ex',
 					'this-one-is-not-required' => null,
-				]);
-				$update->where()->eq('guid')->to('1235');
-				$this->driver->execute($update);
+				]))->where()->eq('guid')->to('1235')->query());
+				$this->driver->execute((new UpdateQuery($this->schema, [
+					'property-for-this-table'  => null,
+					'this-one-is-not-required' => 32,
+				]))->where()->eq('guid')->to('1234')->query());
 			}
 
 			/**

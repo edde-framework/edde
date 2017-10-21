@@ -36,6 +36,15 @@
 			 */
 			public function getQuery(): INode {
 				$this->init();
+				return $this->node;
+			}
+
+			/**
+			 * @throws \Exception
+			 */
+			protected function handleInit(): void {
+				parent::handleInit();
+				$this->node = new Node('update', null, ['table' => $this->schema->getName()]);
 				$parameterList = $this->node->getNode('parameter-list');
 				$setList = $this->node->getNode('set-list');
 				foreach ($this->source as $k => $v) {
@@ -45,11 +54,5 @@
 					]));
 					$parameterList->addNode(new Node('parameter', $v, ['name' => $parameterId]));
 				}
-				return $this->node;
-			}
-
-			protected function handleInit(): void {
-				parent::handleInit();
-				$this->node = new Node('update', null, ['table' => $this->schema->getName()]);
 			}
 		}
