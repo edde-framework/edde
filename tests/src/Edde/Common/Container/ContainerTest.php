@@ -18,8 +18,6 @@
 		use Edde\Test\FooObject;
 		use Edde\Test\InjectDependencyObject;
 
-		require_once __DIR__ . '/../assets/assets.php';
-
 		class ContainerTest extends TestCase {
 			use Container;
 

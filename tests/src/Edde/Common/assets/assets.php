@@ -81,6 +81,56 @@
 				$this->barObject = $barObject;
 			}
 		}
+
+		interface AbstractGuidSchema {
+			/**
+			 * @schema-property primary
+			 */
+			function guid(): string;
+		}
+
+		/**
+		 * @schema-alias another name for this schema
+		 */
+		interface AnotherSchema extends AbstractGuidSchema {
+			/**
+			 * @schema-property
+			 */
+			function justName(): int;
+		}
+
+		interface MoreSchemasLikeThis extends AbstractGuidSchema {
+			/**
+			 * @schema-property unique
+			 */
+			function foo(): string;
+		}
+
+		interface ThisWillRepresentSchema extends AbstractGuidSchema {
+			/**
+			 * @schema-property
+			 */
+			function property(): string;
+
+			/**
+			 * @return null|string
+			 */
+			function something(): ?string;
+
+			/**
+			 * link creates a simple relation ($this to AnotherSchema)
+			 *
+			 * @schema-link
+			 */
+			function linkToSchema(): AnotherSchema;
+
+			/**
+			 * relation creates a M:N relation ($this could have multiple AnotherSchemas)
+			 *
+			 * @schema-relation
+			 */
+			function multiLink(): AnotherSchema;
+		}
 	}
 	namespace Foo {
 

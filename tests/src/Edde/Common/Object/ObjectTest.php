@@ -11,8 +11,6 @@
 		use Edde\Test\FooObject;
 		use PHPUnit\Framework\TestCase;
 
-		require_once __DIR__ . '/../assets/assets.php';
-
 		class ObjectTest extends TestCase {
 			/**
 			 * @var FooObject
