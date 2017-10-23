@@ -2,7 +2,6 @@
 	namespace Edde\Common\Database;
 
 		use Edde\Api\Database\Inject\Driver;
-		use Edde\Api\Generator\Inject\GeneratorManager;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\IQuery;
 		use Edde\Api\Storage\Exception\ExclusiveTransactionException;
@@ -20,7 +19,6 @@
 
 		class DatabaseStorage extends AbstractStorage {
 			use EntityManager;
-			use GeneratorManager;
 			use Driver;
 			/**
 			 * @var int
@@ -114,7 +112,6 @@
 				foreach ($this->entityManager->getDirtyProperties($entity) as $property) {
 					$source[$property->getName()] = $property->get();
 				}
-				$source = $this->generatorManager->generate($source);
 				$query = isset($hasEntity) ? new UpdateQuery($schemaName, $source) : new InsertQuery($schemaName, $source);
 				if (isset($hasEntity)) {
 					$where = $query->where();
