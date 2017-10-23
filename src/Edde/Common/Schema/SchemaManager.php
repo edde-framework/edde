@@ -60,7 +60,7 @@
 				$schema = $this->getSchema($schema);
 				$result = $source;
 				foreach ($schema->getPropertyList() as $property) {
-					if (($generator = $property->getGenerator()) && isset($source[$name = $property->getName()]) === false) {
+					if (isset($source[$name = $property->getName()]) === false && ($generator = $property->getGenerator())) {
 						$source[$name] = $this->generatorManager->getGenerator($generator)->generate();
 					}
 				}
@@ -74,7 +74,7 @@
 				$schema = $this->getSchema($schema);
 				$result = $source;
 				foreach ($source as $k => $v) {
-					if ($filter = ($property = $schema->getProperty($k))->getFilter()) {
+					if ($filter = $schema->getProperty($k)->getFilter()) {
 						$result[$k] = $this->filterManager->getFilter($filter)->filter($v);
 					}
 				}
@@ -88,7 +88,7 @@
 				$schema = $this->getSchema($schema);
 				$result = $source;
 				foreach ($source as $k => $v) {
-					if ($sanitizer = ($property = $schema->getProperty($k))->getSanitizer()) {
+					if ($sanitizer = $schema->getProperty($k)->getSanitizer()) {
 						$result[$k] = $this->sanitizerManager->getSanitizer($sanitizer)->sanitize($v);
 					}
 				}
