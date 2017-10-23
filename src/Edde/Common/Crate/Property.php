@@ -20,6 +20,7 @@
 			 * @var mixed
 			 */
 			protected $value;
+			protected $dirty = false;
 
 			/**
 			 * @param string $name
@@ -40,6 +41,8 @@
 			 */
 			public function setDefault($value): IProperty {
 				$this->default = $value;
+				$this->value = null;
+				$this->dirty = false;
 				return $this;
 			}
 
@@ -54,7 +57,10 @@
 			 * @inheritdoc
 			 */
 			public function setValue($value): IProperty {
-				$this->value = $value;
+				$this->dirty = false;
+				if ($this->default !== ($this->value = $value)) {
+					$this->dirty = true;
+				}
 				return $this;
 			}
 
@@ -76,14 +82,14 @@
 			 * @inheritdoc
 			 */
 			public function get($default = null) {
-				return $this->value ?: $this->default ?: $default;
+				return $this->dirty ? $this->value : ($this->default ?: $default);
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function isDirty(): bool {
-				return $this->default !== $this->value;
+				return $this->dirty;
 			}
 
 			/**
@@ -91,7 +97,8 @@
 			 */
 			public function commit(): IProperty {
 				$this->default = $this->value;
-				$this->value = false;
+				$this->value = null;
+				$this->dirty = false;
 				return $this;
 			}
 		}
