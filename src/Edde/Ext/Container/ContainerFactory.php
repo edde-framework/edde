@@ -14,6 +14,7 @@
 		use Edde\Api\Crypt\IRandomService;
 		use Edde\Api\Database\IDriver;
 		use Edde\Api\EddeException;
+		use Edde\Api\Filter\IFilterManager;
 		use Edde\Api\Generator\IGeneratorManager;
 		use Edde\Api\Http\IHttpUtils;
 		use Edde\Api\Http\IRequestService as IHttpRequestService;
@@ -45,6 +46,7 @@
 		use Edde\Common\Converter\ConverterManager;
 		use Edde\Common\Crypt\RandomService;
 		use Edde\Common\Database\DatabaseStorage;
+		use Edde\Common\Filter\FilterManager;
 		use Edde\Common\Generator\GeneratorManager;
 		use Edde\Common\Http\HttpUtils;
 		use Edde\Common\Http\RequestService as HttpRequestService;
@@ -63,6 +65,7 @@
 		use Edde\Common\Xml\XmlExport;
 		use Edde\Common\Xml\XmlParser;
 		use Edde\Ext\Converter\ConverterManagerConfigurator;
+		use Edde\Ext\Filter\FilterManagerConfigurator;
 		use Edde\Ext\Generator\GeneratorManagerConfigurator;
 		use Edde\Ext\Protocol\ProtocolServiceConfigurator;
 		use Edde\Ext\Router\RouterServiceConfigurator;
@@ -290,6 +293,7 @@
 					 * generator (related to schema) support
 					 */
 					IGeneratorManager::class        => GeneratorManager::class,
+					IFilterManager::class           => FilterManager::class,
 					/**
 					 * random & security support
 					 */
@@ -326,6 +330,7 @@
 					IRouterService::class    => RouterServiceConfigurator::class,
 					IConverterManager::class => ConverterManagerConfigurator::class,
 					IGeneratorManager::class => GeneratorManagerConfigurator::class,
+					IFilterManager::class    => FilterManagerConfigurator::class,
 				];
 			}
 		}
