@@ -1,7 +1,6 @@
 <?php
-	namespace App\Common\Upgrade;
+	namespace App\Ext\Upgrade;
 
-		use App\Ext\Upgrade\ZeroUpgrade;
 		use Edde\Api\Container\Exception\ContainerException;
 		use Edde\Api\Container\Exception\FactoryException;
 		use Edde\Api\Container\Inject\Container;
@@ -21,8 +20,6 @@
 				parent::configure($instance);
 				$instance->registerUpgradeList([
 					$this->container->create(ZeroUpgrade::class, [], __METHOD__),
-					//					$this->container->create(TestUpgrade::class, [], __METHOD__),
-					//					$this->container->create(JustAnotherUpgrade::class, [], __METHOD__),
 				]);
 			}
 		}

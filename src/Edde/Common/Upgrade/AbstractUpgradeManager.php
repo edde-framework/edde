@@ -2,6 +2,7 @@
 	namespace Edde\Common\Upgrade;
 
 		use Edde\Api\Storage\Inject\Storage;
+		use Edde\Api\Upgrade\Exception\CurrentVersionException;
 		use Edde\Api\Upgrade\Exception\InvalidVersionException;
 		use Edde\Api\Upgrade\Exception\NoUpgradesAvailableException;
 		use Edde\Api\Upgrade\Exception\UnknownVersionException;
@@ -38,39 +39,42 @@
 			 * @inheritdoc
 			 */
 			public function upgrade(string $version = null): IUpgrade {
-				if (empty($this->upgradeList)) {
-					throw new NoUpgradesAvailableException('Cannot run upgrade: there are no available upgrades.' . ($this->isSetup() ? ' Upgrade manager is not probably properly configured.' : ' Setup has not been run, try call setup on [' . static ::class . ']'));
-				} else if ($version && isset($this->upgradeList[$version]) === null) {
-					throw new UnknownVersionException(sprintf('Requested unknown version [%s] for upgrade; there is no such upgrade available.', $version));
-				}
-				/** @var $upgradeList IUpgrade[] */
-				$upgradeList = null;
-				$currentVersion = $this->getVersion();
-				foreach ($this->upgradeList as $upgrade) {
-					if ($upgradeList && $upgrade->getVersion() === $currentVersion) {
-						throw new InvalidVersionException(sprintf('Requested version [%s] is older than current version [%s]!', $version, $currentVersion));
-					} else if ($upgradeList) {
-						$upgradeList[] = $upgrade;
-					} else if ($upgrade->getVersion() === $version || ($version === null && $currentVersion !== null && $upgrade->getVersion() === $currentVersion)) {
-						$upgradeList = [];
-					} else if ($version === null) {
-						$upgradeList[] = $upgrade;
-					}
-				}
-				if (empty($upgradeList)) {
-					throw new NoUpgradesAvailableException(sprintf('There are no upgrades available for the version [%s].', $version));
-				}
-				$this->onStartup();
+				$last = null;
 				try {
+					$this->onUpgradeStart();
+					if (empty($this->upgradeList)) {
+						throw new NoUpgradesAvailableException('Cannot run upgrade: there are no available upgrades.' . ($this->isSetup() ? ' Upgrade manager is not probably properly configured.' : ' Setup has not been run, try call setup on [' . static ::class . ']'));
+					}
+					if ($version === null) {
+						end($this->upgradeList);
+						$version = key($this->upgradeList);
+					}
+					if (isset($this->upgradeList[$version]) === false) {
+						throw new UnknownVersionException(sprintf('Requested unknown version [%s] for upgrade; there is no such upgrade available.', $version));
+					}
+					$upgradeList = array_keys($this->upgradeList);
+					if (($current = $this->getVersion()) !== null && array_search($current, $upgradeList, true) > array_search($version, $upgradeList, true)) {
+						throw new InvalidVersionException(sprintf('Current version [%s] is newer than requested version [%s] for upgrade.', $current, $version));
+					}
+					$upgradeList = $current ? array_slice($this->upgradeList, $index = array_search($current, array_keys($this->upgradeList), true) + 1, null, true) : $this->upgradeList;
+					if (isset($index) && $index >= count($this->upgradeList)) {
+						throw new CurrentVersionException(sprintf('Version [%s] is current; no upgrades has been run.', $current));
+					}
+					if (empty($upgradeList)) {
+						throw new NoUpgradesAvailableException(sprintf('There are no upgrades available for the version [%s].', $version));
+					}
 					$upgrade = null;
 					foreach ($upgradeList as $upgrade) {
-						$upgrade->upgrade();
+						($last = $upgrade)->upgrade();
 						$this->onUpgrade($upgrade);
+						if ($upgrade->getVersion() === $version) {
+							break;
+						}
 					}
-					$this->onCommit($upgrade);
+					$this->onUpgradeEnd($upgrade);
 					return $upgrade;
 				} catch (\Throwable $throwable) {
-					$this->onRollback($upgrade, $throwable);
+					$this->onUpgradeFailed($throwable, $last);
 					throw $throwable;
 				}
 			}
@@ -81,22 +85,18 @@
 			public function rollback(string $version = null): IUpgrade {
 			}
 
-			protected function onStartup(): void {
+			protected function onUpgradeStart(): void {
 				$this->storage->start();
 			}
 
 			protected function onUpgrade(IUpgrade $upgrade): void {
 			}
 
-			protected function onCommit(IUpgrade $upgrade): void {
+			protected function onUpgradeEnd(IUpgrade $upgrade): void {
 				$this->storage->commit();
 			}
 
-			/**
-			 * @param IUpgrade   $upgrade
-			 * @param \Throwable $throwable
-			 */
-			protected function onRollback(IUpgrade $upgrade, \Throwable $throwable): void {
+			protected function onUpgradeFailed(\Throwable $throwable, IUpgrade $upgrade = null): void {
 				$this->storage->rollback();
 			}
 		}

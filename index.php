@@ -9,7 +9,7 @@
 	declare(strict_types=1);
 	use App\Common\Application\Context;
 	use App\Common\Upgrade\UpgradeManager;
-	use App\Common\Upgrade\UpgradeManagerConfigurator;
+	use App\Ext\Upgrade\UpgradeManagerConfigurator;
 	use Edde\Api\Application\IContext;
 	use Edde\Api\Application\IRootDirectory;
 	use Edde\Api\Database\IDriver;

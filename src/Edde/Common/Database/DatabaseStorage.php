@@ -120,6 +120,9 @@
 					}
 				}
 				$this->execute($query);
+				/**
+				 * entity must be set as not dirty!
+				 */
 				return $this;
 			}
 

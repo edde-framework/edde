@@ -2,6 +2,7 @@
 	namespace App\Common\Upgrade\Cli;
 
 		use Edde\Api\Application\Exception\AbortException;
+		use Edde\Api\Upgrade\Exception\CurrentVersionException;
 		use Edde\Api\Upgrade\Inject\UpgradeManager;
 		use Edde\Common\Object\Object;
 		use Edde\Ext\Control\CliController;
@@ -18,7 +19,9 @@
 			 */
 			public function actionUpgrade() {
 				try {
-					$this->upgradeManager->upgrade();
+					printf("Upgraded to [%s].\n", $this->upgradeManager->upgrade()->getVersion());
+				} catch (CurrentVersionException $exception) {
+					printf("Everything is nice and shiny!\n");
 				} catch (\Throwable $exception) {
 					$this->abort($exception->getMessage(), -1, $exception);
 				}
