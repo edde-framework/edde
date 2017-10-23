@@ -55,10 +55,11 @@
 			 * @inheritdoc
 			 */
 			public function getProperty(string $name): IProperty {
-				if (isset($this->propertyList[$name]) === false) {
+				$propertyList = $this->getPropertyList();
+				if (isset($propertyList[$name]) === false) {
 					throw new UnknownPropertyException(sprintf('Requested unknown property [%s] on schema [%s].', $name, $this->getName()));
 				}
-				return $this->propertyList[$name];
+				return $propertyList[$name];
 			}
 
 			/**
@@ -69,7 +70,7 @@
 					return $this->propertyList;
 				}
 				foreach ($this->node->getNodeList() as $node) {
-					$this->propertyList[] = new Property($node);
+					$this->propertyList[$node->getAttribute('name')] = new Property($node);
 				}
 				return $this->propertyList;
 			}
@@ -80,23 +81,9 @@
 			public function getPrimaryList(): array {
 				$propertyList = [];
 				/** @var $property IProperty */
-				foreach ($this->getPropertyList() as $property) {
+				foreach ($this->getPropertyList() as $name => $property) {
 					if ($property->isPrimary()) {
-						$propertyList[] = $property;
-					}
-				}
-				return $propertyList;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getGeneratorList(): array {
-				$propertyList = [];
-				/** @var $property IProperty */
-				foreach ($this->getPropertyList() as $property) {
-					if ($property->getGenerator() !== null) {
-						$propertyList[] = $property;
+						$propertyList[$name] = $property;
 					}
 				}
 				return $propertyList;

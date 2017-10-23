@@ -59,9 +59,9 @@
 			public function generate(string $schema, array $source): array {
 				$schema = $this->getSchema($schema);
 				$result = $source;
-				foreach ($schema->getGeneratorList() as $property) {
-					if (isset($source[$name = $property->getName()]) === false) {
-						$source[$name] = $this->generatorManager->getGenerator($name)->generate();
+				foreach ($schema->getPropertyList() as $property) {
+					if (($generator = $property->getGenerator()) && isset($source[$name = $property->getName()]) === false) {
+						$source[$name] = $this->generatorManager->getGenerator($generator)->generate();
 					}
 				}
 				return $result;

@@ -60,13 +60,6 @@
 			public function getPrimaryList(): array;
 
 			/**
-			 * get list of properties with generator
-			 *
-			 * @return IProperty[]
-			 */
-			public function getGeneratorList(): array;
-
-			/**
 			 * return list of property nodes
 			 *
 			 * @return INode[]
