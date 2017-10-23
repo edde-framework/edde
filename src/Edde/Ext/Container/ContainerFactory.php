@@ -22,6 +22,7 @@
 		use Edde\Api\Runtime\IRuntime;
 		use Edde\Api\Schema\ISchemaManager;
 		use Edde\Api\Schema\ISchemaReflectionService;
+		use Edde\Api\Storage\IEntityManager;
 		use Edde\Api\Storage\IStorage;
 		use Edde\Api\Upgrade\IUpgradeManager;
 		use Edde\Api\Utils\ICliUtils;
@@ -51,6 +52,7 @@
 		use Edde\Common\Runtime\Runtime;
 		use Edde\Common\Schema\SchemaManager;
 		use Edde\Common\Schema\SchemaReflectionService;
+		use Edde\Common\Storage\EntityManager;
 		use Edde\Common\Upgrade\AbstractUpgradeManager;
 		use Edde\Common\Utils\CliUtils;
 		use Edde\Common\Utils\StringUtils;
@@ -279,6 +281,7 @@
 					/**
 					 * storage support
 					 */
+					IEntityManager::class           => EntityManager::class,
 					IStorage::class                 => DatabaseStorage::class,
 					IDriver::class                  => self::exception(sprintf('Please register driver to use Database Storage (or whatever storage is using [%s] implementation).', IDriver::class)),
 					/**

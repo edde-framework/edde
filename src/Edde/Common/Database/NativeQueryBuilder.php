@@ -62,15 +62,14 @@
 			}
 
 			protected function fragmentInsert(INode $root): INativeQuery {
-				$parameterList = [];
+				$parameterList = $this->fragmentParameterList($root->getNode('parameter-list'))->getParameterList();
 				$nameList = [];
 				$columnList = [];
-				foreach ($root->getAttributeList() as $k => $v) {
-					$parameterList[$parameter = sha1($k)] = $v;
-					$nameList[] = $this->delimite($k);
-					$columnList[] = ':' . $parameter;
+				foreach ($root->getNode('column-list')->getNodeList() as $node) {
+					$nameList[] = $this->delimite($node->getAttribute('column'));
+					$columnList[] = ':' . $node->getAttribute('parameter');
 				}
-				$sql = 'INSERT INTO ' . $this->delimite($root->getValue()) . ' (';
+				$sql = 'INSERT INTO ' . $this->delimite($root->getAttribute('table')) . ' (';
 				$sql .= implode(',', $nameList) . ') VALUES (';
 				return new NativeQuery($sql . implode(', ', $columnList) . ')', $parameterList);
 			}
@@ -85,7 +84,7 @@
 				$sql[] = "UPDATE\n\t" . $this->delimite($root->getAttribute('table')) . "\nSET\n\t";
 				$parameterList = $this->fragment($root->getNode('parameter-list'))->getParameterList();
 				$setList = [];
-				foreach ($root->getNode('set-list')->getNodeList() as $node) {
+				foreach ($root->getNode('column-list')->getNodeList() as $node) {
 					$setList[] = $this->delimite($node->getAttribute('column')) . ' = :' . $node->getAttribute('parameter');
 				}
 				$sql[] = implode(",\n\t", $setList) . "\n";
@@ -123,7 +122,13 @@
 					$sql[] = $query->getQuery();
 					array_merge($parameterList, $query->getParameterList());
 				}
-				array_merge($parameterList, ($this->fragment($root->getNode('parameter-list')))->getParameterList());
+				if ($root->hasNode('order-list')) {
+					$sql[] = "ORDER BY\n";
+					$query = $this->fragment($root->getNode('order-list'));
+					$sql[] = $query->getQuery();
+					array_merge($parameterList, $query->getParameterList());
+				}
+				array_merge($parameterList, ($this->fragmentParameterList($root->getNode('parameter-list')))->getParameterList());
 				$sql = implode('', $sql);
 				return new NativeQuery($sql, $parameterList);
 			}
@@ -250,6 +255,14 @@
 						throw new DriverQueryException(sprintf('Unknown where IN target type [%s].', $target));
 				}
 				throw new DriverQueryException(sprintf('Unknown where type [%s].', $type));
+			}
+
+			protected function fragmentOrderList(INode $root): INativeQuery {
+				$orderList = [];
+				foreach ($root->getNodeList() as $node) {
+					$orderList[] = $this->delimite($node->getAttribute('column')) . ' ' . ($node->getAttribute('asc', true) ? 'ASC' : 'DESC');
+				}
+				return new NativeQuery(implode(',', $orderList));
 			}
 
 			protected function fragmentParameterList(INode $root): INativeQuery {

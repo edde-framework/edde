@@ -49,6 +49,27 @@
 			public function execute(IQuery $query): \PDOStatement;
 
 			/**
+			 * start a transaction
+			 *
+			 * @return IDriver
+			 */
+			public function start(): IDriver;
+
+			/**
+			 * commit a transaction
+			 *
+			 * @return IDriver
+			 */
+			public function commit(): IDriver;
+
+			/**
+			 * rollback a transaction
+			 *
+			 * @return IDriver
+			 */
+			public function rollback(): IDriver;
+
+			/**
 			 * delimite input string
 			 *
 			 * @param string $delimite

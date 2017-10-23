@@ -6,6 +6,11 @@
 		use Edde\Common\Node\Node;
 
 		class TableFragment extends AbstractFragment {
+			/**
+			 * @var OrderFragment
+			 */
+			protected $orderFragment;
+
 			public function column(string $name): TableFragment {
 				$this->root->getNode('column-list')->addNode($node = new Node('column', $name, ['type' => 'column']));
 				if (($alis = $this->node->getAttribute('alias')) !== null) {
@@ -44,5 +49,9 @@
 			public function where(): WhereFragment {
 				$this->root->getNode('where-list')->addNode($node = new Node('where'));
 				return new WhereFragment($this->root, $node);
+			}
+
+			public function order(): OrderFragment {
+				return $this->orderFragment ?: $this->orderFragment = new OrderFragment($this->root, $this->root->getNode('order-list'));
 			}
 		}

@@ -48,4 +48,12 @@
 			 * @throws UnknownVersionException if requested version does not exists
 			 */
 			public function rollback(string $version = null): IUpgrade;
+
+			/**
+			 * get current version (basically current version of an application); if null
+			 * is returned, application is in "zero state", thus nothing nowhere
+			 *
+			 * @return string|null
+			 */
+			public function getVersion(): ?string;
 		}

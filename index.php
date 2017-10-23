@@ -12,10 +12,12 @@
 	use App\Common\Upgrade\UpgradeManagerConfigurator;
 	use Edde\Api\Application\IContext;
 	use Edde\Api\Application\IRootDirectory;
+	use Edde\Api\Database\IDriver;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Application\RootDirectory;
 	use Edde\Common\Container\Factory\CascadeFactory;
 	use Edde\Common\Container\Factory\ClassFactory;
+	use Edde\Common\Database\Driver\PostgresDriver;
 	use Edde\Ext\Container\ContainerFactory;
 	use Tracy\Debugger;
 
@@ -55,6 +57,7 @@
 			 */
 			IContext::class        => Context::class,
 			IUpgradeManager::class => UpgradeManager::class,
+			IDriver::class         => ContainerFactory::instance(PostgresDriver::class, ['pgsql:dbname=edde;user=edde;password=edde;host=172.17.0.1']),
 		], is_array($local = @include $local) ? $local : [], [
 			/**
 			 * This stranger here must (should be) be last, because it's canHandle method is able to kill a lot of dependencies and

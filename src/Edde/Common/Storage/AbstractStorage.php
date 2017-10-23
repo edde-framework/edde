@@ -17,4 +17,10 @@
 				}
 				throw new EntityNotFoundException(sprintf('Cannot load any Entity by query [%s].', $query->getDescription()));
 			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function get($primary, string $schema): IEntity {
+			}
 		}

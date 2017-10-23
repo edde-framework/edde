@@ -5,7 +5,7 @@
 
 		interface IEntityManager extends IConfigurable {
 			/**
-			 * creates an entity
+			 * creates an entity; the set source (data) could make entity dirty
 			 *
 			 * @param string $schema
 			 * @param array  $source

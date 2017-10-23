@@ -59,6 +59,30 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function start(): IDriver {
+				$this->pdo->beginTransaction();
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function commit(): IDriver {
+				$this->pdo->commit();
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function rollback(): IDriver {
+				$this->pdo->rollBack();
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function delimite(string $delimite): string {
 				return '"' . str_replace('"', '""', $delimite) . '"';
 			}

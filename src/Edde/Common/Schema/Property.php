@@ -44,6 +44,7 @@
 			 */
 			public function unique(bool $unique = true): IProperty {
 				$this->node->setAttribute('unique', $unique);
+				$this->required($unique);
 				return $this;
 			}
 

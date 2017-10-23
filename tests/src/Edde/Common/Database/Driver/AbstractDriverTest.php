@@ -7,11 +7,14 @@
 		use Edde\Api\Database\Inject\Driver;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
+		use Edde\Api\Storage\Exception\DuplicateTableException;
 		use Edde\Api\Storage\Exception\IntegrityException;
 		use Edde\Api\Storage\Exception\NullValueException;
+		use Edde\Api\Storage\Exception\UnknownTableException;
 		use Edde\Common\Container\Factory\ClassFactory;
 		use Edde\Common\Query\CreateSchemaQuery;
 		use Edde\Common\Query\InsertQuery;
+		use Edde\Common\Query\NativeQuery;
 		use Edde\Common\Query\UpdateQuery;
 		use Edde\Common\Schema\Schema;
 		use Edde\Ext\Container\ContainerFactory;
@@ -37,19 +40,37 @@
 			 * @throws DriverQueryException
 			 * @throws IntegrityException
 			 */
+			public function testDuplicateTable() {
+				$this->expectException(DuplicateTableException::class);
+				$this->driver->execute(new CreateSchemaQuery($this->schema));
+			}
+
+			/**
+			 * @throws DriverQueryException
+			 * @throws IntegrityException
+			 */
+			public function testUndefinedTable() {
+				$this->expectException(UnknownTableException::class);
+				$this->driver->native(new NativeQuery('SELECT * FROM ' . $this->driver->delimite('not-exists')));
+			}
+
+			/**
+			 * @throws DriverQueryException
+			 * @throws IntegrityException
+			 */
 			public function testInsertQuery() {
 				$this->expectException(DuplicateEntryException::class);
-				$this->driver->execute(new InsertQuery($this->schema, [
+				$this->driver->execute(new InsertQuery($this->schema->getName(), [
 					'guid'                     => '1234',
 					'property-for-this-table'  => 'string',
 					'this-one-is-not-required' => 12,
 				]));
-				$this->driver->execute(new InsertQuery($this->schema, [
+				$this->driver->execute(new InsertQuery($this->schema->getName(), [
 					'guid'                     => '1235',
 					'property-for-this-table'  => 'string',
 					'this-one-is-not-required' => 24,
 				]));
-				$this->driver->execute(new InsertQuery($this->schema, [
+				$this->driver->execute(new InsertQuery($this->schema->getName(), [
 					'guid'                     => '1236',
 					'property-for-this-table'  => 'string',
 					'this-one-is-not-required' => 12,
@@ -63,11 +84,11 @@
 			 */
 			public function testUpdateQuery() {
 				$this->expectException(NullValueException::class);
-				$this->driver->execute((new UpdateQuery($this->schema, [
+				$this->driver->execute((new UpdateQuery($this->schema->getName(), [
 					'property-for-this-table'  => 'string-ex',
 					'this-one-is-not-required' => null,
 				]))->where()->eq('guid')->to('1235')->query());
-				$this->driver->execute((new UpdateQuery($this->schema, [
+				$this->driver->execute((new UpdateQuery($this->schema->getName(), [
 					'property-for-this-table'  => null,
 					'this-one-is-not-required' => 32,
 				]))->where()->eq('guid')->to('1234')->query());

@@ -3,9 +3,7 @@
 
 		use Edde\Api\Database\Exception\DriverQueryException;
 		use Edde\Api\Database\Inject\Driver;
-		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\IntegrityException;
-		use Edde\Api\Storage\Exception\NullValueException;
 		use Edde\Common\Query\NativeQuery;
 		use Edde\Ext\Container\ContainerFactory;
 
@@ -28,17 +26,5 @@
 					'edde',
 					'edde',
 				]);
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			protected function exception(\Throwable $throwable) {
-				if (stripos($message = $throwable->getMessage(), 'unique') !== false) {
-					throw new DuplicateEntryException($message, 0, $throwable);
-				} else if (stripos($message, 'not null') !== false) {
-					throw new NullValueException($message, 0, $throwable);
-				}
-				throw new DriverQueryException($message, 0, $throwable);
 			}
 		}
