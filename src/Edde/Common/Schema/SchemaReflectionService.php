@@ -40,17 +40,18 @@
 						}
 						$attr = $this->stringUtils->match($doc, '~@schema\s*(?<attr>.*?)[\n\r]~sm', true);
 						$attr = $attr['attr'] ?? '';
-						$property = $schema->property($reflectionMethod->getName());
-						if (($generator = $this->stringUtils->match($doc, '~@generator\s*(?<generator>.*?)[\n\r]~sm', true)) !== null) {
-							$property->generator(trim($generator['generator']));
-						}
+						$property = $schema->property($name = $reflectionMethod->getName());
 						$property->type('string');
 						if (strpos($attr, 'unique') !== false) {
 							$property->unique();
 						}
 						if (strpos($attr, 'primary') !== false) {
 							$property->primary();
-						};
+							$property->generator($name);
+						}
+						if (($generator = $this->stringUtils->match($doc, '~@generator\s*(?<generator>.*?)[\n\r]~sm', true)) !== null) {
+							$property->generator(trim($generator['generator']));
+						}
 						if (($type = $reflectionMethod->getReturnType()) !== null) {
 							$property->type($type->getName());
 							$property->required($type->allowsNull() === false);

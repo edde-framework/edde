@@ -1,6 +1,7 @@
 <?php
 	namespace Edde\Common\Storage;
 
+		use Edde\Api\Filter\IFilter;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Storage\IEntity;
 		use Edde\Api\Storage\IEntityManager;
@@ -8,6 +9,28 @@
 
 		class EntityManager extends Object implements IEntityManager {
 			use SchemaManager;
+			/**
+			 * @var IFilter[]
+			 */
+			protected $generatorList = [];
+
+			/**
+			 * @inheritdoc
+			 */
+			public function registerGenerator(string $name, IFilter $filter): IEntityManager {
+				$this->generatorList[$name] = $filter;
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function registerGeneratorList(array $filterList): IEntityManager {
+				foreach ($filterList as $name => $filter) {
+					$this->registerGenerator($name, $filter);
+				}
+				return $this;
+			}
 
 			/**
 			 * @inheritdoc

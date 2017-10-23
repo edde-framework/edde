@@ -11,6 +11,7 @@
 		use Edde\Api\Container\IContainer;
 		use Edde\Api\Container\IFactory;
 		use Edde\Api\Converter\IConverterManager;
+		use Edde\Api\Crypt\IRandomService;
 		use Edde\Api\Database\IDriver;
 		use Edde\Api\EddeException;
 		use Edde\Api\Http\IHttpUtils;
@@ -41,6 +42,7 @@
 		use Edde\Common\Container\Factory\LinkFactory;
 		use Edde\Common\Container\Factory\ProxyFactory;
 		use Edde\Common\Converter\ConverterManager;
+		use Edde\Common\Crypt\RandomService;
 		use Edde\Common\Database\DatabaseStorage;
 		use Edde\Common\Http\HttpUtils;
 		use Edde\Common\Http\RequestService as HttpRequestService;
@@ -61,6 +63,7 @@
 		use Edde\Ext\Converter\ConverterManagerConfigurator;
 		use Edde\Ext\Protocol\ProtocolServiceConfigurator;
 		use Edde\Ext\Router\RouterServiceConfigurator;
+		use Edde\Ext\Storage\EntityManagerConfigurator;
 		use ReflectionMethod;
 
 		/**
@@ -279,6 +282,10 @@
 					ISchemaManager::class           => SchemaManager::class,
 					ISchemaReflectionService::class => SchemaReflectionService::class,
 					/**
+					 * Random & security support
+					 */
+					IRandomService::class           => RandomService::class,
+					/**
 					 * storage support
 					 */
 					IEntityManager::class           => EntityManager::class,
@@ -309,6 +316,7 @@
 					IProtocolService::class  => ProtocolServiceConfigurator::class,
 					IRouterService::class    => RouterServiceConfigurator::class,
 					IConverterManager::class => ConverterManagerConfigurator::class,
+					IEntityManager::class    => EntityManagerConfigurator::class,
 				];
 			}
 		}
