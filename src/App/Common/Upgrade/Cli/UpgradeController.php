@@ -1,17 +1,27 @@
 <?php
 	namespace App\Common\Upgrade\Cli;
 
+		use Edde\Api\Application\Exception\AbortException;
+		use Edde\Api\Upgrade\Inject\UpgradeManager;
 		use Edde\Common\Object\Object;
 		use Edde\Ext\Control\CliController;
 
 		class UpgradeController extends Object {
 			use CliController;
+			use UpgradeManager;
 
 			/**
 			 * @help run an upgrade to the given version or do full upgrade to the latest available version
 			 * @help [--version] <version name>: select target upgrade
+			 *
+			 * @throws AbortException
 			 */
 			public function actionUpgrade() {
+				try {
+					$this->upgradeManager->upgrade();
+				} catch (\Throwable $exception) {
+					$this->abort($exception->getMessage(), -1, $exception);
+				}
 			}
 
 			/**
