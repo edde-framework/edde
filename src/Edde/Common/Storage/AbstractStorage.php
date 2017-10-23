@@ -11,16 +11,10 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function load(IQuery $query): IEntity {
-				foreach ($this->collection($query) as $entity) {
+			public function load(string $schema, IQuery $query): IEntity {
+				foreach ($this->collection($schema, $query) as $entity) {
 					return $entity;
 				}
 				throw new EntityNotFoundException(sprintf('Cannot load any Entity by query [%s].', $query->getDescription()));
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function get($primary, string $schema): IEntity {
 			}
 		}

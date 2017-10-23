@@ -21,4 +21,15 @@
 			public function getSchema(): ISchema {
 				return $this->schema;
 			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getPrimaryList(): array {
+				$primaryList = [];
+				foreach ($this->schema->getPrimaryList() as $property) {
+					$primaryList[] = $this->getProperty($property->getName());
+				}
+				return $primaryList;
+			}
 		}

@@ -2,6 +2,7 @@
 	namespace Edde\Api\Storage;
 
 		use Edde\Api\Crate\ICrate;
+		use Edde\Api\Crate\IProperty;
 		use Edde\Api\Schema\ISchema;
 
 		/**
@@ -14,4 +15,11 @@
 			 * @return ISchema
 			 */
 			public function getSchema(): ISchema;
+
+			/**
+			 * return list of primary properties
+			 *
+			 * @return IProperty[]
+			 */
+			public function getPrimaryList(): array;
 		}

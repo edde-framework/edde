@@ -14,6 +14,13 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function get(string $property, $default = null) {
+				return $this->getProperty($property)->get($default);
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function hasProperty(string $name): bool {
 				return isset($this->propertyList[$name]);
 			}

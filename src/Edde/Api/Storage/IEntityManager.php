@@ -37,6 +37,18 @@
 			public function create(string $schema, array $source = []): IEntity;
 
 			/**
+			 * quite complex method: create an entity, fill data (entity is NOT dirty) and
+			 * try to convert properties due it's types (for example database will not return
+			 * float as float, but as a string, ...)
+			 *
+			 * @param string $schema
+			 * @param array  $source
+			 *
+			 * @return IEntity
+			 */
+			public function factory(string $schema, array $source): IEntity;
+
+			/**
 			 * entity is using schema with types, so entity manager should do accurate
 			 * dirty state detection (implementation in crate is quite weak)
 			 *

@@ -37,9 +37,25 @@
 			 * @inheritdoc
 			 */
 			public function create(string $schema, array $source = []): IEntity {
-				$entity = new Entity($this->schemaManager->getSchema($schema));
+				$entity = $this->createEntity($schema);
 				$entity->update($source);
 				return $entity;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function factory(string $schema, array $source): IEntity {
+				$entity = $this->createEntity($schema);
+				$entity->push($source);
+				return $entity;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function createEntity(string $schema): IEntity {
+				return new Entity($this->schemaManager->getSchema($schema));
 			}
 
 			/**

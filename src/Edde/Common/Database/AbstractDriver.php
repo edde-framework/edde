@@ -33,9 +33,10 @@
 			public function native(INativeQuery $nativeQuery): \PDOStatement {
 				$exception = null;
 				try {
-					$prepared = $this->pdo->prepare($nativeQuery->getQuery());
-					$prepared->execute($nativeQuery->getParameterList());
-					return $prepared;
+					$statement = $this->pdo->prepare($nativeQuery->getQuery());
+					$statement->setFetchMode(PDO::FETCH_ASSOC);
+					$statement->execute($nativeQuery->getParameterList());
+					return $statement;
 				} catch (\PDOException $exception) {
 					$this->exception($exception);
 				}

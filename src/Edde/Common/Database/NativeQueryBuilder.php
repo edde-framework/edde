@@ -128,7 +128,7 @@
 					$sql[] = $query->getQuery();
 					array_merge($parameterList, $query->getParameterList());
 				}
-				array_merge($parameterList, ($this->fragmentParameterList($root->getNode('parameter-list')))->getParameterList());
+				$parameterList = array_merge($parameterList, ($this->fragmentParameterList($root->getNode('parameter-list')))->getParameterList());
 				$sql = implode('', $sql);
 				return new NativeQuery($sql, $parameterList);
 			}
@@ -201,12 +201,12 @@
 			 * @throws DriverQueryException
 			 */
 			protected function fragmentWhereList(INode $root): INativeQuery {
-				$whereList = [];
+				$whereList = null;
 				$parameterList = [];
 				foreach ($root->getNodeList() as $node) {
 					$query = $this->fragment($node);
 					$where = null;
-					if ($relationTo = $node->getAttribute('relation-to')) {
+					if ($whereList && ($relationTo = $node->getAttribute('relation-to'))) {
 						$where .= ' ' . strtoupper($relationTo);
 					}
 					$where .= $query->getQuery();

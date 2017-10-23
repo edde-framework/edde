@@ -10,7 +10,10 @@
 		use Edde\Api\Storage\IEntity;
 		use Edde\Api\Storage\Inject\EntityManager;
 		use Edde\Api\Storage\IStorage;
+		use Edde\Common\Query\InsertQuery;
 		use Edde\Common\Query\NativeQuery;
+		use Edde\Common\Query\SelectQuery;
+		use Edde\Common\Query\UpdateQuery;
 		use Edde\Common\Storage\AbstractStorage;
 		use Edde\Common\Storage\Collection;
 
@@ -95,15 +98,36 @@
 				 * generate values for properties with a generator
 				 */
 				$this->entityManager->generate($entity);
-				$dirtyProperties = $this->entityManager->getDirtyProperties($entity);
 				$schema = $entity->getSchema();
+				$query = new SelectQuery();
+				$query->setDescription('check entity existence query');
+				$query->table($name = $schema->getName())->all();
+				$where = $query->where();
+				foreach (($primaryList = $entity->getPrimaryList()) as $property) {
+					$where->and()->eq($property->getName())->to($property->get());
+				}
+				foreach ($this->execute($query) as $hasEntity) {
+					break;
+				}
+				$source = [];
+				foreach ($this->entityManager->getDirtyProperties($entity) as $property) {
+					$source[$property->getName()] = $property->get();
+				}
+				$query = isset($hasEntity) ? new UpdateQuery($name, $source) : new InsertQuery($name, $source);
+				if (isset($hasEntity)) {
+					$where = $query->where();
+					foreach ($primaryList as $property) {
+						$where->and()->eq($property->getName())->to($property->get());
+					}
+				}
+				$this->execute($query);
 				return $this;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function collection(IQuery $query): ICollection {
-				return new Collection($this, $query);
+			public function collection(string $schema, IQuery $query): ICollection {
+				return new Collection($schema, $this->entityManager, $this, $query);
 			}
 		}

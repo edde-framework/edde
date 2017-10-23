@@ -7,6 +7,16 @@
 	 */
 		interface ICrate {
 			/**
+			 * get an (effective) value
+			 *
+			 * @param string $property
+			 * @param mixed  $default
+			 *
+			 * @return mixed
+			 */
+			public function get(string $property, $default = null);
+
+			/**
 			 * does property with the given name exists in this crate?
 			 *
 			 * @param string $name

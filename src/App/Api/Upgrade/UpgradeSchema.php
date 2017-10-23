@@ -15,5 +15,5 @@
 			/**
 			 * @schema
 			 */
-			public function stamp(): \DateTime;
+			public function stamp(): float;
 		}
