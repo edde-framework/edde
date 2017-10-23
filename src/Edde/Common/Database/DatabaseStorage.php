@@ -99,19 +99,23 @@
 				$schema = $entity->getSchema();
 				$query = new SelectQuery();
 				$query->setDescription('check entity existence query');
-				$query->table($name = $schema->getName())->all();
+				$query->table($schemaName = $schema->getName())->all();
 				$where = $query->where();
+				$source = [];
 				foreach (($primaryList = $entity->getPrimaryList()) as $property) {
-					$where->and()->eq($property->getName())->to($property->get());
+					$where->and()->eq($name = $property->getName())->to($value = $property->get());
+					if ($value === null) {
+						$source[$name] = $value;
+					}
 				}
 				foreach ($this->execute($query) as $hasEntity) {
 					break;
 				}
-				$source = [];
 				foreach ($this->entityManager->getDirtyProperties($entity) as $property) {
 					$source[$property->getName()] = $property->get();
 				}
-				$query = isset($hasEntity) ? new UpdateQuery($name, $source) : new InsertQuery($name, $source);
+				$source = $this->generatorManager->generate($source);
+				$query = isset($hasEntity) ? new UpdateQuery($schemaName, $source) : new InsertQuery($schemaName, $source);
 				if (isset($hasEntity)) {
 					$where = $query->where();
 					foreach ($primaryList as $property) {
