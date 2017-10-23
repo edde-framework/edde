@@ -55,5 +55,5 @@
 			 *
 			 * @return IProperty[]
 			 */
-			public function getDirtyList(): array;
+			public function getDirtyProperties(): array;
 		}

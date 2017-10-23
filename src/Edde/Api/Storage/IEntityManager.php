@@ -2,6 +2,7 @@
 	namespace Edde\Api\Storage;
 
 		use Edde\Api\Config\IConfigurable;
+		use Edde\Api\Crate\IProperty;
 
 		interface IEntityManager extends IConfigurable {
 			/**
@@ -13,4 +14,23 @@
 			 * @return IEntity
 			 */
 			public function create(string $schema, array $source = []): IEntity;
+
+			/**
+			 * entity is using schema with types, so entity manager should do accurate
+			 * dirty state detection (implementation in crate is quite weak)
+			 *
+			 * @param IEntity $entity
+			 *
+			 * @return bool
+			 */
+			public function isDirty(IEntity $entity): bool;
+
+			/**
+			 * return dirty properties of the given entity
+			 *
+			 * @param IEntity $entity
+			 *
+			 * @return IProperty[]
+			 */
+			public function getDirtyProperties(IEntity $entity): array;
 		}

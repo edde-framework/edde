@@ -17,4 +17,18 @@
 				$entity->update($source);
 				return $entity;
 			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function isDirty(IEntity $entity): bool {
+				return $entity->isDirty();
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getDirtyProperties(IEntity $entity): array {
+				return $entity->getDirtyProperties();
+			}
 		}

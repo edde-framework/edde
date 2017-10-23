@@ -38,9 +38,12 @@
 						if (($doc = $reflectionMethod->getDocComment()) === false || strpos($doc, '@schema') === false) {
 							continue;
 						}
-						$doc = $this->stringUtils->match($doc, '~@schema\s*(?<attr>.*?)[\n\r]~sm', true);
-						$attr = $doc['attr'] ?? '';
+						$attr = $this->stringUtils->match($doc, '~@schema\s*(?<attr>.*?)[\n\r]~sm', true);
+						$attr = $attr['attr'] ?? '';
 						$property = $schema->property($reflectionMethod->getName());
+						if (($generator = $this->stringUtils->match($doc, '~@generator\s*(?<generator>.*?)[\n\r]~sm', true)) !== null) {
+							$property->generator(trim($generator['generator']));
+						}
 						$property->type('string');
 						if (strpos($attr, 'unique') !== false) {
 							$property->unique();

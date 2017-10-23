@@ -28,6 +28,20 @@
 			public function isPrimary(): bool;
 
 			/**
+			 * name of value generator for this property (if value is null)
+			 *
+			 * @param string $name
+			 *
+			 * @return IProperty
+			 */
+			public function generator(string $name): IProperty;
+
+			/**
+			 * @return string
+			 */
+			public function getGenerator(): ?string;
+
+			/**
 			 * set a property as it's value is unique in it's schema
 			 *
 			 * @param bool $unique
@@ -42,16 +56,6 @@
 			 * @return bool
 			 */
 			public function isUnique(): bool;
-
-			/**
-			 * set property value generator; if a value is not set, this generator should be used
-			 * to get a property value
-			 *
-			 * @param string $string
-			 *
-			 * @return IProperty
-			 */
-			public function generator(string $string): IProperty;
 
 			/**
 			 * set property as it's required

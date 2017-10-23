@@ -63,7 +63,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getDirtyList(): array {
+			public function getDirtyProperties(): array {
 				$dirtyList = [];
 				if ($this->isDirty() === false) {
 					return [];

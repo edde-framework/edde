@@ -6,7 +6,8 @@
 	 */
 		interface UserSchema {
 			/**
-			 * @schema primary
+			 * @schema    primary
+			 * @generator guid
 			 */
 			public function guid(): string;
 

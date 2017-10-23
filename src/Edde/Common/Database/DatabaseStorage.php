@@ -8,12 +8,14 @@
 		use Edde\Api\Storage\Exception\NoTransactionException;
 		use Edde\Api\Storage\ICollection;
 		use Edde\Api\Storage\IEntity;
+		use Edde\Api\Storage\Inject\EntityManager;
 		use Edde\Api\Storage\IStorage;
 		use Edde\Common\Query\NativeQuery;
 		use Edde\Common\Storage\AbstractStorage;
 		use Edde\Common\Storage\Collection;
 
 		class DatabaseStorage extends AbstractStorage {
+			use EntityManager;
 			use Driver;
 			/**
 			 * @var int
@@ -86,9 +88,10 @@
 				/**
 				 * entities not changed will not be saved
 				 */
-				if ($entity->isDirty() === false) {
+				if ($this->entityManager->isDirty($entity) === false) {
 					return $this;
 				}
+				$dirtyProperties = $this->entityManager->getDirtyProperties($entity);
 				$schema = $entity->getSchema();
 				return $this;
 			}

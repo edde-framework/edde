@@ -66,6 +66,13 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function getGenerator(): ?string {
+				return $this->node->getAttribute('generator');
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function required(bool $required = true): IProperty {
 				$this->node->setAttribute('required', $required);
 				return $this;
