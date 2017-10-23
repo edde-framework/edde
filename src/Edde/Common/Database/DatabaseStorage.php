@@ -97,6 +97,9 @@
 					return $this;
 				}
 				$schema = $entity->getSchema();
+				/**
+				 * build a query for check if an entity already exists in this storage
+				 */
 				$query = new SelectQuery();
 				$query->setDescription('check entity existence query');
 				$query->table($schemaName = $schema->getName())->all();
@@ -104,14 +107,31 @@
 				foreach (($primaryList = $entity->getPrimaryList()) as $property) {
 					$where->and()->eq($name = $property->getName())->to($property->get());
 				}
+				/**
+				 * pickup an entity from storage if it's already there (and run update)
+				 */
 				foreach ($this->execute($query) as $hasEntity) {
 					break;
 				}
+				/**
+				 * pickup all dirty properties being sent to storage
+				 */
 				$source = [];
 				foreach ($this->entityManager->getDirtyProperties($entity) as $property) {
 					$source[$property->getName()] = $property->get();
 				}
-				$source = $this->schemaManager->sanitize($schemaName, $this->schemaManager->generate($schemaName, $source));
+				/**
+				 * generate empty values and push them into crate before they're sanitized; that means
+				 * on PHP side is everything same, only ongoing values are changed
+				 */
+				$entity->push($source = $this->schemaManager->generate($schemaName, $source));
+				/**
+				 * convert strange PHP things to output compatible with a storage (if needed)
+				 */
+				$source = $this->schemaManager->sanitize($schemaName, $source);
+				/**
+				 * it's quite tricky to check, if entity exists and which query to run, but it works
+				 */
 				$query = isset($hasEntity) ? new UpdateQuery($schemaName, $source) : new InsertQuery($schemaName, $source);
 				if (isset($hasEntity)) {
 					$where = $query->where();
@@ -119,10 +139,14 @@
 						$where->and()->eq($property->getName())->to($property->get());
 					}
 				}
+				/**
+				 * yapee, do the magic and execute the query
+				 */
 				$this->execute($query);
 				/**
-				 * entity must be set as not dirty!
+				 * commit changes in entity, so it's no longer dirty
 				 */
+				$entity->commit();
 				return $this;
 			}
 
