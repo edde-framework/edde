@@ -40,12 +40,15 @@ Edde is now using Docker to build the stack in very simple way.
 // for example
 $ vim /etc/environment
 
+// build containers 
+$ sudo docker-compose build
+
 // install dependencies for composer on the "server" service 
 $ sudo docker-compose run server composer update
 
 // because container is setting root rights on folders required for Edde,
 // it's necessary to fix permissions
-$ sudo chmod 777 logs, temp, cache -R
+$ sudo chmod 777 ./assets -R
 
 // run the containers on background 
 $ sudo docker-compose up -d
