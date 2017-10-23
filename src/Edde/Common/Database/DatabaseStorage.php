@@ -2,6 +2,7 @@
 	namespace Edde\Common\Database;
 
 		use Edde\Api\Database\Inject\Driver;
+		use Edde\Api\Generator\Inject\GeneratorManager;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\IQuery;
 		use Edde\Api\Storage\Exception\ExclusiveTransactionException;
@@ -19,6 +20,7 @@
 
 		class DatabaseStorage extends AbstractStorage {
 			use EntityManager;
+			use GeneratorManager;
 			use Driver;
 			/**
 			 * @var int
@@ -94,10 +96,6 @@
 				if ($this->entityManager->isDirty($entity) === false) {
 					return $this;
 				}
-				/**
-				 * generate values for properties with a generator
-				 */
-				$this->entityManager->generate($entity);
 				$schema = $entity->getSchema();
 				$query = new SelectQuery();
 				$query->setDescription('check entity existence query');

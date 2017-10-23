@@ -14,6 +14,7 @@
 		use Edde\Api\Crypt\IRandomService;
 		use Edde\Api\Database\IDriver;
 		use Edde\Api\EddeException;
+		use Edde\Api\Generator\IGeneratorManager;
 		use Edde\Api\Http\IHttpUtils;
 		use Edde\Api\Http\IRequestService as IHttpRequestService;
 		use Edde\Api\Log\ILogService;
@@ -44,6 +45,7 @@
 		use Edde\Common\Converter\ConverterManager;
 		use Edde\Common\Crypt\RandomService;
 		use Edde\Common\Database\DatabaseStorage;
+		use Edde\Common\Generator\GeneratorManager;
 		use Edde\Common\Http\HttpUtils;
 		use Edde\Common\Http\RequestService as HttpRequestService;
 		use Edde\Common\Log\LogService;
@@ -61,9 +63,9 @@
 		use Edde\Common\Xml\XmlExport;
 		use Edde\Common\Xml\XmlParser;
 		use Edde\Ext\Converter\ConverterManagerConfigurator;
+		use Edde\Ext\Generator\GeneratorManagerConfigurator;
 		use Edde\Ext\Protocol\ProtocolServiceConfigurator;
 		use Edde\Ext\Router\RouterServiceConfigurator;
-		use Edde\Ext\Storage\EntityManagerConfigurator;
 		use ReflectionMethod;
 
 		/**
@@ -279,10 +281,17 @@
 					 * general service for http request/response
 					 */
 					IHttpRequestService::class      => HttpRequestService::class,
+					/**
+					 * schema support
+					 */
 					ISchemaManager::class           => SchemaManager::class,
 					ISchemaReflectionService::class => SchemaReflectionService::class,
 					/**
-					 * Random & security support
+					 * generator (related to schema) support
+					 */
+					IGeneratorManager::class        => GeneratorManager::class,
+					/**
+					 * random & security support
 					 */
 					IRandomService::class           => RandomService::class,
 					/**
@@ -316,7 +325,7 @@
 					IProtocolService::class  => ProtocolServiceConfigurator::class,
 					IRouterService::class    => RouterServiceConfigurator::class,
 					IConverterManager::class => ConverterManagerConfigurator::class,
-					IEntityManager::class    => EntityManagerConfigurator::class,
+					IGeneratorManager::class => GeneratorManagerConfigurator::class,
 				];
 			}
 		}
