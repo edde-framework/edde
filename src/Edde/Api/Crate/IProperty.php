@@ -47,6 +47,13 @@
 			public function getValue($default = null);
 
 			/**
+			 * has property some value? Only NULL should be considered as empty
+			 *
+			 * @return bool
+			 */
+			public function isEmpty(): bool;
+
+			/**
 			 * resolve value; if current value is empty/null, default is checked; if same, default parameter is used
 			 *
 			 * @param mixed $default

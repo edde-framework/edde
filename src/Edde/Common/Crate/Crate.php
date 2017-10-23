@@ -33,7 +33,7 @@
 			 */
 			public function update(array $source): ICrate {
 				foreach ($source as $k => $v) {
-					$this->getProperty($k)->setDefault($v);
+					$this->getProperty($k)->setValue($v);
 				}
 				return $this;
 			}

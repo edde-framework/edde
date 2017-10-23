@@ -5,6 +5,13 @@
 
 		interface IProperty {
 			/**
+			 * get name of this property
+			 *
+			 * @return string
+			 */
+			public function getName(): string;
+
+			/**
 			 * return data node of this property
 			 *
 			 * @return INode

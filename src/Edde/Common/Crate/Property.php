@@ -68,6 +68,13 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function isEmpty(): bool {
+				return $this->get() === null;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function get($default = null) {
 				return $this->value ?: $this->default ?: $default;
 			}

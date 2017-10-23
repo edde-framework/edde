@@ -91,6 +91,10 @@
 				if ($this->entityManager->isDirty($entity) === false) {
 					return $this;
 				}
+				/**
+				 * generate values for properties with a generator
+				 */
+				$this->entityManager->generate($entity);
 				$dirtyProperties = $this->entityManager->getDirtyProperties($entity);
 				$schema = $entity->getSchema();
 				return $this;

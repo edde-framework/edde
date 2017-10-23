@@ -3,6 +3,7 @@
 
 		use Edde\Api\Filter\IFilter;
 		use Edde\Api\Schema\Inject\SchemaManager;
+		use Edde\Api\Storage\Exception\UnknownGeneratorException;
 		use Edde\Api\Storage\IEntity;
 		use Edde\Api\Storage\IEntityManager;
 		use Edde\Common\Object\Object;
@@ -53,5 +54,20 @@
 			 */
 			public function getDirtyProperties(IEntity $entity): array {
 				return $entity->getDirtyProperties();
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function generate(IEntity $entity): IEntityManager {
+				foreach (($schema = $entity->getSchema())->getGeneratorList() as $property) {
+					if (($filter = $this->generatorList[$generator = $property->getGenerator()] ?? null) === null) {
+						throw new UnknownGeneratorException(sprintf('Unknown generator [%s] for property [%s::%s].', $generator, $schema->getName(), $property->getName()));
+					} else if (($value = $entity->getProperty($property->getName()))->isEmpty() === false) {
+						continue;
+					}
+					$value->setValue($filter->filter(null));
+				}
+				return $this;
 			}
 		}

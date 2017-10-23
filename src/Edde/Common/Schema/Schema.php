@@ -67,14 +67,28 @@
 			 * @inheritdoc
 			 */
 			public function getPrimaryList(): array {
-				$primaryList = [];
+				$propertyList = [];
 				/** @var $property IProperty */
-				foreach ($this->getPrimaryList() as $property) {
+				foreach ($this->getPropertyList() as $property) {
 					if ($property->isPrimary()) {
-						$primaryList[] = $property;
+						$propertyList[] = $property;
 					}
 				}
-				return $primaryList;
+				return $propertyList;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getGeneratorList(): array {
+				$propertyList = [];
+				/** @var $property IProperty */
+				foreach ($this->getPropertyList() as $property) {
+					if ($property->getGenerator() !== null) {
+						$propertyList[] = $property;
+					}
+				}
+				return $propertyList;
 			}
 
 			/**

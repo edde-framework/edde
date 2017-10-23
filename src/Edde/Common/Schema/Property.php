@@ -18,6 +18,13 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function getName(): string {
+				return $this->node->getAttribute('name');
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function getNode(): INode {
 				return $this->node;
 			}
