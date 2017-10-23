@@ -58,6 +58,16 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function commit(): ICrate {
+				foreach ($this->propertyList as $property) {
+					$property->commit();
+				}
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function isDirty(): bool {
 				foreach ($this->propertyList as $property) {
 					if ($property->isDirty()) {

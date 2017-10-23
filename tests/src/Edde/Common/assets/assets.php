@@ -89,7 +89,7 @@
 			function guid(): string;
 		}
 
-		interface SimpleSchema {
+		interface SimpleSchema extends AbstractGuidSchema {
 			/**
 			 * @schema
 			 */

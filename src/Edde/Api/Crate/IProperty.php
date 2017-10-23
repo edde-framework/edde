@@ -68,4 +68,11 @@
 			 * @return bool
 			 */
 			public function isDirty(): bool;
+
+			/**
+			 * set current value as default, thus property no longer will be dirty
+			 *
+			 * @return IProperty
+			 */
+			public function commit(): IProperty;
 		}

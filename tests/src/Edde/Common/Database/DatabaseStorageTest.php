@@ -8,6 +8,7 @@
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Storage\Exception\IntegrityException;
 		use Edde\Api\Storage\Exception\StorageException;
+		use Edde\Api\Storage\Inject\EntityManager;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Container\Factory\ClassFactory;
 		use Edde\Common\Database\Driver\PostgresDriver;
@@ -18,6 +19,7 @@
 
 		class DatabaseStorageTest extends TestCase {
 			use SchemaManager;
+			use EntityManager;
 			use Storage;
 
 			public function testPrepareDatabase() {
@@ -31,24 +33,25 @@
 			 */
 			public function testCreateSchema() {
 				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->getSchema(SimpleSchema::class)));
+				self::assertTrue(true, 'everything is ok');
 			}
 
 			/**
-			 * @throws UnknownSchemaException
 			 * @throws IntegrityException
 			 * @throws StorageException
 			 */
 			public function testSave() {
-				$entity = $this->storage->createEntity(SimpleSchema::class, [
+				$entity = $this->entityManager->create(SimpleSchema::class, [
 					'name'     => 'some name for this entity',
 					'optional' => 'this string is optional, but I wanna fill it!',
 				]);
 				$this->storage->save($entity);
-				$entity = $this->storage->createEntity(SimpleSchema::class, [
+				$entity = $this->entityManager->create(SimpleSchema::class, [
 					'name'     => 'another name',
 					'optional' => null,
 				]);
 				$this->storage->save($entity);
+				self::assertFalse($entity->isDirty(), 'Entity is still dirty!');
 			}
 
 			/**

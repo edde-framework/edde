@@ -72,4 +72,9 @@
 </root>
 ', $file->get());
 			}
+
+			protected function setUp() {
+				parent::setUp();
+				@mkdir(__DIR__ . '/temp');
+			}
 		}

@@ -85,4 +85,13 @@
 			public function isDirty(): bool {
 				return $this->default !== $this->value;
 			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function commit(): IProperty {
+				$this->default = $this->value;
+				$this->value = false;
+				return $this;
+			}
 		}

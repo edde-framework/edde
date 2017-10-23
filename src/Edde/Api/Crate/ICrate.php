@@ -54,6 +54,13 @@
 			public function push(array $source): ICrate;
 
 			/**
+			 * set all values for properties as "default", thus making crate not dirty
+			 *
+			 * @return ICrate
+			 */
+			public function commit(): ICrate;
+
+			/**
 			 * is state of a crate changed (any property is changed?)?
 			 *
 			 * @return bool
