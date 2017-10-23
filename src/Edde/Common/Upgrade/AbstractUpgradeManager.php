@@ -51,7 +51,7 @@
 						throw new InvalidVersionException(sprintf('Requested version [%s] is older than current version [%s]!', $version, $currentVersion));
 					} else if ($upgradeList) {
 						$upgradeList[] = $upgrade;
-					} else if ($upgrade->getVersion() === $version) {
+					} else if ($upgrade->getVersion() === $version || ($version === null && $currentVersion !== null && $upgrade->getVersion() === $currentVersion)) {
 						$upgradeList = [];
 					} else if ($version === null) {
 						$upgradeList[] = $upgrade;

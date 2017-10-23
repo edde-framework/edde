@@ -21,6 +21,8 @@
 				parent::configure($instance);
 				$instance->registerUpgradeList([
 					$this->container->create(ZeroUpgrade::class, [], __METHOD__),
+					//					$this->container->create(TestUpgrade::class, [], __METHOD__),
+					//					$this->container->create(JustAnotherUpgrade::class, [], __METHOD__),
 				]);
 			}
 		}

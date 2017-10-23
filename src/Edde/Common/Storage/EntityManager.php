@@ -47,6 +47,11 @@
 			 */
 			public function factory(string $schema, array $source): IEntity {
 				$entity = $this->createEntity($schema);
+//				$this->schemaManager->filter($schema, $source);
+				/**
+				 * sanitizer as output filter
+				 */
+//				$this->schemaManager->sanitize($schema, $source);
 				$entity->push($source);
 				return $entity;
 			}

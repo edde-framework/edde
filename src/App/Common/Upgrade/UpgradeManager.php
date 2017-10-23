@@ -23,8 +23,7 @@
 					$query = new SelectQuery();
 					$query->setDescription('current version select');
 					$query->table(UpgradeSchema::class, 'u')->all()->order()->desc('stamp')->asc('version');
-					$entity = $this->storage->load(UpgradeSchema::class, $query);
-					return $entity->get('version');
+					return $this->storage->load(UpgradeSchema::class, $query)->get('version');
 				} catch (UnknownTableException $exception) {
 					$this->storage->execute(new CreateSchemaQuery($this->schemaManager->getSchema(UpgradeSchema::class)));
 					return null;
