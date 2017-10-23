@@ -30,11 +30,22 @@
 			 *
 			 * @param string|null $version
 			 *
-			 * @return IUpgradeManager
+			 * @return IUpgrade
 			 *
 			 * @throws CurrentVersionException if there is nothing to do
 			 * @throws NoUpgradesAvailableException if there are no upgrades at all
 			 * @throws UnknownVersionException if requested version does not exists
 			 */
-			public function upgrade(string $version = null): IUpgradeManager;
+			public function upgrade(string $version = null): IUpgrade;
+
+			/**
+			 * @param string|null $version
+			 *
+			 * @return IUpgrade
+			 *
+			 * @throws CurrentVersionException if there is nothing to do
+			 * @throws NoUpgradesAvailableException if there are no upgrades at all
+			 * @throws UnknownVersionException if requested version does not exists
+			 */
+			public function rollback(string $version = null): IUpgrade;
 		}

@@ -9,6 +9,7 @@
 	declare(strict_types=1);
 	use App\Common\Application\Context;
 	use App\Common\Upgrade\UpgradeManager;
+	use App\Common\Upgrade\UpgradeManagerConfigurator;
 	use Edde\Api\Application\IContext;
 	use Edde\Api\Application\IRootDirectory;
 	use Edde\Api\Upgrade\IUpgradeManager;
@@ -61,6 +62,7 @@
 			 */
 			new ClassFactory(),
 		]), [
+			IUpgradeManager::class => UpgradeManagerConfigurator::class,
 		]);
 		/**
 		 * This one is one of the most magical: this factory uses IContext::cascade() to search for class; this is quite

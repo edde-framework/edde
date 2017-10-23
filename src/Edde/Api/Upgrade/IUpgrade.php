@@ -11,4 +11,16 @@
 			 * @return string
 			 */
 			public function getVersion(): string;
+
+			/**
+			 * execute an upgrade procedure (there could be anything, file moves, cache
+			 * invalidation, database structure update, ...)
+			 */
+			public function upgrade(): void;
+
+			/**
+			 * try to revert effect of this upgrade; drop newly created columns, rename
+			 * tables, delete new files, ...
+			 */
+			public function rollback(): void;
 		}
