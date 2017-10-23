@@ -49,6 +49,38 @@
 			public function getGenerator(): ?string;
 
 			/**
+			 * set the name of filter responsible for value filtering of this property
+			 *
+			 * @param string $name
+			 *
+			 * @return IProperty
+			 */
+			public function filter(string $name): IProperty;
+
+			/**
+			 * get property filter
+			 *
+			 * @return null|string
+			 */
+			public function getFilter(): ?string;
+
+			/**
+			 * set a sanitizer for this property
+			 *
+			 * @param string $name
+			 *
+			 * @return IProperty
+			 */
+			public function sanitizer(string $name): IProperty;
+
+			/**
+			 * return name of the sanitizer for this property
+			 *
+			 * @return null|string
+			 */
+			public function getSanitizer(): ?string;
+
+			/**
 			 * set a property as it's value is unique in it's schema
 			 *
 			 * @param bool $unique

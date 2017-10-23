@@ -2,6 +2,7 @@
 	namespace Edde\Common\Schema;
 
 		use Edde\Api\Node\INode;
+		use Edde\Api\Schema\Exception\UnknownPropertyException;
 		use Edde\Api\Schema\IProperty;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Common\Node\Node;
@@ -48,6 +49,16 @@
 			 */
 			public function getAlias(): ?string {
 				return $this->node->getAttribute('alias');
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getProperty(string $name): IProperty {
+				if (isset($this->propertyList[$name]) === false) {
+					throw new UnknownPropertyException(sprintf('Requested unknown property [%s] on schema [%s].', $name, $this->getName()));
+				}
+				return $this->propertyList[$name];
 			}
 
 			/**

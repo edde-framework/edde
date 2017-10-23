@@ -33,4 +33,34 @@
 			 * @throws UnknownSchemaException
 			 */
 			public function getSchema(string $name): ISchema;
+
+			/**
+			 * generate all empty values with a generator (using a schema)
+			 *
+			 * @param string $schema
+			 * @param array  $source
+			 *
+			 * @return array
+			 */
+			public function generate(string $schema, array $source): array;
+
+			/**
+			 * filter values using a schema and filter
+			 *
+			 * @param string $schema
+			 * @param array  $source
+			 *
+			 * @return array
+			 */
+			public function filter(string $schema, array $source): array;
+
+			/**
+			 * sanitize values using a schema and sanitizer
+			 *
+			 * @param string $schema
+			 * @param array  $source
+			 *
+			 * @return array
+			 */
+			public function sanitize(string $schema, array $source): array;
 		}

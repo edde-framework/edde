@@ -80,6 +80,36 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function filter(string $name): IProperty {
+				$this->node->setAttribute('filter', $name);
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getFilter(): ?string {
+				return $this->node->getAttribute('filter');
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function sanitizer(string $name): IProperty {
+				$this->node->setAttribute('sanitizer', $name);
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getSanitizer(): ?string {
+				return $this->node->getAttribute('sanitizer');
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function required(bool $required = true): IProperty {
 				$this->node->setAttribute('required', $required);
 				return $this;

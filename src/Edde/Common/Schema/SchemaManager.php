@@ -1,6 +1,9 @@
 <?php
 	namespace Edde\Common\Schema;
 
+		use Edde\Api\Filter\Inject\FilterManager;
+		use Edde\Api\Generator\Inject\GeneratorManager;
+		use Edde\Api\Sanitizer\Inject\SanitizerManager;
 		use Edde\Api\Schema\Exception\SchemaReflectionException;
 		use Edde\Api\Schema\Exception\UnknownSchemaException;
 		use Edde\Api\Schema\Inject\SchemaReflectionService;
@@ -10,6 +13,9 @@
 
 		class SchemaManager extends Object implements ISchemaManager {
 			use SchemaReflectionService;
+			use GeneratorManager;
+			use FilterManager;
+			use SanitizerManager;
 			/**
 			 * @var ISchema[]
 			 */
@@ -45,5 +51,47 @@
 					}
 				}
 				return $this->schemaList[$name];
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function generate(string $schema, array $source): array {
+				$schema = $this->getSchema($schema);
+				$result = $source;
+				foreach ($schema->getGeneratorList() as $property) {
+					if (isset($source[$name = $property->getName()]) === false) {
+						$source[$name] = $this->generatorManager->getGenerator($name)->generate();
+					}
+				}
+				return $result;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function filter(string $schema, array $source): array {
+				$schema = $this->getSchema($schema);
+				$result = $source;
+				foreach ($source as $k => $v) {
+					if ($filter = ($property = $schema->getProperty($k))->getFilter()) {
+						$result[$k] = $this->filterManager->getFilter($filter)->filter($v);
+					}
+				}
+				return $result;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function sanitize(string $schema, array $source): array {
+				$schema = $this->getSchema($schema);
+				$result = $source;
+				foreach ($source as $k => $v) {
+					if ($sanitizer = ($property = $schema->getProperty($k))->getSanitizer()) {
+						$result[$k] = $this->sanitizerManager->getSanitizer($sanitizer)->sanitize($v);
+					}
+				}
+				return $result;
 			}
 		}

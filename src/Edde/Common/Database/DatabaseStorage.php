@@ -99,16 +99,13 @@
 				$query->setDescription('check entity existence query');
 				$query->table($schemaName = $schema->getName())->all();
 				$where = $query->where();
-				$source = [];
 				foreach (($primaryList = $entity->getPrimaryList()) as $property) {
-					$where->and()->eq($name = $property->getName())->to($value = $property->get());
-					if ($value === null) {
-						$source[$name] = $value;
-					}
+					$where->and()->eq($name = $property->getName())->to($property->get());
 				}
 				foreach ($this->execute($query) as $hasEntity) {
 					break;
 				}
+				$source = [];
 				foreach ($this->entityManager->getDirtyProperties($entity) as $property) {
 					$source[$property->getName()] = $property->get();
 				}

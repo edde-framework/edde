@@ -3,6 +3,7 @@
 
 		use Edde\Api\Config\IConfigurable;
 		use Edde\Api\Node\INode;
+		use Edde\Api\Schema\Exception\UnknownPropertyException;
 
 		interface ISchema extends IConfigurable {
 			/**
@@ -34,6 +35,15 @@
 			 * @return string|null
 			 */
 			public function getAlias(): ?string;
+
+			/**
+			 * @param string $name
+			 *
+			 * @return IProperty
+			 *
+			 * @throws UnknownPropertyException
+			 */
+			public function getProperty(string $name): IProperty;
 
 			/**
 			 * return list of properties of this schema
