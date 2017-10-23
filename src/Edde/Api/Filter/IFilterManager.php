@@ -2,6 +2,7 @@
 	namespace Edde\Api\Filter;
 
 		use Edde\Api\Config\IConfigurable;
+		use Edde\Api\Filter\Exception\UnknownFilterException;
 
 		interface IFilterManager extends IConfigurable {
 			/**
@@ -22,4 +23,22 @@
 			 * @return IFilterManager
 			 */
 			public function registerFilterList(array $filterList): IFilterManager;
+
+			/**
+			 * @param string $name
+			 *
+			 * @return IFilter
+			 *
+			 * @throws UnknownFilterException
+			 */
+			public function getFilter(string $name): IFilter;
+
+			/**
+			 * filter the given input array into output array; all known filters are applied
+			 *
+			 * @param array $source
+			 *
+			 * @return array
+			 */
+			public function filter(array $source): array;
 		}

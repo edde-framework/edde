@@ -43,7 +43,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function generate(array $source): array {
+			public function filter(array $source): array {
 				$result = $source;
 				foreach ($source as $k => $v) {
 					if (isset($this->filterList[$k])) {
