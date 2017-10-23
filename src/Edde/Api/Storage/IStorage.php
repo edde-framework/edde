@@ -4,7 +4,6 @@
 		use Edde\Api\Config\IConfigurable;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\IQuery;
-		use Edde\Api\Schema\Exception\UnknownSchemaException;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
 		use Edde\Api\Storage\Exception\IntegrityException;
 		use Edde\Api\Storage\Exception\StorageException;
@@ -38,19 +37,6 @@
 			 * @return mixed
 			 */
 			public function native(INativeQuery $nativeQuery);
-
-			/**
-			 * create an abstract entity with the given schema; this method is useful for a new entity
-			 * creation to be saved in storage (not right after load as it will be marked dirty)
-			 *
-			 * @param string $schema
-			 * @param array  $source
-			 *
-			 * @return IEntity
-			 *
-			 * @throws UnknownSchemaException
-			 */
-			public function createEntity(string $schema, array $source = []): IEntity;
 
 			/**
 			 * save the given entity; the storage should check, if an entity is already present and
