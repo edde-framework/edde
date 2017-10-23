@@ -61,7 +61,7 @@
 				$result = $source;
 				foreach ($schema->getPropertyList() as $property) {
 					if (isset($source[$name = $property->getName()]) === false && ($generator = $property->getGenerator())) {
-						$source[$name] = $this->generatorManager->getGenerator($generator)->generate();
+						$result[$name] = $this->generatorManager->getGenerator($generator)->generate();
 					}
 				}
 				return $result;
