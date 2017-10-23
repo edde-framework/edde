@@ -4,6 +4,10 @@
 		use Edde\Api\Config\IConfigurable;
 		use Edde\Api\Filter\Exception\UnknownFilterException;
 
+		/**
+		 * Filter manager should take care about values coming to PHP side (for example from
+		 * database, from request, whatever). All of them should be converted to scalar type.
+		 */
 		interface IFilterManager extends IConfigurable {
 			/**
 			 * register the given filter

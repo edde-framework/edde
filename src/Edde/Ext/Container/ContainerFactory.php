@@ -23,6 +23,7 @@
 		use Edde\Api\Request\IRequestService;
 		use Edde\Api\Router\IRouterService;
 		use Edde\Api\Runtime\IRuntime;
+		use Edde\Api\Sanitizer\ISanitizerManager;
 		use Edde\Api\Schema\ISchemaManager;
 		use Edde\Api\Schema\ISchemaReflectionService;
 		use Edde\Api\Storage\IEntityManager;
@@ -56,6 +57,7 @@
 		use Edde\Common\Request\RequestService;
 		use Edde\Common\Router\RouterService;
 		use Edde\Common\Runtime\Runtime;
+		use Edde\Common\Sanitizer\SanitizerManager;
 		use Edde\Common\Schema\SchemaManager;
 		use Edde\Common\Schema\SchemaReflectionService;
 		use Edde\Common\Storage\EntityManager;
@@ -69,6 +71,7 @@
 		use Edde\Ext\Generator\GeneratorManagerConfigurator;
 		use Edde\Ext\Protocol\ProtocolServiceConfigurator;
 		use Edde\Ext\Router\RouterServiceConfigurator;
+		use Edde\Ext\Sanitizer\SanitizerManagerConfigurator;
 		use ReflectionMethod;
 
 		/**
@@ -294,6 +297,7 @@
 					 */
 					IGeneratorManager::class        => GeneratorManager::class,
 					IFilterManager::class           => FilterManager::class,
+					ISanitizerManager::class        => SanitizerManager::class,
 					/**
 					 * random & security support
 					 */
@@ -331,6 +335,7 @@
 					IConverterManager::class => ConverterManagerConfigurator::class,
 					IGeneratorManager::class => GeneratorManagerConfigurator::class,
 					IFilterManager::class    => FilterManagerConfigurator::class,
+					ISanitizerManager::class => SanitizerManagerConfigurator::class,
 				];
 			}
 		}
