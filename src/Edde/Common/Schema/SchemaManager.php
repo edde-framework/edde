@@ -4,22 +4,32 @@
 		use Edde\Api\Filter\Inject\FilterManager;
 		use Edde\Api\Generator\Inject\GeneratorManager;
 		use Edde\Api\Sanitizer\Inject\SanitizerManager;
-		use Edde\Api\Schema\Exception\SchemaReflectionException;
 		use Edde\Api\Schema\Exception\UnknownSchemaException;
-		use Edde\Api\Schema\Inject\SchemaReflectionService;
 		use Edde\Api\Schema\ISchema;
+		use Edde\Api\Schema\ISchemaLoader;
 		use Edde\Api\Schema\ISchemaManager;
 		use Edde\Common\Object\Object;
 
 		class SchemaManager extends Object implements ISchemaManager {
-			use SchemaReflectionService;
 			use GeneratorManager;
 			use FilterManager;
 			use SanitizerManager;
 			/**
+			 * @var ISchemaLoader[]
+			 */
+			protected $schemaLoaderList = [];
+			/**
 			 * @var ISchema[]
 			 */
 			protected $schemaList = [];
+
+			/**
+			 * @inheritdoc
+			 */
+			public function registerSchemaLoader(ISchemaLoader $schemaLoader): ISchemaManager {
+				$this->schemaLoaderList[] = $schemaLoader;
+				return $this;
+			}
 
 			/**
 			 * @inheritdoc
@@ -43,14 +53,26 @@
 			 * @inheritdoc
 			 */
 			public function getSchema(string $name): ISchema {
-				if (isset($this->schemaList[$name]) === false) {
-					try {
-						$this->schemaList[$name] = $this->schemaReflectionService->getSchema($name);
-					} catch (SchemaReflectionException $exception) {
-						throw new UnknownSchemaException(sprintf('Requested unknown schema [%s].%s', $name, $this->isSetup() ? ' Schema manager has not been set up. Try call setup() method.' : ''), 0, $exception);
+				return $this->schemaList[$name] ?? $this->schemaList[$name] = $this->createSchema($name);
+			}
+
+			/**
+			 * @param string $name
+			 *
+			 * @return ISchema
+			 * @throws UnknownSchemaException
+			 */
+			public function createSchema(string $name): ISchema {
+				$schema = null;
+				foreach ($this->schemaLoaderList as $schemaLoader) {
+					if (($schema = $schemaLoader->getSchema($name)) !== null) {
+						break;
 					}
 				}
-				return $this->schemaList[$name];
+				if ($schema === null) {
+					throw new UnknownSchemaException(sprintf('Requested unknown schema [%s].', $name));
+				}
+				return $schema;
 			}
 
 			/**

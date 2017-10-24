@@ -6,6 +6,15 @@
 
 		interface ISchemaManager extends IConfigurable {
 			/**
+			 * register given schema loader (could be more of them)
+			 *
+			 * @param ISchemaLoader $schemaLoader
+			 *
+			 * @return ISchemaManager
+			 */
+			public function registerSchemaLoader(ISchemaLoader $schemaLoader): ISchemaManager;
+
+			/**
 			 * register the given schema
 			 *
 			 * @param ISchema $schema

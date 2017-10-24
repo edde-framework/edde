@@ -1,13 +1,14 @@
 <?php
-	namespace Edde\Common\Schema;
+	namespace Edde\Ext\Schema;
 
 		use Edde\Api\Schema\Exception\SchemaReflectionException;
 		use Edde\Api\Schema\ISchema;
-		use Edde\Api\Schema\ISchemaReflectionService;
+		use Edde\Api\Schema\ISchemaLoader;
 		use Edde\Api\Utils\Inject\StringUtils;
-		use Edde\Common\Object\Object;
+		use Edde\Common\Schema\AbstractSchemaLoader;
+		use Edde\Common\Schema\Schema;
 
-		class SchemaReflectionService extends Object implements ISchemaReflectionService {
+		class SchemaReflectionLoader extends AbstractSchemaLoader implements ISchemaLoader {
 			use StringUtils;
 			/**
 			 * @var ISchema[]

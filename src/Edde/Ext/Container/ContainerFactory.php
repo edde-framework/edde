@@ -25,7 +25,6 @@
 		use Edde\Api\Runtime\IRuntime;
 		use Edde\Api\Sanitizer\ISanitizerManager;
 		use Edde\Api\Schema\ISchemaManager;
-		use Edde\Api\Schema\ISchemaReflectionService;
 		use Edde\Api\Storage\IEntityManager;
 		use Edde\Api\Storage\IStorage;
 		use Edde\Api\Upgrade\IUpgradeManager;
@@ -59,7 +58,6 @@
 		use Edde\Common\Runtime\Runtime;
 		use Edde\Common\Sanitizer\SanitizerManager;
 		use Edde\Common\Schema\SchemaManager;
-		use Edde\Common\Schema\SchemaReflectionService;
 		use Edde\Common\Storage\EntityManager;
 		use Edde\Common\Upgrade\AbstractUpgradeManager;
 		use Edde\Common\Utils\CliUtils;
@@ -72,6 +70,7 @@
 		use Edde\Ext\Protocol\ProtocolServiceConfigurator;
 		use Edde\Ext\Router\RouterServiceConfigurator;
 		use Edde\Ext\Sanitizer\SanitizerManagerConfigurator;
+		use Edde\Ext\Schema\SchemaManagerConfigurator;
 		use ReflectionMethod;
 
 		/**
@@ -242,89 +241,88 @@
 
 			static public function getDefaultFactoryList(): array {
 				return [
-					IRootDirectory::class           => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
-					IAssetsDirectory::class         => self::proxy(IRootDirectory::class, 'directory', [
+					IRootDirectory::class      => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
+					IAssetsDirectory::class    => self::proxy(IRootDirectory::class, 'directory', [
 						'.assets',
 						AssetsDirectory::class,
 					]),
-					ITempDirectory::class           => self::proxy(IAssetsDirectory::class, 'directory', [
+					ITempDirectory::class      => self::proxy(IAssetsDirectory::class, 'directory', [
 						'temp',
 						TempDirectory::class,
 					]),
 					/**
 					 * utils
 					 */
-					IHttpUtils::class               => HttpUtils::class,
-					IStringUtils::class             => StringUtils::class,
-					ICliUtils::class                => CliUtils::class,
+					IHttpUtils::class          => HttpUtils::class,
+					IStringUtils::class        => StringUtils::class,
+					ICliUtils::class           => CliUtils::class,
 					/**
 					 * container implementation
 					 */
-					IContainer::class               => Container::class,
+					IContainer::class          => Container::class,
 					/**
 					 * runtime info provider
 					 */
-					IRuntime::class                 => Runtime::class,
+					IRuntime::class            => Runtime::class,
 					/**
 					 * log support
 					 */
-					ILogService::class              => LogService::class,
+					ILogService::class         => LogService::class,
 					/**
 					 * user request into protocol element translation
 					 */
-					IRouterService::class           => RouterService::class,
-					IRequestService::class          => RequestService::class,
+					IRouterService::class      => RouterService::class,
+					IRequestService::class     => RequestService::class,
 					/**
 					 * content conversion implementation (mainly useful for server content
 					 * negotiation)
 					 */
-					IConverterManager::class        => ConverterManager::class,
+					IConverterManager::class   => ConverterManager::class,
 					/**
 					 * The Protocol specification related stuff
 					 */
-					IProtocolService::class         => ProtocolService::class,
+					IProtocolService::class    => ProtocolService::class,
 					/**
 					 * general service for http request/response
 					 */
-					IHttpRequestService::class      => HttpRequestService::class,
+					IHttpRequestService::class => HttpRequestService::class,
 					/**
 					 * schema support
 					 */
-					ISchemaManager::class           => SchemaManager::class,
-					ISchemaReflectionService::class => SchemaReflectionService::class,
+					ISchemaManager::class      => SchemaManager::class,
 					/**
 					 * generator (related to schema) support
 					 */
-					IGeneratorManager::class        => GeneratorManager::class,
-					IFilterManager::class           => FilterManager::class,
-					ISanitizerManager::class        => SanitizerManager::class,
+					IGeneratorManager::class   => GeneratorManager::class,
+					IFilterManager::class      => FilterManager::class,
+					ISanitizerManager::class   => SanitizerManager::class,
 					/**
 					 * random & security support
 					 */
-					IRandomService::class           => RandomService::class,
+					IRandomService::class      => RandomService::class,
 					/**
 					 * storage support
 					 */
-					IEntityManager::class           => EntityManager::class,
-					IStorage::class                 => DatabaseStorage::class,
-					IDriver::class                  => self::exception(sprintf('Please register driver to use Database Storage (or whatever storage is using [%s] implementation).', IDriver::class)),
+					IEntityManager::class      => EntityManager::class,
+					IStorage::class            => DatabaseStorage::class,
+					IDriver::class             => self::exception(sprintf('Please register driver to use Database Storage (or whatever storage is using [%s] implementation).', IDriver::class)),
 					/**
 					 * an application upgrades support
 					 */
-					IUpgradeManager::class          => self::exception(sprintf('You have to privide you own implementation of [%s]; you can use [%s] to get some little help.', IUpgradeManager::class, AbstractUpgradeManager::class)),
+					IUpgradeManager::class     => self::exception(sprintf('You have to privide you own implementation of [%s]; you can use [%s] to get some little help.', IUpgradeManager::class, AbstractUpgradeManager::class)),
 					/**
 					 * Xml support
 					 */
-					IXmlExport::class               => XmlExport::class,
-					IXmlParser::class               => XmlParser::class,
+					IXmlExport::class          => XmlExport::class,
+					IXmlParser::class          => XmlParser::class,
 					/**
 					 * an application handles lifecycle workflow
 					 */
-					IApplication::class             => Application::class,
+					IApplication::class        => Application::class,
 					/**
 					 * magical factory for an application execution
 					 */
-					'application'                   => IApplication::class . '::run',
+					'application'              => IApplication::class . '::run',
 				];
 			}
 
@@ -336,6 +334,7 @@
 					IGeneratorManager::class => GeneratorManagerConfigurator::class,
 					IFilterManager::class    => FilterManagerConfigurator::class,
 					ISanitizerManager::class => SanitizerManagerConfigurator::class,
+					ISchemaManager::class    => SchemaManagerConfigurator::class,
 				];
 			}
 		}
