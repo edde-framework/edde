@@ -13,10 +13,28 @@
     <orderEntry type="module-library">
       <library name="PHARS">
         <CLASSES>
+          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/build/badkey.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/build/nosig.phar/" />
           <root url="phar://$MODULE_DIR$/bin/sami.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/test-nopubkey.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/build/old.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/test.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/build/new.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.1.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/phar-io/manifest/tests/_fixture/test.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/build/badsig.phar/" />
         </CLASSES>
         <SOURCES>
+          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/build/badkey.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/build/nosig.phar/" />
           <root url="phar://$MODULE_DIR$/bin/sami.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/test-nopubkey.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/build/old.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/test.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/build/new.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.1.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/phar-io/manifest/tests/_fixture/test.phar/" />
+          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/build/badsig.phar/" />
         </SOURCES>
       </library>
     </orderEntry>

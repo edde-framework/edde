@@ -26,6 +26,8 @@
 				$property = new Property('foo');
 				$property->setDefault('bar');
 				self::assertFalse($property->isDirty(), 'property should NOT be dirty with just default value!');
+				$property->setValue('bar');
+				self::assertFalse($property->isDirty(), 'property should NOT be dirty when values are same!');
 			}
 
 			public function testIsDirty() {
@@ -45,5 +47,14 @@
 				self::assertFalse($property->isDirty(), 'property is still dirty even after commit!');
 				self::assertSame('bar', $property->get());
 				self::assertSame(null, $property->getValue());
+			}
+
+			public function testIsEmpty() {
+				$property = new Property('foo');
+				self::assertTrue($property->isEmpty(), 'property is NOT empty by default');
+				$property->setDefault('value');
+				self::assertFalse($property->isEmpty(), 'property has a default value, but it is still empty!');
+				$property->setValue(null);
+				self::assertTrue($property->isEmpty(), 'property is NOT empty when there is set NULL value');
 			}
 		}
