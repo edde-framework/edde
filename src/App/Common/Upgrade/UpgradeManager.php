@@ -44,7 +44,7 @@
 			 * @inheritdoc
 			 */
 			protected function onUpgrade(IUpgrade $upgrade): void {
-				$this->storage->save($this->entityManager->create(UpgradeSchema::class, [
+				$this->storage->insert($this->entityManager->create(UpgradeSchema::class, [
 					'stamp'   => microtime(true),
 					'version' => $upgrade->getVersion(),
 				]));
