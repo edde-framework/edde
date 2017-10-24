@@ -96,13 +96,9 @@
 				if ($entity->isDirty() === false) {
 					return $this;
 				}
-				$schema = $entity->getSchema();
-				/**
-				 * build a query for check if an entity already exists in this storage
-				 */
 				$query = new SelectQuery();
 				$query->setDescription('check entity existence query');
-				$query->table($schemaName = $schema->getName())->all();
+				$query->table($entity->getSchema()->getName())->all();
 				$where = $query->where();
 				foreach (($primaryList = $entity->getPrimaryList()) as $property) {
 					$where->and()->eq($name = $property->getName())->to($property->get());
@@ -110,44 +106,10 @@
 				/**
 				 * pickup an entity from storage if it's already there (and run update)
 				 */
-				foreach ($this->execute($query) as $hasEntity) {
-					break;
+				foreach ($this->execute($query) as $_) {
+					return $this->update($entity);
 				}
-				/**
-				 * pickup all dirty properties being sent to storage
-				 */
-				$source = [];
-				foreach ($entity->getDirtyProperties() as $property) {
-					$source[$property->getName()] = $property->get();
-				}
-				/**
-				 * generate empty values and push them into crate before they're sanitized; that means
-				 * on PHP side is everything same, only ongoing values are changed
-				 */
-				$entity->push($source = $this->schemaManager->generate($schemaName, $source));
-				/**
-				 * convert strange PHP things to output compatible with a storage (if needed)
-				 */
-				$source = $this->schemaManager->sanitize($schemaName, $source);
-				/**
-				 * it's quite tricky to check, if entity exists and which query to run, but it works
-				 */
-				$query = isset($hasEntity) ? new UpdateQuery($schemaName, $source) : new InsertQuery($schemaName, $source);
-				if (isset($hasEntity)) {
-					$where = $query->where();
-					foreach ($primaryList as $property) {
-						$where->and()->eq($property->getName())->to($property->get());
-					}
-				}
-				/**
-				 * yapee, do the magic and execute the query
-				 */
-				$this->execute($query);
-				/**
-				 * commit changes in entity, so it's no longer dirty
-				 */
-				$entity->commit();
-				return $this;
+				return $this->insert($entity);
 			}
 
 			/**
@@ -179,6 +141,13 @@
 				return $this;
 			}
 
+			/**
+			 * @inheritdoc
+			 */
+			public function collection(string $schema, IQuery $query): ICollection {
+				return new Collection($schema, $this->entityManager, $this, $query);
+			}
+
 			protected function prepare(IEntity $entity): array {
 				$schema = $entity->getSchema();
 				$schemaName = $schema->getName();
@@ -188,12 +157,5 @@
 				}
 				$entity->push($source = $this->schemaManager->generate($schemaName, $source));
 				return $this->schemaManager->sanitize($schemaName, $source);
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function collection(string $schema, IQuery $query): ICollection {
-				return new Collection($schema, $this->entityManager, $this, $query);
 			}
 		}
