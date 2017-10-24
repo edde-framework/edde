@@ -109,6 +109,11 @@
 			 * @schema
 			 */
 			function date(): ?\DateTime;
+
+			/**
+			 * @schema
+			 */
+			function question(): ?bool;
 		}
 
 		/**

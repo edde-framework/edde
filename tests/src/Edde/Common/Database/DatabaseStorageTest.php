@@ -79,6 +79,7 @@
 					'optional' => null,
 					'value'    => 3.14,
 					'date'     => new \DateTime('24.12.2020 12:24:13'),
+					'question' => false,
 				]);
 				$this->storage->insert($entity);
 				$entity->set('optional', 'this is a new nice and updated string');
@@ -88,6 +89,8 @@
 				self::assertEquals($expect, $array = $entity->toArray());
 				self::assertTrue(gettype($array['value']) === 'double', 'value is not float!');
 				self::assertInstanceOf(\DateTime::class, $array['date']);
+				self::assertTrue(gettype($array['question']) === 'bool', 'question is not bool!');
+				assertTrue($array['question']);
 			}
 
 			/**
