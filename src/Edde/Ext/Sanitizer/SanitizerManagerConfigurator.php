@@ -6,6 +6,7 @@
 		use Edde\Api\Container\Inject\Container;
 		use Edde\Api\Sanitizer\ISanitizerManager;
 		use Edde\Common\Config\AbstractConfigurator;
+		use Edde\Common\Sanitizer\DateTimeSanitizer;
 		use Edde\Common\Sanitizer\FloatSanitizer;
 
 		class SanitizerManagerConfigurator extends AbstractConfigurator {
@@ -20,7 +21,10 @@
 			public function configure($instance) {
 				parent::configure($instance);
 				$instance->registerSanitizerList([
-					'float' => $this->container->create(FloatSanitizer::class, [], __METHOD__),
+					'float'          => $sanitizer = $this->container->create(FloatSanitizer::class, [], __METHOD__),
+					'double'         => $sanitizer,
+					\DateTime::class => $sanitizer = $this->container->create(DateTimeSanitizer::class, [], __METHOD__),
+					'datetime'       => $sanitizer,
 				]);
 			}
 		}

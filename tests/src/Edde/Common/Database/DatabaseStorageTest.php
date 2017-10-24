@@ -78,13 +78,16 @@
 					'name'     => 'to-be-updated',
 					'optional' => null,
 					'value'    => 3.14,
+					'date'     => new \DateTime('24.12.2020 12:24:13'),
 				]);
 				$this->storage->insert($entity);
 				$entity->set('optional', 'this is a new nice and updated string');
 				$expect = $entity->toArray();
 				$this->storage->update($entity);
 				$entity = $this->storage->load(SimpleSchema::class, (new SelectQuery())->table(SimpleSchema::class)->all()->where()->eq('guid')->to($entity->get('guid'))->query());
-				self::assertEquals($expect, $entity->toArray(), '', 0, 10, true);
+				self::assertEquals($expect, $array = $entity->toArray());
+				self::assertTrue(gettype($array['value']) === 'double', 'value is not float!');
+				self::assertInstanceOf(\DateTime::class, $array['date']);
 			}
 
 			/**

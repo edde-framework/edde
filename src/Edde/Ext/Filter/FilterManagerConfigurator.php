@@ -7,6 +7,7 @@
 		use Edde\Api\Filter\IFilterManager;
 		use Edde\Common\Config\AbstractConfigurator;
 		use Edde\Common\Filter\BoolFilter;
+		use Edde\Common\Filter\DateTimeFilter;
 		use Edde\Common\Filter\FloatFilter;
 
 		class FilterManagerConfigurator extends AbstractConfigurator {
@@ -21,8 +22,11 @@
 			public function configure($instance) {
 				parent::configure($instance);
 				$instance->registerFilterList([
-					'bool'  => $this->container->create(BoolFilter::class, [], __METHOD__),
-					'float' => $this->container->create(FloatFilter::class, [], __METHOD__),
+					'bool'           => $this->container->create(BoolFilter::class, [], __METHOD__),
+					'float'          => $filter = $this->container->create(FloatFilter::class, [], __METHOD__),
+					'double'         => $filter,
+					\DateTime::class => $filter = $this->container->create(DateTimeFilter::class, [], __METHOD__),
+					'datetime'       => $filter,
 				]);
 			}
 		}

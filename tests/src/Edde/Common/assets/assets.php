@@ -104,6 +104,11 @@
 			 * @schema
 			 */
 			function value(): ?float;
+
+			/**
+			 * @schema
+			 */
+			function date(): ?\DateTime;
 		}
 
 		/**
