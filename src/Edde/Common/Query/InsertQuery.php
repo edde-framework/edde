@@ -1,9 +1,10 @@
 <?php
 	namespace Edde\Common\Query;
 
+		use Edde\Api\Query\IInsertQuery;
 		use Edde\Common\Node\Node;
 
-		class InsertQuery extends AbstractQuery {
+		class InsertQuery extends AbstractQuery implements IInsertQuery {
 			/**
 			 * @var string
 			 */

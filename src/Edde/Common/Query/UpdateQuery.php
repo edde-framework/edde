@@ -1,10 +1,12 @@
 <?php
 	namespace Edde\Common\Query;
 
+		use Edde\Api\Query\Fragment\IWhere;
+		use Edde\Api\Query\IUpdateQuery;
 		use Edde\Common\Node\Node;
 		use Edde\Common\Query\Fragment\WhereFragment;
 
-		class UpdateQuery extends InsertQuery {
+		class UpdateQuery extends InsertQuery implements IUpdateQuery {
 			/**
 			 * @var string
 			 */
@@ -19,7 +21,10 @@
 				$this->type = 'update';
 			}
 
-			public function where(): WhereFragment {
+			/**
+			 * @inheritdoc
+			 */
+			public function where(): IWhere {
 				$this->init();
 				$this->node->getNode('where-list')->addNode($node = new Node('where'));
 				return new WhereFragment($this->node, $node);
