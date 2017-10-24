@@ -106,11 +106,18 @@
 			public function required(bool $required = true): IProperty;
 
 			/**
-			 * property type
+			 * set property type
 			 *
 			 * @param string $type
 			 *
 			 * @return IProperty
 			 */
 			public function type(string $type): IProperty;
+
+			/**
+			 * get type of property
+			 *
+			 * @return string
+			 */
+			public function getType(): string;
 		}

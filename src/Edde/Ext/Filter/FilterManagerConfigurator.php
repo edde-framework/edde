@@ -6,7 +6,8 @@
 		use Edde\Api\Container\Inject\Container;
 		use Edde\Api\Filter\IFilterManager;
 		use Edde\Common\Config\AbstractConfigurator;
-		use Edde\Common\Filter\ToBoolFilter;
+		use Edde\Common\Filter\BoolFilter;
+		use Edde\Common\Filter\FloatFilter;
 
 		class FilterManagerConfigurator extends AbstractConfigurator {
 			use Container;
@@ -20,7 +21,8 @@
 			public function configure($instance) {
 				parent::configure($instance);
 				$instance->registerFilterList([
-					'bool' => $this->container->create(ToBoolFilter::class, [], __METHOD__),
+					'bool'  => $this->container->create(BoolFilter::class, [], __METHOD__),
+					'float' => $this->container->create(FloatFilter::class, [], __METHOD__),
 				]);
 			}
 		}

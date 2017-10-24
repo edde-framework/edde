@@ -25,7 +25,7 @@
 						return 'LONGTEXT';
 					case 'binary':
 						return 'LONGBLOB';
-					case 'integer':
+					case 'int':
 						return 'INTEGER';
 					case 'float':
 						return 'DOUBLE PRECISION';

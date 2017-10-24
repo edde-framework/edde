@@ -130,7 +130,7 @@
 			 * @inheritdoc
 			 */
 			public function integer(string $name): IProperty {
-				return $this->property($name)->type('integer');
+				return $this->property($name)->type('int');
 			}
 
 			static public function create(string $name): ISchema {

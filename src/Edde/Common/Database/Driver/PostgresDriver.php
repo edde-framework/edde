@@ -21,7 +21,7 @@
 						return 'TEXT';
 					case 'binary':
 						return 'BYTEA';
-					case 'integer':
+					case 'int':
 						return 'INTEGER';
 					case 'float':
 						return 'DOUBLE PRECISION';

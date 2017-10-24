@@ -122,4 +122,11 @@
 				$this->node->setAttribute('type', $type);
 				return $this;
 			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getType(): string {
+				return $this->node->getAttribute('type', 'string');
+			}
 		}
