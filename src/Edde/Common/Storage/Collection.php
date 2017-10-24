@@ -2,6 +2,7 @@
 	namespace Edde\Common\Storage;
 
 		use Edde\Api\Query\IQuery;
+		use Edde\Api\Schema\ISchemaManager;
 		use Edde\Api\Storage\ICollection;
 		use Edde\Api\Storage\IEntityManager;
 		use Edde\Api\Storage\IStorage;
@@ -9,9 +10,9 @@
 
 		class Collection extends Object implements ICollection {
 			/**
-			 * @var string
+			 * @var ISchemaManager
 			 */
-			protected $schema;
+			protected $schemaManager;
 			/**
 			 * @var IEntityManager
 			 */
@@ -28,12 +29,17 @@
 			 * @var IQuery
 			 */
 			protected $query;
+			/**
+			 * @var string
+			 */
+			protected $schema;
 
-			public function __construct($schema, IEntityManager $entityManager, IStorage $storage, IQuery $query) {
-				$this->schema = $schema;
+			public function __construct(ISchemaManager $schemaManager, IEntityManager $entityManager, IStorage $storage, IQuery $query, string $schema) {
+				$this->schemaManager = $schemaManager;
 				$this->entityManager = $entityManager;
 				$this->storage = $storage;
 				$this->query = $query;
+				$this->schema = $schema;
 			}
 
 			/**
@@ -41,7 +47,7 @@
 			 */
 			public function getIterator() {
 				foreach ($this->storage->execute($this->query) as $source) {
-					yield $this->entityManager->factory($this->schema, $source);
+					yield $this->entityManager->factory($this->schema, $this->schemaManager->filter($this->schema, $source));
 				}
 			}
 		}
