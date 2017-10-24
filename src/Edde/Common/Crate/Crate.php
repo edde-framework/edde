@@ -82,14 +82,23 @@
 			 */
 			public function getDirtyProperties(): array {
 				$dirtyList = [];
-				if ($this->isDirty() === false) {
-					return [];
-				}
 				foreach ($this->propertyList as $name => $property) {
 					if ($property->isDirty()) {
 						$dirtyList[$name] = $property;
 					}
 				}
 				return $dirtyList;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function isEmpty(): bool {
+				foreach ($this->propertyList as $property) {
+					if ($property->isEmpty() === false) {
+						return false;
+					}
+				}
+				return true;
 			}
 		}

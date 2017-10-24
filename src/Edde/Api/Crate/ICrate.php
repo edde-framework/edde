@@ -73,4 +73,11 @@
 			 * @return IProperty[]
 			 */
 			public function getDirtyProperties(): array;
+
+			/**
+			 * check if all properties of this crate are empty
+			 *
+			 * @return bool
+			 */
+			public function isEmpty(): bool;
 		}
