@@ -1,6 +1,7 @@
 <?php
 	namespace Edde\Api\Query;
 
+		use Edde\Api\Query\Fragment\IOrder;
 		use Edde\Api\Query\Fragment\ITable;
 		use Edde\Api\Query\Fragment\IWhere;
 
@@ -34,4 +35,11 @@
 			 * @return IWhere
 			 */
 			public function where(): IWhere;
+
+			/**
+			 * order by
+			 *
+			 * @return IOrder
+			 */
+			public function order(): IOrder;
 		}

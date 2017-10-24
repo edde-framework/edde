@@ -28,4 +28,18 @@
 			 * @return ITable
 			 */
 			public function table(string $name, string $alias = null): ITable;
+
+			/**
+			 * where clausule
+			 *
+			 * @return IWhere
+			 */
+			public function where(): IWhere;
+
+			/**
+			 * order by
+			 *
+			 * @return IOrder
+			 */
+			public function order(): IOrder;
 		}

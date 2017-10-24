@@ -1,19 +1,27 @@
 <?php
 	namespace Edde\Common\Query;
 
+		use Edde\Api\Query\Fragment\IOrder;
 		use Edde\Api\Query\Fragment\ITable;
 		use Edde\Api\Query\Fragment\IWhere;
 		use Edde\Api\Query\ISelectQuery;
 		use Edde\Common\Node\Node;
+		use Edde\Common\Query\Fragment\OrderFragment;
 		use Edde\Common\Query\Fragment\TableFragment;
 		use Edde\Common\Query\Fragment\WhereFragment;
 
 		class SelectQuery extends AbstractQuery implements ISelectQuery {
 			/**
+			 * @var IOrder
+			 */
+			protected $orderFragment;
+
+			/**
 			 * @inheritdoc
 			 */
 			public function select(ISelectQuery $selectQuery, string $alias): ISelectQuery {
-				$this->root->getNode('column-list')->addNode($node = new Node('column', null, [
+				$this->init();
+				$this->node->getNode('column-list')->addNode($node = new Node('column', null, [
 					'type'  => 'query',
 					'alias' => $alias,
 				]));
@@ -37,6 +45,14 @@
 				$this->init();
 				$this->node->getNode('where-list')->addNode($node = new Node('where'));
 				return new WhereFragment($this->node, $node);
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function order(): IOrder {
+				$this->init();
+				return $this->orderFragment ?: $this->orderFragment = new OrderFragment($this->node, $this->node->getNode('order-list'));
 			}
 
 			protected function handleInit(): void {
