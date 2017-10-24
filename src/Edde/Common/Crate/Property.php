@@ -57,10 +57,7 @@
 			 * @inheritdoc
 			 */
 			public function setValue($value): IProperty {
-				$this->dirty = false;
-				if ($this->default !== ($this->value = $value)) {
-					$this->dirty = true;
-				}
+				$this->dirty = $this->isDiff($this->default, $this->value = $value);
 				return $this;
 			}
 
@@ -100,5 +97,33 @@
 				$this->value = null;
 				$this->dirty = false;
 				return $this;
+			}
+
+			/**
+			 * crate suppose it contains values already for PHP side, thus types in properties
+			 * are type in right way; this method supports only PHP scalar types
+			 *
+			 * @param mixed $current
+			 * @param mixed $value
+			 *
+			 * @return bool
+			 */
+			protected function isDiff($current, $value): bool {
+				switch (gettype($value)) {
+					case 'int':
+						$current = (int)$current;
+						$value = (int)$value;
+						return $current !== $value;
+					case 'float':
+						$current = (float)$current;
+						$value = (float)$value;
+						return abs($current - $value) > abs(($current - $value) / $value);
+					case 'string':
+						return (string)$current !== (string)$value;
+					case 'bool':
+						return filter_var($current, FILTER_VALIDATE_BOOLEAN) !== filter_var($value, FILTER_VALIDATE_BOOLEAN);
+					default:
+						return $current !== $value;
+				}
 			}
 		}
