@@ -38,6 +38,13 @@
 				self::assertSame('bar', $property->get());
 			}
 
+			public function testIsDirtyWithFalse() {
+				$property = new Property('foo');
+				$property->setValue(false);
+				self::assertTrue($property->isDirty(), 'property should be dirty!');
+				self::assertFalse($property->get(), 'value of property should be boolean false!');
+			}
+
 			public function testCommit() {
 				$property = new Property('foo');
 				$property->setValue('bar');

@@ -79,7 +79,7 @@
 			 * @inheritdoc
 			 */
 			public function get($default = null) {
-				return $this->dirty ? $this->value : ($this->default ?: $default);
+				return $this->dirty ? $this->value : ($this->default !== null ? $this->default : $default);
 			}
 
 			/**
@@ -120,8 +120,9 @@
 						return abs($current - $value) > abs(($current - $value) / $value);
 					case 'string':
 						return (string)$current !== (string)$value;
+					case 'boolean':
 					case 'bool':
-						return filter_var($current, FILTER_VALIDATE_BOOLEAN) !== filter_var($value, FILTER_VALIDATE_BOOLEAN);
+						return $current !== filter_var($value, FILTER_VALIDATE_BOOLEAN);
 					default:
 						return $current !== $value;
 				}
