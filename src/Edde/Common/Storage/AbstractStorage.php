@@ -28,7 +28,7 @@
 			 * @inheritdoc
 			 */
 			public function collection(string $schema): ICollection {
-				$collection = new Collection($this->entityManager, $this, $schema);
+				$collection = new Collection($this->entityManager, $this, $this->schemaManager->getSchema($schema));
 				/**
 				 * by default select all from the source schema
 				 */

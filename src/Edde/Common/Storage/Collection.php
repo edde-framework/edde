@@ -1,6 +1,7 @@
 <?php
 	namespace Edde\Common\Storage;
 
+		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
 		use Edde\Api\Storage\ICollection;
 		use Edde\Api\Storage\IEntity;
@@ -20,11 +21,11 @@
 			 */
 			protected $storage;
 			/**
-			 * @var string
+			 * @var ISchema
 			 */
 			protected $schema;
 
-			public function __construct(IEntityManager $entityManager, IStorage $storage, string $schema) {
+			public function __construct(IEntityManager $entityManager, IStorage $storage, ISchema $schema) {
 				$this->entityManager = $entityManager;
 				$this->storage = $storage;
 				$this->schema = $schema;
@@ -43,9 +44,20 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function load($value): IEntity {
+				$where = $this->where();
+				foreach ($this->schema->getPrimaryList() as $property) {
+					$where->and()->eq($property->getName())->to($value);
+				}
+				return $this->getEntity();
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function getIterator() {
 				foreach ($this->storage->execute($this) as $source) {
-					yield $this->entityManager->factory($this->schema, $source);
+					yield $this->entityManager->factory($this->schema->getName(), $source);
 				}
 			}
 		}
