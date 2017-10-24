@@ -14,7 +14,6 @@
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Container\Factory\ClassFactory;
 		use Edde\Common\Database\Driver\PostgresDriver;
-		use Edde\Common\Query\SelectQuery;
 		use Edde\Ext\Container\ContainerFactory;
 		use Edde\Ext\Test\TestCase;
 		use Edde\Test\SimpleSchema;
@@ -84,7 +83,9 @@
 				$entity->set('optional', 'this is a new nice and updated string');
 				$expect = $entity->toArray();
 				$this->storage->update($entity);
-				$entity = $this->storage->load(SimpleSchema::class, (new SelectQuery())->table(SimpleSchema::class)->all()->where()->eq('guid')->to($entity->get('guid'))->query());
+				$collection = $this->storage->collection(SimpleSchema::class);
+				$collection->where()->eq('guid')->to($entity->get('guid'));
+				$entity = $collection->getEntity();
 				self::assertFalse($entity->isDirty(), 'entity should NOT be dirty right after load!');
 				self::assertEquals($expect, $array = $entity->toArray());
 				self::assertTrue(($type = gettype($array['value'])) === 'double', 'value [' . $type . '] is not float!');
