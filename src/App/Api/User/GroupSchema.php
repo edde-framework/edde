@@ -15,5 +15,5 @@
 			/**
 			 * @relation guid
 			 */
-			public function userGroup(): UserSchema;
+			public function UserGroup(): UserSchema;
 		}

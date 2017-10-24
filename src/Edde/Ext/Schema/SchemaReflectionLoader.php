@@ -73,9 +73,9 @@
 							if (($sanitizer = $this->stringUtils->match($doc, '~@sanitizer\s*(?<value>.*?)[\n\r]~sm', true)) !== null) {
 								$property->sanitizer(trim($sanitizer['value']));
 							}
-						} else if (strpos($doc, '@relation') !== false) {
+						} else if (strpos($doc, '@relation') !== false && ($type = $reflectionMethod->getReturnType()) !== null) {
 							$attr = $this->stringUtils->match($doc, '~@relation\s*(?<attr>.*?)[\n\r]~sm', true);
-							$schema->relation($reflectionMethod->getName(), $attr['attr']);
+							$schema->relation($reflectionMethod->getName(), $attr['attr'], $type->getName());
 						}
 					}
 					return $this->schemaList[$schema->getName()] = $schema;

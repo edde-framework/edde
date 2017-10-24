@@ -15,5 +15,5 @@
 			/**
 			 * @relation guid
 			 */
-			public function userRole(): UserSchema;
+			public function UserRole(): UserSchema;
 		}

@@ -23,10 +23,10 @@
 			 *
 			 * @relation guid
 			 */
-			public function userRole(): RoleSchema;
+			public function UserRole(): RoleSchema;
 
 			/**
 			 * @relation guid
 			 */
-			public function userGroup(): GroupSchema;
+			public function UserGroup(): GroupSchema;
 		}

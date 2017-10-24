@@ -136,11 +136,20 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function relation(string $schema, string $property, string $source): ISchema {
+			public function relation(string $schema, string $source, string $target): ISchema {
 				$this->node->getNode('relation-list')->addNode(new Node('relation', null, [
-					'schema'   => $schema,
-					'property' => $property,
-					'source'   => $source,
+					/**
+					 * the name of relation schema
+					 */
+					'schema' => $schema,
+					/**
+					 * source property on THIS schema
+					 */
+					'source' => $source,
+					/**
+					 * target relation, also used as target property
+					 */
+					'target' => $target,
 				]));
 				return $this;
 			}
