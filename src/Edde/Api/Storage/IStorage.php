@@ -5,7 +5,6 @@
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\IQuery;
 		use Edde\Api\Storage\Exception\DuplicateTableException;
-		use Edde\Api\Storage\Exception\EntityNotFoundException;
 		use Edde\Api\Storage\Exception\IntegrityException;
 		use Edde\Api\Storage\Exception\StorageException;
 		use Edde\Api\Storage\Exception\UnknownTableException;
@@ -103,43 +102,13 @@
 			 * get a collection of entities (collection should use generator or iterator, never fetch to array)
 			 *
 			 * @param string $schema
-			 * @param IQuery $query
 			 *
 			 * @return ICollection|IEntity[]
 			 *
 			 * @throws UnknownTableException
 			 */
-			public function collection(string $schema, IQuery $query): ICollection;
+			public function collection(string $schema): ICollection;
 
-			/**
-			 * load exactly one entity or throw an exception if the entity is not found
-			 *
-			 * @param string $schema
-			 * @param IQuery $query
-			 *
-			 * @return IEntity
-			 *
-			 * @throws EntityNotFoundException
-			 * @throws UnknownTableException
-			 */
-			public function load(string $schema, IQuery $query): IEntity;
-
-			/**
-			 * try to get an entity by the given primary key (suppose just one key, for more complex
-			 * search use full query) and all unique properties (quite magical method)
-			 *
-			 * I'ts important to use this method wisely, because it could return surprising result - for
-			 * example where unique factors are scattered around different columns on different rows.
-			 *
-			 * @param string $schema
-			 * @param mixed  $primary
-			 *
-			 * @return IEntity
-			 *
-			 * @throws EntityNotFoundException
-			 * @throws UnknownTableException
-			 */
-//			public function get(string $schema, $primary): IEntity;
 			/**
 			 * creates a new schema or throw an exception if already exists (or other error)
 			 *

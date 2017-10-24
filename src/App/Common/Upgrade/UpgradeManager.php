@@ -8,7 +8,6 @@
 		use Edde\Api\Storage\ICollection;
 		use Edde\Api\Storage\Inject\EntityManager;
 		use Edde\Api\Upgrade\IUpgrade;
-		use Edde\Common\Query\SelectQuery;
 		use Edde\Common\Upgrade\AbstractUpgradeManager;
 
 		class UpgradeManager extends AbstractUpgradeManager {
@@ -20,10 +19,7 @@
 			 */
 			public function getVersion(): ?string {
 				try {
-					$query = new SelectQuery();
-					$query->setDescription('current version select');
-					$query->table(UpgradeSchema::class)->all()->order()->desc('stamp');
-					return $this->storage->load(UpgradeSchema::class, $query)->get('version');
+					return $this->getCurrentList()->getEntity()->get('version');
 				} catch (UnknownTableException $exception) {
 					/**
 					 * when query fails, it's necessary to clear current transaction and start a new one
@@ -41,7 +37,9 @@
 			 * @inheritdoc
 			 */
 			public function getCurrentList(): ICollection {
-				return $this->storage->collection(UpgradeSchema::class, (new SelectQuery())->table(UpgradeSchema::class)->all()->order()->desc('stamp')->query());
+				$collection = $this->storage->collection(UpgradeSchema::class);
+				$collection->order()->desc('stamp');
+				return $collection;
 			}
 
 			/**

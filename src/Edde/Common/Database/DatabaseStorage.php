@@ -6,19 +6,15 @@
 		use Edde\Api\Query\IQuery;
 		use Edde\Api\Storage\Exception\ExclusiveTransactionException;
 		use Edde\Api\Storage\Exception\NoTransactionException;
-		use Edde\Api\Storage\ICollection;
 		use Edde\Api\Storage\IEntity;
-		use Edde\Api\Storage\Inject\EntityManager;
 		use Edde\Api\Storage\IStorage;
 		use Edde\Common\Query\InsertQuery;
 		use Edde\Common\Query\NativeQuery;
 		use Edde\Common\Query\SelectQuery;
 		use Edde\Common\Query\UpdateQuery;
 		use Edde\Common\Storage\AbstractStorage;
-		use Edde\Common\Storage\Collection;
 
 		class DatabaseStorage extends AbstractStorage {
-			use EntityManager;
 			use Driver;
 			/**
 			 * @var int
@@ -137,13 +133,6 @@
 				$this->execute($query);
 				$entity->commit();
 				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function collection(string $schema, IQuery $query): ICollection {
-				return new Collection($this->entityManager, $this, $query, $schema);
 			}
 
 			protected function prepare(IEntity $entity): array {
