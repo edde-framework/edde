@@ -110,4 +110,15 @@
 			 * @return IProperty
 			 */
 			public function integer(string $name): IProperty;
+
+			/**
+			 * create (or update) a relation
+			 *
+			 * @param string $schema   target schema name for the relation
+			 * @param string $property name of relation property (will be added as a property to relation)
+			 * @param string $source   source property of this schema used as a filter for the relation
+			 *
+			 * @return ISchema
+			 */
+			public function relation(string $schema, string $property, string $source): ISchema;
 		}

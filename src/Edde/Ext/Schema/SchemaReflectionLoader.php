@@ -18,23 +18,23 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getSchema(string $name): ISchema {
-				return $this->schemaList[$name] ?? $this->schemaList[$name] = $this->reflect($name);
+			public function getSchema(string $schema): ISchema {
+				return $this->schemaList[$schema] ?? $this->schemaList[$schema] = $this->reflect($schema);
 			}
 
 			/**
-			 * @param string $name
+			 * @param string $schema
 			 *
 			 * @return ISchema
 			 * @throws SchemaReflectionException
 			 */
-			protected function reflect(string $name): ISchema {
+			protected function reflect(string $schema): ISchema {
 				try {
-					if (isset($this->schemaList[$name])) {
-						return $this->schemaList[$name];
+					if (isset($this->schemaList[$schema])) {
+						return $this->schemaList[$schema];
 					}
-					$reflectionClass = new \ReflectionClass($name);
-					$schema = Schema::create($name);
+					$reflectionClass = new \ReflectionClass($schema);
+					$schema = Schema::create($schema);
 					foreach ($reflectionClass->getMethods() as $reflectionMethod) {
 						if (($doc = $reflectionMethod->getDocComment()) === false) {
 							continue;
@@ -75,11 +75,12 @@
 							}
 						} else if (strpos($doc, '@relation') !== false) {
 							$attr = $this->stringUtils->match($doc, '~@relation\s*(?<attr>.*?)[\n\r]~sm', true);
+							$schema->relation($reflectionMethod->getName(), $attr['attr']);
 						}
 					}
 					return $this->schemaList[$schema->getName()] = $schema;
 				} catch (\Throwable $throwable) {
-					throw new SchemaReflectionException(sprintf('Cannot do reflection of [%s]. Name is not probably a class.', $name));
+					throw new SchemaReflectionException(sprintf('Cannot do reflection of [%s]. Name is not probably a class.', $schema));
 				}
 			}
 		}

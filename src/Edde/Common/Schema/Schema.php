@@ -69,7 +69,7 @@
 				if ($this->propertyList) {
 					return $this->propertyList;
 				}
-				foreach ($this->node->getNodeList() as $node) {
+				foreach ($this->node->getNode('property-list')->getNodeList() as $node) {
 					$this->propertyList[$node->getAttribute('name')] = new Property($node);
 				}
 				return $this->propertyList;
@@ -93,7 +93,7 @@
 			 * @inheritdoc
 			 */
 			public function getNodeList(): array {
-				return $this->node->getNodeList();
+				return $this->node->getNode('property-list')->getNodeList();
 			}
 
 			/**
@@ -101,7 +101,7 @@
 			 */
 			public function property(string $name): IProperty {
 				$this->propertyList = null;
-				$this->node->addNode($node = new Node('property', null, ['name' => $name]));
+				$this->node->getNode('property-list')->addNode($node = new Node('property', null, ['name' => $name]));
 				return new Property($node);
 			}
 
@@ -131,6 +131,18 @@
 			 */
 			public function integer(string $name): IProperty {
 				return $this->property($name)->type('int');
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function relation(string $schema, string $property, string $source): ISchema {
+				$this->node->getNode('relation-list')->addNode(new Node('relation', null, [
+					'schema'   => $schema,
+					'property' => $property,
+					'source'   => $source,
+				]));
+				return $this;
 			}
 
 			static public function create(string $name): ISchema {
