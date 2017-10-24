@@ -33,7 +33,7 @@
 			public function actionList() {
 				printf("List of currently installed upgrades:\n");
 				foreach ($this->upgradeManager->getCurrentList() as $upgrade) {
-					printf("\t - version [%s] from [%s]\n", $upgrade->get('version'), date('Y-m-d H:i:s', $upgrade->get('stamp')));
+					printf("\t - version [%s] from [%s]\n", $upgrade->get('version'), $upgrade->get('stamp')->format('Y-m-d H:i:s'));
 				}
 			}
 

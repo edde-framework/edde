@@ -26,6 +26,11 @@
 					$query->table(UpgradeSchema::class)->all()->order()->desc('stamp');
 					return $this->storage->load(UpgradeSchema::class, $query)->get('version');
 				} catch (UnknownTableException $exception) {
+					/**
+					 * when query fails, it's necessary to clear current transaction and start a new one
+					 */
+					$this->storage->rollback();
+					$this->storage->start();
 					$this->storage->execute(new CreateSchemaQuery($this->schemaManager->getSchema(UpgradeSchema::class)));
 					return null;
 				} catch (EntityNotFoundException  $exception) {
@@ -45,7 +50,7 @@
 			 */
 			protected function onUpgrade(IUpgrade $upgrade): void {
 				$this->storage->insert($this->entityManager->create(UpgradeSchema::class, [
-					'stamp'   => microtime(true),
+					'stamp'   => new \DateTime(),
 					'version' => $upgrade->getVersion(),
 				]));
 			}
