@@ -152,6 +152,9 @@
 				$schema = $entity->getSchema();
 				$schemaName = $schema->getName();
 				$source = [];
+				foreach ($entity->getPrimaryList() as $property) {
+					$source[$property->getName()] = $property->get();
+				}
 				foreach ($entity->getDirtyProperties() as $property) {
 					$source[$property->getName()] = $property->get();
 				}

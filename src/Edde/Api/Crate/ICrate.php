@@ -7,6 +7,17 @@
 	 */
 		interface ICrate {
 			/**
+			 * when setting a property to crate, value should be compatible type to keep
+			 * everything working properly; that's scalar types, DateTime and few others
+			 *
+			 * @param string $property
+			 * @param mixed  $value
+			 *
+			 * @return ICrate
+			 */
+			public function set(string $property, $value): ICrate;
+
+			/**
 			 * get an (effective) value
 			 *
 			 * @param string $property
@@ -80,4 +91,11 @@
 			 * @return bool
 			 */
 			public function isEmpty(): bool;
+
+			/**
+			 * return crate as an array
+			 *
+			 * @return array
+			 */
+			public function toArray(): array;
 		}

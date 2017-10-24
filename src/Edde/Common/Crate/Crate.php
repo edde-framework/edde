@@ -14,6 +14,14 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function set(string $property, $value): ICrate {
+				$this->getProperty($property)->setValue($value);
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function get(string $property, $default = null) {
 				return $this->getProperty($property)->get($default);
 			}
@@ -100,5 +108,16 @@
 					}
 				}
 				return true;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function toArray(): array {
+				$source = [];
+				foreach ($this->propertyList as $name => $property) {
+					$source[$name] = $property->get();
+				}
+				return $source;
 			}
 		}

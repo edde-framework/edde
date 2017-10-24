@@ -6,13 +6,16 @@
 		use Edde\Api\Database\IDriver;
 		use Edde\Api\Schema\Exception\UnknownSchemaException;
 		use Edde\Api\Schema\Inject\SchemaManager;
+		use Edde\Api\Storage\Exception\EntityNotFoundException;
 		use Edde\Api\Storage\Exception\IntegrityException;
 		use Edde\Api\Storage\Exception\StorageException;
+		use Edde\Api\Storage\Exception\UnknownTableException;
 		use Edde\Api\Storage\Inject\EntityManager;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Container\Factory\ClassFactory;
 		use Edde\Common\Database\Driver\PostgresDriver;
 		use Edde\Common\Query\CreateSchemaQuery;
+		use Edde\Common\Query\SelectQuery;
 		use Edde\Ext\Container\ContainerFactory;
 		use Edde\Ext\Test\TestCase;
 		use Edde\Test\SimpleSchema;
@@ -63,6 +66,24 @@
 				]);
 				$this->storage->insert($entity);
 				self::assertNotEmpty($entity->get('guid'));
+			}
+
+			/**
+			 * @throws EntityNotFoundException
+			 * @throws UnknownTableException
+			 * @throws \Exception
+			 */
+			public function testUpdate() {
+				$entity = $this->entityManager->create(SimpleSchema::class, [
+					'name'     => 'to-be-updated',
+					'optional' => null,
+				]);
+				$this->storage->insert($entity);
+				$entity->set('optional', 'this is a new nice and updated string');
+				$expect = $entity->toArray();
+				$this->storage->update($entity);
+				$entity = $this->storage->load(SimpleSchema::class, (new SelectQuery())->table(SimpleSchema::class)->all()->where()->eq('guid')->to($entity->get('guid'))->query());
+				self::assertEquals($expect, $entity->toArray());
 			}
 
 			/**
