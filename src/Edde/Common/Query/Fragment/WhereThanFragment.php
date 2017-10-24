@@ -1,9 +1,10 @@
 <?php
 	namespace Edde\Common\Query\Fragment;
 
+		use Edde\Api\Query\Fragment\IWhereThan;
 		use Edde\Common\Node\Node;
 
-		class WhereThanFragment extends AbstractFragment {
+		class WhereThanFragment extends AbstractFragment implements IWhereThan {
 			public function than($value): WhereRelationFragment {
 				$this->node->setAttribute('target', 'parameter');
 				/** @noinspection PhpUnhandledExceptionInspection */

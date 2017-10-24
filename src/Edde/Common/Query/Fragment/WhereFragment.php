@@ -2,6 +2,8 @@
 	namespace Edde\Common\Query\Fragment;
 
 		use Edde\Api\Query\Fragment\IWhere;
+		use Edde\Api\Query\Fragment\IWhereIn;
+		use Edde\Api\Query\Fragment\IWhereThan;
 		use Edde\Api\Query\Fragment\IWhereTo;
 		use Edde\Common\Node\Node;
 
@@ -13,43 +15,70 @@
 				return $this->createToFragment(__FUNCTION__, $name);
 			}
 
+			/**
+			 * @inheritdoc
+			 */
 			public function neq(string $name): IWhereTo {
 				return $this->createToFragment(__FUNCTION__, $name);
 			}
 
-			public function gt(string $name): WhereThanFragment {
+			/**
+			 * @inheritdoc
+			 */
+			public function gt(string $name): IWhereThan {
 				return $this->createThanFragment(__FUNCTION__, $name);
 			}
 
-			public function gte(string $name): WhereThanFragment {
+			/**
+			 * @inheritdoc
+			 */
+			public function gte(string $name): IWhereThan {
 				return $this->createThanFragment(__FUNCTION__, $name);
 			}
 
-			public function lt(string $name): WhereThanFragment {
+			/**
+			 * @inheritdoc
+			 */
+			public function lt(string $name): IWhereThan {
 				return $this->createThanFragment(__FUNCTION__, $name);
 			}
 
-			public function lte(string $name): WhereThanFragment {
+			/**
+			 * @inheritdoc
+			 */
+			public function lte(string $name): IWhereThan {
 				return $this->createThanFragment(__FUNCTION__, $name);
 			}
 
-			public function in(string $name): WhereInFragment {
+			/**
+			 * @inheritdoc
+			 */
+			public function in(string $name): IWhereIn {
 				$this->node->setAttribute('type', 'in');
 				$this->node->setAttribute('where', $name);
 				return new WhereInFragment($this->root, $this->node);
 			}
 
-			public function group(): WhereFragment {
+			/**
+			 * @inheritdoc
+			 */
+			public function group(): IWhere {
 				$this->node->setAttribute('type', 'group');
 				$this->node->addNode($node = new Node('where'));
 				return new WhereFragment($this->root, $node);
 			}
 
-			public function and (): WhereFragment {
+			/**
+			 * @inheritdoc
+			 */
+			public function and (): IWhere {
 				return $this->createRelation(__FUNCTION__);
 			}
 
-			public function or (): WhereFragment {
+			/**
+			 * @inheritdoc
+			 */
+			public function or (): IWhere {
 				return $this->createRelation(__FUNCTION__);
 			}
 
@@ -64,7 +93,7 @@
 				return new WhereToFragment($this->root, $this->node);
 			}
 
-			protected function createThanFragment(string $type, string $name): WhereThanFragment {
+			protected function createThanFragment(string $type, string $name): IWhereThan {
 				$this->node->setAttribute('type', $type);
 				$this->node->setAttribute('where', $name);
 				return new WhereThanFragment($this->root, $this->node);

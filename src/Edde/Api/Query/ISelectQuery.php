@@ -2,6 +2,7 @@
 	namespace Edde\Api\Query;
 
 		use Edde\Api\Query\Fragment\ITable;
+		use Edde\Api\Query\Fragment\IWhere;
 
 		/**
 		 * Formal interface for Select Queries (also to map relevant fragments).
@@ -26,4 +27,11 @@
 			 * @return ISelectQuery
 			 */
 			public function select(ISelectQuery $selectQuery, string $alias): ISelectQuery;
+
+			/**
+			 * where clausule
+			 *
+			 * @return IWhere
+			 */
+			public function where(): IWhere;
 		}
