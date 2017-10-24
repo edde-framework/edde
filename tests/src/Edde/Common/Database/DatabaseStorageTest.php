@@ -77,13 +77,14 @@
 				$entity = $this->entityManager->create(SimpleSchema::class, [
 					'name'     => 'to-be-updated',
 					'optional' => null,
+					'value'    => 3.14,
 				]);
 				$this->storage->insert($entity);
 				$entity->set('optional', 'this is a new nice and updated string');
 				$expect = $entity->toArray();
 				$this->storage->update($entity);
 				$entity = $this->storage->load(SimpleSchema::class, (new SelectQuery())->table(SimpleSchema::class)->all()->where()->eq('guid')->to($entity->get('guid'))->query());
-				self::assertEquals($expect, $entity->toArray());
+				self::assertEquals($expect, $entity->toArray(), '', 0, 10, true);
 			}
 
 			/**

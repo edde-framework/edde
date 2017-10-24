@@ -99,6 +99,11 @@
 			 * @schema
 			 */
 			function optional(): ?string;
+
+			/**
+			 * @schema
+			 */
+			function value(): ?float;
 		}
 
 		/**
