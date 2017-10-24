@@ -4,6 +4,7 @@
 		use Edde\Api\Config\IConfigurable;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\IQuery;
+		use Edde\Api\Storage\Exception\DuplicateTableException;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
 		use Edde\Api\Storage\Exception\IntegrityException;
 		use Edde\Api\Storage\Exception\StorageException;
@@ -139,4 +140,13 @@
 			 * @throws UnknownTableException
 			 */
 //			public function get(string $schema, $primary): IEntity;
+			/**
+			 * creates a new schema or throw an exception if already exists (or other error)
+			 *
+			 * @param string $schema
+			 *
+			 * @return IStorage
+			 * @throws DuplicateTableException
+			 */
+			public function createSchema(string $schema): IStorage;
 		}

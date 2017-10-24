@@ -4,7 +4,6 @@
 		use App\Api\User\UserSchema;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Storage\Inject\Storage;
-		use Edde\Common\Query\CreateSchemaQuery;
 		use Edde\Common\Upgrade\AbstractUpgrade;
 
 		class ZeroUpgrade extends AbstractUpgrade {
@@ -26,7 +25,7 @@
 					UserSchema::class,
 				];
 				foreach ($schemaList as $schema) {
-					$this->storage->execute(new CreateSchemaQuery($this->schemaManager->getSchema($schema)));
+					$this->storage->createSchema($schema);
 				}
 			}
 		}

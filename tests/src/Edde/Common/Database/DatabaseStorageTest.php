@@ -4,8 +4,8 @@
 		use Edde\Api\Container\Exception\ContainerException;
 		use Edde\Api\Container\Exception\FactoryException;
 		use Edde\Api\Database\IDriver;
-		use Edde\Api\Schema\Exception\UnknownSchemaException;
 		use Edde\Api\Schema\Inject\SchemaManager;
+		use Edde\Api\Storage\Exception\DuplicateTableException;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
 		use Edde\Api\Storage\Exception\IntegrityException;
 		use Edde\Api\Storage\Exception\StorageException;
@@ -14,7 +14,6 @@
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Container\Factory\ClassFactory;
 		use Edde\Common\Database\Driver\PostgresDriver;
-		use Edde\Common\Query\CreateSchemaQuery;
 		use Edde\Common\Query\SelectQuery;
 		use Edde\Ext\Container\ContainerFactory;
 		use Edde\Ext\Test\TestCase;
@@ -32,10 +31,10 @@
 			}
 
 			/**
-			 * @throws UnknownSchemaException
+			 * @throws DuplicateTableException
 			 */
 			public function testCreateSchema() {
-				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->getSchema(SimpleSchema::class)));
+				$this->storage->createSchema(SimpleSchema::class);
 				self::assertTrue(true, 'everything is ok');
 			}
 

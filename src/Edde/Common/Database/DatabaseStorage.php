@@ -4,7 +4,6 @@
 		use Edde\Api\Database\Inject\Driver;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\IQuery;
-		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Storage\Exception\ExclusiveTransactionException;
 		use Edde\Api\Storage\Exception\NoTransactionException;
 		use Edde\Api\Storage\ICollection;
@@ -20,7 +19,6 @@
 
 		class DatabaseStorage extends AbstractStorage {
 			use EntityManager;
-			use SchemaManager;
 			use Driver;
 			/**
 			 * @var int

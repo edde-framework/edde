@@ -8,7 +8,6 @@
 		use Edde\Api\Storage\ICollection;
 		use Edde\Api\Storage\Inject\EntityManager;
 		use Edde\Api\Upgrade\IUpgrade;
-		use Edde\Common\Query\CreateSchemaQuery;
 		use Edde\Common\Query\SelectQuery;
 		use Edde\Common\Upgrade\AbstractUpgradeManager;
 
@@ -31,7 +30,7 @@
 					 */
 					$this->storage->rollback();
 					$this->storage->start();
-					$this->storage->execute(new CreateSchemaQuery($this->schemaManager->getSchema(UpgradeSchema::class)));
+					$this->storage->createSchema(UpgradeSchema::class);
 					return null;
 				} catch (EntityNotFoundException  $exception) {
 					return null;
