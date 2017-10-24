@@ -1,6 +1,8 @@
 <?php
 	namespace App\Ext\Upgrade;
 
+		use App\Api\User\GroupSchema;
+		use App\Api\User\RoleSchema;
 		use App\Api\User\UserSchema;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Storage\Inject\Storage;
@@ -23,6 +25,8 @@
 			public function upgrade(): void {
 				$schemaList = [
 					UserSchema::class,
+					RoleSchema::class,
+					GroupSchema::class,
 				];
 				foreach ($schemaList as $schema) {
 					$this->storage->createSchema($schema);
