@@ -2,12 +2,16 @@
 	namespace Edde\Common\Query\Fragment;
 
 		use Edde\Api\Query\Fragment\IWhereIn;
-		use Edde\Api\Query\IQuery;
+		use Edde\Api\Query\Fragment\IWhereRelation;
+		use Edde\Api\Query\ISelectQuery;
 
 		class WhereInFragment extends AbstractFragment implements IWhereIn {
-			public function select(IQuery $query): WhereRelationFragment {
+			/**
+			 * @inheritdoc
+			 */
+			public function select(ISelectQuery $selectQuery): IWhereRelation {
 				$this->node->setAttribute('target', 'query');
-				$this->node->addNode($query->getQuery());
+				$this->node->addNode($selectQuery->getQuery());
 				return new WhereRelationFragment($this->root, $this->node);
 			}
 		}
