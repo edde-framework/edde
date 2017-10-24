@@ -66,6 +66,9 @@
 			 * save the given entity; the storage should check, if an entity is already present and
 			 * do proper inert/update
 			 *
+			 * This method is quite heavy; for example when there is a lot of new entities
+			 * created, insert method could be used instead as optimization
+			 *
 			 * @param IEntity $entity
 			 *
 			 * @return IStorage
@@ -74,6 +77,26 @@
 			 * @throws StorageException
 			 */
 			public function save(IEntity $entity): IStorage;
+
+			/**
+			 * when entity status for this storage is known (like it's new), than it's
+			 * possible to use this faster method to insert the entity into storage
+			 *
+			 * @param IEntity $entity
+			 *
+			 * @return IStorage
+			 */
+			public function insert(IEntity $entity): IStorage;
+
+			/**
+			 * when user know that entity has changed in this storage (thus it already exists in this
+			 * storage), this shortcut method could be used
+			 *
+			 * @param IEntity $entity
+			 *
+			 * @return IStorage
+			 */
+			public function update(IEntity $entity): IStorage;
 
 			/**
 			 * get a collection of entities (collection should use generator or iterator, never fetch to array)

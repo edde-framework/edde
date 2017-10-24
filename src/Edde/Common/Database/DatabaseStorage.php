@@ -93,7 +93,7 @@
 				/**
 				 * entities not changed will not be saved
 				 */
-				if ($this->entityManager->isDirty($entity) === false) {
+				if ($entity->isDirty() === false) {
 					return $this;
 				}
 				$schema = $entity->getSchema();
@@ -117,7 +117,7 @@
 				 * pickup all dirty properties being sent to storage
 				 */
 				$source = [];
-				foreach ($this->entityManager->getDirtyProperties($entity) as $property) {
+				foreach ($entity->getDirtyProperties() as $property) {
 					$source[$property->getName()] = $property->get();
 				}
 				/**
@@ -148,6 +148,46 @@
 				 */
 				$entity->commit();
 				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function insert(IEntity $entity): IStorage {
+				if ($entity->isDirty() === false) {
+					return $this;
+				}
+				$this->execute(new InsertQuery($entity->getSchema()->getName(), $this->prepare($entity)));
+				$entity->commit();
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function update(IEntity $entity): IStorage {
+				if ($entity->isDirty() === false) {
+					return $this;
+				}
+				$query = new UpdateQuery($entity->getSchema()->getName(), $this->prepare($entity));
+				$where = $query->where();
+				foreach ($entity->getPrimaryList() as $property) {
+					$where->and()->eq($property->getName())->to($property->get());
+				}
+				$this->execute($query);
+				$entity->commit();
+				return $this;
+			}
+
+			protected function prepare(IEntity $entity): array {
+				$schema = $entity->getSchema();
+				$schemaName = $schema->getName();
+				$source = [];
+				foreach ($entity->getDirtyProperties() as $property) {
+					$source[$property->getName()] = $property->get();
+				}
+				$entity->push($source = $this->schemaManager->generate($schemaName, $source));
+				return $this->schemaManager->sanitize($schemaName, $source);
 			}
 
 			/**

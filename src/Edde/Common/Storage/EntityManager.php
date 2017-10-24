@@ -12,6 +12,13 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function createEntity(string $schema): IEntity {
+				return new Entity($this->schemaManager->getSchema($schema));
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function create(string $schema, array $source = []): IEntity {
 				$entity = $this->createEntity($schema);
 				$entity->update($source);
@@ -30,26 +37,5 @@
 //				$this->schemaManager->sanitize($schema, $source);
 				$entity->push($source);
 				return $entity;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function createEntity(string $schema): IEntity {
-				return new Entity($this->schemaManager->getSchema($schema));
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function isDirty(IEntity $entity): bool {
-				return $entity->isDirty();
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getDirtyProperties(IEntity $entity): array {
-				return $entity->getDirtyProperties();
 			}
 		}

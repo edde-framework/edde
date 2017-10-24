@@ -46,12 +46,23 @@
 					'optional' => 'this string is optional, but I wanna fill it!',
 				]);
 				$this->storage->save($entity);
+				self::assertNotEmpty($entity->get('guid'));
 				$entity = $this->entityManager->create(SimpleSchema::class, [
 					'name'     => 'another name',
 					'optional' => null,
 				]);
 				$this->storage->save($entity);
 				self::assertFalse($entity->isDirty(), 'Entity is still dirty!');
+				self::assertNotEmpty($entity->get('guid'));
+			}
+
+			public function testInsert() {
+				$entity = $this->entityManager->create(SimpleSchema::class, [
+					'name'     => 'this entity is new',
+					'optional' => 'foo-bar',
+				]);
+				$this->storage->insert($entity);
+				self::assertNotEmpty($entity->get('guid'));
 			}
 
 			/**
