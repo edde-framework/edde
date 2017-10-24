@@ -1,14 +1,19 @@
 <?php
 	namespace Edde\Common\Query\Fragment;
 
+		use Edde\Api\Query\Fragment\IWhere;
+		use Edde\Api\Query\Fragment\IWhereTo;
 		use Edde\Common\Node\Node;
 
-		class WhereFragment extends AbstractFragment {
-			public function eq(string $name): WhereToFragment {
+		class WhereFragment extends AbstractFragment implements IWhere {
+			/**
+			 * @inheritdoc
+			 */
+			public function eq(string $name): IWhereTo {
 				return $this->createToFragment(__FUNCTION__, $name);
 			}
 
-			public function neq(string $name): WhereToFragment {
+			public function neq(string $name): IWhereTo {
 				return $this->createToFragment(__FUNCTION__, $name);
 			}
 
@@ -53,7 +58,7 @@
 				return new WhereFragment($this->root, $this->node);
 			}
 
-			protected function createToFragment(string $type, string $name): WhereToFragment {
+			protected function createToFragment(string $type, string $name): IWhereTo {
 				$this->node->setAttribute('type', $type);
 				$this->node->setAttribute('where', $name);
 				return new WhereToFragment($this->root, $this->node);

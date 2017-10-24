@@ -1,9 +1,10 @@
 <?php
 	namespace Edde\Common\Query\Fragment;
 
+		use Edde\Api\Query\Fragment\IWhereRelation;
 		use Edde\Common\Node\Node;
 
-		class WhereRelationFragment extends AbstractFragment {
+		class WhereRelationFragment extends AbstractFragment implements IWhereRelation {
 			public function and (): WhereFragment {
 				return $this->createRelation(__FUNCTION__);
 			}

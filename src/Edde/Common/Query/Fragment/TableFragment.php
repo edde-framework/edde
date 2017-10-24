@@ -1,47 +1,42 @@
 <?php
 	namespace Edde\Common\Query\Fragment;
 
-		use Edde\Api\Node\NodeException;
-		use Edde\Api\Query\IQuery;
+		use Edde\Api\Query\Fragment\ITable;
 		use Edde\Common\Node\Node;
 
-		class TableFragment extends AbstractFragment {
+		class TableFragment extends AbstractFragment implements ITable {
 			/**
 			 * @var OrderFragment
 			 */
 			protected $orderFragment;
 
-			public function column(string $name): TableFragment {
-				$this->root->getNode('column-list')->addNode($node = new Node('column', $name, ['type' => 'column']));
-				if (($alis = $this->node->getAttribute('alias')) !== null) {
-					$node->setAttribute('prefix', $alis);
-				}
-				return $this;
-			}
-
 			/**
-			 * @param IQuery $query
-			 * @param string $alias
-			 *
-			 * @return TableFragment
-			 * @throws NodeException
+			 * @inheritdoc
 			 */
-			public function select(IQuery $query, string $alias): TableFragment {
-				$this->root->getNode('column-list')->addNode($node = new Node('column', null, [
-					'type'  => 'query',
-					'alias' => $alias,
-				]));
-				$node->addNode($query->getQuery());
-				return $this;
-			}
-
-			public function all(): TableFragment {
+			public function all(): ITable {
 				$this->root->getNode('column-list')->addNode($node = new Node('column', null, ['type' => 'asterisk']));
 				$node->setAttribute('prefix', $this->node->getAttribute('alias', $this->node->getValue()));
 				return $this;
 			}
 
-			public function table(string $name, string $alias = null): TableFragment {
+			/**
+			 * @inheritdoc
+			 */
+			public function column(string $name, string $alias = null): ITable {
+				$this->root->getNode('column-list')->addNode($node = new Node('column', $name, ['type' => 'column']));
+				if (($alis = $this->node->getAttribute('alias')) !== null) {
+					$node->setAttribute('prefix', $alis);
+				}
+				if ($alias) {
+					$node->setAttribute('alias', $alias);
+				}
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function table(string $name, string $alias = null): ITable {
 				$this->root->getNode('table-list')->addNode($node = new Node('table', $name, $alias ? ['alias' => $alias] : []));
 				return new TableFragment($this->root, $node);
 			}

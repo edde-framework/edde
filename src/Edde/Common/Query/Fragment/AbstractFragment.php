@@ -2,11 +2,12 @@
 	namespace Edde\Common\Query\Fragment;
 
 		use Edde\Api\Node\INode;
+		use Edde\Api\Query\Fragment\IFragment;
 		use Edde\Api\Query\IQuery;
 		use Edde\Common\Object\Object;
 		use Edde\Common\Query\Query;
 
-		abstract class AbstractFragment extends Object {
+		abstract class AbstractFragment extends Object implements IFragment {
 			/**
 			 * @var INode
 			 */
@@ -25,10 +26,16 @@
 				$this->node = $node;
 			}
 
-			public function getNode() {
+			/**
+			 * @inheritdoc
+			 */
+			public function getNode(): INode {
 				return $this->node;
 			}
 
+			/**
+			 * @inheritdoc
+			 */
 			public function query(): IQuery {
 				return new Query($this->root);
 			}
