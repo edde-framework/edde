@@ -13,7 +13,6 @@
 			public function name(): string;
 
 			/**
-			 * @schema
 			 * @relation guid
 			 */
 			public function userGroup(): UserSchema;

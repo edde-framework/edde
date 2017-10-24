@@ -21,13 +21,11 @@
 			 * relation means M:N relation; if relation table does not exists (related schema), one
 			 * is automagically created
 			 *
-			 * @schema
 			 * @relation guid
 			 */
 			public function userRole(): RoleSchema;
 
 			/**
-			 * @schema
 			 * @relation guid
 			 */
 			public function userGroup(): GroupSchema;
