@@ -26,7 +26,7 @@
 					case 'float':
 						return 'DOUBLE PRECISION';
 					case 'bool':
-						return 'BOOLEAN';
+						return 'SMALLINT';
 					case 'datetime':
 						return 'TIMESTAMP';
 				}

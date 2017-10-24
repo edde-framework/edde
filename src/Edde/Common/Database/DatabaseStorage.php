@@ -145,7 +145,7 @@
 			 * @inheritdoc
 			 */
 			public function collection(string $schema, IQuery $query): ICollection {
-				return new Collection($this->schemaManager, $this->entityManager, $this, $query, $schema);
+				return new Collection($this->entityManager, $this, $query, $schema);
 			}
 
 			protected function prepare(IEntity $entity): array {

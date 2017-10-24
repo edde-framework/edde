@@ -93,6 +93,9 @@
 			 * @inheritdoc
 			 */
 			public function commit(): IProperty {
+				if ($this->dirty === false) {
+					return $this;
+				}
 				$this->default = $this->value;
 				$this->value = null;
 				$this->dirty = false;

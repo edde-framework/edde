@@ -58,7 +58,7 @@
 			 */
 			public function push(array $source): ICrate {
 				foreach ($source as $k => $v) {
-					$this->getProperty($k)->setValue($v);
+					$this->getProperty($k)->setDefault($v);
 				}
 				return $this;
 			}

@@ -86,11 +86,12 @@
 				$expect = $entity->toArray();
 				$this->storage->update($entity);
 				$entity = $this->storage->load(SimpleSchema::class, (new SelectQuery())->table(SimpleSchema::class)->all()->where()->eq('guid')->to($entity->get('guid'))->query());
+				self::assertFalse($entity->isDirty(), 'entity should NOT be dirty right after load!');
 				self::assertEquals($expect, $array = $entity->toArray());
-				self::assertTrue(gettype($array['value']) === 'double', 'value is not float!');
+				self::assertTrue(($type = gettype($array['value'])) === 'double', 'value [' . $type . '] is not float!');
 				self::assertInstanceOf(\DateTime::class, $array['date']);
-				self::assertTrue(gettype($array['question']) === 'bool', 'question is not bool!');
-				assertTrue($array['question']);
+				self::assertTrue(($type = gettype($array['question'])) === 'boolean', 'question [' . $type . '] is not bool!');
+				self::assertFalse($array['question']);
 			}
 
 			/**

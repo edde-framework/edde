@@ -6,6 +6,6 @@
 			 * @inheritdoc
 			 */
 			public function sanitize($value, array $options = []) {
-				return (bool)$value;
+				return (int)$value;
 			}
 		}

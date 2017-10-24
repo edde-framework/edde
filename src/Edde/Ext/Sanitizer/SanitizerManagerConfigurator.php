@@ -22,7 +22,8 @@
 			public function configure($instance) {
 				parent::configure($instance);
 				$instance->registerSanitizerList([
-					'bool'           => $this->container->create(BoolSanitizer::class, [], __METHOD__),
+					'bool'           => $sanitizer = $this->container->create(BoolSanitizer::class, [], __METHOD__),
+					'boolean'        => $sanitizer,
 					'float'          => $sanitizer = $this->container->create(FloatSanitizer::class, [], __METHOD__),
 					'double'         => $sanitizer,
 					\DateTime::class => $sanitizer = $this->container->create(DateTimeSanitizer::class, [], __METHOD__),

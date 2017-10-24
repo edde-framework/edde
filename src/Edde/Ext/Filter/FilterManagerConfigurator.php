@@ -22,7 +22,8 @@
 			public function configure($instance) {
 				parent::configure($instance);
 				$instance->registerFilterList([
-					'bool'           => $this->container->create(BoolFilter::class, [], __METHOD__),
+					'bool'           => $filter = $this->container->create(BoolFilter::class, [], __METHOD__),
+					'boolean'        => $filter,
 					'float'          => $filter = $this->container->create(FloatFilter::class, [], __METHOD__),
 					'double'         => $filter,
 					\DateTime::class => $filter = $this->container->create(DateTimeFilter::class, [], __METHOD__),

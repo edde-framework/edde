@@ -30,7 +30,7 @@
 					case 'float':
 						return 'DOUBLE PRECISION';
 					case 'bool':
-						return 'BOOLEAN';
+						return 'TINYINT';
 					case 'datetime':
 						return 'DATETIME(6)';
 				}
