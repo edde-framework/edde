@@ -100,6 +100,10 @@
 			 * @throws StorageException
 			 */
 			public function testRelation() {
+				/**
+				 * there is an idea to have kind of links in schema reflection (thus it will be
+				 * possible to describe a bit more complex data structures by a reflection)
+				 */
 				$this->storage->createSchema(FooSchema::class);
 				$this->storage->createSchema(BarSchema::class);
 				$this->storage->createSchema(FooBarSchema::class);

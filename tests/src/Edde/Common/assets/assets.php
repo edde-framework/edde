@@ -134,12 +134,12 @@
 			/**
 			 * @schema primary link
 			 */
-			public function foo(): FooSchema;
+			public function foo(FooSchema $guid): string;
 
 			/**
 			 * @schema primary link
 			 */
-			public function bar(): BarSchema;
+			public function bar(BarSchema $guid): string;
 		}
 	}
 	namespace Foo {
