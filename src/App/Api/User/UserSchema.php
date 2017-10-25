@@ -16,17 +16,4 @@
 			 * @schema
 			 */
 			public function password(): ?string;
-
-			/**
-			 * relation means M:N relation; if relation table does not exists (related schema), one
-			 * is automagically created
-			 *
-			 * @relation guid
-			 */
-			public function UserRole(): RoleSchema;
-
-			/**
-			 * @relation guid
-			 */
-			public function UserGroup(): GroupSchema;
 		}

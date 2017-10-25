@@ -11,9 +11,4 @@
 			 * @schema unique
 			 */
 			public function name(): string;
-
-			/**
-			 * @relation guid
-			 */
-			public function UserGroup(): UserSchema;
 		}
