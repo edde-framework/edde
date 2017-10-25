@@ -72,6 +72,10 @@
 				if ($schema === null) {
 					throw new UnknownSchemaException(sprintf('Requested unknown schema [%s].', $name));
 				}
+//				foreach ($schema->getLinkList() as $property) {
+//					$link = $property->getLink();
+//					$target = $this->getSchema($link->getTarget());
+//				}
 				return $schema;
 			}
 

@@ -2,6 +2,7 @@
 	namespace Edde\Common\Schema;
 
 		use Edde\Api\Node\INode;
+		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\IProperty;
 		use Edde\Common\Object\Object;
 
@@ -10,6 +11,7 @@
 			 * @var INode
 			 */
 			protected $node;
+			protected $link;
 
 			public function __construct(INode $node) {
 				$this->node = $node;
@@ -128,5 +130,29 @@
 			 */
 			public function getType(): string {
 				return $this->node->getAttribute('type', 'string');
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function link(string $target, string $property = null): IProperty {
+				$this->link = null;
+				$this->node->setAttribute('link', $target);
+				$this->node->setAttribute('target', $property);
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function isLink(): bool {
+				return $this->node->hasAttribute('link');
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getLink(): ILink {
+				return $this->link ?: $this->link = new Link($this->node->getAttribute('link'), $this->node->getAttribute('target'));
 			}
 		}

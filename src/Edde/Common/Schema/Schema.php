@@ -92,6 +92,20 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function getLinkList(): array {
+				$propertyList = [];
+				/** @var $property IProperty */
+				foreach ($this->getPropertyList() as $name => $property) {
+					if ($property->isLink()) {
+						$propertyList[$name] = $property;
+					}
+				}
+				return $propertyList;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function getNodeList(): array {
 				return $this->node->getNode('property-list')->getNodeList();
 			}
@@ -131,27 +145,6 @@
 			 */
 			public function integer(string $name): IProperty {
 				return $this->property($name)->type('int');
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function relation(string $schema, string $source, string $target): ISchema {
-				$this->node->getNode('relation-list')->addNode(new Node('relation', null, [
-					/**
-					 * the name of relation schema
-					 */
-					'schema' => $schema,
-					/**
-					 * source property on THIS schema
-					 */
-					'source' => $source,
-					/**
-					 * target relation, also used as target property
-					 */
-					'target' => $target,
-				]));
-				return $this;
 			}
 
 			static public function create(string $name): ISchema {

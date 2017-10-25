@@ -1,5 +1,5 @@
 <?php
-	namespace App\Api\User;
+	namespace App\Api\User\Schema;
 
 	/**
 	 * Relations should have explicit schemas to keep them clear and

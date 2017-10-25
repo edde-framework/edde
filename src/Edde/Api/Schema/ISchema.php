@@ -60,6 +60,13 @@
 			public function getPrimaryList(): array;
 
 			/**
+			 * return an array with properties which are link
+			 *
+			 * @return IProperty[]
+			 */
+			public function getLinkList(): array;
+
+			/**
 			 * return list of property nodes
 			 *
 			 * @return INode[]
@@ -110,15 +117,4 @@
 			 * @return IProperty
 			 */
 			public function integer(string $name): IProperty;
-
-			/**
-			 * create (or update) a relation
-			 *
-			 * @param string $schema relation schema name
-			 * @param string $source source property of this schema used as a filter for the relation
-			 * @param string $target target schema of this relation
-			 *
-			 * @return ISchema
-			 */
-			public function relation(string $schema, string $source, string $target): ISchema;
 		}

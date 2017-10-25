@@ -120,4 +120,26 @@
 			 * @return string
 			 */
 			public function getType(): string;
+
+			/**
+			 * link this property to another $property in $target schema
+			 *
+			 * @param string $target   target schema of a link
+			 * @param string $property property of schema (for example primary key)
+			 *
+			 * @return IProperty
+			 */
+			public function link(string $target, string $property = null): IProperty;
+
+			/**
+			 * is this property a link?
+			 *
+			 * @return bool
+			 */
+			public function isLink(): bool;
+
+			/**
+			 * @return ILink
+			 */
+			public function getLink(): ILink;
 		}
