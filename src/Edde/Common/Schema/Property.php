@@ -4,16 +4,25 @@
 		use Edde\Api\Node\INode;
 		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\IProperty;
+		use Edde\Common\Node\Node;
 		use Edde\Common\Object\Object;
 
 		class Property extends Object implements IProperty {
 			/**
 			 * @var INode
 			 */
+			protected $root;
+			/**
+			 * @var INode
+			 */
 			protected $node;
+			/**
+			 * @var INode
+			 */
 			protected $link;
 
-			public function __construct(INode $node) {
+			public function __construct(INode $root, INode $node) {
+				$this->root = $root;
 				$this->node = $node;
 			}
 
@@ -135,10 +144,15 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function link(string $target, string $property = null): IProperty {
-				$this->link = null;
-				$this->node->setAttribute('link', $target);
-				$this->node->setAttribute('target', $property);
+			public function link(string $target, string $property): IProperty {
+				if ($this->link === null) {
+					$this->root->getNode('link-list')->addNode($this->link = new Node('link'));
+				}
+				$this->link->putAttributeList([
+					'schema' => $target,
+					'target' => $property,
+					'source' => $this->getName(),
+				]);
 				return $this;
 			}
 
@@ -146,13 +160,13 @@
 			 * @inheritdoc
 			 */
 			public function isLink(): bool {
-				return $this->node->hasAttribute('link');
+				return $this->link !== null;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function getLink(): ILink {
-				return $this->link ?: $this->link = new Link($this->node->getAttribute('link'), $this->node->getAttribute('target'));
+				return new Link($this->link);
 			}
 		}

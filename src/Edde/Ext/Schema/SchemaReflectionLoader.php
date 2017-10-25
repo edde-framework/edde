@@ -54,8 +54,15 @@
 								$property->type($type->getName());
 								$property->required($type->allowsNull() === false);
 							}
-							if ($type && strpos($attr, 'link') !== false) {
-								$property->link($type->getName());
+							/**
+							 * exactly one parameter means link to another schema
+							 */
+							if ($reflectionMethod->getNumberOfParameters() === 1) {
+								list($parameter) = $reflectionMethod->getParameters();
+								if ($type = $parameter->getType()) {
+									$property->required($type->allowsNull() === false);
+									$property->link($type->getName(), $parameter->getName());
+								}
 							}
 							switch ($type = $property->getType()) {
 								case 'float':

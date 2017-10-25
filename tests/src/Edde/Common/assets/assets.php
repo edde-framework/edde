@@ -134,7 +134,7 @@
 			/**
 			 * @schema primary
 			 */
-			public function foo(FooSchema $guid);
+			public function foo(?FooSchema $guid);
 
 			/**
 			 * @schema primary

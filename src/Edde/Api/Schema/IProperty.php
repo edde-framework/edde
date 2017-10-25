@@ -129,7 +129,7 @@
 			 *
 			 * @return IProperty
 			 */
-			public function link(string $target, string $property = null): IProperty;
+			public function link(string $target, string $property): IProperty;
 
 			/**
 			 * is this property a link?

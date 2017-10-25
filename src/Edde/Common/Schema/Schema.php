@@ -74,7 +74,7 @@
 					return $this->propertyList;
 				}
 				foreach ($this->node->getNode('property-list')->getNodeList() as $node) {
-					$this->propertyList[$node->getAttribute('name')] = new Property($node);
+					$this->propertyList[$node->getAttribute('name')] = new Property($this->node, $node);
 				}
 				return $this->propertyList;
 			}
@@ -145,7 +145,7 @@
 			public function property(string $name): IProperty {
 				$this->propertyList = null;
 				$this->node->getNode('property-list')->addNode($node = new Node('property', null, ['name' => $name]));
-				return new Property($node);
+				return new Property($this->node, $node);
 			}
 
 			/**

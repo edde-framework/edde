@@ -3,16 +3,23 @@
 
 		interface ILink {
 			/**
-			 * get target schema of the link
+			 * return target schema name
+			 *
+			 * @return string
+			 */
+			public function getSchema(): string;
+
+			/**
+			 * return property of the target schema
 			 *
 			 * @return string
 			 */
 			public function getTarget(): string;
 
 			/**
-			 * return targeted property in the schema (or null to use primary property)
+			 * get source property name
 			 *
-			 * @return null|string
+			 * @return string
 			 */
-			public function getProperty(): ?string;
+			public function getProperty(): string;
 		}

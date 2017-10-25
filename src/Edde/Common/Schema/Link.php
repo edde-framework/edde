@@ -1,35 +1,31 @@
 <?php
 	namespace Edde\Common\Schema;
 
+		use Edde\Api\Node\INode;
 		use Edde\Api\Schema\ILink;
 		use Edde\Common\Object\Object;
 
 		class Link extends Object implements ILink {
 			/**
-			 * @var string
+			 * @var INode
 			 */
-			protected $target;
-			/**
-			 * @var string|null
-			 */
-			protected $property;
+			protected $node;
 
-			public function __construct(string $target, string $property = null) {
-				$this->target = $target;
-				$this->property = $property;
+			public function __construct(INode $node) {
+				$this->node = $node;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getSchema(): string {
+				return $this->node->getAttribute('schema');
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function getTarget(): string {
-				return $this->target;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getProperty(): ?string {
-				return $this->property;
+				return $this->node->getAttribute('target');
 			}
 		}
