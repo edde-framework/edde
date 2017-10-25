@@ -44,12 +44,13 @@
 			}
 
 			protected function fragmentCreateSchema(INode $root): INativeQuery {
-				$sql = 'CREATE TABLE ' . $this->delimite($root->getAttribute('name')) . ' (';
+				$sql = 'CREATE TABLE ' . ($this->delimite($table = $root->getAttribute('name'))) . " (\n\t";
 				$columnList = [];
+				$primaryList = [];
 				foreach ($root->getNodeList() as $node) {
-					$column = $this->delimite($node->getAttribute('name')) . ' ' . $this->type($node->getAttribute('type'));
+					$column = ($name = $this->delimite($node->getAttribute('name'))) . ' ' . $this->type($node->getAttribute('type'));
 					if ($node->getAttribute('primary', false)) {
-						$column .= ' PRIMARY KEY';
+						$primaryList[] = $name;
 					} else if ($node->getAttribute('unique', false)) {
 						$column .= ' UNIQUE';
 					}
@@ -58,7 +59,11 @@
 					}
 					$columnList[] = $column;
 				}
-				return new NativeQuery($sql . implode(',', $columnList) . ')');
+				if (empty($primaryList) === false) {
+					$columnList[] = "CONSTRAINT " . $this->delimite($table . '_primary_' . sha1($primary = implode(', ', $primaryList))) . ' PRIMARY KEY (' . $primary . ")\n";
+				}
+				$sql .= implode(",\n\t", $columnList) . "\n";
+				return new NativeQuery($sql . ')');
 			}
 
 			protected function fragmentInsert(INode $root): INativeQuery {
