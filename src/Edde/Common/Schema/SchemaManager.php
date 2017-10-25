@@ -56,15 +56,7 @@
 				if (isset($this->schemaList[$name])) {
 					return $this->schemaList[$name];
 				}
-				$schema = $this->load($name);
-				foreach ($schema->getLinkList() as $property) {
-					$link = $property->getLink();
-					$target = $this->getSchema($link->getTarget());
-					$primary = ($primary = $link->getProperty()) ? $target->getProperty($primary) : $target->getPrimary();
-					$property->type($primary->getType());
-					$property->link($target->getName(), $primary->getName());
-				}
-				return $this->schemaList[$name] = $schema;
+				return $this->schemaList[$name] = $this->load($name);
 			}
 
 			/**

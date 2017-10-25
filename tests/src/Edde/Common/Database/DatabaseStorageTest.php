@@ -5,6 +5,7 @@
 		use Edde\Api\Container\Exception\FactoryException;
 		use Edde\Api\Database\IDriver;
 		use Edde\Api\Schema\Inject\SchemaManager;
+		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\DuplicateTableException;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
 		use Edde\Api\Storage\Exception\IntegrityException;
@@ -114,10 +115,20 @@
 					'name' => 'bar The Second',
 				]);
 				$this->storage->save($this->entityManager->attach($foo, $bar, FooBarSchema::class));
+				/**
+				 * second save of the same entities will survive, because save is checking presence by primary
+				 * keys and FooBarSchema is using it's properties as a primary key
+				 */
 				$this->storage->save($this->entityManager->attach($bar, $foo, FooBarSchema::class));
-			}
-
-			public function testMultiUnique() {
+				$exception = null;
+				try {
+					/**
+					 * this will fail, because insert is bypassing storage check of entity presence
+					 */
+					$this->storage->insert($this->entityManager->attach($bar, $foo, FooBarSchema::class));
+				} catch (DuplicateEntryException $exception) {
+				}
+				self::assertNotEmpty($exception, 'insert has not thrown an exception!');
 			}
 
 			/**

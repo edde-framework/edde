@@ -93,9 +93,8 @@
 				$query = new SelectQuery();
 				$query->setDescription('check entity existence query');
 				$query->table($entity->getSchema()->getName())->all();
-				$where = $query->where();
 				foreach (($primaryList = $entity->getPrimaryList()) as $property) {
-					$where->and()->eq($name = $property->getName())->to($property->get());
+					$query->where()->and()->eq($property->getName())->to($property->get());
 				}
 				/**
 				 * pickup an entity from storage if it's already there (and run update)
@@ -134,9 +133,8 @@
 					return $this;
 				}
 				$query = new UpdateQuery($entity->getSchema()->getName(), $this->prepare($entity));
-				$where = $query->where();
 				foreach ($entity->getPrimaryList() as $property) {
-					$where->and()->eq($property->getName())->to($property->get());
+					$query->where()->and()->eq($property->getName())->to($property->get());
 				}
 				$this->execute($query);
 				$entity->commit();

@@ -75,13 +75,13 @@
 			public function getLinkList(): array;
 
 			/**
-			 * get link by a target schema
+			 * get relation (link) property list for the given target
 			 *
 			 * @param string $target
 			 *
-			 * @return ILink
+			 * @return IProperty[]
 			 */
-			public function getLink(string $target): ILink;
+			public function getRelationList(string $target): array;
 
 			/**
 			 * return list of property nodes

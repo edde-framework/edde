@@ -28,4 +28,11 @@
 			public function getTarget(): string {
 				return $this->node->getAttribute('target');
 			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getProperty(): string {
+				return $this->node->getAttribute('source');
+			}
 		}
