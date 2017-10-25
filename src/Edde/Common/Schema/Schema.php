@@ -2,9 +2,11 @@
 	namespace Edde\Common\Schema;
 
 		use Edde\Api\Node\INode;
+		use Edde\Api\Schema\Exception\LinkException;
 		use Edde\Api\Schema\Exception\MultiplePrimaryException;
 		use Edde\Api\Schema\Exception\NoPrimaryPropertyException;
 		use Edde\Api\Schema\Exception\UnknownPropertyException;
+		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\IProperty;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Common\Node\Node;
@@ -115,6 +117,19 @@
 					}
 				}
 				return $propertyList;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getLink(string $target): ILink {
+				/** @var $property IProperty */
+				foreach ($this->getLinkList() as $property) {
+					if (($link = $property->getLink())->getTarget() === $target) {
+						return $link;
+					}
+				}
+				throw new LinkException(sprintf('There is no link from schema [%s] to [%s].', $this->getName(), $target));
 			}
 
 			/**

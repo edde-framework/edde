@@ -75,6 +75,15 @@
 			public function getLinkList(): array;
 
 			/**
+			 * get link by a target schema
+			 *
+			 * @param string $target
+			 *
+			 * @return ILink
+			 */
+			public function getLink(string $target): ILink;
+
+			/**
 			 * return list of property nodes
 			 *
 			 * @return INode[]

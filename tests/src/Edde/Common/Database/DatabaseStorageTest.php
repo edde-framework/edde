@@ -96,6 +96,8 @@
 
 			/**
 			 * @throws DuplicateTableException
+			 * @throws IntegrityException
+			 * @throws StorageException
 			 */
 			public function testRelation() {
 				$this->storage->createSchema(FooSchema::class);
@@ -107,8 +109,11 @@
 				$bar = $this->storage->push(BarSchema::class, [
 					'name' => 'bar The Second',
 				]);
-//				$foo->link
-//				$bar->linkTo()
+				$this->storage->save($this->entityManager->attach($foo, $bar, FooBarSchema::class));
+				$this->storage->save($this->entityManager->attach($bar, $foo, FooBarSchema::class));
+			}
+
+			public function testMultiUnique() {
 			}
 
 			/**

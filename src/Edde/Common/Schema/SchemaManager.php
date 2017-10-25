@@ -53,7 +53,18 @@
 			 * @inheritdoc
 			 */
 			public function getSchema(string $name): ISchema {
-				return $this->schemaList[$name] ?? $this->schemaList[$name] = $this->createSchema($name);
+				if (isset($this->schemaList[$name])) {
+					return $this->schemaList[$name];
+				}
+				$schema = $this->load($name);
+				foreach ($schema->getLinkList() as $property) {
+					$link = $property->getLink();
+					$target = $this->getSchema($link->getTarget());
+					$primary = ($primary = $link->getProperty()) ? $target->getProperty($primary) : $target->getPrimary();
+					$property->type($primary->getType());
+					$property->link($target->getName(), $primary->getName());
+				}
+				return $this->schemaList[$name] = $schema;
 			}
 
 			/**
@@ -62,7 +73,7 @@
 			 * @return ISchema
 			 * @throws UnknownSchemaException
 			 */
-			public function createSchema(string $name): ISchema {
+			public function load(string $name): ISchema {
 				$schema = null;
 				foreach ($this->schemaLoaderList as $schemaLoader) {
 					if (($schema = $schemaLoader->getSchema($name)) !== null) {
@@ -71,12 +82,6 @@
 				}
 				if ($schema === null) {
 					throw new UnknownSchemaException(sprintf('Requested unknown schema [%s].', $name));
-				}
-				foreach ($schema->getLinkList() as $property) {
-					$link = $property->getLink();
-					$target = $this->getSchema($link->getTarget());
-					$primary = $target->getPrimary();
-					$property->type($primary->getType());
 				}
 				return $schema;
 			}

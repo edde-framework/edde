@@ -33,4 +33,15 @@
 				$entity->push($this->schemaManager->filter($schema, $source));
 				return $entity;
 			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function attach(IEntity $entity, IEntity $to, string $relation): IEntity {
+				$relation = $this->createEntity(($schema = $this->schemaManager->getSchema($relation))->getName());
+				$relation->set($schema->getLink($entity->getSchema()->getName())->getProperty(), '');
+//				$schema->getLink($to->getSchema()->getName());
+//				$entity->set()
+				return $relation;
+			}
 		}

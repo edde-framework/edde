@@ -2,6 +2,7 @@
 	namespace Edde\Api\Storage;
 
 		use Edde\Api\Config\IConfigurable;
+		use Edde\Api\Storage\Exception\SchemaRelationException;
 
 		interface IEntityManager extends IConfigurable {
 			/**
@@ -34,4 +35,15 @@
 			 * @return IEntity
 			 */
 			public function factory(string $schema, array $source): IEntity;
+
+			/**
+			 * creates an relation entity
+			 *
+			 * @param IEntity $entity
+			 * @param IEntity $to
+			 * @param string  $relation
+			 *
+			 * @return IEntity
+			 */
+			public function attach(IEntity $entity, IEntity $to, string $relation): IEntity;
 		}
