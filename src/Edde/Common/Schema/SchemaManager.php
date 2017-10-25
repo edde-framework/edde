@@ -75,7 +75,7 @@
 			 */
 			public function load(string $name): ISchema {
 				foreach ($this->schemaLoaderList as $schemaLoader) {
-					if (($schema = $schemaLoader->getSchema($name)) !== null) {
+					if ($schema = $schemaLoader->getSchema($name)) {
 						return $schema;
 					}
 				}
