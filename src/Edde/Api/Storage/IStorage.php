@@ -89,6 +89,16 @@
 			public function insert(IEntity $entity): IStorage;
 
 			/**
+			 * shortut: creates an entity, push data inside and insert it into the storage
+			 *
+			 * @param string $schema
+			 * @param array  $source
+			 *
+			 * @return IEntity
+			 */
+			public function push(string $schema, array $source): IEntity;
+
+			/**
 			 * when user know that entity has changed in this storage (thus it already exists in this
 			 * storage), this shortcut method could be used
 			 *

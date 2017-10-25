@@ -121,6 +121,14 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function push(string $schema, array $source): IEntity {
+				$this->insert($entity = $this->entityManager->create($schema, $source));
+				return $entity;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function update(IEntity $entity): IStorage {
 				if ($entity->isDirty() === false) {
 					return $this;

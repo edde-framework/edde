@@ -60,6 +60,14 @@
 			public function getPrimaryList(): array;
 
 			/**
+			 * return a primary property of this schema (should throw an exception
+			 * when there are more primary properties)
+			 *
+			 * @return IProperty
+			 */
+			public function getPrimary(): IProperty;
+
+			/**
 			 * return an array with properties which are link
 			 *
 			 * @return IProperty[]

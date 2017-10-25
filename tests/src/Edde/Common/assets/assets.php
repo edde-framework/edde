@@ -116,52 +116,30 @@
 			function question(): ?bool;
 		}
 
-		/**
-		 * @schema-alias another name for this schema
-		 */
-		interface AnotherSchema extends AbstractGuidSchema {
+		interface FooSchema extends AbstractGuidSchema {
 			/**
-			 * @schema
+			 * @schema unique
 			 */
-			function justName(): int;
+			public function name(): string;
 		}
 
-		interface MoreSchemasLikeThis extends AbstractGuidSchema {
+		interface BarSchema extends AbstractGuidSchema {
 			/**
-			 * @schema
-			 * @unique
+			 * @schema unique
 			 */
-			function foo(): string;
+			public function name(): string;
 		}
 
-		interface ThisWillRepresentSchema extends AbstractGuidSchema {
+		interface FooBarSchema {
 			/**
-			 * @schema
+			 * @schema primary link
 			 */
-			function property();
-
-			/**
-			 * @schema
-			 */
-			function something(): ?string;
+			public function foo(): FooSchema;
 
 			/**
-			 * @schema link
-			 *
-			 * link creates a simple relation ($this to AnotherSchema)
+			 * @schema primary link
 			 */
-			function linkToSchema(): AnotherSchema;
-
-			/**
-			 * relation creates a M:N relation ($this could have multiple AnotherSchemas)
-			 *
-			 * @schema relation
-			 */
-			function multiLink(): AnotherSchema;
-
-			function bar();
-
-			function notExported();
+			public function bar(): BarSchema;
 		}
 	}
 	namespace Foo {

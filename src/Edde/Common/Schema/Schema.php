@@ -2,6 +2,8 @@
 	namespace Edde\Common\Schema;
 
 		use Edde\Api\Node\INode;
+		use Edde\Api\Schema\Exception\MultiplePrimaryException;
+		use Edde\Api\Schema\Exception\NoPrimaryPropertyException;
 		use Edde\Api\Schema\Exception\UnknownPropertyException;
 		use Edde\Api\Schema\IProperty;
 		use Edde\Api\Schema\ISchema;
@@ -87,6 +89,18 @@
 					}
 				}
 				return $propertyList;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getPrimary(): IProperty {
+				if (empty($primaryList = $this->getPrimaryList())) {
+					throw new NoPrimaryPropertyException(sprintf('Schema [%s] has no primary properties.', $this->getName()));
+				} else if (count($primaryList) > 1) {
+					throw new MultiplePrimaryException(sprintf('Schema [%s] has more primary properties [%s].', $this->getName(), implode(', ', array_keys($primaryList))));
+				}
+				return reset($primaryList);
 			}
 
 			/**

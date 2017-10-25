@@ -16,6 +16,9 @@
 		use Edde\Common\Database\Driver\PostgresDriver;
 		use Edde\Ext\Container\ContainerFactory;
 		use Edde\Ext\Test\TestCase;
+		use Edde\Test\BarSchema;
+		use Edde\Test\FooBarSchema;
+		use Edde\Test\FooSchema;
 		use Edde\Test\SimpleSchema;
 
 		class DatabaseStorageTest extends TestCase {
@@ -72,14 +75,13 @@
 			 * @throws \Exception
 			 */
 			public function testUpdate() {
-				$entity = $this->entityManager->create(SimpleSchema::class, [
+				$entity = $this->storage->push(SimpleSchema::class, [
 					'name'     => 'to-be-updated',
 					'optional' => null,
 					'value'    => 3.14,
 					'date'     => new \DateTime('24.12.2020 12:24:13'),
 					'question' => false,
 				]);
-				$this->storage->insert($entity);
 				$entity->set('optional', 'this is a new nice and updated string');
 				$expect = $entity->toArray();
 				$this->storage->update($entity);
@@ -90,6 +92,23 @@
 				self::assertInstanceOf(\DateTime::class, $array['date']);
 				self::assertTrue(($type = gettype($array['question'])) === 'boolean', 'question [' . $type . '] is not bool!');
 				self::assertFalse($array['question']);
+			}
+
+			/**
+			 * @throws DuplicateTableException
+			 */
+			public function testRelation() {
+				$this->storage->createSchema(FooSchema::class);
+				$this->storage->createSchema(BarSchema::class);
+				$this->storage->createSchema(FooBarSchema::class);
+				$foo = $this->storage->push(FooSchema::class, [
+					'name' => 'foo The First',
+				]);
+				$bar = $this->storage->push(BarSchema::class, [
+					'name' => 'bar The Second',
+				]);
+//				$foo->link
+//				$bar->linkTo()
 			}
 
 			/**
