@@ -132,14 +132,14 @@
 
 		interface FooBarSchema {
 			/**
-			 * @schema primary link
+			 * @schema primary
 			 */
-			public function foo(FooSchema $guid): string;
+			public function foo(FooSchema $guid);
 
 			/**
-			 * @schema primary link
+			 * @schema primary
 			 */
-			public function bar(BarSchema $guid): string;
+			public function bar(BarSchema $guid);
 		}
 	}
 	namespace Foo {
