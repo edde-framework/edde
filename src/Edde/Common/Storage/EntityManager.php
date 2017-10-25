@@ -55,10 +55,11 @@
 			 * @throws EntityManagerException
 			 */
 			protected function link(IEntity $relation, IEntity $entity, ISchema $schema) {
-				if (count($link = $schema->getRelationList($entity->getSchema()->getName())) > 1) {
-					throw new EntityManagerException(sprintf('Invalid schema //generate better exception text'));
+				if (($count = count($link = $schema->getRelationList($name = $entity->getSchema()->getName()))) > 1) {
+					throw new EntityManagerException(sprintf('Schema [%s] has multiple relations of target schema [%s].', $schema->getName(), $name));
+				} else if ($count !== 1) {
+					throw new EntityManagerException(sprintf('Schema [%s] has no relation to target schema [%s].', $schema->getName(), $name));
 				}
-				list($link) = $link;
-				$relation->set(($link = $link->getLink())->getProperty(), $entity->get($link->getTarget()));
+				$relation->set(($link = $link[0]->getLink())->getProperty(), $entity->get($link->getTarget()));
 			}
 		}
