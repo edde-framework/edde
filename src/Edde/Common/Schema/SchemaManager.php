@@ -74,16 +74,12 @@
 			 * @throws UnknownSchemaException
 			 */
 			public function load(string $name): ISchema {
-				$schema = null;
 				foreach ($this->schemaLoaderList as $schemaLoader) {
 					if (($schema = $schemaLoader->getSchema($name)) !== null) {
-						break;
+						return $schema;
 					}
 				}
-				if ($schema === null) {
-					throw new UnknownSchemaException(sprintf('Requested unknown schema [%s].', $name));
-				}
-				return $schema;
+				throw new UnknownSchemaException(sprintf('Requested unknown schema [%s].', $name));
 			}
 
 			/**
