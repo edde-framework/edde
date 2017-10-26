@@ -9,6 +9,16 @@
 
 		class Neo4jQueryBuilder extends AbstractQueryBuilder {
 			protected function fragmentCreateSchema(INode $root): INativeQuery {
+				$primaryList = null;
+				foreach ($root->getNodeList() as $node) {
+					$name = $node->getAttribute('name');
+					if ($node->getAttribute('primary', false)) {
+						$primaryList[] = $name;
+					}
+				}
+				if ($primaryList) {
+					$index = 'CREATE INDEX ON :' . $this->delimite($root->getAttribute('name')) . '(' . implode(', ', $primaryList) . ')';
+				}
 			}
 
 			protected function fragmentInsert(INode $root): INativeQuery {
