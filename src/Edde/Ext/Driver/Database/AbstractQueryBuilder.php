@@ -4,15 +4,10 @@
 		use Edde\Api\Node\INode;
 		use Edde\Api\Query\Exception\QueryBuilderException;
 		use Edde\Api\Query\INativeQuery;
-		use Edde\Api\Utils\Inject\StringUtils;
 		use Edde\Common\Query\AbstractQueryBuilder;
 		use Edde\Common\Query\NativeQuery;
-		use ReflectionClass;
-		use ReflectionMethod;
 
 		abstract class AbstractSqlBuilder extends AbstractQueryBuilder {
-			use StringUtils;
-
 			protected function fragmentCreateSchema(INode $root): INativeQuery {
 				$sql = 'CREATE TABLE ' . ($this->delimite($table = $root->getAttribute('name'))) . " (\n\t";
 				$columnList = [];
@@ -238,27 +233,5 @@
 					$orderList[] = $this->delimite($node->getAttribute('column')) . ' ' . ($node->getAttribute('asc', true) ? 'ASC' : 'DESC');
 				}
 				return new NativeQuery(implode(',', $orderList));
-			}
-
-			protected function fragmentParameterList(INode $root): INativeQuery {
-				$parameterList = [];
-				foreach ($root->getNodeList() as $node) {
-					$parameterList[$node->getAttribute('name')] = $node->getValue();
-				}
-				return new NativeQuery('', $parameterList);
-			}
-
-			protected function handleSetup(): void {
-				parent::handleSetup();
-				$reflectionClass = new ReflectionClass($this);
-				foreach ($reflectionClass->getMethods(ReflectionMethod::IS_PROTECTED) as $reflectionMethod) {
-					if (strpos($name = $reflectionMethod->getName(), 'fragment') === false || strlen($name) <= 8) {
-						continue;
-					}
-					$this->fragmentList[$this->stringUtils->recamel(substr($name, 8))] = [
-						$this,
-						$name,
-					];
-				}
 			}
 		}
