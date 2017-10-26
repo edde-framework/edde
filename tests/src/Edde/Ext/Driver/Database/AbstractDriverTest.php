@@ -6,6 +6,7 @@
 		use Edde\Api\Driver\IDriver;
 		use Edde\Api\Driver\Inject\Driver;
 		use Edde\Api\Query\Inject\QueryBuilder;
+		use Edde\Api\Query\IQueryBuilder;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\DuplicateTableException;
@@ -104,7 +105,8 @@
 				 * parent missing intentionally
 				 */
 				ContainerFactory::inject($this, [
-					IDriver::class => $this->getDriverFactory(),
+					IDriver::class       => $this->getDriverFactory(),
+					IQueryBuilder::class => $this->getQueryBuilderFactory(),
 					new ClassFactory(),
 				]);
 				$schemaBuilder = new SchemaBuilder('some-cool-schema');

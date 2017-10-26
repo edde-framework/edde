@@ -40,19 +40,6 @@
 				return $this->fragmentList[$name]($node);
 			}
 
-			protected function initNativeQueryBuilder() {
-				$reflectionClass = new ReflectionClass($this);
-				foreach ($reflectionClass->getMethods(ReflectionMethod::IS_PROTECTED) as $reflectionMethod) {
-					if (strpos($name = $reflectionMethod->getName(), 'fragment') === false || strlen($name) <= 8) {
-						continue;
-					}
-					$this->fragmentList[$this->stringUtils->recamel(substr($name, 8))] = [
-						$this,
-						$name,
-					];
-				}
-			}
-
 			protected function fragmentCreateSchema(INode $root): INativeQuery {
 				$sql = 'CREATE TABLE ' . ($this->delimite($table = $root->getAttribute('name'))) . " (\n\t";
 				$columnList = [];
@@ -286,5 +273,19 @@
 					$parameterList[$node->getAttribute('name')] = $node->getValue();
 				}
 				return new NativeQuery('', $parameterList);
+			}
+
+			protected function handleSetup(): void {
+				parent::handleSetup();
+				$reflectionClass = new ReflectionClass($this);
+				foreach ($reflectionClass->getMethods(ReflectionMethod::IS_PROTECTED) as $reflectionMethod) {
+					if (strpos($name = $reflectionMethod->getName(), 'fragment') === false || strlen($name) <= 8) {
+						continue;
+					}
+					$this->fragmentList[$this->stringUtils->recamel(substr($name, 8))] = [
+						$this,
+						$name,
+					];
+				}
 			}
 		}

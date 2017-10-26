@@ -4,6 +4,7 @@
 		use Edde\Api\Container\Exception\ContainerException;
 		use Edde\Api\Container\Exception\FactoryException;
 		use Edde\Api\Driver\IDriver;
+		use Edde\Api\Query\IQueryBuilder;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\DuplicateTableException;
@@ -16,6 +17,7 @@
 		use Edde\Common\Container\Factory\ClassFactory;
 		use Edde\Ext\Container\ContainerFactory;
 		use Edde\Ext\Driver\Database\Postgres\PostgresDriver;
+		use Edde\Ext\Driver\Database\Postgres\PostgresQueryBuilder;
 		use Edde\Ext\Test\TestCase;
 		use Edde\Test\BarSchema;
 		use Edde\Test\FooBarSchema;
@@ -137,7 +139,8 @@
 			 */
 			protected function setUp() {
 				ContainerFactory::inject($this, [
-					IDriver::class => ContainerFactory::instance(PostgresDriver::class, ['pgsql:dbname=edde;user=edde;password=edde;host=172.17.0.1']),
+					IDriver::class       => ContainerFactory::instance(PostgresDriver::class, ['pgsql:dbname=edde;user=edde;password=edde;host=172.17.0.1']),
+					IQueryBuilder::class => PostgresQueryBuilder::class,
 					new ClassFactory(),
 				]);
 				$this->storage->query('SET search_path TO "test"');
