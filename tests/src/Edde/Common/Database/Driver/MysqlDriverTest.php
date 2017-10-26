@@ -4,7 +4,6 @@
 		use Edde\Api\Storage\Exception\IntegrityException;
 		use Edde\Common\Query\NativeQuery;
 		use Edde\Ext\Container\ContainerFactory;
-		use Edde\Ext\Database\Driver\MysqlDriver;
 
 		class MysqlDriverTest extends AbstractDriverTest {
 			use Edde\Api\Driver\Inject\Driver;
@@ -20,7 +19,7 @@
 			}
 
 			protected function getDriverFactory() {
-				return ContainerFactory::instance(MysqlDriver::class, [
+				return ContainerFactory::instance(\Edde\Ext\Driver\MysqlDriver::class, [
 					'mysql:dbname=edde;host=172.17.0.1',
 					'edde',
 					'edde',

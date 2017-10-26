@@ -1,5 +1,5 @@
 <?php
-	namespace Edde\Common\Database;
+	namespace Edde\Ext\Driver;
 
 		use Edde\Api\Driver\Exception\DriverQueryException;
 		use Edde\Api\Node\INode;
@@ -12,7 +12,7 @@
 		/**
 		 * Helper trait to share common SQL generation code between driverss.
 		 */
-		trait NativeQueryBuilder {
+		trait SqlQueryBuilder {
 			use StringUtils;
 			protected $fragmentList = [];
 

@@ -6,7 +6,6 @@
 		use Edde\Api\Storage\Exception\IntegrityException;
 		use Edde\Common\Query\NativeQuery;
 		use Edde\Ext\Container\ContainerFactory;
-		use Edde\Ext\Database\Driver\PostgresDriver;
 
 		class PostgresDriverTest extends AbstractDriverTest {
 			/**
@@ -33,6 +32,6 @@
 			}
 
 			protected function getDriverFactory() {
-				return ContainerFactory::instance(PostgresDriver::class, ['pgsql:dbname=edde;user=edde;password=edde;host=172.17.0.1']);
+				return ContainerFactory::instance(\Edde\Ext\Driver\PostgresDriver::class, ['pgsql:dbname=edde;user=edde;password=edde;host=172.17.0.1']);
 			}
 		}
