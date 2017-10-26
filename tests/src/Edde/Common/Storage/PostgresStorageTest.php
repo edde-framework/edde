@@ -1,5 +1,5 @@
 <?php
-	namespace Edde\Common\Database;
+	namespace Edde\Common\Storage;
 
 		use Edde\Api\Container\Exception\ContainerException;
 		use Edde\Api\Container\Exception\FactoryException;
@@ -22,7 +22,7 @@
 		use Edde\Test\FooSchema;
 		use Edde\Test\SimpleSchema;
 
-		class DatabaseStorageTest extends TestCase {
+		class PostgresStorageTest extends TestCase {
 			use SchemaManager;
 			use EntityManager;
 			use Storage;
