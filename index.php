@@ -13,12 +13,14 @@
 	use Edde\Api\Application\IContext;
 	use Edde\Api\Application\IRootDirectory;
 	use Edde\Api\Driver\IDriver;
+	use Edde\Api\Query\IQueryBuilder;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Application\RootDirectory;
 	use Edde\Common\Container\Factory\CascadeFactory;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Driver\Database\Postgres\PostgresDriver;
+	use Edde\Ext\Driver\Database\Postgres\PostgresQueryBuilder;
 	use Tracy\Debugger;
 
 	/**
@@ -56,8 +58,18 @@
 			 * This application is using specific contexts to separate user experience
 			 */
 			IContext::class        => Context::class,
+			/**
+			 * application is using custom upgrade manager as it needs to know some schema details
+			 */
 			IUpgradeManager::class => UpgradeManager::class,
+			/**
+			 * driver is used by storage; it implements connection details and provides exception translation
+			 */
 			IDriver::class         => ContainerFactory::instance(PostgresDriver::class, ['pgsql:dbname=edde;user=edde;password=edde;host=172.17.0.1']),
+			/**
+			 * query builder is responsible for converting IQL queries into ones consumable by a Driver
+			 */
+			IQueryBuilder::class   => PostgresQueryBuilder::class,
 		], is_array($local = @include $local) ? $local : [], [
 			/**
 			 * This stranger here must (should be) be last, because it's canHandle method is able to kill a lot of dependencies and

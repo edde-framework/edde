@@ -20,6 +20,7 @@
 		use Edde\Api\Http\IRequestService as IHttpRequestService;
 		use Edde\Api\Log\ILogService;
 		use Edde\Api\Protocol\IProtocolService;
+		use Edde\Api\Query\IQueryBuilder;
 		use Edde\Api\Request\IRequestService;
 		use Edde\Api\Router\IRouterService;
 		use Edde\Api\Runtime\IRuntime;
@@ -45,7 +46,6 @@
 		use Edde\Common\Container\Factory\ProxyFactory;
 		use Edde\Common\Converter\ConverterManager;
 		use Edde\Common\Crypt\RandomService;
-		use Edde\Common\Database\DatabaseStorage;
 		use Edde\Common\Filter\FilterManager;
 		use Edde\Common\Generator\GeneratorManager;
 		use Edde\Common\Http\HttpUtils;
@@ -59,6 +59,7 @@
 		use Edde\Common\Sanitizer\SanitizerManager;
 		use Edde\Common\Schema\SchemaManager;
 		use Edde\Common\Storage\EntityManager;
+		use Edde\Common\Storage\Storage;
 		use Edde\Common\Upgrade\AbstractUpgradeManager;
 		use Edde\Common\Utils\CliUtils;
 		use Edde\Common\Utils\StringUtils;
@@ -289,36 +290,37 @@
 					/**
 					 * schema support
 					 */
-					ISchemaManager::class      => SchemaManager::class,
+					ISchemaManager::class    => SchemaManager::class,
 					/**
 					 * generator (related to schema) support
 					 */
-					IGeneratorManager::class   => GeneratorManager::class,
-					IFilterManager::class      => FilterManager::class,
-					ISanitizerManager::class   => SanitizerManager::class,
+					IGeneratorManager::class => GeneratorManager::class,
+					IFilterManager::class    => FilterManager::class,
+					ISanitizerManager::class => SanitizerManager::class,
 					/**
 					 * random & security support
 					 */
-					IRandomService::class      => RandomService::class,
+					IRandomService::class    => RandomService::class,
 					/**
 					 * storage support
 					 */
-					IEntityManager::class      => EntityManager::class,
-					IStorage::class            => DatabaseStorage::class,
-					IDriver::class             => self::exception(sprintf('Please register driver to use Database Storage (or whatever storage is using [%s] implementation).', IDriver::class)),
+					IEntityManager::class    => EntityManager::class,
+					IStorage::class          => Storage::class,
+					IDriver::class           => self::exception(sprintf('Please register driver to use Storage.', IDriver::class)),
+					IQueryBuilder::class     => self::exception(sprintf('Please register query builder according to used [%s].', IDriver::class)),
 					/**
 					 * an application upgrades support
 					 */
-					IUpgradeManager::class     => self::exception(sprintf('You have to privide you own implementation of [%s]; you can use [%s] to get some little help.', IUpgradeManager::class, AbstractUpgradeManager::class)),
+					IUpgradeManager::class   => self::exception(sprintf('You have to privide you own implementation of [%s]; you can use [%s] to get some little help.', IUpgradeManager::class, AbstractUpgradeManager::class)),
 					/**
 					 * Xml support
 					 */
-					IXmlExport::class          => XmlExport::class,
-					IXmlParser::class          => XmlParser::class,
+					IXmlExport::class        => XmlExport::class,
+					IXmlParser::class        => XmlParser::class,
 					/**
 					 * an application handles lifecycle workflow
 					 */
-					IApplication::class        => Application::class,
+					IApplication::class      => Application::class,
 					/**
 					 * magical factory for an application execution
 					 */
