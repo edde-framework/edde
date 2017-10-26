@@ -1,5 +1,7 @@
 <?php
 	namespace Edde\Api\Query;
 
-		interface IQueryBuilder {
+		use Edde\Api\Config\IConfigurable;
+
+		interface IQueryBuilder extends IConfigurable {
 		}

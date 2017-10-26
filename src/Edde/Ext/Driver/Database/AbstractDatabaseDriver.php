@@ -1,13 +1,13 @@
 <?php
-	namespace Edde\Ext\Driver;
+	namespace Edde\Ext\Driver\Database;
 
 		use Edde\Api\Driver\Exception\DriverException;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Common\Driver\AbstractDriver;
 		use PDO;
 
-		abstract class AbstractPdoDriver extends AbstractDriver {
-			use SqlQueryBuilder;
+		abstract class AbstractDatabaseDriver extends AbstractDriver {
+			use Edde\Ext\Driver\Database\SqlQueryBuilder;
 			/**
 			 * @var array
 			 */

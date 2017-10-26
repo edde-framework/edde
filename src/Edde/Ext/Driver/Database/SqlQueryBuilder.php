@@ -1,18 +1,17 @@
 <?php
-	namespace Edde\Ext\Driver;
+	namespace Edde\Ext\Driver\Database;
 
 		use Edde\Api\Driver\Exception\DriverQueryException;
 		use Edde\Api\Node\INode;
 		use Edde\Api\Query\INativeQuery;
+		use Edde\Api\Query\IQueryBuilder;
 		use Edde\Api\Utils\Inject\StringUtils;
+		use Edde\Common\Object\Object;
 		use Edde\Common\Query\NativeQuery;
 		use ReflectionClass;
 		use ReflectionMethod;
 
-		/**
-		 * Helper trait to share common SQL generation code between driverss.
-		 */
-		trait SqlQueryBuilder {
+		class SqlQueryBuilder extends Object implements IQueryBuilder {
 			use StringUtils;
 			protected $fragmentList = [];
 
@@ -23,7 +22,7 @@
 			 *
 			 * @throws DriverQueryException
 			 */
-			public function fragment(INode $node): INativeQuery {
+			public function build(INode $node): INativeQuery {
 				if (isset($this->fragmentList[$name = $node->getName()]) === false) {
 					throw new DriverQueryException(sprintf('Unsupported fragment type [%s] in [%s].', $name, static::class));
 				}
@@ -87,7 +86,7 @@
 			 */
 			protected function fragmentUpdate(INode $root): INativeQuery {
 				$sql[] = "UPDATE\n\t" . $this->delimite($root->getAttribute('table')) . "\nSET\n\t";
-				$parameterList = $this->fragment($root->getNode('parameter-list'))->getParameterList();
+				$parameterList = $this->build($root->getNode('parameter-list'))->getParameterList();
 				$setList = [];
 				foreach ($root->getNode('column-list')->getNodeList() as $node) {
 					$setList[] = $this->delimite($node->getAttribute('column')) . ' = :' . $node->getAttribute('parameter');
@@ -95,7 +94,7 @@
 				$sql[] = implode(",\n\t", $setList) . "\n";
 				if ($root->hasNode('where-list')) {
 					$sql[] = "WHERE\n";
-					$query = $this->fragment($root->getNode('where-list'));
+					$query = $this->build($root->getNode('where-list'));
 					$sql[] = $query->getQuery();
 					array_merge($parameterList, $query->getParameterList());
 				}
@@ -112,24 +111,24 @@
 				$sql = [];
 				$parameterList = [];
 				$sql[] = "SELECT\n";
-				$query = $this->fragment($root->getNode('column-list'));
+				$query = $this->build($root->getNode('column-list'));
 				$sql[] = $query->getQuery();
 				array_merge($parameterList, $query->getParameterList());
 				if ($root->hasNode('table-list')) {
 					$sql[] = "FROM\n";
-					$query = $this->fragment($root->getNode('table-list'));
+					$query = $this->build($root->getNode('table-list'));
 					$sql[] = $query->getQuery();
 					array_merge($parameterList, $query->getParameterList());
 				}
 				if ($root->hasNode('where-list')) {
 					$sql[] = "WHERE\n";
-					$query = $this->fragment($root->getNode('where-list'));
+					$query = $this->build($root->getNode('where-list'));
 					$sql[] = $query->getQuery();
 					array_merge($parameterList, $query->getParameterList());
 				}
 				if ($root->hasNode('order-list')) {
 					$sql[] = "ORDER BY\n";
-					$query = $this->fragment($root->getNode('order-list'));
+					$query = $this->build($root->getNode('order-list'));
 					$sql[] = $query->getQuery();
 					array_merge($parameterList, $query->getParameterList());
 				}
@@ -148,7 +147,7 @@
 				$columnList = [];
 				$parameterList = [];
 				foreach ($root->getNodeList() as $node) {
-					$query = $this->fragment($node);
+					$query = $this->build($node);
 					$columnList[] = "\t" . $query->getQuery();
 					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
@@ -186,7 +185,7 @@
 				$tableList = [];
 				$parameterList = [];
 				foreach ($root->getNodeList() as $node) {
-					$query = $this->fragment($node);
+					$query = $this->build($node);
 					$tableList[] = "\t" . $query->getQuery();
 					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
@@ -209,7 +208,7 @@
 				$whereList = null;
 				$parameterList = [];
 				foreach ($root->getNodeList() as $node) {
-					$query = $this->fragment($node);
+					$query = $this->build($node);
 					$where = null;
 					if ($whereList && ($relationTo = $node->getAttribute('relation-to'))) {
 						$where .= ' ' . strtoupper($relationTo);
@@ -255,7 +254,7 @@
 					case 'in':
 						switch ($target = $root->getAttribute('target')) {
 							case 'query':
-								return new NativeQuery($this->delimite($root->getAttribute('where')) . " IN (\n" . ($query = $this->fragment($root->getNode('select')))->getQuery() . ')', $query->getParameterList());
+								return new NativeQuery($this->delimite($root->getAttribute('where')) . " IN (\n" . ($query = $this->fragmentSelect($root->getNode('select')))->getQuery() . ')', $query->getParameterList());
 						}
 						throw new DriverQueryException(sprintf('Unknown where IN target type [%s].', $target));
 				}

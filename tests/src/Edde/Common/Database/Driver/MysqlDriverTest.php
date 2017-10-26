@@ -19,7 +19,7 @@
 			}
 
 			protected function getDriverFactory() {
-				return ContainerFactory::instance(\Edde\Ext\Driver\MysqlDriver::class, [
+				return ContainerFactory::instance(\Edde\Ext\Driver\Database\MysqlDriver::class, [
 					'mysql:dbname=edde;host=172.17.0.1',
 					'edde',
 					'edde',

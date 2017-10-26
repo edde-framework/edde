@@ -14,7 +14,7 @@
 		use Edde\Common\Storage\Storage;
 
 		class DatabaseStorage extends Storage {
-			use Edde\Api\Driver\Inject\Driver;
+			use Driver;
 			/**
 			 * @var int
 			 */

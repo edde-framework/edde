@@ -1,5 +1,5 @@
 <?php
-	namespace Edde\Ext\Driver;
+	namespace Edde\Ext\Driver\Database;
 
 		use Edde\Api\Driver\Exception\DriverException;
 		use Edde\Api\Driver\Exception\DriverQueryException;
@@ -8,7 +8,7 @@
 		use Edde\Api\Storage\Exception\NullValueException;
 		use Edde\Api\Storage\Exception\UnknownTableException;
 
-		class PostgresDriver extends AbstractPdoDriver {
+		class PostgresDriver extends AbstractDatabaseDriver {
 			/**
 			 * @inheritdoc
 			 */
