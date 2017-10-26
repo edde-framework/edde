@@ -134,7 +134,8 @@
 			 */
 			public function purge(): IDirectory {
 				$permissions = 0777;
-				if (file_exists($this->realpath())) {
+				$this->realpath();
+				if (file_exists($this->directory)) {
 					$permissions = $this->getPermission();
 				}
 				$this->delete();

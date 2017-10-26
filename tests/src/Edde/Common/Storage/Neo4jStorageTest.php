@@ -1,6 +1,8 @@
 <?php
 	namespace Edde\Common\Storage;
 
+		use Edde\Api\Container\Exception\ContainerException;
+		use Edde\Api\Container\Exception\FactoryException;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Api\Storage\IStorage;
 		use Edde\Common\Container\Factory\ClassFactory;
@@ -16,6 +18,10 @@
 				$this->storage->native(new NativeQuery('MATCH (n) DETACH DELETE n'));
 			}
 
+			/**
+			 * @throws ContainerException
+			 * @throws FactoryException
+			 */
 			protected function setUp() {
 				ContainerFactory::inject($this, [
 					IStorage::class => ContainerFactory::instance(Neo4jStorage::class, []),
