@@ -2,9 +2,9 @@
 	namespace Edde\Ext\Driver\Database\Mysql;
 
 		use Edde\Api\Query\Exception\QueryBuilderException;
-		use Edde\Ext\Driver\Database\AbstractQueryBuilder;
+		use Edde\Ext\Driver\Database\AbstractSqlBuilder;
 
-		class MysqlQueryBuilder extends AbstractQueryBuilder {
+		class MysqlQueryBuilder extends AbstractSqlBuilder {
 			public function delimite(string $delimite): string {
 				return '`' . str_replace('`', '``', $delimite) . '`';
 			}

@@ -10,6 +10,7 @@
 		use Edde\Ext\Container\ContainerFactory;
 		use Edde\Ext\Driver\Graph\Neo4j\Neo4jDriver;
 		use Edde\Ext\Test\TestCase;
+		use Edde\Test\FooSchema;
 
 		class Neo4jStorageTest extends TestCase {
 			use Storage;
@@ -17,6 +18,12 @@
 			public function testPrepareDatabase() {
 				$this->storage->native(new NativeQuery('MATCH (n) DETACH DELETE n'));
 				self::assertTrue(true, 'everything is ok, yapee!');
+			}
+
+			public function testInsert() {
+				$this->storage->push(FooSchema::class, [
+					'name' => 'neo4j rocks!',
+				]);
 			}
 
 			/**

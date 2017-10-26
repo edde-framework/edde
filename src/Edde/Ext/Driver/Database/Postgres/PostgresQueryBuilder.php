@@ -2,9 +2,9 @@
 	namespace Edde\Ext\Driver\Database\Postgres;
 
 		use Edde\Api\Query\Exception\QueryBuilderException;
-		use Edde\Ext\Driver\Database\AbstractQueryBuilder;
+		use Edde\Ext\Driver\Database\AbstractSqlBuilder;
 
-		class PostgresQueryBuilder extends AbstractQueryBuilder {
+		class PostgresQueryBuilder extends AbstractSqlBuilder {
 			/**
 			 * @inheritdoc
 			 */

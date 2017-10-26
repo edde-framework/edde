@@ -4,41 +4,14 @@
 		use Edde\Api\Node\INode;
 		use Edde\Api\Query\Exception\QueryBuilderException;
 		use Edde\Api\Query\INativeQuery;
-		use Edde\Api\Query\IQuery;
-		use Edde\Api\Query\IQueryBuilder;
 		use Edde\Api\Utils\Inject\StringUtils;
-		use Edde\Common\Object\Object;
+		use Edde\Common\Query\AbstractQueryBuilder;
 		use Edde\Common\Query\NativeQuery;
 		use ReflectionClass;
 		use ReflectionMethod;
 
-		abstract class AbstractQueryBuilder extends Object implements IQueryBuilder {
+		abstract class AbstractSqlBuilder extends AbstractQueryBuilder {
 			use StringUtils;
-			protected $fragmentList = [];
-
-			/**
-			 * @param IQuery $query
-			 *
-			 * @return INativeQuery
-			 * @throws QueryBuilderException
-			 */
-			public function build(IQuery $query): INativeQuery {
-				return $this->fragment($query->getQuery());
-			}
-
-			/**
-			 * @param INode $node
-			 *
-			 * @return INativeQuery
-			 *
-			 * @throws QueryBuilderException
-			 */
-			public function fragment(INode $node): INativeQuery {
-				if (isset($this->fragmentList[$name = $node->getName()]) === false) {
-					throw new QueryBuilderException(sprintf('Unsupported fragment type [%s] in [%s].', $name, static::class));
-				}
-				return $this->fragmentList[$name]($node);
-			}
 
 			protected function fragmentCreateSchema(INode $root): INativeQuery {
 				$sql = 'CREATE TABLE ' . ($this->delimite($table = $root->getAttribute('name'))) . " (\n\t";
