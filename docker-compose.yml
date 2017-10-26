@@ -90,7 +90,7 @@ services:
     networks:
       - neo4j-network
     volumes:
-      - ./.assets/neo4j:/data
+      - neo4j:/data
 
   # https://www.arangodb.com/
   arangodb:
