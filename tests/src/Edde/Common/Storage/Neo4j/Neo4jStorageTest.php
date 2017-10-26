@@ -16,6 +16,7 @@
 
 			public function testPrepareDatabase() {
 				$this->storage->native(new NativeQuery('MATCH (n) DETACH DELETE n'));
+				self::assertTrue(true, 'everything is ok, yapee!');
 			}
 
 			/**

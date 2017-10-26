@@ -57,7 +57,7 @@
 					$columnList[] = $column;
 				}
 				if (empty($primaryList) === false) {
-					$columnList[] = "CONSTRAINT " . $this->delimite($table . '_primary_' . sha1($primary = implode(', ', $primaryList))) . ' PRIMARY KEY (' . $primary . ")\n";
+					$columnList[] = "CONSTRAINT " . $this->delimite(sha1($table . '_primary_' . $primary = implode(', ', $primaryList))) . ' PRIMARY KEY (' . $primary . ")\n";
 				}
 				$sql .= implode(",\n\t", $columnList) . "\n";
 				return new NativeQuery($sql . ')');
