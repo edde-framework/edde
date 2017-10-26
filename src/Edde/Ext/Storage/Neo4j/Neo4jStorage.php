@@ -1,5 +1,5 @@
 <?php
-	namespace Edde\Ext\Storage;
+	namespace Edde\Ext\Storage\Neo4j;
 
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\IQuery;

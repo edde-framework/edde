@@ -1,5 +1,5 @@
 <?php
-	namespace Edde\Common\Storage;
+	namespace Edde\Common\Storage\Neo4j;
 
 		use Edde\Api\Container\Exception\ContainerException;
 		use Edde\Api\Container\Exception\FactoryException;
@@ -8,7 +8,7 @@
 		use Edde\Common\Container\Factory\ClassFactory;
 		use Edde\Common\Query\NativeQuery;
 		use Edde\Ext\Container\ContainerFactory;
-		use Edde\Ext\Storage\Neo4jStorage;
+		use Edde\Ext\Storage\Neo4j\Neo4jStorage;
 		use Edde\Ext\Test\TestCase;
 
 		class Neo4jStorageTest extends TestCase {
