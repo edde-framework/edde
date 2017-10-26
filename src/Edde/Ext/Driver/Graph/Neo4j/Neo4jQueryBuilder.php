@@ -17,8 +17,7 @@
 				foreach ($root->getNode('column-list')->getNodeList() as $node) {
 					$create[$node->getAttribute('column')] = $parameterList[$node->getAttribute('parameter')];
 				}
-				return new NativeQuery('CREATE (n:$name) SET n = $create', [
-					'name'   => $root->getAttribute('table'),
+				return new NativeQuery('CREATE (n:' . $this->delimite($root->getAttribute('table')) . ' $create)', [
 					'create' => $create,
 				]);
 			}
@@ -27,7 +26,7 @@
 			 * @inheritdoc
 			 */
 			public function delimite(string $delimite): string {
-				return $delimite;
+				return preg_replace('~[^a-zA-Z0-9]+~', '', $delimite);
 			}
 
 			/**
