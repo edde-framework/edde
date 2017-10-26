@@ -8,13 +8,17 @@
 		use Edde\Common\Query\NativeQuery;
 
 		class Neo4jQueryBuilder extends AbstractQueryBuilder {
-			protected function fragmentInsert(INode $node): INativeQuery {
-				$parameterList = $this->fragmentParameterList($node->getNode('parameter-list'))->getParameterList();
+			protected function fragmentCreateSchema(INode $root): INativeQuery {
+			}
+
+			protected function fragmentInsert(INode $root): INativeQuery {
+				$parameterList = $this->fragmentParameterList($root->getNode('parameter-list'))->getParameterList();
 				$create = [];
-				foreach ($node->getNode('column-list')->getNodeList() as $node) {
+				foreach ($root->getNode('column-list')->getNodeList() as $node) {
 					$create[$node->getAttribute('column')] = $parameterList[$node->getAttribute('parameter')];
 				}
-				return new NativeQuery('CREATE (n:Foooo) SET n = $create', [
+				return new NativeQuery('CREATE (n:$name) SET n = $create', [
+					'name'   => $root->getAttribute('table'),
 					'create' => $create,
 				]);
 			}

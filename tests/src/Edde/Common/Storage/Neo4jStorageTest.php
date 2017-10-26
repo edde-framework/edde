@@ -5,6 +5,7 @@
 		use Edde\Api\Container\Exception\FactoryException;
 		use Edde\Api\Driver\IDriver;
 		use Edde\Api\Query\IQueryBuilder;
+		use Edde\Api\Storage\Exception\DuplicateTableException;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Container\Factory\ClassFactory;
 		use Edde\Common\Query\NativeQuery;
@@ -20,6 +21,13 @@
 			public function testPrepareDatabase() {
 				$this->storage->native(new NativeQuery('MATCH (n) DETACH DELETE n'));
 				self::assertTrue(true, 'everything is ok, yapee!');
+			}
+
+			/**
+			 * @throws DuplicateTableException
+			 */
+			public function testCreateSchema() {
+				$this->storage->createSchema(FooSchema::class);
 			}
 
 			public function testInsert() {
