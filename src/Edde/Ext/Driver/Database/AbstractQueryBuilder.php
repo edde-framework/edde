@@ -12,7 +12,7 @@
 		use ReflectionClass;
 		use ReflectionMethod;
 
-		class SqlQueryBuilder extends Object implements IQueryBuilder {
+		abstract class AbstractQueryBuilder extends Object implements IQueryBuilder {
 			use StringUtils;
 			protected $fragmentList = [];
 

@@ -2,6 +2,7 @@
 	namespace Edde\Ext\Driver\Database;
 
 		use Edde\Api\Driver\Exception\DriverException;
+		use Edde\Api\Driver\IDriver;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Common\Driver\AbstractDriver;
 		use PDO;
@@ -27,7 +28,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function native(INativeQuery $nativeQuery): \PDOStatement {
+			public function execute(INativeQuery $nativeQuery) {
 				$exception = null;
 				try {
 					$statement = $this->pdo->prepare($nativeQuery->getQuery());
@@ -38,5 +39,32 @@
 					$this->exception($exception);
 				}
 				throw new DriverException('Unhandled exception: ' . $exception->getMessage(), 0, $exception);
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function start(): IDriver {
+				$this->pdo->beginTransaction();
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function commit(): IDriver {
+				$this->pdo->commit();
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function rollback(): IDriver {
+				$this->pdo->rollBack();
+				return $this;
+			}
+
+			protected function exception(\Throwable $throwable) {
 			}
 		}

@@ -9,10 +9,6 @@
 		use Edde\Api\Storage\Exception\UnknownTableException;
 
 		class MysqlDriver extends AbstractDatabaseDriver {
-			public function delimite(string $delimite): string {
-				return '`' . str_replace('`', '``', $delimite) . '`';
-			}
-
 			/**
 			 * @inheritdoc
 			 */

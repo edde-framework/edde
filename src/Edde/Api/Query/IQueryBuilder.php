@@ -14,7 +14,7 @@
 			public function build(IQuery $query): INativeQuery;
 
 			/**
-			 * delimite input string
+			 * delimite the given string
 			 *
 			 * @param string $delimite
 			 *
@@ -23,16 +23,7 @@
 			public function delimite(string $delimite): string;
 
 			/**
-			 * quote input string
-			 *
-			 * @param string $delimite
-			 *
-			 * @return string
-			 */
-			public function quote(string $delimite): string;
-
-			/**
-			 * translate input type to engine internal type
+			 * translate input type to internal type
 			 *
 			 * @param string $type
 			 *
