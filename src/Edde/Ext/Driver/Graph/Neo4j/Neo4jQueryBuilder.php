@@ -9,6 +9,7 @@
 			 * @inheritdoc
 			 */
 			public function delimite(string $delimite): string {
+				return $delimite;
 			}
 
 			/**
