@@ -1,5 +1,5 @@
 <?php
-	namespace Edde\Common\Database\Driver;
+	namespace Edde\Ext\Database\Driver;
 
 		use Edde\Api\Database\Exception\DriverException;
 		use Edde\Api\Database\Exception\DriverQueryException;
@@ -9,7 +9,11 @@
 		use Edde\Api\Storage\Exception\UnknownTableException;
 		use Edde\Common\Database\AbstractDriver;
 
-		class PostgresDriver extends AbstractDriver {
+		class MysqlDriver extends AbstractDriver {
+			public function delimite(string $delimite): string {
+				return '`' . str_replace('`', '``', $delimite) . '`';
+			}
+
 			/**
 			 * @inheritdoc
 			 */
@@ -18,34 +22,32 @@
 					case 'string':
 						return 'CHARACTER VARYING(1024)';
 					case 'text':
-						return 'TEXT';
+						return 'LONGTEXT';
 					case 'binary':
-						return 'BYTEA';
+						return 'LONGBLOB';
 					case 'int':
 						return 'INTEGER';
 					case 'float':
 						return 'DOUBLE PRECISION';
 					case 'bool':
-						return 'SMALLINT';
+						return 'TINYINT';
 					case 'datetime':
-						return 'TIMESTAMP';
+						return 'DATETIME(6)';
 				}
 				throw new DriverException(sprintf('Unknown type [%s] for driver [%s]', $type, static::class));
 			}
 
 			/**
-			 * @param \Throwable $throwable
-			 *
-			 * @throws \Exception
+			 * @inheritdoc
 			 */
 			protected function exception(\Throwable $throwable) {
-				if (stripos($message = $throwable->getMessage(), 'unique') !== false) {
+				if (stripos($message = $throwable->getMessage(), 'duplicate') !== false) {
 					throw new DuplicateEntryException($message, 0, $throwable);
-				} else if (stripos($message, 'not null') !== false) {
+				} else if (stripos($message, 'cannot be null') !== false) {
 					throw new NullValueException($message, 0, $throwable);
-				} else if (stripos($message, 'duplicate table') !== false) {
+				} else if (stripos($message, 'table or view already exists') !== false) {
 					throw new DuplicateTableException($message, 0, $throwable);
-				} else if (stripos($message, 'undefined table') !== false) {
+				} else if (stripos($message, 'table or view not found') !== false) {
 					throw new UnknownTableException($message, 0, $throwable);
 				}
 				throw new DriverQueryException($message, 0, $throwable);
