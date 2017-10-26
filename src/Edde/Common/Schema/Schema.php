@@ -116,14 +116,14 @@
 				if (isset($this->relationList[$target])) {
 					return $this->relationList[$target];
 				}
-				$linkList = [];
-				/** @var $node INode */
-				foreach ($this->node->getNode('link-list')->getNodeList() as $node) {
-					if ($node->getAttribute('schema') === $target) {
-						$linkList[] = $this->getProperty($node->getAttribute('source'));
+				$relationList = [];
+				/** @var $property IProperty */
+				foreach ($this->getLinkList() as $property) {
+					if (($link = $property->getLink())->getSchema() === $target) {
+						$relationList[] = $this->getProperty($link->getProperty());
 					}
 				}
-				return $this->relationList[$target] = $linkList;
+				return $this->relationList[$target] = $relationList;
 			}
 
 			/**

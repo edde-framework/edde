@@ -87,7 +87,7 @@
 					}
 					return $this->schemaList[$schema] = $schemaBuilder->getSchema();
 				} catch (\Throwable $throwable) {
-					throw new SchemaReflectionException(sprintf('Cannot do reflection of [%s]. Name is not probably a class.', $schema));
+					throw new SchemaReflectionException(sprintf('Cannot do reflection of [%s]. Name is not probably a class.', $schema), 0, $throwable);
 				}
 			}
 		}

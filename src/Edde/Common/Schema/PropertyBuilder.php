@@ -100,6 +100,6 @@
 			 * @inheritdoc
 			 */
 			public function getProperty(): IProperty {
-				return $this->property ?: $this->property = new Property($this->node);
+				return $this->property ?: $this->property = new Property($this->root, $this->node);
 			}
 		}
