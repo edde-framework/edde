@@ -4,7 +4,6 @@
 		use Edde\Api\Node\INode;
 		use Edde\Api\Schema\IProperty;
 		use Edde\Api\Schema\IPropertyBuilder;
-		use Edde\Common\Node\Node;
 		use Edde\Common\Object\Object;
 
 		class PropertyBuilder extends Object implements IPropertyBuilder {
@@ -16,10 +15,6 @@
 			 * @var INode
 			 */
 			protected $node;
-			/**
-			 * @var INode
-			 */
-			protected $link;
 			/**
 			 * @var IProperty
 			 */
@@ -93,10 +88,7 @@
 			 * @inheritdoc
 			 */
 			public function link(string $target, string $property): IPropertyBuilder {
-				if ($this->link === null) {
-					$this->root->getNode('link-list')->addNode($this->link = new Node('link'));
-				}
-				$this->link->putAttributeList([
+				$this->node->getNode('link')->putAttributeList([
 					'schema' => $target,
 					'target' => $property,
 					'source' => $this->node->getAttribute('name'),

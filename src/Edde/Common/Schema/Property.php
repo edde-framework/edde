@@ -2,6 +2,7 @@
 	namespace Edde\Common\Schema;
 
 		use Edde\Api\Node\INode;
+		use Edde\Api\Schema\Exception\LinkException;
 		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\IProperty;
 		use Edde\Common\Object\Object;
@@ -10,9 +11,18 @@
 			/**
 			 * @var INode
 			 */
+			protected $root;
+			/**
+			 * @var INode
+			 */
 			protected $node;
+			/**
+			 * @var ILink
+			 */
+			protected $link;
 
-			public function __construct(INode $node) {
+			public function __construct(INode $root, INode $node) {
+				$this->root = $root;
 				$this->node = $node;
 			}
 
@@ -69,13 +79,18 @@
 			 * @inheritdoc
 			 */
 			public function isLink(): bool {
-				return $this->link !== null;
+				return $this->node->hasNode('link');
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function getLink(): ILink {
-				return new Link($this->link);
+				if ($this->link) {
+					return $this->link;
+				} else if ($this->isLink() === false) {
+					throw new LinkException(sprintf('Property [%s::%s] is not a link.', $this->root->getAttribute('name'), $this->getName()));
+				}
+				return $this->link = new Link($this->node->getNode('link'));
 			}
 		}
