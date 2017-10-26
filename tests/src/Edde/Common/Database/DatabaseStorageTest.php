@@ -15,7 +15,7 @@
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Container\Factory\ClassFactory;
 		use Edde\Ext\Container\ContainerFactory;
-		use Edde\Ext\Driver\Database\PostgresDriver;
+		use Edde\Ext\Driver\Database\Postgres\PostgresDriver;
 		use Edde\Ext\Test\TestCase;
 		use Edde\Test\BarSchema;
 		use Edde\Test\FooBarSchema;

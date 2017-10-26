@@ -32,6 +32,6 @@
 			}
 
 			protected function getDriverFactory() {
-				return ContainerFactory::instance(\Edde\Ext\Driver\Database\PostgresDriver::class, ['pgsql:dbname=edde;user=edde;password=edde;host=172.17.0.1']);
+				return ContainerFactory::instance(\Edde\Ext\Driver\Database\Postgres\PostgresDriver::class, ['pgsql:dbname=edde;user=edde;password=edde;host=172.17.0.1']);
 			}
 		}

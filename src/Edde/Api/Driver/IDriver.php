@@ -42,13 +42,4 @@
 			 * @return IDriver
 			 */
 			public function rollback(): IDriver;
-
-			/**
-			 * delimite input string
-			 *
-			 * @param string $delimite
-			 *
-			 * @return string
-			 */
-			public function delimite(string $delimite): string;
 		}
