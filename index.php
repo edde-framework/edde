@@ -12,7 +12,7 @@
 	use App\Ext\Upgrade\UpgradeManagerConfigurator;
 	use Edde\Api\Application\IContext;
 	use Edde\Api\Application\IRootDirectory;
-	use Edde\Api\Database\IDriver;
+	use Edde\Api\Driver\IDriver;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Application\RootDirectory;
 	use Edde\Common\Container\Factory\CascadeFactory;

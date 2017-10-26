@@ -5,11 +5,11 @@
 		use Edde\Api\Query\IQuery;
 		use Edde\Api\Storage\IEntity;
 		use Edde\Api\Storage\IStorage;
-		use Edde\Common\Storage\AbstractStorage;
+		use Edde\Common\Storage\Storage;
 		use GraphAware\Bolt\GraphDatabase;
 		use GraphAware\Bolt\Protocol\SessionInterface;
 
-		class Neo4jStorage extends AbstractStorage {
+		class Neo4jStorage extends Storage {
 			/**
 			 * @var SessionInterface
 			 */

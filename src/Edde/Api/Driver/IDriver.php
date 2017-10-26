@@ -1,16 +1,15 @@
 <?php
-	namespace Edde\Api\Database;
+	namespace Edde\Api\Driver;
 
 		use Edde\Api\Config\IConfigurable;
-		use Edde\Api\Database\Exception\DriverQueryException;
-		use Edde\Api\Database\Exception\NativeQueryException;
+		use Edde\Api\Driver\Exception\DriverQueryException;
+		use Edde\Api\Driver\Exception\NativeQueryException;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\IQuery;
 		use Edde\Api\Storage\Exception\IntegrityException;
 
 		/**
-		 * Database driver implementation based on PDO; if there should be another type of driver,
-		 * like neo4j, use standalone Storage implementation.
+		 * General storage driver implementation; one storage could have more drivers to choose from.
 		 */
 		interface IDriver extends IConfigurable {
 			/**
@@ -23,7 +22,7 @@
 			 * @throws DriverQueryException
 			 * @throws IntegrityException
 			 */
-			public function native(INativeQuery $nativeQuery): \PDOStatement;
+			public function native(INativeQuery $nativeQuery);
 
 			/**
 			 * try to translate the given query to native query
@@ -46,7 +45,7 @@
 			 * @throws DriverQueryException
 			 * @throws IntegrityException
 			 */
-			public function execute(IQuery $query): \PDOStatement;
+			public function execute(IQuery $query);
 
 			/**
 			 * start a transaction

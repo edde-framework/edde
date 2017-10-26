@@ -1,8 +1,8 @@
 <?php
 	namespace Edde\Ext\Database\Driver;
 
-		use Edde\Api\Database\Exception\DriverException;
-		use Edde\Api\Database\Exception\DriverQueryException;
+		use Edde\Api\Driver\Exception\DriverException;
+		use Edde\Api\Driver\Exception\DriverQueryException;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\DuplicateTableException;
 		use Edde\Api\Storage\Exception\NullValueException;

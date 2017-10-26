@@ -1,8 +1,8 @@
 <?php
 	namespace Edde\Common\Database;
 
-		use Edde\Api\Database\Exception\DriverException;
-		use Edde\Api\Database\IDriver;
+		use Edde\Api\Driver\Exception\DriverException;
+		use Edde\Api\Driver\IDriver;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\IQuery;
 		use Edde\Common\Object\Object;

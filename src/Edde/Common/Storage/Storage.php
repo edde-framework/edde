@@ -8,7 +8,7 @@
 		use Edde\Common\Object\Object;
 		use Edde\Common\Query\CreateSchemaQuery;
 
-		abstract class AbstractStorage extends Object implements IStorage {
+		class Storage extends Object implements IStorage {
 			use EntityManager;
 			use SchemaManager;
 

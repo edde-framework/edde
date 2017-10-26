@@ -1,7 +1,6 @@
 <?php
 	namespace Edde\Common\Database;
 
-		use Edde\Api\Database\Inject\Driver;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\IQuery;
 		use Edde\Api\Storage\Exception\ExclusiveTransactionException;
@@ -12,10 +11,10 @@
 		use Edde\Common\Query\NativeQuery;
 		use Edde\Common\Query\SelectQuery;
 		use Edde\Common\Query\UpdateQuery;
-		use Edde\Common\Storage\AbstractStorage;
+		use Edde\Common\Storage\Storage;
 
-		class DatabaseStorage extends AbstractStorage {
-			use Driver;
+		class DatabaseStorage extends Storage {
+			use Edde\Api\Driver\Inject\Driver;
 			/**
 			 * @var int
 			 */

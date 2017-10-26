@@ -2,7 +2,7 @@
 	namespace Edde\Common\Database\Driver;
 
 		use Edde\Api\Container\Exception\ContainerException;
-		use Edde\Api\Database\Exception\DriverQueryException;
+		use Edde\Api\Driver\Exception\DriverQueryException;
 		use Edde\Api\Storage\Exception\IntegrityException;
 		use Edde\Common\Query\NativeQuery;
 		use Edde\Ext\Container\ContainerFactory;

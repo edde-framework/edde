@@ -12,7 +12,7 @@
 		use Edde\Api\Container\IFactory;
 		use Edde\Api\Converter\IConverterManager;
 		use Edde\Api\Crypt\IRandomService;
-		use Edde\Api\Database\IDriver;
+		use Edde\Api\Driver\IDriver;
 		use Edde\Api\EddeException;
 		use Edde\Api\Filter\IFilterManager;
 		use Edde\Api\Generator\IGeneratorManager;

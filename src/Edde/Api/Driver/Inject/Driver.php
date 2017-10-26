@@ -1,7 +1,7 @@
 <?php
-	namespace Edde\Api\Database\Inject;
+	namespace Edde\Api\Driver\Inject;
 
-		use Edde\Api\Database\IDriver;
+		use Edde\Api\Driver\IDriver;
 
 		trait Driver {
 			/**

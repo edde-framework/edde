@@ -1,7 +1,7 @@
 <?php
 	namespace Edde\Common\Database;
 
-		use Edde\Api\Database\Exception\DriverQueryException;
+		use Edde\Api\Driver\Exception\DriverQueryException;
 		use Edde\Api\Node\INode;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Utils\Inject\StringUtils;
@@ -225,7 +225,7 @@
 			 * @param INode $root
 			 *
 			 * @return INativeQuery
-			 * @throws DriverQueryException
+			 * @throws \Edde\Api\Driver\Exception\DriverQueryException
 			 */
 			protected function fragmentWhere(INode $root): INativeQuery {
 				$where = null;

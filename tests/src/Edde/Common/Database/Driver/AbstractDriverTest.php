@@ -2,9 +2,8 @@
 	namespace Edde\Common\Database\Driver;
 
 		use Edde\Api\Container\Exception\ContainerException;
-		use Edde\Api\Database\Exception\DriverQueryException;
-		use Edde\Api\Database\IDriver;
-		use Edde\Api\Database\Inject\Driver;
+		use Edde\Api\Driver\Exception\DriverQueryException;
+		use Edde\Api\Driver\IDriver;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\DuplicateTableException;
@@ -21,7 +20,7 @@
 		use Edde\Ext\Test\TestCase;
 
 		abstract class AbstractDriverTest extends TestCase {
-			use Driver;
+			use Edde\Api\Driver\Inject\Driver;
 			/**
 			 * @var ISchema
 			 */

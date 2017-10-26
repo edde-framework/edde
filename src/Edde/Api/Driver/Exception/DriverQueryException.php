@@ -1,5 +1,5 @@
 <?php
-	namespace Edde\Api\Database\Exception;
+	namespace Edde\Api\Driver\Exception;
 
 		class DriverQueryException extends DriverException {
 		}
