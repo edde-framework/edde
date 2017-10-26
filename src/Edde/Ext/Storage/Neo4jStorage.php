@@ -6,14 +6,14 @@
 		use Edde\Api\Storage\IEntity;
 		use Edde\Api\Storage\IStorage;
 		use Edde\Common\Storage\AbstractStorage;
-		use GraphAware\Neo4j\Client\ClientBuilder;
-		use GraphAware\Neo4j\Client\ClientInterface;
+		use GraphAware\Bolt\GraphDatabase;
+		use GraphAware\Bolt\Protocol\SessionInterface;
 
 		class Neo4jStorage extends AbstractStorage {
 			/**
-			 * @var ClientInterface
+			 * @var SessionInterface
 			 */
-			protected $client;
+			protected $session;
 
 			/**
 			 * @inheritdoc
@@ -31,7 +31,7 @@
 			 * @inheritdoc
 			 */
 			public function native(INativeQuery $nativeQuery) {
-				return $this->client->run($nativeQuery->getQuery(), $nativeQuery->getParameterList());
+				return $this->session->run($nativeQuery->getQuery(), $nativeQuery->getParameterList());
 			}
 
 			/**
@@ -83,7 +83,7 @@
 			}
 
 			protected function connect(): IStorage {
-				$this->client = ClientBuilder::create()->addConnection('bolt', 'bolt://172.17.0.1:7687')->build();
+				$this->session = GraphDatabase::driver('bolt://172.17.0.1')->session();
 				return $this;
 			}
 
