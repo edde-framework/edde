@@ -3,9 +3,7 @@
 
 		use Edde\Api\Config\IConfigurable;
 		use Edde\Api\Driver\Exception\DriverQueryException;
-		use Edde\Api\Driver\Exception\NativeQueryException;
 		use Edde\Api\Query\INativeQuery;
-		use Edde\Api\Query\IQuery;
 		use Edde\Api\Storage\Exception\IntegrityException;
 
 		/**
@@ -13,7 +11,7 @@
 		 */
 		interface IDriver extends IConfigurable {
 			/**
-			 * executes native query on this engine
+			 * translates and executes the given query
 			 *
 			 * @param INativeQuery $nativeQuery
 			 *
@@ -22,30 +20,7 @@
 			 * @throws DriverQueryException
 			 * @throws IntegrityException
 			 */
-			public function native(INativeQuery $nativeQuery);
-
-			/**
-			 * try to translate the given query to native query
-			 *
-			 * @param IQuery $query
-			 *
-			 * @return INativeQuery
-			 *
-			 * @throws NativeQueryException
-			 */
-			public function toNative(IQuery $query): INativeQuery;
-
-			/**
-			 * translates and executes the given query
-			 *
-			 * @param IQuery $query
-			 *
-			 * @return mixed
-			 *
-			 * @throws DriverQueryException
-			 * @throws IntegrityException
-			 */
-			public function execute(IQuery $query);
+			public function execute(INativeQuery $nativeQuery);
 
 			/**
 			 * start a transaction
@@ -67,31 +42,4 @@
 			 * @return IDriver
 			 */
 			public function rollback(): IDriver;
-
-			/**
-			 * delimite input string
-			 *
-			 * @param string $delimite
-			 *
-			 * @return string
-			 */
-			public function delimite(string $delimite): string;
-
-			/**
-			 * quote input string
-			 *
-			 * @param string $delimite
-			 *
-			 * @return string
-			 */
-			public function quote(string $delimite): string;
-
-			/**
-			 * translate input type to engine internal type
-			 *
-			 * @param string $type
-			 *
-			 * @return string
-			 */
-			public function type(string $type): string;
 		}

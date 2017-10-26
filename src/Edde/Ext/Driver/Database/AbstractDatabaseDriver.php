@@ -7,7 +7,6 @@
 		use PDO;
 
 		abstract class AbstractDatabaseDriver extends AbstractDriver {
-			use Edde\Ext\Driver\Database\SqlQueryBuilder;
 			/**
 			 * @var array
 			 */

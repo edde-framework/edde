@@ -1,9 +1,10 @@
 <?php
 	namespace Edde\Ext\Driver\Database;
 
-		use Edde\Api\Driver\Exception\DriverQueryException;
 		use Edde\Api\Node\INode;
+		use Edde\Api\Query\Exception\QueryBuilderException;
 		use Edde\Api\Query\INativeQuery;
+		use Edde\Api\Query\IQuery;
 		use Edde\Api\Query\IQueryBuilder;
 		use Edde\Api\Utils\Inject\StringUtils;
 		use Edde\Common\Object\Object;
@@ -16,15 +17,25 @@
 			protected $fragmentList = [];
 
 			/**
+			 * @param IQuery $query
+			 *
+			 * @return INativeQuery
+			 * @throws QueryBuilderException
+			 */
+			public function build(IQuery $query): INativeQuery {
+				return $this->fragment($query->getQuery());
+			}
+
+			/**
 			 * @param INode $node
 			 *
 			 * @return INativeQuery
 			 *
-			 * @throws DriverQueryException
+			 * @throws QueryBuilderException
 			 */
-			public function build(INode $node): INativeQuery {
+			public function fragment(INode $node): INativeQuery {
 				if (isset($this->fragmentList[$name = $node->getName()]) === false) {
-					throw new DriverQueryException(sprintf('Unsupported fragment type [%s] in [%s].', $name, static::class));
+					throw new QueryBuilderException(sprintf('Unsupported fragment type [%s] in [%s].', $name, static::class));
 				}
 				return $this->fragmentList[$name]($node);
 			}
@@ -82,11 +93,11 @@
 			 * @param INode $root
 			 *
 			 * @return INativeQuery
-			 * @throws DriverQueryException
+			 * @throws QueryBuilderException
 			 */
 			protected function fragmentUpdate(INode $root): INativeQuery {
 				$sql[] = "UPDATE\n\t" . $this->delimite($root->getAttribute('table')) . "\nSET\n\t";
-				$parameterList = $this->build($root->getNode('parameter-list'))->getParameterList();
+				$parameterList = $this->fragment($root->getNode('parameter-list'))->getParameterList();
 				$setList = [];
 				foreach ($root->getNode('column-list')->getNodeList() as $node) {
 					$setList[] = $this->delimite($node->getAttribute('column')) . ' = :' . $node->getAttribute('parameter');
@@ -94,7 +105,7 @@
 				$sql[] = implode(",\n\t", $setList) . "\n";
 				if ($root->hasNode('where-list')) {
 					$sql[] = "WHERE\n";
-					$query = $this->build($root->getNode('where-list'));
+					$query = $this->fragmentWhereList($root->getNode('where-list'));
 					$sql[] = $query->getQuery();
 					array_merge($parameterList, $query->getParameterList());
 				}
@@ -105,30 +116,30 @@
 			 * @param INode $root
 			 *
 			 * @return NativeQuery
-			 * @throws DriverQueryException
+			 * @throws QueryBuilderException
 			 */
 			protected function fragmentSelect(INode $root) {
 				$sql = [];
 				$parameterList = [];
 				$sql[] = "SELECT\n";
-				$query = $this->build($root->getNode('column-list'));
+				$query = $this->fragmentColumnList($root->getNode('column-list'));
 				$sql[] = $query->getQuery();
 				array_merge($parameterList, $query->getParameterList());
 				if ($root->hasNode('table-list')) {
 					$sql[] = "FROM\n";
-					$query = $this->build($root->getNode('table-list'));
+					$query = $this->fragmentTableList($root->getNode('table-list'));
 					$sql[] = $query->getQuery();
 					array_merge($parameterList, $query->getParameterList());
 				}
 				if ($root->hasNode('where-list')) {
 					$sql[] = "WHERE\n";
-					$query = $this->build($root->getNode('where-list'));
+					$query = $this->fragmentWhereList($root->getNode('where-list'));
 					$sql[] = $query->getQuery();
 					array_merge($parameterList, $query->getParameterList());
 				}
 				if ($root->hasNode('order-list')) {
 					$sql[] = "ORDER BY\n";
-					$query = $this->build($root->getNode('order-list'));
+					$query = $this->fragmentOrderList($root->getNode('order-list'));
 					$sql[] = $query->getQuery();
 					array_merge($parameterList, $query->getParameterList());
 				}
@@ -141,13 +152,13 @@
 			 * @param INode $root
 			 *
 			 * @return INativeQuery
-			 * @throws DriverQueryException
+			 * @throws QueryBuilderException
 			 */
 			protected function fragmentColumnList(INode $root): INativeQuery {
 				$columnList = [];
 				$parameterList = [];
 				foreach ($root->getNodeList() as $node) {
-					$query = $this->build($node);
+					$query = $this->fragment($node);
 					$columnList[] = "\t" . $query->getQuery();
 					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
@@ -158,7 +169,7 @@
 			 * @param INode $root
 			 *
 			 * @return INativeQuery
-			 * @throws DriverQueryException
+			 * @throws QueryBuilderException
 			 */
 			protected function fragmentColumn(INode $root): INativeQuery {
 				switch ($type = $root->getAttribute('type')) {
@@ -172,20 +183,20 @@
 						$column .= '*';
 						return new NativeQuery($column);
 				}
-				throw new DriverQueryException(sprintf('Unknown column type [%s].', $type));
+				throw new QueryBuilderException(sprintf('Unknown column type [%s].', $type));
 			}
 
 			/**
 			 * @param INode $root
 			 *
 			 * @return INativeQuery
-			 * @throws DriverQueryException
+			 * @throws QueryBuilderException
 			 */
 			protected function fragmentTableList(INode $root): INativeQuery {
 				$tableList = [];
 				$parameterList = [];
 				foreach ($root->getNodeList() as $node) {
-					$query = $this->build($node);
+					$query = $this->fragment($node);
 					$tableList[] = "\t" . $query->getQuery();
 					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
@@ -202,13 +213,13 @@
 			 * @param INode $root
 			 *
 			 * @return INativeQuery
-			 * @throws DriverQueryException
+			 * @throws QueryBuilderException
 			 */
 			protected function fragmentWhereList(INode $root): INativeQuery {
 				$whereList = null;
 				$parameterList = [];
 				foreach ($root->getNodeList() as $node) {
-					$query = $this->build($node);
+					$query = $this->fragment($node);
 					$where = null;
 					if ($whereList && ($relationTo = $node->getAttribute('relation-to'))) {
 						$where .= ' ' . strtoupper($relationTo);
@@ -224,7 +235,7 @@
 			 * @param INode $root
 			 *
 			 * @return INativeQuery
-			 * @throws \Edde\Api\Driver\Exception\DriverQueryException
+			 * @throws QueryBuilderException
 			 */
 			protected function fragmentWhere(INode $root): INativeQuery {
 				$where = null;
@@ -256,9 +267,9 @@
 							case 'query':
 								return new NativeQuery($this->delimite($root->getAttribute('where')) . " IN (\n" . ($query = $this->fragmentSelect($root->getNode('select')))->getQuery() . ')', $query->getParameterList());
 						}
-						throw new DriverQueryException(sprintf('Unknown where IN target type [%s].', $target));
+						throw new QueryBuilderException(sprintf('Unknown where IN target type [%s].', $target));
 				}
-				throw new DriverQueryException(sprintf('Unknown where type [%s].', $type));
+				throw new QueryBuilderException(sprintf('Unknown where type [%s].', $type));
 			}
 
 			protected function fragmentOrderList(INode $root): INativeQuery {
