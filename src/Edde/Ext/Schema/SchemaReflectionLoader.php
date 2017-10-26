@@ -6,7 +6,7 @@
 		use Edde\Api\Schema\ISchemaLoader;
 		use Edde\Api\Utils\Inject\StringUtils;
 		use Edde\Common\Schema\AbstractSchemaLoader;
-		use Edde\Common\Schema\Schema;
+		use Edde\Common\Schema\SchemaBuilder;
 
 		class SchemaReflectionLoader extends AbstractSchemaLoader implements ISchemaLoader {
 			use StringUtils;
@@ -34,25 +34,25 @@
 						return $this->schemaList[$schema];
 					}
 					$reflectionClass = new \ReflectionClass($schema);
-					$schema = Schema::create($schema);
+					$schemaBuilder = new SchemaBuilder($schema);
 					foreach ($reflectionClass->getMethods() as $reflectionMethod) {
 						if (($doc = $reflectionMethod->getDocComment()) === false) {
 							continue;
 						} else if (strpos($doc, '@schema') !== false) {
 							$attr = $this->stringUtils->match($doc, '~@schema\s*(?<attr>.*?)[\n\r]~sm', true);
 							$attr = $attr['attr'] ?? '';
-							$property = $schema->property($name = $reflectionMethod->getName());
-							$property->type('string');
+							$propertyBuilder = $schemaBuilder->property($name = $reflectionMethod->getName());
+							$propertyBuilder->type($propertyType = 'string');
 							if (strpos($attr, 'unique') !== false) {
-								$property->unique();
+								$propertyBuilder->unique();
 							}
 							if (strpos($attr, 'primary') !== false) {
-								$property->primary();
-								$property->generator($name);
+								$propertyBuilder->primary();
+								$propertyBuilder->generator($name);
 							}
 							if (($type = $reflectionMethod->getReturnType()) !== null) {
-								$property->type($type->getName());
-								$property->required($type->allowsNull() === false);
+								$propertyBuilder->type($propertyType = $type->getName());
+								$propertyBuilder->required($type->allowsNull() === false);
 							}
 							/**
 							 * exactly one parameter means link to another schema
@@ -60,32 +60,32 @@
 							if ($reflectionMethod->getNumberOfParameters() === 1) {
 								list($parameter) = $reflectionMethod->getParameters();
 								if ($type = $parameter->getType()) {
-									$property->required($type->allowsNull() === false);
-									$property->link($type->getName(), $parameter->getName());
+									$propertyBuilder->required($type->allowsNull() === false);
+									$propertyBuilder->link($type->getName(), $parameter->getName());
 								}
 							}
-							switch ($type = $property->getType()) {
+							switch ($propertyType) {
 								case 'float':
 								case 'int':
 								case 'bool':
 								case 'datetime':
 								case \DateTime::class:
-									$property->filter($type);
-									$property->sanitizer($type);
+									$propertyBuilder->filter($propertyType);
+									$propertyBuilder->sanitizer($propertyType);
 									break;
 							}
 							if (($generator = $this->stringUtils->match($doc, '~@generator\s*(?<value>.*?)[\n\r]~sm', true)) !== null) {
-								$property->generator(trim($generator['value']));
+								$propertyBuilder->generator(trim($generator['value']));
 							}
 							if (($filter = $this->stringUtils->match($doc, '~@filter\s*(?<value>.*?)[\n\r]~sm', true)) !== null) {
-								$property->filter(trim($filter['value']));
+								$propertyBuilder->filter(trim($filter['value']));
 							}
 							if (($sanitizer = $this->stringUtils->match($doc, '~@sanitizer\s*(?<value>.*?)[\n\r]~sm', true)) !== null) {
-								$property->sanitizer(trim($sanitizer['value']));
+								$propertyBuilder->sanitizer(trim($sanitizer['value']));
 							}
 						}
 					}
-					return $this->schemaList[$schema->getName()] = $schema;
+					return $this->schemaList[$schema] = $schemaBuilder->getSchema();
 				} catch (\Throwable $throwable) {
 					throw new SchemaReflectionException(sprintf('Cannot do reflection of [%s]. Name is not probably a class.', $schema));
 				}

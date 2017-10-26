@@ -7,7 +7,6 @@
 		use Edde\Api\Schema\Exception\UnknownPropertyException;
 		use Edde\Api\Schema\IProperty;
 		use Edde\Api\Schema\ISchema;
-		use Edde\Common\Node\Node;
 		use Edde\Common\Object\Object;
 
 		class Schema extends Object implements ISchema {
@@ -23,8 +22,9 @@
 			protected $linkList = null;
 			protected $relationList = [];
 
-			public function __construct(INode $node) {
+			public function __construct(INode $node, array $propertyList) {
 				$this->node = $node;
+				$this->propertyList = $propertyList;
 			}
 
 			/**
@@ -32,14 +32,6 @@
 			 */
 			public function getName(): string {
 				return $this->node->getAttribute('name');
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function alias(string $alias): ISchema {
-				$this->node->setAttribute('alias', $alias);
-				return $this;
 			}
 
 			/**
@@ -139,45 +131,5 @@
 			 */
 			public function getNodeList(): array {
 				return $this->node->getNode('property-list')->getNodeList();
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function property(string $name): IProperty {
-				$this->node->getNode('property-list')->addNode($node = new Node('property', null, ['name' => $name]));
-				return $this->propertyList[$name] = new Property($this->node, $node);
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function primary(string $name): IProperty {
-				return $this->property($name)->primary();
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function string(string $name): IProperty {
-				return $this->property($name)->type('string');
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function text(string $name): IProperty {
-				return $this->property($name)->type('text');
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function integer(string $name): IProperty {
-				return $this->property($name)->type('int');
-			}
-
-			static public function create(string $name): ISchema {
-				return new static(new Node('schema', null, ['name' => $name]));
 			}
 		}

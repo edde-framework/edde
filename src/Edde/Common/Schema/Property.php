@@ -4,25 +4,15 @@
 		use Edde\Api\Node\INode;
 		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\IProperty;
-		use Edde\Common\Node\Node;
 		use Edde\Common\Object\Object;
 
 		class Property extends Object implements IProperty {
 			/**
 			 * @var INode
 			 */
-			protected $root;
-			/**
-			 * @var INode
-			 */
 			protected $node;
-			/**
-			 * @var INode
-			 */
-			protected $link;
 
-			public function __construct(INode $root, INode $node) {
-				$this->root = $root;
+			public function __construct(INode $node) {
 				$this->node = $node;
 			}
 
@@ -36,34 +26,8 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getNode(): INode {
-				return $this->node;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function primary(bool $primary = true): IProperty {
-				$this->node->setAttribute('primary', $primary);
-				$this->required($primary);
-				$this->unique($primary);
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
 			public function isPrimary(): bool {
 				return $this->node->getAttribute('primary', false);
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function unique(bool $unique = true): IProperty {
-				$this->node->setAttribute('unique', $unique);
-				$this->required($unique);
-				return $this;
 			}
 
 			/**
@@ -76,24 +40,8 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function generator(string $string): IProperty {
-				$this->node->setAttribute('generator', $string);
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
 			public function getGenerator(): ?string {
 				return $this->node->getAttribute('generator');
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function filter(string $name): IProperty {
-				$this->node->setAttribute('filter', $name);
-				return $this;
 			}
 
 			/**
@@ -106,14 +54,6 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function sanitizer(string $name): IProperty {
-				$this->node->setAttribute('sanitizer', $name);
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
 			public function getSanitizer(): ?string {
 				return $this->node->getAttribute('sanitizer');
 			}
@@ -121,39 +61,8 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function required(bool $required = true): IProperty {
-				$this->node->setAttribute('required', $required);
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function type(string $type): IProperty {
-				$this->node->setAttribute('type', $type);
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
 			public function getType(): string {
 				return $this->node->getAttribute('type', 'string');
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function link(string $target, string $property): IProperty {
-				if ($this->link === null) {
-					$this->root->getNode('link-list')->addNode($this->link = new Node('link'));
-				}
-				$this->link->putAttributeList([
-					'schema' => $target,
-					'target' => $property,
-					'source' => $this->getName(),
-				]);
-				return $this;
 			}
 
 			/**
