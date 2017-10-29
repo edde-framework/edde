@@ -12,14 +12,13 @@
 				$nativeBatch = new NativeBatch();
 				$primaryList = null;
 				$indexList = null;
-				$uniqueList = null;
+				$uniqueList = [];
 				$delimited = $this->delimite($root->getAttribute('name'));
 				foreach ($root->getNodeList() as $node) {
 					$name = $node->getAttribute('name');
 					if ($node->getAttribute('primary', false)) {
 						$primaryList[] = 'n.' . $this->delimite($name);
-					}
-					if ($node->getAttribute('unique', false)) {
+					} else if ($node->getAttribute('unique', false)) {
 						$uniqueList[] = 'n.' . $this->delimite($name);
 					}
 				}
@@ -29,9 +28,9 @@
 				if ($primaryList) {
 					$nativeBatch->addQuery('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT (' . implode(', ', $primaryList) . ') IS NODE KEY');
 				}
-//				if ($uniqueList) {
-//					$nativeBatch->addQuery('CREATE CONSTRAINT ON n:' . $delimited . ' ASSERT (' . implode(', ', $primaryList) . ') IS NODE KEY');
-//				}
+				foreach ($uniqueList as $unique) {
+					$nativeBatch->addQuery('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT ' . $unique . ' IS UNIQUE');
+				}
 				return $nativeBatch;
 			}
 
