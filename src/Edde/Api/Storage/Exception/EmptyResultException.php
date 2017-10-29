@@ -1,5 +1,5 @@
 <?php
 	namespace Edde\Api\Storage\Exception;
 
-		class EmptyResultException extends StorageException {
+		class EmptyResultException extends EntityException {
 		}

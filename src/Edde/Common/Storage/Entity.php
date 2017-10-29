@@ -2,6 +2,7 @@
 	namespace Edde\Common\Storage;
 
 		use Edde\Api\Schema\ISchema;
+		use Edde\Api\Storage\Exception\EntityException;
 		use Edde\Api\Storage\IEntity;
 		use Edde\Common\Crate\Crate;
 
@@ -10,6 +11,10 @@
 			 * @var ISchema
 			 */
 			protected $schema;
+			/**
+			 * @var IEntity[]
+			 */
+			protected $linkList = [];
 
 			public function __construct(ISchema $schema) {
 				$this->schema = $schema;
@@ -31,5 +36,16 @@
 					$primaryList[] = $this->getProperty($property->getName());
 				}
 				return $primaryList;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function attach(string $name, IEntity $entity): IEntity {
+				if ($this->schema->getProperty($name)->isLink() === false) {
+					throw new EntityException(sprintf('Cannot attach entity [%s] to entity [%s::%s] - property is not a link.', $entity->getSchema()->getName(), $this->schema->getName(), $name));
+				}
+				$this->linkList[$name] = $entity;
+				return $this;
 			}
 		}

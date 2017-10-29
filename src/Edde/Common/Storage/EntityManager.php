@@ -41,8 +41,7 @@
 			 */
 			public function attach(IEntity $entity, IEntity $to, string $relation): IEntity {
 				$schema = $this->schemaManager->getSchema($relation);
-				$relation = $this->createEntity(($schema)->getName());
-				$this->link($relation, $entity, $schema);
+				$this->link($relation = $this->createEntity($schema->getName()), $entity, $schema);
 				$this->link($relation, $to, $schema);
 				return $relation;
 			}
@@ -60,6 +59,6 @@
 				} else if ($count !== 1) {
 					throw new EntityManagerException(sprintf('Schema [%s] has no relation to target schema [%s].', $schema->getName(), $name));
 				}
-				$relation->set(($link = $link[0]->getLink())->getProperty(), $entity->get($link->getTarget()));
+				$relation->attach($link[0]->getLink()->getProperty(), $entity);
 			}
 		}
