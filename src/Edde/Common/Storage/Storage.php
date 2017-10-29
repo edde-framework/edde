@@ -123,14 +123,18 @@
 				}
 				$query = new SelectQuery();
 				$query->setDescription('check entity existence query');
-				$query->table($entity->getSchema()->getName())->all();
+				$query->table($entity->getSchema()->getName(), 's')->all();
+				$value = null;
 				foreach (($primaryList = $entity->getPrimaryList()) as $property) {
-					$query->where()->and()->eq($property->getName())->to($property->get());
+					if (($value = $property->get()) === null) {
+						break;
+					}
+					$query->where()->and()->eq($property->getName(), 's')->to($value);
 				}
 				/**
 				 * pickup an entity from storage if it's already there (and run update)
 				 */
-				foreach ($this->execute($query) as $_) {
+				foreach ($value ? $this->execute($query) : [] as $_) {
 					return $this->update($entity);
 				}
 				return $this->insert($entity);

@@ -105,6 +105,13 @@
 				$this->session = GraphDatabase::driver($this->url)->session();
 			}
 
+			/**
+			 * @param \Throwable $throwable
+			 *
+			 * @throws DriverException
+			 * @throws DuplicateEntryException
+			 * @throws NullValueException
+			 */
 			protected function exception(\Throwable $throwable) {
 				if (stripos($message = $throwable->getMessage(), 'already exists with label') !== false) {
 					throw new DuplicateEntryException($message, 0, $throwable);
