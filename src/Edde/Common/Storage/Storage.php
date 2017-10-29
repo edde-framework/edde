@@ -121,23 +121,33 @@
 				if ($entity->isDirty() === false) {
 					return $this;
 				}
-				$query = new SelectQuery();
-				$query->setDescription('check entity existence query');
-				$query->table($entity->getSchema()->getName(), 's')->all();
-				$value = null;
-				foreach (($primaryList = $entity->getPrimaryList()) as $property) {
-					if (($value = $property->get()) === null) {
+				$this->start();
+				try {
+					$query = new SelectQuery();
+					$query->setDescription('check entity existence query');
+					$query->table($entity->getSchema()->getName(), 's')->all();
+					$value = null;
+					foreach (($primaryList = $entity->getPrimaryList()) as $property) {
+						if (($value = $property->get()) === null) {
+							break;
+						}
+						$query->where()->and()->eq($property->getName(), 's')->to($value);
+					}
+					/**
+					 * pickup an entity from storage if it's already there (and run update)
+					 */
+					$method = 'insert';
+					foreach ($value ? $this->execute($query) : [] as $_) {
+						$method = 'update';
 						break;
 					}
-					$query->where()->and()->eq($property->getName(), 's')->to($value);
+					$this->{$method}($entity);
+					$this->commit();
+					return $this;
+				} catch (\Throwable $throwable) {
+					$this->rollback();
+					throw $throwable;
 				}
-				/**
-				 * pickup an entity from storage if it's already there (and run update)
-				 */
-				foreach ($value ? $this->execute($query) : [] as $_) {
-					return $this->update($entity);
-				}
-				return $this->insert($entity);
 			}
 
 			/**
