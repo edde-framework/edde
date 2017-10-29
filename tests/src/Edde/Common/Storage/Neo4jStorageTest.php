@@ -5,7 +5,9 @@
 		use Edde\Api\Container\Exception\FactoryException;
 		use Edde\Api\Driver\IDriver;
 		use Edde\Api\Query\IQueryBuilder;
+		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\DuplicateTableException;
+		use Edde\Api\Storage\Exception\NullValueException;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Container\Factory\ClassFactory;
 		use Edde\Ext\Container\ContainerFactory;
@@ -36,8 +38,27 @@
 			}
 
 			public function testInsertException() {
+				$this->expectException(NullValueException::class);
 				$this->storage->push(FooSchema::class, [
 					'label' => 'kaboom',
+				]);
+			}
+
+			public function testInsertException2() {
+				$this->expectException(NullValueException::class);
+				$this->storage->push(FooSchema::class, [
+					'name'  => null,
+					'label' => 'kaboom',
+				]);
+			}
+
+			public function testInsertUnique() {
+				$this->expectException(DuplicateEntryException::class);
+				$this->storage->push(FooSchema::class, [
+					'name' => 'unique',
+				]);
+				$this->storage->push(FooSchema::class, [
+					'name' => 'unique',
 				]);
 			}
 

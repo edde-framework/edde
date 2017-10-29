@@ -70,7 +70,7 @@
 			 * @inheritdoc
 			 */
 			public function start(bool $exclusive = false): IStorage {
-				if ($this->transaction + 1 > 0) {
+				if ($this->transaction > 0) {
 					if ($exclusive === false) {
 						return $this;
 					}
