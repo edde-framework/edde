@@ -23,6 +23,13 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function isDirty(): bool {
+				return $this->hasLinks() || parent::isDirty();
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function getSchema(): ISchema {
 				return $this->schema;
 			}
@@ -47,5 +54,19 @@
 				}
 				$this->linkList[$name] = $entity;
 				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function hasLinks(): bool {
+				return empty($this->linkList) === false;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getLinkList(): array {
+				return $this->linkList;
 			}
 		}

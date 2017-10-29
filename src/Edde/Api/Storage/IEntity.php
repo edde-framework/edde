@@ -32,4 +32,18 @@
 			 * @return IEntity
 			 */
 			public function attach(string $name, IEntity $entity): IEntity;
+
+			/**
+			 * are there some linked entities to this one?
+			 *
+			 * @return bool
+			 */
+			public function hasLinks(): bool;
+
+			/**
+			 * get array of linked entities
+			 *
+			 * @return IEntity[]
+			 */
+			public function getLinkList(): array;
 		}

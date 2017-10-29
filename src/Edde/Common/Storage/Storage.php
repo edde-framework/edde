@@ -144,9 +144,6 @@
 			 * @inheritdoc
 			 */
 			public function insert(IEntity $entity): IStorage {
-				if ($entity->isDirty() === false) {
-					return $this;
-				}
 				$this->execute(new InsertQuery($entity->getSchema()->getName(), $this->prepare($entity)));
 				$entity->commit();
 				return $this;
@@ -164,9 +161,6 @@
 			 * @inheritdoc
 			 */
 			public function update(IEntity $entity): IStorage {
-				if ($entity->isDirty() === false) {
-					return $this;
-				}
 				$query = new UpdateQuery($entity->getSchema()->getName(), $this->prepare($entity));
 				$query->alias('u');
 				foreach ($entity->getPrimaryList() as $property) {
