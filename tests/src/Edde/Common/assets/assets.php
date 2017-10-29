@@ -135,6 +135,9 @@
 			public function name(): string;
 		}
 
+		/**
+		 * @relation
+		 */
 		interface FooBarSchema {
 			/**
 			 * @schema primary

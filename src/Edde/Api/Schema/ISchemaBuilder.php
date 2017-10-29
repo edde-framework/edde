@@ -12,6 +12,15 @@
 			public function alias(string $alias): ISchemaBuilder;
 
 			/**
+			 * mark a schema as relational schema
+			 *
+			 * @param bool $relation
+			 *
+			 * @return ISchemaBuilder
+			 */
+			public function relation(bool $relation): ISchemaBuilder;
+
+			/**
 			 * create a new property with the given name
 			 *
 			 * @param string $name

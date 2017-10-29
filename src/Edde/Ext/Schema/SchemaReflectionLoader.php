@@ -35,6 +35,8 @@
 					}
 					$reflectionClass = new \ReflectionClass($schema);
 					$schemaBuilder = new SchemaBuilder($schema);
+					$doc = ($doc = $reflectionClass->getDocComment()) ? $doc : '';
+					$schemaBuilder->relation(strpos($doc, '@relation') !== false);
 					foreach ($reflectionClass->getMethods() as $reflectionMethod) {
 						if (($doc = $reflectionMethod->getDocComment()) === false) {
 							continue;

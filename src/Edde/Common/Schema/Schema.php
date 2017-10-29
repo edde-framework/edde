@@ -37,6 +37,13 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function isRelation(): bool {
+				return $this->node->getAttribute('is-relation', false);
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function hasAlias(): bool {
 				return $this->node->hasAttribute('alias');
 			}

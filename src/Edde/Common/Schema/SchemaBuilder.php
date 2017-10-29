@@ -37,6 +37,14 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function relation(bool $relation): ISchemaBuilder {
+				$this->node->setAttribute('is-relation', $relation);
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function property(string $name): IPropertyBuilder {
 				$this->node->getNode('property-list')->addNode($node = new Node('property', null, ['name' => $name]));
 				return $this->propertyBuilderList[$name] = new PropertyBuilder($this->node, $node);

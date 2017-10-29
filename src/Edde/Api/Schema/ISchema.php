@@ -14,6 +14,13 @@
 			public function getName(): string;
 
 			/**
+			 * special kind of schemas used just as a relational schemas (m:n relations, for graphs, ...)
+			 *
+			 * @return bool
+			 */
+			public function isRelation(): bool;
+
+			/**
 			 * has this schema alias?
 			 *
 			 * @return bool

@@ -139,7 +139,7 @@
 					/**
 					 * pickup an entity from storage if it's already there (and run update)
 					 */
-					$method = 'insert';
+					$method = $entity->getSchema()->isRelation() ? 'relation' : 'insert';
 					foreach ($value ? $this->execute($query) : [] as $_) {
 						$method = 'update';
 						break;
@@ -160,6 +160,13 @@
 				$this->handleLinks($entity);
 				$this->execute(new InsertQuery($entity->getSchema()->getName(), $this->prepare($entity)));
 				$entity->commit();
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function relation(IEntity $entity): IStorage {
 				return $this;
 			}
 
@@ -218,7 +225,7 @@
 			 * @throws UnknownPropertyException
 			 * @throws \Throwable
 			 */
-			protected function handleLinks(IEntity $entity) {
+			protected function handleLinks(IEntity $entity): void {
 				$schema = $entity->getSchema();
 				foreach ($entity->getLinkList() as $name => $linked) {
 					$this->save($linked);
