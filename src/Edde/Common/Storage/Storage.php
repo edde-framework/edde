@@ -6,6 +6,7 @@
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\Inject\QueryBuilder;
 		use Edde\Api\Query\IQuery;
+		use Edde\Api\Schema\Exception\UnknownPropertyException;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Storage\Exception\ExclusiveTransactionException;
 		use Edde\Api\Storage\Exception\NoTransactionException;
@@ -72,6 +73,7 @@
 			public function start(bool $exclusive = false): IStorage {
 				if ($this->transaction > 0) {
 					if ($exclusive === false) {
+						$this->transaction++;
 						return $this;
 					}
 					throw new ExclusiveTransactionException('Cannot start an exclusive transaction; there is already another one running.');
@@ -89,12 +91,12 @@
 					throw new NoTransactionException('Cannot commit a transaction - there is no one running!');
 				} else if ($this->transaction === 1) {
 					$this->driver->commit();
-					/**
-					 * it's intentional to lower the number of transaction after commit as a driver could throw an
-					 * exception, thus transaction state could not be consistent
-					 */
-					$this->transaction--;
 				}
+				/**
+				 * it's intentional to lower the number of transaction after commit as a driver could throw an
+				 * exception, thus transaction state could not be consistent
+				 */
+				$this->transaction--;
 				return $this;
 			}
 
@@ -106,8 +108,8 @@
 					throw new NoTransactionException('Cannot rollback a transaction - there is no one running!');
 				} else if ($this->transaction === 1) {
 					$this->driver->rollback();
-					$this->transaction--;
 				}
+				$this->transaction--;
 				return $this;
 			}
 
@@ -127,6 +129,7 @@
 					$query->setDescription('check entity existence query');
 					$query->table($entity->getSchema()->getName(), 's')->all();
 					$value = null;
+					$this->handleLinks($entity);
 					foreach (($primaryList = $entity->getPrimaryList()) as $property) {
 						if (($value = $property->get()) === null) {
 							break;
@@ -154,6 +157,7 @@
 			 * @inheritdoc
 			 */
 			public function insert(IEntity $entity): IStorage {
+				$this->handleLinks($entity);
 				$this->execute(new InsertQuery($entity->getSchema()->getName(), $this->prepare($entity)));
 				$entity->commit();
 				return $this;
@@ -171,6 +175,7 @@
 			 * @inheritdoc
 			 */
 			public function update(IEntity $entity): IStorage {
+				$this->handleLinks($entity);
 				$query = new UpdateQuery($entity->getSchema()->getName(), $this->prepare($entity));
 				$query->alias('u');
 				foreach ($entity->getPrimaryList() as $property) {
@@ -205,14 +210,34 @@
 				return $collection;
 			}
 
-			protected function prepare(IEntity $entity): array {
+			/**
+			 * @param IEntity $entity
+			 *
+			 * @throws ExclusiveTransactionException
+			 * @throws NoTransactionException
+			 * @throws UnknownPropertyException
+			 * @throws \Throwable
+			 */
+			protected function handleLinks(IEntity $entity) {
 				$schema = $entity->getSchema();
-				$schemaName = $schema->getName();
+				foreach ($entity->getLinkList() as $name => $linked) {
+					$this->save($linked);
+					$link = $schema->getProperty($name)->getLink();
+					$entity->set($link->getProperty(), $linked->get($link->getTarget()));
+				}
+			}
+
+			/**
+			 * @param IEntity $entity
+			 *
+			 * @return array
+			 */
+			protected function prepare(IEntity $entity): array {
 				$source = $this->driver->toArray($entity);
 				foreach ($entity->getPrimaryList() as $property) {
 					$source[$property->getName()] = $property->get();
 				}
-				$entity->push($source = $this->schemaManager->generate($schemaName, $source));
+				$entity->push($source = $this->schemaManager->generate($schemaName = $entity->getSchema()->getName(), $source));
 				return $this->schemaManager->sanitize($schemaName, $source);
 			}
 		}

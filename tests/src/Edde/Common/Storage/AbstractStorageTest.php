@@ -120,10 +120,10 @@
 			 * @throws StorageException
 			 */
 			public function testRelation() {
-				$foo = $this->storage->push(FooSchema::class, [
+				$foo = $this->entityManager->create(FooSchema::class, [
 					'name' => 'foo The First',
 				]);
-				$bar = $this->storage->push(BarSchema::class, [
+				$bar = $this->entityManager->create(BarSchema::class, [
 					'name' => 'bar The Second',
 				]);
 				$this->storage->save($this->entityManager->attach($foo, $bar, FooBarSchema::class));
