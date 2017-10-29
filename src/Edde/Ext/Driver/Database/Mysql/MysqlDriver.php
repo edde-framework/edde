@@ -15,7 +15,7 @@
 			protected function exception(\Throwable $throwable) {
 				if (stripos($message = $throwable->getMessage(), 'duplicate') !== false) {
 					throw new DuplicateEntryException($message, 0, $throwable);
-				} else if (stripos($message, 'cannot be null') !== false) {
+				} else if (stripos($message, 'cannot be null') !== false || stripos($message, 'have a default value') !== false) {
 					throw new NullValueException($message, 0, $throwable);
 				} else if (stripos($message, 'table or view already exists') !== false) {
 					throw new DuplicateTableException($message, 0, $throwable);
