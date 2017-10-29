@@ -13,7 +13,7 @@
 				foreach ($root->getNodeList() as $node) {
 					$name = $node->getAttribute('name');
 					if ($node->getAttribute('primary', false)) {
-						$primaryList[] = $name;
+						$primaryList[] = $this->delimite($name);
 					}
 				}
 				if ($primaryList) {
