@@ -167,6 +167,9 @@
 			 * @inheritdoc
 			 */
 			public function relation(IEntity $entity): IStorage {
+				$this->handleLinks($entity);
+//				new RelationQuery();
+				$entity->commit();
 				return $this;
 			}
 
