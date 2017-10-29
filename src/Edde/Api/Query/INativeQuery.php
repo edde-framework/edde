@@ -1,9 +1,7 @@
 <?php
 	namespace Edde\Api\Query;
 
-		use Edde\Api\Config\IConfigurable;
-
-		interface INativeQuery extends IConfigurable {
+		interface INativeQuery {
 			/**
 			 * return native query (commonly SQL, it could be an array, whatever...)
 			 *
