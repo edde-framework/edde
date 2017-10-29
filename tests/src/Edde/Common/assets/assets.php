@@ -121,6 +121,11 @@
 			 * @schema unique
 			 */
 			public function name(): string;
+
+			/**
+			 * @schema
+			 */
+			public function label(): ?string;
 		}
 
 		interface BarSchema extends AbstractGuidSchema {

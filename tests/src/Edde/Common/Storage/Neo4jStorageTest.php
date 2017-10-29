@@ -26,14 +26,18 @@
 			 * @throws DuplicateTableException
 			 */
 			public function testCreateSchema() {
-				$this->storage->start();
 				$this->storage->createSchema(FooSchema::class);
-				$this->storage->commit();
 			}
 
 			public function testInsert() {
 				$this->storage->push(FooSchema::class, [
 					'name' => 'neo4j rocks!',
+				]);
+			}
+
+			public function testInsertException() {
+				$this->storage->push(FooSchema::class, [
+					'label' => 'kaboom',
 				]);
 			}
 
