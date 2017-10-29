@@ -7,7 +7,9 @@
 		use Edde\Api\Query\IQueryBuilder;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\DuplicateTableException;
+		use Edde\Api\Storage\Exception\EntityNotFoundException;
 		use Edde\Api\Storage\Exception\NullValueException;
+		use Edde\Api\Storage\Exception\UnknownTableException;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Container\Factory\ClassFactory;
 		use Edde\Ext\Container\ContainerFactory;
@@ -15,6 +17,7 @@
 		use Edde\Ext\Driver\Graph\Neo4j\Neo4jQueryBuilder;
 		use Edde\Ext\Test\TestCase;
 		use Edde\Test\FooSchema;
+		use Edde\Test\SimpleSchema;
 
 		class Neo4jStorageTest extends TestCase {
 			use Storage;
@@ -60,6 +63,30 @@
 				$this->storage->push(FooSchema::class, [
 					'name' => 'unique',
 				]);
+			}
+
+			/**
+			 * @throws EntityNotFoundException
+			 * @throws UnknownTableException
+			 */
+			public function testUpdate() {
+				$entity = $this->storage->push(SimpleSchema::class, [
+					'name'     => 'to-be-updated',
+					'optional' => null,
+					'value'    => 3.14,
+					'date'     => new \DateTime('24.12.2020 12:24:13'),
+					'question' => false,
+				]);
+				$entity->set('optional', 'this is a new nice and updated string');
+				$expect = $entity->toArray();
+				$this->storage->update($entity);
+				$entity = $this->storage->collection(FooSchema::class)->load($entity->get('guid'));
+				self::assertFalse($entity->isDirty(), 'entity should NOT be dirty right after load!');
+				self::assertEquals($expect, $array = $entity->toArray());
+				self::assertTrue(($type = gettype($array['value'])) === 'double', 'value [' . $type . '] is not float!');
+				self::assertInstanceOf(\DateTime::class, $array['date']);
+				self::assertTrue(($type = gettype($array['question'])) === 'boolean', 'question [' . $type . '] is not bool!');
+				self::assertFalse($array['question']);
 			}
 
 			/**

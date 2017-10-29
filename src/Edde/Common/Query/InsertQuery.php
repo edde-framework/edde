@@ -27,6 +27,12 @@
 				$this->type = 'insert';
 			}
 
+			public function alias(string $alias): IInsertQuery {
+				$this->init();
+				$this->node->setAttribute('alias', $alias);
+				return $this;
+			}
+
 			/**
 			 * @throws \Exception
 			 */
@@ -38,7 +44,7 @@
 				foreach ($this->source as $k => $v) {
 					$setList->addNode(new Node('set', null, [
 						'column'    => $k,
-						'parameter' => $parameterId = (sha1($k . microtime(true) . random_bytes(64))),
+						'parameter' => $parameterId = ('p' . sha1($k . microtime(true) . random_bytes(64))),
 					]));
 					$parameterList->addNode(new Node('parameter', $v, ['name' => $parameterId]));
 				}

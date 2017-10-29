@@ -11,43 +11,43 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function eq(string $name): IWhereTo {
-				return $this->createToFragment(__FUNCTION__, $name);
+			public function eq(string $name, string $prefix = null): IWhereTo {
+				return $this->createToFragment(__FUNCTION__, $name, $prefix);
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function neq(string $name): IWhereTo {
-				return $this->createToFragment(__FUNCTION__, $name);
+			public function neq(string $name, string $prefix = null): IWhereTo {
+				return $this->createToFragment(__FUNCTION__, $name, $prefix);
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function gt(string $name): IWhereThan {
-				return $this->createThanFragment(__FUNCTION__, $name);
+			public function gt(string $name, string $prefix = null): IWhereThan {
+				return $this->createThanFragment(__FUNCTION__, $name, $prefix);
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function gte(string $name): IWhereThan {
-				return $this->createThanFragment(__FUNCTION__, $name);
+			public function gte(string $name, string $prefix = null): IWhereThan {
+				return $this->createThanFragment(__FUNCTION__, $name, $prefix);
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function lt(string $name): IWhereThan {
-				return $this->createThanFragment(__FUNCTION__, $name);
+			public function lt(string $name, string $prefix = null): IWhereThan {
+				return $this->createThanFragment(__FUNCTION__, $name, $prefix);
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function lte(string $name): IWhereThan {
-				return $this->createThanFragment(__FUNCTION__, $name);
+			public function lte(string $name, string $prefix = null): IWhereThan {
+				return $this->createThanFragment(__FUNCTION__, $name, $prefix);
 			}
 
 			/**
@@ -87,15 +87,17 @@
 				return new WhereFragment($this->root, $this->node);
 			}
 
-			protected function createToFragment(string $type, string $name): IWhereTo {
+			protected function createToFragment(string $type, string $name, string $prefix = null): IWhereTo {
 				$this->node->setAttribute('type', $type);
 				$this->node->setAttribute('where', $name);
+				$this->node->setAttribute('prefix', $prefix);
 				return new WhereToFragment($this->root, $this->node);
 			}
 
-			protected function createThanFragment(string $type, string $name): IWhereThan {
+			protected function createThanFragment(string $type, string $name, string $prefix = null): IWhereThan {
 				$this->node->setAttribute('type', $type);
 				$this->node->setAttribute('where', $name);
+				$this->node->setAttribute('prefix', $prefix);
 				return new WhereThanFragment($this->root, $this->node);
 			}
 		}

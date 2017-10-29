@@ -5,6 +5,7 @@
 		use Edde\Api\Query\INativeBatch;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\IQuery;
+		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\DuplicateTableException;
 		use Edde\Api\Storage\Exception\IntegrityException;
 		use Edde\Api\Storage\Exception\StorageException;
@@ -95,6 +96,8 @@
 			 * @param IEntity $entity
 			 *
 			 * @return IStorage
+			 *
+			 * @throws DuplicateEntryException
 			 */
 			public function insert(IEntity $entity): IStorage;
 

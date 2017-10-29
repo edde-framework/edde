@@ -164,8 +164,9 @@
 					return $this;
 				}
 				$query = new UpdateQuery($entity->getSchema()->getName(), $this->prepare($entity));
+				$query->alias('u');
 				foreach ($entity->getPrimaryList() as $property) {
-					$query->where()->and()->eq($property->getName())->to($property->get());
+					$query->where()->and()->eq($property->getName(), 'u')->to($property->get());
 				}
 				$this->execute($query);
 				$entity->commit();

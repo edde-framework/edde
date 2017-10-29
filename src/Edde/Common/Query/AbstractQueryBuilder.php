@@ -39,6 +39,28 @@
 				return $this->fragmentList[$name]($node);
 			}
 
+			/**
+			 * @param INode $root
+			 *
+			 * @return INativeBatch
+			 * @throws QueryBuilderException
+			 */
+			protected function fragmentWhereList(INode $root): INativeBatch {
+				$whereList = null;
+				$parameterList = [];
+				foreach ($root->getNodeList() as $node) {
+					$query = $this->fragment($node);
+					$where = null;
+					if ($whereList && ($relationTo = $node->getAttribute('relation-to'))) {
+						$where .= ' ' . strtoupper($relationTo);
+					}
+					$where .= $query->getQuery();
+					$whereList[] = $where . ' ' . strtoupper($node->getAttribute('relation'));
+					$parameterList = array_merge($parameterList, $query->getParameterList());
+				}
+				return new NativeBatch("\t" . implode("\n\t", $whereList), $parameterList);
+			}
+
 			protected function fragmentParameterList(INode $root): INativeBatch {
 				$parameterList = [];
 				foreach ($root->getNodeList() as $node) {

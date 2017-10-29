@@ -3,12 +3,12 @@
 
 		use Edde\Api\Node\INode;
 		use Edde\Api\Query\Exception\QueryBuilderException;
-		use Edde\Api\Query\INativeQuery;
+		use Edde\Api\Query\INativeBatch;
 		use Edde\Common\Query\AbstractQueryBuilder;
-		use Edde\Common\Query\NativeQuery;
+		use Edde\Common\Query\NativeBatch;
 
 		abstract class AbstractSqlBuilder extends AbstractQueryBuilder {
-			protected function fragmentCreateSchema(INode $root): INativeQuery {
+			protected function fragmentCreateSchema(INode $root): INativeBatch {
 				$sql = 'CREATE TABLE ' . ($this->delimite($table = $root->getAttribute('name'))) . " (\n\t";
 				$columnList = [];
 				$primaryList = [];
@@ -28,10 +28,10 @@
 					$columnList[] = "CONSTRAINT " . $this->delimite(sha1($table . '_primary_' . $primary = implode(', ', $primaryList))) . ' PRIMARY KEY (' . $primary . ")\n";
 				}
 				$sql .= implode(",\n\t", $columnList) . "\n";
-				return new NativeQuery($sql . ')');
+				return new NativeBatch($sql . ')');
 			}
 
-			protected function fragmentInsert(INode $root): INativeQuery {
+			protected function fragmentInsert(INode $root): INativeBatch {
 				$parameterList = $this->fragmentParameterList($root->getNode('parameter-list'))->getParameterList();
 				$nameList = [];
 				$columnList = [];
@@ -41,16 +41,16 @@
 				}
 				$sql = 'INSERT INTO ' . $this->delimite($root->getAttribute('table')) . ' (';
 				$sql .= implode(',', $nameList) . ') VALUES (';
-				return new NativeQuery($sql . implode(', ', $columnList) . ')', $parameterList);
+				return new NativeBatch($sql . implode(', ', $columnList) . ')', $parameterList);
 			}
 
 			/**
 			 * @param INode $root
 			 *
-			 * @return INativeQuery
+			 * @return INativeBatch
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentUpdate(INode $root): INativeQuery {
+			protected function fragmentUpdate(INode $root): INativeBatch {
 				$sql[] = "UPDATE\n\t" . $this->delimite($root->getAttribute('table')) . "\nSET\n\t";
 				$parameterList = $this->fragment($root->getNode('parameter-list'))->getParameterList();
 				$setList = [];
@@ -62,18 +62,18 @@
 					$sql[] = "WHERE\n";
 					$query = $this->fragmentWhereList($root->getNode('where-list'));
 					$sql[] = $query->getQuery();
-					array_merge($parameterList, $query->getParameterList());
+					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
-				return new NativeQuery(implode('', $sql), $parameterList);
+				return new NativeBatch(implode('', $sql), $parameterList);
 			}
 
 			/**
 			 * @param INode $root
 			 *
-			 * @return NativeQuery
+			 * @return INativeBatch
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentSelect(INode $root) {
+			protected function fragmentSelect(INode $root): INativeBatch {
 				$sql = [];
 				$parameterList = [];
 				$sql[] = "SELECT\n";
@@ -99,17 +99,16 @@
 					array_merge($parameterList, $query->getParameterList());
 				}
 				$parameterList = array_merge($parameterList, ($this->fragmentParameterList($root->getNode('parameter-list')))->getParameterList());
-				$sql = implode('', $sql);
-				return new NativeQuery($sql, $parameterList);
+				return new NativeBatch(implode('', $sql), $parameterList);
 			}
 
 			/**
 			 * @param INode $root
 			 *
-			 * @return INativeQuery
+			 * @return INativeBatch
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentColumnList(INode $root): INativeQuery {
+			protected function fragmentColumnList(INode $root): INativeBatch {
 				$columnList = [];
 				$parameterList = [];
 				foreach ($root->getNodeList() as $node) {
@@ -117,26 +116,26 @@
 					$columnList[] = "\t" . $query->getQuery();
 					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
-				return new NativeQuery(implode(",\n", $columnList) . "\n", $parameterList);
+				return new NativeBatch(implode(",\n", $columnList) . "\n", $parameterList);
 			}
 
 			/**
 			 * @param INode $root
 			 *
-			 * @return INativeQuery
+			 * @return INativeBatch
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentColumn(INode $root): INativeQuery {
+			protected function fragmentColumn(INode $root): INativeBatch {
 				switch ($type = $root->getAttribute('type')) {
 					case 'column':
 						$column = ($prefix = $root->getAttribute('prefix')) ? $this->delimite($prefix) . '.' : '';
 						$column .= $this->delimite($root->getValue());
 						$column .= ($alis = $root->getAttribute('alias')) ? ' AS ' . $this->delimite($alis) : '';
-						return new NativeQuery($column);
+						return new NativeBatch($column);
 					case 'asterisk':
 						$column = ($prefix = $root->getAttribute('prefix')) ? $this->delimite($prefix) . '.' : '';
 						$column .= '*';
-						return new NativeQuery($column);
+						return new NativeBatch($column);
 				}
 				throw new QueryBuilderException(sprintf('Unknown column type [%s].', $type));
 			}
@@ -144,10 +143,10 @@
 			/**
 			 * @param INode $root
 			 *
-			 * @return INativeQuery
+			 * @return INativeBatch
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentTableList(INode $root): INativeQuery {
+			protected function fragmentTableList(INode $root): INativeBatch {
 				$tableList = [];
 				$parameterList = [];
 				foreach ($root->getNodeList() as $node) {
@@ -155,44 +154,22 @@
 					$tableList[] = "\t" . $query->getQuery();
 					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
-				return new NativeQuery(implode(",\n", $tableList) . "\n", $parameterList);
+				return new NativeBatch(implode(",\n", $tableList) . "\n", $parameterList);
 			}
 
-			protected function fragmentTable(INode $root): INativeQuery {
+			protected function fragmentTable(INode $root): INativeBatch {
 				$table = $this->delimite($root->getValue());
 				$table .= (($alias = $root->getAttribute('alias')) ? ' ' . $this->delimite($alias) : '');
-				return new NativeQuery($table);
+				return new NativeBatch($table);
 			}
 
 			/**
 			 * @param INode $root
 			 *
-			 * @return INativeQuery
+			 * @return INativeBatch
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentWhereList(INode $root): INativeQuery {
-				$whereList = null;
-				$parameterList = [];
-				foreach ($root->getNodeList() as $node) {
-					$query = $this->fragment($node);
-					$where = null;
-					if ($whereList && ($relationTo = $node->getAttribute('relation-to'))) {
-						$where .= ' ' . strtoupper($relationTo);
-					}
-					$where .= $query->getQuery();
-					$whereList[] = $where . ' ' . strtoupper($node->getAttribute('relation'));
-					$parameterList = array_merge($parameterList, $query->getParameterList());
-				}
-				return new NativeQuery("\t" . implode("\n\t", $whereList), $parameterList);
-			}
-
-			/**
-			 * @param INode $root
-			 *
-			 * @return INativeQuery
-			 * @throws QueryBuilderException
-			 */
-			protected function fragmentWhere(INode $root): INativeQuery {
+			protected function fragmentWhere(INode $root): INativeBatch {
 				$where = null;
 				static $expressions = [
 					'eq'  => '=',
@@ -212,26 +189,26 @@
 							$where .= ':' . $root->getAttribute('parameter');
 							break;
 					}
-					return new NativeQuery($where);
+					return new NativeBatch($where);
 				}
 				switch ($type) {
 					case 'group':
-						return new NativeQuery("(\n" . ($query = $this->fragmentWhereList($root))->getQuery() . "\t)", $query->getParameterList());
+						return new NativeBatch("(\n" . ($query = $this->fragmentWhereList($root))->getQuery() . "\t)", $query->getParameterList());
 					case 'in':
 						switch ($target = $root->getAttribute('target')) {
 							case 'query':
-								return new NativeQuery($this->delimite($root->getAttribute('where')) . " IN (\n" . ($query = $this->fragmentSelect($root->getNode('select')))->getQuery() . ')', $query->getParameterList());
+								return new NativeBatch($this->delimite($root->getAttribute('where')) . " IN (\n" . ($query = $this->fragmentSelect($root->getNode('select')))->getQuery() . ')', $query->getParameterList());
 						}
 						throw new QueryBuilderException(sprintf('Unknown where IN target type [%s].', $target));
 				}
 				throw new QueryBuilderException(sprintf('Unknown where type [%s].', $type));
 			}
 
-			protected function fragmentOrderList(INode $root): INativeQuery {
+			protected function fragmentOrderList(INode $root): INativeBatch {
 				$orderList = [];
 				foreach ($root->getNodeList() as $node) {
 					$orderList[] = $this->delimite($node->getAttribute('column')) . ' ' . ($node->getAttribute('asc', true) ? 'ASC' : 'DESC');
 				}
-				return new NativeQuery(implode(',', $orderList));
+				return new NativeBatch(implode(',', $orderList));
 			}
 		}

@@ -54,6 +54,64 @@
 			}
 
 			/**
+			 * @param INode $root
+			 *
+			 * @return INativeBatch
+			 * @throws QueryBuilderException
+			 */
+			protected function fragmentUpdate(INode $root): INativeBatch {
+				$parameterList = $this->fragmentParameterList($root->getNode('parameter-list'))->getParameterList();
+				$update = [];
+				foreach ($root->getNode('column-list')->getNodeList() as $node) {
+					$update[$node->getAttribute('column')] = $parameterList[$node->getAttribute('parameter')];
+				}
+				$cypher[] = 'MATCH (n:' . $this->delimite($root->getAttribute('table')) . ")\n";
+				if ($root->hasNode('where-list')) {
+					$cypher[] = "WHERE\n";
+					$query = $this->fragmentWhereList($root->getNode('where-list'));
+					$cypher[] = $query->getQuery();
+					$parameterList = array_merge($parameterList, $query->getParameterList());
+				}
+				$cypher[] = 'RETURN n';
+				return new NativeBatch(implode('', $cypher), $parameterList);
+			}
+
+			/**
+			 * @param INode $root
+			 *
+			 * @return INativeBatch
+			 * @throws QueryBuilderException
+			 */
+			protected function fragmentWhere(INode $root): INativeBatch {
+				$where = null;
+				static $expressions = [
+					'eq'  => '=',
+					'neq' => '!=',
+					'gt'  => '>',
+					'gte' => '>=',
+					'lt'  => '<',
+					'lte' => '<=',
+				];
+				if (isset($expressions[$type = $root->getAttribute('type')])) {
+					$where = $this->delimite($root->getAttribute('where')) . ' ' . $expressions[$type] . ' ';
+					switch ($root->getAttribute('target', 'column')) {
+						case 'column':
+							$where .= $this->delimite($root->getAttribute('column'));
+							break;
+						case 'parameter':
+							$where .= '$' . $root->getAttribute('parameter');
+							break;
+					}
+					return new NativeBatch($where);
+				}
+				switch ($type) {
+					case 'group':
+						return new NativeBatch("(\n" . ($query = $this->fragmentWhereList($root))->getQuery() . "\t)", $query->getParameterList());
+				}
+				throw new QueryBuilderException(sprintf('Unknown where type [%s].', $type));
+			}
+
+			/**
 			 * @inheritdoc
 			 */
 			public function delimite(string $delimite): string {
