@@ -3,9 +3,22 @@
 	namespace Edde\Api\Http;
 
 		interface IResponse extends IHttp {
+			/**
+			 * everything is nice and shiny
+			 */
 			const R200_OK = 200;
+			/**
+			 * when the thing has been successfully created
+			 */
 			const R200_OK_CREATED = 201;
+			/**
+			 * something was requested, but on output is no content
+			 */
 			const R200_NO_CONTENT = 204;
+			/**
+			 * when there is a pagination in returned data
+			 */
+			const R200_PARTIAL_CONTENT = 206;
 			const R400_BAD_REQUEST = 400;
 			const R400_NOT_FOUND = 404;
 			const R400_NOT_ALLOWED = 405;
