@@ -36,7 +36,7 @@
 			 * @inheritdoc
 			 */
 			public function delimite(string $delimite): string {
-				return preg_replace('~[^a-zA-Z][^a-zA-Z0-9_]*~', '', str_replace('\\', '_', $delimite));
+				return '`' . str_replace('`', '``', $delimite) . '`';
 			}
 
 			/**
