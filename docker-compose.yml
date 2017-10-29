@@ -80,7 +80,7 @@ services:
       - redis-network
 
   neo4j:
-    image: neo4j:latest
+    image: neo4j:enterprise
     environment:
       - NEO4J_AUTH=none
     ports:

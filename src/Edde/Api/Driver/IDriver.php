@@ -3,6 +3,7 @@
 
 		use Edde\Api\Config\IConfigurable;
 		use Edde\Api\Driver\Exception\DriverQueryException;
+		use Edde\Api\Query\INativeBatch;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Storage\Exception\IntegrityException;
 
@@ -21,6 +22,15 @@
 			 * @throws IntegrityException
 			 */
 			public function execute(INativeQuery $nativeQuery);
+
+			/**
+			 * return last result from the batch
+			 *
+			 * @param INativeBatch $nativeBatch
+			 *
+			 * @return mixed
+			 */
+			public function batch(INativeBatch $nativeBatch);
 
 			/**
 			 * start a transaction

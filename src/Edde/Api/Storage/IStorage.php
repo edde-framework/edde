@@ -2,6 +2,7 @@
 	namespace Edde\Api\Storage;
 
 		use Edde\Api\Config\IConfigurable;
+		use Edde\Api\Query\INativeBatch;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\IQuery;
 		use Edde\Api\Storage\Exception\DuplicateTableException;
@@ -31,13 +32,22 @@
 			public function query($query, array $parameterList = []);
 
 			/**
-			 * executes native query on this storage
+			 * directly execute native query
 			 *
 			 * @param INativeQuery $nativeQuery
 			 *
 			 * @return mixed
 			 */
 			public function native(INativeQuery $nativeQuery);
+
+			/**
+			 * executes native query on this storage
+			 *
+			 * @param INativeBatch $nativeBatch
+			 *
+			 * @return mixed
+			 */
+			public function batch(INativeBatch $nativeBatch);
 
 			/**
 			 * start a transaction on the storage

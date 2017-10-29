@@ -8,7 +8,6 @@
 		use Edde\Api\Storage\Exception\DuplicateTableException;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Container\Factory\ClassFactory;
-		use Edde\Common\Query\NativeQuery;
 		use Edde\Ext\Container\ContainerFactory;
 		use Edde\Ext\Driver\Graph\Neo4j\Neo4jDriver;
 		use Edde\Ext\Driver\Graph\Neo4j\Neo4jQueryBuilder;
@@ -19,7 +18,7 @@
 			use Storage;
 
 			public function testPrepareDatabase() {
-				$this->storage->native(new NativeQuery('MATCH (n) DETACH DELETE n'));
+				$this->storage->query('MATCH (n) DETACH DELETE n');
 				self::assertTrue(true, 'everything is ok, yapee!');
 			}
 
@@ -27,7 +26,9 @@
 			 * @throws DuplicateTableException
 			 */
 			public function testCreateSchema() {
+				$this->storage->start();
 				$this->storage->createSchema(FooSchema::class);
+				$this->storage->commit();
 			}
 
 			public function testInsert() {

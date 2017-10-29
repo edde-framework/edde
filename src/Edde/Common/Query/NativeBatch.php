@@ -3,13 +3,19 @@
 
 		use Edde\Api\Query\INativeBatch;
 		use Edde\Api\Query\INativeQuery;
-		use Edde\Common\Object\Object;
 
-		class NativeBatch extends Object implements INativeBatch {
+		class NativeBatch extends NativeQuery implements INativeBatch {
 			/**
 			 * @var INativeQuery[]
 			 */
 			protected $queryList = [];
+
+			public function __construct($query = '', array $parameterList = []) {
+				parent::__construct($query, $parameterList);
+				if ($query) {
+					$this->queryList[] = $this;
+				}
+			}
 
 			/**
 			 * @inheritdoc
@@ -22,7 +28,15 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function addQuery($query, array $parameterList = []): INativeBatch {
+				$this->add(new NativeQuery($query, $parameterList));
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function getIterator() {
-				return $this->queryList;
+				return new \ArrayIterator($this->queryList);
 			}
 		}

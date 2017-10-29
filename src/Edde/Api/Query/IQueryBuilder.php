@@ -5,13 +5,14 @@
 
 		interface IQueryBuilder extends IConfigurable {
 			/**
-			 * creates a native query from the given query
+			 * takes an IQL input and convert it to native query; there could
+			 * be more queries per one IQL
 			 *
 			 * @param IQuery $query
 			 *
-			 * @return INativeQuery
+			 * @return INativeBatch
 			 */
-			public function build(IQuery $query): INativeQuery;
+			public function build(IQuery $query): INativeBatch;
 
 			/**
 			 * delimite the given string

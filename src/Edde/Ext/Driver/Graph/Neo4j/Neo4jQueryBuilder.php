@@ -3,31 +3,45 @@
 
 		use Edde\Api\Node\INode;
 		use Edde\Api\Query\Exception\QueryBuilderException;
-		use Edde\Api\Query\INativeQuery;
+		use Edde\Api\Query\INativeBatch;
 		use Edde\Common\Query\AbstractQueryBuilder;
-		use Edde\Common\Query\NativeQuery;
+		use Edde\Common\Query\NativeBatch;
 
 		class Neo4jQueryBuilder extends AbstractQueryBuilder {
-			protected function fragmentCreateSchema(INode $root): INativeQuery {
+			protected function fragmentCreateSchema(INode $root): INativeBatch {
+				$nativeBatch = new NativeBatch();
 				$primaryList = null;
+				$indexList = null;
+				$uniqueList = null;
+				$delimited = $this->delimite($root->getAttribute('name'));
 				foreach ($root->getNodeList() as $node) {
 					$name = $node->getAttribute('name');
 					if ($node->getAttribute('primary', false)) {
-						$primaryList[] = $this->delimite($name);
+						$primaryList[] = 'n.' . $this->delimite($name);
+					}
+					if ($node->getAttribute('unique', false)) {
+						$uniqueList[] = 'n.' . $this->delimite($name);
 					}
 				}
-				if ($primaryList) {
-					$index = 'CREATE INDEX ON :' . $this->delimite($root->getAttribute('name')) . '(' . implode(', ', $primaryList) . ')';
+				if ($indexList) {
+					$nativeBatch->addQuery('CREATE INDEX ON :' . $delimited . '(' . implode(',', $indexList) . ')');
 				}
+				if ($primaryList) {
+					$nativeBatch->addQuery('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT (' . implode(', ', $primaryList) . ') IS NODE KEY');
+				}
+//				if ($uniqueList) {
+//					$nativeBatch->addQuery('CREATE CONSTRAINT ON n:' . $delimited . ' ASSERT (' . implode(', ', $primaryList) . ') IS NODE KEY');
+//				}
+				return $nativeBatch;
 			}
 
-			protected function fragmentInsert(INode $root): INativeQuery {
+			protected function fragmentInsert(INode $root): INativeBatch {
 				$parameterList = $this->fragmentParameterList($root->getNode('parameter-list'))->getParameterList();
 				$create = [];
 				foreach ($root->getNode('column-list')->getNodeList() as $node) {
 					$create[$node->getAttribute('column')] = $parameterList[$node->getAttribute('parameter')];
 				}
-				return new NativeQuery('CREATE (n:' . $this->delimite($root->getAttribute('table')) . ' $create)', [
+				return new NativeBatch('CREATE (n:' . $this->delimite($root->getAttribute('table')) . ' $create)', [
 					'create' => $create,
 				]);
 			}

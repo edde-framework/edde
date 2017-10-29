@@ -3,7 +3,7 @@
 
 		use Edde\Api\Node\INode;
 		use Edde\Api\Query\Exception\QueryBuilderException;
-		use Edde\Api\Query\INativeQuery;
+		use Edde\Api\Query\INativeBatch;
 		use Edde\Api\Query\IQuery;
 		use Edde\Api\Query\IQueryBuilder;
 		use Edde\Api\Utils\Inject\StringUtils;
@@ -18,33 +18,33 @@
 			/**
 			 * @param IQuery $query
 			 *
-			 * @return INativeQuery
+			 * @return INativeBatch
 			 * @throws QueryBuilderException
 			 */
-			public function build(IQuery $query): INativeQuery {
+			public function build(IQuery $query): INativeBatch {
 				return $this->fragment($query->getQuery());
 			}
 
 			/**
 			 * @param INode $node
 			 *
-			 * @return INativeQuery
+			 * @return INativeBatch
 			 *
 			 * @throws QueryBuilderException
 			 */
-			protected function fragment(INode $node): INativeQuery {
+			protected function fragment(INode $node): INativeBatch {
 				if (isset($this->fragmentList[$name = $node->getName()]) === false) {
 					throw new QueryBuilderException(sprintf('Unsupported fragment type [%s] in [%s].', $name, static::class));
 				}
 				return $this->fragmentList[$name]($node);
 			}
 
-			protected function fragmentParameterList(INode $root): INativeQuery {
+			protected function fragmentParameterList(INode $root): INativeBatch {
 				$parameterList = [];
 				foreach ($root->getNodeList() as $node) {
 					$parameterList[$node->getAttribute('name')] = $node->getValue();
 				}
-				return new NativeQuery('', $parameterList);
+				return new NativeBatch('', $parameterList);
 			}
 
 			protected function handleSetup(): void {
