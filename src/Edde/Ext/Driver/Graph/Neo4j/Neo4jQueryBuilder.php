@@ -13,13 +13,18 @@
 				$primaryList = null;
 				$indexList = null;
 				$uniqueList = [];
+				$requiredList = [];
 				$delimited = $this->delimite($root->getAttribute('name'));
 				foreach ($root->getNodeList() as $node) {
 					$name = $node->getAttribute('name');
+					$property = 'n.' . $this->delimite($name);
 					if ($node->getAttribute('primary', false)) {
-						$primaryList[] = 'n.' . $this->delimite($name);
+						$primaryList[] = $property;
 					} else if ($node->getAttribute('unique', false)) {
-						$uniqueList[] = 'n.' . $this->delimite($name);
+						$uniqueList[] = $property;
+					}
+					if ($node->getAttribute('required', false)) {
+						$requiredList[] = $property;
 					}
 				}
 				if ($indexList) {
@@ -30,6 +35,9 @@
 				}
 				foreach ($uniqueList as $unique) {
 					$nativeBatch->addQuery('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT ' . $unique . ' IS UNIQUE');
+				}
+				foreach ($requiredList as $required) {
+					$nativeBatch->addQuery('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT exists(' . $required . ')');
 				}
 				return $nativeBatch;
 			}

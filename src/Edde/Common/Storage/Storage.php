@@ -55,7 +55,15 @@
 			 * @inheritdoc
 			 */
 			public function batch(INativeBatch $nativeBatch) {
-				return $this->driver->batch($nativeBatch);
+				try {
+					$this->start();
+					$result = $this->driver->batch($nativeBatch);
+					$this->commit();
+					return $result;
+				} catch (\Throwable $throwable) {
+					$this->rollback();
+					throw $throwable;
+				}
 			}
 
 			/**
