@@ -1,6 +1,7 @@
 <?php
 	namespace Edde\Common\Storage;
 
+		use Edde\Api\Crate\ICrate;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\EntityException;
 		use Edde\Api\Storage\IEntity;
@@ -25,6 +26,14 @@
 			 */
 			public function isDirty(): bool {
 				return $this->hasLinks() || parent::isDirty();
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function commit(): ICrate {
+				$this->linkList = [];
+				return parent::commit();
 			}
 
 			/**

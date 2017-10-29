@@ -73,6 +73,13 @@
 			public function getLinkList(): array;
 
 			/**
+			 * @param string $property
+			 *
+			 * @return ILink
+			 */
+			public function getLink(string $property): ILink;
+
+			/**
 			 * get relation (link) property list for the given target
 			 *
 			 * @param string $target

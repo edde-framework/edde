@@ -5,6 +5,7 @@
 		use Edde\Api\Schema\Exception\MultiplePrimaryException;
 		use Edde\Api\Schema\Exception\NoPrimaryPropertyException;
 		use Edde\Api\Schema\Exception\UnknownPropertyException;
+		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\IProperty;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Common\Object\Object;
@@ -114,6 +115,13 @@
 					}
 				}
 				return $this->linkList = $propertyList;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getLink(string $property): ILink {
+				return $this->getProperty($property)->getLink();
 			}
 
 			/**

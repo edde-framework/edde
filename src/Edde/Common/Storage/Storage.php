@@ -18,6 +18,7 @@
 		use Edde\Common\Query\CreateSchemaQuery;
 		use Edde\Common\Query\InsertQuery;
 		use Edde\Common\Query\NativeQuery;
+		use Edde\Common\Query\RelationQuery;
 		use Edde\Common\Query\SelectQuery;
 		use Edde\Common\Query\UpdateQuery;
 
@@ -168,7 +169,16 @@
 			 */
 			public function relation(IEntity $entity): IStorage {
 				$this->handleLinks($entity);
-//				new RelationQuery();
+				/**
+				 * relation name
+				 */
+				$query = new RelationQuery($entity->getSchema()->getName());
+				$schema = $entity->getSchema();
+				foreach ($entity->getLinkList() as $name => $linked) {
+					$link = $schema->getLink($name);
+					$query->addRelation($link->getSchema(), $property = $link->getTarget(), $linked->get($property));
+				}
+//				$this->execute($query);
 				$entity->commit();
 				return $this;
 			}
