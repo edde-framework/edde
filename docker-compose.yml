@@ -79,6 +79,9 @@ services:
     networks:
       - redis-network
 
+  # formal support for neo4j, but it has lower priority because it needs to be in
+  # enterprise edition to make some simple things working (node keys) which are implemented
+  # in other systems
   neo4j:
     image: neo4j:enterprise
     environment:
@@ -92,7 +95,7 @@ services:
     volumes:
       - neo4j:/data
 
-  # https://www.arangodb.com/
+  # experimental support for arangodb as a main storage for basically everything
   arangodb:
     image: arangodb:latest
     environment:
@@ -104,6 +107,7 @@ services:
     networks:
       - arangodb-network
 
+  # traditional mysql database support
   mysql:
     image: mariadb:latest
     environment:
@@ -118,6 +122,7 @@ services:
     networks:
       - mysql-network
 
+  # for postgres lovers
   postgres:
     image: postgres:latest
     environment:
@@ -130,6 +135,7 @@ services:
     networks:
       - postgres-network
 
+  # kind of useful database tool
   adminer:
     image: adminer
     ports:
