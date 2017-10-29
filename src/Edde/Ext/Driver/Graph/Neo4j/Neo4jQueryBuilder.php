@@ -63,16 +63,18 @@
 				$parameterList = $this->fragmentParameterList($root->getNode('parameter-list'))->getParameterList();
 				$update = [];
 				foreach ($root->getNode('column-list')->getNodeList() as $node) {
-					$update[$node->getAttribute('column')] = $parameterList[$node->getAttribute('parameter')];
+					$update[$node->getAttribute('column')] = $parameterList[$parameter = $node->getAttribute('parameter')];
+					unset($parameterList[$parameter]);
 				}
-				$cypher[] = 'MATCH (n:' . $this->delimite($root->getAttribute('table')) . ")\n";
+				$parameterList['update'] = $update;
+				$cypher[] = 'MATCH (' . ($alias = $root->getAttribute('alias')) . ':' . $this->delimite($root->getAttribute('table')) . ")\n";
 				if ($root->hasNode('where-list')) {
 					$cypher[] = "WHERE\n";
 					$query = $this->fragmentWhereList($root->getNode('where-list'));
 					$cypher[] = $query->getQuery();
 					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
-				$cypher[] = 'RETURN n';
+				$cypher[] = 'SET ' . $alias . ' = $update';
 				return new NativeBatch(implode('', $cypher), $parameterList);
 			}
 
@@ -93,7 +95,8 @@
 					'lte' => '<=',
 				];
 				if (isset($expressions[$type = $root->getAttribute('type')])) {
-					$where = $this->delimite($root->getAttribute('where')) . ' ' . $expressions[$type] . ' ';
+					$where = ($prefix = $root->getAttribute('prefix')) ? $prefix . '.' : '';
+					$where .= $this->delimite($root->getAttribute('where')) . ' ' . $expressions[$type] . ' ';
 					switch ($root->getAttribute('target', 'column')) {
 						case 'column':
 							$where .= $this->delimite($root->getAttribute('column'));
