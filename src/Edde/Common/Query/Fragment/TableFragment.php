@@ -25,7 +25,10 @@
 			 * @inheritdoc
 			 */
 			public function column(string $name, string $alias = null): ITable {
-				$this->root->getNode('column-list')->addNode($node = new Node('column', $name, ['type' => 'column']));
+				$this->root->getNode('column-list')->addNode($node = new Node('column', null, [
+					'name' => $name,
+					'type' => 'column',
+				]));
 				if (($alis = $this->node->getAttribute('alias')) !== null) {
 					$node->setAttribute('prefix', $alis);
 				}
@@ -39,7 +42,8 @@
 			 * @inheritdoc
 			 */
 			public function table(string $name, string $alias = null): ITable {
-				$this->root->getNode('table-list')->addNode($node = new Node('table', $name, $alias ? ['alias' => $alias] : []));
+				$this->root->getNode('table-list')->addNode($node = new Node('table', null, ['table' => $name]));
+				$alias ? $node->setAttribute('alias', $alias) : null;
 				return new TableFragment($this->root, $node);
 			}
 

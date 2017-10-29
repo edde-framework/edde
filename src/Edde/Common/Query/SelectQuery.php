@@ -34,7 +34,8 @@
 			 */
 			public function table(string $name, string $alias = null): ITable {
 				$this->init();
-				$this->node->getNode('table-list')->addNode($node = new Node('table', $name, $alias ? ['alias' => $alias] : []));
+				$this->node->getNode('table-list')->addNode($node = new Node('table', null, ['table' => $name]));
+				$alias ? $node->setAttribute('alias', $alias) : null;
 				return new TableFragment($this->node, $node);
 			}
 

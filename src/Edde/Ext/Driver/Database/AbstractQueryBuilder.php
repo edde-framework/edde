@@ -79,24 +79,24 @@
 				$sql[] = "SELECT\n";
 				$query = $this->fragmentColumnList($root->getNode('column-list'));
 				$sql[] = $query->getQuery();
-				array_merge($parameterList, $query->getParameterList());
+				$parameterList = array_merge($parameterList, $query->getParameterList());
 				if ($root->hasNode('table-list')) {
 					$sql[] = "FROM\n";
 					$query = $this->fragmentTableList($root->getNode('table-list'));
 					$sql[] = $query->getQuery();
-					array_merge($parameterList, $query->getParameterList());
+					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
 				if ($root->hasNode('where-list')) {
 					$sql[] = "WHERE\n";
 					$query = $this->fragmentWhereList($root->getNode('where-list'));
 					$sql[] = $query->getQuery();
-					array_merge($parameterList, $query->getParameterList());
+					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
 				if ($root->hasNode('order-list')) {
 					$sql[] = "ORDER BY\n";
 					$query = $this->fragmentOrderList($root->getNode('order-list'));
 					$sql[] = $query->getQuery();
-					array_merge($parameterList, $query->getParameterList());
+					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
 				$parameterList = array_merge($parameterList, ($this->fragmentParameterList($root->getNode('parameter-list')))->getParameterList());
 				return new NativeBatch(implode('', $sql), $parameterList);

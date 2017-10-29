@@ -84,6 +84,31 @@
 			 * @return INativeBatch
 			 * @throws QueryBuilderException
 			 */
+			protected function fragmentSelect(INode $root): INativeBatch {
+				$parameterList = $this->fragmentParameterList($root->getNode('parameter-list'))->getParameterList();
+				$cypher = [];
+				$alias = null;
+				if ($root->hasNode('table-list')) {
+					foreach ($root->getNode('table-list')->getNodeList() as $node) {
+						$cypher[] = 'MATCH (' . ($alias = $node->getAttribute('alias')) . ':' . $this->delimite($node->getAttribute('table')) . ")\n";
+					}
+				}
+				if ($root->hasNode('where-list')) {
+					$cypher[] = "WHERE\n";
+					$query = $this->fragmentWhereList($root->getNode('where-list'));
+					$cypher[] = $query->getQuery();
+					$parameterList = array_merge($parameterList, $query->getParameterList());
+				}
+				$cypher[] = 'RETURN ' . $alias;
+				return new NativeBatch(implode('', $cypher), $parameterList);
+			}
+
+			/**
+			 * @param INode $root
+			 *
+			 * @return INativeBatch
+			 * @throws QueryBuilderException
+			 */
 			protected function fragmentWhere(INode $root): INativeBatch {
 				$where = null;
 				static $expressions = [

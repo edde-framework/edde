@@ -47,7 +47,7 @@
 			public function load($value): IEntity {
 				$where = $this->where();
 				foreach ($this->schema->getPrimaryList() as $property) {
-					$where->and()->eq($property->getName())->to($value);
+					$where->and()->eq($property->getName(), 'c')->to($value);
 				}
 				return $this->getEntity();
 			}

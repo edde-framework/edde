@@ -193,7 +193,7 @@
 				/**
 				 * by default select all from the source schema
 				 */
-				$collection->table($schema)->all();
+				$collection->table($schema, 'c')->all();
 				return $collection;
 			}
 
