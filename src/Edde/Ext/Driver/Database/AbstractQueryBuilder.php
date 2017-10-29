@@ -158,7 +158,7 @@
 			}
 
 			protected function fragmentTable(INode $root): INativeBatch {
-				$table = $this->delimite($root->getValue());
+				$table = $this->delimite($root->getAttribute('table'));
 				$table .= (($alias = $root->getAttribute('alias')) ? ' ' . $this->delimite($alias) : '');
 				return new NativeBatch($table);
 			}

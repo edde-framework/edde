@@ -32,12 +32,14 @@
 			 */
 			public function testCreateSchema() {
 				$this->storage->createSchema(FooSchema::class);
+				self::assertTrue(true, 'everything is nice and shiny!');
 			}
 
 			public function testInsert() {
 				$this->storage->push(FooSchema::class, [
 					'name' => 'neo4j rocks!',
 				]);
+				self::assertTrue(true, 'yay!');
 			}
 
 			public function testInsertException() {
