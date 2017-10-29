@@ -4,6 +4,7 @@
 		use Edde\Api\Driver\Exception\DriverException;
 		use Edde\Api\Driver\IDriver;
 		use Edde\Api\Query\INativeQuery;
+		use Edde\Api\Storage\IEntity;
 		use Edde\Common\Driver\AbstractDriver;
 		use PDO;
 
@@ -63,6 +64,17 @@
 			public function rollback(): IDriver {
 				$this->pdo->rollBack();
 				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function toArray(IEntity $entity): array {
+				$source = [];
+				foreach ($entity->getDirtyProperties() as $property) {
+					$source[$property->getName()] = $property->get();
+				}
+				return $source;
 			}
 
 			protected function exception(\Throwable $throwable) {

@@ -6,11 +6,14 @@
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\NullValueException;
+		use Edde\Api\Storage\IEntity;
 		use Edde\Common\Driver\AbstractDriver;
 		use GraphAware\Bolt\Exception\MessageFailureException;
 		use GraphAware\Bolt\GraphDatabase;
 		use GraphAware\Bolt\Protocol\SessionInterface;
 		use GraphAware\Bolt\Protocol\V1\Transaction;
+		use GraphAware\Bolt\Result\Result;
+		use GraphAware\Common\Type\Node;
 
 		class Neo4jDriver extends AbstractDriver {
 			/** @var string */
@@ -36,7 +39,14 @@
 			 */
 			public function execute(INativeQuery $nativeQuery) {
 				try {
-					return $this->session->run($nativeQuery->getQuery(), $nativeQuery->getParameterList());
+					return (function (Result $result) {
+						foreach ($result->getRecords() as $record) {
+							/** @var $value Node */
+							foreach ($record->values() as $value) {
+								yield $value->asArray();
+							}
+						}
+					})($this->session->run($nativeQuery->getQuery(), $nativeQuery->getParameterList()));
 				} catch (\Throwable $throwable) {
 					return $this->exception($throwable);
 				}
@@ -81,6 +91,13 @@
 				}
 				$this->transaction = null;
 				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function toArray(IEntity $entity): array {
+				return $entity->toArray();
 			}
 
 			protected function handleSetup(): void {

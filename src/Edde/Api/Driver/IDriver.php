@@ -6,6 +6,7 @@
 		use Edde\Api\Query\INativeBatch;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Storage\Exception\IntegrityException;
+		use Edde\Api\Storage\IEntity;
 
 		/**
 		 * General storage driver implementation; one storage could have more drivers to choose from.
@@ -52,4 +53,15 @@
 			 * @return IDriver
 			 */
 			public function rollback(): IDriver;
+
+			/**
+			 * every driver could behave in different way when it comes to update:
+			 * common database can do patch (partial update), some other engines
+			 * could require whole data to be updated
+			 *
+			 * @param IEntity $entity
+			 *
+			 * @return array
+			 */
+			public function toArray(IEntity $entity): array;
 		}
