@@ -81,4 +81,15 @@
 			 * @return ICollection
 			 */
 			public function collection(): ICollection;
+
+			/**
+			 * create a related entity based on the given schema (m:n relation); the returned entity
+			 * is the relation entity (returned entity is not save by default)
+			 *
+			 * @param IEntity $entity
+			 * @param string  $schema
+			 *
+			 * @return IEntity
+			 */
+			public function relationTo(IEntity $entity, string $schema): IEntity;
 		}

@@ -6,10 +6,12 @@
 		use Edde\Api\Storage\Exception\EntityException;
 		use Edde\Api\Storage\ICollection;
 		use Edde\Api\Storage\IEntity;
+		use Edde\Api\Storage\Inject\EntityManager;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Crate\Crate;
 
 		class Entity extends Crate implements IEntity {
+			use EntityManager;
 			use Storage;
 			/**
 			 * @var ISchema
@@ -119,6 +121,13 @@
 			 */
 			public function collection(): ICollection {
 				return $this->storage->collection($this->schema->getName());
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function relationTo(IEntity $entity, string $schema): IEntity {
+				return $this->entityManager->attach($this, $entity, $schema);
 			}
 
 			public function __clone() {

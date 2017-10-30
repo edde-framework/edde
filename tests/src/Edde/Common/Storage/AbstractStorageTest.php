@@ -116,12 +116,12 @@
 				$bar = $this->entityManager->create(BarSchema::class, [
 					'name' => 'bar The Second',
 				]);
-				$this->storage->save($this->entityManager->attach($foo, $bar, FooBarSchema::class));
+				$foo->relationTo($bar, FooBarSchema::class)->save();
 				/**
 				 * second save of the same entities will survive, because save is checking presence by primary
 				 * keys and FooBarSchema is using it's properties as a primary key
 				 */
-				$this->storage->save($this->entityManager->attach($foo, $bar, FooBarSchema::class));
+				$foo->relationTo($bar, FooBarSchema::class)->save();
 				self::assertTrue(true, 'yay!!');
 			}
 		}
