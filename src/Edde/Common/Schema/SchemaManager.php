@@ -52,33 +52,27 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getSchema(string $name): ISchema {
+			public function load(string $name): ISchema {
 				if (isset($this->schemaList[$name])) {
 					return $this->schemaList[$name];
 				}
-				return $this->schemaList[$name] = $this->load($name);
-			}
-
-			/**
-			 * @param string $name
-			 *
-			 * @return ISchema
-			 * @throws UnknownSchemaException
-			 */
-			public function load(string $name): ISchema {
+				$schema = null;
 				foreach ($this->schemaLoaderList as $schemaLoader) {
 					if ($schema = $schemaLoader->getSchema($name)) {
-						return $schema;
+						break;
 					}
 				}
-				throw new UnknownSchemaException(sprintf('Requested unknown schema [%s].', $name));
+				if ($schema === null) {
+					throw new UnknownSchemaException(sprintf('Requested unknown schema [%s].', $name));
+				}
+				return $this->schemaList[$name] = $schema;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function generate(string $schema, array $source): array {
-				$schema = $this->getSchema($schema);
+				$schema = $this->load($schema);
 				$result = $source;
 				foreach ($schema->getPropertyList() as $property) {
 					if (isset($source[$name = $property->getName()]) === false && ($generator = $property->getGenerator())) {
@@ -92,7 +86,7 @@
 			 * @inheritdoc
 			 */
 			public function filter(string $schema, array $source): array {
-				$schema = $this->getSchema($schema);
+				$schema = $this->load($schema);
 				$result = $source;
 				foreach ($source as $k => $v) {
 					if ($filter = $schema->getProperty($k)->getFilter()) {
@@ -106,7 +100,7 @@
 			 * @inheritdoc
 			 */
 			public function sanitize(string $schema, array $source): array {
-				$schema = $this->getSchema($schema);
+				$schema = $this->load($schema);
 				$result = $source;
 				foreach ($source as $k => $v) {
 					if ($sanitizer = $schema->getProperty($k)->getSanitizer()) {

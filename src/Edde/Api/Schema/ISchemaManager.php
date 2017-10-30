@@ -41,7 +41,7 @@
 			 *
 			 * @throws UnknownSchemaException
 			 */
-			public function getSchema(string $name): ISchema;
+			public function load(string $name): ISchema;
 
 			/**
 			 * generate all empty values with a generator (using a schema)

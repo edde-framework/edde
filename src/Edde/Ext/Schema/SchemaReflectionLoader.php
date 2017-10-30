@@ -1,7 +1,6 @@
 <?php
 	namespace Edde\Ext\Schema;
 
-		use Edde\Api\Schema\Exception\InvalidRelationException;
 		use Edde\Api\Schema\Exception\SchemaException;
 		use Edde\Api\Schema\Exception\SchemaReflectionException;
 		use Edde\Api\Schema\ISchema;
@@ -38,60 +37,65 @@
 					}
 					$reflectionClass = new \ReflectionClass($schema);
 					$schemaBuilder = new SchemaBuilder($schema);
-					$doc = ($doc = $reflectionClass->getDocComment()) ? $doc : '';
-					$schemaBuilder->relation($isRelation = (strpos($doc, '@relation') !== false));
 					$linkCount = 0;
+					$methodCount = 0;
 					foreach ($reflectionClass->getMethods() as $reflectionMethod) {
-						if (($doc = $reflectionMethod->getDocComment()) === false) {
-							continue;
-						} else if (strpos($doc, '@schema') !== false) {
-							$attr = $this->stringUtils->match($doc, '~@schema\s*(?<attr>.*?)[\n\r]~sm', true);
-							$attr = $attr['attr'] ?? '';
-							$propertyBuilder = $schemaBuilder->property($name = $reflectionMethod->getName());
-							$propertyBuilder->type($propertyType = 'string');
-							if (strpos($attr, 'unique') !== false) {
-								$propertyBuilder->unique();
-							}
-							if (strpos($attr, 'primary') !== false) {
-								$propertyBuilder->primary();
-								$propertyBuilder->generator($name);
-							}
-							if (($type = $reflectionMethod->getReturnType()) !== null) {
-								$propertyBuilder->type($propertyType = $type->getName());
-								$propertyBuilder->required($type->allowsNull() === false);
-							}
-							/**
-							 * exactly one parameter means link to another schema
-							 */
-							if ($reflectionMethod->getNumberOfParameters() === 1) {
-								list($parameter) = $reflectionMethod->getParameters();
-								if ($type = $parameter->getType()) {
-									if ($isRelation && $linkCount++ >= 2) {
-										throw new InvalidRelationException(sprintf('More than two links in a relation schema [%s] is forbidden.', $schema));
+						$methodCount++;
+						$propertyBuilder = $schemaBuilder->property($propertyName = $reflectionMethod->getName());
+						$propertyBuilder->type($propertyType = 'string');
+						foreach ($reflectionMethod->getParameters() as $parameter) {
+							switch ($parameter->getName()) {
+								case 'unique':
+									$propertyBuilder->unique();
+									break;
+								case 'primary':
+									$propertyBuilder->primary();
+									$propertyBuilder->generator($propertyName);
+									break;
+								case 'generator':
+									if (($generator = $parameter->getDefaultValue()) || is_string($generator) === false) {
+										throw new SchemaReflectionException(sprintf('Parameter [%s::%s($generator)] must have string default value as a generator name.', $schema, $propertyName));
 									}
-									$propertyBuilder->required($type->allowsNull() === false);
-									$propertyBuilder->link($type->getName(), $parameter->getName());
-								}
-							}
-							switch ($propertyType) {
-								case 'float':
-								case 'int':
-								case 'bool':
-								case 'datetime':
-								case \DateTime::class:
-									$propertyBuilder->filter($propertyType);
-									$propertyBuilder->sanitizer($propertyType);
+									$propertyBuilder->generator($generator);
+									break;
+								case 'filter':
+									if (($filter = $parameter->getDefaultValue()) || is_string($filter) === false) {
+										throw new SchemaReflectionException(sprintf('Parameter [%s::%s($filter)] must have string default value as a filter name.', $schema, $propertyName));
+									}
+									$propertyBuilder->filter($filter);
+									break;
+								case 'sanitizer':
+									if (($sanitizer = $parameter->getDefaultValue()) || is_string($sanitizer) === false) {
+										throw new SchemaReflectionException(sprintf('Parameter [%s::%s($sanitizer)] must have string default value as a sanitizer name.', $schema, $propertyName));
+									}
+									$propertyBuilder->sanitizer($sanitizer);
 									break;
 							}
-							if (($generator = $this->stringUtils->match($doc, '~@generator\s*(?<value>.*?)[\n\r]~sm', true)) !== null) {
-								$propertyBuilder->generator(trim($generator['value']));
+						}
+						if (($type = $reflectionMethod->getReturnType()) !== null) {
+							$propertyBuilder->type($propertyType = $type->getName());
+							$propertyBuilder->required($type->allowsNull() === false);
+						}
+						/**
+						 * exactly one parameter means link to another schema
+						 */
+						if ($reflectionMethod->getNumberOfParameters() === 1) {
+							list($parameter) = $reflectionMethod->getParameters();
+							if ($type = $parameter->getType()) {
+								$schemaBuilder->relation(++$linkCount === 2);
+								$propertyBuilder->required($type->allowsNull() === false);
+								$propertyBuilder->link($type->getName(), $parameter->getName());
 							}
-							if (($filter = $this->stringUtils->match($doc, '~@filter\s*(?<value>.*?)[\n\r]~sm', true)) !== null) {
-								$propertyBuilder->filter(trim($filter['value']));
-							}
-							if (($sanitizer = $this->stringUtils->match($doc, '~@sanitizer\s*(?<value>.*?)[\n\r]~sm', true)) !== null) {
-								$propertyBuilder->sanitizer(trim($sanitizer['value']));
-							}
+						}
+						switch ($propertyType) {
+							case 'float':
+							case 'int':
+							case 'bool':
+							case 'datetime':
+							case \DateTime::class:
+								$propertyBuilder->filter($propertyType);
+								$propertyBuilder->sanitizer($propertyType);
+								break;
 						}
 					}
 					return $this->schemaList[$schema] = $schemaBuilder->getSchema();
