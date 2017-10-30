@@ -47,7 +47,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function update(array $source): ICrate {
+			public function put(array $source): ICrate {
 				foreach ($source as $k => $v) {
 					$this->getProperty($k)->setValue($v);
 				}

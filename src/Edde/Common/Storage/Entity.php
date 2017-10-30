@@ -5,9 +5,11 @@
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\EntityException;
 		use Edde\Api\Storage\IEntity;
+		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Crate\Crate;
 
 		class Entity extends Crate implements IEntity {
+			use Storage;
 			/**
 			 * @var ISchema
 			 */
@@ -85,6 +87,14 @@
 			 */
 			public function getLinkList(): array {
 				return $this->linkList;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function save(): IEntity {
+				$this->storage->save($this);
+				return $this;
 			}
 
 			public function __clone() {

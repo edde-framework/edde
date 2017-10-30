@@ -4,6 +4,9 @@
 		use Edde\Api\Crate\ICrate;
 		use Edde\Api\Crate\IProperty;
 		use Edde\Api\Schema\ISchema;
+		use Edde\Api\Storage\Exception\DuplicateEntryException;
+		use Edde\Api\Storage\Exception\IntegrityException;
+		use Edde\Api\Storage\Exception\StorageException;
 
 		/**
 		 * An Entity is extended Crate with some additional features.
@@ -46,4 +49,15 @@
 			 * @return IEntity[]
 			 */
 			public function getLinkList(): array;
+
+			/**
+			 * save this entity into storage (and all related stuff to this entity)
+			 *
+			 * @return IEntity
+			 *
+			 * @throws StorageException
+			 * @throws DuplicateEntryException
+			 * @throws IntegrityException
+			 */
+			public function save(): IEntity;
 		}

@@ -72,21 +72,20 @@
 			}
 
 			/**
-			 * @throws IntegrityException
+			 * @throws DuplicateEntryException
 			 * @throws StorageException
+			 * @throws IntegrityException
 			 */
 			public function testSave() {
 				$entity = $this->entityManager->create(SimpleSchema::class, [
 					'name'     => 'some name for this entity',
 					'optional' => 'this string is optional, but I wanna fill it!',
-				]);
-				$this->storage->save($entity);
+				])->save();
 				self::assertNotEmpty($entity->get('guid'));
 				$entity = $this->entityManager->create(SimpleSchema::class, [
 					'name'     => 'another name',
 					'optional' => null,
-				]);
-				$this->storage->save($entity);
+				])->save();
 				self::assertFalse($entity->isDirty(), 'Entity is still dirty!');
 				self::assertNotEmpty($entity->get('guid'));
 			}

@@ -52,7 +52,7 @@
 			 *
 			 * @return $this
 			 */
-			public function update(array $source): ICrate;
+			public function put(array $source): ICrate;
 
 			/**
 			 * push given data to the crate without making it dirty (if it was already dirty,

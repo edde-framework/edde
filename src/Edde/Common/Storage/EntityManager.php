@@ -32,7 +32,7 @@
 			 */
 			public function create(string $schema, array $source = []): IEntity {
 				$entity = $this->createEntity($schema);
-				$entity->update($source);
+				$entity->put($source);
 				return $entity;
 			}
 
