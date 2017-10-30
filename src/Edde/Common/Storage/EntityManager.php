@@ -1,6 +1,7 @@
 <?php
 	namespace Edde\Common\Storage;
 
+		use Edde\Api\Container\Inject\Container;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\EntityManagerException;
@@ -10,12 +11,20 @@
 
 		class EntityManager extends Object implements IEntityManager {
 			use SchemaManager;
+			use Container;
+			/**
+			 * @var IEntity[]
+			 */
+			protected $entityList = [];
 
 			/**
 			 * @inheritdoc
 			 */
 			public function createEntity(string $schema): IEntity {
-				return new Entity($this->schemaManager->getSchema($schema));
+				if (isset($this->entityList[$schema]) === false) {
+					$this->entityList[$schema] = $this->container->inject(new Entity($this->schemaManager->getSchema($schema)));
+				}
+				return clone $this->entityList[$schema];
 			}
 
 			/**

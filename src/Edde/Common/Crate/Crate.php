@@ -133,4 +133,9 @@
 				}
 				return $source;
 			}
+
+			public function __clone() {
+				$this->propertyList = [];
+				$this->dirty = null;
+			}
 		}

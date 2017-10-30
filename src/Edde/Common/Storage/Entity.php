@@ -86,4 +86,9 @@
 			public function getLinkList(): array {
 				return $this->linkList;
 			}
+
+			public function __clone() {
+				parent::__clone();
+				$this->linkList = [];
+			}
 		}
