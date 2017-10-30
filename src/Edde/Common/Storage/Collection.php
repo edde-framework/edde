@@ -59,10 +59,10 @@
 			 */
 			public function load($value): IEntity {
 				foreach ($this->schema->getPrimaryList() as $property) {
-					$this->query->where()->or()->eq($property->getName(), 'c')->to($value);
+					$this->query->where()->or()->eq($property->getName())->to($value);
 				}
 				foreach ($this->schema->getUniqueList() as $property) {
-					$this->query->where()->or()->eq($property->getName(), 'c')->to($value);
+					$this->query->where()->or()->eq($property->getName())->to($value);
 				}
 				return $this->getEntity();
 			}

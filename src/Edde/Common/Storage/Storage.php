@@ -160,7 +160,7 @@
 			 */
 			public function insert(IEntity $entity): IStorage {
 				$this->handleLinks($entity);
-				$this->execute(new InsertQuery($entity->getSchema()->getName(), $this->prepare($entity)));
+				$this->execute(new InsertQuery($entity->getSchema(), $this->prepare($entity)));
 				$entity->commit();
 				return $this;
 			}
@@ -174,20 +174,18 @@
 				 * relation name
 				 */
 				$schema = $entity->getSchema();
-				$query = new RelationQuery($entity->getSchema()->getName());
+				$query = new RelationQuery($entity->getSchema());
 				foreach ($entity->getLinkList() as $name => $linked) {
 					/**
 					 * setup relation itself
 					 *
 					 * if there is a graph database, this will help find existing relation and make an edge; if there is a classic
 					 * database, relations will not be used at all
-					 */
-					$query->addRelation(($link = $schema->getLink($name))->getSchema(), $property = $link->getTarget(), $value = $linked->get($property));
-					/**
+					 *
 					 * relation entity should be updated to given values too; on graph database this is just optional step, but
 					 * on classic database this is mandatory to set foreign references
 					 */
-					$query->set($link->getProperty(), $value);
+					$query->addRelation($link = $schema->getLink($name), $value = $linked->get($link->getTarget()));
 				}
 				$this->execute($query);
 				$entity->commit();
@@ -207,10 +205,9 @@
 			 */
 			public function update(IEntity $entity): IStorage {
 				$this->handleLinks($entity);
-				$query = new UpdateQuery($entity->getSchema()->getName(), $this->prepare($entity));
-				$query->alias('u');
+				$query = new UpdateQuery($entity->getSchema(), $this->prepare($entity));
 				foreach ($entity->getPrimaryList() as $property) {
-					$query->where()->and()->eq($property->getName(), 'u')->to($property->get());
+					$query->where()->and()->eq($property->getName())->to($property->get());
 				}
 				$this->execute($query);
 				$entity->commit();
@@ -238,7 +235,7 @@
 					 * by default select all from the source schema
 					 */
 					$query = new SelectQuery();
-					$query->table($schema, 'c')->all();
+					$query->table($schema)->all();
 				}
 				return new Collection($this->entityManager, $this, $this->schemaManager->getSchema($schema), $query);
 			}

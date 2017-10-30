@@ -1,22 +1,22 @@
 <?php
 	namespace Edde\Common\Query;
 
+		use Edde\Api\Schema\ILink;
+		use Edde\Api\Schema\ISchema;
 		use Edde\Common\Node\Node;
 
 		class RelationQuery extends AbstractQuery {
 			/**
-			 * @var string
+			 * @var ISchema
 			 */
-			protected $relation;
+			protected $schema;
+			protected $source;
 
-			/**
-			 * @param string $relation
-			 */
-			public function __construct(string $relation) {
-				$this->relation = $relation;
+			public function __construct(ISchema $schema) {
+				$this->schema = $schema;
 			}
 
-			public function addRelation(string $schema, string $property, string $value): RelationQuery {
+			public function addRelation(ILink $link, string $value): RelationQuery {
 				$this->init();
 				$this->node->getNode('relation-list')->addNode(new Node('link', null, [
 					/**
@@ -35,14 +35,8 @@
 				return $this;
 			}
 
-			public function set(string $property, $value): RelationQuery {
-				$this->init();
-				$this->node->getNode('set-list')->addNode(new Node('set', null, [$property => $value]));
-				return $this;
-			}
-
 			protected function handleInit(): void {
 				parent::handleInit();
-				$this->node = new Node('relation', null, ['name' => $this->relation]);
+				$this->node = new Node('relation', $this->source, ['schema' => $this->schema]);
 			}
 		}

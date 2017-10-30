@@ -3,21 +3,13 @@
 
 		use Edde\Api\Query\Fragment\IWhere;
 		use Edde\Api\Query\IUpdateQuery;
+		use Edde\Api\Schema\ISchema;
 		use Edde\Common\Node\Node;
 		use Edde\Common\Query\Fragment\WhereFragment;
 
 		class UpdateQuery extends InsertQuery implements IUpdateQuery {
-			/**
-			 * @var string
-			 */
-			protected $name;
-			/**
-			 * @var array
-			 */
-			protected $source;
-
-			public function __construct(string $table, array $source) {
-				parent::__construct($table, $source);
+			public function __construct(ISchema $schema, array $source) {
+				parent::__construct($schema, $source);
 				$this->type = 'update';
 			}
 

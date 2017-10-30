@@ -4,6 +4,7 @@
 		use Edde\Api\Node\INode;
 		use Edde\Api\Query\Exception\QueryBuilderException;
 		use Edde\Api\Query\INativeBatch;
+		use Edde\Api\Schema\ISchema;
 		use Edde\Common\Query\AbstractQueryBuilder;
 		use Edde\Common\Query\NativeBatch;
 
@@ -38,13 +39,13 @@
 			protected function fragmentInsert(INode $root): INativeBatch {
 				$nameList = [];
 				$parameterList = [];
-				foreach ($root->getNode('set-list')->getNodeList() as $node) {
-					foreach ($node->getAttributeList()->array() as $k => $v) {
-						$nameList[] = $this->delimite($k);
-						$parameterList['p_' . sha1($k)] = $v;
-					}
+				foreach ($root->getValue([]) as $k => $v) {
+					$nameList[] = $this->delimite($k);
+					$parameterList['p_' . sha1($k)] = $v;
 				}
-				$sql = 'INSERT INTO ' . $this->delimite($root->getAttribute('name')) . ' (';
+				/** @var $schema ISchema */
+				$schema = $root->getAttribute('schema');
+				$sql = 'INSERT INTO ' . $this->delimite($schema->getName()) . ' (';
 				$sql .= implode(',', $nameList) . ') VALUES (';
 				return new NativeBatch($sql . ':' . implode(', :', array_keys($parameterList)) . ')', $parameterList);
 			}
@@ -56,7 +57,9 @@
 			 * @throws QueryBuilderException
 			 */
 			protected function fragmentUpdate(INode $root): INativeBatch {
-				$sql = "UPDATE\n\t" . $this->delimite($root->getAttribute('name')) . ' ' . ($alias = ($alias = $root->getAttribute('alias')) ? $this->delimite($alias) : '') . "\nSET\n\t";
+				/** @var $schema ISchema */
+				$schema = $root->getAttribute('schema');
+				$sql = "UPDATE\n\t" . $this->delimite($schema->getName()) . ' ' . ($alias = ($alias = $root->getAttribute('alias')) ? $this->delimite($alias) : '') . "\nSET\n\t";
 				$where = null;
 				$setList = [];
 				$parameterList = [];
@@ -68,11 +71,9 @@
 					$where .= "WHERE\n" . $query->getQuery();
 					$parameterList = $query->getParameterList();
 				}
-				foreach ($root->getNode('set-list')->getNodeList() as $node) {
-					foreach ($node->getAttributeList()->array() as $k => $v) {
-						$setList[] = $this->delimite($k) . ' = :' . $parameterId = ('p_' . sha1($k));
-						$parameterList[$parameterId] = $v;
-					}
+				foreach ($root->getValue([]) as $k => $v) {
+					$setList[] = $this->delimite($k) . ' = :' . $parameterId = ('p_' . sha1($k));
+					$parameterList[$parameterId] = $v;
 				}
 				return new NativeBatch($sql . implode(",\n\t", $setList) . "\n" . $where, $parameterList);
 			}
