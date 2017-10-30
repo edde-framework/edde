@@ -140,7 +140,18 @@
 			public function testRelation() {
 				$foo = $this->storage->collection(FooSchema::class)->load('foo The First');
 				self::assertSame('foo The First', $foo->get('name'));
+				$expect = [
+					'bar The Second',
+					'bar The Third',
+				];
+				$current = [];
+//MATCH
+//				(c:`Edde\Test\BarSchema`)-[r:`Edde\Test\FooBarSchema` {foo: '5956cc99-6d01-4d6c-80a2-f0e9a707bf08'}]-(t:`Edde\Test\FooSchema`)
+//RETURN
+//	c
 				foreach ($foo->relationOf(BarSchema::class, FooBarSchema::class) as $bar) {
+					$current[] = $bar->get('name');
 				}
+				self::assertSame($expect, $current, 'entities are not same or not loaded by the collection!');
 			}
 		}

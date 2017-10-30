@@ -56,7 +56,7 @@
 			 * @throws QueryBuilderException
 			 */
 			protected function fragmentUpdate(INode $root): INativeBatch {
-				$sql = "UPDATE\n\t" . $this->delimite($root->getAttribute('name')) . "\nSET\n\t";
+				$sql = "UPDATE\n\t" . $this->delimite($root->getAttribute('name')) . ' ' . ($alias = ($alias = $root->getAttribute('alias')) ? $this->delimite($alias) : '') . "\nSET\n\t";
 				$where = null;
 				$setList = [];
 				$parameterList = [];
