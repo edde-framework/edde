@@ -152,6 +152,8 @@
 				foreach ($foo->relationOf(BarSchema::class, FooBarSchema::class) as $bar) {
 					$current[] = $bar->get('name');
 				}
+				sort($expect);
+				sort($current);
 				self::assertSame($expect, $current, 'entities are not same or not loaded by the collection!');
 			}
 		}

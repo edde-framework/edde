@@ -232,13 +232,15 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function collection(string $schema): ICollection {
-				$collection = new Collection($this->entityManager, $this, $this->schemaManager->getSchema($schema));
-				/**
-				 * by default select all from the source schema
-				 */
-				$collection->table($schema, 'c')->all();
-				return $collection;
+			public function collection(string $schema, IQuery $query = null): ICollection {
+				if ($query === null) {
+					/**
+					 * by default select all from the source schema
+					 */
+					$query = new SelectQuery();
+					$query->table($schema, 'c')->all();
+				}
+				return new Collection($this->entityManager, $this, $this->schemaManager->getSchema($schema), $query);
 			}
 
 			/**

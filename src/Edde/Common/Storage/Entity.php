@@ -142,7 +142,7 @@
 				list($sourceProperty) = $relationSchema->getRelationList($this->schema->getName());
 				$targetLink = $targetProperty->getLink();
 				$sourceLink = $sourceProperty->getLink();
-				$collection->table($relation, 'r')->where()->eq($sourceLink->getProperty(), 'r')->to($this->get($sourceLink->getTarget()))->and()->eq($targetLink->getProperty(), 'r')->toColumn($targetLink->getTarget(), 'c');
+				$collection->getQuery()->table($relation, 'r')->where()->eq($sourceLink->getProperty(), 'r')->to($this->get($sourceLink->getTarget()))->and()->eq($targetLink->getProperty(), 'r')->toColumn($targetLink->getTarget(), 'c');
 				return $collection;
 			}
 

@@ -133,13 +133,13 @@
 			/**
 			 * get a collection of entities (collection should use generator or iterator, never fetch to array)
 			 *
-			 * @param string $schema
+			 * @param string      $schema
+			 * @param IQuery|null $query
 			 *
 			 * @return ICollection|IEntity[]
-			 *
 			 * @throws UnknownTableException
 			 */
-			public function collection(string $schema): ICollection;
+			public function collection(string $schema, IQuery $query = null): ICollection;
 
 			/**
 			 * creates a new schema or throw an exception if already exists (or other error)

@@ -4,7 +4,14 @@
 		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
 
-		interface ICollection extends ISelectQuery, \IteratorAggregate {
+		interface ICollection extends \IteratorAggregate {
+			/**
+			 * get the query of this collection
+			 *
+			 * @return ISelectQuery
+			 */
+			public function getQuery(): ISelectQuery;
+
 			/**
 			 * get exactly one entity or throw an exception of the collection is empty; this
 			 * method should NOT be used for iteration
