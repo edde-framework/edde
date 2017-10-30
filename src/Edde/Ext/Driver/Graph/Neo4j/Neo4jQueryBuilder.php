@@ -43,13 +43,12 @@
 			}
 
 			protected function fragmentInsert(INode $root): INativeBatch {
-				$parameterList = $this->fragmentParameterList($root->getNode('parameter-list'))->getParameterList();
-				$create = [];
-				foreach ($root->getNode('column-list')->getNodeList() as $node) {
-					$create[$node->getAttribute('column')] = $parameterList[$node->getAttribute('parameter')];
+				$set = [];
+				foreach ($root->getNode('set-list')->getNodeList() as $node) {
+					$set = array_merge($set, $node->getAttributeList()->array());
 				}
-				return new NativeBatch('CREATE (n:' . $this->delimite($root->getAttribute('table')) . ' $create)', [
-					'create' => $create,
+				return new NativeBatch('CREATE (n:' . $this->delimite($root->getAttribute('name')) . ' $set)', [
+					'set' => $set,
 				]);
 			}
 
@@ -60,22 +59,18 @@
 			 * @throws QueryBuilderException
 			 */
 			protected function fragmentUpdate(INode $root): INativeBatch {
-				$parameterList = $this->fragmentParameterList($root->getNode('parameter-list'))->getParameterList();
-				$update = [];
-				foreach ($root->getNode('column-list')->getNodeList() as $node) {
-					$update[$node->getAttribute('column')] = $parameterList[$parameter = $node->getAttribute('parameter')];
-					unset($parameterList[$parameter]);
+				$set = [];
+				foreach ($root->getNode('set-list')->getNodeList() as $node) {
+					$set = array_merge($set, $node->getAttributeList()->array());
 				}
-				$parameterList['update'] = $update;
-				$cypher[] = 'MATCH (' . ($alias = $root->getAttribute('alias')) . ':' . $this->delimite($root->getAttribute('table')) . ")\n";
+				$cypher = "MATCH\n\t(" . ($alias = $root->getAttribute('alias')) . ':' . $this->delimite($root->getAttribute('name')) . ")\n";
 				if ($root->hasNode('where-list')) {
-					$cypher[] = "WHERE\n";
-					$query = $this->fragmentWhereList($root->getNode('where-list'));
-					$cypher[] = $query->getQuery();
-					$parameterList = array_merge($parameterList, $query->getParameterList());
+					$cypher .= "WHERE\n" . ($query = $this->fragmentWhereList($root->getNode('where-list')))->getQuery() . "\n";
+					$parameterList = $query->getParameterList();
 				}
-				$cypher[] = 'SET ' . $alias . ' = $update';
-				return new NativeBatch(implode('', $cypher), $parameterList);
+				$parameterList['set'] = $set;
+				$cypher .= "SET\n\t" . $alias . ' = $set';
+				return new NativeBatch($cypher, $parameterList);
 			}
 
 			/**
@@ -108,6 +103,7 @@
 			 *
 			 * @return INativeBatch
 			 * @throws QueryBuilderException
+			 * @throws \Exception
 			 */
 			protected function fragmentWhere(INode $root): INativeBatch {
 				$where = null;
@@ -119,18 +115,22 @@
 					'lt'  => '<',
 					'lte' => '<=',
 				];
+				$parameterList = [];
 				if (isset($expressions[$type = $root->getAttribute('type')])) {
 					$where = ($prefix = $root->getAttribute('prefix')) ? $prefix . '.' : '';
 					$where .= $this->delimite($root->getAttribute('where')) . ' ' . $expressions[$type] . ' ';
-					switch ($root->getAttribute('target', 'column')) {
+					switch ($target = $root->getAttribute('target', 'column')) {
 						case 'column':
 							$where .= $this->delimite($root->getAttribute('column'));
 							break;
 						case 'parameter':
-							$where .= '$' . $root->getAttribute('parameter');
+							$parameterList[$id = ('p_' . sha1(random_bytes(64)))] = $root->getAttribute('parameter');
+							$where .= '$' . $id;
 							break;
+						default:
+							throw new QueryBuilderException(sprintf('Unknown where target type [%s] in [%s].', $target, static::class));
 					}
-					return new NativeBatch($where);
+					return new NativeBatch($where, $parameterList);
 				}
 				switch ($type) {
 					case 'group':

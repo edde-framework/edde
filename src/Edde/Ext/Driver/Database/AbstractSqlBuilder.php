@@ -201,7 +201,7 @@
 							$where .= ':' . $id;
 							break;
 						default:
-							throw new QueryBuilderException(sprintf('Unknown where target type [%s].', $target));
+							throw new QueryBuilderException(sprintf('Unknown where target type [%s] in [%s].', $target, static::class));
 					}
 					return new NativeBatch($where, $parameterList);
 				}
