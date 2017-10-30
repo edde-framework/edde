@@ -72,6 +72,15 @@
 			public function commit(): ICrate;
 
 			/**
+			 * explicitly change dirty flag
+			 *
+			 * @param bool $dirty
+			 *
+			 * @return ICrate
+			 */
+			public function setDirty(bool $dirty = true): ICrate;
+
+			/**
 			 * is state of a crate changed (any property is changed?)?
 			 *
 			 * @return bool

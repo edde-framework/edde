@@ -10,6 +10,7 @@
 			 * @var IProperty[]
 			 */
 			protected $propertyList = [];
+			protected $dirty = null;
 
 			/**
 			 * @inheritdoc
@@ -70,6 +71,15 @@
 				foreach ($this->propertyList as $property) {
 					$property->commit();
 				}
+				$this->dirty = null;
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function setDirty(bool $dirty = true): ICrate {
+				$this->dirty = $dirty;
 				return $this;
 			}
 
@@ -77,6 +87,9 @@
 			 * @inheritdoc
 			 */
 			public function isDirty(): bool {
+				if ($this->dirty !== null) {
+					return $this->dirty;
+				}
 				foreach ($this->propertyList as $property) {
 					if ($property->isDirty()) {
 						return true;
