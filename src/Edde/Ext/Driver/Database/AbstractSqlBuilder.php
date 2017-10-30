@@ -57,22 +57,24 @@
 			 */
 			protected function fragmentUpdate(INode $root): INativeBatch {
 				$sql = "UPDATE\n\t" . $this->delimite($root->getAttribute('name')) . "\nSET\n\t";
+				$where = null;
 				$setList = [];
-				$parameterList = $this->fragmentParameterList($root->getNode('parameter-list'))->getParameterList();
+				$parameterList = [];
+				/**
+				 * micro-optimization to eliminate array_merge over parameter list
+				 */
+				if ($root->hasNode('where-list')) {
+					$query = $this->fragmentWhereList($root->getNode('where-list'));
+					$where .= "WHERE\n" . $query->getQuery();
+					$parameterList = $query->getParameterList();
+				}
 				foreach ($root->getNode('set-list')->getNodeList() as $node) {
 					foreach ($node->getAttributeList()->array() as $k => $v) {
 						$setList[] = $this->delimite($k) . ' = :' . $parameterId = ('p_' . sha1($k));
 						$parameterList[$parameterId] = $v;
 					}
 				}
-				$sql .= implode(",\n\t", $setList) . "\n";
-				if ($root->hasNode('where-list')) {
-					$sql .= "WHERE\n";
-					$query = $this->fragmentWhereList($root->getNode('where-list'));
-					$sql .= $query->getQuery();
-					$parameterList = array_merge($parameterList, $query->getParameterList());
-				}
-				return new NativeBatch($sql, $parameterList);
+				return new NativeBatch($sql . implode(",\n\t", $setList) . "\n" . $where, $parameterList);
 			}
 
 			/**
@@ -176,9 +178,9 @@
 			 *
 			 * @return INativeBatch
 			 * @throws QueryBuilderException
+			 * @throws \Exception
 			 */
 			protected function fragmentWhere(INode $root): INativeBatch {
-				$where = null;
 				static $expressions = [
 					'eq'  => '=',
 					'neq' => '!=',
@@ -187,17 +189,21 @@
 					'lt'  => '<',
 					'lte' => '<=',
 				];
+				$parameterList = [];
 				if (isset($expressions[$type = $root->getAttribute('type')])) {
 					$where = $this->delimite($root->getAttribute('where')) . ' ' . $expressions[$type] . ' ';
-					switch ($root->getAttribute('target', 'column')) {
+					switch ($target = $root->getAttribute('target', 'column')) {
 						case 'column':
 							$where .= $this->delimite($root->getAttribute('column'));
 							break;
 						case 'parameter':
-							$where .= ':' . $root->getAttribute('parameter');
+							$parameterList[$id = ('p_' . sha1(random_bytes(64)))] = $root->getAttribute('parameter');
+							$where .= ':' . $id;
 							break;
+						default:
+							throw new QueryBuilderException(sprintf('Unknown where target type [%s].', $target));
 					}
-					return new NativeBatch($where);
+					return new NativeBatch($where, $parameterList);
 				}
 				switch ($type) {
 					case 'group':
