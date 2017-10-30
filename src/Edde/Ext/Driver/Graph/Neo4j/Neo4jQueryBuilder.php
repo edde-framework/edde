@@ -42,6 +42,24 @@
 				return $nativeBatch;
 			}
 
+			protected function fragmentRelation(INode $root): INativeBatch {
+				list($alpha, $beta) = $root->getNode('relation-list')->getNodeList();
+				$cypher = "MATCH\n\t";
+				$parameterList = [
+					'a' => $alpha->getAttribute('value'),
+					'b' => $beta->getAttribute('value'),
+				];
+				$cypher .= '(a:' . $this->delimite($alpha->getAttribute('schema')) . ' {' . $this->delimite($alpha->getAttribute('property')) . ': $a}),';
+				$cypher .= '(b:' . $this->delimite($beta->getAttribute('schema')) . ' {' . $this->delimite($beta->getAttribute('property')) . ": \$b})\n";
+				$cypher .= "CREATE\n\t(a)-[:" . $this->delimite($root->getAttribute('name')) . ' $set]->(b)';
+				foreach ($root->getNode('set-list')->getNodeList() as $node) {
+					foreach ($node->getAttributeList()->array() as $k => $v) {
+						$parameterList['set'][$k] = $v;
+					}
+				}
+				return new NativeBatch($cypher, $parameterList);
+			}
+
 			protected function fragmentInsert(INode $root): INativeBatch {
 				$set = [];
 				foreach ($root->getNode('set-list')->getNodeList() as $node) {

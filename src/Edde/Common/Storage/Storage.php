@@ -125,6 +125,7 @@
 					 */
 					$this->handleLinks($entity);
 					if ($entity->isDirty() === false) {
+						$this->commit();
 						return $this;
 					}
 					$query = new SelectQuery();
