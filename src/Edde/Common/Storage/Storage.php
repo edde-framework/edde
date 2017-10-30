@@ -141,11 +141,7 @@
 					/**
 					 * pickup an entity from storage if it's already there (and run update)
 					 */
-					$method = 'insert';
-					if ($entity->getSchema()->isRelation()) {
-						$method = 'relation';
-						$value = null;
-					}
+					$method = $entity->getSchema()->isRelation() ? 'relation' : 'insert';
 					foreach ($value ? $this->execute($query) : [] as $_) {
 						$method = 'update';
 						break;
