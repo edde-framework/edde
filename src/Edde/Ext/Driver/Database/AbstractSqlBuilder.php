@@ -191,9 +191,11 @@
 				];
 				$parameterList = [];
 				if (isset($expressions[$type = $root->getAttribute('type')])) {
-					$where = $this->delimite($root->getAttribute('where')) . ' ' . $expressions[$type] . ' ';
+					$where = ($prefix = $root->getAttribute('prefix')) ? $this->delimite($prefix) . '.' : '';
+					$where .= $this->delimite($root->getAttribute('where')) . ' ' . $expressions[$type] . ' ';
 					switch ($target = $root->getAttribute('target', 'column')) {
 						case 'column':
+							$where .= ($prefix = $root->getAttribute('column-prefix')) ? $this->delimite($prefix) . '.' : '';
 							$where .= $this->delimite($root->getAttribute('column'));
 							break;
 						case 'parameter':

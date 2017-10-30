@@ -2,6 +2,7 @@
 	namespace Edde\Common\Storage;
 
 		use Edde\Api\Crate\ICrate;
+		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\EntityException;
 		use Edde\Api\Storage\ICollection;
@@ -12,6 +13,7 @@
 
 		class Entity extends Crate implements IEntity {
 			use EntityManager;
+			use SchemaManager;
 			use Storage;
 			/**
 			 * @var ISchema
@@ -128,6 +130,20 @@
 			 */
 			public function relationTo(IEntity $entity, string $schema): IEntity {
 				return $this->entityManager->attach($this, $entity, $schema);
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function relationOf(string $schema, string $relation): ICollection {
+				$relationSchema = $this->schemaManager->getSchema($relation);
+				list($relationProperty) = $relationSchema->getRelationList($schema);
+				list($sourceProperty) = $relationSchema->getRelationList($this->schema->getName());
+				$relationLink = $relationProperty->getLink();
+				$sourceLink = $sourceProperty->getLink();
+				$collection = $this->storage->collection($schema);
+				$collection->table($relation, 'r')->where()->eq($sourceLink->getProperty(), 'r')->to($this->get($sourceLink->getTarget()))->and()->eq($relationLink->getProperty(), 'r')->toColumn($relationLink->getTarget(), 'c');
+				return $collection;
 			}
 
 			public function __clone() {

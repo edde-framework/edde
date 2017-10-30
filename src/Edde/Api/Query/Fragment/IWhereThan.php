@@ -14,9 +14,10 @@
 			/**
 			 * where than column
 			 *
-			 * @param string $name
+			 * @param string      $name
+			 * @param string|null $prefix
 			 *
 			 * @return IWhereRelation
 			 */
-			public function thanColumn(string $name): IWhereRelation;
+			public function thanColumn(string $name, string $prefix = null): IWhereRelation;
 		}

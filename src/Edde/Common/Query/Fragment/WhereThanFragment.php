@@ -17,9 +17,10 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function thanColumn(string $name): IWhereRelation {
+			public function thanColumn(string $name, string $prefix = null): IWhereRelation {
 				$this->node->setAttribute('target', 'column');
 				$this->node->setAttribute('column', $name);
+				$this->node->setAttribute('column-prefix', $prefix);
 				return new WhereRelationFragment($this->root, $this->node);
 			}
 		}

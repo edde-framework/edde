@@ -138,7 +138,9 @@
 			 * @throws UnknownTableException
 			 */
 			public function testRelation() {
-				$entity = $this->storage->collection(FooSchema::class)->load('foo The First');
-				self::assertSame('foo The First', $entity->get('name'));
+				$foo = $this->storage->collection(FooSchema::class)->load('foo The First');
+				self::assertSame('foo The First', $foo->get('name'));
+				foreach ($foo->relationOf(BarSchema::class, FooBarSchema::class) as $bar) {
+				}
 			}
 		}
