@@ -4,6 +4,7 @@
 		use Edde\Api\Crate\ICrate;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\EntityException;
+		use Edde\Api\Storage\ICollection;
 		use Edde\Api\Storage\IEntity;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Crate\Crate;
@@ -95,6 +96,29 @@
 			public function save(): IEntity {
 				$this->storage->save($this);
 				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function update(): IEntity {
+				$this->storage->update($this);
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function insert(): IEntity {
+				$this->storage->insert($this);
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function collection(): ICollection {
+				return $this->storage->collection($this->schema->getName());
 			}
 
 			public function __clone() {

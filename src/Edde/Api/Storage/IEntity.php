@@ -60,4 +60,25 @@
 			 * @throws IntegrityException
 			 */
 			public function save(): IEntity;
+
+			/**
+			 * shortcut to update already existing entity
+			 *
+			 * @return IEntity
+			 */
+			public function update(): IEntity;
+
+			/**
+			 * force insertion of this entity bypassing existence check
+			 *
+			 * @return IEntity
+			 */
+			public function insert(): IEntity;
+
+			/**
+			 * return collection of this entity; collection is not related to entity itself
+			 *
+			 * @return ICollection
+			 */
+			public function collection(): ICollection;
 		}

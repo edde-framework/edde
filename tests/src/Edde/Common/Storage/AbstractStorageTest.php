@@ -7,7 +7,6 @@
 		use Edde\Api\Storage\Exception\IntegrityException;
 		use Edde\Api\Storage\Exception\NullValueException;
 		use Edde\Api\Storage\Exception\StorageException;
-		use Edde\Api\Storage\Exception\UnknownTableException;
 		use Edde\Api\Storage\Inject\EntityManager;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Ext\Test\TestCase;
@@ -31,34 +30,27 @@
 				self::assertTrue(true, 'everything is ok');
 			}
 
-			/**
-			 * @throws DuplicateEntryException
-			 */
 			public function testInsert() {
 				$entity = $this->entityManager->create(SimpleSchema::class, [
 					'name'     => 'this entity is new',
 					'optional' => 'foo-bar',
-				]);
-				$this->storage->push(FooSchema::class, [
-					'name' => 'neo4j rocks!',
-				]);
-				$this->storage->insert($entity);
+				])->insert();
 				self::assertNotEmpty($entity->get('guid'));
 			}
 
 			public function testInsertException() {
 				$this->expectException(NullValueException::class);
-				$this->storage->push(FooSchema::class, [
+				$this->entityManager->create(FooSchema::class, [
 					'label' => 'kaboom',
-				]);
+				])->insert();
 			}
 
 			public function testInsertException2() {
 				$this->expectException(NullValueException::class);
-				$this->storage->push(FooSchema::class, [
+				$this->entityManager->create(FooSchema::class, [
 					'name'  => null,
 					'label' => 'kaboom',
-				]);
+				])->insert();
 			}
 
 			public function testInsertUnique() {
@@ -92,21 +84,20 @@
 
 			/**
 			 * @throws EntityNotFoundException
-			 * @throws UnknownTableException
 			 * @throws \Exception
 			 */
 			public function testUpdate() {
-				$entity = $this->storage->push(SimpleSchema::class, [
+				$entity = $this->entityManager->create(SimpleSchema::class, [
 					'name'     => 'to-be-updated',
 					'optional' => null,
 					'value'    => 3.14,
 					'date'     => new \DateTime('24.12.2020 12:24:13'),
 					'question' => false,
-				]);
+				])->insert();
 				$entity->set('optional', 'this is a new nice and updated string');
 				$expect = $entity->toArray();
-				$this->storage->update($entity);
-				$entity = $this->storage->collection(SimpleSchema::class)->load($entity->get('guid'));
+				$entity->update();
+				$entity = $entity->collection()->load($entity->get('guid'));
 				self::assertFalse($entity->isDirty(), 'entity should NOT be dirty right after load!');
 				self::assertEquals($expect, $array = $entity->toArray());
 				self::assertTrue(($type = gettype($array['value'])) === 'double', 'value [' . $type . '] is not float!');
