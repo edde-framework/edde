@@ -20,6 +20,7 @@
 			 */
 			protected $propertyList = [];
 			protected $primaryList = null;
+			protected $uniqueList = null;
 			protected $linkList = null;
 			protected $relationList = [];
 
@@ -99,6 +100,22 @@
 					throw new MultiplePrimaryException(sprintf('Schema [%s] has more primary properties [%s].', $this->getName(), implode(', ', array_keys($primaryList))));
 				}
 				return reset($primaryList);
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getUniqueList(): array {
+				if ($this->uniqueList) {
+					return $this->uniqueList;
+				}
+				$this->uniqueList = [];
+				foreach ($this->propertyList as $name => $property) {
+					if ($property->isUnique()) {
+						$this->uniqueList[$name] = $property;
+					}
+				}
+				return $this->uniqueList;
 			}
 
 			/**

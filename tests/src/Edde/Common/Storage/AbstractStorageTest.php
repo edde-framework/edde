@@ -7,6 +7,7 @@
 		use Edde\Api\Storage\Exception\IntegrityException;
 		use Edde\Api\Storage\Exception\NullValueException;
 		use Edde\Api\Storage\Exception\StorageException;
+		use Edde\Api\Storage\Exception\UnknownTableException;
 		use Edde\Api\Storage\Inject\EntityManager;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Ext\Test\TestCase;
@@ -109,19 +110,35 @@
 			/**
 			 * @throws StorageException
 			 */
-			public function testRelation() {
+			public function testRelationTo() {
 				$foo = $this->entityManager->create(FooSchema::class, [
 					'name' => 'foo The First',
 				]);
+				$foo2 = $this->entityManager->create(FooSchema::class, [
+					'name' => 'foo The Second',
+				])->save();
 				$bar = $this->entityManager->create(BarSchema::class, [
 					'name' => 'bar The Second',
 				]);
+				$bar2 = $this->entityManager->create(BarSchema::class, [
+					'name' => 'bar The Third',
+				]);
 				$foo->relationTo($bar, FooBarSchema::class)->save();
+				$foo->relationTo($bar2, FooBarSchema::class)->save();
 				/**
 				 * second save of the same entities will survive, because save is checking presence by primary
 				 * keys and FooBarSchema is using it's properties as a primary key
 				 */
 				$foo->relationTo($bar, FooBarSchema::class)->save();
 				self::assertTrue(true, 'yay!!');
+			}
+
+			/**
+			 * @throws EntityNotFoundException
+			 * @throws UnknownTableException
+			 */
+			public function testRelation() {
+				$entity = $this->storage->collection(FooSchema::class)->load('foo The First');
+				self::assertSame('foo The First', $entity->get('name'));
 			}
 		}

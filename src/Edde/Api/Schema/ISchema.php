@@ -66,6 +66,13 @@
 			public function getPrimary(): IProperty;
 
 			/**
+			 * return list of unique properties
+			 *
+			 * @return IProperty[]
+			 */
+			public function getUniqueList(): array;
+
+			/**
 			 * return an array with properties which are link
 			 *
 			 * @return IProperty[]
