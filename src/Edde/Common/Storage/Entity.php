@@ -25,7 +25,15 @@
 			 * @inheritdoc
 			 */
 			public function isDirty(): bool {
-				return $this->hasLinks() || parent::isDirty();
+				if (parent::isDirty()) {
+					return true;
+				}
+				foreach ($this->linkList as $entity) {
+					if ($entity->isDirty()) {
+						return true;
+					}
+				}
+				return false;
 			}
 
 			/**
