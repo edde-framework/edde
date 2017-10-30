@@ -85,6 +85,24 @@
 		 */
 		class ContainerFactory extends Object {
 			/**
+			 * for the integration purposes
+			 *
+			 * @var IContainer
+			 */
+			static protected $instance;
+
+			/**
+			 * @return IContainer
+			 * @throws ContainerException
+			 */
+			static public function getContainer(): IContainer {
+				if (self::$instance) {
+					return self::$instance;
+				}
+				throw new ContainerException(sprintf('No Container is available; please use some factory method of [%s] to create a container.', static::class));
+			}
+
+			/**
 			 * @param array $factoryList
 			 *
 			 * @return IFactory[]
@@ -130,31 +148,6 @@
 					$factories[$name] = $current;
 				}
 				return $factories;
-			}
-
-			/**
-			 * pure way how to simple create a system container
-			 *
-			 * @param array    $factoryList
-			 * @param string[] $configuratorList
-			 *
-			 * @return IContainer
-			 * @throws ContainerException
-			 * @throws FactoryException
-			 */
-			static public function create(array $factoryList = [], array $configuratorList = []): IContainer {
-				/** @var $container IContainer */
-				$container = new Container();
-				/**
-				 * this trick ensures that container is properly configured when some internal dependency needs it while container is construction
-				 */
-				$containerConfigurator = $configuratorList[IContainer::class] = new ContainerConfigurator($factoryList = self::createFactoryList($factoryList), $configuratorList);
-				$container->addConfigurator($containerConfigurator);
-				$container->setup();
-				$container = $container->create(IContainer::class);
-				$container->addConfigurator($containerConfigurator);
-				$container->setup();
-				return $container;
 			}
 
 			/**
@@ -207,6 +200,31 @@
 					'method'        => $method,
 					'parameterList' => $parameterList,
 				];
+			}
+
+			/**
+			 * pure way how to simple create a system container
+			 *
+			 * @param array    $factoryList
+			 * @param string[] $configuratorList
+			 *
+			 * @return IContainer
+			 * @throws ContainerException
+			 * @throws FactoryException
+			 */
+			static public function create(array $factoryList = [], array $configuratorList = []): IContainer {
+				/** @var $container IContainer */
+				$container = new Container();
+				/**
+				 * this trick ensures that container is properly configured when some internal dependency needs it while container is construction
+				 */
+				$containerConfigurator = $configuratorList[IContainer::class] = new ContainerConfigurator($factoryList = self::createFactoryList($factoryList), $configuratorList);
+				$container->addConfigurator($containerConfigurator);
+				$container->setup();
+				$container = $container->create(IContainer::class);
+				$container->addConfigurator($containerConfigurator);
+				$container->setup();
+				return self::$instance = $container;
 			}
 
 			/**
@@ -290,37 +308,37 @@
 					/**
 					 * schema support
 					 */
-					ISchemaManager::class    => SchemaManager::class,
+					ISchemaManager::class      => SchemaManager::class,
 					/**
 					 * generator (related to schema) support
 					 */
-					IGeneratorManager::class => GeneratorManager::class,
-					IFilterManager::class    => FilterManager::class,
-					ISanitizerManager::class => SanitizerManager::class,
+					IGeneratorManager::class   => GeneratorManager::class,
+					IFilterManager::class      => FilterManager::class,
+					ISanitizerManager::class   => SanitizerManager::class,
 					/**
 					 * random & security support
 					 */
-					IRandomService::class    => RandomService::class,
+					IRandomService::class      => RandomService::class,
 					/**
 					 * storage support
 					 */
-					IEntityManager::class    => EntityManager::class,
-					IStorage::class          => Storage::class,
-					IDriver::class           => self::exception(sprintf('Please register driver to use Storage.', IDriver::class)),
-					IQueryBuilder::class     => self::exception(sprintf('Please register query builder according to used [%s].', IDriver::class)),
+					IEntityManager::class      => EntityManager::class,
+					IStorage::class            => Storage::class,
+					IDriver::class             => self::exception(sprintf('Please register driver to use Storage.', IDriver::class)),
+					IQueryBuilder::class       => self::exception(sprintf('Please register query builder according to used [%s].', IDriver::class)),
 					/**
 					 * an application upgrades support
 					 */
-					IUpgradeManager::class   => self::exception(sprintf('You have to privide you own implementation of [%s]; you can use [%s] to get some little help.', IUpgradeManager::class, AbstractUpgradeManager::class)),
+					IUpgradeManager::class     => self::exception(sprintf('You have to privide you own implementation of [%s]; you can use [%s] to get some little help.', IUpgradeManager::class, AbstractUpgradeManager::class)),
 					/**
 					 * Xml support
 					 */
-					IXmlExport::class        => XmlExport::class,
-					IXmlParser::class        => XmlParser::class,
+					IXmlExport::class          => XmlExport::class,
+					IXmlParser::class          => XmlParser::class,
 					/**
 					 * an application handles lifecycle workflow
 					 */
-					IApplication::class      => Application::class,
+					IApplication::class        => Application::class,
 					/**
 					 * magical factory for an application execution
 					 */
