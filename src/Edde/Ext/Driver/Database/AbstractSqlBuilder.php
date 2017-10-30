@@ -31,6 +31,20 @@
 				return new NativeBatch($sql . ')');
 			}
 
+			protected function fragmentRelation(INode $root): INativeBatch {
+				$nameList = [];
+				$parameterList = [];
+				foreach ($root->getNode('set-list')->getNodeList() as $node) {
+					foreach ($node->getAttributeList()->array() as $k => $v) {
+						$nameList[] = $this->delimite($k);
+						$parameterList['p_' . sha1($k)] = $v;
+					}
+				}
+				$sql = 'INSERT INTO ' . $this->delimite($root->getAttribute('name')) . ' (';
+				$sql .= implode(',', $nameList) . ') VALUES (';
+				return new NativeBatch($sql . ':' . implode(', :', array_keys($parameterList)) . ')', $parameterList);
+			}
+
 			protected function fragmentInsert(INode $root): INativeBatch {
 				$parameterList = $this->fragmentParameterList($root->getNode('parameter-list'))->getParameterList();
 				$nameList = [];

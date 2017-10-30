@@ -118,19 +118,19 @@
 			 * @inheritdoc
 			 */
 			public function save(IEntity $entity): IStorage {
-				/**
-				 * entities not changed will not be saved
-				 */
-				if ($entity->isDirty() === false) {
-					return $this;
-				}
 				$this->start();
 				try {
+					/**
+					 * entities not changed will not be saved
+					 */
+					$this->handleLinks($entity);
+					if ($entity->isDirty() === false) {
+						return $this;
+					}
 					$query = new SelectQuery();
 					$query->setDescription('check entity existence query');
 					$query->table($entity->getSchema()->getName(), 's')->all();
 					$value = null;
-					$this->handleLinks($entity);
 					foreach (($primaryList = $entity->getPrimaryList()) as $property) {
 						if (($value = $property->get()) === null) {
 							break;
