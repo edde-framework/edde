@@ -172,13 +172,23 @@
 				/**
 				 * relation name
 				 */
-				$query = new RelationQuery($entity->getSchema()->getName());
 				$schema = $entity->getSchema();
+				$query = new RelationQuery($entity->getSchema()->getName());
 				foreach ($entity->getLinkList() as $name => $linked) {
-					$link = $schema->getLink($name);
-					$query->addRelation($link->getSchema(), $property = $link->getTarget(), $linked->get($property));
+					/**
+					 * setup relation itself
+					 *
+					 * if there is a graph database, this will help find existing relation and make an edge; if there is a classic
+					 * database, relations will not be used at all
+					 */
+					$query->addRelation(($link = $schema->getLink($name))->getSchema(), $property = $link->getTarget(), $value = $linked->get($property));
+					/**
+					 * relation entity should be updated to given values too; on graph database this is just optional step, but
+					 * on classic database this is mandatory to set foreign references
+					 */
+					$query->set($link->getProperty(), $value);
 				}
-//				$this->execute($query);
+				$this->execute($query);
 				$entity->commit();
 				return $this;
 			}
