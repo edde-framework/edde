@@ -52,7 +52,7 @@
 					$query = $this->fragment($node);
 					$where = null;
 					if ($whereList && ($relationTo = $node->getAttribute('relation-to'))) {
-						$where .= ' ' . strtoupper($relationTo);
+						$where .= ' ' . strtoupper($relationTo) . "\n\t";
 					}
 					$where .= $query->getQuery();
 					$whereList[] = $where . ' ' . strtoupper($node->getAttribute('relation'));
