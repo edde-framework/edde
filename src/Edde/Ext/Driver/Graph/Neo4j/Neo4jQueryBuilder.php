@@ -10,6 +10,12 @@
 		class Neo4jQueryBuilder extends AbstractQueryBuilder {
 			protected function fragmentCreateSchema(INode $root): INativeBatch {
 				$nativeBatch = new NativeBatch();
+				/**
+				 * relations should not be physically created
+				 */
+				if ($root->getAttribute('relation', false)) {
+					return $nativeBatch;
+				}
 				$primaryList = null;
 				$indexList = null;
 				$uniqueList = [];
@@ -51,7 +57,7 @@
 				];
 				$cypher .= '(a:' . $this->delimite($alpha->getAttribute('schema')) . ' {' . $this->delimite($alpha->getAttribute('property')) . ': $a}),';
 				$cypher .= '(b:' . $this->delimite($beta->getAttribute('schema')) . ' {' . $this->delimite($beta->getAttribute('property')) . ": \$b})\n";
-				$cypher .= "CREATE\n\t(a)-[:" . $this->delimite($root->getAttribute('name')) . ' $set]->(b)';
+				$cypher .= "CREATE UNIQUE\n\t(a)-[:" . $this->delimite($root->getAttribute('name')) . ' $set]->(b)';
 				foreach ($root->getNode('set-list')->getNodeList() as $node) {
 					foreach ($node->getAttributeList()->array() as $k => $v) {
 						$parameterList['set'][$k] = $v;
@@ -108,7 +114,7 @@
 				}
 				if ($root->hasNode('where-list')) {
 					$query = $this->fragmentWhereList($root->getNode('where-list'));
-					$cypher .= "WHERE\n" . $query->getQuery();
+					$cypher .= "WHERE\n" . $query->getQuery() . "\n";
 					$parameterList = $query->getParameterList();
 				}
 				return new NativeBatch($cypher . 'RETURN ' . $alias, $parameterList);
