@@ -22,7 +22,7 @@
 				$this->table = $table;
 				$this->source = $source;
 				/**
-				 * type in constructor is missing intentionally as it's not allowed for user to change this variable
+				 * type in constructor is missing intentionally as user is not allowed to change this variable
 				 */
 				$this->type = 'insert';
 			}

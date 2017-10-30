@@ -1,6 +1,8 @@
 <?php
 	namespace Edde\Ext\Schema;
 
+		use Edde\Api\Schema\Exception\InvalidRelationException;
+		use Edde\Api\Schema\Exception\SchemaException;
 		use Edde\Api\Schema\Exception\SchemaReflectionException;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Schema\ISchemaLoader;
@@ -27,6 +29,7 @@
 			 *
 			 * @return ISchema
 			 * @throws SchemaReflectionException
+			 * @throws SchemaException
 			 */
 			protected function reflect(string $schema): ISchema {
 				try {
@@ -36,7 +39,8 @@
 					$reflectionClass = new \ReflectionClass($schema);
 					$schemaBuilder = new SchemaBuilder($schema);
 					$doc = ($doc = $reflectionClass->getDocComment()) ? $doc : '';
-					$schemaBuilder->relation(strpos($doc, '@relation') !== false);
+					$schemaBuilder->relation($isRelation = (strpos($doc, '@relation') !== false));
+					$linkCount = 0;
 					foreach ($reflectionClass->getMethods() as $reflectionMethod) {
 						if (($doc = $reflectionMethod->getDocComment()) === false) {
 							continue;
@@ -62,6 +66,9 @@
 							if ($reflectionMethod->getNumberOfParameters() === 1) {
 								list($parameter) = $reflectionMethod->getParameters();
 								if ($type = $parameter->getType()) {
+									if ($isRelation && $linkCount++ >= 2) {
+										throw new InvalidRelationException(sprintf('More than two links in a relation schema [%s] is forbidden.', $schema));
+									}
 									$propertyBuilder->required($type->allowsNull() === false);
 									$propertyBuilder->link($type->getName(), $parameter->getName());
 								}
@@ -88,6 +95,8 @@
 						}
 					}
 					return $this->schemaList[$schema] = $schemaBuilder->getSchema();
+				} catch (SchemaException $exception) {
+					throw $exception;
 				} catch (\Throwable $throwable) {
 					throw new SchemaReflectionException(sprintf('Cannot do reflection of [%s]. Name is not probably a class.', $schema), 0, $throwable);
 				}
