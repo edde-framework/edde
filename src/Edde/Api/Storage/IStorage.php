@@ -102,6 +102,15 @@
 			public function insert(IEntity $entity): IStorage;
 
 			/**
+			 * @param IEntity $entity
+			 *
+			 * @return IStorage
+			 *
+			 * @throws DuplicateEntryException
+			 */
+			public function relation(IEntity $entity): IStorage;
+
+			/**
 			 * shortut: creates an entity, push data inside and insert it into the storage
 			 *
 			 * @param string $schema

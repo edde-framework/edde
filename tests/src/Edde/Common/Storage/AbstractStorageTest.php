@@ -137,7 +137,7 @@
 					/**
 					 * this will fail, because insert is bypassing storage check of entity presence
 					 */
-					$this->storage->insert($this->entityManager->attach($bar, $foo, FooBarSchema::class));
+					$this->storage->relation($this->entityManager->attach($foo, $bar, FooBarSchema::class));
 				} catch (DuplicateEntryException $exception) {
 				}
 				self::assertNotEmpty($exception, 'insert has not thrown an exception!');
