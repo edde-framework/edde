@@ -10,7 +10,7 @@
 			/**
 			 * @var string
 			 */
-			protected $table;
+			protected $name;
 			/**
 			 * @var array
 			 */

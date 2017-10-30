@@ -32,6 +32,10 @@
 			}
 
 			protected function fragmentRelation(INode $root): INativeBatch {
+				return $this->fragmentInsert($root);
+			}
+
+			protected function fragmentInsert(INode $root): INativeBatch {
 				$nameList = [];
 				$parameterList = [];
 				foreach ($root->getNode('set-list')->getNodeList() as $node) {
@@ -45,19 +49,6 @@
 				return new NativeBatch($sql . ':' . implode(', :', array_keys($parameterList)) . ')', $parameterList);
 			}
 
-			protected function fragmentInsert(INode $root): INativeBatch {
-				$parameterList = $this->fragmentParameterList($root->getNode('parameter-list'))->getParameterList();
-				$nameList = [];
-				$columnList = [];
-				foreach ($root->getNode('column-list')->getNodeList() as $node) {
-					$nameList[] = $this->delimite($node->getAttribute('column'));
-					$columnList[] = ':' . $node->getAttribute('parameter');
-				}
-				$sql = 'INSERT INTO ' . $this->delimite($root->getAttribute('table')) . ' (';
-				$sql .= implode(',', $nameList) . ') VALUES (';
-				return new NativeBatch($sql . implode(', ', $columnList) . ')', $parameterList);
-			}
-
 			/**
 			 * @param INode $root
 			 *
@@ -65,20 +56,23 @@
 			 * @throws QueryBuilderException
 			 */
 			protected function fragmentUpdate(INode $root): INativeBatch {
-				$sql[] = "UPDATE\n\t" . $this->delimite($root->getAttribute('table')) . "\nSET\n\t";
-				$parameterList = $this->fragment($root->getNode('parameter-list'))->getParameterList();
+				$sql = "UPDATE\n\t" . $this->delimite($root->getAttribute('name')) . "\nSET\n\t";
 				$setList = [];
-				foreach ($root->getNode('column-list')->getNodeList() as $node) {
-					$setList[] = $this->delimite($node->getAttribute('column')) . ' = :' . $node->getAttribute('parameter');
+				$parameterList = $this->fragmentParameterList($root->getNode('parameter-list'))->getParameterList();
+				foreach ($root->getNode('set-list')->getNodeList() as $node) {
+					foreach ($node->getAttributeList()->array() as $k => $v) {
+						$setList[] = $this->delimite($k) . ' = :' . $parameterId = ('p_' . sha1($k));
+						$parameterList[$parameterId] = $v;
+					}
 				}
-				$sql[] = implode(",\n\t", $setList) . "\n";
+				$sql .= implode(",\n\t", $setList) . "\n";
 				if ($root->hasNode('where-list')) {
-					$sql[] = "WHERE\n";
+					$sql .= "WHERE\n";
 					$query = $this->fragmentWhereList($root->getNode('where-list'));
-					$sql[] = $query->getQuery();
+					$sql .= $query->getQuery();
 					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
-				return new NativeBatch(implode('', $sql), $parameterList);
+				return new NativeBatch($sql, $parameterList);
 			}
 
 			/**

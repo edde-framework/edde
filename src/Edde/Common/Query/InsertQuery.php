@@ -8,7 +8,7 @@
 			/**
 			 * @var string
 			 */
-			protected $table;
+			protected $name;
 			/**
 			 * @var array
 			 */
@@ -19,7 +19,7 @@
 			protected $type;
 
 			public function __construct(string $table, array $source) {
-				$this->table = $table;
+				$this->name = $table;
 				$this->source = $source;
 				/**
 				 * type in constructor is missing intentionally as user is not allowed to change this variable
@@ -38,15 +38,7 @@
 			 */
 			protected function handleInit(): void {
 				parent::handleInit();
-				$this->node = new Node($this->type, null, ['table' => $this->table]);
-				$parameterList = $this->node->getNode('parameter-list');
-				$setList = $this->node->getNode('column-list');
-				foreach ($this->source as $k => $v) {
-					$setList->addNode(new Node('set', null, [
-						'column'    => $k,
-						'parameter' => $parameterId = ('p' . sha1($k . microtime(true) . random_bytes(64))),
-					]));
-					$parameterList->addNode(new Node('parameter', $v, ['name' => $parameterId]));
-				}
+				$this->node = new Node($this->type, null, ['name' => $this->name]);
+				$this->node->getNode('set-list')->addNode(new Node('set', null, $this->source));
 			}
 		}
