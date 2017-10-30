@@ -21,5 +21,5 @@
 			 *
 			 * @return string
 			 */
-			public function getProperty(): string;
+			public function getSource(): string;
 		}

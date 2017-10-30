@@ -53,14 +53,13 @@
 		 */
 		interface FooBarSchema {
 			/**
-			 * make property foo as a reference to FooSchema's property $guid; the type of this
-			 * property will be automatically set to $guid's type
+			 * make property foo as a reference to FooSchema's property $guid
 			 */
-			public function foo(FooSchema $guid);
+			public function foo(FooSchema $guid): string;
 
 			/**
 			 * the same works here
 			 */
-			public function bar(BarSchema $guid);
+			public function bar(BarSchema $guid): string;
 		}
 	}

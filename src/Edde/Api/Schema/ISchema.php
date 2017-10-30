@@ -14,6 +14,13 @@
 			public function getName(): string;
 
 			/**
+			 * return list of property nodes
+			 *
+			 * @return INode[]
+			 */
+			public function getNodeList(): array;
+
+			/**
 			 * special kind of schemas used just as a relational schemas (m:n relations, for graphs, ...)
 			 *
 			 * @return bool
@@ -71,34 +78,4 @@
 			 * @return IProperty[]
 			 */
 			public function getUniqueList(): array;
-
-			/**
-			 * return an array with properties which are link
-			 *
-			 * @return IProperty[]
-			 */
-			public function getLinkList(): array;
-
-			/**
-			 * @param string $property
-			 *
-			 * @return ILink
-			 */
-			public function getLink(string $property): ILink;
-
-			/**
-			 * get relation (link) property list for the given target
-			 *
-			 * @param string $target
-			 *
-			 * @return IProperty[]
-			 */
-			public function getRelationList(string $target): array;
-
-			/**
-			 * return list of property nodes
-			 *
-			 * @return INode[]
-			 */
-			public function getNodeList(): array;
 		}

@@ -253,7 +253,7 @@
 				foreach ($entity->getLinkList() as $name => $linked) {
 					$this->save($linked);
 					$link = $schema->getProperty($name)->getLink();
-					$entity->set($link->getProperty(), $linked->get($link->getTarget()));
+					$entity->set($link->getSource(), $linked->get($link->getTarget()));
 				}
 			}
 

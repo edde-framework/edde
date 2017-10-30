@@ -5,7 +5,6 @@
 		use Edde\Api\Schema\Exception\MultiplePrimaryException;
 		use Edde\Api\Schema\Exception\NoPrimaryPropertyException;
 		use Edde\Api\Schema\Exception\UnknownPropertyException;
-		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\IProperty;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Common\Object\Object;
@@ -21,8 +20,6 @@
 			protected $propertyList = [];
 			protected $primaryList = null;
 			protected $uniqueList = null;
-			protected $linkList = null;
-			protected $relationList = [];
 
 			public function __construct(INode $node, array $propertyList) {
 				$this->node = $node;
@@ -34,6 +31,13 @@
 			 */
 			public function getName(): string {
 				return $this->node->getAttribute('name');
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getNodeList(): array {
+				return $this->node->getNode('property-list')->getNodeList();
 			}
 
 			/**
@@ -116,52 +120,5 @@
 					}
 				}
 				return $this->uniqueList;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getLinkList(): array {
-				if ($this->linkList) {
-					return $this->linkList;
-				}
-				$propertyList = [];
-				foreach ($this->propertyList as $name => $property) {
-					if ($property->isLink()) {
-						$propertyList[$name] = $property;
-					}
-				}
-				return $this->linkList = $propertyList;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getLink(string $property): ILink {
-				return $this->getProperty($property)->getLink();
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getRelationList(string $target): array {
-				if (isset($this->relationList[$target])) {
-					return $this->relationList[$target];
-				}
-				$relationList = [];
-				/** @var $property IProperty */
-				foreach ($this->getLinkList() as $property) {
-					if (($link = $property->getLink())->getSchema() === $target) {
-						$relationList[] = $this->getProperty($link->getProperty());
-					}
-				}
-				return $this->relationList[$target] = $relationList;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getNodeList(): array {
-				return $this->node->getNode('property-list')->getNodeList();
 			}
 		}

@@ -32,7 +32,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getProperty(): string {
+			public function getSource(): string {
 				return $this->node->getAttribute('source');
 			}
 		}
