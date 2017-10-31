@@ -129,7 +129,7 @@
 			 * @inheritdoc
 			 */
 			public function linkTo(ISchema $schema, ILink $link): ISchema {
-				$this->linkToList[$schema->getName()][$link->getTarget()] = $link;
+				$this->linkToList[$schema->getName()][$link->getSource()] = $link;
 				return $this;
 			}
 
@@ -137,7 +137,7 @@
 			 * @inheritdoc
 			 */
 			public function link(ISchema $schema, ILink $link): ISchema {
-				$this->linkList[$schema->getName()][$link->getSource()] = $link;
+				$this->linkList[$schema->getName()][$link->getTarget()] = $link;
 				return $this;
 			}
 		}

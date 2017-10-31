@@ -70,8 +70,8 @@
 						continue;
 					}
 					$link = $property->getLink();
-					$schema->linkTo($target = $this->load($link->getSchema()), $link);
-					$target->link($schema, $link);
+					$schema->link($target = $this->load($link->getSchema()), $link);
+					$target->linkTo($schema, $link);
 				}
 				return $this->schemaList[$name] = $schema;
 			}

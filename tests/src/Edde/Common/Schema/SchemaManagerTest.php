@@ -17,6 +17,7 @@
 				$fooBarSchema = $this->schemaManager->load(FooBarSchema::class);
 				self::assertTrue($fooBarSchema->isRelation(), 'foo bar schema should be automagicall relation!');
 				$fooSchema = $this->schemaManager->load(FooSchema::class);
+				$barSchema = $this->schemaManager->load(BarSchema::class);
 //				$link = $fooSchema->getLinkTo(FooBarSchema::class);
 //				self::assertSame(FooSchema::class, $link->getSchema());
 //				self::assertSame('guid', $link->getTarget());
