@@ -173,4 +173,11 @@
 				$this->relationList[$relation->getTargetLink()->getTargetSchema()->getName()][] = $relation;
 				return $this;
 			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getRelationList(string $schema): array {
+				return $this->relationList[$schema] ?? [];
+			}
 		}

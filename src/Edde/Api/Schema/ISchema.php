@@ -124,4 +124,14 @@
 			 * @return ISchema
 			 */
 			public function relationTo(IRelation $relation): ISchema;
+
+			/**
+			 * return array of relations to the given schema (the given schema is target schema, not
+			 * relation schema)
+			 *
+			 * @param string $schema
+			 *
+			 * @return IRelation[]
+			 */
+			public function getRelationList(string $schema): array;
 		}
