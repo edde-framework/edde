@@ -1,11 +1,11 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Schema {
+	namespace Edde\Common\Schema;
 
-		/**
-		 * Because there is a reflection loader, we can use php native
-		 * fetaures, that's fuckin' cool!
-		 */
+	/**
+	 * Because there is a reflection loader, we can use php native
+	 * fetaures, that's fuckin' cool!
+	 */
 		interface GuidSchema {
 			/**
 			 * define property guid which is primary (parameter name matters)
@@ -62,4 +62,15 @@
 			 */
 			public function bar(BarSchema $guid): string;
 		}
-	}
+
+		interface SimpleSchema extends GuidSchema {
+			public function name(): string;
+
+			public function optional(): ?string;
+
+			public function value(): ?float;
+
+			public function date(): ?\DateTime;
+
+			public function question(): ?bool;
+		}

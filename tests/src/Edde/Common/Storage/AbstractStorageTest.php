@@ -10,11 +10,11 @@
 		use Edde\Api\Storage\Exception\UnknownTableException;
 		use Edde\Api\Storage\Inject\EntityManager;
 		use Edde\Api\Storage\Inject\Storage;
+		use Edde\Common\Schema\BarSchema;
+		use Edde\Common\Schema\FooBarSchema;
+		use Edde\Common\Schema\FooSchema;
+		use Edde\Common\Schema\SimpleSchema;
 		use Edde\Ext\Test\TestCase;
-		use Edde\Test\BarSchema;
-		use Edde\Test\FooBarSchema;
-		use Edde\Test\FooSchema;
-		use Edde\Test\SimpleSchema;
 
 		abstract class AbstractStorageTest extends TestCase {
 			use Storage;

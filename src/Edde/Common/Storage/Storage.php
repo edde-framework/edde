@@ -222,7 +222,7 @@
 				 * because storage is using IQL in general, it's possible to safely use queries here in abstract
 				 * implementation
 				 */
-				$this->execute(new CreateSchemaQuery($this->schemaManager->getSchema($schema)));
+				$this->execute(new CreateSchemaQuery($this->schemaManager->load($schema)));
 				return $this;
 			}
 
@@ -237,7 +237,7 @@
 					$query = new SelectQuery();
 					$query->table($schema)->all();
 				}
-				return new Collection($this->entityManager, $this, $this->schemaManager->getSchema($schema), $query);
+				return new Collection($this->entityManager, $this, $this->schemaManager->load($schema), $query);
 			}
 
 			/**
