@@ -2,7 +2,9 @@
 	namespace Edde\Common\Storage;
 
 		use Edde\Api\Crate\ICrate;
+		use Edde\Api\Schema\Exception\LinkException;
 		use Edde\Api\Schema\Exception\RelationException;
+		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\ICollection;
@@ -39,6 +41,16 @@
 				if (parent::isDirty()) {
 					return true;
 				}
+				foreach ($this->linkList as $entity) {
+					if ($entity->isDirty()) {
+						return true;
+					}
+				}
+				foreach ($this->relationList as $entity) {
+					if ($entity->isDirty()) {
+						return true;
+					}
+				}
 				return false;
 			}
 
@@ -46,7 +58,10 @@
 			 * @inheritdoc
 			 */
 			public function commit(): ICrate {
-				return parent::commit();
+				parent::commit();
+				$this->linkList = [];
+				$this->relationList = [];
+				return $this;
 			}
 
 			/**
@@ -70,7 +85,17 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function link(IEntity $entity): IEntity {
+			public function link(IEntity $entity, ILink $link = null): IEntity {
+				if ($link === null) {
+					$linkList = $this->schema->getLinkList($schemaName = $entity->getSchema()->getName());
+					if (($count = count($linkList)) === 0) {
+						throw new LinkException(sprintf('There is no link from [%s] to [%s].', $this->schema->getName(), $schemaName));
+					} else if ($count !== 1) {
+						throw new LinkException(sprintf('There are more links from [%s] to [%s].', $this->schema->getName(), $schemaName));
+					}
+					list($link) = $linkList;
+				}
+				$this->set($link->getSourceProperty()->getName(), $entity->get($link->getTargetProperty()->getName()));
 				$this->linkList[] = $entity;
 				return $this;
 			}
@@ -118,15 +143,15 @@
 			 */
 			public function attach(IEntity $entity): IEntity {
 				$relationList = $this->schema->getRelationList($schemaName = $entity->getSchema()->getName());
-				if (count($relationList) === 0) {
+				if (($count = count($relationList)) === 0) {
 					throw new RelationException(sprintf('There are no relations from [%s] to schema [%s].', $this->schema->getName(), $schemaName));
-				} else if (count($relationList) !== 1) {
+				} else if ($count !== 1) {
 					throw new RelationException(sprintf('There are more relations from [%s] to schema [%s]. You have to specify relation schema.', $this->schema->getName(), $schemaName));
 				}
 				list($relation) = $relationList;
 				$relationEntity = $this->entityManager->createEntity($relation->getSchema());
-				$relationEntity->link($this);
-				$relationEntity->link($entity);
+				$relationEntity->link($this, $relation->getSourceLink());
+				$relationEntity->link($entity, $relation->getTargetLink());
 				return $this->relationList[] = $relationEntity;
 			}
 
@@ -139,6 +164,7 @@
 
 			public function __clone() {
 				parent::__clone();
+				$this->linkList = [];
 				$this->relationList = [];
 			}
 		}

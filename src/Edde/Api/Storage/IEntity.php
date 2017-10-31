@@ -3,6 +3,7 @@
 
 		use Edde\Api\Crate\ICrate;
 		use Edde\Api\Crate\IProperty;
+		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\IntegrityException;
@@ -61,11 +62,12 @@
 			/**
 			 * link the given entity to the current one
 			 *
-			 * @param IEntity $entity
+			 * @param IEntity    $entity
+			 * @param ILink|null $link
 			 *
 			 * @return IEntity
 			 */
-			public function link(IEntity $entity): IEntity;
+			public function link(IEntity $entity, ILink $link = null): IEntity;
 
 			/**
 			 * return linked list of entites
