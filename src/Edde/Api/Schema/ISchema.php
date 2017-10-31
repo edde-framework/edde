@@ -96,7 +96,7 @@
 			 *
 			 * @return ILink[]
 			 */
-			public function getLinkToList(string $schema): array;
+			public function getLinkToList(string $schema = null): array;
 
 			/**
 			 * link $schema to $this schema; the relation is from "me" to "him"
@@ -114,5 +114,5 @@
 			 *
 			 * @return ILink[]
 			 */
-			public function getLinkList(string $schema): array;
+			public function getLinkList(string $schema = null): array;
 		}
