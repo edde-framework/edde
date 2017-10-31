@@ -125,27 +125,6 @@
 				return $this->storage->collection($this->schema->getName());
 			}
 
-			/**
-			 * @inheritdoc
-			 */
-			public function relationTo(IEntity $entity, string $schema): IEntity {
-				return $this->entityManager->attach($this, $entity, $schema);
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function relationOf(string $schema, string $relation): ICollection {
-				$collection = $this->storage->collection($schema);
-				$relationSchema = $this->schemaManager->getSchema($relation);
-				list($targetProperty) = $relationSchema->getRelationList($schema);
-				list($sourceProperty) = $relationSchema->getRelationList($this->schema->getName());
-				$targetLink = $targetProperty->getLink();
-				$sourceLink = $sourceProperty->getLink();
-				$collection->getQuery()->table($relation, 'r')->where()->eq($sourceLink->getProperty(), 'r')->to($this->get($sourceLink->getTarget()))->and()->eq($targetLink->getProperty(), 'r')->toColumn($targetLink->getTarget(), 'c');
-				return $collection;
-			}
-
 			public function __clone() {
 				parent::__clone();
 				$this->linkList = [];
