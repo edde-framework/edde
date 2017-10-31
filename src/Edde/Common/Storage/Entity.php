@@ -22,6 +22,10 @@
 			/**
 			 * @var IEntity[]
 			 */
+			protected $linkList = [];
+			/**
+			 * @var IEntity[]
+			 */
 			protected $relationList = [];
 
 			public function __construct(ISchema $schema) {
@@ -66,8 +70,9 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function hasLinks(): bool {
-				return empty($this->linkList) === false;
+			public function link(IEntity $entity): IEntity {
+				$this->linkList[] = $entity;
+				return $this;
 			}
 
 			/**
@@ -120,9 +125,8 @@
 				}
 				list($relation) = $relationList;
 				$relationEntity = $this->entityManager->createEntity($relation->getSchema());
-				// link instead of direct set of a value
-//				$relationEntity->set($name = $relation->getSourceLink()->getSourceProperty()->getName(), $entity->get($name));
-//				$relationEntity->set($name = $relation->getTargetLink()->getSourceProperty()->getName(), $entity->get($name));
+				$relationEntity->link($this);
+				$relationEntity->link($entity);
 				return $this->relationList[] = $relationEntity;
 			}
 

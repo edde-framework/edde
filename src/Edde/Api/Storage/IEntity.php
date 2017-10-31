@@ -59,6 +59,22 @@
 			public function collection(): ICollection;
 
 			/**
+			 * link the given entity to the current one
+			 *
+			 * @param IEntity $entity
+			 *
+			 * @return IEntity
+			 */
+			public function link(IEntity $entity): IEntity;
+
+			/**
+			 * return linked list of entites
+			 *
+			 * @return IEntity[]
+			 */
+			public function getLinkList(): array;
+
+			/**
 			 * attach the given entity to $this one using m:n relation; returned entity is the
 			 * relation entity
 			 *

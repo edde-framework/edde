@@ -116,6 +116,9 @@
 			 * @inheritdoc
 			 */
 			public function saveRelations(IEntity $entity): IStorage {
+				foreach ($entity->getLinkList() as $entity) {
+					$this->save($entity);
+				}
 				foreach ($entity->getRelationList() as $entity) {
 					$this->save($entity);
 				}
