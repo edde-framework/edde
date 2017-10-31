@@ -57,7 +57,7 @@
 			public function isLink(): bool;
 
 			/**
-			 * @return ILink
+			 * @return IPropertyLink
 			 */
-			public function getLink(): ILink;
+			public function getLink(): IPropertyLink;
 		}

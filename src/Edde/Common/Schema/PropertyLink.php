@@ -2,10 +2,10 @@
 	namespace Edde\Common\Schema;
 
 		use Edde\Api\Node\INode;
-		use Edde\Api\Schema\ILink;
+		use Edde\Api\Schema\IPropertyLink;
 		use Edde\Common\Object\Object;
 
-		class Link extends Object implements ILink {
+		class PropertyLink extends Object implements IPropertyLink {
 			/**
 			 * @var INode
 			 */

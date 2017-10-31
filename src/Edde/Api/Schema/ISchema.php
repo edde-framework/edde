@@ -83,20 +83,20 @@
 			 * link $this schema to the target $schema using the given $link (relation is
 			 * from "him" to "me")
 			 *
-			 * @param ISchema $schema
-			 * @param ILink   $link
+			 * @param ISchema       $schema
+			 * @param IPropertyLink $link
 			 *
 			 * @return ISchema
 			 */
-			public function linkTo(ISchema $schema, ILink $link): ISchema;
+			public function linkTo(ISchema $schema, IPropertyLink $link): ISchema;
 
 			/**
 			 * link $schema to $this schema; the relation is from "me" to "him"
 			 *
-			 * @param ISchema $schema
-			 * @param ILink   $link
+			 * @param ISchema       $schema
+			 * @param IPropertyLink $link
 			 *
 			 * @return ISchema
 			 */
-			public function link(ISchema $schema, ILink $link): ISchema;
+			public function link(ISchema $schema, IPropertyLink $link): ISchema;
 		}

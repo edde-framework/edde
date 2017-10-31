@@ -1,7 +1,7 @@
 <?php
 	namespace Edde\Common\Query;
 
-		use Edde\Api\Schema\ILink;
+		use Edde\Api\Schema\IPropertyLink;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Common\Node\Node;
 
@@ -16,7 +16,7 @@
 				$this->schema = $schema;
 			}
 
-			public function addRelation(ILink $link, string $value): RelationQuery {
+			public function addRelation(IPropertyLink $link, string $value): RelationQuery {
 				$this->init();
 				$this->node->getNode('relation-list')->addNode(new Node('link', null, [
 					/**

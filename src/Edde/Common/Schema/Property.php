@@ -3,8 +3,8 @@
 
 		use Edde\Api\Node\INode;
 		use Edde\Api\Schema\Exception\LinkException;
-		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\IProperty;
+		use Edde\Api\Schema\IPropertyLink;
 		use Edde\Common\Object\Object;
 
 		class Property extends Object implements IProperty {
@@ -17,7 +17,7 @@
 			 */
 			protected $node;
 			/**
-			 * @var ILink
+			 * @var IPropertyLink
 			 */
 			protected $link;
 
@@ -85,12 +85,12 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getLink(): ILink {
+			public function getLink(): IPropertyLink {
 				if ($this->link) {
 					return $this->link;
 				} else if ($this->isLink() === false) {
 					throw new LinkException(sprintf('Property [%s::%s] is not a link.', $this->root->getAttribute('name'), $this->getName()));
 				}
-				return $this->link = new Link($this->node->getNode('link'));
+				return $this->link = new PropertyLink($this->node->getNode('link'));
 			}
 		}

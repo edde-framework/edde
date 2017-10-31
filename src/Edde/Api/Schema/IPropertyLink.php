@@ -1,7 +1,7 @@
 <?php
 	namespace Edde\Api\Schema;
 
-		interface ILink {
+		interface IPropertyLink {
 			/**
 			 * return target schema name
 			 *
