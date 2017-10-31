@@ -115,4 +115,13 @@
 			 * @return ILink[]
 			 */
 			public function getLinkList(string $schema = null): array;
+
+			/**
+			 * add a m:n relation to another schema through (relation) schema
+			 *
+			 * @param IRelation $relation
+			 *
+			 * @return ISchema
+			 */
+			public function relationTo(IRelation $relation): ISchema;
 		}

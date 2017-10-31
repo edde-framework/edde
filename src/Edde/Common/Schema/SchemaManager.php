@@ -77,6 +77,13 @@
 					);
 					$target->linkTo($link);
 				}
+				$linkList = $schema->getLinkList();
+				$current = array_shift($linkList);
+				foreach ($linkList as $link) {
+					$link->getTargetSchema()->relationTo(new Relation($schema, $link, $current));
+					$current->getTargetSchema()->relationTo(new Relation($schema, $current, $link));
+					$current = $link;
+				}
 				return $this->schemaList[$name] = $schema;
 			}
 

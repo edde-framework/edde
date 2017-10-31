@@ -7,6 +7,7 @@
 		use Edde\Api\Schema\Exception\UnknownPropertyException;
 		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\IProperty;
+		use Edde\Api\Schema\IRelation;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Common\Object\Object;
 
@@ -21,8 +22,18 @@
 			protected $propertyList = [];
 			protected $primaryList = null;
 			protected $uniqueList = null;
+			/**
+			 * @var ILink[][]
+			 */
 			protected $linkToList = [];
+			/**
+			 * @var ILink[][]
+			 */
 			protected $linkList = [];
+			/**
+			 * @var IRelation[][]
+			 */
+			protected $relationList = [];
 
 			public function __construct(INode $node, array $propertyList) {
 				$this->node = $node;
@@ -153,5 +164,13 @@
 			 */
 			public function getLinkList(string $schema = null): array {
 				return $this->linkList[$schema] ?? [];
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function relationTo(IRelation $relation): ISchema {
+				$this->relationList[$relation->getTargetLink()->getTargetSchema()->getName()][] = $relation;
+				return $this;
 			}
 		}
