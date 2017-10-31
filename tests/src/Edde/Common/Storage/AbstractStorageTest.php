@@ -1,6 +1,8 @@
 <?php
 	namespace Edde\Common\Storage;
 
+		use Edde\Api\Schema\Exception\UnknownSchemaException;
+		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\DuplicateTableException;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
@@ -19,6 +21,7 @@
 		abstract class AbstractStorageTest extends TestCase {
 			use Storage;
 			use EntityManager;
+			use SchemaManager;
 
 			/**
 			 * @throws DuplicateTableException
@@ -109,12 +112,13 @@
 
 			/**
 			 * @throws StorageException
+			 * @throws UnknownSchemaException
 			 */
 			public function testRelationTo() {
 				$foo = $this->entityManager->create(FooSchema::class, [
 					'name' => 'foo The First',
 				]);
-				$foo2 = $this->entityManager->create(FooSchema::class, [
+				$this->entityManager->create(FooSchema::class, [
 					'name' => 'foo The Second',
 				])->save();
 				$bar = $this->entityManager->create(BarSchema::class, [
@@ -123,14 +127,10 @@
 				$bar2 = $this->entityManager->create(BarSchema::class, [
 					'name' => 'bar The Third',
 				]);
-//				$foo->attach()
-				$foo->relationTo($bar, FooBarSchema::class)->save();
-				$foo->relationTo($bar2, FooBarSchema::class)->save();
-				/**
-				 * second save of the same entities will survive, because save is checking presence by primary
-				 * keys and FooBarSchema is using it's properties as a primary key
-				 */
-				$foo->relationTo($bar, FooBarSchema::class)->save();
+				$this->schemaManager->load(FooBarSchema::class);
+				$foo->attach($bar);
+				$foo->attach($bar2);
+				$foo->save();
 				self::assertTrue(true, 'yay!!');
 			}
 

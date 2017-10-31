@@ -23,6 +23,7 @@
 			 * @throws FactoryException
 			 */
 			protected function setUp() {
+				parent::setUp();
 				ContainerFactory::inject($this, [
 					IDriver::class       => ContainerFactory::instance(MysqlDriver::class, [
 						'mysql:dbname=edde;host=172.17.0.1',

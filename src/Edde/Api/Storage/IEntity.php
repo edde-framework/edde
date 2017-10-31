@@ -57,4 +57,21 @@
 			 * @return ICollection
 			 */
 			public function collection(): ICollection;
+
+			/**
+			 * attach the given entity to $this one using m:n relation; returned entity is the
+			 * relation entity
+			 *
+			 * @param IEntity $entity
+			 *
+			 * @return IEntity
+			 */
+			public function attach(IEntity $entity): IEntity;
+
+			/**
+			 * get list of attached entities
+			 *
+			 * @return IEntity[]
+			 */
+			public function getRelationList(): array;
 		}

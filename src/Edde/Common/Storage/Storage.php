@@ -115,9 +115,20 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function saveRelations(IEntity $entity): IStorage {
+				foreach ($entity->getRelationList() as $entity) {
+					$this->save($entity);
+				}
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function save(IEntity $entity): IStorage {
 				$this->start();
 				try {
+					$this->saveRelations($entity);
 					/**
 					 * entities not changed will not be saved
 					 */
@@ -156,6 +167,7 @@
 			 * @inheritdoc
 			 */
 			public function insert(IEntity $entity): IStorage {
+				$this->saveRelations($entity);
 				$this->execute(new InsertQuery($entity->getSchema(), $this->prepare($entity)));
 				$entity->commit();
 				return $this;
@@ -173,6 +185,7 @@
 			 * @inheritdoc
 			 */
 			public function update(IEntity $entity): IStorage {
+				$this->saveRelations($entity);
 				$query = new UpdateQuery($entity->getSchema(), $this->prepare($entity));
 				foreach ($entity->getPrimaryList() as $property) {
 					$query->where()->and()->eq($property->getName())->to($property->get());
