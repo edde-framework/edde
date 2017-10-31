@@ -65,6 +65,14 @@
 				if ($schema === null) {
 					throw new UnknownSchemaException(sprintf('Requested unknown schema [%s].', $name));
 				}
+				foreach ($schema->getPropertyList() as $property) {
+					if ($property->isLink() === false) {
+						continue;
+					}
+					$link = $property->getLink();
+					$schema->linkTo($target = $this->load($link->getSchema()), $link);
+					$target->link($schema, $link);
+				}
 				return $this->schemaList[$name] = $schema;
 			}
 

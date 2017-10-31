@@ -3,11 +3,11 @@
 
 		interface ILink {
 			/**
-			 * return target schema name
+			 * return target schema
 			 *
-			 * @return string
+			 * @return ISchema
 			 */
-			public function getSchema(): string;
+			public function getSchema(): ISchema;
 
 			/**
 			 * return property of the target schema

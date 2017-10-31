@@ -78,4 +78,25 @@
 			 * @return IProperty[]
 			 */
 			public function getUniqueList(): array;
+
+			/**
+			 * link $this schema to the target $schema using the given $link (relation is
+			 * from "him" to "me")
+			 *
+			 * @param ISchema $schema
+			 * @param ILink   $link
+			 *
+			 * @return ISchema
+			 */
+			public function linkTo(ISchema $schema, ILink $link): ISchema;
+
+			/**
+			 * link $schema to $this schema; the relation is from "me" to "him"
+			 *
+			 * @param ISchema $schema
+			 * @param ILink   $link
+			 *
+			 * @return ISchema
+			 */
+			public function link(ISchema $schema, ILink $link): ISchema;
 		}

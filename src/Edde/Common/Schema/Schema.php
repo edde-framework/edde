@@ -5,6 +5,7 @@
 		use Edde\Api\Schema\Exception\MultiplePrimaryException;
 		use Edde\Api\Schema\Exception\NoPrimaryPropertyException;
 		use Edde\Api\Schema\Exception\UnknownPropertyException;
+		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\IProperty;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Common\Object\Object;
@@ -20,6 +21,8 @@
 			protected $propertyList = [];
 			protected $primaryList = null;
 			protected $uniqueList = null;
+			protected $linkToList = [];
+			protected $linkList = [];
 
 			public function __construct(INode $node, array $propertyList) {
 				$this->node = $node;
@@ -120,5 +123,21 @@
 					}
 				}
 				return $this->uniqueList;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function linkTo(ISchema $schema, ILink $link): ISchema {
+				$this->linkToList[$schema->getName()][$link->getTarget()] = $link;
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function link(ISchema $schema, ILink $link): ISchema {
+				$this->linkList[$schema->getName()][$link->getSource()] = $link;
+				return $this;
 			}
 		}
