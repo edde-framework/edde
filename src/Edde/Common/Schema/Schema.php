@@ -6,7 +6,6 @@
 		use Edde\Api\Schema\Exception\NoPrimaryPropertyException;
 		use Edde\Api\Schema\Exception\UnknownPropertyException;
 		use Edde\Api\Schema\IProperty;
-		use Edde\Api\Schema\IPropertyLink;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Common\Object\Object;
 
@@ -128,7 +127,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function linkTo(ISchema $schema, IPropertyLink $link): ISchema {
+			public function linkTo(ISchema $schema, ILink $link): ISchema {
 				$this->linkToList[$schema->getName()][$link->getSource()] = $link;
 				return $this;
 			}
@@ -136,7 +135,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function link(ISchema $schema, IPropertyLink $link): ISchema {
+			public function link(ISchema $schema, ILink $link): ISchema {
 				$this->linkList[$schema->getName()][$link->getTarget()] = $link;
 				return $this;
 			}

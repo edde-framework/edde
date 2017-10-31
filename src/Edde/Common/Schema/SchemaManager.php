@@ -69,9 +69,10 @@
 					if ($property->isLink() === false) {
 						continue;
 					}
-					$link = $property->getLink();
-					$schema->link($target = $this->load($link->getSchema()), $link);
-					$target->linkTo($schema, $link);
+					$link = $property->getLinkNode();
+//					new Link(Schema, Property, Propert);
+//					$schema->link($target = $this->load($link->getAttribute('schema')), $link);
+//					$target->linkTo($schema, $link);
 				}
 				return $this->schemaList[$name] = $schema;
 			}

@@ -1,6 +1,8 @@
 <?php
 	namespace Edde\Api\Schema;
 
+		use Edde\Api\Node\INode;
+
 		interface IProperty {
 			/**
 			 * get name of this property
@@ -57,7 +59,7 @@
 			public function isLink(): bool;
 
 			/**
-			 * @return IPropertyLink
+			 * @return INode
 			 */
-			public function getLink(): IPropertyLink;
+			public function getLinkNode(): INode;
 		}
