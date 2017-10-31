@@ -6,7 +6,6 @@
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\Inject\QueryBuilder;
 		use Edde\Api\Query\IQuery;
-		use Edde\Api\Schema\Exception\UnknownPropertyException;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Storage\Exception\ExclusiveTransactionException;
 		use Edde\Api\Storage\Exception\NoTransactionException;
@@ -18,7 +17,6 @@
 		use Edde\Common\Query\CreateSchemaQuery;
 		use Edde\Common\Query\InsertQuery;
 		use Edde\Common\Query\NativeQuery;
-		use Edde\Common\Query\RelationQuery;
 		use Edde\Common\Query\SelectQuery;
 		use Edde\Common\Query\UpdateQuery;
 
@@ -123,7 +121,6 @@
 					/**
 					 * entities not changed will not be saved
 					 */
-					$this->handleLinks($entity);
 					if ($entity->isDirty() === false) {
 						$this->commit();
 						return $this;
@@ -141,7 +138,7 @@
 					/**
 					 * pickup an entity from storage if it's already there (and run update)
 					 */
-					$method = $entity->getSchema()->isRelation() ? 'relation' : 'insert';
+					$method = 'insert';
 					foreach ($value ? $this->execute($query) : [] as $_) {
 						$method = 'update';
 						break;
@@ -159,35 +156,7 @@
 			 * @inheritdoc
 			 */
 			public function insert(IEntity $entity): IStorage {
-				$this->handleLinks($entity);
 				$this->execute(new InsertQuery($entity->getSchema(), $this->prepare($entity)));
-				$entity->commit();
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function relation(IEntity $entity): IStorage {
-				$this->handleLinks($entity);
-				/**
-				 * relation name
-				 */
-				$schema = $entity->getSchema();
-				$query = new RelationQuery($entity->getSchema());
-				foreach ($entity->getLinkList() as $name => $linked) {
-					/**
-					 * setup relation itself
-					 *
-					 * if there is a graph database, this will help find existing relation and make an edge; if there is a classic
-					 * database, relations will not be used at all
-					 *
-					 * relation entity should be updated to given values too; on graph database this is just optional step, but
-					 * on classic database this is mandatory to set foreign references
-					 */
-					$query->addRelation($link = $schema->getLink($name), $value = $linked->get($link->getTarget()));
-				}
-				$this->execute($query);
 				$entity->commit();
 				return $this;
 			}
@@ -204,7 +173,6 @@
 			 * @inheritdoc
 			 */
 			public function update(IEntity $entity): IStorage {
-				$this->handleLinks($entity);
 				$query = new UpdateQuery($entity->getSchema(), $this->prepare($entity));
 				foreach ($entity->getPrimaryList() as $property) {
 					$query->where()->and()->eq($property->getName())->to($property->get());
@@ -238,23 +206,6 @@
 					$query->table($schema)->all();
 				}
 				return new Collection($this->entityManager, $this, $this->schemaManager->load($schema), $query);
-			}
-
-			/**
-			 * @param IEntity $entity
-			 *
-			 * @throws ExclusiveTransactionException
-			 * @throws NoTransactionException
-			 * @throws UnknownPropertyException
-			 * @throws \Throwable
-			 */
-			protected function handleLinks(IEntity $entity): void {
-				$schema = $entity->getSchema();
-				foreach ($entity->getLinkList() as $name => $linked) {
-					$this->save($linked);
-					$link = $schema->getProperty($name)->getLink();
-					$entity->set($link->getSource(), $linked->get($link->getTarget()));
-				}
 			}
 
 			/**

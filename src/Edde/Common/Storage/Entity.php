@@ -4,7 +4,6 @@
 		use Edde\Api\Crate\ICrate;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Schema\ISchema;
-		use Edde\Api\Storage\Exception\EntityException;
 		use Edde\Api\Storage\ICollection;
 		use Edde\Api\Storage\IEntity;
 		use Edde\Api\Storage\Inject\EntityManager;
@@ -19,10 +18,6 @@
 			 * @var ISchema
 			 */
 			protected $schema;
-			/**
-			 * @var IEntity[]
-			 */
-			protected $linkList = [];
 
 			public function __construct(ISchema $schema) {
 				$this->schema = $schema;
@@ -35,11 +30,6 @@
 				if (parent::isDirty()) {
 					return true;
 				}
-				foreach ($this->linkList as $entity) {
-					if ($entity->isDirty()) {
-						return true;
-					}
-				}
 				return false;
 			}
 
@@ -47,7 +37,6 @@
 			 * @inheritdoc
 			 */
 			public function commit(): ICrate {
-				$this->linkList = [];
 				return parent::commit();
 			}
 
@@ -67,17 +56,6 @@
 					$primaryList[] = $this->getProperty($property->getName());
 				}
 				return $primaryList;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function attach(string $name, IEntity $entity): IEntity {
-				if ($this->schema->getProperty($name)->isLink() === false) {
-					throw new EntityException(sprintf('Cannot attach entity [%s] to entity [%s::%s] - property is not a link.', $entity->getSchema()->getName(), $this->schema->getName(), $name));
-				}
-				$this->linkList[$name] = $entity;
-				return $this;
 			}
 
 			/**

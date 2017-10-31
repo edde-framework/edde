@@ -123,6 +123,7 @@
 				$bar2 = $this->entityManager->create(BarSchema::class, [
 					'name' => 'bar The Third',
 				]);
+//				$foo->attach()
 				$foo->relationTo($bar, FooBarSchema::class)->save();
 				$foo->relationTo($bar2, FooBarSchema::class)->save();
 				/**

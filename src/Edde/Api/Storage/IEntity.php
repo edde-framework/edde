@@ -27,30 +27,6 @@
 			public function getPrimaryList(): array;
 
 			/**
-			 * attach the given entity to the given property of this entity
-			 *
-			 * @param string  $name
-			 * @param IEntity $entity
-			 *
-			 * @return IEntity
-			 */
-			public function attach(string $name, IEntity $entity): IEntity;
-
-			/**
-			 * are there some linked entities to this one?
-			 *
-			 * @return bool
-			 */
-			public function hasLinks(): bool;
-
-			/**
-			 * get array of linked entities
-			 *
-			 * @return IEntity[]
-			 */
-			public function getLinkList(): array;
-
-			/**
 			 * save this entity into storage (and all related stuff to this entity)
 			 *
 			 * @return IEntity
