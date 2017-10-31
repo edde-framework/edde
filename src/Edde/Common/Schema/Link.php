@@ -48,14 +48,14 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getSource(): IProperty {
+			public function getSourceProperty(): IProperty {
 				return $this->sourceProperty;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getTarget(): IProperty {
+			public function getTargetProperty(): IProperty {
 				return $this->targetProperty;
 			}
 		}

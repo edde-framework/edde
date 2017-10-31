@@ -90,6 +90,15 @@
 			public function linkTo(ILink $link): ISchema;
 
 			/**
+			 * return list of links pointing to the given schema
+			 *
+			 * @param string $schema
+			 *
+			 * @return ILink[]
+			 */
+			public function getLinkToList(string $schema): array;
+
+			/**
 			 * link $schema to $this schema; the relation is from "me" to "him"
 			 *
 			 * @param ILink $link
@@ -97,4 +106,13 @@
 			 * @return ISchema
 			 */
 			public function link(ILink $link): ISchema;
+
+			/**
+			 * get all links pointing to the given schema (related to self::link() method)
+			 *
+			 * @param string $schema
+			 *
+			 * @return ILink[]
+			 */
+			public function getLinkList(string $schema): array;
 		}

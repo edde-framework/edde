@@ -21,12 +21,12 @@
 			 *
 			 * @return IProperty
 			 */
-			public function getSource(): IProperty;
+			public function getSourceProperty(): IProperty;
 
 			/**
 			 * get target property (target schema -> target property)
 			 *
 			 * @return IProperty
 			 */
-			public function getTarget(): IProperty;
+			public function getTargetProperty(): IProperty;
 		}
