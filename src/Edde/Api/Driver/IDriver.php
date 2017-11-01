@@ -13,7 +13,7 @@
 		 */
 		interface IDriver extends IConfigurable {
 			/**
-			 * translates and executes the given query
+			 * executes the given query
 			 *
 			 * @param INativeQuery $nativeQuery
 			 *

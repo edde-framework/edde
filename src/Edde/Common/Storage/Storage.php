@@ -3,7 +3,6 @@
 
 		use Edde\Api\Driver\Inject\Driver;
 		use Edde\Api\Query\INativeQuery;
-		use Edde\Api\Query\INativeTransaction;
 		use Edde\Api\Query\Inject\QueryBuilder;
 		use Edde\Api\Query\IQuery;
 		use Edde\Api\Storage\Exception\ExclusiveTransactionException;
@@ -69,29 +68,14 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function transaction(INativeTransaction $nativeTransaction): IStream {
-				try {
-					$this->start();
-					$stream = $this->driver->transaction($nativeTransaction);
-					$this->commit();
-					return $stream;
-				} catch (\Throwable $throwable) {
-					$this->rollback();
-					throw $throwable;
-				}
-			}
-
-			/**
-			 * @inheritdoc
-			 */
 			public function execute(IQuery $query): IStream {
-				return $this->transaction($this->queryBuilder->query($query));
+				return $this->driver->transaction($this->queryBuilder->query($query));
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function query(INativeQuery $nativeQuery): IStream {
+			public function native(INativeQuery $nativeQuery): IStream {
 				return $this->driver->execute($nativeQuery);
 			}
 		}

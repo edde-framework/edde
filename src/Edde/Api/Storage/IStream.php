@@ -18,6 +18,11 @@
 			public function getQuery(): INativeQuery;
 
 			/**
+			 * @return IStream
+			 */
+			public function execute(): IStream;
+
+			/**
 			 * @return \Traversable|array
 			 */
 			public function getIterator();
