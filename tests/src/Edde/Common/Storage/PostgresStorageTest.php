@@ -13,8 +13,8 @@
 
 		class PostgresStorageTest extends AbstractStorageTest {
 			public function testPrepareDatabase() {
-				$this->storage->query(new NativeQuery('DROP SCHEMA IF EXISTS "test" CASCADE'));
-				$this->storage->query(new NativeQuery('CREATE SCHEMA "test" AUTHORIZATION "edde"'));
+				$this->storage->native(new NativeQuery('DROP SCHEMA IF EXISTS "test" CASCADE'));
+				$this->storage->native(new NativeQuery('CREATE SCHEMA "test" AUTHORIZATION "edde"'));
 				$this->assertTrue(true, 'everything is OK!');
 			}
 
@@ -28,6 +28,6 @@
 					IQueryBuilder::class => PostgresQueryBuilder::class,
 					new ClassFactory(),
 				]);
-				$this->storage->query(new NativeQuery('SET search_path TO "test"'));
+				$this->storage->native(new NativeQuery('SET search_path TO "test"'));
 			}
 		}
