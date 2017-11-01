@@ -7,9 +7,24 @@
 
 		abstract class AbstractQuery extends Object implements IQuery {
 			/**
+			 * @var string
+			 */
+			protected $type;
+			/**
 			 * @var INode
 			 */
 			protected $node;
+
+			public function __construct(string $type) {
+				$this->type = $type;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getType(): string {
+				return $this->type;
+			}
 
 			/**
 			 * @inheritdoc

@@ -12,7 +12,7 @@
 			 *
 			 * @return INativeTransaction
 			 */
-			public function build(IQuery $query): INativeTransaction;
+			public function query(IQuery $query): INativeTransaction;
 
 			/**
 			 * delimite the given string

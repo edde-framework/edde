@@ -87,7 +87,7 @@
 			 * @inheritdoc
 			 */
 			public function execute(IQuery $query) {
-				return $this->transaction($this->queryBuilder->build($query));
+				return $this->transaction($this->queryBuilder->query($query));
 			}
 
 			/**

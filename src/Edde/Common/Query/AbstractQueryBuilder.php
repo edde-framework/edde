@@ -21,22 +21,11 @@
 			 * @return INativeTransaction
 			 * @throws QueryBuilderException
 			 */
-			public function build(IQuery $query): INativeTransaction {
-				return $this->fragment($query->getQuery());
-			}
-
-			/**
-			 * @param INode $node
-			 *
-			 * @return INativeTransaction
-			 *
-			 * @throws QueryBuilderException
-			 */
-			protected function fragment(INode $node): INativeTransaction {
-				if (isset($this->fragmentList[$name = $node->getName()]) === false) {
-					throw new QueryBuilderException(sprintf('Unsupported fragment type [%s] in [%s].', $name, static::class));
+			public function query(IQuery $query): INativeTransaction {
+				if (isset($this->fragmentList[$name = $query->getType()]) === false) {
+					throw new QueryBuilderException(sprintf('Unsupported query type [%s] in [%s].', $name, static::class));
 				}
-				return $this->fragmentList[$name]($node);
+				return $this->fragmentList[$name]($query);
 			}
 
 			/**

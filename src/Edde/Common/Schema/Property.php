@@ -35,6 +35,13 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function getType(): string {
+				return $this->node->getAttribute('type', 'string');
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function isPrimary(): bool {
 				return $this->node->getAttribute('primary', false);
 			}
@@ -44,6 +51,13 @@
 			 */
 			public function isUnique(): bool {
 				return $this->node->getAttribute('unique', false);
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function isRequired(): bool {
+				return $this->node->getAttribute('required', false);
 			}
 
 			/**
@@ -65,13 +79,6 @@
 			 */
 			public function getSanitizer(): ?string {
 				return $this->node->getAttribute('sanitizer');
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getType(): string {
-				return $this->node->getAttribute('type', 'string');
 			}
 
 			/**

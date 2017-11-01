@@ -1,27 +1,24 @@
 <?php
 	namespace Edde\Common\Query;
 
-		use Edde\Api\Node\INode;
+		use Edde\Api\Query\ICrateSchemaQuery;
 		use Edde\Api\Schema\ISchema;
-		use Edde\Common\Node\Node;
 
-		class CreateSchemaQuery extends AbstractQuery {
+		class CreateSchemaQuery extends AbstractQuery implements ICrateSchemaQuery {
 			/**
 			 * @var ISchema
 			 */
 			protected $schema;
 
 			public function __construct(ISchema $schema) {
+				parent::__construct('create-schema');
 				$this->schema = $schema;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getQuery(): INode {
-				return (new Node('create-schema', null, [
-					'name'     => $this->schema->getName(),
-					'relation' => $this->schema->isRelation(),
-				]))->addNodeList($this->schema->getNodeList());
+			public function getSchema(): ISchema {
+				return $this->schema;
 			}
 		}

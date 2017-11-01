@@ -35,7 +35,7 @@
 			 * @throws IntegrityException
 			 */
 			public function testCreateSchema() {
-				$this->driver->execute($this->queryBuilder->build(new CreateSchemaQuery($this->schema)));
+				$this->driver->execute($this->queryBuilder->query(new CreateSchemaQuery($this->schema)));
 				$this->assertTrue(true, 'everything looks nice even here!');
 			}
 
@@ -45,7 +45,7 @@
 			 */
 			public function testDuplicateTable() {
 				$this->expectException(DuplicateTableException::class);
-				$this->driver->execute($this->queryBuilder->build(new CreateSchemaQuery($this->schema)));
+				$this->driver->execute($this->queryBuilder->query(new CreateSchemaQuery($this->schema)));
 			}
 
 			/**
@@ -63,17 +63,17 @@
 			 */
 			public function testInsertQuery() {
 				$this->expectException(DuplicateEntryException::class);
-				$this->driver->execute($this->queryBuilder->build(new InsertQuery($this->schema->getName(), [
+				$this->driver->execute($this->queryBuilder->query(new InsertQuery($this->schema->getName(), [
 					'guid'                     => '1234',
 					'property-for-this-table'  => 'string',
 					'this-one-is-not-required' => 12,
 				])));
-				$this->driver->execute($this->queryBuilder->build(new InsertQuery($this->schema->getName(), [
+				$this->driver->execute($this->queryBuilder->query(new InsertQuery($this->schema->getName(), [
 					'guid'                     => '1235',
 					'property-for-this-table'  => 'string',
 					'this-one-is-not-required' => 24,
 				])));
-				$this->driver->execute($this->queryBuilder->build(new InsertQuery($this->schema->getName(), [
+				$this->driver->execute($this->queryBuilder->query(new InsertQuery($this->schema->getName(), [
 					'guid'                     => '1236',
 					'property-for-this-table'  => 'string',
 					'this-one-is-not-required' => 12,
@@ -87,11 +87,11 @@
 			 */
 			public function testUpdateQuery() {
 				$this->expectException(NullValueException::class);
-				$this->driver->execute($this->queryBuilder->build((new UpdateQuery($this->schema->getName(), [
+				$this->driver->execute($this->queryBuilder->query((new UpdateQuery($this->schema->getName(), [
 					'property-for-this-table'  => 'string-ex',
 					'this-one-is-not-required' => null,
 				]))->where()->eq('guid')->to('1235')->query()));
-				$this->driver->execute($this->queryBuilder->build((new UpdateQuery($this->schema->getName(), [
+				$this->driver->execute($this->queryBuilder->query((new UpdateQuery($this->schema->getName(), [
 					'property-for-this-table'  => null,
 					'this-one-is-not-required' => 32,
 				]))->where()->eq('guid')->to('1234')->query()));

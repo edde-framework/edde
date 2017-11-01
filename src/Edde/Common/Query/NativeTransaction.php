@@ -3,8 +3,9 @@
 
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\INativeTransaction;
+		use Edde\Common\Object\Object;
 
-		class NativeTransaction extends NativeQuery implements INativeTransaction {
+		class NativeTransaction extends Object implements INativeTransaction {
 			/**
 			 * @var INativeQuery[]
 			 */

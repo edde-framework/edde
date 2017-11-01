@@ -12,6 +12,13 @@
 			public function getName(): string;
 
 			/**
+			 * get type of property
+			 *
+			 * @return string
+			 */
+			public function getType(): string;
+
+			/**
 			 * is this property marked as primary?
 			 *
 			 * @return bool
@@ -45,11 +52,9 @@
 			public function isUnique(): bool;
 
 			/**
-			 * get type of property
-			 *
-			 * @return string
+			 * @return bool
 			 */
-			public function getType(): string;
+			public function isRequired(): bool;
 
 			/**
 			 * is this property a link?

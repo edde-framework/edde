@@ -1,6 +1,7 @@
 <?php
 	namespace Edde\Common\Storage;
 
+		use Edde\Api\Entity\Inject\EntityManager;
 		use Edde\Api\Schema\Exception\UnknownSchemaException;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
@@ -18,18 +19,19 @@
 		use Edde\Ext\Test\TestCase;
 
 		abstract class AbstractStorageTest extends TestCase {
-			use Storage;
-			use Edde\Api\Entity\Inject\EntityManager;
+			use EntityManager;
 			use SchemaManager;
+			use Storage;
 
 			/**
 			 * @throws DuplicateTableException
+			 * @throws UnknownSchemaException
 			 */
 			public function testCreateSchema() {
-				$this->storage->createSchema(SimpleSchema::class);
-				$this->storage->createSchema(FooSchema::class);
-				$this->storage->createSchema(BarSchema::class);
-				$this->storage->createSchema(FooBarSchema::class);
+				$this->storage->createSchema($this->schemaManager->load(SimpleSchema::class));
+				$this->storage->createSchema($this->schemaManager->load(FooSchema::class));
+				$this->storage->createSchema($this->schemaManager->load(BarSchema::class));
+				$this->storage->createSchema($this->schemaManager->load(FooBarSchema::class));
 				self::assertTrue(true, 'everything is ok');
 			}
 
@@ -71,14 +73,19 @@
 				])->save();
 			}
 
+			/**
+			 * @throws DuplicateEntryException
+			 * @throws IntegrityException
+			 * @throws StorageException
+			 */
 			public function testInsertUnique() {
 				$this->expectException(DuplicateEntryException::class);
-				$this->storage->push(FooSchema::class, [
+				$this->entityManager->create(FooSchema::class, [
 					'name' => 'unique',
-				]);
-				$this->storage->push(FooSchema::class, [
+				])->save();
+				$this->entityManager->create(FooSchema::class, [
 					'name' => 'unique',
-				]);
+				])->save();
 			}
 
 			/**
@@ -111,10 +118,10 @@
 					'value'    => 3.14,
 					'date'     => new \DateTime('24.12.2020 12:24:13'),
 					'question' => false,
-				])->insert();
+				])->save();
 				$entity->set('optional', 'this is a new nice and updated string');
 				$expect = $entity->toArray();
-				$entity->update();
+				$entity->save();
 				$entity = $entity->collection()->load($entity->get('guid'));
 				self::assertFalse($entity->isDirty(), 'entity should NOT be dirty right after load!');
 				self::assertEquals($expect, $array = $entity->toArray());

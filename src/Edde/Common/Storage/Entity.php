@@ -4,6 +4,7 @@
 		use Edde\Api\Crate\ICrate;
 		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Entity\IEntity;
+		use Edde\Api\Entity\Inject\EntityManager;
 		use Edde\Api\Query\IQuery;
 		use Edde\Api\Schema\Exception\LinkException;
 		use Edde\Api\Schema\Exception\RelationException;
@@ -13,7 +14,7 @@
 		use Edde\Common\Crate\Crate;
 
 		class Entity extends Crate implements IEntity {
-			use Edde\Api\Entity\Inject\EntityManager;
+			use EntityManager;
 			use Storage;
 			/**
 			 * @var ISchema
@@ -24,7 +25,7 @@
 			 */
 			protected $linkList = [];
 			/**
-			 * @var \Edde\Api\Entity\IEntity[]
+			 * @var IEntity[]
 			 */
 			protected $relationList = [];
 
@@ -42,7 +43,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function link(\Edde\Api\Entity\IEntity $entity, ILink $link = null): IEntity {
+			public function link(IEntity $entity, ILink $link = null): IEntity {
 				if ($link === null) {
 					$linkList = $this->schema->getLinkList($schemaName = $entity->getSchema()->getName());
 					if (($count = count($linkList)) === 0) {
@@ -60,7 +61,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function attach(\Edde\Api\Entity\IEntity $entity): \Edde\Api\Entity\IEntity {
+			public function attach(IEntity $entity): IEntity {
 				$relationList = $this->schema->getRelationList($schemaName = $entity->getSchema()->getName());
 				if (($count = count($relationList)) === 0) {
 					throw new RelationException(sprintf('There are no relations from [%s] to schema [%s].', $this->schema->getName(), $schemaName));
@@ -77,7 +78,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function save(): \Edde\Api\Entity\IEntity {
+			public function save(): IEntity {
 				$this->storage->execute($this->getQuery());
 				return $this;
 			}

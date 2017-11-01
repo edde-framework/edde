@@ -3,49 +3,51 @@
 
 		use Edde\Api\Node\INode;
 		use Edde\Api\Query\Exception\QueryBuilderException;
+		use Edde\Api\Query\ICrateSchemaQuery;
 		use Edde\Api\Query\INativeTransaction;
 		use Edde\Common\Query\AbstractQueryBuilder;
+		use Edde\Common\Query\NativeQuery;
 		use Edde\Common\Query\NativeTransaction;
 
 		class Neo4jQueryBuilder extends AbstractQueryBuilder {
-			protected function fragmentCreateSchema(INode $root): INativeTransaction {
-				$nativeBatch = new NativeTransaction();
+			protected function fragmentCreateSchema(ICrateSchemaQuery $crateSchemaQuery): INativeTransaction {
+				$nativeTransaction = new NativeTransaction();
 				/**
 				 * relations should not be physically created
 				 */
-				if ($root->getAttribute('relation', false)) {
-					return $nativeBatch;
+				if (($schema = $crateSchemaQuery->getSchema())->isRelation()) {
+					return $nativeTransaction;
 				}
 				$primaryList = null;
 				$indexList = null;
 				$uniqueList = [];
 				$requiredList = [];
-				$delimited = $this->delimite($root->getAttribute('name'));
-				foreach ($root->getNodeList() as $node) {
-					$name = $node->getAttribute('name');
-					$property = 'n.' . $this->delimite($name);
-					if ($node->getAttribute('primary', false)) {
-						$primaryList[] = $property;
-					} else if ($node->getAttribute('unique', false)) {
-						$uniqueList[] = $property;
+				$delimited = $this->delimite($schema->getName());
+				foreach ($schema->getPropertyList() as $property) {
+					$name = $property->getName();
+					$fragment = 'n.' . $this->delimite($name);
+					if ($property->isPrimary()) {
+						$primaryList[] = $fragment;
+					} else if ($property->isUnique()) {
+						$uniqueList[] = $fragment;
 					}
-					if ($node->getAttribute('required', false)) {
-						$requiredList[] = $property;
+					if ($property->isRequired()) {
+						$requiredList[] = $fragment;
 					}
 				}
 				if ($indexList) {
-					$nativeBatch->addQuery('CREATE INDEX ON :' . $delimited . '(' . implode(',', $indexList) . ')');
+					$nativeTransaction->query(new NativeQuery('CREATE INDEX ON :' . $delimited . '(' . implode(',', $indexList) . ')'));
 				}
 				if ($primaryList) {
-					$nativeBatch->addQuery('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT (' . implode(', ', $primaryList) . ') IS NODE KEY');
+					$nativeTransaction->query(new NativeQuery('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT (' . implode(', ', $primaryList) . ') IS NODE KEY'));
 				}
 				foreach ($uniqueList as $unique) {
-					$nativeBatch->addQuery('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT ' . $unique . ' IS UNIQUE');
+					$nativeTransaction->query(new NativeQuery('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT ' . $unique . ' IS UNIQUE'));
 				}
 				foreach ($requiredList as $required) {
-					$nativeBatch->addQuery('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT exists(' . $required . ')');
+					$nativeTransaction->query(new NativeQuery('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT exists(' . $required . ')'));
 				}
-				return $nativeBatch;
+				return $nativeTransaction;
 			}
 
 			protected function fragmentRelation(INode $root): INativeTransaction {

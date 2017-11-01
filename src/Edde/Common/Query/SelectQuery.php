@@ -16,6 +16,10 @@
 			 */
 			protected $orderFragment;
 
+			public function __construct() {
+				parent::__construct('select');
+			}
+
 			/**
 			 * @inheritdoc
 			 */

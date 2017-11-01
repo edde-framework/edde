@@ -6,6 +6,13 @@
 
 		interface IQuery extends IConfigurable {
 			/**
+			 * type of this query
+			 *
+			 * @return string
+			 */
+			public function getType(): string;
+
+			/**
 			 * create an IQL query node
 			 *
 			 * @return INode

@@ -3,24 +3,28 @@
 
 		use Edde\Api\Node\INode;
 		use Edde\Api\Query\Exception\QueryBuilderException;
+		use Edde\Api\Query\ICrateSchemaQuery;
+		use Edde\Api\Query\IInsertQuery;
 		use Edde\Api\Query\INativeTransaction;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Common\Query\AbstractQueryBuilder;
+		use Edde\Common\Query\NativeQuery;
 		use Edde\Common\Query\NativeTransaction;
 
 		abstract class AbstractSqlBuilder extends AbstractQueryBuilder {
-			protected function fragmentCreateSchema(INode $root): INativeTransaction {
-				$sql = 'CREATE TABLE ' . ($this->delimite($table = $root->getAttribute('name'))) . " (\n\t";
+			protected function fragmentCreateSchema(ICrateSchemaQuery $query): INativeTransaction {
+				$schema = $query->getSchema();
+				$sql = 'CREATE TABLE ' . ($this->delimite($table = $schema->getName())) . " (\n\t";
 				$columnList = [];
 				$primaryList = [];
-				foreach ($root->getNodeList() as $node) {
-					$column = ($name = $this->delimite($node->getAttribute('name'))) . ' ' . $this->type($node->getAttribute('type'));
-					if ($node->getAttribute('primary', false)) {
+				foreach ($schema->getPropertyList() as $property) {
+					$column = ($name = $this->delimite($property->getName())) . ' ' . $this->type($property->getType());
+					if ($property->isPrimary()) {
 						$primaryList[] = $name;
-					} else if ($node->getAttribute('unique', false)) {
+					} else if ($property->isUnique()) {
 						$column .= ' UNIQUE';
 					}
-					if ($node->getAttribute('required', false)) {
+					if ($property->isRequired()) {
 						$column .= ' NOT NULL';
 					}
 					$columnList[] = $column;
@@ -28,26 +32,19 @@
 				if (empty($primaryList) === false) {
 					$columnList[] = "CONSTRAINT " . $this->delimite(sha1($table . '_primary_' . $primary = implode(', ', $primaryList))) . ' PRIMARY KEY (' . $primary . ")\n";
 				}
-				$sql .= implode(",\n\t", $columnList) . "\n";
-				return new NativeTransaction($sql . ')');
+				return (new NativeTransaction())->query(new NativeQuery($sql . implode(",\n\t", $columnList) . "\n)"));
 			}
 
-			protected function fragmentRelation(INode $root): INativeTransaction {
-				return $this->fragmentInsert($root);
-			}
-
-			protected function fragmentInsert(INode $root): INativeTransaction {
+			protected function fragmentInsert(IInsertQuery $insertQuery): INativeTransaction {
 				$nameList = [];
 				$parameterList = [];
-				foreach ($root->getValue([]) as $k => $v) {
+				foreach ($insertQuery->getSource() as $k => $v) {
 					$nameList[] = $this->delimite($k);
 					$parameterList['p_' . sha1($k)] = $v;
 				}
-				/** @var $schema ISchema */
-				$schema = $root->getAttribute('schema');
-				$sql = 'INSERT INTO ' . $this->delimite($schema->getName()) . ' (';
-				$sql .= implode(',', $nameList) . ') VALUES (';
-				return new NativeTransaction($sql . ':' . implode(', :', array_keys($parameterList)) . ')', $parameterList);
+				$schema = $insertQuery->getSchema();
+				$sql = 'INSERT INTO ' . $this->delimite($schema->getName()) . ' (' . implode(',', $nameList) . ') VALUES (';
+				return (new NativeTransaction())->query(new NativeQuery($sql . ':' . implode(', :', array_keys($parameterList)) . ')', $parameterList));
 			}
 
 			/**
