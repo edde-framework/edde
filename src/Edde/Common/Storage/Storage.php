@@ -68,14 +68,21 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function execute(IQuery $query): IStream {
+			public function execute(IQuery $query) {
 				return $this->driver->transaction($this->queryBuilder->query($query));
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function native(INativeQuery $nativeQuery): IStream {
+			public function native(INativeQuery $nativeQuery) {
 				return $this->driver->execute($nativeQuery);
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function stream(IQuery $query): IStream {
+				return new Stream($this, $query);
 			}
 		}

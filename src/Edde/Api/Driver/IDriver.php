@@ -6,7 +6,6 @@
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\INativeTransaction;
 		use Edde\Api\Storage\Exception\IntegrityException;
-		use Edde\Api\Storage\IStream;
 
 		/**
 		 * General storage driver implementation; one storage could have more drivers to choose from.
@@ -17,21 +16,21 @@
 			 *
 			 * @param INativeQuery $nativeQuery
 			 *
-			 * @return IStream
+			 * @return mixed
 			 *
 			 * @throws DriverQueryException
 			 * @throws IntegrityException
 			 */
-			public function execute(INativeQuery $nativeQuery): IStream;
+			public function execute(INativeQuery $nativeQuery);
 
 			/**
 			 * return last result from the transaction
 			 *
 			 * @param INativeTransaction $nativeTransaction
 			 *
-			 * @return IStream
+			 * @return mixed
 			 */
-			public function transaction(INativeTransaction $nativeTransaction): IStream;
+			public function transaction(INativeTransaction $nativeTransaction);
 
 			/**
 			 * start a transaction

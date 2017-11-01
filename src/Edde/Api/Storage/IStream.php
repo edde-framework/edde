@@ -1,7 +1,6 @@
 <?php
 	namespace Edde\Api\Storage;
 
-		use Edde\Api\Query\INativeQuery;
 		use IteratorAggregate;
 
 		/**
@@ -10,18 +9,6 @@
 		 * bunch of data in the memory.
 		 */
 		interface IStream extends IteratorAggregate {
-			/**
-			 * return query powering this stream
-			 *
-			 * @return INativeQuery
-			 */
-			public function getQuery(): INativeQuery;
-
-			/**
-			 * @return IStream
-			 */
-			public function execute(): IStream;
-
 			/**
 			 * @return \Traversable|array
 			 */

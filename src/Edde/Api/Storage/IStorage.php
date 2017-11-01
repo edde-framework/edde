@@ -36,7 +36,7 @@
 			 *
 			 * @return IStream
 			 */
-			public function execute(IQuery $query): IStream;
+			public function execute(IQuery $query);
 
 			/**
 			 * execute the given native query and return stream as a result
@@ -45,5 +45,14 @@
 			 *
 			 * @return IStream
 			 */
-			public function native(INativeQuery $nativeQuery): IStream;
+			public function native(INativeQuery $nativeQuery);
+
+			/**
+			 * prepare stream for the given query
+			 *
+			 * @param IQuery $query
+			 *
+			 * @return IStream
+			 */
+			public function stream(IQuery $query): IStream;
 		}
