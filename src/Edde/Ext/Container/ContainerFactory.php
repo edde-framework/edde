@@ -31,7 +31,6 @@
 		use Edde\Api\Schema\ISchemaManager;
 		use Edde\Api\Storage\IStorage;
 		use Edde\Api\Upgrade\IUpgradeManager;
-		use Edde\Api\Utils\ICliUtils;
 		use Edde\Api\Utils\IStringUtils;
 		use Edde\Api\Xml\IXmlExport;
 		use Edde\Api\Xml\IXmlParser;
@@ -63,7 +62,6 @@
 		use Edde\Common\Schema\SchemaManager;
 		use Edde\Common\Storage\Storage;
 		use Edde\Common\Upgrade\AbstractUpgradeManager;
-		use Edde\Common\Utils\CliUtils;
 		use Edde\Common\Utils\StringUtils;
 		use Edde\Common\Xml\XmlExport;
 		use Edde\Common\Xml\XmlParser;
@@ -262,51 +260,50 @@
 
 			static public function getDefaultFactoryList(): array {
 				return [
-					IRootDirectory::class   => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
-					IAssetsDirectory::class => self::proxy(IRootDirectory::class, 'directory', [
+					IRootDirectory::class    => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
+					IAssetsDirectory::class  => self::proxy(IRootDirectory::class, 'directory', [
 						'.assets',
 						AssetsDirectory::class,
 					]),
-					ITempDirectory::class   => self::proxy(IAssetsDirectory::class, 'directory', [
+					ITempDirectory::class    => self::proxy(IAssetsDirectory::class, 'directory', [
 						'temp',
 						TempDirectory::class,
 					]),
-					ILogDirectory::class    => self::proxy(IAssetsDirectory::class, 'directory', [
+					ILogDirectory::class     => self::proxy(IAssetsDirectory::class, 'directory', [
 						'logs',
 						LogDirectory::class,
 					]),
 					/**
 					 * utils
 					 */
-					IHttpUtils::class       => HttpUtils::class,
-					IStringUtils::class     => StringUtils::class,
-					ICliUtils::class        => CliUtils::class,
+					IHttpUtils::class        => HttpUtils::class,
+					IStringUtils::class      => StringUtils::class,
 					/**
 					 * container implementation
 					 */
-					IContainer::class       => Container::class,
+					IContainer::class        => Container::class,
 					/**
 					 * runtime info provider
 					 */
-					IRuntime::class         => Runtime::class,
+					IRuntime::class          => Runtime::class,
 					/**
 					 * log support
 					 */
-					ILogService::class      => LogService::class,
+					ILogService::class       => LogService::class,
 					/**
 					 * user request into protocol element translation
 					 */
-					IRouterService::class      => RouterService::class,
-					IRequestService::class     => RequestService::class,
+					IRouterService::class    => RouterService::class,
+					IRequestService::class   => RequestService::class,
 					/**
 					 * content conversion implementation (mainly useful for server content
 					 * negotiation)
 					 */
-					IConverterManager::class   => ConverterManager::class,
+					IConverterManager::class => ConverterManager::class,
 					/**
 					 * The Protocol specification related stuff
 					 */
-					IProtocolService::class    => ProtocolService::class,
+					IProtocolService::class  => ProtocolService::class,
 					/**
 					 * general service for http request/response
 					 */
