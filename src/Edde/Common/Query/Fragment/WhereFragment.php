@@ -38,11 +38,20 @@
 			 * @inheritdoc
 			 */
 			public function and (): IWhereFragment {
+				return (new WhereRelationFragment($this))->and();
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function or (): IWhereFragment {
+				return (new WhereRelationFragment($this))->or();
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getSchemaFragment(): ISchemaFragment {
+				return $this->schemaFragment;
 			}
 		}

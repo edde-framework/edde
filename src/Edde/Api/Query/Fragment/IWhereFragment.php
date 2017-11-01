@@ -32,4 +32,9 @@
 			 * @return IWhereFragment
 			 */
 			public function or (): IWhereFragment;
+
+			/**
+			 * @return ISchemaFragment
+			 */
+			public function getSchemaFragment(): ISchemaFragment;
 		}
