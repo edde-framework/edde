@@ -15,10 +15,9 @@
 			/**
 			 * where to a column name
 			 *
-			 * @param string      $name
-			 * @param string|null $prefix
+			 * @param string $name
 			 *
 			 * @return IWhereRelation
 			 */
-			public function toColumn(string $name, string $prefix = null): IWhereRelation;
+			public function toColumn(string $name): IWhereRelation;
 		}

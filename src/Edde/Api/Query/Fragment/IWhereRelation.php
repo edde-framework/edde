@@ -16,11 +16,4 @@
 			 * @return IWhereFragment
 			 */
 			public function or (): IWhereFragment;
-
-			/**
-			 * jump from group if there is one
-			 *
-			 * @return IWhereRelation
-			 */
-			public function end(): IWhereRelation;
 		}

@@ -21,13 +21,6 @@
 				return $this->createRelation(__FUNCTION__);
 			}
 
-			/**
-			 * @inheritdoc
-			 */
-			public function end(): IWhereRelation {
-				return new WhereRelationFragment($this->root, $this->node->getParent());
-			}
-
 			protected function createRelation(string $relation): IWhereFragment {
 				$this->node->setAttribute('relation', $relation);
 				if (($root = $this->node->getParent())->getAttribute('type') !== 'group') {
