@@ -2,8 +2,8 @@
 	namespace Edde\Common\Storage;
 
 		use Edde\Api\Driver\Inject\Driver;
-		use Edde\Api\Query\INativeBatch;
 		use Edde\Api\Query\INativeQuery;
+		use Edde\Api\Query\INativeTransaction;
 		use Edde\Api\Query\Inject\QueryBuilder;
 		use Edde\Api\Query\IQuery;
 		use Edde\Api\Schema\Inject\SchemaManager;
@@ -33,7 +33,7 @@
 			 * @inheritdoc
 			 */
 			public function execute(IQuery $query) {
-				return $this->batch($this->queryBuilder->build($query));
+				return $this->transaction($this->queryBuilder->build($query));
 			}
 
 			/**
@@ -46,10 +46,10 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function batch(INativeBatch $nativeBatch) {
+			public function transaction(INativeTransaction $nativeTransaction) {
 				try {
 					$this->start();
-					$result = $this->driver->batch($nativeBatch);
+					$result = $this->driver->transaction($nativeTransaction);
 					$this->commit();
 					return $result;
 				} catch (\Throwable $throwable) {

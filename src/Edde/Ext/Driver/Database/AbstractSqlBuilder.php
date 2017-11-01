@@ -3,13 +3,13 @@
 
 		use Edde\Api\Node\INode;
 		use Edde\Api\Query\Exception\QueryBuilderException;
-		use Edde\Api\Query\INativeBatch;
+		use Edde\Api\Query\INativeTransaction;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Common\Query\AbstractQueryBuilder;
-		use Edde\Common\Query\NativeBatch;
+		use Edde\Common\Query\NativeTransaction;
 
 		abstract class AbstractSqlBuilder extends AbstractQueryBuilder {
-			protected function fragmentCreateSchema(INode $root): INativeBatch {
+			protected function fragmentCreateSchema(INode $root): INativeTransaction {
 				$sql = 'CREATE TABLE ' . ($this->delimite($table = $root->getAttribute('name'))) . " (\n\t";
 				$columnList = [];
 				$primaryList = [];
@@ -29,14 +29,14 @@
 					$columnList[] = "CONSTRAINT " . $this->delimite(sha1($table . '_primary_' . $primary = implode(', ', $primaryList))) . ' PRIMARY KEY (' . $primary . ")\n";
 				}
 				$sql .= implode(",\n\t", $columnList) . "\n";
-				return new NativeBatch($sql . ')');
+				return new NativeTransaction($sql . ')');
 			}
 
-			protected function fragmentRelation(INode $root): INativeBatch {
+			protected function fragmentRelation(INode $root): INativeTransaction {
 				return $this->fragmentInsert($root);
 			}
 
-			protected function fragmentInsert(INode $root): INativeBatch {
+			protected function fragmentInsert(INode $root): INativeTransaction {
 				$nameList = [];
 				$parameterList = [];
 				foreach ($root->getValue([]) as $k => $v) {
@@ -47,16 +47,16 @@
 				$schema = $root->getAttribute('schema');
 				$sql = 'INSERT INTO ' . $this->delimite($schema->getName()) . ' (';
 				$sql .= implode(',', $nameList) . ') VALUES (';
-				return new NativeBatch($sql . ':' . implode(', :', array_keys($parameterList)) . ')', $parameterList);
+				return new NativeTransaction($sql . ':' . implode(', :', array_keys($parameterList)) . ')', $parameterList);
 			}
 
 			/**
 			 * @param INode $root
 			 *
-			 * @return INativeBatch
+			 * @return INativeTransaction
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentUpdate(INode $root): INativeBatch {
+			protected function fragmentUpdate(INode $root): INativeTransaction {
 				/** @var $schema ISchema */
 				$schema = $root->getAttribute('schema');
 				$sql = "UPDATE\n\t" . $this->delimite($schema->getName()) . ' ' . ($alias = ($alias = $root->getAttribute('alias')) ? $this->delimite($alias) : '') . "\nSET\n\t";
@@ -75,16 +75,16 @@
 					$setList[] = $this->delimite($k) . ' = :' . $parameterId = ('p_' . sha1($k));
 					$parameterList[$parameterId] = $v;
 				}
-				return new NativeBatch($sql . implode(",\n\t", $setList) . "\n" . $where, $parameterList);
+				return new NativeTransaction($sql . implode(",\n\t", $setList) . "\n" . $where, $parameterList);
 			}
 
 			/**
 			 * @param INode $root
 			 *
-			 * @return INativeBatch
+			 * @return INativeTransaction
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentSelect(INode $root): INativeBatch {
+			protected function fragmentSelect(INode $root): INativeTransaction {
 				$sql = [];
 				$parameterList = [];
 				$sql[] = "SELECT\n";
@@ -110,16 +110,16 @@
 					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
 				$parameterList = array_merge($parameterList, ($this->fragmentParameterList($root->getNode('parameter-list')))->getParameterList());
-				return new NativeBatch(implode('', $sql), $parameterList);
+				return new NativeTransaction(implode('', $sql), $parameterList);
 			}
 
 			/**
 			 * @param INode $root
 			 *
-			 * @return INativeBatch
+			 * @return INativeTransaction
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentColumnList(INode $root): INativeBatch {
+			protected function fragmentColumnList(INode $root): INativeTransaction {
 				$columnList = [];
 				$parameterList = [];
 				foreach ($root->getNodeList() as $node) {
@@ -127,26 +127,26 @@
 					$columnList[] = "\t" . $query->getQuery();
 					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
-				return new NativeBatch(implode(",\n", $columnList) . "\n", $parameterList);
+				return new NativeTransaction(implode(",\n", $columnList) . "\n", $parameterList);
 			}
 
 			/**
 			 * @param INode $root
 			 *
-			 * @return INativeBatch
+			 * @return INativeTransaction
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentColumn(INode $root): INativeBatch {
+			protected function fragmentColumn(INode $root): INativeTransaction {
 				switch ($type = $root->getAttribute('type')) {
 					case 'column':
 						$column = ($prefix = $root->getAttribute('prefix')) ? $this->delimite($prefix) . '.' : '';
 						$column .= $this->delimite($root->getValue());
 						$column .= ($alis = $root->getAttribute('alias')) ? ' AS ' . $this->delimite($alis) : '';
-						return new NativeBatch($column);
+						return new NativeTransaction($column);
 					case 'asterisk':
 						$column = ($prefix = $root->getAttribute('prefix')) ? $this->delimite($prefix) . '.' : '';
 						$column .= '*';
-						return new NativeBatch($column);
+						return new NativeTransaction($column);
 				}
 				throw new QueryBuilderException(sprintf('Unknown column type [%s].', $type));
 			}
@@ -154,10 +154,10 @@
 			/**
 			 * @param INode $root
 			 *
-			 * @return INativeBatch
+			 * @return INativeTransaction
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentTableList(INode $root): INativeBatch {
+			protected function fragmentTableList(INode $root): INativeTransaction {
 				$tableList = [];
 				$parameterList = [];
 				foreach ($root->getNodeList() as $node) {
@@ -165,23 +165,23 @@
 					$tableList[] = "\t" . $query->getQuery();
 					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
-				return new NativeBatch(implode(",\n", $tableList) . "\n", $parameterList);
+				return new NativeTransaction(implode(",\n", $tableList) . "\n", $parameterList);
 			}
 
-			protected function fragmentTable(INode $root): INativeBatch {
+			protected function fragmentTable(INode $root): INativeTransaction {
 				$table = $this->delimite($root->getAttribute('table'));
 				$table .= (($alias = $root->getAttribute('alias')) ? ' ' . $this->delimite($alias) : '');
-				return new NativeBatch($table);
+				return new NativeTransaction($table);
 			}
 
 			/**
 			 * @param INode $root
 			 *
-			 * @return INativeBatch
+			 * @return INativeTransaction
 			 * @throws QueryBuilderException
 			 * @throws \Exception
 			 */
-			protected function fragmentWhere(INode $root): INativeBatch {
+			protected function fragmentWhere(INode $root): INativeTransaction {
 				static $expressions = [
 					'eq'  => '=',
 					'neq' => '!=',
@@ -206,26 +206,26 @@
 						default:
 							throw new QueryBuilderException(sprintf('Unknown where target type [%s] in [%s].', $target, static::class));
 					}
-					return new NativeBatch($where, $parameterList);
+					return new NativeTransaction($where, $parameterList);
 				}
 				switch ($type) {
 					case 'group':
-						return new NativeBatch("(\n" . ($query = $this->fragmentWhereList($root))->getQuery() . "\t)", $query->getParameterList());
+						return new NativeTransaction("(\n" . ($query = $this->fragmentWhereList($root))->getQuery() . "\t)", $query->getParameterList());
 					case 'in':
 						switch ($target = $root->getAttribute('target')) {
 							case 'query':
-								return new NativeBatch($this->delimite($root->getAttribute('where')) . " IN (\n" . ($query = $this->fragmentSelect($root->getNode('select')))->getQuery() . ')', $query->getParameterList());
+								return new NativeTransaction($this->delimite($root->getAttribute('where')) . " IN (\n" . ($query = $this->fragmentSelect($root->getNode('select')))->getQuery() . ')', $query->getParameterList());
 						}
 						throw new QueryBuilderException(sprintf('Unknown where IN target type [%s].', $target));
 				}
 				throw new QueryBuilderException(sprintf('Unknown where type [%s].', $type));
 			}
 
-			protected function fragmentOrderList(INode $root): INativeBatch {
+			protected function fragmentOrderList(INode $root): INativeTransaction {
 				$orderList = [];
 				foreach ($root->getNodeList() as $node) {
 					$orderList[] = $this->delimite($node->getAttribute('column')) . ' ' . ($node->getAttribute('asc', true) ? 'ASC' : 'DESC');
 				}
-				return new NativeBatch(implode(',', $orderList));
+				return new NativeTransaction(implode(',', $orderList));
 			}
 		}

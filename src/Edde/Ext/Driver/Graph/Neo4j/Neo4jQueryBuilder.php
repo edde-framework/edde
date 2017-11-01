@@ -3,13 +3,13 @@
 
 		use Edde\Api\Node\INode;
 		use Edde\Api\Query\Exception\QueryBuilderException;
-		use Edde\Api\Query\INativeBatch;
+		use Edde\Api\Query\INativeTransaction;
 		use Edde\Common\Query\AbstractQueryBuilder;
-		use Edde\Common\Query\NativeBatch;
+		use Edde\Common\Query\NativeTransaction;
 
 		class Neo4jQueryBuilder extends AbstractQueryBuilder {
-			protected function fragmentCreateSchema(INode $root): INativeBatch {
-				$nativeBatch = new NativeBatch();
+			protected function fragmentCreateSchema(INode $root): INativeTransaction {
+				$nativeBatch = new NativeTransaction();
 				/**
 				 * relations should not be physically created
 				 */
@@ -48,7 +48,7 @@
 				return $nativeBatch;
 			}
 
-			protected function fragmentRelation(INode $root): INativeBatch {
+			protected function fragmentRelation(INode $root): INativeTransaction {
 				list($alpha, $beta) = $root->getNode('relation-list')->getNodeList();
 				$cypher = "MATCH\n\t";
 				$parameterList = [
@@ -63,15 +63,15 @@
 						$parameterList['set'][$k] = $v;
 					}
 				}
-				return new NativeBatch($cypher, $parameterList);
+				return new NativeTransaction($cypher, $parameterList);
 			}
 
-			protected function fragmentInsert(INode $root): INativeBatch {
+			protected function fragmentInsert(INode $root): INativeTransaction {
 				$set = [];
 				foreach ($root->getNode('set-list')->getNodeList() as $node) {
 					$set = array_merge($set, $node->getAttributeList()->array());
 				}
-				return new NativeBatch('CREATE (n:' . $this->delimite($root->getAttribute('name')) . ' $set)', [
+				return new NativeTransaction('CREATE (n:' . $this->delimite($root->getAttribute('name')) . ' $set)', [
 					'set' => $set,
 				]);
 			}
@@ -79,10 +79,10 @@
 			/**
 			 * @param INode $root
 			 *
-			 * @return INativeBatch
+			 * @return INativeTransaction
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentUpdate(INode $root): INativeBatch {
+			protected function fragmentUpdate(INode $root): INativeTransaction {
 				$set = [];
 				foreach ($root->getNode('set-list')->getNodeList() as $node) {
 					$set = array_merge($set, $node->getAttributeList()->array());
@@ -94,16 +94,16 @@
 				}
 				$parameterList['set'] = $set;
 				$cypher .= "SET\n\t" . $alias . ' = $set';
-				return new NativeBatch($cypher, $parameterList);
+				return new NativeTransaction($cypher, $parameterList);
 			}
 
 			/**
 			 * @param INode $root
 			 *
-			 * @return INativeBatch
+			 * @return INativeTransaction
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentSelect(INode $root): INativeBatch {
+			protected function fragmentSelect(INode $root): INativeTransaction {
 				$parameterList = [];
 				$cypher = null;
 				$alias = null;
@@ -117,17 +117,17 @@
 					$cypher .= "WHERE\n" . $query->getQuery() . "\n";
 					$parameterList = $query->getParameterList();
 				}
-				return new NativeBatch($cypher . 'RETURN ' . $alias, $parameterList);
+				return new NativeTransaction($cypher . 'RETURN ' . $alias, $parameterList);
 			}
 
 			/**
 			 * @param INode $root
 			 *
-			 * @return INativeBatch
+			 * @return INativeTransaction
 			 * @throws QueryBuilderException
 			 * @throws \Exception
 			 */
-			protected function fragmentWhere(INode $root): INativeBatch {
+			protected function fragmentWhere(INode $root): INativeTransaction {
 				$where = null;
 				static $expressions = [
 					'eq'  => '=',
@@ -152,11 +152,11 @@
 						default:
 							throw new QueryBuilderException(sprintf('Unknown where target type [%s] in [%s].', $target, static::class));
 					}
-					return new NativeBatch($where, $parameterList);
+					return new NativeTransaction($where, $parameterList);
 				}
 				switch ($type) {
 					case 'group':
-						return new NativeBatch("(\n" . ($query = $this->fragmentWhereList($root))->getQuery() . "\t)", $query->getParameterList());
+						return new NativeTransaction("(\n" . ($query = $this->fragmentWhereList($root))->getQuery() . "\t)", $query->getParameterList());
 				}
 				throw new QueryBuilderException(sprintf('Unknown where type [%s].', $type));
 			}

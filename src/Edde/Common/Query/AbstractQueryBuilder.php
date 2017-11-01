@@ -3,7 +3,7 @@
 
 		use Edde\Api\Node\INode;
 		use Edde\Api\Query\Exception\QueryBuilderException;
-		use Edde\Api\Query\INativeBatch;
+		use Edde\Api\Query\INativeTransaction;
 		use Edde\Api\Query\IQuery;
 		use Edde\Api\Query\IQueryBuilder;
 		use Edde\Api\Utils\Inject\StringUtils;
@@ -18,21 +18,21 @@
 			/**
 			 * @param IQuery $query
 			 *
-			 * @return INativeBatch
+			 * @return INativeTransaction
 			 * @throws QueryBuilderException
 			 */
-			public function build(IQuery $query): INativeBatch {
+			public function build(IQuery $query): INativeTransaction {
 				return $this->fragment($query->getQuery());
 			}
 
 			/**
 			 * @param INode $node
 			 *
-			 * @return INativeBatch
+			 * @return INativeTransaction
 			 *
 			 * @throws QueryBuilderException
 			 */
-			protected function fragment(INode $node): INativeBatch {
+			protected function fragment(INode $node): INativeTransaction {
 				if (isset($this->fragmentList[$name = $node->getName()]) === false) {
 					throw new QueryBuilderException(sprintf('Unsupported fragment type [%s] in [%s].', $name, static::class));
 				}
@@ -42,10 +42,10 @@
 			/**
 			 * @param INode $root
 			 *
-			 * @return INativeBatch
+			 * @return INativeTransaction
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentWhereList(INode $root): INativeBatch {
+			protected function fragmentWhereList(INode $root): INativeTransaction {
 				$whereList = null;
 				$parameterList = [];
 				foreach ($root->getNodeList() as $node) {
@@ -58,15 +58,15 @@
 					$whereList[] = $where . ' ' . strtoupper($node->getAttribute('relation'));
 					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
-				return new NativeBatch("\t" . implode("\n\t", $whereList), $parameterList);
+				return new NativeTransaction("\t" . implode("\n\t", $whereList), $parameterList);
 			}
 
-			protected function fragmentParameterList(INode $root): INativeBatch {
+			protected function fragmentParameterList(INode $root): INativeTransaction {
 				$parameterList = [];
 				foreach ($root->getNodeList() as $node) {
 					$parameterList[$node->getAttribute('name')] = $node->getValue();
 				}
-				return new NativeBatch('', $parameterList);
+				return new NativeTransaction('', $parameterList);
 			}
 
 			protected function handleSetup(): void {

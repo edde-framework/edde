@@ -2,8 +2,8 @@
 	namespace Edde\Api\Storage;
 
 		use Edde\Api\Config\IConfigurable;
-		use Edde\Api\Query\INativeBatch;
 		use Edde\Api\Query\INativeQuery;
+		use Edde\Api\Query\INativeTransaction;
 		use Edde\Api\Query\IQuery;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\DuplicateTableException;
@@ -32,13 +32,13 @@
 			public function query(INativeQuery $nativeQuery);
 
 			/**
-			 * executes native query on this storage
+			 * executes a transaction (a set of queries) on this storage
 			 *
-			 * @param INativeBatch $nativeBatch
+			 * @param INativeTransaction $nativeTransaction
 			 *
 			 * @return mixed
 			 */
-			public function batch(INativeBatch $nativeBatch);
+			public function transaction(INativeTransaction $nativeTransaction);
 
 			/**
 			 * start a transaction on the storage

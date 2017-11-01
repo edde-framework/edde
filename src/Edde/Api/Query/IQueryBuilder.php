@@ -10,9 +10,9 @@
 			 *
 			 * @param IQuery $query
 			 *
-			 * @return INativeBatch
+			 * @return INativeTransaction
 			 */
-			public function build(IQuery $query): INativeBatch;
+			public function build(IQuery $query): INativeTransaction;
 
 			/**
 			 * delimite the given string
