@@ -103,19 +103,21 @@
 				$entity = $this->entityManager->create(SimpleSchema::class, [
 					'name'     => 'another name',
 					'optional' => null,
-				])->save();
-				self::assertFalse($entity->isDirty(), 'Entity is still dirty!');
+				]);
 				self::assertNotEmpty($entity->get('guid'));
+				$entity->save();
+				self::assertFalse($entity->isDirty(), 'Entity is still dirty!');
 			}
 
 			public function testCollection() {
-				$entity = $this->entityManager->create(SimpleSchema::class);
-				/**
-				 * because an entity is deffered, it should get loaded on first request
-				 * of data read; because there is no query, default collection is used, thus
-				 * first row of a table is returned
-				 */
-				self::assertSame('some name for this entity', $entity->get('name'));
+				$collection = $this->entityManager->collection(SimpleSchema::class);
+				$entityList = [];
+				foreach ($collection as $entity) {
+					$entity = $entity->toArray();
+					unset($entity['guid']);
+					$entityList[] = $entity;
+				}
+				self::assertEquals([], $entityList);
 			}
 
 			/**
