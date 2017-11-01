@@ -33,9 +33,9 @@
 			/**
 			 * where clausule
 			 *
-			 * @return IWhere
+			 * @return IWhereFragment
 			 */
-			public function where(): IWhere;
+			public function where(): IWhereFragment;
 
 			/**
 			 * order by

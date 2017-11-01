@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Query\Fragment;
 
-		use Edde\Api\Query\Fragment\IWhere;
+		use Edde\Api\Query\Fragment\IWhereFragment;
 		use Edde\Api\Query\Fragment\IWhereRelation;
 		use Edde\Common\Node\Node;
 
@@ -10,14 +10,14 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function and (): IWhere {
+			public function and (): IWhereFragment {
 				return $this->createRelation(__FUNCTION__);
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function or (): IWhere {
+			public function or (): IWhereFragment {
 				return $this->createRelation(__FUNCTION__);
 			}
 
@@ -28,7 +28,7 @@
 				return new WhereRelationFragment($this->root, $this->node->getParent());
 			}
 
-			protected function createRelation(string $relation): IWhere {
+			protected function createRelation(string $relation): IWhereFragment {
 				$this->node->setAttribute('relation', $relation);
 				if (($root = $this->node->getParent())->getAttribute('type') !== 'group') {
 					$root = $this->root->getNode('where-list');

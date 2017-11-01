@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Query\Fragment;
 
-		interface IWhere extends IFragment {
+		interface IWhereFragment extends IFragment {
 			/**
 			 * where equals
 			 *
@@ -75,21 +75,21 @@
 			/**
 			 * group is like braces (sub where)
 			 *
-			 * @return IWhere
+			 * @return IWhereFragment
 			 */
-			public function group(): IWhere;
+			public function group(): IWhereFragment;
 
 			/**
 			 * where AND relation
 			 *
-			 * @return IWhere
+			 * @return IWhereFragment
 			 */
-			public function and (): IWhere;
+			public function and (): IWhereFragment;
 
 			/**
 			 * where or relation
 			 *
-			 * @return IWhere
+			 * @return IWhereFragment
 			 */
-			public function or (): IWhere;
+			public function or (): IWhereFragment;
 		}

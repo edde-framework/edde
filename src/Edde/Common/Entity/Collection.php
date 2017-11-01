@@ -5,6 +5,7 @@
 		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\Inject\EntityManager;
+		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
 		use Edde\Api\Storage\IStream;
@@ -24,6 +25,13 @@
 			public function __construct(IStream $stream, ISchema $schema) {
 				$this->stream = $stream;
 				$this->schema = $schema;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getQuery(): ISelectQuery {
+				return $this->stream->getQuery();
 			}
 
 			/**

@@ -6,16 +6,16 @@
 			/**
 			 * where and relation
 			 *
-			 * @return IWhere
+			 * @return IWhereFragment
 			 */
-			public function and (): IWhere;
+			public function and (): IWhereFragment;
 
 			/**
 			 * where or relation
 			 *
-			 * @return IWhere
+			 * @return IWhereFragment
 			 */
-			public function or (): IWhere;
+			public function or (): IWhereFragment;
 
 			/**
 			 * jump from group if there is one

@@ -3,7 +3,7 @@
 	namespace Edde\Common\Query;
 
 		use Edde\Api\Node\INode;
-		use Edde\Api\Query\Fragment\IWhere;
+		use Edde\Api\Query\Fragment\IWhereFragment;
 		use Edde\Api\Query\IUpdateQuery;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Common\Node\Node;
@@ -23,7 +23,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function where(): IWhere {
+			public function where(): IWhereFragment {
 				if ($this->where === null) {
 					$this->where = new Node('where-list');
 				}

@@ -18,4 +18,18 @@
 			 * @return string
 			 */
 			public function getAlias(): string;
+
+			/**
+			 * is there a where fragment?
+			 *
+			 * @return bool
+			 */
+			public function hasWhere(): bool;
+
+			/**
+			 * get the where fragment for this query
+			 *
+			 * @return IWhereFragment
+			 */
+			public function where(): IWhereFragment;
 		}

@@ -110,9 +110,8 @@
 			}
 
 			public function testCollection() {
-				$collection = $this->entityManager->collection(SimpleSchema::class);
 				$entityList = [];
-				foreach ($collection as $entity) {
+				foreach ($this->entityManager->collection(SimpleSchema::class) as $entity) {
 					$entity = $entity->toArray();
 					unset($entity['guid']);
 					$entityList[] = $entity;
@@ -147,6 +146,7 @@
 			 * @throws DuplicateEntryException
 			 * @throws IntegrityException
 			 * @throws StorageException
+			 * @throws UnknownSchemaException
 			 */
 			public function testUpdate() {
 				$entity = $this->entityManager->create(SimpleSchema::class, [
@@ -159,7 +159,10 @@
 				$entity->set('optional', 'this is a new nice and updated string');
 				$expect = $entity->toArray();
 				$entity->save();
-				$entity = $entity->collection()->load($entity->get('guid'));
+				$collection = $this->entityManager->collection(SimpleSchema::class);
+				$query = $collection->getQuery();
+				$query->schema($this->schemaManager->load(SimpleSchema::class), 'c')->where()->eq('guid')->to($entity->get('guid'));
+				$entity = $collection->getEntity();
 				self::assertFalse($entity->isDirty(), 'entity should NOT be dirty right after load!');
 				self::assertEquals($expect, $array = $entity->toArray());
 				self::assertTrue(($type = gettype($array['value'])) === 'double', 'value [' . $type . '] is not float!');

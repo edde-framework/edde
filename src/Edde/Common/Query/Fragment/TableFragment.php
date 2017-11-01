@@ -4,7 +4,7 @@
 
 		use Edde\Api\Query\Fragment\IOrder;
 		use Edde\Api\Query\Fragment\ITable;
-		use Edde\Api\Query\Fragment\IWhere;
+		use Edde\Api\Query\Fragment\IWhereFragment;
 		use Edde\Common\Node\Node;
 
 		class TableFragment extends AbstractFragment implements ITable {
@@ -51,7 +51,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function where(): IWhere {
+			public function where(): IWhereFragment {
 				$this->root->getNode('where-list')->addNode($node = new Node('where'));
 				return new WhereFragment($this->root, $node);
 			}

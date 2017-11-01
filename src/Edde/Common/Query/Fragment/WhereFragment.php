@@ -2,13 +2,23 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Query\Fragment;
 
-		use Edde\Api\Query\Fragment\IWhere;
+		use Edde\Api\Query\Fragment\ISchemaFragment;
+		use Edde\Api\Query\Fragment\IWhereFragment;
 		use Edde\Api\Query\Fragment\IWhereIn;
 		use Edde\Api\Query\Fragment\IWhereThan;
 		use Edde\Api\Query\Fragment\IWhereTo;
 		use Edde\Common\Node\Node;
 
-		class WhereFragment extends AbstractFragment implements IWhere {
+		class WhereFragment extends AbstractFragment implements IWhereFragment {
+			/**
+			 * @var ISchemaFragment
+			 */
+			protected $schemaFragment;
+
+			public function __construct(ISchemaFragment $schemaFragment) {
+				$this->schemaFragment = $schemaFragment;
+			}
+
 			/**
 			 * @inheritdoc
 			 */
@@ -63,7 +73,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function group(): IWhere {
+			public function group(): IWhereFragment {
 				$this->node->setAttribute('type', 'group');
 				$this->node->addNode($node = new Node('where'));
 				return new WhereFragment($this->root, $node);
@@ -72,14 +82,14 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function and (): IWhere {
+			public function and (): IWhereFragment {
 				return $this->createRelation(__FUNCTION__);
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function or (): IWhere {
+			public function or (): IWhereFragment {
 				return $this->createRelation(__FUNCTION__);
 			}
 

@@ -3,15 +3,15 @@
 	namespace Edde\Api\Query;
 
 		use Edde\Api\Node\INode;
-		use Edde\Api\Query\Fragment\IWhere;
+		use Edde\Api\Query\Fragment\IWhereFragment;
 
 		interface IUpdateQuery extends IInsertQuery {
 			/**
 			 * update where
 			 *
-			 * @return IWhere
+			 * @return IWhereFragment
 			 */
-			public function where(): IWhere;
+			public function where(): IWhereFragment;
 
 			/**
 			 * has this update query where limitation

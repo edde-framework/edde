@@ -21,7 +21,10 @@
 			 * @inheritdoc
 			 */
 			public function schema(ISchema $schema, string $alias): ISchemaFragment {
-				return $this->schemaFragmentList[] = new SchemaFragment($schema, $alias);
+				if (isset($this->schemaFragmentList[$schemaId = ($schema->getName() . $alias)]) === false) {
+					$this->schemaFragmentList[$schemaId] = new SchemaFragment($schema, $alias);
+				}
+				return $this->schemaFragmentList[$schemaId];
 			}
 
 			/**
@@ -33,10 +36,6 @@
 
 			public function __clone() {
 				parent::__clone();
-				/**
-				 * use the very first schemas as a main schema for
-				 * select
-				 */
-				$this->schemaFragmentList = [reset($this->schemaFragmentList)];
+				$this->schemaFragmentList = [];
 			}
 		}
