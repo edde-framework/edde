@@ -9,7 +9,6 @@
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\ExclusiveTransactionException;
 		use Edde\Api\Storage\Exception\NoTransactionException;
-		use Edde\Api\Storage\ICollection;
 		use Edde\Api\Storage\IStorage;
 		use Edde\Common\Object\Object;
 		use Edde\Common\Query\CreateSchemaQuery;
@@ -101,7 +100,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function collection(string $schema, IQuery $query = null): ICollection {
+			public function collection(string $schema, IQuery $query = null): \Edde\Api\Entity\ICollection {
 				if ($query === null) {
 					/**
 					 * by default select all from the source schema

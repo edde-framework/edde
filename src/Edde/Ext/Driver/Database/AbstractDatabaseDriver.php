@@ -3,8 +3,8 @@
 
 		use Edde\Api\Driver\Exception\DriverException;
 		use Edde\Api\Driver\IDriver;
+		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Query\INativeQuery;
-		use Edde\Api\Storage\IEntity;
 		use Edde\Common\Driver\AbstractDriver;
 		use PDO;
 

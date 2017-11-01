@@ -1,5 +1,5 @@
 <?php
-	namespace Edde\Api\Storage;
+	namespace Edde\Api\Entity;
 
 		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;

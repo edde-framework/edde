@@ -1,16 +1,14 @@
 <?php
 	namespace Edde\Common\Storage;
 
+		use Edde\Api\Entity\IEntityManager;
 		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
-		use Edde\Api\Storage\ICollection;
-		use Edde\Api\Storage\IEntity;
-		use Edde\Api\Storage\IEntityManager;
 		use Edde\Api\Storage\IStorage;
 		use Edde\Common\Object\Object;
 
-		class Collection extends Object implements ICollection {
+		class Collection extends Object implements \Edde\Api\Entity\ICollection {
 			/**
 			 * @var IEntityManager
 			 */
@@ -47,7 +45,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getEntity(): IEntity {
+			public function getEntity(): \Edde\Api\Entity\IEntity {
 				foreach ($this as $entity) {
 					return $entity;
 				}
@@ -57,7 +55,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function load($value): IEntity {
+			public function load($value): \Edde\Api\Entity\IEntity {
 				foreach ($this->schema->getPrimaryList() as $property) {
 					$this->query->where()->or()->eq($property->getName())->to($value);
 				}

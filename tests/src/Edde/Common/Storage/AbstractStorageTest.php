@@ -10,7 +10,6 @@
 		use Edde\Api\Storage\Exception\NullValueException;
 		use Edde\Api\Storage\Exception\StorageException;
 		use Edde\Api\Storage\Exception\UnknownTableException;
-		use Edde\Api\Storage\Inject\EntityManager;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Schema\BarSchema;
 		use Edde\Common\Schema\FooBarSchema;
@@ -20,7 +19,7 @@
 
 		abstract class AbstractStorageTest extends TestCase {
 			use Storage;
-			use EntityManager;
+			use Edde\Api\Entity\Inject\EntityManager;
 			use SchemaManager;
 
 			/**

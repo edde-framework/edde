@@ -3,10 +3,10 @@
 
 		use Edde\Api\Driver\Exception\DriverException;
 		use Edde\Api\Driver\IDriver;
+		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\NullValueException;
-		use Edde\Api\Storage\IEntity;
 		use Edde\Common\Driver\AbstractDriver;
 		use GraphAware\Bolt\Exception\MessageFailureException;
 		use GraphAware\Bolt\GraphDatabase;

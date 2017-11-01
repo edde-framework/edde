@@ -1,9 +1,8 @@
 <?php
-	namespace Edde\Api\Storage;
+	namespace Edde\Api\Entity;
 
 		use Edde\Api\Config\IConfigurable;
 		use Edde\Api\Schema\ISchema;
-		use Edde\Api\Storage\Exception\SchemaRelationException;
 
 		interface IEntityManager extends IConfigurable {
 			/**

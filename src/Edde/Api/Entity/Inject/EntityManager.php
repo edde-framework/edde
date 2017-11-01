@@ -1,7 +1,7 @@
 <?php
-	namespace Edde\Api\Storage\Inject;
+	namespace Edde\Api\Entity\Inject;
 
-		use Edde\Api\Storage\IEntityManager;
+		use Edde\Api\Entity\IEntityManager;
 
 		trait EntityManager {
 			/**

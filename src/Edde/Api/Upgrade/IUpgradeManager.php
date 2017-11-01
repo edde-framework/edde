@@ -2,8 +2,8 @@
 	namespace Edde\Api\Upgrade;
 
 		use Edde\Api\Config\IConfigurable;
-		use Edde\Api\Storage\ICollection;
-		use Edde\Api\Storage\IEntity;
+		use Edde\Api\Entity\ICollection;
+		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Upgrade\Exception\CurrentVersionException;
 		use Edde\Api\Upgrade\Exception\NoUpgradesAvailableException;
 		use Edde\Api\Upgrade\Exception\UnknownVersionException;

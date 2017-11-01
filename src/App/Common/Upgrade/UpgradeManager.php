@@ -2,16 +2,15 @@
 	namespace App\Common\Upgrade;
 
 		use App\Api\Upgrade\UpgradeSchema;
+		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
 		use Edde\Api\Storage\Exception\UnknownTableException;
-		use Edde\Api\Storage\ICollection;
-		use Edde\Api\Storage\Inject\EntityManager;
 		use Edde\Api\Upgrade\IUpgrade;
 		use Edde\Common\Upgrade\AbstractUpgradeManager;
 
 		class UpgradeManager extends AbstractUpgradeManager {
-			use EntityManager;
+			use Edde\Api\Entity\Inject\EntityManager;
 			use SchemaManager;
 
 			/**

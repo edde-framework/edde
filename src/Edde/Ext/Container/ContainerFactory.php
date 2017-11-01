@@ -14,6 +14,7 @@
 		use Edde\Api\Crypt\IRandomService;
 		use Edde\Api\Driver\IDriver;
 		use Edde\Api\EddeException;
+		use Edde\Api\Entity\IEntityManager;
 		use Edde\Api\Filter\IFilterManager;
 		use Edde\Api\Generator\IGeneratorManager;
 		use Edde\Api\Http\IHttpUtils;
@@ -26,7 +27,6 @@
 		use Edde\Api\Runtime\IRuntime;
 		use Edde\Api\Sanitizer\ISanitizerManager;
 		use Edde\Api\Schema\ISchemaManager;
-		use Edde\Api\Storage\IEntityManager;
 		use Edde\Api\Storage\IStorage;
 		use Edde\Api\Upgrade\IUpgradeManager;
 		use Edde\Api\Utils\ICliUtils;

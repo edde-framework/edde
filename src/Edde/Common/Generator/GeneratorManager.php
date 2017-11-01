@@ -1,9 +1,9 @@
 <?php
 	namespace Edde\Common\Generator;
 
+		use Edde\Api\Generator\Exception\UnknownGeneratorException;
 		use Edde\Api\Generator\IGenerator;
 		use Edde\Api\Generator\IGeneratorManager;
-		use Edde\Api\Storage\Exception\UnknownGeneratorException;
 		use Edde\Common\Object\Object;
 
 		class GeneratorManager extends Object implements IGeneratorManager {

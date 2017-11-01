@@ -2,6 +2,8 @@
 	namespace Edde\Api\Storage;
 
 		use Edde\Api\Config\IConfigurable;
+		use Edde\Api\Entity\ICollection;
+		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\INativeTransaction;
 		use Edde\Api\Query\IQuery;

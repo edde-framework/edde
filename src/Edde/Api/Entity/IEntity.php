@@ -1,5 +1,5 @@
 <?php
-	namespace Edde\Api\Storage;
+	namespace Edde\Api\Entity;
 
 		use Edde\Api\Crate\ICrate;
 		use Edde\Api\Query\IQuery;

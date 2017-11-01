@@ -3,10 +3,10 @@
 
 		use Edde\Api\Config\IConfigurable;
 		use Edde\Api\Driver\Exception\DriverQueryException;
+		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\INativeTransaction;
 		use Edde\Api\Storage\Exception\IntegrityException;
-		use Edde\Api\Storage\IEntity;
 
 		/**
 		 * General storage driver implementation; one storage could have more drivers to choose from.
@@ -59,7 +59,7 @@
 			 * common database can do patch (partial update), some other engines
 			 * could require whole data to be updated
 			 *
-			 * @param IEntity $entity
+			 * @param \Edde\Api\Entity\IEntity $entity
 			 *
 			 * @return array
 			 */
