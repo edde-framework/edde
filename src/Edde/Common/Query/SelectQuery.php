@@ -5,6 +5,7 @@
 		use Edde\Api\Query\Fragment\ITable;
 		use Edde\Api\Query\Fragment\IWhere;
 		use Edde\Api\Query\ISelectQuery;
+		use Edde\Api\Schema\ISchema;
 		use Edde\Common\Node\Node;
 		use Edde\Common\Query\Fragment\OrderFragment;
 		use Edde\Common\Query\Fragment\TableFragment;
@@ -15,9 +16,14 @@
 			 * @var IOrder
 			 */
 			protected $orderFragment;
+			/**
+			 * @var ISchema
+			 */
+			protected $schema;
 
-			public function __construct() {
+			public function __construct(ISchema $schema) {
 				parent::__construct('select');
+				$this->schema = $schema;
 			}
 
 			/**
@@ -63,6 +69,7 @@
 			protected function handleInit(): void {
 				parent::handleInit();
 				$this->node = new Node('select');
+				$this->table($this->schema->getName())->all();
 			}
 
 			public function __clone() {

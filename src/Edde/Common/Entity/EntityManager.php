@@ -56,11 +56,9 @@
 			 * @inheritdoc
 			 */
 			public function collection(string $schema): ICollection {
-				if (isset($this->collectionList[$schema]) === false) {
-					$query = new SelectQuery();
-					$query->table($schema)->all();
-					$this->collectionList[$schema] = $this->container->inject(new Collection($this->storage->stream($query), $this->schemaManager->load($schema)));
+				if (isset($this->collectionList[$name = $schema]) === false) {
+					$this->collectionList[$name] = $this->container->inject(new Collection($this->storage->stream(new SelectQuery($schema = $this->schemaManager->load($name))), $schema));
 				}
-				return clone $this->collectionList[$schema];
+				return clone $this->collectionList[$name];
 			}
 		}
