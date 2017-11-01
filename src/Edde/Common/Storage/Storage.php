@@ -11,6 +11,8 @@
 		use Edde\Api\Storage\Exception\ExclusiveTransactionException;
 		use Edde\Api\Storage\Exception\NoTransactionException;
 		use Edde\Api\Storage\IStorage;
+		use Edde\Api\Storage\IStream;
+		use Edde\Common\Entity\Collection;
 		use Edde\Common\Object\Object;
 		use Edde\Common\Query\CreateSchemaQuery;
 		use Edde\Common\Query\SelectQuery;
@@ -72,12 +74,12 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function transaction(INativeTransaction $nativeTransaction) {
+			public function transaction(INativeTransaction $nativeTransaction): IStream {
 				try {
 					$this->start();
-					$result = $this->driver->transaction($nativeTransaction);
+					$stream = $this->driver->transaction($nativeTransaction);
 					$this->commit();
-					return $result;
+					return $stream;
 				} catch (\Throwable $throwable) {
 					$this->rollback();
 					throw $throwable;

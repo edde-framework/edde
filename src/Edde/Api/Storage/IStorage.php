@@ -40,9 +40,9 @@
 			 *
 			 * @param INativeTransaction $nativeTransaction
 			 *
-			 * @return mixed
+			 * @return IStream
 			 */
-			public function transaction(INativeTransaction $nativeTransaction);
+			public function transaction(INativeTransaction $nativeTransaction): IStream;
 
 			/**
 			 * execute the given query against a storage; query should be translated into native query and

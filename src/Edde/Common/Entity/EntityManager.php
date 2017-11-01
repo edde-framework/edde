@@ -1,5 +1,5 @@
 <?php
-	namespace Edde\Common\Storage;
+	namespace Edde\Common\Entity;
 
 		use Edde\Api\Container\Inject\Container;
 		use Edde\Api\Entity\IEntity;

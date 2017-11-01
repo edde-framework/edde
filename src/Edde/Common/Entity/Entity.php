@@ -1,11 +1,9 @@
 <?php
-	namespace Edde\Common\Storage;
+	namespace Edde\Common\Entity;
 
 		use Edde\Api\Crate\ICrate;
-		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\Inject\EntityManager;
-		use Edde\Api\Query\IQuery;
 		use Edde\Api\Schema\Exception\LinkException;
 		use Edde\Api\Schema\Exception\RelationException;
 		use Edde\Api\Schema\ILink;
@@ -86,30 +84,8 @@
 			 * @inheritdoc
 			 */
 			public function save(): IEntity {
-				$this->storage->execute($this->getQuery());
+				$this->storage->execute(new InsertQuery($this->schema, $this->schemaManager->sanitize($this->schema, $this->toArray())));
 				$this->commit();
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function collection(): ICollection {
-				return $this->storage->collection($this->schema->getName());
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getQuery(): IQuery {
-				return new InsertQuery($this->schema, $this->schemaManager->sanitize($this->schema, $this->toArray()));
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function deffered(): IEntity {
-				$this->deffered = true;
 				return $this;
 			}
 

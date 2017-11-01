@@ -4,6 +4,7 @@
 		use Edde\Api\Driver\Exception\DriverException;
 		use Edde\Api\Driver\IDriver;
 		use Edde\Api\Query\INativeQuery;
+		use Edde\Api\Storage\IStream;
 		use Edde\Common\Driver\AbstractDriver;
 		use PDO;
 
@@ -28,7 +29,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function execute(INativeQuery $nativeQuery) {
+			public function execute(INativeQuery $nativeQuery): IStream {
 				$exception = null;
 				try {
 					$statement = $this->pdo->prepare($nativeQuery->getQuery());
@@ -36,9 +37,8 @@
 					$statement->execute($nativeQuery->getParameterList());
 					return $statement;
 				} catch (\PDOException $exception) {
-					$this->exception($exception);
+					throw $this->exception($exception);
 				}
-				throw new DriverException('Unhandled exception: ' . $exception->getMessage(), 0, $exception);
 			}
 
 			/**
@@ -65,7 +65,8 @@
 				return $this;
 			}
 
-			protected function exception(\Throwable $throwable) {
+			protected function exception(\Throwable $throwable): \Throwable {
+				return new DriverException('Unhandled exception: ' . $throwable->getMessage(), 0, $throwable);;
 			}
 
 			public function handleSetup(): void {

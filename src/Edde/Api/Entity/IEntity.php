@@ -2,7 +2,6 @@
 	namespace Edde\Api\Entity;
 
 		use Edde\Api\Crate\ICrate;
-		use Edde\Api\Query\IQuery;
 		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
@@ -50,28 +49,4 @@
 			 * @throws IntegrityException
 			 */
 			public function save(): IEntity;
-
-			/**
-			 * return collection of this entity; collection is not related to entity itself
-			 *
-			 * @return ICollection
-			 */
-			public function collection(): ICollection;
-
-			/**
-			 * return current "status" query for this entity; it could generate "insert/update" query,
-			 * or "delete" if this entity should be deleted
-			 *
-			 * this is a trick how to offload quite ugly piece of work from storage outside
-			 *
-			 * @return IQuery
-			 */
-			public function getQuery(): IQuery;
-
-			/**
-			 * mark this entity as lazy; when it got first request for data, it will be loaded (get, ...)
-			 *
-			 * @return IEntity
-			 */
-			public function deffered(): IEntity;
 		}

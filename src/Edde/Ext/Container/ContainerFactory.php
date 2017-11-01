@@ -46,6 +46,7 @@
 		use Edde\Common\Container\Factory\ProxyFactory;
 		use Edde\Common\Converter\ConverterManager;
 		use Edde\Common\Crypt\RandomService;
+		use Edde\Common\Entity\EntityManager;
 		use Edde\Common\Filter\FilterManager;
 		use Edde\Common\Generator\GeneratorManager;
 		use Edde\Common\Http\HttpUtils;
@@ -58,7 +59,6 @@
 		use Edde\Common\Runtime\Runtime;
 		use Edde\Common\Sanitizer\SanitizerManager;
 		use Edde\Common\Schema\SchemaManager;
-		use Edde\Common\Storage\EntityManager;
 		use Edde\Common\Storage\Storage;
 		use Edde\Common\Upgrade\AbstractUpgradeManager;
 		use Edde\Common\Utils\CliUtils;

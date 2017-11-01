@@ -6,6 +6,7 @@
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\NullValueException;
+		use Edde\Api\Storage\IStream;
 		use Edde\Common\Driver\AbstractDriver;
 		use GraphAware\Bolt\Exception\MessageFailureException;
 		use GraphAware\Bolt\GraphDatabase;
@@ -36,7 +37,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function execute(INativeQuery $nativeQuery) {
+			public function execute(INativeQuery $nativeQuery): IStream {
 				try {
 					return (function (Result $result) {
 						foreach ($result->getRecords() as $record) {
@@ -47,7 +48,7 @@
 						}
 					})($this->session->run($nativeQuery->getQuery(), $nativeQuery->getParameterList()));
 				} catch (\Throwable $throwable) {
-					return $this->exception($throwable);
+					throw $this->exception($throwable);
 				}
 			}
 
@@ -92,20 +93,13 @@
 				return $this;
 			}
 
-			/**
-			 * @param \Throwable $throwable
-			 *
-			 * @throws DriverException
-			 * @throws DuplicateEntryException
-			 * @throws NullValueException
-			 */
-			protected function exception(\Throwable $throwable) {
+			protected function exception(\Throwable $throwable): \Throwable {
 				if (stripos($message = $throwable->getMessage(), 'already exists with label') !== false) {
-					throw new DuplicateEntryException($message, 0, $throwable);
+					return new DuplicateEntryException($message, 0, $throwable);
 				} else if (stripos($message, 'must have the property') !== false) {
-					throw new NullValueException($message, 0, $throwable);
+					return new NullValueException($message, 0, $throwable);
 				}
-				throw new DriverException($message, 0, $throwable);
+				return new DriverException($message, 0, $throwable);
 			}
 
 			protected function handleSetup(): void {
