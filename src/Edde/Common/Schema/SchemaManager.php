@@ -90,8 +90,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function generate(string $schema, array $source): array {
-				$schema = $this->load($schema);
+			public function generate(ISchema $schema, array $source): array {
 				$result = $source;
 				foreach ($schema->getPropertyList() as $property) {
 					if (isset($source[$name = $property->getName()]) === false && ($generator = $property->getGenerator())) {
@@ -104,8 +103,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function filter(string $schema, array $source): array {
-				$schema = $this->load($schema);
+			public function filter(ISchema $schema, array $source): array {
 				$result = $source;
 				foreach ($source as $k => $v) {
 					if ($filter = $schema->getProperty($k)->getFilter()) {
@@ -118,8 +116,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function sanitize(string $schema, array $source): array {
-				$schema = $this->load($schema);
+			public function sanitize(ISchema $schema, array $source): array {
 				$result = $source;
 				foreach ($source as $k => $v) {
 					if ($sanitizer = $schema->getProperty($k)->getSanitizer()) {

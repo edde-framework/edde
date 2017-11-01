@@ -46,30 +46,30 @@
 			/**
 			 * generate all empty values with a generator (using a schema)
 			 *
-			 * @param string $schema
-			 * @param array  $source
+			 * @param ISchema $schema
+			 * @param array   $source
 			 *
 			 * @return array
 			 */
-			public function generate(string $schema, array $source): array;
+			public function generate(ISchema $schema, array $source): array;
 
 			/**
 			 * filter incoming (to PHP side) values using a schema and filter
 			 *
-			 * @param string $schema
-			 * @param array  $source
+			 * @param ISchema $schema
+			 * @param array   $source
 			 *
 			 * @return array
 			 */
-			public function filter(string $schema, array $source): array;
+			public function filter(ISchema $schema, array $source): array;
 
 			/**
 			 * sanitize (outgoing) values (from PHP side) using a schema and sanitizer
 			 *
-			 * @param string $schema
-			 * @param array  $source
+			 * @param ISchema $schema
+			 * @param array   $source
 			 *
 			 * @return array
 			 */
-			public function sanitize(string $schema, array $source): array;
+			public function sanitize(ISchema $schema, array $source): array;
 		}

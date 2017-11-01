@@ -9,12 +9,15 @@
 		use Edde\Api\Schema\Exception\LinkException;
 		use Edde\Api\Schema\Exception\RelationException;
 		use Edde\Api\Schema\ILink;
+		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Crate\Crate;
+		use Edde\Common\Query\InsertQuery;
 
 		class Entity extends Crate implements IEntity {
 			use EntityManager;
+			use SchemaManager;
 			use Storage;
 			/**
 			 * @var ISchema
@@ -94,6 +97,7 @@
 			 * @inheritdoc
 			 */
 			public function getQuery(): IQuery {
+				return new InsertQuery($this->schema, $this->schemaManager->sanitize($this->schema, $this->toArray()));
 			}
 
 			/**

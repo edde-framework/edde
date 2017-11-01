@@ -25,10 +25,6 @@
 			public function create(string $schema, array $source = []): IEntity;
 
 			/**
-			 * quite complex method: create an entity, fill data (entity is NOT dirty) and
-			 * try to convert properties due it's types (for example database will not return
-			 * float as float, but as a string, ...)
-			 *
 			 * @param string $schema
 			 * @param array  $source
 			 *
