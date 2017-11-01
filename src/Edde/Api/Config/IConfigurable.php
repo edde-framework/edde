@@ -34,7 +34,7 @@
 			public function init();
 
 			/**
-			 * do any heavy computations; after this object is usualy not serializable
+			 * do any heavy computations; after this object is usually not serializable
 			 *
 			 * @return $this
 			 */

@@ -64,7 +64,7 @@
 			public function getResourceName(): string;
 
 			/**
-			 * a little tricky method - return extension (.somthing), if it is present in url
+			 * a little tricky method - return extension (.something), if it is present in url
 			 *
 			 * @return string|null
 			 */

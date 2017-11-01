@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Request;
 
+		use Edde\Api\Application\Exception\AbortException;
 		use Edde\Api\Config\IConfigurable;
 
 		/**
@@ -13,6 +14,8 @@
 			 * shortened method to execute current request (basically run(getRequest()))
 			 *
 			 * @return IRequestService
+			 *
+			 * @throws AbortException
 			 */
 			public function execute(): IRequestService;
 
@@ -20,6 +23,8 @@
 			 * @param IRequest $request
 			 *
 			 * @return IRequestService
+			 *
+			 * @throws AbortException
 			 */
 			public function run(IRequest $request): IRequestService;
 

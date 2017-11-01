@@ -136,7 +136,7 @@
 			 * @inheritdoc
 			 */
 			public function normalizeNewLines(string $string): string {
-				return str_replace([
+				return (string)str_replace([
 					"\r\n",
 					"\r",
 				], "\n", $string);

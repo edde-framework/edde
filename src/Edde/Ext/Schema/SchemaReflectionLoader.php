@@ -1,4 +1,5 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Ext\Schema;
 
 		use Edde\Api\Schema\Exception\SchemaException;

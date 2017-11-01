@@ -15,14 +15,14 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function isConsoleMode() : bool {
+			public function isConsoleMode(): bool {
 				return PHP_SAPI === 'cli';
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getArgumentList() : array {
+			public function getArgumentList(): array {
 				if ($this->argumentList) {
 					return $this->argumentList;
 				}
@@ -35,6 +35,7 @@
 				 * credit for this method goes here:
 				 * https://github.com/pwfisher/CommandLine.php/blob/master/CommandLine.php
 				 */
+				$key = null;
 				for ($i = 0, $j = count($argv); $i < $j; $i++) {
 					$arg = $argv[$i];
 					if (strpos($arg, '--', 0) === 0) {

@@ -1,4 +1,5 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Ext\Protocol;
 
 		use Edde\Api\Container\Exception\ContainerException;

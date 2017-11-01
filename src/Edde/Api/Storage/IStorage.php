@@ -1,9 +1,11 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Api\Storage;
 
 		use Edde\Api\Config\IConfigurable;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\IQuery;
+		use Edde\Api\Query\ISelectQuery;
 
 		interface IStorage extends IConfigurable {
 			/**
@@ -50,9 +52,9 @@
 			/**
 			 * prepare stream for the given query
 			 *
-			 * @param IQuery $query
+			 * @param ISelectQuery $selectQuery
 			 *
 			 * @return IStream
 			 */
-			public function stream(IQuery $query): IStream;
+			public function stream(ISelectQuery $selectQuery): IStream;
 		}

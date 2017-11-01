@@ -3,6 +3,8 @@
 	namespace Edde\Ext\Container;
 
 		use Edde\Api\Application\IApplication;
+		use Edde\Api\Application\ILogDirectory;
+		use Edde\Api\Application\Inject\LogDirectory;
 		use Edde\Api\Application\IRootDirectory;
 		use Edde\Api\Application\ITempDirectory;
 		use Edde\Api\Assets\IAssetsDirectory;
@@ -260,33 +262,37 @@
 
 			static public function getDefaultFactoryList(): array {
 				return [
-					IRootDirectory::class      => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
-					IAssetsDirectory::class    => self::proxy(IRootDirectory::class, 'directory', [
+					IRootDirectory::class   => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
+					IAssetsDirectory::class => self::proxy(IRootDirectory::class, 'directory', [
 						'.assets',
 						AssetsDirectory::class,
 					]),
-					ITempDirectory::class      => self::proxy(IAssetsDirectory::class, 'directory', [
+					ITempDirectory::class   => self::proxy(IAssetsDirectory::class, 'directory', [
 						'temp',
 						TempDirectory::class,
+					]),
+					ILogDirectory::class    => self::proxy(IAssetsDirectory::class, 'directory', [
+						'logs',
+						LogDirectory::class,
 					]),
 					/**
 					 * utils
 					 */
-					IHttpUtils::class          => HttpUtils::class,
-					IStringUtils::class        => StringUtils::class,
-					ICliUtils::class           => CliUtils::class,
+					IHttpUtils::class       => HttpUtils::class,
+					IStringUtils::class     => StringUtils::class,
+					ICliUtils::class        => CliUtils::class,
 					/**
 					 * container implementation
 					 */
-					IContainer::class          => Container::class,
+					IContainer::class       => Container::class,
 					/**
 					 * runtime info provider
 					 */
-					IRuntime::class            => Runtime::class,
+					IRuntime::class         => Runtime::class,
 					/**
 					 * log support
 					 */
-					ILogService::class         => LogService::class,
+					ILogService::class      => LogService::class,
 					/**
 					 * user request into protocol element translation
 					 */

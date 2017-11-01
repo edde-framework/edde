@@ -1,4 +1,5 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Common\Schema;
 
 		use Edde\Api\Node\INode;
@@ -43,21 +44,21 @@
 			 * @inheritdoc
 			 */
 			public function isPrimary(): bool {
-				return $this->node->getAttribute('primary', false);
+				return (bool)$this->node->getAttribute('primary', false);
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function isUnique(): bool {
-				return $this->node->getAttribute('unique', false);
+				return (bool)$this->node->getAttribute('unique', false);
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function isRequired(): bool {
-				return $this->node->getAttribute('required', false);
+				return (bool)$this->node->getAttribute('required', false);
 			}
 
 			/**

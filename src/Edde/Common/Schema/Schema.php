@@ -1,4 +1,5 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Common\Schema;
 
 		use Edde\Api\Node\INode;
@@ -20,7 +21,13 @@
 			 * @var IProperty[]
 			 */
 			protected $propertyList = [];
+			/**
+			 * @var array
+			 */
 			protected $primaryList = null;
+			/**
+			 * @var array
+			 */
 			protected $uniqueList = null;
 			/**
 			 * @var ILink[][]
@@ -58,7 +65,7 @@
 			 * @inheritdoc
 			 */
 			public function isRelation(): bool {
-				return $this->node->getAttribute('is-relation', false);
+				return (bool)$this->node->getAttribute('is-relation', false);
 			}
 
 			/**

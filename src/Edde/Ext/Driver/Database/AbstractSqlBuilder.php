@@ -1,4 +1,5 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Ext\Driver\Database;
 
 		use Edde\Api\Node\INode;
@@ -113,7 +114,6 @@
 			 * @param INode $root
 			 *
 			 * @return INativeTransaction
-			 * @throws QueryBuilderException
 			 */
 			protected function fragmentColumnList(INode $root): INativeTransaction {
 				$columnList = [];
@@ -151,7 +151,6 @@
 			 * @param INode $root
 			 *
 			 * @return INativeTransaction
-			 * @throws QueryBuilderException
 			 */
 			protected function fragmentTableList(INode $root): INativeTransaction {
 				$tableList = [];
@@ -161,13 +160,13 @@
 					$tableList[] = "\t" . $query->getQuery();
 					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
-				return new NativeTransaction(implode(",\n", $tableList) . "\n", $parameterList);
+				return (new NativeTransaction())->query(new NativeQuery(implode(",\n", $tableList) . "\n", $parameterList));
 			}
 
 			protected function fragmentTable(INode $root): INativeTransaction {
 				$table = $this->delimite($root->getAttribute('table'));
 				$table .= (($alias = $root->getAttribute('alias')) ? ' ' . $this->delimite($alias) : '');
-				return new NativeTransaction($table);
+				return (new NativeTransaction())->query(new NativeQuery($table));
 			}
 
 			/**
@@ -202,15 +201,15 @@
 						default:
 							throw new QueryBuilderException(sprintf('Unknown where target type [%s] in [%s].', $target, static::class));
 					}
-					return new NativeTransaction($where, $parameterList);
+					return (new NativeTransaction())->query(new NativeQuery($where, $parameterList));
 				}
 				switch ($type) {
 					case 'group':
-						return new NativeTransaction("(\n" . ($query = $this->fragmentWhereList($root))->getQuery() . "\t)", $query->getParameterList());
+						return (new NativeTransaction())->query(new NativeQuery("(\n" . ($query = $this->fragmentWhereList($root))->getQuery() . "\t)", $query->getParameterList()));
 					case 'in':
 						switch ($target = $root->getAttribute('target')) {
 							case 'query':
-								return new NativeTransaction($this->delimite($root->getAttribute('where')) . " IN (\n" . ($query = $this->fragmentSelect($root->getNode('select')))->getQuery() . ')', $query->getParameterList());
+								return (new NativeTransaction())->query(new NativeQuery($this->delimite($root->getAttribute('where')) . " IN (\n" . ($query = $this->fragmentSelect($root->getNode('select')))->getQuery() . ')', $query->getParameterList()));
 						}
 						throw new QueryBuilderException(sprintf('Unknown where IN target type [%s].', $target));
 				}
@@ -222,6 +221,6 @@
 				foreach ($root->getNodeList() as $node) {
 					$orderList[] = $this->delimite($node->getAttribute('column')) . ' ' . ($node->getAttribute('asc', true) ? 'ASC' : 'DESC');
 				}
-				return new NativeTransaction(implode(',', $orderList));
+				return (new NativeTransaction())->query(new NativeQuery(implode(',', $orderList)));
 			}
 		}

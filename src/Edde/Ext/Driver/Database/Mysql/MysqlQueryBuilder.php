@@ -1,4 +1,5 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Ext\Driver\Database\Mysql;
 
 		use Edde\Api\Query\Exception\QueryBuilderException;

@@ -1,4 +1,5 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Api\Application\Inject;
 
 		use Edde\Api\Application\ITempDirectory;

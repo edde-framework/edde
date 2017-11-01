@@ -1,4 +1,5 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Ext\Driver\Database\Postgres;
 
 		use Edde\Api\Driver\Exception\DriverQueryException;
@@ -9,21 +10,16 @@
 		use Edde\Ext\Driver\Database\AbstractDatabaseDriver;
 
 		class PostgresDriver extends AbstractDatabaseDriver {
-			/**
-			 * @param \Throwable $throwable
-			 *
-			 * @throws \Exception
-			 */
-			protected function exception(\Throwable $throwable) {
+			protected function exception(\Throwable $throwable): \Throwable {
 				if (stripos($message = $throwable->getMessage(), 'unique') !== false) {
-					throw new DuplicateEntryException($message, 0, $throwable);
+					return new DuplicateEntryException($message, 0, $throwable);
 				} else if (stripos($message, 'not null') !== false) {
-					throw new NullValueException($message, 0, $throwable);
+					return new NullValueException($message, 0, $throwable);
 				} else if (stripos($message, 'duplicate table') !== false) {
-					throw new DuplicateTableException($message, 0, $throwable);
+					return new DuplicateTableException($message, 0, $throwable);
 				} else if (stripos($message, 'undefined table') !== false) {
-					throw new UnknownTableException($message, 0, $throwable);
+					return new UnknownTableException($message, 0, $throwable);
 				}
-				throw new DriverQueryException($message, 0, $throwable);
+				return new DriverQueryException($message, 0, $throwable);
 			}
 		}

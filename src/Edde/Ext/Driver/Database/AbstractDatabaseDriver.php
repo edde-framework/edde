@@ -1,4 +1,5 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Ext\Driver\Database;
 
 		use Edde\Api\Driver\Exception\DriverException;

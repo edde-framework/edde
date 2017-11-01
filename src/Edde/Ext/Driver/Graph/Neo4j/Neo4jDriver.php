@@ -1,4 +1,5 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Ext\Driver\Graph\Neo4j;
 
 		use Edde\Api\Driver\Exception\DriverException;

@@ -1,10 +1,12 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Common\Storage;
 
 		use Edde\Api\Driver\Inject\Driver;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\Inject\QueryBuilder;
 		use Edde\Api\Query\IQuery;
+		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Storage\Exception\ExclusiveTransactionException;
 		use Edde\Api\Storage\Exception\NoTransactionException;
 		use Edde\Api\Storage\IStorage;
@@ -82,7 +84,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function stream(IQuery $query): IStream {
-				return new Stream($this, $query);
+			public function stream(ISelectQuery $selectQuery): IStream {
+				return new Stream($this, $selectQuery);
 			}
 		}

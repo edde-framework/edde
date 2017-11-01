@@ -1,4 +1,5 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Ext\Driver\Graph\Neo4j;
 
 		use Edde\Api\Node\INode;
@@ -65,7 +66,7 @@
 						$parameterList['set'][$k] = $v;
 					}
 				}
-				return new NativeTransaction($cypher, $parameterList);
+				return (new NativeTransaction())->query(new NativeQuery($cypher, $parameterList));
 			}
 
 			protected function fragmentInsert(INode $root): INativeTransaction {
@@ -73,9 +74,7 @@
 				foreach ($root->getNode('set-list')->getNodeList() as $node) {
 					$set = array_merge($set, $node->getAttributeList()->array());
 				}
-				return new NativeTransaction('CREATE (n:' . $this->delimite($root->getAttribute('name')) . ' $set)', [
-					'set' => $set,
-				]);
+				return (new NativeTransaction())->query(new NativeQuery('CREATE (n:' . $this->delimite($root->getAttribute('name')) . ' $set)', ['set' => $set]));
 			}
 
 			/**
@@ -96,7 +95,7 @@
 				}
 				$parameterList['set'] = $set;
 				$cypher .= "SET\n\t" . $alias . ' = $set';
-				return new NativeTransaction($cypher, $parameterList);
+				return (new NativeTransaction())->query(new NativeQuery($cypher, $parameterList));
 			}
 
 			/**
@@ -119,7 +118,7 @@
 					$cypher .= "WHERE\n" . $query->getQuery() . "\n";
 					$parameterList = $query->getParameterList();
 				}
-				return new NativeTransaction($cypher . 'RETURN ' . $alias, $parameterList);
+				return (new NativeTransaction())->query(new NativeQuery($cypher . 'RETURN ' . $alias, $parameterList));
 			}
 
 			/**

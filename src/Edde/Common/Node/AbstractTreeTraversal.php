@@ -27,7 +27,7 @@
 					$treeTraversal->enter($node, $iterator, ...$parameters);
 					$treeTraversal->node($node, $iterator, ...$parameters);
 					$treeTraversal->leave($node, $iterator, ...$parameters);
-				} catch (SkipException $exception) {
+				} catch (SkipException $_) {
 					/**
 					 * skip exception could be safely ignored
 					 */

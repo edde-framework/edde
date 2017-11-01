@@ -1,4 +1,5 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Api\Query\Fragment;
 
 		interface IWhereTo extends IFragment {
@@ -12,7 +13,7 @@
 			public function to($value): IWhereRelation;
 
 			/**
-			 * where to a column namel
+			 * where to a column name
 			 *
 			 * @param string      $name
 			 * @param string|null $prefix

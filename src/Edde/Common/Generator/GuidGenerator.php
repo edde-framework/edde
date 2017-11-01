@@ -1,4 +1,5 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Common\Generator;
 
 		use Edde\Api\Crypt\Inject\RandomService;

@@ -1,4 +1,5 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Api\Assets\Inject;
 
 		use Edde\Api\Assets\IAssetsDirectory;

@@ -36,7 +36,7 @@
 			 * @inheritdoc
 			 */
 			public function getName(): string {
-				return $this->cookie['name'];
+				return (string)$this->cookie['name'];
 			}
 
 			/**

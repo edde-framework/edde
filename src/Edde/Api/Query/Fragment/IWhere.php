@@ -1,4 +1,5 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Api\Query\Fragment;
 
 		interface IWhere extends IFragment {
@@ -72,7 +73,7 @@
 			public function in(string $name): IWhereIn;
 
 			/**
-			 * group is like braces (subwhere)
+			 * group is like braces (sub where)
 			 *
 			 * @return IWhere
 			 */

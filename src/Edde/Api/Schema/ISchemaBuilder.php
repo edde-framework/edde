@@ -1,4 +1,5 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Api\Schema;
 
 		interface ISchemaBuilder {
@@ -30,7 +31,7 @@
 			public function property(string $name): IPropertyBuilder;
 
 			/**
-			 * create a primary propery on the schema
+			 * create a primary property on the schema
 			 *
 			 * @param string $name
 			 *

@@ -1,11 +1,11 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Ext\Router;
 
 		use Edde\Api\Http\Exception\NoHttpException;
 		use Edde\Api\Protocol\Inject\ProtocolService;
 		use Edde\Api\Request\IRequest;
 		use Edde\Api\Router\Exception\RouterException;
-		use Edde\Api\Utils\Inject\CliUtils;
 		use Edde\Api\Utils\Inject\StringUtils;
 		use Edde\Common\Request\Request;
 		use Edde\Common\Router\AbstractRouter;
@@ -14,7 +14,6 @@
 			const PREG_CONTROLLER = '~^/?(?<class>[.a-z0-9-]+)/(?<method>[a-z0-9-]+)$~';
 			const PREG_REST = '~^/?rest/(?<class>[.a-z0-9-]+)$~';
 			use ProtocolService;
-			use CliUtils;
 			use StringUtils;
 
 			/**
@@ -51,14 +50,7 @@
 			 * @inheritdoc
 			 */
 			protected function createCliRequest(): IRequest {
-				/**
-				 * it's better to not relay on the global argc/v; they can be
-				 * safely accessed from globals array
-				 */
-				if (isset($GLOBALS['argv']) === false) {
-					throw new RouterException("There is no \$GLOBALS['argv']!");
-				}
-				$parameterList = $this->cliUtils->getArgumentList($GLOBALS['argv']);
+				$parameterList = $this->runtime->getArgumentList();
 				/**
 				 * first parameter must be plain string in the same format, like in URL (for example foo.bar-service/do-this)
 				 */

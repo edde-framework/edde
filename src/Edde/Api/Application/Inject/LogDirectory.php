@@ -1,13 +1,13 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Log\Inject;
+	namespace Edde\Api\Application\Inject;
 
-		use Edde\Api\Log\ILogDirectory;
+		use Edde\Api\Application\ILogDirectory;
 
 		/**
 		 * Log directory lazy dependency.
 		 */
-		trait LazyLogDirectoryTrait {
+		trait LogDirectory {
 			/**
 			 * @var ILogDirectory
 			 */

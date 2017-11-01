@@ -79,7 +79,7 @@
 			 */
 			public function getResourceName(): string {
 				$pathList = $this->getPathList();
-				return end($pathList);
+				return (string)end($pathList);
 			}
 
 			/**

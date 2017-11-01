@@ -44,7 +44,7 @@
 			public function resolve(IContent $content, array $targetList = null): IConvertable;
 
 			/**
-			 * execute the conversion fron source to target
+			 * execute the conversion from source to target
 			 *
 			 * @param IContent   $content
 			 * @param array|null $targetList

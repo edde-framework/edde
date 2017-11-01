@@ -1,4 +1,5 @@
 <?php
+	declare(strict_types=1);
 	namespace App\Ext\Upgrade;
 
 		use App\Api\User\Schema\GroupSchema;

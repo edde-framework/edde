@@ -1,4 +1,5 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Common\Query;
 
 		use Edde\Api\Node\INode;
@@ -32,7 +33,6 @@
 			 * @param INode $root
 			 *
 			 * @return INativeTransaction
-			 * @throws QueryBuilderException
 			 */
 			protected function fragmentWhereList(INode $root): INativeTransaction {
 				$whereList = null;
@@ -47,15 +47,7 @@
 					$whereList[] = $where . ' ' . strtoupper($node->getAttribute('relation'));
 					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
-				return new NativeTransaction("\t" . implode("\n\t", $whereList), $parameterList);
-			}
-
-			protected function fragmentParameterList(INode $root): INativeTransaction {
-				$parameterList = [];
-				foreach ($root->getNodeList() as $node) {
-					$parameterList[$node->getAttribute('name')] = $node->getValue();
-				}
-				return new NativeTransaction('', $parameterList);
+				return (new NativeTransaction())->query(new NativeQuery("\t" . implode("\n\t", $whereList), $parameterList));
 			}
 
 			protected function handleSetup(): void {

@@ -1,4 +1,5 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Common\Crate;
 
 		use Edde\Api\Crate\ICrate;
@@ -10,6 +11,9 @@
 			 * @var IProperty[]
 			 */
 			protected $propertyList = [];
+			/**
+			 * @var bool
+			 */
 			protected $dirty = null;
 
 			/**

@@ -76,6 +76,9 @@
 				return $n ?: (is_callable($default) ? call_user_func($default) : $default);
 			}
 
+			/**
+			 * @inheritdoc
+			 */
 			public function isEmpty(INode $node) {
 				$iterator = $this->filter($node);
 				$iterator->rewind();

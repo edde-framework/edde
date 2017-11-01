@@ -1,8 +1,8 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Api\Query\Fragment;
 
 		use Edde\Api\Node\INode;
-		use Edde\Api\Query\IQuery;
 
 		interface IFragment {
 			/**
@@ -11,11 +11,4 @@
 			 * @return INode
 			 */
 			public function getNode(): INode;
-
-			/**
-			 * return or create a root Query using root IQL node
-			 *
-			 * @return IQuery
-			 */
-			public function query(): IQuery;
 		}

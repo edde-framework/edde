@@ -31,7 +31,7 @@
 			public function getExtension(): ?string;
 
 			/**
-			 * return firendy name of this resource; this can be arbitrary string
+			 * return friendly name of this resource; this can be arbitrary string
 			 *
 			 * @return string
 			 */

@@ -1,4 +1,5 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Common\Upgrade;
 
 		use Edde\Api\Storage\Inject\Storage;
@@ -6,6 +7,7 @@
 		use Edde\Api\Upgrade\Exception\InvalidVersionException;
 		use Edde\Api\Upgrade\Exception\NoUpgradesAvailableException;
 		use Edde\Api\Upgrade\Exception\UnknownVersionException;
+		use Edde\Api\Upgrade\Exception\UpgradeException;
 		use Edde\Api\Upgrade\IUpgrade;
 		use Edde\Api\Upgrade\IUpgradeManager;
 		use Edde\Common\Object\Object;
@@ -83,6 +85,7 @@
 			 * @inheritdoc
 			 */
 			public function rollback(string $version = null): IUpgrade {
+				throw new UpgradeException('Rollback is not supported in [%s].', static::class);
 			}
 
 			protected function onUpgradeStart(): void {

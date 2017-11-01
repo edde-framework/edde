@@ -1,16 +1,19 @@
 <?php
+	declare(strict_types=1);
 	namespace App\Common\Upgrade;
 
 		use App\Api\Upgrade\UpgradeSchema;
 		use Edde\Api\Entity\ICollection;
+		use Edde\Api\Entity\Inject\EntityManager;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
 		use Edde\Api\Storage\Exception\UnknownTableException;
 		use Edde\Api\Upgrade\IUpgrade;
+		use Edde\Common\Query\CreateSchemaQuery;
 		use Edde\Common\Upgrade\AbstractUpgradeManager;
 
 		class UpgradeManager extends AbstractUpgradeManager {
-			use Edde\Api\Entity\Inject\EntityManager;
+			use EntityManager;
 			use SchemaManager;
 
 			/**
@@ -25,7 +28,7 @@
 					 */
 					$this->storage->rollback();
 					$this->storage->start();
-					$this->storage->createSchema(UpgradeSchema::class);
+					$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(UpgradeSchema::class)));
 					return null;
 				} catch (EntityNotFoundException  $exception) {
 					return null;

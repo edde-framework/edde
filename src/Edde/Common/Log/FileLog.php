@@ -2,15 +2,17 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Log;
 
+		use Edde\Api\Application\Inject\LogDirectory;
+		use Edde\Api\File\Exception\FileWriteException;
+		use Edde\Api\File\IFile;
 		use Edde\Api\Log\ILog;
 		use Edde\Api\Log\ILogRecord;
-		use Edde\Api\Log\Inject\LazyLogDirectoryTrait;
 
 		/**
 		 * Default file based log.
 		 */
 		class FileLog extends AbstractLog {
-			use LazyLogDirectoryTrait;
+			use LogDirectory;
 			/**
 			 * @var string
 			 */
@@ -44,6 +46,7 @@
 			 * @param ILogRecord $logRecord
 			 *
 			 * @return ILog
+			 * @throws FileWriteException
 			 */
 			public function record(ILogRecord $logRecord): ILog {
 				$this->file->write(sprintf("[%s] %s\n", date('Y-m-d H:i:s'), $logRecord->getLog()));

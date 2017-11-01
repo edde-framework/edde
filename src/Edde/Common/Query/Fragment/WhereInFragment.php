@@ -1,4 +1,5 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Common\Query\Fragment;
 
 		use Edde\Api\Query\Fragment\IWhereIn;
