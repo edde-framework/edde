@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Query;
 
-		use Edde\Api\Node\INode;
 		use Edde\Api\Query\Exception\QueryBuilderException;
 		use Edde\Api\Query\INativeTransaction;
 		use Edde\Api\Query\IQuery;
@@ -27,27 +26,6 @@
 					throw new QueryBuilderException(sprintf('Unsupported query type [%s] in [%s].', $name, static::class));
 				}
 				return $this->fragmentList[$name]($query);
-			}
-
-			/**
-			 * @param INode $root
-			 *
-			 * @return INativeTransaction
-			 */
-			protected function fragmentWhereList(INode $root): INativeTransaction {
-				$whereList = null;
-				$parameterList = [];
-				foreach ($root->getNodeList() as $node) {
-					$query = $this->fragment($node);
-					$where = null;
-					if ($whereList && ($relationTo = $node->getAttribute('relation-to'))) {
-						$where .= ' ' . strtoupper($relationTo) . "\n\t";
-					}
-					$where .= $query->getQuery();
-					$whereList[] = $where . ' ' . strtoupper($node->getAttribute('relation'));
-					$parameterList = array_merge($parameterList, $query->getParameterList());
-				}
-				return (new NativeTransaction())->query(new NativeQuery("\t" . implode("\n\t", $whereList), $parameterList));
 			}
 
 			protected function handleSetup(): void {

@@ -2,10 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Driver\Database;
 
+		use Edde\Api\Query\Fragment\IWhereFragment;
 		use Edde\Api\Query\ICrateSchemaQuery;
 		use Edde\Api\Query\IInsertQuery;
 		use Edde\Api\Query\INativeTransaction;
 		use Edde\Api\Query\ISelectQuery;
+		use Edde\Api\Query\IUpdateQuery;
 		use Edde\Common\Query\AbstractQueryBuilder;
 		use Edde\Common\Query\NativeQuery;
 		use Edde\Common\Query\NativeTransaction;
@@ -47,15 +49,35 @@
 			}
 
 			protected function fragmentSelect(ISelectQuery $selectQuery): INativeTransaction {
-				$sql = "SELECT\n\t";
 				$columnList = [];
 				$fromList = [];
 				foreach ($selectQuery->getSchemaFragmentList() as $schemaFragment) {
 					$columnList[$alias] = ($alias = $this->delimite($schemaFragment->getAlias())) . '.*';
 					$fromList[$alias] = $this->delimite($schemaFragment->getSchema()->getName()) . ' ' . $alias;
 				}
-				$sql .= implode(",\n\t", $columnList) . "\n";
-				$sql .= "FROM\n\t" . implode(",\n\t", $fromList);
+				$sql = "SELECT\n\t" . implode(",\n\t", $columnList) . "\nFROM\n\t" . implode(",\n\t", $fromList);
 				return (new NativeTransaction())->query(new NativeQuery($sql));
+			}
+
+			protected function fragmentUpdate(IUpdateQuery $updateQuery): INativeTransaction {
+				$schema = $updateQuery->getSchema();
+				$sql = "UPDATE\n\t";
+				$sql .= $this->delimite($schema->getName()) . "\n";
+				$sql .= "SET\n\t";
+				$parameterList = [];
+				$nameList = [];
+				foreach ($updateQuery->getSource() as $k => $v) {
+					$nameList[] = $this->delimite($k) . ' = :' . ($parameterId = ('p_' . sha1($k)));
+					$parameterList[$parameterId] = $v;
+				}
+				$sql .= implode(",\n\t", $nameList) . "\n";
+				if ($updateQuery->hasWhere()) {
+					$sql .= "WHERE\n\t";
+					$this->fragmentWhere($updateQuery->where());
+				}
+				return (new NativeTransaction())->query(new NativeQuery($sql, $parameterList));
+			}
+
+			protected function fragmentWhere(IWhereFragment $whereFragment): INativeTransaction {
 			}
 		}
