@@ -13,6 +13,7 @@
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Crate\Crate;
 		use Edde\Common\Query\InsertQuery;
+		use Edde\Common\Query\UpdateQuery;
 
 		class Entity extends Crate implements IEntity {
 			use EntityManager;
@@ -30,10 +31,7 @@
 			 * @var IEntity[]
 			 */
 			protected $relationList = [];
-			/**
-			 * @var bool
-			 */
-			protected $deffered = false;
+			protected $exists = false;
 
 			public function __construct(ISchema $schema) {
 				$this->schema = $schema;
@@ -85,8 +83,26 @@
 			 * @inheritdoc
 			 */
 			public function save(): IEntity {
-				$this->storage->execute(new InsertQuery($this->schema, $this->schemaManager->sanitize($this->schema, $this->toArray())));
+				$source = $this->schemaManager->sanitize($this->schema, $this->toArray());
+				$query = new InsertQuery($this->schema, $source);
+				if ($this->exists) {
+					$query = new UpdateQuery($this->schema, $source);
+					foreach ($this->schema->getPrimaryList() as $name => $property) {
+						$query->where()->eq($name)->to($this->get($name));
+					}
+				}
+				$this->storage->execute($query);
 				$this->commit();
+				$this->exists = true;
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function load(array $source): IEntity {
+				$this->push($this->schemaManager->filter($this->schema, $source));
+				$this->exists = true;
 				return $this;
 			}
 
@@ -124,6 +140,6 @@
 				parent::__clone();
 				$this->linkList = [];
 				$this->relationList = [];
-				$this->deffered = false;
+				$this->exists = false;
 			}
 		}

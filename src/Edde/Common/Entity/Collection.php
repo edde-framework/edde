@@ -50,7 +50,7 @@
 			public function getIterator() {
 				$name = $this->schema->getName();
 				foreach ($this->stream as $source) {
-					yield $this->entityManager->factory($name, $source);
+					yield $this->entityManager->load($name, $source);
 				}
 			}
 

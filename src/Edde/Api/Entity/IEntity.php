@@ -50,4 +50,13 @@
 			 * @throws IntegrityException
 			 */
 			public function save(): IEntity;
+
+			/**
+			 * load the given data (they should be also filtered)
+			 *
+			 * @param array $source
+			 *
+			 * @return IEntity
+			 */
+			public function load(array $source): IEntity;
 		}

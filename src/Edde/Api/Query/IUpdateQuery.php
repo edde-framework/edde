@@ -2,17 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Query;
 
-		use Edde\Api\Node\INode;
 		use Edde\Api\Query\Fragment\IWhereFragment;
 
 		interface IUpdateQuery extends IInsertQuery {
-			/**
-			 * update where
-			 *
-			 * @return IWhereFragment
-			 */
-			public function where(): IWhereFragment;
-
 			/**
 			 * has this update query where limitation
 			 *
@@ -21,9 +13,9 @@
 			public function hasWhere(): bool;
 
 			/**
-			 * return where IQL node
+			 * update where
 			 *
-			 * @return INode
+			 * @return IWhereFragment
 			 */
-			public function getWhere(): INode;
+			public function where(): IWhereFragment;
 		}

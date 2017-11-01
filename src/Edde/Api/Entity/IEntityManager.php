@@ -26,12 +26,15 @@
 			public function create(string $schema, array $source = []): IEntity;
 
 			/**
+			 * when this method is used, entity would be marked as "existing"; that
+			 * means on save there will be update action instead of insert
+			 *
 			 * @param string $schema
 			 * @param array  $source
 			 *
 			 * @return IEntity
 			 */
-			public function factory(string $schema, array $source): IEntity;
+			public function load(string $schema, array $source): IEntity;
 
 			/**
 			 * create a collection of the given schema

@@ -45,8 +45,8 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function factory(string $schema, array $source): IEntity {
-				return $this->createEntity($schema = $this->schemaManager->load($schema))->push($this->schemaManager->filter($schema, $source));
+			public function load(string $schema, array $source): IEntity {
+				return $this->createEntity($this->schemaManager->load($schema))->load($source);
 			}
 
 			/**
