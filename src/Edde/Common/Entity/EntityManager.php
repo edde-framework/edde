@@ -38,18 +38,14 @@
 			 * @inheritdoc
 			 */
 			public function create(string $schema, array $source = []): IEntity {
-				$entity = $this->createEntity($schema = $this->schemaManager->load($schema));
-				$entity->put($this->schemaManager->generate($schema, $source));
-				return $entity;
+				return $this->createEntity($schema = $this->schemaManager->load($schema))->put($this->schemaManager->generate($schema, $source));
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function factory(string $schema, array $source): IEntity {
-				$entity = $this->createEntity($schema = $this->schemaManager->load($schema));
-				$entity->push($this->schemaManager->filter($schema, $source));
-				return $entity;
+				return $this->createEntity($schema = $this->schemaManager->load($schema))->push($this->schemaManager->filter($schema, $source));
 			}
 
 			/**
