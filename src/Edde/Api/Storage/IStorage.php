@@ -2,14 +2,9 @@
 	namespace Edde\Api\Storage;
 
 		use Edde\Api\Config\IConfigurable;
-		use Edde\Api\Entity\ICollection;
-		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\INativeTransaction;
 		use Edde\Api\Query\IQuery;
-		use Edde\Api\Schema\ISchema;
-		use Edde\Api\Storage\Exception\DuplicateTableException;
-		use Edde\Api\Storage\Exception\UnknownTableException;
 
 		interface IStorage extends IConfigurable {
 			/**
@@ -50,37 +45,16 @@
 			 *
 			 * @param IQuery $query
 			 *
-			 * @return mixed
+			 * @return IStream
 			 */
-			public function execute(IQuery $query);
+			public function execute(IQuery $query): IStream;
 
 			/**
 			 * directly execute native query
 			 *
 			 * @param INativeQuery $nativeQuery
 			 *
-			 * @return mixed
+			 * @return IStream
 			 */
-			public function query(INativeQuery $nativeQuery);
-
-			/**
-			 * get a collection of entities (collection should use generator or iterator, never fetch to array)
-			 *
-			 * @param string      $schema
-			 * @param IQuery|null $query
-			 *
-			 * @return ICollection|IEntity[]
-			 * @throws UnknownTableException
-			 */
-			public function collection(string $schema, IQuery $query = null): ICollection;
-
-			/**
-			 * creates a new schema or throw an exception if already exists (or other error)
-			 *
-			 * @param ISchema $schema
-			 *
-			 * @return IStorage
-			 * @throws DuplicateTableException
-			 */
-			public function createSchema(ISchema $schema): IStorage;
+			public function query(INativeQuery $nativeQuery): IStream;
 		}

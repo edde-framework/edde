@@ -5,13 +5,13 @@
 		use Edde\Api\Schema\Exception\UnknownSchemaException;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
-		use Edde\Api\Storage\Exception\DuplicateTableException;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
 		use Edde\Api\Storage\Exception\IntegrityException;
 		use Edde\Api\Storage\Exception\NullValueException;
 		use Edde\Api\Storage\Exception\StorageException;
 		use Edde\Api\Storage\Exception\UnknownTableException;
 		use Edde\Api\Storage\Inject\Storage;
+		use Edde\Common\Query\CreateSchemaQuery;
 		use Edde\Common\Schema\BarSchema;
 		use Edde\Common\Schema\FooBarSchema;
 		use Edde\Common\Schema\FooSchema;
@@ -24,14 +24,13 @@
 			use Storage;
 
 			/**
-			 * @throws DuplicateTableException
 			 * @throws UnknownSchemaException
 			 */
 			public function testCreateSchema() {
-				$this->storage->createSchema($this->schemaManager->load(SimpleSchema::class));
-				$this->storage->createSchema($this->schemaManager->load(FooSchema::class));
-				$this->storage->createSchema($this->schemaManager->load(BarSchema::class));
-				$this->storage->createSchema($this->schemaManager->load(FooBarSchema::class));
+				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(SimpleSchema::class)));
+				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(FooSchema::class)));
+				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(BarSchema::class)));
+				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(FooBarSchema::class)));
 				self::assertTrue(true, 'everything is ok');
 			}
 
@@ -111,7 +110,6 @@
 
 			public function testCollection() {
 				$entity = $this->entityManager->create(SimpleSchema::class);
-				$entity->deffered();
 				/**
 				 * because an entity is deffered, it should get loaded on first request
 				 * of data read; because there is no query, default collection is used, thus

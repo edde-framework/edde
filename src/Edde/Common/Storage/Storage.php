@@ -2,20 +2,15 @@
 	namespace Edde\Common\Storage;
 
 		use Edde\Api\Driver\Inject\Driver;
-		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\INativeTransaction;
 		use Edde\Api\Query\Inject\QueryBuilder;
 		use Edde\Api\Query\IQuery;
-		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\ExclusiveTransactionException;
 		use Edde\Api\Storage\Exception\NoTransactionException;
 		use Edde\Api\Storage\IStorage;
 		use Edde\Api\Storage\IStream;
-		use Edde\Common\Entity\Collection;
 		use Edde\Common\Object\Object;
-		use Edde\Common\Query\CreateSchemaQuery;
-		use Edde\Common\Query\SelectQuery;
 
 		class Storage extends Object implements IStorage {
 			use QueryBuilder;
@@ -89,40 +84,14 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function execute(IQuery $query) {
+			public function execute(IQuery $query): IStream {
 				return $this->transaction($this->queryBuilder->query($query));
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function query(INativeQuery $nativeQuery) {
+			public function query(INativeQuery $nativeQuery): IStream {
 				return $this->driver->execute($nativeQuery);
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function collection(string $schema, IQuery $query = null): ICollection {
-				if ($query === null) {
-					/**
-					 * by default select all from the source schema
-					 */
-					$query = new SelectQuery();
-					$query->table($schema)->all();
-				}
-				return new Collection($this->entityManager, $this, $this->schemaManager->load($schema), $query);
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function createSchema(ISchema $schema): IStorage {
-				/**
-				 * because storage is using IQL in general, it's possible to safely use queries here in abstract
-				 * implementation
-				 */
-				$this->execute(new CreateSchemaQuery($schema));
-				return $this;
 			}
 		}
