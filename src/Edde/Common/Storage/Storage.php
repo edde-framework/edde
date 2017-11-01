@@ -10,14 +10,11 @@
 		use Edde\Api\Storage\Exception\ExclusiveTransactionException;
 		use Edde\Api\Storage\Exception\NoTransactionException;
 		use Edde\Api\Storage\ICollection;
-		use Edde\Api\Storage\IEntity;
 		use Edde\Api\Storage\Inject\EntityManager;
 		use Edde\Api\Storage\IStorage;
 		use Edde\Common\Object\Object;
 		use Edde\Common\Query\CreateSchemaQuery;
-		use Edde\Common\Query\InsertQuery;
 		use Edde\Common\Query\SelectQuery;
-		use Edde\Common\Query\UpdateQuery;
 
 		class Storage extends Object implements IStorage {
 			use EntityManager;
@@ -28,35 +25,6 @@
 			 * @var int
 			 */
 			protected $transaction = 0;
-
-			/**
-			 * @inheritdoc
-			 */
-			public function execute(IQuery $query) {
-				return $this->transaction($this->queryBuilder->build($query));
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function query(INativeQuery $nativeQuery) {
-				return $this->driver->execute($nativeQuery);
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function transaction(INativeTransaction $nativeTransaction) {
-				try {
-					$this->start();
-					$result = $this->driver->transaction($nativeTransaction);
-					$this->commit();
-					return $result;
-				} catch (\Throwable $throwable) {
-					$this->rollback();
-					throw $throwable;
-				}
-			}
 
 			/**
 			 * @inheritdoc
@@ -107,51 +75,12 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function saveRelations(IEntity $entity): IStorage {
-				foreach ($entity->getLinkList() as $entity) {
-					$this->save($entity);
-				}
-				foreach ($entity->getRelationList() as $entity) {
-					$this->save($entity);
-				}
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function save(IEntity $entity): IStorage {
-				$this->start();
+			public function transaction(INativeTransaction $nativeTransaction) {
 				try {
-					$this->saveRelations($entity);
-					/**
-					 * entities not changed will not be saved
-					 */
-					if ($entity->isDirty() === false) {
-						$this->commit();
-						return $this;
-					}
-					$query = new SelectQuery();
-					$query->setDescription('check entity existence query');
-					$query->table($entity->getSchema()->getName(), 's')->all();
-					$value = null;
-					foreach (($primaryList = $entity->getPrimaryList()) as $property) {
-						if (($value = $property->get()) === null) {
-							break;
-						}
-						$query->where()->and()->eq($property->getName(), 's')->to($value);
-					}
-					/**
-					 * pickup an entity from storage if it's already there (and run update)
-					 */
-					$method = 'insert';
-					foreach ($value ? $this->execute($query) : [] as $_) {
-						$method = 'update';
-						break;
-					}
-					$this->{$method}($entity);
+					$this->start();
+					$result = $this->driver->transaction($nativeTransaction);
 					$this->commit();
-					return $this;
+					return $result;
 				} catch (\Throwable $throwable) {
 					$this->rollback();
 					throw $throwable;
@@ -161,45 +90,15 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function insert(IEntity $entity): IStorage {
-				$this->saveRelations($entity);
-				$this->execute(new InsertQuery($entity->getSchema(), $this->prepare($entity)));
-				$entity->commit();
-				return $this;
+			public function execute(IQuery $query) {
+				return $this->transaction($this->queryBuilder->build($query));
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function push(string $schema, array $source): IEntity {
-				$this->insert($entity = $this->entityManager->create($schema, $source));
-				return $entity;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function update(IEntity $entity): IStorage {
-				$this->saveRelations($entity);
-				$query = new UpdateQuery($entity->getSchema(), $this->prepare($entity));
-				foreach ($entity->getPrimaryList() as $property) {
-					$query->where()->and()->eq($property->getName())->to($property->get());
-				}
-				$this->execute($query);
-				$entity->commit();
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function createSchema(string $schema): IStorage {
-				/**
-				 * because storage is using IQL in general, it's possible to safely use queries here in abstract
-				 * implementation
-				 */
-				$this->execute(new CreateSchemaQuery($this->schemaManager->load($schema)));
-				return $this;
+			public function query(INativeQuery $nativeQuery) {
+				return $this->driver->execute($nativeQuery);
 			}
 
 			/**
@@ -217,16 +116,14 @@
 			}
 
 			/**
-			 * @param IEntity $entity
-			 *
-			 * @return array
+			 * @inheritdoc
 			 */
-			protected function prepare(IEntity $entity): array {
-				$source = $this->driver->toArray($entity);
-				foreach ($entity->getPrimaryList() as $property) {
-					$source[$property->getName()] = $property->get();
-				}
-				$entity->push($source = $this->schemaManager->generate($schemaName = $entity->getSchema()->getName(), $source));
-				return $this->schemaManager->sanitize($schemaName, $source);
+			public function createSchema(string $schema): IStorage {
+				/**
+				 * because storage is using IQL in general, it's possible to safely use queries here in abstract
+				 * implementation
+				 */
+				$this->execute(new CreateSchemaQuery($this->schemaManager->load($schema)));
+				return $this;
 			}
 		}

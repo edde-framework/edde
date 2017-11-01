@@ -34,27 +34,42 @@
 				self::assertTrue(true, 'everything is ok');
 			}
 
+			/**
+			 * @throws DuplicateEntryException
+			 * @throws IntegrityException
+			 * @throws StorageException
+			 */
 			public function testInsert() {
 				$entity = $this->entityManager->create(SimpleSchema::class, [
 					'name'     => 'this entity is new',
 					'optional' => 'foo-bar',
-				])->insert();
+				])->save();
 				self::assertNotEmpty($entity->get('guid'));
 			}
 
+			/**
+			 * @throws DuplicateEntryException
+			 * @throws IntegrityException
+			 * @throws StorageException
+			 */
 			public function testInsertException() {
 				$this->expectException(NullValueException::class);
 				$this->entityManager->create(FooSchema::class, [
 					'label' => 'kaboom',
-				])->insert();
+				])->save();
 			}
 
+			/**
+			 * @throws DuplicateEntryException
+			 * @throws IntegrityException
+			 * @throws StorageException
+			 */
 			public function testInsertException2() {
 				$this->expectException(NullValueException::class);
 				$this->entityManager->create(FooSchema::class, [
 					'name'  => null,
 					'label' => 'kaboom',
-				])->insert();
+				])->save();
 			}
 
 			public function testInsertUnique() {

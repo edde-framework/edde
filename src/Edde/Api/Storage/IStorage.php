@@ -5,41 +5,10 @@
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\INativeTransaction;
 		use Edde\Api\Query\IQuery;
-		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\DuplicateTableException;
-		use Edde\Api\Storage\Exception\IntegrityException;
-		use Edde\Api\Storage\Exception\StorageException;
 		use Edde\Api\Storage\Exception\UnknownTableException;
 
 		interface IStorage extends IConfigurable {
-			/**
-			 * execute the given query against a storage; query should be translated into native query and
-			 * executed by a native() method
-			 *
-			 * @param IQuery $query
-			 *
-			 * @return mixed
-			 */
-			public function execute(IQuery $query);
-
-			/**
-			 * directly execute native query
-			 *
-			 * @param INativeQuery $nativeQuery
-			 *
-			 * @return mixed
-			 */
-			public function query(INativeQuery $nativeQuery);
-
-			/**
-			 * executes a transaction (a set of queries) on this storage
-			 *
-			 * @param INativeTransaction $nativeTransaction
-			 *
-			 * @return mixed
-			 */
-			public function transaction(INativeTransaction $nativeTransaction);
-
 			/**
 			 * start a transaction on the storage
 			 *
@@ -64,52 +33,32 @@
 			public function rollback(): IStorage;
 
 			/**
-			 * save the given entity; the storage should check, if an entity is already present and
-			 * do proper inert/update
+			 * executes a transaction (a set of queries) on this storage
 			 *
-			 * This method is quite heavy; for example when there is a lot of new entities
-			 * created, insert method could be used instead as optimization
+			 * @param INativeTransaction $nativeTransaction
 			 *
-			 * @param IEntity $entity
-			 *
-			 * @return IStorage
-			 *
-			 * @throws IntegrityException
-			 * @throws StorageException
+			 * @return mixed
 			 */
-			public function save(IEntity $entity): IStorage;
+			public function transaction(INativeTransaction $nativeTransaction);
 
 			/**
-			 * when entity status for this storage is known (like it's new), than it's
-			 * possible to use this faster method to insert the entity into storage
+			 * execute the given query against a storage; query should be translated into native query and
+			 * executed by a native() method
 			 *
-			 * @param IEntity $entity
+			 * @param IQuery $query
 			 *
-			 * @return IStorage
-			 *
-			 * @throws DuplicateEntryException
+			 * @return mixed
 			 */
-			public function insert(IEntity $entity): IStorage;
+			public function execute(IQuery $query);
 
 			/**
-			 * shortut: creates an entity, push data inside and insert it into the storage
+			 * directly execute native query
 			 *
-			 * @param string $schema
-			 * @param array  $source
+			 * @param INativeQuery $nativeQuery
 			 *
-			 * @return IEntity
+			 * @return mixed
 			 */
-			public function push(string $schema, array $source): IEntity;
-
-			/**
-			 * when user know that entity has changed in this storage (thus it already exists in this
-			 * storage), this shortcut method could be used
-			 *
-			 * @param IEntity $entity
-			 *
-			 * @return IStorage
-			 */
-			public function update(IEntity $entity): IStorage;
+			public function query(INativeQuery $nativeQuery);
 
 			/**
 			 * get a collection of entities (collection should use generator or iterator, never fetch to array)
