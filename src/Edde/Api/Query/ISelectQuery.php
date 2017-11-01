@@ -2,45 +2,27 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Query;
 
-		use Edde\Api\Query\Fragment\IOrder;
-		use Edde\Api\Query\Fragment\ITable;
-		use Edde\Api\Query\Fragment\IWhere;
+		use Edde\Api\Query\Fragment\ISchemaFragment;
+		use Edde\Api\Schema\ISchema;
 
 		/**
 		 * Formal interface for Select Queries (also to map relevant fragments).
 		 */
 		interface ISelectQuery extends IQuery {
 			/**
-			 * add this table as source (usually FROM)
+			 * add a schema to query to be queried
 			 *
-			 * @param string      $name
+			 * @param ISchema     $schema
 			 * @param string|null $alias
 			 *
-			 * @return ITable
+			 * @return ISchemaFragment
 			 */
-			public function table(string $name, string $alias = null): ITable;
+			public function schema(ISchema $schema, string $alias = null): ISchemaFragment;
 
 			/**
-			 * do subselect in column list
+			 * return list of schemas being queried
 			 *
-			 * @param ISelectQuery $selectQuery
-			 * @param string       $alias
-			 *
-			 * @return ISelectQuery
+			 * @return ISchema[]
 			 */
-			public function select(ISelectQuery $selectQuery, string $alias): ISelectQuery;
-
-			/**
-			 * where clausule
-			 *
-			 * @return IWhere
-			 */
-			public function where(): IWhere;
-
-			/**
-			 * order by
-			 *
-			 * @return IOrder
-			 */
-			public function order(): IOrder;
+			public function getSchemaFragmentList(): array;
 		}

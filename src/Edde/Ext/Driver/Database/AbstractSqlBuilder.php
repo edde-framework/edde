@@ -7,6 +7,7 @@
 		use Edde\Api\Query\ICrateSchemaQuery;
 		use Edde\Api\Query\IInsertQuery;
 		use Edde\Api\Query\INativeTransaction;
+		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Query\IUpdateQuery;
 		use Edde\Common\Query\AbstractQueryBuilder;
 		use Edde\Common\Query\NativeQuery;
@@ -52,7 +53,6 @@
 			 * @param IUpdateQuery $updateQuery
 			 *
 			 * @return INativeTransaction
-			 * @throws QueryBuilderException
 			 */
 			protected function fragmentUpdate(IUpdateQuery $updateQuery): INativeTransaction {
 				$schema = $updateQuery->getSchema();
@@ -75,16 +75,11 @@
 				return (new NativeTransaction())->query(new NativeQuery($sql . implode(",\n\t", $setList) . "\n" . $where, $parameterList));
 			}
 
-			/**
-			 * @param INode $root
-			 *
-			 * @return INativeTransaction
-			 * @throws QueryBuilderException
-			 */
-			protected function fragmentSelect(INode $root): INativeTransaction {
-				$sql = [];
+			protected function fragmentSelect(ISelectQuery $selectQuery): INativeTransaction {
+				$sql = "SELECT\n";
+				foreach ($selectQuery->getSchemaFragmentList() as $schema) {
+				}
 				$parameterList = [];
-				$sql[] = "SELECT\n";
 				$query = $this->fragmentColumnList($root->getNode('column-list'));
 				$sql[] = $query->getQuery();
 				$parameterList = array_merge($parameterList, $query->getParameterList());

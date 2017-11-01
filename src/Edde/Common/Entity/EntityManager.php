@@ -54,7 +54,7 @@
 			 */
 			public function collection(string $schema): ICollection {
 				if (isset($this->collectionList[$name = $schema]) === false) {
-					$this->collectionList[$name] = $this->container->inject(new Collection($this->storage->stream(new SelectQuery($schema = $this->schemaManager->load($name))), $schema));
+					$this->collectionList[$name] = $this->container->inject(new Collection($this->storage->stream((new SelectQuery())->schema($schema = $this->schemaManager->load($name))), $schema));
 				}
 				return clone $this->collectionList[$name];
 			}
