@@ -6,14 +6,15 @@
 		use Edde\Api\Driver\IDriver;
 		use Edde\Api\Query\IQueryBuilder;
 		use Edde\Common\Container\Factory\ClassFactory;
+		use Edde\Common\Query\NativeQuery;
 		use Edde\Ext\Container\ContainerFactory;
 		use Edde\Ext\Driver\Database\Postgres\PostgresDriver;
 		use Edde\Ext\Driver\Database\Postgres\PostgresQueryBuilder;
 
 		class PostgresStorageTest extends AbstractStorageTest {
 			public function testPrepareDatabase() {
-				$this->storage->query('DROP SCHEMA IF EXISTS "test" CASCADE');
-				$this->storage->query('CREATE SCHEMA "test" AUTHORIZATION "edde"');
+				$this->storage->query(new NativeQuery('DROP SCHEMA IF EXISTS "test" CASCADE'));
+				$this->storage->query(new NativeQuery('CREATE SCHEMA "test" AUTHORIZATION "edde"'));
 				$this->assertTrue(true, 'everything is OK!');
 			}
 
@@ -27,6 +28,6 @@
 					IQueryBuilder::class => PostgresQueryBuilder::class,
 					new ClassFactory(),
 				]);
-				$this->storage->query('SET search_path TO "test"');
+				$this->storage->query(new NativeQuery('SET search_path TO "test"'));
 			}
 		}

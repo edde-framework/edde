@@ -2,7 +2,7 @@
 	namespace Edde\Api\Storage;
 
 		use Edde\Api\Crate\ICrate;
-		use Edde\Api\Crate\IProperty;
+		use Edde\Api\Query\IQuery;
 		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
@@ -21,11 +21,24 @@
 			public function getSchema(): ISchema;
 
 			/**
-			 * return list of primary properties
+			 * link the given entity to the current one
 			 *
-			 * @return IProperty[]
+			 * @param IEntity    $entity
+			 * @param ILink|null $link
+			 *
+			 * @return IEntity
 			 */
-			public function getPrimaryList(): array;
+			public function link(IEntity $entity, ILink $link = null): IEntity;
+
+			/**
+			 * attach the given entity to $this one using m:n relation; returned entity is the
+			 * relation entity
+			 *
+			 * @param IEntity $entity
+			 *
+			 * @return IEntity
+			 */
+			public function attach(IEntity $entity): IEntity;
 
 			/**
 			 * save this entity into storage (and all related stuff to this entity)
@@ -39,20 +52,6 @@
 			public function save(): IEntity;
 
 			/**
-			 * shortcut to update already existing entity
-			 *
-			 * @return IEntity
-			 */
-			public function update(): IEntity;
-
-			/**
-			 * force insertion of this entity bypassing existence check
-			 *
-			 * @return IEntity
-			 */
-			public function insert(): IEntity;
-
-			/**
 			 * return collection of this entity; collection is not related to entity itself
 			 *
 			 * @return ICollection
@@ -60,36 +59,12 @@
 			public function collection(): ICollection;
 
 			/**
-			 * link the given entity to the current one
+			 * return current "status" query for this entity; it could generate "insert/update" query,
+			 * or "delete" if this entity should be deleted
 			 *
-			 * @param IEntity    $entity
-			 * @param ILink|null $link
+			 * this is a trick how to offload quite ugly piece of work from storage outside
 			 *
-			 * @return IEntity
+			 * @return IQuery
 			 */
-			public function link(IEntity $entity, ILink $link = null): IEntity;
-
-			/**
-			 * return linked list of entites
-			 *
-			 * @return IEntity[]
-			 */
-			public function getLinkList(): array;
-
-			/**
-			 * attach the given entity to $this one using m:n relation; returned entity is the
-			 * relation entity
-			 *
-			 * @param IEntity $entity
-			 *
-			 * @return IEntity
-			 */
-			public function attach(IEntity $entity): IEntity;
-
-			/**
-			 * get list of attached entities
-			 *
-			 * @return IEntity[]
-			 */
-			public function getRelationList(): array;
+			public function getQuery(): IQuery;
 		}

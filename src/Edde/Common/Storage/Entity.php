@@ -2,10 +2,10 @@
 	namespace Edde\Common\Storage;
 
 		use Edde\Api\Crate\ICrate;
+		use Edde\Api\Query\IQuery;
 		use Edde\Api\Schema\Exception\LinkException;
 		use Edde\Api\Schema\Exception\RelationException;
 		use Edde\Api\Schema\ILink;
-		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\ICollection;
 		use Edde\Api\Storage\IEntity;
@@ -15,7 +15,6 @@
 
 		class Entity extends Crate implements IEntity {
 			use EntityManager;
-			use SchemaManager;
 			use Storage;
 			/**
 			 * @var ISchema
@@ -32,6 +31,69 @@
 
 			public function __construct(ISchema $schema) {
 				$this->schema = $schema;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getSchema(): ISchema {
+				return $this->schema;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function link(IEntity $entity, ILink $link = null): IEntity {
+				if ($link === null) {
+					$linkList = $this->schema->getLinkList($schemaName = $entity->getSchema()->getName());
+					if (($count = count($linkList)) === 0) {
+						throw new LinkException(sprintf('There is no link from [%s] to [%s].', $this->schema->getName(), $schemaName));
+					} else if ($count !== 1) {
+						throw new LinkException(sprintf('There are more links from [%s] to [%s].', $this->schema->getName(), $schemaName));
+					}
+					list($link) = $linkList;
+				}
+				$this->set($link->getSourceProperty()->getName(), $entity->get($link->getTargetProperty()->getName()));
+				$this->linkList[] = $entity;
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function attach(IEntity $entity): IEntity {
+				$relationList = $this->schema->getRelationList($schemaName = $entity->getSchema()->getName());
+				if (($count = count($relationList)) === 0) {
+					throw new RelationException(sprintf('There are no relations from [%s] to schema [%s].', $this->schema->getName(), $schemaName));
+				} else if ($count !== 1) {
+					throw new RelationException(sprintf('There are more relations from [%s] to schema [%s]. You have to specify relation schema.', $this->schema->getName(), $schemaName));
+				}
+				list($relation) = $relationList;
+				$relationEntity = $this->entityManager->createEntity($relation->getSchema());
+				$relationEntity->link($this, $relation->getSourceLink());
+				$relationEntity->link($entity, $relation->getTargetLink());
+				return $this->relationList[] = $relationEntity;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function save(): IEntity {
+				$this->storage->execute($this->getQuery());
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function collection(): ICollection {
+				return $this->storage->collection($this->schema->getName());
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getQuery(): IQuery {
 			}
 
 			/**
@@ -62,104 +124,6 @@
 				$this->linkList = [];
 				$this->relationList = [];
 				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getSchema(): ISchema {
-				return $this->schema;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getPrimaryList(): array {
-				$primaryList = [];
-				foreach ($this->schema->getPrimaryList() as $property) {
-					$primaryList[] = $this->getProperty($property->getName());
-				}
-				return $primaryList;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function link(IEntity $entity, ILink $link = null): IEntity {
-				if ($link === null) {
-					$linkList = $this->schema->getLinkList($schemaName = $entity->getSchema()->getName());
-					if (($count = count($linkList)) === 0) {
-						throw new LinkException(sprintf('There is no link from [%s] to [%s].', $this->schema->getName(), $schemaName));
-					} else if ($count !== 1) {
-						throw new LinkException(sprintf('There are more links from [%s] to [%s].', $this->schema->getName(), $schemaName));
-					}
-					list($link) = $linkList;
-				}
-				$this->set($link->getSourceProperty()->getName(), $entity->get($link->getTargetProperty()->getName()));
-				$this->linkList[] = $entity;
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getLinkList(): array {
-				return $this->linkList;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function save(): IEntity {
-				$this->storage->save($this);
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function update(): IEntity {
-				$this->storage->update($this);
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function insert(): IEntity {
-				$this->storage->insert($this);
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function collection(): ICollection {
-				return $this->storage->collection($this->schema->getName());
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function attach(IEntity $entity): IEntity {
-				$relationList = $this->schema->getRelationList($schemaName = $entity->getSchema()->getName());
-				if (($count = count($relationList)) === 0) {
-					throw new RelationException(sprintf('There are no relations from [%s] to schema [%s].', $this->schema->getName(), $schemaName));
-				} else if ($count !== 1) {
-					throw new RelationException(sprintf('There are more relations from [%s] to schema [%s]. You have to specify relation schema.', $this->schema->getName(), $schemaName));
-				}
-				list($relation) = $relationList;
-				$relationEntity = $this->entityManager->createEntity($relation->getSchema());
-				$relationEntity->link($this, $relation->getSourceLink());
-				$relationEntity->link($entity, $relation->getTargetLink());
-				return $this->relationList[] = $relationEntity;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getRelationList(): array {
-				return $this->relationList;
 			}
 
 			public function __clone() {

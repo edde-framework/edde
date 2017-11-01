@@ -7,6 +7,7 @@
 		use Edde\Api\Query\IQueryBuilder;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Container\Factory\ClassFactory;
+		use Edde\Common\Query\NativeQuery;
 		use Edde\Ext\Container\ContainerFactory;
 		use Edde\Ext\Driver\Graph\Neo4j\Neo4jDriver;
 		use Edde\Ext\Driver\Graph\Neo4j\Neo4jQueryBuilder;
@@ -15,7 +16,7 @@
 			use Storage;
 
 			public function testPrepareDatabase() {
-				$this->storage->query('MATCH (n) DETACH DELETE n');
+				$this->storage->query(new NativeQuery('MATCH (n) DETACH DELETE n'));
 				self::assertTrue(true, 'everything is ok, yapee!');
 			}
 

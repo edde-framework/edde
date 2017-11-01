@@ -16,7 +16,6 @@
 		use Edde\Common\Object\Object;
 		use Edde\Common\Query\CreateSchemaQuery;
 		use Edde\Common\Query\InsertQuery;
-		use Edde\Common\Query\NativeQuery;
 		use Edde\Common\Query\SelectQuery;
 		use Edde\Common\Query\UpdateQuery;
 
@@ -40,14 +39,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function query($query, array $parameterList = []) {
-				return $this->native(new NativeQuery($query, $parameterList));
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function native(INativeQuery $nativeQuery) {
+			public function query(INativeQuery $nativeQuery) {
 				return $this->driver->execute($nativeQuery);
 			}
 

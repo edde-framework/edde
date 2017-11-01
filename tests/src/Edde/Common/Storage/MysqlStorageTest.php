@@ -13,8 +13,8 @@
 
 		class MysqlStorageTest extends AbstractStorageTest {
 			public function testPrepareDatabase() {
-				$this->storage->native(new NativeQuery('drop database edde'));
-				$this->storage->native(new NativeQuery('create database edde'));
+				$this->storage->query(new NativeQuery('drop database edde'));
+				$this->storage->query(new NativeQuery('create database edde'));
 				$this->assertTrue(true, 'everything looks nice even here!');
 			}
 
