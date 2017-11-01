@@ -3,17 +3,14 @@
 
 		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Entity\IEntity;
-		use Edde\Api\Entity\IEntityManager;
+		use Edde\Api\Entity\Inject\EntityManager;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
 		use Edde\Api\Storage\IStream;
 		use Edde\Common\Object\Object;
 
 		class Collection extends Object implements ICollection {
-			/**
-			 * @var IEntityManager
-			 */
-			protected $entityManager;
+			use EntityManager;
 			/**
 			 * @var IStream
 			 */
@@ -23,8 +20,7 @@
 			 */
 			protected $schema;
 
-			public function __construct(IEntityManager $entityManager, IStream $stream, ISchema $schema) {
-				$this->entityManager = $entityManager;
+			public function __construct(IStream $stream, ISchema $schema) {
 				$this->stream = $stream;
 				$this->schema = $schema;
 			}
@@ -47,5 +43,10 @@
 				foreach ($this->stream as $source) {
 					yield $this->entityManager->factory($name, $source);
 				}
+			}
+
+			public function __clone() {
+				parent::__clone();
+				$this->stream = clone $this->stream;
 			}
 		}

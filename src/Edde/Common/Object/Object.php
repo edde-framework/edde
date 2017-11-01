@@ -20,4 +20,14 @@
 		class Object implements IObject {
 			use ConfigurableTrait;
 			use AutowireTrait;
+
+			/**
+			 * because PHP has some cool shit things like it cannot call
+			 * magic parent, this method helps to standardize parent::__clone calls
+			 * around the code
+			 */
+			public function __clone() {
+				$this->tInit = false;
+				$this->tSetup = false;
+			}
 		}

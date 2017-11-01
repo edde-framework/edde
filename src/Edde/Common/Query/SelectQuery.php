@@ -64,4 +64,10 @@
 				parent::handleInit();
 				$this->node = new Node('select');
 			}
+
+			public function __clone() {
+				parent::__clone();
+				$this->init();
+				$this->orderFragment = null;
+			}
 		}

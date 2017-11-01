@@ -1,6 +1,7 @@
 <?php
 	namespace Edde\Api\Storage;
 
+		use Edde\Api\Query\ISelectQuery;
 		use IteratorAggregate;
 
 		/**
@@ -9,6 +10,14 @@
 		 * bunch of data in the memory.
 		 */
 		interface IStream extends IteratorAggregate {
+			/**
+			 * return query powering this stream; only select queries could
+			 * be used
+			 *
+			 * @return ISelectQuery
+			 */
+			public function getQuery(): ISelectQuery;
+
 			/**
 			 * @return \Traversable|array
 			 */

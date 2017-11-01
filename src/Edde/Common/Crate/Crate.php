@@ -135,6 +135,7 @@
 			}
 
 			public function __clone() {
+				parent::__clone();
 				$this->propertyList = [];
 				$this->dirty = null;
 			}

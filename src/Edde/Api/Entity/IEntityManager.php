@@ -31,4 +31,13 @@
 			 * @return IEntity
 			 */
 			public function factory(string $schema, array $source): IEntity;
+
+			/**
+			 * create a collection of the given schema
+			 *
+			 * @param string $schema
+			 *
+			 * @return ICollection
+			 */
+			public function collection(string $schema): ICollection;
 		}
