@@ -30,8 +30,8 @@
 			 * @inheritdoc
 			 */
 			public function create(string $schema, array $source = []): IEntity {
-				$entity = $this->createEntity($this->schemaManager->load($schema));
-				$entity->put($source);
+				$entity = $this->createEntity($schema = $this->schemaManager->load($schema));
+				$entity->put($this->schemaManager->generate($schema, $source));
 				return $entity;
 			}
 

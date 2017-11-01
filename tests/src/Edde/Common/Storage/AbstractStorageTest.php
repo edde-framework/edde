@@ -44,8 +44,10 @@
 				$entity = $this->entityManager->create(SimpleSchema::class, [
 					'name'     => 'this entity is new',
 					'optional' => 'foo-bar',
-				])->save();
+				]);
 				self::assertNotEmpty($entity->get('guid'));
+				$entity->save();
+				self::assertFalse($entity->isDirty());
 			}
 
 			/**

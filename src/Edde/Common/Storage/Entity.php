@@ -83,6 +83,7 @@
 			 */
 			public function save(): IEntity {
 				$this->storage->execute($this->getQuery());
+				$this->commit();
 				return $this;
 			}
 
