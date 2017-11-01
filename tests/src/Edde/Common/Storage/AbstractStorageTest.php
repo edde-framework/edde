@@ -117,7 +117,30 @@
 					unset($entity['guid']);
 					$entityList[] = $entity;
 				}
-				self::assertEquals([], $entityList);
+				sort($entityList);
+				self::assertEquals([
+					[
+						'name'     => 'another name',
+						'optional' => null,
+						'value'    => null,
+						'date'     => null,
+						'question' => null,
+					],
+					[
+						'name'     => 'some name for this entity',
+						'optional' => 'this string is optional, but I wanna fill it!',
+						'value'    => null,
+						'date'     => null,
+						'question' => null,
+					],
+					[
+						'name'     => 'this entity is new',
+						'optional' => 'foo-bar',
+						'value'    => null,
+						'date'     => null,
+						'question' => null,
+					],
+				], $entityList);
 			}
 
 			/**
