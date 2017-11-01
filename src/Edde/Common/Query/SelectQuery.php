@@ -20,7 +20,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function schema(ISchema $schema, string $alias = null): ISchemaFragment {
+			public function schema(ISchema $schema, string $alias): ISchemaFragment {
 				return $this->schemaFragmentList[] = new SchemaFragment($schema, $alias);
 			}
 

@@ -11,11 +11,11 @@
 			 */
 			protected $schema;
 			/**
-			 * @var string|null
+			 * @var string
 			 */
 			protected $alias;
 
-			public function __construct(ISchema $schema, $alias) {
+			public function __construct(ISchema $schema, string $alias) {
 				$this->schema = $schema;
 				$this->alias = $alias;
 			}
@@ -30,7 +30,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getAlias(): ?string {
+			public function getAlias(): string {
 				return $this->alias;
 			}
 		}

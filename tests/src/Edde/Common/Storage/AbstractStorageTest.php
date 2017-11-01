@@ -121,8 +121,9 @@
 			}
 
 			/**
-			 * @throws EntityNotFoundException
-			 * @throws \Exception
+			 * @throws DuplicateEntryException
+			 * @throws IntegrityException
+			 * @throws StorageException
 			 */
 			public function testUpdate() {
 				$entity = $this->entityManager->create(SimpleSchema::class, [

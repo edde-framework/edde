@@ -12,17 +12,17 @@
 			/**
 			 * add a schema to query to be queried
 			 *
-			 * @param ISchema     $schema
-			 * @param string|null $alias
+			 * @param ISchema $schema
+			 * @param string  $alias
 			 *
 			 * @return ISchemaFragment
 			 */
-			public function schema(ISchema $schema, string $alias = null): ISchemaFragment;
+			public function schema(ISchema $schema, string $alias): ISchemaFragment;
 
 			/**
 			 * return list of schemas being queried
 			 *
-			 * @return ISchema[]
+			 * @return ISchemaFragment[]
 			 */
 			public function getSchemaFragmentList(): array;
 		}

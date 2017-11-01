@@ -15,7 +15,7 @@
 			/**
 			 * get alias of this schema
 			 *
-			 * @return null|string
+			 * @return string
 			 */
-			public function getAlias(): ?string;
+			public function getAlias(): string;
 		}

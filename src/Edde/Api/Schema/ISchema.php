@@ -29,20 +29,6 @@
 			public function isRelation(): bool;
 
 			/**
-			 * has this schema alias?
-			 *
-			 * @return bool
-			 */
-			public function hasAlias(): bool;
-
-			/**
-			 * return schema alias
-			 *
-			 * @return string|null
-			 */
-			public function getAlias(): ?string;
-
-			/**
 			 * @param string $name
 			 *
 			 * @return IProperty

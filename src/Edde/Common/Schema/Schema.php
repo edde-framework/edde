@@ -71,20 +71,6 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function hasAlias(): bool {
-				return $this->node->hasAttribute('alias');
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getAlias(): ?string {
-				return $this->node->getAttribute('alias');
-			}
-
-			/**
-			 * @inheritdoc
-			 */
 			public function getProperty(string $name): IProperty {
 				if (isset($this->propertyList[$name]) === false) {
 					throw new UnknownPropertyException(sprintf('Requested unknown property [%s] on schema [%s].', $name, $this->getName()));
