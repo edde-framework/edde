@@ -33,9 +33,4 @@
 			public function getSchemaFragmentList(): array {
 				return $this->schemaFragmentList;
 			}
-
-			public function __clone() {
-				parent::__clone();
-				$this->schemaFragmentList = [];
-			}
 		}
