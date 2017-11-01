@@ -109,6 +109,17 @@
 				self::assertNotEmpty($entity->get('guid'));
 			}
 
+			public function testCollection() {
+				$entity = $this->entityManager->create(SimpleSchema::class);
+				$entity->deffered();
+				/**
+				 * because an entity is deffered, it should get loaded on first request
+				 * of data read; because there is no query, default collection is used, thus
+				 * first row of a table is returned
+				 */
+				self::assertSame('some name for this entity', $entity->get('name'));
+			}
+
 			/**
 			 * @throws EntityNotFoundException
 			 * @throws \Exception

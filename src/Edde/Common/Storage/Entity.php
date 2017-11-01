@@ -31,6 +31,10 @@
 			 * @var IEntity[]
 			 */
 			protected $relationList = [];
+			/**
+			 * @var bool
+			 */
+			protected $deffered = false;
 
 			public function __construct(ISchema $schema) {
 				$this->schema = $schema;
@@ -104,6 +108,14 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function deffered(): IEntity {
+				$this->deffered = true;
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function isDirty(): bool {
 				if (parent::isDirty()) {
 					return true;
@@ -135,5 +147,6 @@
 				parent::__clone();
 				$this->linkList = [];
 				$this->relationList = [];
+				$this->deffered = false;
 			}
 		}

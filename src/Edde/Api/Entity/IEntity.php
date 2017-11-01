@@ -67,4 +67,11 @@
 			 * @return IQuery
 			 */
 			public function getQuery(): IQuery;
+
+			/**
+			 * mark this entity as lazy; when it got first request for data, it will be loaded (get, ...)
+			 *
+			 * @return IEntity
+			 */
+			public function deffered(): IEntity;
 		}

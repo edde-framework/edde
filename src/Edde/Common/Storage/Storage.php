@@ -2,6 +2,7 @@
 	namespace Edde\Common\Storage;
 
 		use Edde\Api\Driver\Inject\Driver;
+		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\INativeTransaction;
 		use Edde\Api\Query\Inject\QueryBuilder;
@@ -100,7 +101,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function collection(string $schema, IQuery $query = null): \Edde\Api\Entity\ICollection {
+			public function collection(string $schema, IQuery $query = null): ICollection {
 				if ($query === null) {
 					/**
 					 * by default select all from the source schema
