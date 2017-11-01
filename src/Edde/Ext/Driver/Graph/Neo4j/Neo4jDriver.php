@@ -3,7 +3,6 @@
 
 		use Edde\Api\Driver\Exception\DriverException;
 		use Edde\Api\Driver\IDriver;
-		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\NullValueException;
@@ -94,18 +93,6 @@
 			}
 
 			/**
-			 * @inheritdoc
-			 */
-			public function toArray(IEntity $entity): array {
-				return $entity->toArray();
-			}
-
-			protected function handleSetup(): void {
-				parent::handleSetup();
-				$this->session = GraphDatabase::driver($this->url)->session();
-			}
-
-			/**
 			 * @param \Throwable $throwable
 			 *
 			 * @throws DriverException
@@ -119,5 +106,10 @@
 					throw new NullValueException($message, 0, $throwable);
 				}
 				throw new DriverException($message, 0, $throwable);
+			}
+
+			protected function handleSetup(): void {
+				parent::handleSetup();
+				$this->session = GraphDatabase::driver($this->url)->session();
 			}
 		}

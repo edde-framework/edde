@@ -3,7 +3,6 @@
 
 		use Edde\Api\Config\IConfigurable;
 		use Edde\Api\Driver\Exception\DriverQueryException;
-		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\INativeTransaction;
 		use Edde\Api\Storage\Exception\IntegrityException;
@@ -53,15 +52,4 @@
 			 * @return IDriver
 			 */
 			public function rollback(): IDriver;
-
-			/**
-			 * every driver could behave in different way when it comes to update:
-			 * common database can do patch (partial update), some other engines
-			 * could require whole data to be updated
-			 *
-			 * @param \Edde\Api\Entity\IEntity $entity
-			 *
-			 * @return array
-			 */
-			public function toArray(IEntity $entity): array;
 		}
