@@ -5,6 +5,7 @@
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\INativeTransaction;
 		use Edde\Api\Query\IQuery;
+		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\DuplicateTableException;
 		use Edde\Api\Storage\Exception\UnknownTableException;
 
@@ -74,10 +75,10 @@
 			/**
 			 * creates a new schema or throw an exception if already exists (or other error)
 			 *
-			 * @param string $schema
+			 * @param ISchema $schema
 			 *
 			 * @return IStorage
 			 * @throws DuplicateTableException
 			 */
-			public function createSchema(string $schema): IStorage;
+			public function createSchema(ISchema $schema): IStorage;
 		}

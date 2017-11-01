@@ -6,19 +6,16 @@
 		use Edde\Api\Query\INativeTransaction;
 		use Edde\Api\Query\Inject\QueryBuilder;
 		use Edde\Api\Query\IQuery;
-		use Edde\Api\Schema\Inject\SchemaManager;
+		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\ExclusiveTransactionException;
 		use Edde\Api\Storage\Exception\NoTransactionException;
 		use Edde\Api\Storage\ICollection;
-		use Edde\Api\Storage\Inject\EntityManager;
 		use Edde\Api\Storage\IStorage;
 		use Edde\Common\Object\Object;
 		use Edde\Common\Query\CreateSchemaQuery;
 		use Edde\Common\Query\SelectQuery;
 
 		class Storage extends Object implements IStorage {
-			use EntityManager;
-			use SchemaManager;
 			use QueryBuilder;
 			use Driver;
 			/**
@@ -118,12 +115,12 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function createSchema(string $schema): IStorage {
+			public function createSchema(ISchema $schema): IStorage {
 				/**
 				 * because storage is using IQL in general, it's possible to safely use queries here in abstract
 				 * implementation
 				 */
-				$this->execute(new CreateSchemaQuery($this->schemaManager->load($schema)));
+				$this->execute(new CreateSchemaQuery($schema));
 				return $this;
 			}
 		}
