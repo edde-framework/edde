@@ -6,7 +6,7 @@
 		use Edde\Api\Query\ICrateSchemaQuery;
 		use Edde\Api\Query\IInsertQuery;
 		use Edde\Api\Query\INativeTransaction;
-		use Edde\Api\Schema\ISchema;
+		use Edde\Api\Query\IUpdateQuery;
 		use Edde\Common\Query\AbstractQueryBuilder;
 		use Edde\Common\Query\NativeQuery;
 		use Edde\Common\Query\NativeTransaction;
@@ -48,31 +48,30 @@
 			}
 
 			/**
-			 * @param INode $root
+			 * @param IUpdateQuery $updateQuery
 			 *
 			 * @return INativeTransaction
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentUpdate(INode $root): INativeTransaction {
-				/** @var $schema ISchema */
-				$schema = $root->getAttribute('schema');
-				$sql = "UPDATE\n\t" . $this->delimite($schema->getName()) . ' ' . ($alias = ($alias = $root->getAttribute('alias')) ? $this->delimite($alias) : '') . "\nSET\n\t";
+			protected function fragmentUpdate(IUpdateQuery $updateQuery): INativeTransaction {
+				$schema = $updateQuery->getSchema();
 				$where = null;
 				$setList = [];
 				$parameterList = [];
 				/**
 				 * micro-optimization to eliminate array_merge over parameter list
 				 */
-				if ($root->hasNode('where-list')) {
-					$query = $this->fragmentWhereList($root->getNode('where-list'));
+				if ($updateQuery->hasWhere()) {
+					$query = $this->fragmentWhereList($updateQuery->getWhere());
 					$where .= "WHERE\n" . $query->getQuery();
 					$parameterList = $query->getParameterList();
 				}
-				foreach ($root->getValue([]) as $k => $v) {
+				foreach ($updateQuery->getSource() as $k => $v) {
 					$setList[] = $this->delimite($k) . ' = :' . $parameterId = ('p_' . sha1($k));
 					$parameterList[$parameterId] = $v;
 				}
-				return new NativeTransaction($sql . implode(",\n\t", $setList) . "\n" . $where, $parameterList);
+				$sql = "UPDATE\n\t" . $this->delimite($schema->getName()) . ' ' . "\nSET\n\t";
+				return (new NativeTransaction())->query(new NativeQuery($sql . implode(",\n\t", $setList) . "\n" . $where, $parameterList));
 			}
 
 			/**
