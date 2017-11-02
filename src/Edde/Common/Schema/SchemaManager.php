@@ -107,7 +107,7 @@
 			public function filter(ISchema $schema, array $source): array {
 				$result = $source;
 				foreach ($source as $k => $v) {
-					if ($v && $filter = $schema->getProperty($k)->getFilter()) {
+					if ($filter = $schema->getProperty($k)->getFilter()) {
 						$result[$k] = $this->filterManager->getFilter($filter)->filter($v);
 					}
 				}
