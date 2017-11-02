@@ -8,9 +8,9 @@
 			/**
 			 * @param IQuery $query
 			 *
-			 * @return INativeTransaction
+			 * @return ITransactionQuery
 			 */
-			public function query(IQuery $query) : INativeTransaction;
+			public function query(IQuery $query) : ITransactionQuery;
 
 			/**
 			 * delimite the given string

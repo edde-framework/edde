@@ -5,21 +5,21 @@
 		use Edde\Api\Node\INode;
 		use Edde\Api\Query\Exception\QueryBuilderException;
 		use Edde\Api\Query\ICrateSchemaQuery;
-		use Edde\Api\Query\INativeQuery;
+		use Edde\Api\Query\IInsertQuery;
 		use Edde\Api\Query\INativeTransaction;
+		use Edde\Api\Query\ITransactionQuery;
 		use Edde\Common\Query\AbstractQueryBuilder;
 		use Edde\Common\Query\NativeQuery;
 		use Edde\Common\Query\NativeTransaction;
 		use Edde\Common\Query\TransactionQuery;
 
 		class Neo4jQueryBuilder extends AbstractQueryBuilder {
-			protected function fragmentCreateSchema(ICrateSchemaQuery $crateSchemaQuery) : INativeTransaction {
-				$nativeTransaction = new NativeTransaction();
+			protected function fragmentCreateSchema(ICrateSchemaQuery $crateSchemaQuery) : ITransactionQuery {
 				/**
 				 * relations should not be physically created
 				 */
 				if (($schema = $crateSchemaQuery->getSchema())->isRelation()) {
-					return $nativeTransaction;
+					return new TransactionQuery();
 				}
 				$primaryList = null;
 				$indexList = null;
@@ -38,28 +38,24 @@
 						$requiredList[] = $fragment;
 					}
 				}
-				$query = '';
+				$transactionQuery = new TransactionQuery();
 				if ($indexList) {
-					$query .= 'CREATE INDEX ON :' . $delimited . '(' . implode(',', $indexList) . ");\n";
+					$transactionQuery->query(new NativeQuery('CREATE INDEX ON :' . $delimited . '(' . implode(',', $indexList) . ')'));
 				}
 				if ($primaryList) {
-					$query .= 'CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT (' . implode(', ', $primaryList) . ") IS NODE KEY;\n";
+					$transactionQuery->query(new NativeQuery('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT (' . implode(', ', $primaryList) . ') IS NODE KEY'));
 				}
 				foreach ($uniqueList as $unique) {
-					$query .= 'CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT ' . $unique . " IS UNIQUE;\n";
+					$transactionQuery->query(new NativeQuery('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT ' . $unique . ' IS UNIQUE'));
 				}
 				foreach ($requiredList as $required) {
-					$query .= 'CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT exists(' . $required . ");\n";
+					$transactionQuery->query(new NativeQuery('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT exists(' . $required . ')'));
 				}
-				return new TransactionQuery($query);
+				return $transactionQuery;
 			}
 
-			protected function fragmentInsert(INode $root) : INativeTransaction {
-				$set = [];
-				foreach ($root->getNode('set-list')->getNodeList() as $node) {
-					$set = array_merge($set, $node->getAttributeList()->array());
-				}
-				return new TransactionQuery('CREATE (n:' . $this->delimite($root->getAttribute('name')) . ' $set)', ['set' => $set]);
+			protected function fragmentInsert(IInsertQuery $insertQuery) : ITransactionQuery {
+				return new TransactionQuery('CREATE (n:' . $this->delimite($insertQuery->getSchema()->getName()) . ' $set)', ['set' => $insertQuery->getSource()]);
 			}
 
 			/**
@@ -68,7 +64,7 @@
 			 * @return INativeTransaction
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentUpdate(INode $root) : INativeQuery {
+			protected function fragmentUpdate(INode $root) : ITransactionQuery {
 				$set = [];
 				foreach ($root->getNode('set-list')->getNodeList() as $node) {
 					$set = array_merge($set, $node->getAttributeList()->array());
@@ -80,7 +76,7 @@
 				}
 				$parameterList['set'] = $set;
 				$cypher .= "SET\n\t" . $alias . ' = $set';
-				return (new NativeTransaction())->query(new NativeQuery($cypher, $parameterList));
+				return new TransactionQuery($cypher, $parameterList);
 			}
 
 			/**
