@@ -42,4 +42,25 @@
 				$this->to = $source;
 				return $this;
 			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getRelation(): IRelation {
+				return $this->relation;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getFrom(): array {
+				return $this->from;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getTo(): array {
+				return $this->to;
+			}
 		}
