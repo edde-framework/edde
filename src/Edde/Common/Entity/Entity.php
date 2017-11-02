@@ -56,9 +56,9 @@
 			 * @inheritdoc
 			 */
 			public function connect(IEntity $entity, IEntity $to, IRelation $relation): IEntity {
+				$entity->link($this);
 				$this->link($entity);
 				$this->link($to);
-				$entity->link($to);
 				return $this;
 			}
 
