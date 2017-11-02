@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Query;
 
-		use Edde\Api\Query\Fragment\IWhereFragment;
+		use Edde\Api\Query\Fragment\IWhereGroup;
 
 		interface IUpdateQuery extends IInsertQuery {
 			/**
@@ -15,7 +15,7 @@
 			/**
 			 * update where
 			 *
-			 * @return IWhereFragment
+			 * @return IWhereGroup
 			 */
-			public function where(): IWhereFragment;
+			public function where(): IWhereGroup;
 		}

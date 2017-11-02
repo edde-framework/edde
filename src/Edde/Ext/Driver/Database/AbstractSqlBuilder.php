@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Driver\Database;
 
-		use Edde\Api\Query\Fragment\IWhereFragment;
+		use Edde\Api\Query\Fragment\IWhere;
 		use Edde\Api\Query\ICrateSchemaQuery;
 		use Edde\Api\Query\IInsertQuery;
 		use Edde\Api\Query\INativeTransaction;
@@ -78,6 +78,6 @@
 				return (new NativeTransaction())->query(new NativeQuery($sql, $parameterList));
 			}
 
-			protected function fragmentWhere(IWhereFragment $whereFragment): INativeTransaction {
+			protected function fragmentWhere(IWhere $whereFragment): INativeTransaction {
 			}
 		}

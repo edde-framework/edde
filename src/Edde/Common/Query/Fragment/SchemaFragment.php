@@ -3,7 +3,7 @@
 	namespace Edde\Common\Query\Fragment;
 
 		use Edde\Api\Query\Fragment\ISchemaFragment;
-		use Edde\Api\Query\Fragment\IWhereFragment;
+		use Edde\Api\Query\Fragment\IWhere;
 		use Edde\Api\Schema\ISchema;
 
 		class SchemaFragment extends AbstractFragment implements ISchemaFragment {
@@ -16,7 +16,7 @@
 			 */
 			protected $alias;
 			/**
-			 * @var IWhereFragment
+			 * @var IWhere
 			 */
 			protected $where;
 
@@ -49,9 +49,9 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function where(): IWhereFragment {
+			public function where(): IWhere {
 				if ($this->where === null) {
-					$this->where = new WhereFragment($this);
+					$this->where = new Where($this);
 				}
 				return $this->where;
 			}

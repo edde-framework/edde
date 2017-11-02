@@ -87,8 +87,9 @@
 				$query = new InsertQuery($this->schema, $source);
 				if ($this->exists) {
 					$query = new UpdateQuery($this->schema, $source);
+					$where = $query->where();
 					foreach ($this->schema->getPrimaryList() as $name => $property) {
-						$query->where()->and()->eq($name)->to($this->get($name));
+						$where->and()->eq($name)->to($this->get($name));
 					}
 				}
 				$this->storage->execute($query);

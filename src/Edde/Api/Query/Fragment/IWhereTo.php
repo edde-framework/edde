@@ -8,16 +8,16 @@
 			 *
 			 * @param mixed $value
 			 *
-			 * @return IWhereRelation
+			 * @return IWhereGroup
 			 */
-			public function to($value): IWhereRelation;
+			public function to($value): IWhereGroup;
 
 			/**
 			 * where to a column name
 			 *
 			 * @param string $name
 			 *
-			 * @return IWhereRelation
+			 * @return IWhereGroup
 			 */
-			public function toColumn(string $name): IWhereRelation;
+			public function toColumn(string $name): IWhereGroup;
 		}

@@ -2,15 +2,14 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Query;
 
-		use Edde\Api\Query\Fragment\IWhereFragment;
+		use Edde\Api\Query\Fragment\IWhereGroup;
 		use Edde\Api\Query\IUpdateQuery;
 		use Edde\Api\Schema\ISchema;
-		use Edde\Common\Query\Fragment\SchemaFragment;
-		use Edde\Common\Query\Fragment\WhereFragment;
+		use Edde\Common\Query\Fragment\WhereGroup;
 
 		class UpdateQuery extends InsertQuery implements IUpdateQuery {
 			/**
-			 * @var IWhereFragment
+			 * @var IWhereGroup
 			 */
 			protected $where;
 
@@ -29,9 +28,9 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function where(): IWhereFragment {
+			public function where(): IWhereGroup {
 				if ($this->where === null) {
-					$this->where = new WhereFragment(new SchemaFragment($this->schema, 'u'));
+					$this->where = new WhereGroup();
 				}
 				return $this->where;
 			}
