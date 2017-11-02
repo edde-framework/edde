@@ -55,28 +55,8 @@
 			}
 
 			protected function fragmentInsert(IInsertQuery $insertQuery) : ITransactionQuery {
-				return new TransactionQuery('CREATE (n:' . $this->delimite($insertQuery->getSchema()->getName()) . ' $set)', ['set' => $insertQuery->getSource()]);
-			}
-
-			/**
-			 * @param INode $root
-			 *
-			 * @return INativeTransaction
-			 * @throws QueryBuilderException
-			 */
-			protected function fragmentUpdate(INode $root) : ITransactionQuery {
-				$set = [];
-				foreach ($root->getNode('set-list')->getNodeList() as $node) {
-					$set = array_merge($set, $node->getAttributeList()->array());
-				}
-				$cypher = "MATCH\n\t(" . ($alias = $root->getAttribute('alias')) . ':' . $this->delimite($root->getAttribute('name')) . ")\n";
-				if ($root->hasNode('where-list')) {
-					$cypher .= "WHERE\n" . ($query = $this->fragmentWhereList($root->getNode('where-list')))->getQuery() . "\n";
-					$parameterList = $query->getParameterList();
-				}
-				$parameterList['set'] = $set;
-				$cypher .= "SET\n\t" . $alias . ' = $set';
-				return new TransactionQuery($cypher, $parameterList);
+				$source = $this->schemaManager->filter(($schema = $insertQuery->getSchema()), $insertQuery->getSource());
+				return new TransactionQuery('CREATE (n:' . $this->delimite($schema->getName()) . ' $set)', ['set' => $source]);
 			}
 
 			/**
@@ -100,6 +80,27 @@
 					$parameterList = $query->getParameterList();
 				}
 				return (new NativeTransaction())->query(new NativeQuery($cypher . 'RETURN ' . $alias, $parameterList));
+			}
+
+			/**
+			 * @param INode $root
+			 *
+			 * @return INativeTransaction
+			 * @throws QueryBuilderException
+			 */
+			protected function fragmentUpdate(INode $root) : ITransactionQuery {
+				$set = [];
+				foreach ($root->getNode('set-list')->getNodeList() as $node) {
+					$set = array_merge($set, $node->getAttributeList()->array());
+				}
+				$cypher = "MATCH\n\t(" . ($alias = $root->getAttribute('alias')) . ':' . $this->delimite($root->getAttribute('name')) . ")\n";
+				if ($root->hasNode('where-list')) {
+					$cypher .= "WHERE\n" . ($query = $this->fragmentWhereList($root->getNode('where-list')))->getQuery() . "\n";
+					$parameterList = $query->getParameterList();
+				}
+				$parameterList['set'] = $set;
+				$cypher .= "SET\n\t" . $alias . ' = $set';
+				return new TransactionQuery($cypher, $parameterList);
 			}
 
 			/**

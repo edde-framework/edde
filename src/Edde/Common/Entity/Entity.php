@@ -98,8 +98,7 @@
 					foreach ($this->linkList as $entity) {
 						$entity->save();
 					}
-					$source = $this->schemaManager->sanitize($this->schema, $this->toArray());
-					$query = new InsertQuery($this->schema, $source);
+					$query = new InsertQuery($this->schema, $source = $this->toArray());
 					if ($this->exists) {
 						$query = new UpdateQuery($this->schema, $source);
 						$where = $query->where();

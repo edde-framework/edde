@@ -8,12 +8,14 @@
 		use Edde\Api\Query\IQuery;
 		use Edde\Api\Query\IQueryBuilder;
 		use Edde\Api\Query\ITransactionQuery;
+		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Utils\Inject\StringUtils;
 		use Edde\Common\Object\Object;
 		use ReflectionClass;
 		use ReflectionMethod;
 
 		abstract class AbstractQueryBuilder extends Object implements IQueryBuilder {
+			use SchemaManager;
 			use StringUtils;
 			protected $fragmentList = [];
 
