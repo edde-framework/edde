@@ -44,7 +44,7 @@
 			 * define a 1:n relation from Bar to SubBarSchema; subBar property
 			 * is connected to guid property of SubBarSchema
 			 */
-			public function subBar(SubBarSchema $guid): string;
+			public function subBar(?SubBarSchema $guid): string;
 		}
 
 		/**

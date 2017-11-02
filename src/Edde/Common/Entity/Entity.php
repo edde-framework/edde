@@ -32,6 +32,7 @@
 			 */
 			protected $relationList = [];
 			protected $exists = false;
+			protected $saving = false;
 
 			public function __construct(ISchema $schema) {
 				$this->schema = $schema;
@@ -83,22 +84,35 @@
 			 * @inheritdoc
 			 */
 			public function save(): IEntity {
-				if ($this->isDirty() === false) {
+				if ($this->saving) {
+					return $this;
+				} else if ($this->isDirty() === false) {
 					return $this;
 				}
-				$source = $this->schemaManager->sanitize($this->schema, $this->toArray());
-				$query = new InsertQuery($this->schema, $source);
-				if ($this->exists) {
-					$query = new UpdateQuery($this->schema, $source);
-					$where = $query->where();
-					foreach ($this->schema->getPrimaryList() as $name => $property) {
-						$where->and()->eq($name)->to($this->get($name));
+				try {
+					$this->saving = true;
+					foreach ($this->relationList as $entity) {
+						$entity->save();
 					}
+					foreach ($this->linkList as $entity) {
+						$entity->save();
+					}
+					$source = $this->schemaManager->sanitize($this->schema, $this->toArray());
+					$query = new InsertQuery($this->schema, $source);
+					if ($this->exists) {
+						$query = new UpdateQuery($this->schema, $source);
+						$where = $query->where();
+						foreach ($this->schema->getPrimaryList() as $name => $property) {
+							$where->and()->eq($name)->to($this->get($name));
+						}
+					}
+					$this->storage->execute($query);
+					$this->commit();
+					$this->exists = true;
+					return $this;
+				} finally {
+					$this->saving = false;
 				}
-				$this->storage->execute($query);
-				$this->commit();
-				$this->exists = true;
-				return $this;
 			}
 
 			/**
