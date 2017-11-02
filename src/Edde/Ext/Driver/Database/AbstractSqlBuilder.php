@@ -8,7 +8,6 @@
 		use Edde\Api\Query\Fragment\IWhereTo;
 		use Edde\Api\Query\ICrateSchemaQuery;
 		use Edde\Api\Query\IInsertQuery;
-		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\INativeTransaction;
 		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Query\ITransactionQuery;
@@ -55,7 +54,7 @@
 			/**
 			 * @param ISelectQuery $selectQuery
 			 *
-			 * @return INativeTransaction
+			 * @return ITransactionQuery
 			 * @throws QueryBuilderException
 			 */
 			protected function fragmentSelect(ISelectQuery $selectQuery) : ITransactionQuery {
@@ -130,7 +129,7 @@
 			/**
 			 * @param IWhere $where
 			 *
-			 * @return INativeQuery
+			 * @return ITransactionQuery
 			 * @throws QueryBuilderException
 			 */
 			protected function fragmentWhere(IWhere $where) : ITransactionQuery {
@@ -144,7 +143,7 @@
 			 * @throws QueryBuilderException
 			 * @throws \Exception
 			 */
-			protected function fragmentWhereExpressionEq(IWhereTo $whereTo) : INativeTransaction {
+			protected function fragmentWhereExpressionEq(IWhereTo $whereTo) : ITransactionQuery {
 				$name = $this->delimite($whereTo->getSchemaFragment()->getAlias()) . '.' . $this->delimite($whereTo->getName());
 				switch ($target = $whereTo->getTarget()) {
 					case 'column':

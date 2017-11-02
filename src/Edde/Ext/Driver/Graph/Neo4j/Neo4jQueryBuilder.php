@@ -2,13 +2,15 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Driver\Graph\Neo4j;
 
-		use Edde\Api\Node\INode;
 		use Edde\Api\Query\Exception\QueryBuilderException;
+		use Edde\Api\Query\Fragment\IWhere;
+		use Edde\Api\Query\Fragment\IWhereGroup;
+		use Edde\Api\Query\Fragment\IWhereTo;
 		use Edde\Api\Query\ICrateSchemaQuery;
 		use Edde\Api\Query\IInsertQuery;
-		use Edde\Api\Query\INativeTransaction;
 		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Query\ITransactionQuery;
+		use Edde\Api\Query\IUpdateQuery;
 		use Edde\Common\Query\AbstractQueryBuilder;
 		use Edde\Common\Query\NativeQuery;
 		use Edde\Common\Query\TransactionQuery;
@@ -63,40 +65,97 @@
 			 * @param ISelectQuery $selectQuery
 			 *
 			 * @return ITransactionQuery
+			 * @throws QueryBuilderException
 			 */
 			protected function fragmentSelect(ISelectQuery $selectQuery) : ITransactionQuery {
 				$returnList = [];
 				$cypher = "MATCH\n\t";
 				$matchList = [];
+				$parameterList = [];
 				foreach ($selectQuery->getSchemaFragmentList() as $schemaFragment) {
-					$matchList[] = '(' . $this->delimite($alias = $schemaFragment->getAlias()) . ':' . $this->delimite($schemaFragment->getSchema()->getName()) . ')';
+					$match = '(' . $this->delimite($alias = $schemaFragment->getAlias()) . ':' . $this->delimite($schemaFragment->getSchema()->getName()) . ')';
 					if ($schemaFragment->isSelected()) {
 						$returnList[] = $alias;
 					}
+					if ($schemaFragment->hasWhere()) {
+						$match .= "\nWHERE" . ($query = $this->fragmentWhereGroup($schemaFragment->where()))->getQuery() . "\n";
+						$parameterList = array_merge($parameterList, $query->getParameterList());
+					}
+					$matchList[] = $match;
 				}
 				$cypher .= implode(",\n\t", $matchList) . "\nRETURN\n\t" . implode(', ', $returnList);
-				return new TransactionQuery($cypher);
+				return new TransactionQuery($cypher, $parameterList);
 			}
 
 			/**
-			 * @param INode $root
+			 * @param IUpdateQuery $updateQuery
 			 *
-			 * @return INativeTransaction
+			 * @return ITransactionQuery
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentUpdate(INode $root) : ITransactionQuery {
-				$set = [];
-				foreach ($root->getNode('set-list')->getNodeList() as $node) {
-					$set = array_merge($set, $node->getAttributeList()->array());
-				}
-				$cypher = "MATCH\n\t(" . ($alias = $root->getAttribute('alias')) . ':' . $this->delimite($root->getAttribute('name')) . ")\n";
-				if ($root->hasNode('where-list')) {
-					$cypher .= "WHERE\n" . ($query = $this->fragmentWhereList($root->getNode('where-list')))->getQuery() . "\n";
+			protected function fragmentUpdate(IUpdateQuery $updateQuery) : ITransactionQuery {
+				$schemaFragment = $updateQuery->getSchemaFragment();
+				$cypher = "MATCH\n\t(" . ($alias = $this->delimite($schemaFragment->getAlias())) . ':' . $this->delimite(($schema = $schemaFragment->getSchema())->getName()) . ")\n";
+				$parameterList = [];
+				if ($schemaFragment->hasWhere()) {
+					$cypher .= 'WHERE' . ($query = $this->fragmentWhereGroup($schemaFragment->where()))->getQuery() . "\n";
 					$parameterList = $query->getParameterList();
 				}
-				$parameterList['set'] = $set;
 				$cypher .= "SET\n\t" . $alias . ' = $set';
-				return new TransactionQuery($cypher, $parameterList);
+				return new TransactionQuery($cypher, array_merge($parameterList, [
+					'set' => $this->schemaManager->sanitize($schema, $updateQuery->getSource()),
+				]));
+			}
+
+			/**
+			 * @param IWhereGroup $whereGroup
+			 *
+			 * @return ITransactionQuery
+			 * @throws QueryBuilderException
+			 */
+			protected function fragmentWhereGroup(IWhereGroup $whereGroup) : ITransactionQuery {
+				$whereList = null;
+				$parameterList = [];
+				foreach ($whereGroup as $where) {
+					$sql = "\n\t";
+					if ($whereList) {
+						$sql = ' ' . strtoupper($where->getRelation()) . "\n\t";
+					}
+					$whereList .= $sql . ($query = $this->fragmentWhere($where))->getQuery();
+					$parameterList = array_merge($parameterList, $query->getParameterList());
+				}
+				return new TransactionQuery($whereList, $parameterList);
+			}
+
+			/**
+			 * @param IWhere $where
+			 *
+			 * @return ITransactionQuery
+			 * @throws QueryBuilderException
+			 */
+			protected function fragmentWhere(IWhere $where) : ITransactionQuery {
+				return $this->fragment($where->getExpression());
+			}
+
+			/**
+			 * @param IWhereTo $whereTo
+			 *
+			 * @return ITransactionQuery
+			 * @throws QueryBuilderException
+			 * @throws \Exception
+			 */
+			protected function fragmentWhereExpressionEq(IWhereTo $whereTo) : ITransactionQuery {
+				$name = $this->delimite($whereTo->getSchemaFragment()->getAlias()) . '.' . $this->delimite($whereTo->getName());
+				switch ($target = $whereTo->getTarget()) {
+//					case 'column':
+//						list($prefix, $column) = $whereTo->getValue();
+//						return new TransactionQuery($name . ': ' . $this->delimite($prefix) . '.' . $this->delimite($column));
+					case 'value':
+						return new TransactionQuery($name . ' = $' . ($parameterId = 'p_' . sha1($target . microtime(true) . random_bytes(8))), [
+							$parameterId => $whereTo->getValue(),
+						]);
+				}
+				throw new QueryBuilderException(sprintf('Unknown where expression [%s] target [%s].', $whereTo->getType(), $target));
 			}
 
 			/**
