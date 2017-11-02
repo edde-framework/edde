@@ -8,8 +8,10 @@
 		use Edde\Api\Query\Fragment\IWhereTo;
 		use Edde\Api\Query\ICrateSchemaQuery;
 		use Edde\Api\Query\IInsertQuery;
+		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\INativeTransaction;
 		use Edde\Api\Query\ISelectQuery;
+		use Edde\Api\Query\ITransactionQuery;
 		use Edde\Api\Query\IUpdateQuery;
 		use Edde\Common\Query\AbstractQueryBuilder;
 		use Edde\Common\Query\TransactionQuery;
@@ -56,7 +58,7 @@
 			 * @return INativeTransaction
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentSelect(ISelectQuery $selectQuery) : INativeTransaction {
+			protected function fragmentSelect(ISelectQuery $selectQuery) : ITransactionQuery {
 				$columnList = [];
 				$fromList = [];
 				$whereList = null;
@@ -108,10 +110,10 @@
 			/**
 			 * @param IWhereGroup $whereGroup
 			 *
-			 * @return INativeTransaction
+			 * @return ITransactionQuery
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentWhereGroup(IWhereGroup $whereGroup) : INativeTransaction {
+			protected function fragmentWhereGroup(IWhereGroup $whereGroup) : ITransactionQuery {
 				$whereList = null;
 				$parameterList = [];
 				foreach ($whereGroup as $where) {
@@ -128,10 +130,10 @@
 			/**
 			 * @param IWhere $where
 			 *
-			 * @return INativeTransaction
+			 * @return INativeQuery
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentWhere(IWhere $where) : INativeTransaction {
+			protected function fragmentWhere(IWhere $where) : ITransactionQuery {
 				return $this->fragment($where->getExpression());
 			}
 

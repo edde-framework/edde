@@ -71,7 +71,7 @@
 			 * @inheritdoc
 			 */
 			public function execute(IQuery $query) {
-				return $this->driver->execute($this->queryBuilder->query($query));
+				return $this->driver->transaction($this->queryBuilder->query($query));
 			}
 
 			/**
