@@ -92,8 +92,12 @@
 				}
 				try {
 					$this->saving = true;
-					foreach ($this->relationList as $entity) {
-						$entity->save();
+					if (empty($this->relationList) === false) {
+						foreach ($this->relationList as $entity) {
+							$entity->save();
+						}
+						$this->commit();
+						return $this;
 					}
 					foreach ($this->linkList as $entity) {
 						$entity->save();
