@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Query\Fragment;
 
-		interface IWhereTo extends IFragment {
+		interface IWhereTo extends IWhereExpression {
 			/**
 			 * where to scalar value, returns a relation
 			 *

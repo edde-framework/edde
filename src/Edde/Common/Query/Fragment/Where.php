@@ -3,7 +3,9 @@
 	namespace Edde\Common\Query\Fragment;
 
 		use Edde\Api\Query\Fragment\IWhere;
+		use Edde\Api\Query\Fragment\IWhereExpression;
 		use Edde\Api\Query\Fragment\IWhereGroup;
+		use Edde\Api\Query\Fragment\IWhereThan;
 		use Edde\Api\Query\Fragment\IWhereTo;
 
 		class Where extends AbstractFragment implements IWhere {
@@ -16,9 +18,9 @@
 			 */
 			protected $relation;
 			/**
-			 * @var IWhereTo
+			 * @var IWhereExpression
 			 */
-			protected $whereTo;
+			protected $where;
 
 			public function __construct(IWhereGroup $whereGroup, string $relation) {
 				$this->whereGroup = $whereGroup;
@@ -29,6 +31,13 @@
 			 * @inheritdoc
 			 */
 			public function eq(string $name): IWhereTo {
-				return $this->whereTo = new WhereTo($this->whereGroup, __FUNCTION__, $name);
+				return $this->where = new WhereTo($this->whereGroup, __FUNCTION__, $name);
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function gt(string $name): IWhereThan {
+				return $this->where = new WhereThan($this->whereGroup, __FUNCTION__, $name);
 			}
 		}

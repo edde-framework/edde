@@ -11,4 +11,13 @@
 			 * @return IWhereTo
 			 */
 			public function eq(string $name): IWhereTo;
+
+			/**
+			 * greater than
+			 *
+			 * @param string $name
+			 *
+			 * @return IWhereThan
+			 */
+			public function gt(string $name): IWhereThan;
 		}
