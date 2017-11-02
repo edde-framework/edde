@@ -50,15 +50,30 @@
 				return new NativeQuery($sql . ':' . implode(', :', array_keys($parameterList)) . ')', $parameterList);
 			}
 
+			/**
+			 * @param ISelectQuery $selectQuery
+			 *
+			 * @return INativeQuery
+			 * @throws QueryBuilderException
+			 */
 			protected function fragmentSelect(ISelectQuery $selectQuery): INativeQuery {
 				$columnList = [];
 				$fromList = [];
+				$whereList = null;
+				$parameterList = [];
 				foreach ($selectQuery->getSchemaFragmentList() as $schemaFragment) {
 					$columnList[$alias] = ($alias = $this->delimite($schemaFragment->getAlias())) . '.*';
 					$fromList[$alias] = $this->delimite($schemaFragment->getSchema()->getName()) . ' ' . $alias;
+					if ($schemaFragment->hasWhere()) {
+						$whereList[] = ($query = $this->fragmentWhereGroup($schemaFragment->where()))->getQuery();
+						$parameterList = array_merge($parameterList, $query->getParameterList());
+					}
 				}
-				$sql = "SELECT\n\t" . implode(",\n\t", $columnList) . "\nFROM\n\t" . implode(",\n\t", $fromList);
-				return new NativeQuery($sql);
+				$sql = "SELECT\n\t" . implode(",\n\t", $columnList) . "\nFROM\n\t" . implode(",\n\t", $fromList) . "\n";
+				if ($whereList) {
+					$sql .= "WHERE\n" . implode("AND\n", $whereList);
+				}
+				return new NativeQuery($sql, $parameterList);
 			}
 
 			/**

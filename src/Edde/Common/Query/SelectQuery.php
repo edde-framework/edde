@@ -3,6 +3,7 @@
 	namespace Edde\Common\Query;
 
 		use Edde\Api\Query\Fragment\ISchemaFragment;
+		use Edde\Api\Query\Fragment\IWhereGroup;
 		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Common\Query\Fragment\SchemaFragment;
@@ -13,6 +14,10 @@
 			 * @var ISchemaFragment[]
 			 */
 			protected $schemaFragmentList = [];
+			/**
+			 * @var IWhereGroup
+			 */
+			protected $where;
 
 			public function __construct() {
 				parent::__construct('select');
