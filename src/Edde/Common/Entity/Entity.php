@@ -48,25 +48,24 @@
 			 * @inheritdoc
 			 */
 			public function attach(IEntity $entity): IEntity {
-				$relationList = $this->schema->getRelationList($schemaName = $entity->getSchema()->getName());
-				if (($count = count($relationList)) === 0) {
+				if (($count = count($relationList = $this->schema->getRelationList($schemaName = $entity->getSchema()->getName()))) === 0) {
 					throw new RelationException(sprintf('There are no relations from [%s] to schema [%s].', $this->schema->getName(), $schemaName));
 				} else if ($count !== 1) {
 					throw new RelationException(sprintf('There are more relations from [%s] to schema [%s]. You have to specify relation schema.', $this->schema->getName(), $schemaName));
 				}
-				list($relation) = $relationList;
-				$relationEntity = $this->entityManager->createEntity($relation->getSchema());
-				$this->related($entity, $relation);
-				$entity->relatedTo($this, $relation);
-				$this->relatedTo($relationEntity, $relation);
-				$relationEntity->related($this, $relation);
-				return $relationEntity;
+				return $this->entityManager->createEntity($relationList[0]->getSchema())->connect($this, $entity, $relationList[0]);
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function connect(IEntity $entity, IEntity $to, IRelation $relation): IEntity {
+				$this->related($entity, $relation);
+				$this->related($to, $relation);
+				$to->relatedTo($this, $relation);
+				$to->relatedTo($entity, $relation);
+				$entity->relatedTo($this, $relation);
+				$entity->related($entity, $relation);
 				return $this;
 			}
 
