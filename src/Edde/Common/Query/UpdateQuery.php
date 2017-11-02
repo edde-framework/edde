@@ -2,17 +2,17 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Query;
 
+		use Edde\Api\Query\Fragment\ISchemaFragment;
 		use Edde\Api\Query\Fragment\IWhereGroup;
 		use Edde\Api\Query\IUpdateQuery;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Common\Query\Fragment\SchemaFragment;
-		use Edde\Common\Query\Fragment\WhereGroup;
 
 		class UpdateQuery extends InsertQuery implements IUpdateQuery {
 			/**
-			 * @var IWhereGroup
+			 * @var ISchemaFragment
 			 */
-			protected $where;
+			protected $schemaFragment;
 
 			public function __construct(ISchema $schema, array $source) {
 				parent::__construct($schema, $source);
@@ -22,17 +22,21 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function getSchemaFragment(): ISchemaFragment {
+				return $this->schemaFragment ?: $this->schemaFragment = new SchemaFragment($this->schema, 'u');
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function hasWhere(): bool {
-				return $this->where !== null;
+				return $this->schemaFragment->hasWhere();
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function where(): IWhereGroup {
-				if ($this->where === null) {
-					$this->where = new WhereGroup(new SchemaFragment($this->schema, 'u'));
-				}
-				return $this->where;
+				return $this->getSchemaFragment()->where();
 			}
 		}

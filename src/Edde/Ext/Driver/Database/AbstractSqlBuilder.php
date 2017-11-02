@@ -71,7 +71,7 @@
 				}
 				$sql = "SELECT\n\t" . implode(",\n\t", $columnList) . "\nFROM\n\t" . implode(",\n\t", $fromList) . "\n";
 				if ($whereList) {
-					$sql .= "WHERE\n" . implode("AND\n", $whereList);
+					$sql .= "WHERE\n\t" . implode("AND\n", $whereList);
 				}
 				return new NativeQuery($sql, $parameterList);
 			}
@@ -84,8 +84,9 @@
 			 */
 			protected function fragmentUpdate(IUpdateQuery $updateQuery): INativeQuery {
 				$schema = $updateQuery->getSchema();
+				$schemaFragment = $updateQuery->getSchemaFragment();
 				$sql = "UPDATE\n\t";
-				$sql .= $this->delimite($schema->getName()) . "\n";
+				$sql .= $this->delimite($schema->getName()) . ' ' . $this->delimite($schemaFragment->getAlias()) . "\n";
 				$sql .= "SET\n\t";
 				$parameterList = [];
 				$nameList = [];
