@@ -3,7 +3,6 @@
 	namespace Edde\Api\Entity;
 
 		use Edde\Api\Crate\ICrate;
-		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\IntegrityException;
@@ -21,16 +20,6 @@
 			public function getSchema(): ISchema;
 
 			/**
-			 * link the given entity to the current one
-			 *
-			 * @param IEntity    $entity
-			 * @param ILink|null $link
-			 *
-			 * @return IEntity
-			 */
-			public function link(IEntity $entity, ILink $link = null): IEntity;
-
-			/**
 			 * attach the given entity to $this one using m:n relation; returned entity is the
 			 * relation entity
 			 *
@@ -39,6 +28,25 @@
 			 * @return IEntity
 			 */
 			public function attach(IEntity $entity): IEntity;
+
+			/**
+			 * mark the given entity as related to this one (to save the tree
+			 * of entities)
+			 *
+			 * @param IEntity $entity
+			 *
+			 * @return IEntity
+			 */
+			public function related(IEntity $entity): IEntity;
+
+			/**
+			 * reverse direction of the related method
+			 *
+			 * @param IEntity $entity
+			 *
+			 * @return IEntity
+			 */
+			public function relatedTo(IEntity $entity): IEntity;
 
 			/**
 			 * save this entity into storage (and all related stuff to this entity)

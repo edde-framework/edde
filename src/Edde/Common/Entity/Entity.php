@@ -6,9 +6,7 @@
 		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\Inject\EntityManager;
-		use Edde\Api\Schema\Exception\LinkException;
 		use Edde\Api\Schema\Exception\RelationException;
-		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Inject\Storage;
@@ -27,11 +25,11 @@
 			/**
 			 * @var IEntity[]
 			 */
-			protected $linkList = [];
+			protected $relatedList = [];
 			/**
 			 * @var IEntity[]
 			 */
-			protected $relationList = [];
+			protected $relatedToList = [];
 			protected $exists = false;
 			protected $saving = false;
 
@@ -42,32 +40,14 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getSchema() : ISchema {
+			public function getSchema(): ISchema {
 				return $this->schema;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function link(IEntity $entity, ILink $link = null) : IEntity {
-				if ($link === null) {
-					$linkList = $this->schema->getLinkList($schemaName = $entity->getSchema()->getName());
-					if (($count = count($linkList)) === 0) {
-						throw new LinkException(sprintf('There is no link from [%s] to [%s].', $this->schema->getName(), $schemaName));
-					} else if ($count !== 1) {
-						throw new LinkException(sprintf('There are more links from [%s] to [%s].', $this->schema->getName(), $schemaName));
-					}
-					list($link) = $linkList;
-				}
-				$this->set($link->getSourceProperty()->getName(), $entity->get($link->getTargetProperty()->getName()));
-				$this->linkList[] = $entity;
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function attach(IEntity $entity) : IEntity {
+			public function attach(IEntity $entity): IEntity {
 				$relationList = $this->schema->getRelationList($schemaName = $entity->getSchema()->getName());
 				if (($count = count($relationList)) === 0) {
 					throw new RelationException(sprintf('There are no relations from [%s] to schema [%s].', $this->schema->getName(), $schemaName));
@@ -76,15 +56,33 @@
 				}
 				list($relation) = $relationList;
 				$relationEntity = $this->entityManager->createEntity($relation->getSchema());
-				$relationEntity->link($this, $relation->getSourceLink());
-				$relationEntity->link($entity, $relation->getTargetLink());
-				return $this->relationList[] = $relationEntity;
+				$this->related($entity);
+				$entity->relatedTo($this);
+				$this->relatedTo($relationEntity);
+				$relationEntity->related($this);
+				return $relationEntity;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function save() : IEntity {
+			public function related(IEntity $entity): IEntity {
+				$this->relatedList[] = $entity;
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function relatedTo(IEntity $entity): IEntity {
+				$this->relatedToList[] = $entity;
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function save(): IEntity {
 				if ($this->saving) {
 					return $this;
 				} else if ($this->isDirty() === false) {
@@ -92,16 +90,6 @@
 				}
 				try {
 					$this->saving = true;
-					if (empty($this->relationList) === false) {
-						foreach ($this->relationList as $entity) {
-							$entity->save();
-						}
-						$this->commit();
-						return $this;
-					}
-					foreach ($this->linkList as $entity) {
-						$entity->save();
-					}
 					$query = new InsertQuery($this->schema, $source = $this->toArray());
 					if ($this->exists) {
 						$query = new UpdateQuery($this->schema, $source);
@@ -122,7 +110,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function load(array $source) : IEntity {
+			public function load(array $source): IEntity {
 				$this->push($this->schemaManager->filter($this->schema, $source));
 				$this->exists = true;
 				return $this;
@@ -131,7 +119,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function collectionOf(string $schema) : ICollection {
+			public function collectionOf(string $schema): ICollection {
 				$collection = $this->entityManager->collection($schema);
 				if (($count = count($relationList = $this->schema->getRelationList($schema))) === 0) {
 					throw new RelationException(sprintf('There are no relations from [%s] to schema [%s].', $this->schema->getName(), $schema));
@@ -151,23 +139,23 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function exists() : bool {
+			public function exists(): bool {
 				return $this->exists;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function isDirty() : bool {
+			public function isDirty(): bool {
 				if (parent::isDirty()) {
 					return true;
 				}
-				foreach ($this->linkList as $entity) {
+				foreach ($this->relatedList as $entity) {
 					if ($entity->isDirty()) {
 						return true;
 					}
 				}
-				foreach ($this->relationList as $entity) {
+				foreach ($this->relatedToList as $entity) {
 					if ($entity->isDirty()) {
 						return true;
 					}
@@ -175,7 +163,7 @@
 				return false;
 			}
 
-			public function toArray() : array {
+			public function toArray(): array {
 				$array = [];
 				foreach ($this->schema->getPropertyList() as $k => $property) {
 					$array[$k] = $this->get($k);
@@ -186,17 +174,17 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function commit() : ICrate {
+			public function commit(): ICrate {
 				parent::commit();
-				$this->linkList = [];
-				$this->relationList = [];
+				$this->relatedList = [];
+				$this->relatedToList = [];
 				return $this;
 			}
 
 			public function __clone() {
 				parent::__clone();
-				$this->linkList = [];
-				$this->relationList = [];
+				$this->relatedList = [];
+				$this->relatedToList = [];
 				$this->exists = false;
 			}
 		}
