@@ -58,10 +58,6 @@
 
 			protected function fragmentInsert(IInsertQuery $insertQuery): ITransactionQuery {
 				$source = $this->schemaManager->sanitize(($schema = $insertQuery->getSchema()), $insertQuery->getSource());
-				if ($schema->isRelation()) {
-					return new TransactionQuery();
-//					throw new QueryException('Relation schema is not implemented yet');
-				}
 				return new TransactionQuery('CREATE (n:' . $this->delimite($schema->getName()) . ' $set)', ['set' => $source]);
 			}
 

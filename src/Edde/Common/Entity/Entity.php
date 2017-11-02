@@ -12,6 +12,7 @@
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Crate\Crate;
 		use Edde\Common\Query\InsertQuery;
+		use Edde\Common\Query\RelationQuery;
 		use Edde\Common\Query\UpdateQuery;
 
 		class Entity extends Crate implements IEntity {
@@ -26,6 +27,10 @@
 			 * @var IEntity[]
 			 */
 			protected $linkList = [];
+			/**
+			 * @var IRelation
+			 */
+			protected $relation;
 			protected $exists = false;
 			protected $saving = false;
 
@@ -56,6 +61,7 @@
 			 * @inheritdoc
 			 */
 			public function connect(IEntity $entity, IEntity $to, IRelation $relation): IEntity {
+				$this->relation = $relation;
 				$entity->link($this);
 				$this->link($entity);
 				$this->link($to);
@@ -85,7 +91,15 @@
 						$entity->save();
 					}
 					$query = new InsertQuery($this->schema, $source = $this->toArray());
-					if ($this->exists) {
+					if ($this->schema->isRelation()) {
+						if (count($this->linkList) !== 2) {
+							throw new RelationException(sprintf('Cannot save [%s] as it does not have exactly two links', $this->schema->getName()));
+						}
+						list($from, $to) = $this->linkList;
+						$query = new RelationQuery($this->relation);
+						$query->from($from->toArray());
+						$query->to($to->toArray());
+					} else if ($this->exists) {
 						$query = new UpdateQuery($this->schema, $source);
 						$where = $query->where();
 						foreach ($this->schema->getPrimaryList() as $name => $property) {
@@ -163,6 +177,7 @@
 			public function __clone() {
 				parent::__clone();
 				$this->linkList = [];
+				$this->relation = null;
 				$this->exists = false;
 			}
 		}
