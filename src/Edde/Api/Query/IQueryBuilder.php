@@ -8,9 +8,9 @@
 			/**
 			 * @param IQuery $query
 			 *
-			 * @return INativeQuery
+			 * @return INativeTransaction
 			 */
-			public function query(IQuery $query): INativeQuery;
+			public function query(IQuery $query) : INativeTransaction;
 
 			/**
 			 * delimite the given string
@@ -19,7 +19,7 @@
 			 *
 			 * @return string
 			 */
-			public function delimite(string $delimite): string;
+			public function delimite(string $delimite) : string;
 
 			/**
 			 * translate input type to internal type
@@ -28,5 +28,5 @@
 			 *
 			 * @return string
 			 */
-			public function type(string $type): string;
+			public function type(string $type) : string;
 		}

@@ -10,14 +10,16 @@
 		use Edde\Common\Query\AbstractQueryBuilder;
 		use Edde\Common\Query\NativeQuery;
 		use Edde\Common\Query\NativeTransaction;
+		use Edde\Common\Query\TransactionQuery;
 
 		class Neo4jQueryBuilder extends AbstractQueryBuilder {
-			protected function fragmentCreateSchema(ICrateSchemaQuery $crateSchemaQuery) : INativeQuery {
+			protected function fragmentCreateSchema(ICrateSchemaQuery $crateSchemaQuery) : INativeTransaction {
+				$nativeTransaction = new NativeTransaction();
 				/**
 				 * relations should not be physically created
 				 */
 				if (($schema = $crateSchemaQuery->getSchema())->isRelation()) {
-					return new NativeQuery('');
+					return $nativeTransaction;
 				}
 				$primaryList = null;
 				$indexList = null;
@@ -49,15 +51,15 @@
 				foreach ($requiredList as $required) {
 					$query .= 'CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT exists(' . $required . ");\n";
 				}
-				return new NativeQuery($query);
+				return new TransactionQuery($query);
 			}
 
-			protected function fragmentInsert(INode $root) : INativeQuery {
+			protected function fragmentInsert(INode $root) : INativeTransaction {
 				$set = [];
 				foreach ($root->getNode('set-list')->getNodeList() as $node) {
 					$set = array_merge($set, $node->getAttributeList()->array());
 				}
-				return new NativeQuery('CREATE (n:' . $this->delimite($root->getAttribute('name')) . ' $set)', ['set' => $set]);
+				return new TransactionQuery('CREATE (n:' . $this->delimite($root->getAttribute('name')) . ' $set)', ['set' => $set]);
 			}
 
 			/**

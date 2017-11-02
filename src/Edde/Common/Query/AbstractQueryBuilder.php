@@ -4,7 +4,7 @@
 
 		use Edde\Api\Query\Exception\QueryBuilderException;
 		use Edde\Api\Query\Fragment\IFragment;
-		use Edde\Api\Query\INativeQuery;
+		use Edde\Api\Query\INativeTransaction;
 		use Edde\Api\Query\IQuery;
 		use Edde\Api\Query\IQueryBuilder;
 		use Edde\Api\Utils\Inject\StringUtils;
@@ -19,24 +19,24 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function query(IQuery $query): INativeQuery {
+			public function query(IQuery $query) : INativeTransaction {
 				return $this->fragment($query);
 			}
 
 			/**
 			 * @param IFragment $fragment
 			 *
-			 * @return INativeQuery
+			 * @return INativeTransaction
 			 * @throws QueryBuilderException
 			 */
-			protected function fragment(IFragment $fragment): INativeQuery {
+			protected function fragment(IFragment $fragment) : INativeTransaction {
 				if (isset($this->fragmentList[$name = $fragment->getType()]) === false) {
 					throw new QueryBuilderException(sprintf('Unsupported fragment type [%s] in [%s].', $name, static::class));
 				}
 				return $this->fragmentList[$name]($fragment);
 			}
 
-			protected function handleSetup(): void {
+			protected function handleSetup() : void {
 				parent::handleSetup();
 				$reflectionClass = new ReflectionClass($this);
 				foreach ($reflectionClass->getMethods(ReflectionMethod::IS_PROTECTED) as $reflectionMethod) {
