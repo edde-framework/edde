@@ -18,6 +18,11 @@
 			public function or (): IWhere;
 
 			/**
+			 * @return ISchemaFragment
+			 */
+			public function getSchemaFragment(): ISchemaFragment;
+
+			/**
 			 * @return \Traversable|IWhere[]
 			 */
 			public function getIterator();

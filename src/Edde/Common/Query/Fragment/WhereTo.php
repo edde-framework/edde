@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Query\Fragment;
 
+		use Edde\Api\Query\Fragment\ISchemaFragment;
 		use Edde\Api\Query\Fragment\IWhereGroup;
 		use Edde\Api\Query\Fragment\IWhereTo;
 
@@ -22,5 +23,12 @@
 				$this->target = 'column';
 				$this->value = $name;
 				return $this->whereGroup;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getSchemaFragment(): ISchemaFragment {
+				return $this->whereGroup->getSchemaFragment();
 			}
 		}

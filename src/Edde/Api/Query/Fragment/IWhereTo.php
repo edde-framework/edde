@@ -20,4 +20,11 @@
 			 * @return IWhereGroup
 			 */
 			public function toColumn(string $name): IWhereGroup;
+
+			/**
+			 * return schema fragment this where belongs to
+			 *
+			 * @return ISchemaFragment
+			 */
+			public function getSchemaFragment(): ISchemaFragment;
 		}

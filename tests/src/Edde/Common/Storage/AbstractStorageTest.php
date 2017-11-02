@@ -146,7 +146,6 @@
 			 * @throws DuplicateEntryException
 			 * @throws IntegrityException
 			 * @throws StorageException
-			 * @throws UnknownSchemaException
 			 */
 			public function testUpdate() {
 				$entity = $this->entityManager->create(SimpleSchema::class, [

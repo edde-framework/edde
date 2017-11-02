@@ -23,6 +23,7 @@
 			protected $where;
 
 			public function __construct(IWhereGroup $whereGroup, string $relation) {
+				parent::__construct('where');
 				$this->whereGroup = $whereGroup;
 				$this->relation = $relation;
 			}

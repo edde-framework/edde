@@ -5,6 +5,7 @@
 		use Edde\Api\Query\Fragment\IWhereGroup;
 		use Edde\Api\Query\IUpdateQuery;
 		use Edde\Api\Schema\ISchema;
+		use Edde\Common\Query\Fragment\SchemaFragment;
 		use Edde\Common\Query\Fragment\WhereGroup;
 
 		class UpdateQuery extends InsertQuery implements IUpdateQuery {
@@ -30,7 +31,7 @@
 			 */
 			public function where(): IWhereGroup {
 				if ($this->where === null) {
-					$this->where = new WhereGroup();
+					$this->where = new WhereGroup(new SchemaFragment($this->schema, 'u'));
 				}
 				return $this->where;
 			}

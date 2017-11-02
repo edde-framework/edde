@@ -137,11 +137,12 @@
 			 * @throws \Exception
 			 */
 			protected function fragmentWhereExpressionEq(IWhereTo $whereTo): INativeQuery {
+				$name = $this->delimite($whereTo->getSchemaFragment()->getAlias()) . '.' . $this->delimite($whereTo->getName());
 				switch ($target = $whereTo->getTarget()) {
 					case 'column':
-						return new NativeQuery($this->delimite($whereTo->getName()) . ' = ' . $this->delimite($whereTo->getValue()));
+						return new NativeQuery($name . ' = ' . $this->delimite($whereTo->getValue()));
 					case 'value':
-						return new NativeQuery($this->delimite($whereTo->getName()) . ' = :' . ($parameterId = 'p_' . sha1($target . microtime(true) . random_bytes(8))), [
+						return new NativeQuery($name . ' = :' . ($parameterId = 'p_' . sha1($target . microtime(true) . random_bytes(8))), [
 							$parameterId => $whereTo->getValue(),
 						]);
 				}

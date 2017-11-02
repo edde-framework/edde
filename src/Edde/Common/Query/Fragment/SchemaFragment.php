@@ -52,7 +52,7 @@
 			 */
 			public function where(): IWhereGroup {
 				if ($this->where === null) {
-					$this->where = new WhereGroup();
+					$this->where = new WhereGroup($this);
 				}
 				return $this->where;
 			}
