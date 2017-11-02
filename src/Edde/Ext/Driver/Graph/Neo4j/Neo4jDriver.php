@@ -7,7 +7,6 @@
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\NullValueException;
-		use Edde\Api\Storage\IStream;
 		use Edde\Common\Driver\AbstractDriver;
 		use GraphAware\Bolt\Exception\MessageFailureException;
 		use GraphAware\Bolt\GraphDatabase;
@@ -38,7 +37,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function execute(INativeQuery $nativeQuery): IStream {
+			public function execute(INativeQuery $nativeQuery) {
 				try {
 					return (function (Result $result) {
 						foreach ($result->getRecords() as $record) {
@@ -56,7 +55,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function start(): IDriver {
+			public function start() : IDriver {
 				($this->transaction = $this->session->transaction())->begin();
 				return $this;
 			}
@@ -64,7 +63,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function commit(): IDriver {
+			public function commit() : IDriver {
 				try {
 					$this->transaction->commit();
 					$this->transaction = null;
@@ -77,7 +76,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function rollback(): IDriver {
+			public function rollback() : IDriver {
 				try {
 					$this->transaction->rollback();
 				} catch (MessageFailureException $exception) {
@@ -94,7 +93,7 @@
 				return $this;
 			}
 
-			protected function exception(\Throwable $throwable): \Throwable {
+			protected function exception(\Throwable $throwable) : \Throwable {
 				if (stripos($message = $throwable->getMessage(), 'already exists with label') !== false) {
 					return new DuplicateEntryException($message, 0, $throwable);
 				} else if (stripos($message, 'must have the property') !== false) {
@@ -103,7 +102,7 @@
 				return new DriverException($message, 0, $throwable);
 			}
 
-			protected function handleSetup(): void {
+			protected function handleSetup() : void {
 				parent::handleSetup();
 				$this->session = GraphDatabase::driver($this->url)->session();
 			}

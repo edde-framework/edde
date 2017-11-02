@@ -5,19 +5,19 @@
 		use Edde\Api\Node\INode;
 		use Edde\Api\Query\Exception\QueryBuilderException;
 		use Edde\Api\Query\ICrateSchemaQuery;
+		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\INativeTransaction;
 		use Edde\Common\Query\AbstractQueryBuilder;
 		use Edde\Common\Query\NativeQuery;
 		use Edde\Common\Query\NativeTransaction;
 
 		class Neo4jQueryBuilder extends AbstractQueryBuilder {
-			protected function fragmentCreateSchema(ICrateSchemaQuery $crateSchemaQuery): INativeTransaction {
-				$nativeTransaction = new NativeTransaction();
+			protected function fragmentCreateSchema(ICrateSchemaQuery $crateSchemaQuery) : INativeQuery {
 				/**
 				 * relations should not be physically created
 				 */
 				if (($schema = $crateSchemaQuery->getSchema())->isRelation()) {
-					return $nativeTransaction;
+					return new NativeQuery('');
 				}
 				$primaryList = null;
 				$indexList = null;
@@ -36,45 +36,28 @@
 						$requiredList[] = $fragment;
 					}
 				}
+				$query = '';
 				if ($indexList) {
-					$nativeTransaction->query(new NativeQuery('CREATE INDEX ON :' . $delimited . '(' . implode(',', $indexList) . ')'));
+					$query .= 'CREATE INDEX ON :' . $delimited . '(' . implode(',', $indexList) . ");\n";
 				}
 				if ($primaryList) {
-					$nativeTransaction->query(new NativeQuery('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT (' . implode(', ', $primaryList) . ') IS NODE KEY'));
+					$query .= 'CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT (' . implode(', ', $primaryList) . ") IS NODE KEY;\n";
 				}
 				foreach ($uniqueList as $unique) {
-					$nativeTransaction->query(new NativeQuery('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT ' . $unique . ' IS UNIQUE'));
+					$query .= 'CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT ' . $unique . " IS UNIQUE;\n";
 				}
 				foreach ($requiredList as $required) {
-					$nativeTransaction->query(new NativeQuery('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT exists(' . $required . ')'));
+					$query .= 'CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT exists(' . $required . ");\n";
 				}
-				return $nativeTransaction;
+				return new NativeQuery($query);
 			}
 
-			protected function fragmentRelation(INode $root): INativeTransaction {
-				list($alpha, $beta) = $root->getNode('relation-list')->getNodeList();
-				$cypher = "MATCH\n\t";
-				$parameterList = [
-					'a' => $alpha->getAttribute('value'),
-					'b' => $beta->getAttribute('value'),
-				];
-				$cypher .= '(a:' . $this->delimite($alpha->getAttribute('schema')) . ' {' . $this->delimite($alpha->getAttribute('property')) . ': $a}),';
-				$cypher .= '(b:' . $this->delimite($beta->getAttribute('schema')) . ' {' . $this->delimite($beta->getAttribute('property')) . ": \$b})\n";
-				$cypher .= "CREATE UNIQUE\n\t(a)-[:" . $this->delimite($root->getAttribute('name')) . ' $set]->(b)';
-				foreach ($root->getNode('set-list')->getNodeList() as $node) {
-					foreach ($node->getAttributeList()->array() as $k => $v) {
-						$parameterList['set'][$k] = $v;
-					}
-				}
-				return (new NativeTransaction())->query(new NativeQuery($cypher, $parameterList));
-			}
-
-			protected function fragmentInsert(INode $root): INativeTransaction {
+			protected function fragmentInsert(INode $root) : INativeQuery {
 				$set = [];
 				foreach ($root->getNode('set-list')->getNodeList() as $node) {
 					$set = array_merge($set, $node->getAttributeList()->array());
 				}
-				return (new NativeTransaction())->query(new NativeQuery('CREATE (n:' . $this->delimite($root->getAttribute('name')) . ' $set)', ['set' => $set]));
+				return new NativeQuery('CREATE (n:' . $this->delimite($root->getAttribute('name')) . ' $set)', ['set' => $set]);
 			}
 
 			/**
@@ -83,7 +66,7 @@
 			 * @return INativeTransaction
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentUpdate(INode $root): INativeTransaction {
+			protected function fragmentUpdate(INode $root) : INativeQuery {
 				$set = [];
 				foreach ($root->getNode('set-list')->getNodeList() as $node) {
 					$set = array_merge($set, $node->getAttributeList()->array());
@@ -104,7 +87,7 @@
 			 * @return INativeTransaction
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentSelect(INode $root): INativeTransaction {
+			protected function fragmentSelect(INode $root) : INativeTransaction {
 				$parameterList = [];
 				$cypher = null;
 				$alias = null;
@@ -122,57 +105,16 @@
 			}
 
 			/**
-			 * @param INode $root
-			 *
-			 * @return INativeTransaction
-			 * @throws QueryBuilderException
-			 * @throws \Exception
-			 */
-			protected function fragmentWhere(INode $root): INativeTransaction {
-				$where = null;
-				static $expressions = [
-					'eq'  => '=',
-					'neq' => '!=',
-					'gt'  => '>',
-					'gte' => '>=',
-					'lt'  => '<',
-					'lte' => '<=',
-				];
-				$parameterList = [];
-				if (isset($expressions[$type = $root->getAttribute('type')])) {
-					$where = ($prefix = $root->getAttribute('prefix')) ? $prefix . '.' : '';
-					$where .= $this->delimite($root->getAttribute('where')) . ' ' . $expressions[$type] . ' ';
-					switch ($target = $root->getAttribute('target', 'column')) {
-						case 'column':
-							$where .= $this->delimite($root->getAttribute('column'));
-							break;
-						case 'parameter':
-							$parameterList[$id = ('p_' . sha1(random_bytes(64)))] = $root->getAttribute('parameter');
-							$where .= '$' . $id;
-							break;
-						default:
-							throw new QueryBuilderException(sprintf('Unknown where target type [%s] in [%s].', $target, static::class));
-					}
-					return new NativeTransaction($where, $parameterList);
-				}
-				switch ($type) {
-					case 'group':
-						return new NativeTransaction("(\n" . ($query = $this->fragmentWhereList($root))->getQuery() . "\t)", $query->getParameterList());
-				}
-				throw new QueryBuilderException(sprintf('Unknown where type [%s].', $type));
-			}
-
-			/**
 			 * @inheritdoc
 			 */
-			public function delimite(string $delimite): string {
+			public function delimite(string $delimite) : string {
 				return '`' . str_replace('`', '``', $delimite) . '`';
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function type(string $type): string {
+			public function type(string $type) : string {
 				throw new QueryBuilderException(sprintf('Unknown type [%s] in query builder [%s]', $type, static::class));
 			}
 		}
