@@ -12,8 +12,9 @@
 
 			/**
 			 * @param string $name
+			 * @param string $prefix
 			 *
 			 * @return IWhereGroup
 			 */
-			public function thanColumn(string $name): IWhereGroup;
+			public function thanColumn(string $name, string $prefix) : IWhereGroup;
 		}

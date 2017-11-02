@@ -190,6 +190,9 @@
 				$bar2 = $this->entityManager->create(BarSchema::class, [
 					'name' => 'bar The Third',
 				]);
+				$this->entityManager->create(BarSchema::class, [
+					'name' => 'Another, very secret bar!',
+				])->save();
 				self::assertFalse($bar2->exists());
 				$this->schemaManager->load(FooBarSchema::class);
 				$foo->attach($bar);
@@ -202,8 +205,10 @@
 
 			/**
 			 * @throws EntityNotFoundException
+			 * @throws UnknownSchemaException
 			 */
 			public function testRelation() {
+				$this->schemaManager->load(FooBarSchema::class);
 				$foo = $this->entityManager->collection(FooSchema::class)->entity('foo The First');
 				self::assertSame('foo The First', $foo->get('name'));
 				$expect = [
@@ -215,7 +220,7 @@
 //				(c:`Edde\Test\BarSchema`)-[r:`Edde\Test\FooBarSchema` {foo: '5956cc99-6d01-4d6c-80a2-f0e9a707bf08'}]-(t:`Edde\Test\FooSchema`)
 //RETURN
 //	c
-				foreach ($foo->relationOf(BarSchema::class, FooBarSchema::class) as $bar) {
+				foreach ($foo->collectionOf(BarSchema::class) as $bar) {
 					$current[] = $bar->get('name');
 				}
 				sort($expect);

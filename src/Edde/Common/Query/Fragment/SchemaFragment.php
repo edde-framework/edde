@@ -16,6 +16,10 @@
 			 */
 			protected $alias;
 			/**
+			 * @var bool
+			 */
+			protected $selected = false;
+			/**
 			 * @var IWhereGroup
 			 */
 			protected $where;
@@ -29,28 +33,43 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getSchema(): ISchema {
+			public function select() : ISchemaFragment {
+				$this->selected = true;
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function isSelected() : bool {
+				return $this->selected;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getSchema() : ISchema {
 				return $this->schema;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getAlias(): string {
+			public function getAlias() : string {
 				return $this->alias;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function hasWhere(): bool {
+			public function hasWhere() : bool {
 				return $this->where !== null;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function where(): IWhereGroup {
+			public function where() : IWhereGroup {
 				if ($this->where === null) {
 					$this->where = new WhereGroup($this);
 				}

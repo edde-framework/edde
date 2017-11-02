@@ -16,10 +16,11 @@
 			 * where to a column name
 			 *
 			 * @param string $name
+			 * @param string $prefix
 			 *
 			 * @return IWhereGroup
 			 */
-			public function toColumn(string $name): IWhereGroup;
+			public function toColumn(string $name, string $prefix) : IWhereGroup;
 
 			/**
 			 * return schema fragment this where belongs to

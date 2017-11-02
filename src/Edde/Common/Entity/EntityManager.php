@@ -28,7 +28,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function createEntity(ISchema $schema): IEntity {
+			public function createEntity(ISchema $schema) : IEntity {
 				if (isset($this->entityList[$name = $schema->getName()]) === false) {
 					$this->entityList[$name] = $this->container->inject(new Entity($schema));
 				}
@@ -38,24 +38,24 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function create(string $schema, array $source = []): IEntity {
+			public function create(string $schema, array $source = []) : IEntity {
 				return $this->createEntity($schema = $this->schemaManager->load($schema))->put($this->schemaManager->generate($schema, $source));
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function load(string $schema, array $source): IEntity {
+			public function load(string $schema, array $source) : IEntity {
 				return $this->createEntity($this->schemaManager->load($schema))->load($source);
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function collection(string $schema): ICollection {
+			public function collection(string $schema) : ICollection {
 				if (isset($this->collectionList[$name = $schema]) === false) {
 					$this->container->inject($query = new SelectQuery());
-					$query->schema($schema, 'c');
+					$query->schema($schema, 'c')->select();
 					$this->collectionList[$name] = $this->container->inject(new Collection($this->storage->stream($query), $schema));
 				}
 				return clone $this->collectionList[$name];

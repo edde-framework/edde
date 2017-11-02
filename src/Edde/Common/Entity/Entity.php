@@ -3,6 +3,7 @@
 	namespace Edde\Common\Entity;
 
 		use Edde\Api\Crate\ICrate;
+		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\Inject\EntityManager;
 		use Edde\Api\Schema\Exception\LinkException;
@@ -41,14 +42,14 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getSchema(): ISchema {
+			public function getSchema() : ISchema {
 				return $this->schema;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function link(IEntity $entity, ILink $link = null): IEntity {
+			public function link(IEntity $entity, ILink $link = null) : IEntity {
 				if ($link === null) {
 					$linkList = $this->schema->getLinkList($schemaName = $entity->getSchema()->getName());
 					if (($count = count($linkList)) === 0) {
@@ -66,7 +67,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function attach(IEntity $entity): IEntity {
+			public function attach(IEntity $entity) : IEntity {
 				$relationList = $this->schema->getRelationList($schemaName = $entity->getSchema()->getName());
 				if (($count = count($relationList)) === 0) {
 					throw new RelationException(sprintf('There are no relations from [%s] to schema [%s].', $this->schema->getName(), $schemaName));
@@ -83,7 +84,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function save(): IEntity {
+			public function save() : IEntity {
 				if ($this->saving) {
 					return $this;
 				} else if ($this->isDirty() === false) {
@@ -118,7 +119,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function load(array $source): IEntity {
+			public function load(array $source) : IEntity {
 				$this->push($this->schemaManager->filter($this->schema, $source));
 				$this->exists = true;
 				return $this;
@@ -127,14 +128,34 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function exists(): bool {
+			public function collectionOf(string $schema) : ICollection {
+				$collection = $this->entityManager->collection($schema);
+				if (($count = count($relationList = $this->schema->getRelationList($schema))) === 0) {
+					throw new RelationException(sprintf('There are no relations from [%s] to schema [%s].', $this->schema->getName(), $schema));
+				} else if ($count !== 1) {
+					throw new RelationException(sprintf('There are more relations from [%s] to schema [%s]. You have to specify relation schema.', $this->schema->getName(), $schema));
+				}
+				list($relation) = $relationList;
+				$targetLink = $relation->getTargetLink();
+				$sourceLink = $relation->getSourceLink();
+				$query = $collection->getQuery();
+				$query->schema($relation->getSchema()->getName(), 'r')->where()->and()->
+				eq($targetLink->getSourceProperty()->getName())->toColumn($targetLink->getTargetProperty()->getName(), 'c')->and()->
+				eq($sourceLink->getSourceProperty()->getName())->to($this->get($sourceLink->getTargetProperty()->getName()));
+				return $collection;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function exists() : bool {
 				return $this->exists;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function isDirty(): bool {
+			public function isDirty() : bool {
 				if (parent::isDirty()) {
 					return true;
 				}
@@ -154,7 +175,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function commit(): ICrate {
+			public function commit() : ICrate {
 				parent::commit();
 				$this->linkList = [];
 				$this->relationList = [];

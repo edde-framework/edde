@@ -15,7 +15,7 @@
 		use Edde\Common\Query\NativeQuery;
 
 		abstract class AbstractSqlBuilder extends AbstractQueryBuilder {
-			protected function fragmentCreateSchema(ICrateSchemaQuery $query): INativeQuery {
+			protected function fragmentCreateSchema(ICrateSchemaQuery $query) : INativeQuery {
 				$schema = $query->getSchema();
 				$sql = 'CREATE TABLE ' . ($this->delimite($table = $schema->getName())) . " (\n\t";
 				$columnList = [];
@@ -38,7 +38,7 @@
 				return new NativeQuery($sql . implode(",\n\t", $columnList) . "\n)");
 			}
 
-			protected function fragmentInsert(IInsertQuery $insertQuery): INativeQuery {
+			protected function fragmentInsert(IInsertQuery $insertQuery) : INativeQuery {
 				$nameList = [];
 				$parameterList = [];
 				foreach ($insertQuery->getSource() as $k => $v) {
@@ -56,13 +56,16 @@
 			 * @return INativeQuery
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentSelect(ISelectQuery $selectQuery): INativeQuery {
+			protected function fragmentSelect(ISelectQuery $selectQuery) : INativeQuery {
 				$columnList = [];
 				$fromList = [];
 				$whereList = null;
 				$parameterList = [];
 				foreach ($selectQuery->getSchemaFragmentList() as $schemaFragment) {
-					$columnList[$alias] = ($alias = $this->delimite($schemaFragment->getAlias())) . '.*';
+					$alias = $this->delimite($schemaFragment->getAlias());
+					if ($schemaFragment->isSelected()) {
+						$columnList[$alias] = $alias . '.*';
+					}
 					$fromList[$alias] = $this->delimite($schemaFragment->getSchema()->getName()) . ' ' . $alias;
 					if ($schemaFragment->hasWhere()) {
 						$whereList[] = ($query = $this->fragmentWhereGroup($schemaFragment->where()))->getQuery();
@@ -82,7 +85,7 @@
 			 * @return INativeQuery
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentUpdate(IUpdateQuery $updateQuery): INativeQuery {
+			protected function fragmentUpdate(IUpdateQuery $updateQuery) : INativeQuery {
 				$schema = $updateQuery->getSchema();
 				$schemaFragment = $updateQuery->getSchemaFragment();
 				$sql = "UPDATE\n\t";
@@ -108,7 +111,7 @@
 			 * @return INativeQuery
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentWhereGroup(IWhereGroup $whereGroup): INativeQuery {
+			protected function fragmentWhereGroup(IWhereGroup $whereGroup) : INativeQuery {
 				$whereList = null;
 				$parameterList = [];
 				foreach ($whereGroup as $where) {
@@ -128,7 +131,7 @@
 			 * @return INativeQuery
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentWhere(IWhere $where): INativeQuery {
+			protected function fragmentWhere(IWhere $where) : INativeQuery {
 				return $this->fragment($where->getExpression());
 			}
 
@@ -139,11 +142,12 @@
 			 * @throws QueryBuilderException
 			 * @throws \Exception
 			 */
-			protected function fragmentWhereExpressionEq(IWhereTo $whereTo): INativeQuery {
+			protected function fragmentWhereExpressionEq(IWhereTo $whereTo) : INativeQuery {
 				$name = $this->delimite($whereTo->getSchemaFragment()->getAlias()) . '.' . $this->delimite($whereTo->getName());
 				switch ($target = $whereTo->getTarget()) {
 					case 'column':
-						return new NativeQuery($name . ' = ' . $this->delimite($whereTo->getValue()));
+						list($prefix, $column) = $whereTo->getValue();
+						return new NativeQuery($name . ' = ' . $this->delimite($prefix) . '.' . $this->delimite($column));
 					case 'value':
 						return new NativeQuery($name . ' = :' . ($parameterId = 'p_' . sha1($target . microtime(true) . random_bytes(8))), [
 							$parameterId => $whereTo->getValue(),

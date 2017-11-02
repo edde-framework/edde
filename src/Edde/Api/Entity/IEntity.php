@@ -61,6 +61,15 @@
 			public function load(array $source): IEntity;
 
 			/**
+			 * prepare m:n collection of related entities
+			 *
+			 * @param string $schema
+			 *
+			 * @return ICollection
+			 */
+			public function collectionOf(string $schema) : ICollection;
+
+			/**
 			 * is the entity loaded from storage, thus it exists?
 			 *
 			 * @return bool

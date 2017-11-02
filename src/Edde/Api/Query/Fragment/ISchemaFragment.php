@@ -6,30 +6,44 @@
 
 		interface ISchemaFragment extends IFragment {
 			/**
+			 * select this schema for data retrieval
+			 *
+			 * @return ISchemaFragment
+			 */
+			public function select() : ISchemaFragment;
+
+			/**
+			 * should be this fragment used as a data source?
+			 *
+			 * @return bool
+			 */
+			public function isSelected() : bool;
+
+			/**
 			 * get schema of this fragment
 			 *
 			 * @return ISchema
 			 */
-			public function getSchema(): ISchema;
+			public function getSchema() : ISchema;
 
 			/**
 			 * get alias of this schema
 			 *
 			 * @return string
 			 */
-			public function getAlias(): string;
+			public function getAlias() : string;
 
 			/**
 			 * is there a where fragment?
 			 *
 			 * @return bool
 			 */
-			public function hasWhere(): bool;
+			public function hasWhere() : bool;
 
 			/**
 			 * get the where fragment for this query
 			 *
 			 * @return IWhereGroup
 			 */
-			public function where(): IWhereGroup;
+			public function where() : IWhereGroup;
 		}

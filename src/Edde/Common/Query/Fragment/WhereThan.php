@@ -18,9 +18,12 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function thanColumn(string $name): IWhereGroup {
+			public function thanColumn(string $name, string $prefix) : IWhereGroup {
 				$this->target = 'column';
-				$this->value = $name;
+				$this->value = [
+					$prefix,
+					$name,
+				];
 				return $this->whereGroup;
 			}
 		}
