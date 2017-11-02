@@ -3,4 +3,10 @@
 	namespace Edde\Api\Query\Fragment;
 
 		interface IFragment {
+			/**
+			 * type of this query
+			 *
+			 * @return string
+			 */
+			public function getType(): string;
 		}

@@ -40,4 +40,18 @@
 			public function gt(string $name): IWhereThan {
 				return $this->where = new WhereThan($this->whereGroup, __FUNCTION__, $name);
 			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getRelation(): string {
+				return $this->relation;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getExpression(): IWhereExpression {
+				return $this->where;
+			}
 		}

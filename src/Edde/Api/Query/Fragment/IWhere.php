@@ -20,4 +20,16 @@
 			 * @return IWhereThan
 			 */
 			public function gt(string $name): IWhereThan;
+
+			/**
+			 * return logical relation (and, or, ...)
+			 *
+			 * @return string
+			 */
+			public function getRelation(): string;
+
+			/**
+			 * @return IWhereExpression
+			 */
+			public function getExpression(): IWhereExpression;
 		}

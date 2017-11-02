@@ -24,4 +24,11 @@
 			public function or (): IWhere {
 				return $this->whereList[] = new Where($this, 'or');
 			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getIterator() {
+				yield from $this->whereList;
+			}
 		}

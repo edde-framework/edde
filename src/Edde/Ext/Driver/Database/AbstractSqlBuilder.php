@@ -2,7 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Driver\Database;
 
+		use Edde\Api\Query\Exception\QueryBuilderException;
 		use Edde\Api\Query\Fragment\IWhere;
+		use Edde\Api\Query\Fragment\IWhereGroup;
 		use Edde\Api\Query\ICrateSchemaQuery;
 		use Edde\Api\Query\IInsertQuery;
 		use Edde\Api\Query\INativeTransaction;
@@ -59,6 +61,12 @@
 				return (new NativeTransaction())->query(new NativeQuery($sql));
 			}
 
+			/**
+			 * @param IUpdateQuery $updateQuery
+			 *
+			 * @return INativeTransaction
+			 * @throws QueryBuilderException
+			 */
 			protected function fragmentUpdate(IUpdateQuery $updateQuery): INativeTransaction {
 				$schema = $updateQuery->getSchema();
 				$sql = "UPDATE\n\t";
@@ -73,11 +81,33 @@
 				$sql .= implode(",\n\t", $nameList) . "\n";
 				if ($updateQuery->hasWhere()) {
 					$sql .= "WHERE\n\t";
-					$this->fragmentWhere($updateQuery->where());
+					$this->fragmentWhereGroup($updateQuery->where());
 				}
 				return (new NativeTransaction())->query(new NativeQuery($sql, $parameterList));
 			}
 
-			protected function fragmentWhere(IWhere $whereFragment): INativeTransaction {
+			/**
+			 * @param IWhereGroup $whereGroup
+			 *
+			 * @return INativeTransaction
+			 * @throws QueryBuilderException
+			 */
+			protected function fragmentWhereGroup(IWhereGroup $whereGroup): INativeTransaction {
+				$whereList = [];
+				foreach ($whereGroup as $where) {
+					$whereList[] = strtoupper($where->getRelation());
+					$whereList[] = $this->fragmentWhere($where);
+				}
+			}
+
+			/**
+			 * @param IWhere $where
+			 *
+			 * @return INativeTransaction
+			 * @throws QueryBuilderException
+			 */
+			protected function fragmentWhere(IWhere $where): INativeTransaction {
+				$expression = $where->getExpression();
+				return $this->fragment($expression);
 			}
 		}

@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Query\Fragment;
 
-		interface IWhereGroup extends IFragment {
+		interface IWhereGroup extends IFragment, \IteratorAggregate {
 			/**
 			 * where and relation
 			 *
@@ -16,4 +16,9 @@
 			 * @return IWhere
 			 */
 			public function or (): IWhere;
+
+			/**
+			 * @return \Traversable|IWhere[]
+			 */
+			public function getIterator();
 		}

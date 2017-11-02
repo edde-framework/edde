@@ -3,15 +3,9 @@
 	namespace Edde\Api\Query;
 
 		use Edde\Api\Config\IConfigurable;
+		use Edde\Api\Query\Fragment\IFragment;
 
-		interface IQuery extends IConfigurable {
-			/**
-			 * type of this query
-			 *
-			 * @return string
-			 */
-			public function getType(): string;
-
+		interface IQuery extends IFragment, IConfigurable {
 			/**
 			 * parameter list of this query
 			 *

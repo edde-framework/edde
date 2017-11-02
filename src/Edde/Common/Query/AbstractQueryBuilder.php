@@ -3,6 +3,7 @@
 	namespace Edde\Common\Query;
 
 		use Edde\Api\Query\Exception\QueryBuilderException;
+		use Edde\Api\Query\Fragment\IFragment;
 		use Edde\Api\Query\INativeTransaction;
 		use Edde\Api\Query\IQuery;
 		use Edde\Api\Query\IQueryBuilder;
@@ -22,10 +23,20 @@
 			 * @throws QueryBuilderException
 			 */
 			public function query(IQuery $query): INativeTransaction {
-				if (isset($this->fragmentList[$name = $query->getType()]) === false) {
-					throw new QueryBuilderException(sprintf('Unsupported query type [%s] in [%s].', $name, static::class));
+				return $this->fragment($query);
+			}
+
+			/**
+			 * @param IFragment $fragment
+			 *
+			 * @return INativeTransaction
+			 * @throws QueryBuilderException
+			 */
+			protected function fragment(IFragment $fragment): INativeTransaction {
+				if (isset($this->fragmentList[$name = $fragment->getType()]) === false) {
+					throw new QueryBuilderException(sprintf('Unsupported fragment type [%s] in [%s].', $name, static::class));
 				}
-				return $this->fragmentList[$name]($query);
+				return $this->fragmentList[$name]($fragment);
 			}
 
 			protected function handleSetup(): void {
