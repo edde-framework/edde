@@ -3,7 +3,6 @@
 	namespace Edde\Ext\Driver\Graph\Neo4j;
 
 		use Edde\Api\Query\Exception\QueryBuilderException;
-		use Edde\Api\Query\Exception\QueryException;
 		use Edde\Api\Query\Fragment\IWhere;
 		use Edde\Api\Query\Fragment\IWhereGroup;
 		use Edde\Api\Query\Fragment\IWhereTo;
@@ -17,7 +16,7 @@
 		use Edde\Common\Query\TransactionQuery;
 
 		class Neo4jQueryBuilder extends AbstractQueryBuilder {
-			protected function fragmentCreateSchema(ICrateSchemaQuery $crateSchemaQuery) : ITransactionQuery {
+			protected function fragmentCreateSchema(ICrateSchemaQuery $crateSchemaQuery): ITransactionQuery {
 				/**
 				 * relations should not be physically created
 				 */
@@ -57,10 +56,11 @@
 				return $transactionQuery;
 			}
 
-			protected function fragmentInsert(IInsertQuery $insertQuery) : ITransactionQuery {
+			protected function fragmentInsert(IInsertQuery $insertQuery): ITransactionQuery {
 				$source = $this->schemaManager->sanitize(($schema = $insertQuery->getSchema()), $insertQuery->getSource());
 				if ($schema->isRelation()) {
-					throw new QueryException('Relation schema is not implemented yet');
+					return new TransactionQuery();
+//					throw new QueryException('Relation schema is not implemented yet');
 				}
 				return new TransactionQuery('CREATE (n:' . $this->delimite($schema->getName()) . ' $set)', ['set' => $source]);
 			}
@@ -71,7 +71,7 @@
 			 * @return ITransactionQuery
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentSelect(ISelectQuery $selectQuery) : ITransactionQuery {
+			protected function fragmentSelect(ISelectQuery $selectQuery): ITransactionQuery {
 				$returnList = [];
 				$cypher = "MATCH\n\t";
 				$matchList = [];
@@ -97,7 +97,7 @@
 			 * @return ITransactionQuery
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentUpdate(IUpdateQuery $updateQuery) : ITransactionQuery {
+			protected function fragmentUpdate(IUpdateQuery $updateQuery): ITransactionQuery {
 				$schemaFragment = $updateQuery->getSchemaFragment();
 				$cypher = "MATCH\n\t(" . ($alias = $this->delimite($schemaFragment->getAlias())) . ':' . $this->delimite(($schema = $schemaFragment->getSchema())->getName()) . ")\n";
 				$parameterList = [];
@@ -117,7 +117,7 @@
 			 * @return ITransactionQuery
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentWhereGroup(IWhereGroup $whereGroup) : ITransactionQuery {
+			protected function fragmentWhereGroup(IWhereGroup $whereGroup): ITransactionQuery {
 				$whereList = null;
 				$parameterList = [];
 				foreach ($whereGroup as $where) {
@@ -137,7 +137,7 @@
 			 * @return ITransactionQuery
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentWhere(IWhere $where) : ITransactionQuery {
+			protected function fragmentWhere(IWhere $where): ITransactionQuery {
 				return $this->fragment($where->getExpression());
 			}
 
@@ -148,7 +148,7 @@
 			 * @throws QueryBuilderException
 			 * @throws \Exception
 			 */
-			protected function fragmentWhereExpressionEq(IWhereTo $whereTo) : ITransactionQuery {
+			protected function fragmentWhereExpressionEq(IWhereTo $whereTo): ITransactionQuery {
 				$name = $this->delimite($whereTo->getSchemaFragment()->getAlias()) . '.' . $this->delimite($whereTo->getName());
 				switch ($target = $whereTo->getTarget()) {
 //					case 'column':
@@ -165,14 +165,14 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function delimite(string $delimite) : string {
+			public function delimite(string $delimite): string {
 				return '`' . str_replace('`', '``', $delimite) . '`';
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function type(string $type) : string {
+			public function type(string $type): string {
 				throw new QueryBuilderException(sprintf('Unknown type [%s] in query builder [%s]', $type, static::class));
 			}
 		}
