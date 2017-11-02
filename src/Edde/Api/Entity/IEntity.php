@@ -31,6 +31,18 @@
 			public function attach(IEntity $entity): IEntity;
 
 			/**
+			 * $this is relation entity which connects the given two entities together
+			 * using specified relation (m:n, 1:n included)
+			 *
+			 * @param IEntity   $entity
+			 * @param IEntity   $to
+			 * @param IRelation $relation
+			 *
+			 * @return IEntity
+			 */
+			public function connect(IEntity $entity, IEntity $to, IRelation $relation): IEntity;
+
+			/**
 			 * mark the given entity as related to this one (to save the tree
 			 * of entities)
 			 *

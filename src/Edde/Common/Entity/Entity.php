@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Entity;
 
-		use Edde\Api\Crate\ICrate;
 		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\Inject\EntityManager;
@@ -62,6 +61,13 @@
 				$this->relatedTo($relationEntity, $relation);
 				$relationEntity->related($this, $relation);
 				return $relationEntity;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function connect(IEntity $entity, IEntity $to, IRelation $relation): IEntity {
+				return $this;
 			}
 
 			/**
@@ -176,16 +182,6 @@
 					$array[$k] = $this->get($k);
 				}
 				return $array;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function commit(): ICrate {
-				parent::commit();
-				$this->relatedList = [];
-				$this->relatedToList = [];
-				return $this;
 			}
 
 			public function __clone() {
