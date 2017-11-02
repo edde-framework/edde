@@ -127,6 +127,13 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function exists(): bool {
+				return $this->exists;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function isDirty(): bool {
 				if (parent::isDirty()) {
 					return true;

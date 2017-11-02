@@ -48,6 +48,21 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function entity($name): IEntity {
+				$where = $this->stream->getQuery()->schema($this->schema, 'c')->where();
+				$schema = $this->schemaManager->load($this->schema);
+				foreach ($schema->getPrimaryList() as $property) {
+					$where->or()->eq($property->getName())->to($name);
+				}
+				foreach ($schema->getUniqueList() as $property) {
+					$where->or()->eq($property->getName())->to($name);
+				}
+				return $this->getEntity();
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function getIterator() {
 				foreach ($this->stream as $source) {
 					yield $this->entityManager->load($this->schema, $source);

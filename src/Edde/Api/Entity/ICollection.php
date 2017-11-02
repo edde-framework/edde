@@ -29,6 +29,18 @@
 			public function getEntity(): IEntity;
 
 			/**
+			 * a bit magical method which try to find an entity by primary keys and all
+			 * unique keys
+			 *
+			 * @param mixed $name
+			 *
+			 * @return IEntity
+			 *
+			 * @throws EntityNotFoundException
+			 */
+			public function entity($name): IEntity;
+
+			/**
 			 * @return Traversable|IEntity[]
 			 */
 			public function getIterator();

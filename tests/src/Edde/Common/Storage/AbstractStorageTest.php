@@ -10,7 +10,6 @@
 		use Edde\Api\Storage\Exception\IntegrityException;
 		use Edde\Api\Storage\Exception\NullValueException;
 		use Edde\Api\Storage\Exception\StorageException;
-		use Edde\Api\Storage\Exception\UnknownTableException;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Query\CreateSchemaQuery;
 		use Edde\Common\Schema\BarSchema;
@@ -179,28 +178,33 @@
 				$foo = $this->entityManager->create(FooSchema::class, [
 					'name' => 'foo The First',
 				]);
-				$this->entityManager->create(FooSchema::class, [
+				self::assertFalse($foo->exists());
+				$entity = $this->entityManager->create(FooSchema::class, [
 					'name' => 'foo The Second',
 				])->save();
+				self::assertTrue($entity->exists());
 				$bar = $this->entityManager->create(BarSchema::class, [
 					'name' => 'bar The Second',
 				]);
+				self::assertFalse($bar->exists());
 				$bar2 = $this->entityManager->create(BarSchema::class, [
 					'name' => 'bar The Third',
 				]);
+				self::assertFalse($bar2->exists());
 				$this->schemaManager->load(FooBarSchema::class);
 				$foo->attach($bar);
 				$foo->attach($bar2);
 				$foo->save();
-				self::assertTrue(true, 'yay!!');
+				self::assertTrue($foo->exists());
+				self::assertTrue($bar->exists());
+				self::assertTrue($bar2->exists());
 			}
 
 			/**
 			 * @throws EntityNotFoundException
-			 * @throws UnknownTableException
 			 */
 			public function testRelation() {
-				$foo = $this->storage->collection(FooSchema::class)->load('foo The First');
+				$foo = $this->entityManager->collection(FooSchema::class)->entity('foo The First');
 				self::assertSame('foo The First', $foo->get('name'));
 				$expect = [
 					'bar The Second',

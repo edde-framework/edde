@@ -71,7 +71,7 @@
 				}
 				$sql = "SELECT\n\t" . implode(",\n\t", $columnList) . "\nFROM\n\t" . implode(",\n\t", $fromList) . "\n";
 				if ($whereList) {
-					$sql .= "WHERE\n\t" . implode("AND\n", $whereList);
+					$sql .= 'WHERE' . implode("AND\n", $whereList);
 				}
 				return new NativeQuery($sql, $parameterList);
 			}
@@ -96,7 +96,7 @@
 				}
 				$sql .= implode(",\n\t", $nameList) . "\n";
 				if ($updateQuery->hasWhere()) {
-					$sql .= "WHERE\n\t" . ($query = $this->fragmentWhereGroup($updateQuery->where()))->getQuery();
+					$sql .= 'WHERE' . ($query = $this->fragmentWhereGroup($updateQuery->where()))->getQuery();
 					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
 				return new NativeQuery($sql, $parameterList);
@@ -109,15 +109,17 @@
 			 * @throws QueryBuilderException
 			 */
 			protected function fragmentWhereGroup(IWhereGroup $whereGroup): INativeQuery {
-				$whereList = [];
+				$whereList = null;
 				$parameterList = [];
 				foreach ($whereGroup as $where) {
-					$whereList[] = strtoupper($where->getRelation());
-					$whereList[] = ($query = $this->fragmentWhere($where))->getQuery();
+					$sql = "\n\t";
+					if ($whereList) {
+						$sql = ' ' . strtoupper($where->getRelation()) . "\n\t";
+					}
+					$whereList .= $sql . ($query = $this->fragmentWhere($where))->getQuery();
 					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
-				array_shift($whereList);
-				return new NativeQuery(implode(",\n\t", $whereList), $parameterList);
+				return new NativeQuery($whereList, $parameterList);
 			}
 
 			/**

@@ -7,6 +7,6 @@
 			 * @inheritdoc
 			 */
 			public function filter($value, array $options = []) {
-				return new \DateTime($value);
+				return $value ? new \DateTime($value) : null;
 			}
 		}

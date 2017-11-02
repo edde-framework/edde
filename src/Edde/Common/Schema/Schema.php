@@ -122,7 +122,7 @@
 				}
 				$this->uniqueList = [];
 				foreach ($this->propertyList as $name => $property) {
-					if ($property->isUnique()) {
+					if ($property->isUnique() && $property->isPrimary() === false) {
 						$this->uniqueList[$name] = $property;
 					}
 				}

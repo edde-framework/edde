@@ -59,4 +59,11 @@
 			 * @return IEntity
 			 */
 			public function load(array $source): IEntity;
+
+			/**
+			 * is the entity loaded from storage, thus it exists?
+			 *
+			 * @return bool
+			 */
+			public function exists(): bool;
 		}
