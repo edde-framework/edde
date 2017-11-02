@@ -158,12 +158,8 @@
 					throw new RelationException(sprintf('There are more relations from [%s] to schema [%s]. You have to specify relation schema.', $this->schema->getName(), $schema));
 				}
 				list($relation) = $relationList;
-				$targetLink = $relation->getTargetLink();
-				$sourceLink = $relation->getSourceLink();
 				$query = $collection->getQuery();
-				$query->schema($relation->getSchema()->getName(), 'r')->where()->and()->
-				eq($targetLink->getSourceProperty()->getName())->toColumn($targetLink->getTargetProperty()->getName(), 'c')->and()->
-				eq($sourceLink->getSourceProperty()->getName())->to($this->get($sourceLink->getTargetProperty()->getName()));
+				$query->schema($this->schema->getName(), 'r')->relation($relation->getSchema()->getName(), $this->toArray())->schema($relation->getTargetLink()->getTargetSchema()->getName());
 				return $collection;
 			}
 
