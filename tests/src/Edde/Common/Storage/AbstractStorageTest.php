@@ -216,12 +216,6 @@
 					'bar The Third',
 				];
 				$current = [];
-//MATCH
-//				(c:`Edde\Test\BarSchema`)-[r:`Edde\Test\FooBarSchema`]-(t:`Edde\Test\FooSchema`)
-//WHERE
-//              t.foo = '5956cc99-6d01-4d6c-80a2-f0e9a707bf08'
-//RETURN
-//	c
 				foreach ($foo->collectionOf(BarSchema::class) as $bar) {
 					$current[] = $bar->get('name');
 				}

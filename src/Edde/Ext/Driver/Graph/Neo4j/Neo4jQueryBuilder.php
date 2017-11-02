@@ -164,9 +164,9 @@
 			protected function fragmentWhereExpressionEq(IWhereTo $whereTo): ITransactionQuery {
 				$name = $this->delimite($whereTo->getSchemaFragment()->getAlias()) . '.' . $this->delimite($whereTo->getName());
 				switch ($target = $whereTo->getTarget()) {
-//					case 'column':
-//						list($prefix, $column) = $whereTo->getValue();
-//						return new TransactionQuery($name . ': ' . $this->delimite($prefix) . '.' . $this->delimite($column));
+					case 'column':
+						list($prefix, $column) = $whereTo->getValue();
+						return new TransactionQuery($name . ' = ' . $this->delimite($prefix) . '.' . $this->delimite($column));
 					case 'value':
 						return new TransactionQuery($name . ' = $' . ($parameterId = 'p_' . sha1($target . microtime(true) . random_bytes(8))), [
 							$parameterId => $whereTo->getValue(),
