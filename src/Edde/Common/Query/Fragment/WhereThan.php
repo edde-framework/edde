@@ -7,16 +7,10 @@
 
 		class WhereThan extends WhereExpression implements IWhereThan {
 			/**
-			 * @var string
-			 */
-			protected $type;
-			protected $value;
-
-			/**
 			 * @inheritdoc
 			 */
 			public function than($value): IWhereGroup {
-				$this->type = 'value';
+				$this->target = 'value';
 				$this->value = $value;
 				return $this->whereGroup;
 			}
@@ -25,7 +19,7 @@
 			 * @inheritdoc
 			 */
 			public function thanColumn(string $name): IWhereGroup {
-				$this->type = 'column';
+				$this->target = 'column';
 				$this->value = $name;
 				return $this->whereGroup;
 			}

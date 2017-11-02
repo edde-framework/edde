@@ -5,6 +5,7 @@
 		use Edde\Api\Query\Exception\QueryBuilderException;
 		use Edde\Api\Query\Fragment\IWhere;
 		use Edde\Api\Query\Fragment\IWhereGroup;
+		use Edde\Api\Query\Fragment\IWhereTo;
 		use Edde\Api\Query\ICrateSchemaQuery;
 		use Edde\Api\Query\IInsertQuery;
 		use Edde\Api\Query\INativeTransaction;
@@ -98,6 +99,8 @@
 					$whereList[] = strtoupper($where->getRelation());
 					$whereList[] = $this->fragmentWhere($where);
 				}
+				array_shift($whereList);
+				return (new NativeTransaction())->query(new NativeQuery(implode(",\n\t", $whereList)));
 			}
 
 			/**
@@ -107,7 +110,25 @@
 			 * @throws QueryBuilderException
 			 */
 			protected function fragmentWhere(IWhere $where): INativeTransaction {
-				$expression = $where->getExpression();
-				return $this->fragment($expression);
+				return $this->fragment($where->getExpression());
+			}
+
+			/**
+			 * @param IWhereTo $whereTo
+			 *
+			 * @return INativeTransaction
+			 * @throws QueryBuilderException
+			 * @throws \Exception
+			 */
+			protected function fragmentWhereExpressionEq(IWhereTo $whereTo): INativeTransaction {
+				switch ($target = $whereTo->getTarget()) {
+					case 'column':
+						return (new NativeTransaction())->query(new NativeQuery($this->delimite($whereTo->getName()) . ' = ' . $this->delimite($whereTo->getValue())));
+					case 'value':
+						return (new NativeTransaction())->query(new NativeQuery($this->delimite($whereTo->getName()) . ' = :' . ($parameterId = sha1($target . microtime(true) . random_bytes(8))), [
+							$parameterId => $whereTo->getValue(),
+						]));
+				}
+				throw new QueryBuilderException(sprintf('Unknown where expression [%s] target [%s].', $whereTo->getType(), $target));
 			}
 		}

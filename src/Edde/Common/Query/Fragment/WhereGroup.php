@@ -11,6 +11,10 @@
 			 */
 			protected $whereList = [];
 
+			public function __construct() {
+				parent::__construct('where-group');
+			}
+
 			/**
 			 * @inheritdoc
 			 */

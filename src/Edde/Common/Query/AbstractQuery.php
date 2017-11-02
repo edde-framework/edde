@@ -12,4 +12,11 @@
 			public function getParameterList(): array {
 				return [];
 			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getDescription(): ?string {
+				return static::class;
+			}
 		}
