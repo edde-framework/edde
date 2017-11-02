@@ -25,11 +25,7 @@
 			/**
 			 * @var IEntity[]
 			 */
-			protected $relatedList = [];
-			/**
-			 * @var IEntity[]
-			 */
-			protected $relatedToList = [];
+			protected $linkList = [];
 			protected $exists = false;
 			protected $saving = false;
 
@@ -60,34 +56,18 @@
 			 * @inheritdoc
 			 */
 			public function connect(IEntity $entity, IEntity $to, IRelation $relation): IEntity {
-				$this->related($entity, $relation);
-				$this->related($to, $relation);
-				$to->relatedTo($this, $relation);
-				$to->relatedTo($entity, $relation);
-				$entity->relatedTo($this, $relation);
-				$entity->related($entity, $relation);
+				$this->link($entity);
+				$this->link($to);
+				$entity->link($to);
+				$to->link($entity);
 				return $this;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function related(IEntity $entity, IRelation $relation): IEntity {
-				$this->relatedList[] = [
-					$entity,
-					$relation,
-				];
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function relatedTo(IEntity $entity, IRelation $relation): IEntity {
-				$this->relatedToList[] = [
-					$entity,
-					$relation,
-				];
+			public function link(IEntity $entity): IEntity {
+				$this->linkList[] = $entity;
 				return $this;
 			}
 
@@ -102,6 +82,9 @@
 				}
 				try {
 					$this->saving = true;
+					foreach ($this->linkList as $entity) {
+						$entity->save();
+					}
 					$query = new InsertQuery($this->schema, $source = $this->toArray());
 					if ($this->exists) {
 						$query = new UpdateQuery($this->schema, $source);
@@ -162,12 +145,7 @@
 				if (parent::isDirty()) {
 					return true;
 				}
-				foreach ($this->relatedList as $entity) {
-					if ($entity->isDirty()) {
-						return true;
-					}
-				}
-				foreach ($this->relatedToList as $entity) {
+				foreach ($this->linkList as $entity) {
 					if ($entity->isDirty()) {
 						return true;
 					}
@@ -185,8 +163,7 @@
 
 			public function __clone() {
 				parent::__clone();
-				$this->relatedList = [];
-				$this->relatedToList = [];
+				$this->linkList = [];
 				$this->exists = false;
 			}
 		}

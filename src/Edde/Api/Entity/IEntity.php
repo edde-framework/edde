@@ -43,25 +43,14 @@
 			public function connect(IEntity $entity, IEntity $to, IRelation $relation): IEntity;
 
 			/**
-			 * mark the given entity as related to this one (to save the tree
-			 * of entities)
+			 * when $this or $entity is saved, the other one is saved too; links will remain
+			 * after commit
 			 *
-			 * @param IEntity   $entity
-			 * @param IRelation $relation
-			 *
-			 * @return IEntity
-			 */
-			public function related(IEntity $entity, IRelation $relation): IEntity;
-
-			/**
-			 * reverse direction of the related method
-			 *
-			 * @param IEntity   $entity
-			 * @param IRelation $relation
+			 * @param IEntity $entity
 			 *
 			 * @return IEntity
 			 */
-			public function relatedTo(IEntity $entity, IRelation $relation): IEntity;
+			public function link(IEntity $entity): IEntity;
 
 			/**
 			 * save this entity into storage (and all related stuff to this entity)
