@@ -4,10 +4,11 @@
 
 		use Edde\Api\Query\Fragment\ISchemaFragment;
 		use Edde\Api\Query\ISelectQuery;
-		use Edde\Api\Schema\ISchema;
+		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Common\Query\Fragment\SchemaFragment;
 
 		class SelectQuery extends AbstractQuery implements ISelectQuery {
+			use SchemaManager;
 			/**
 			 * @var ISchemaFragment[]
 			 */
@@ -20,9 +21,9 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function schema(ISchema $schema, string $alias): ISchemaFragment {
-				if (isset($this->schemaFragmentList[$schemaId = ($schema->getName() . $alias)]) === false) {
-					$this->schemaFragmentList[$schemaId] = new SchemaFragment($schema, $alias);
+			public function schema(string $schema, string $alias): ISchemaFragment {
+				if (isset($this->schemaFragmentList[$schemaId = ($schema . $alias)]) === false) {
+					$this->schemaFragmentList[$schemaId] = new SchemaFragment($this->schemaManager->load($schema), $alias);
 				}
 				return $this->schemaFragmentList[$schemaId];
 			}

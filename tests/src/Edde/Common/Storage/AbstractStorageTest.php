@@ -161,7 +161,7 @@
 				$entity->save();
 				$collection = $this->entityManager->collection(SimpleSchema::class);
 				$query = $collection->getQuery();
-				$query->schema($this->schemaManager->load(SimpleSchema::class), 'c')->where()->eq('guid')->to($entity->get('guid'));
+				$query->schema(SimpleSchema::class, 'c')->where()->and()->eq('guid')->to($entity->get('guid'));
 				$entity = $collection->getEntity();
 				self::assertFalse($entity->isDirty(), 'entity should NOT be dirty right after load!');
 				self::assertEquals($expect, $array = $entity->toArray());

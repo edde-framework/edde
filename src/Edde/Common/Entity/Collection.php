@@ -6,23 +6,24 @@
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\Inject\EntityManager;
 		use Edde\Api\Query\ISelectQuery;
-		use Edde\Api\Schema\ISchema;
+		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
 		use Edde\Api\Storage\IStream;
 		use Edde\Common\Object\Object;
 
 		class Collection extends Object implements ICollection {
 			use EntityManager;
+			use SchemaManager;
 			/**
 			 * @var IStream
 			 */
 			protected $stream;
 			/**
-			 * @var ISchema
+			 * @var string
 			 */
 			protected $schema;
 
-			public function __construct(IStream $stream, ISchema $schema) {
+			public function __construct(IStream $stream, string $schema) {
 				$this->stream = $stream;
 				$this->schema = $schema;
 			}
@@ -48,9 +49,8 @@
 			 * @inheritdoc
 			 */
 			public function getIterator() {
-				$name = $this->schema->getName();
 				foreach ($this->stream as $source) {
-					yield $this->entityManager->load($name, $source);
+					yield $this->entityManager->load($this->schema, $source);
 				}
 			}
 

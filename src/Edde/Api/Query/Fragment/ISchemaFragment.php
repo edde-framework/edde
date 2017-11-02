@@ -29,7 +29,7 @@
 			/**
 			 * get the where fragment for this query
 			 *
-			 * @return IWhere
+			 * @return IWhereGroup
 			 */
-			public function where(): IWhere;
+			public function where(): IWhereGroup;
 		}

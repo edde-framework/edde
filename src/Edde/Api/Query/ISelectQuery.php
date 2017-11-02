@@ -3,7 +3,6 @@
 	namespace Edde\Api\Query;
 
 		use Edde\Api\Query\Fragment\ISchemaFragment;
-		use Edde\Api\Schema\ISchema;
 
 		/**
 		 * Formal interface for Select Queries (also to map relevant fragments).
@@ -12,12 +11,12 @@
 			/**
 			 * add a schema to query to be queried
 			 *
-			 * @param ISchema $schema
-			 * @param string  $alias
+			 * @param string $schema
+			 * @param string $alias
 			 *
 			 * @return ISchemaFragment
 			 */
-			public function schema(ISchema $schema, string $alias): ISchemaFragment;
+			public function schema(string $schema, string $alias): ISchemaFragment;
 
 			/**
 			 * return list of schemas being queried
