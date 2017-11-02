@@ -83,6 +83,9 @@
 			 * @inheritdoc
 			 */
 			public function save(): IEntity {
+				if ($this->isDirty() === false) {
+					return $this;
+				}
 				$source = $this->schemaManager->sanitize($this->schema, $this->toArray());
 				$query = new InsertQuery($this->schema, $source);
 				if ($this->exists) {
