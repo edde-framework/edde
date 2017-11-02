@@ -56,8 +56,19 @@
 			 * @inheritdoc
 			 */
 			public function connect(IEntity $entity, IEntity $to, IRelation $relation): IEntity {
+				/**
+				 * link both entities to "me" as I'm a relation entity
+				 */
 				$this->link($entity);
 				$this->link($to);
+				/**
+				 * link both entities to "me"
+				 */
+				$entity->link($this);
+				$to->link($this);
+				/**
+				 * link both entities between themselfs
+				 */
 				$entity->link($to);
 				$to->link($entity);
 				return $this;
