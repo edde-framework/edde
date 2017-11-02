@@ -4,7 +4,6 @@
 
 		use Edde\Api\Query\Exception\QueryBuilderException;
 		use Edde\Api\Query\Fragment\IFragment;
-		use Edde\Api\Query\INativeTransaction;
 		use Edde\Api\Query\IQuery;
 		use Edde\Api\Query\IQueryBuilder;
 		use Edde\Api\Query\ITransactionQuery;
@@ -29,7 +28,7 @@
 			/**
 			 * @param IFragment $fragment
 			 *
-			 * @return INativeTransaction
+			 * @return ITransactionQuery
 			 * @throws QueryBuilderException
 			 */
 			protected function fragment(IFragment $fragment) : ITransactionQuery {

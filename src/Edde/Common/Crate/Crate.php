@@ -19,7 +19,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function set(string $property, $value): ICrate {
+			public function set(string $property, $value) : ICrate {
 				$this->getProperty($property)->setValue($value);
 				return $this;
 			}
@@ -34,14 +34,14 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function hasProperty(string $name): bool {
+			public function hasProperty(string $name) : bool {
 				return isset($this->propertyList[$name]);
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getProperty(string $name): IProperty {
+			public function getProperty(string $name) : IProperty {
 				if (isset($this->propertyList[$name]) === false) {
 					$this->propertyList[$name] = new Property($name);
 				}
@@ -51,7 +51,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function put(array $source): ICrate {
+			public function put(array $source) : ICrate {
 				foreach ($source as $k => $v) {
 					$this->getProperty($k)->setValue($v);
 				}
@@ -61,7 +61,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function push(array $source): ICrate {
+			public function push(array $source) : ICrate {
 				foreach ($source as $k => $v) {
 					$this->getProperty($k)->setDefault($v);
 				}
@@ -71,7 +71,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function commit(): ICrate {
+			public function commit() : ICrate {
 				foreach ($this->propertyList as $property) {
 					$property->commit();
 				}
@@ -82,7 +82,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function setDirty(bool $dirty = true): ICrate {
+			public function setDirty(bool $dirty = true) : ICrate {
 				$this->dirty = $dirty;
 				return $this;
 			}
@@ -90,7 +90,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function isDirty(): bool {
+			public function isDirty() : bool {
 				if ($this->dirty !== null) {
 					return $this->dirty;
 				}
@@ -105,7 +105,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getDirtyProperties(): array {
+			public function getDirtyProperties() : array {
 				$dirtyList = [];
 				foreach ($this->propertyList as $name => $property) {
 					if ($property->isDirty()) {
@@ -118,7 +118,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function isEmpty(): bool {
+			public function isEmpty() : bool {
 				foreach ($this->propertyList as $property) {
 					if ($property->isEmpty() === false) {
 						return false;
@@ -130,7 +130,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function toArray(): array {
+			public function toArray() : array {
 				$source = [];
 				foreach ($this->propertyList as $name => $property) {
 					$source[$name] = $property->get();

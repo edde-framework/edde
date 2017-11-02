@@ -7,10 +7,10 @@
 		use Edde\Api\Query\ICrateSchemaQuery;
 		use Edde\Api\Query\IInsertQuery;
 		use Edde\Api\Query\INativeTransaction;
+		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Query\ITransactionQuery;
 		use Edde\Common\Query\AbstractQueryBuilder;
 		use Edde\Common\Query\NativeQuery;
-		use Edde\Common\Query\NativeTransaction;
 		use Edde\Common\Query\TransactionQuery;
 
 		class Neo4jQueryBuilder extends AbstractQueryBuilder {
@@ -55,31 +55,27 @@
 			}
 
 			protected function fragmentInsert(IInsertQuery $insertQuery) : ITransactionQuery {
-				$source = $this->schemaManager->filter(($schema = $insertQuery->getSchema()), $insertQuery->getSource());
+				$source = $this->schemaManager->sanitize(($schema = $insertQuery->getSchema()), $insertQuery->getSource());
 				return new TransactionQuery('CREATE (n:' . $this->delimite($schema->getName()) . ' $set)', ['set' => $source]);
 			}
 
 			/**
-			 * @param INode $root
+			 * @param ISelectQuery $selectQuery
 			 *
-			 * @return INativeTransaction
-			 * @throws QueryBuilderException
+			 * @return ITransactionQuery
 			 */
-			protected function fragmentSelect(INode $root) : INativeTransaction {
-				$parameterList = [];
-				$cypher = null;
-				$alias = null;
-				if ($root->hasNode('table-list')) {
-					foreach ($root->getNode('table-list')->getNodeList() as $node) {
-						$cypher .= "MATCH\n\t(" . ($alias = $node->getAttribute('alias')) . ':' . $this->delimite($node->getAttribute('table')) . ")\n";
+			protected function fragmentSelect(ISelectQuery $selectQuery) : ITransactionQuery {
+				$returnList = [];
+				$cypher = "MATCH\n\t";
+				$matchList = [];
+				foreach ($selectQuery->getSchemaFragmentList() as $schemaFragment) {
+					$matchList[] = '(' . $this->delimite($alias = $schemaFragment->getAlias()) . ':' . $this->delimite($schemaFragment->getSchema()->getName()) . ')';
+					if ($schemaFragment->isSelected()) {
+						$returnList[] = $alias;
 					}
 				}
-				if ($root->hasNode('where-list')) {
-					$query = $this->fragmentWhereList($root->getNode('where-list'));
-					$cypher .= "WHERE\n" . $query->getQuery() . "\n";
-					$parameterList = $query->getParameterList();
-				}
-				return (new NativeTransaction())->query(new NativeQuery($cypher . 'RETURN ' . $alias, $parameterList));
+				$cypher .= implode(",\n\t", $matchList) . "\nRETURN\n\t" . implode(', ', $returnList);
+				return new TransactionQuery($cypher);
 			}
 
 			/**

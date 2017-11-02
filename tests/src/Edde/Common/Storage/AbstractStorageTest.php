@@ -150,12 +150,12 @@
 			public function testUpdate() {
 				$entity = $this->entityManager->create(SimpleSchema::class, [
 					'name'     => 'to-be-updated',
-					'optional' => null,
+					'optional' => 'this is a new nice and updated string',
 					'value'    => 3.14,
 					'date'     => new \DateTime('24.12.2020 12:24:13'),
 					'question' => false,
 				])->save();
-				$entity->set('optional', 'this is a new nice and updated string');
+				$entity->set('optional', null);
 				$expect = $entity->toArray();
 				$entity->save();
 				$collection = $this->entityManager->collection(SimpleSchema::class);

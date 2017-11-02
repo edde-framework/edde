@@ -171,6 +171,14 @@
 				return false;
 			}
 
+			public function toArray() : array {
+				$array = [];
+				foreach ($this->schema->getPropertyList() as $k => $property) {
+					$array[$k] = $this->get($k);
+				}
+				return $array;
+			}
+
 			/**
 			 * @inheritdoc
 			 */
