@@ -53,6 +53,16 @@
 			public function link(IEntity $entity): IEntity;
 
 			/**
+			 * relation entity; they cannot be linked as it's necessary to save entity tree in
+			 * the right order
+			 *
+			 * @param IEntity $entity
+			 *
+			 * @return IEntity
+			 */
+			public function relation(IEntity $entity): IEntity;
+
+			/**
 			 * save this entity into storage (and all related stuff to this entity)
 			 *
 			 * @return IEntity

@@ -28,6 +28,10 @@
 			 */
 			protected $linkList = [];
 			/**
+			 * @var IEntity[]
+			 */
+			protected $relationList = [];
+			/**
 			 * @var IRelation
 			 */
 			protected $relation;
@@ -62,7 +66,8 @@
 			 */
 			public function connect(IEntity $entity, IEntity $to, IRelation $relation): IEntity {
 				$this->relation = $relation;
-				$entity->link($this);
+				$entity->relation($this);
+				$entity->link($to);
 				$this->link($entity);
 				$this->link($to);
 				return $this;
@@ -79,6 +84,14 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function relation(IEntity $entity): IEntity {
+				$this->relationList[] = $entity;
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function save(): IEntity {
 				if ($this->saving) {
 					return $this;
@@ -87,6 +100,10 @@
 				}
 				try {
 					$this->saving = true;
+					/**
+					 * linked entities must be saved first as they must exists before
+					 * relations could be created
+					 */
 					foreach ($this->linkList as $entity) {
 						$entity->save();
 					}
@@ -107,6 +124,12 @@
 						}
 					}
 					$this->storage->execute($query);
+					/**
+					 * relations must be saved last as all related entities already exists
+					 */
+					foreach ($this->relationList as $entity) {
+						$entity->save();
+					}
 					$this->commit();
 					$this->exists = true;
 					return $this;
@@ -163,6 +186,11 @@
 						return true;
 					}
 				}
+				foreach ($this->relationList as $entity) {
+					if ($entity->isDirty()) {
+						return true;
+					}
+				}
 				return false;
 			}
 
@@ -177,6 +205,7 @@
 			public function __clone() {
 				parent::__clone();
 				$this->linkList = [];
+				$this->relationList = [];
 				$this->relation = null;
 				$this->exists = false;
 			}
