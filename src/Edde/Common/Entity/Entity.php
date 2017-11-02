@@ -8,6 +8,7 @@
 		use Edde\Api\Entity\Inject\EntityManager;
 		use Edde\Api\Schema\Exception\RelationException;
 		use Edde\Api\Schema\Inject\SchemaManager;
+		use Edde\Api\Schema\IRelation;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Crate\Crate;
@@ -56,26 +57,32 @@
 				}
 				list($relation) = $relationList;
 				$relationEntity = $this->entityManager->createEntity($relation->getSchema());
-				$this->related($entity);
-				$entity->relatedTo($this);
-				$this->relatedTo($relationEntity);
-				$relationEntity->related($this);
+				$this->related($entity, $relation);
+				$entity->relatedTo($this, $relation);
+				$this->relatedTo($relationEntity, $relation);
+				$relationEntity->related($this, $relation);
 				return $relationEntity;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function related(IEntity $entity): IEntity {
-				$this->relatedList[] = $entity;
+			public function related(IEntity $entity, IRelation $relation): IEntity {
+				$this->relatedList[] = [
+					$entity,
+					$relation,
+				];
 				return $this;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function relatedTo(IEntity $entity): IEntity {
-				$this->relatedToList[] = $entity;
+			public function relatedTo(IEntity $entity, IRelation $relation): IEntity {
+				$this->relatedToList[] = [
+					$entity,
+					$relation,
+				];
 				return $this;
 			}
 

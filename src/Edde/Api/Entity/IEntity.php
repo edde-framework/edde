@@ -3,6 +3,7 @@
 	namespace Edde\Api\Entity;
 
 		use Edde\Api\Crate\ICrate;
+		use Edde\Api\Schema\IRelation;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\IntegrityException;
@@ -33,20 +34,22 @@
 			 * mark the given entity as related to this one (to save the tree
 			 * of entities)
 			 *
-			 * @param IEntity $entity
+			 * @param IEntity   $entity
+			 * @param IRelation $relation
 			 *
 			 * @return IEntity
 			 */
-			public function related(IEntity $entity): IEntity;
+			public function related(IEntity $entity, IRelation $relation): IEntity;
 
 			/**
 			 * reverse direction of the related method
 			 *
-			 * @param IEntity $entity
+			 * @param IEntity   $entity
+			 * @param IRelation $relation
 			 *
 			 * @return IEntity
 			 */
-			public function relatedTo(IEntity $entity): IEntity;
+			public function relatedTo(IEntity $entity, IRelation $relation): IEntity;
 
 			/**
 			 * save this entity into storage (and all related stuff to this entity)
@@ -75,7 +78,7 @@
 			 *
 			 * @return ICollection
 			 */
-			public function collectionOf(string $schema) : ICollection;
+			public function collectionOf(string $schema): ICollection;
 
 			/**
 			 * is the entity loaded from storage, thus it exists?
