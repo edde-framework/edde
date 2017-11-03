@@ -23,7 +23,6 @@
 		use Edde\Api\Http\IRequestService as IHttpRequestService;
 		use Edde\Api\Log\ILogService;
 		use Edde\Api\Protocol\IProtocolService;
-		use Edde\Api\Query\IQueryBuilder;
 		use Edde\Api\Request\IRequestService;
 		use Edde\Api\Router\IRouterService;
 		use Edde\Api\Runtime\IRuntime;
@@ -260,50 +259,50 @@
 
 			static public function getDefaultFactoryList(): array {
 				return [
-					IRootDirectory::class    => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
-					IAssetsDirectory::class  => self::proxy(IRootDirectory::class, 'directory', [
+					IRootDirectory::class      => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
+					IAssetsDirectory::class    => self::proxy(IRootDirectory::class, 'directory', [
 						'.assets',
 						AssetsDirectory::class,
 					]),
-					ITempDirectory::class    => self::proxy(IAssetsDirectory::class, 'directory', [
+					ITempDirectory::class      => self::proxy(IAssetsDirectory::class, 'directory', [
 						'temp',
 						TempDirectory::class,
 					]),
-					ILogDirectory::class     => self::proxy(IAssetsDirectory::class, 'directory', [
+					ILogDirectory::class       => self::proxy(IAssetsDirectory::class, 'directory', [
 						'logs',
 						LogDirectory::class,
 					]),
 					/**
 					 * utils
 					 */
-					IHttpUtils::class        => HttpUtils::class,
-					IStringUtils::class      => StringUtils::class,
+					IHttpUtils::class          => HttpUtils::class,
+					IStringUtils::class        => StringUtils::class,
 					/**
 					 * container implementation
 					 */
-					IContainer::class        => Container::class,
+					IContainer::class          => Container::class,
 					/**
 					 * runtime info provider
 					 */
-					IRuntime::class          => Runtime::class,
+					IRuntime::class            => Runtime::class,
 					/**
 					 * log support
 					 */
-					ILogService::class       => LogService::class,
+					ILogService::class         => LogService::class,
 					/**
 					 * user request into protocol element translation
 					 */
-					IRouterService::class    => RouterService::class,
-					IRequestService::class   => RequestService::class,
+					IRouterService::class      => RouterService::class,
+					IRequestService::class     => RequestService::class,
 					/**
 					 * content conversion implementation (mainly useful for server content
 					 * negotiation)
 					 */
-					IConverterManager::class => ConverterManager::class,
+					IConverterManager::class   => ConverterManager::class,
 					/**
 					 * The Protocol specification related stuff
 					 */
-					IProtocolService::class  => ProtocolService::class,
+					IProtocolService::class    => ProtocolService::class,
 					/**
 					 * general service for http request/response
 					 */
@@ -328,7 +327,6 @@
 					IEntityManager::class      => EntityManager::class,
 					IStorage::class            => Storage::class,
 					IDriver::class             => self::exception(sprintf('Please register driver to use Storage.', IDriver::class)),
-					IQueryBuilder::class       => self::exception(sprintf('Please register query builder according to used [%s].', IDriver::class)),
 					/**
 					 * an application upgrades support
 					 */

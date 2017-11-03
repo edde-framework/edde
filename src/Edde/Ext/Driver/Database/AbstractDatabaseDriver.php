@@ -4,7 +4,6 @@
 
 		use Edde\Api\Driver\Exception\DriverException;
 		use Edde\Api\Driver\IDriver;
-		use Edde\Api\Query\INativeQuery;
 		use Edde\Common\Driver\AbstractDriver;
 		use PDO;
 
@@ -29,12 +28,12 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function execute(INativeQuery $nativeQuery) {
+			public function native($query, array $parameterList = []) {
 				$exception = null;
 				try {
-					$statement = $this->pdo->prepare($nativeQuery->getQuery());
+					$statement = $this->pdo->prepare($query);
 					$statement->setFetchMode(PDO::FETCH_ASSOC);
-					$statement->execute($nativeQuery->getParameterList());
+					$statement->execute($parameterList);
 					return $statement;
 				} catch (\PDOException $exception) {
 					throw $this->exception($exception);

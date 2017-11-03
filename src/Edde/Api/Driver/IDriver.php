@@ -3,35 +3,31 @@
 	namespace Edde\Api\Driver;
 
 		use Edde\Api\Config\IConfigurable;
-		use Edde\Api\Driver\Exception\DriverQueryException;
-		use Edde\Api\Query\INativeQuery;
-		use Edde\Api\Query\INativeTransaction;
-		use Edde\Api\Storage\Exception\IntegrityException;
+		use Edde\Api\Query\IQuery;
 
 		/**
-		 * General storage driver implementation; one storage could have more drivers to choose from.
+		 * General driver for storage implementation; one storage could have more drivers to choose from.
 		 */
 		interface IDriver extends IConfigurable {
 			/**
-			 * executes the given query
+			 * execute the given query and return native driver's result; this method does quite heavy
+			 * job with translating input query into native query for this driver
 			 *
-			 * @param INativeQuery $nativeQuery
+			 * @param IQuery $query
 			 *
 			 * @return mixed
-			 *
-			 * @throws DriverQueryException
-			 * @throws IntegrityException
 			 */
-			public function execute(INativeQuery $nativeQuery);
+			public function execute(IQuery $query);
 
 			/**
-			 * return last result from the transaction
+			 * execute native query on this driver without any additional processing
 			 *
-			 * @param INativeTransaction $nativeTransaction
+			 * @param mixed $query
+			 * @param array $parameterList
 			 *
 			 * @return mixed
 			 */
-			public function transaction(INativeTransaction $nativeTransaction);
+			public function native($query, array $parameterList = []);
 
 			/**
 			 * start a transaction

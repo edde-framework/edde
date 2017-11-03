@@ -3,9 +3,7 @@
 	namespace Edde\Api\Storage;
 
 		use Edde\Api\Config\IConfigurable;
-		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\IQuery;
-		use Edde\Api\Query\ISelectQuery;
 
 		interface IStorage extends IConfigurable {
 			/**
@@ -41,20 +39,21 @@
 			public function execute(IQuery $query);
 
 			/**
-			 * execute the given native query and return stream as a result
-			 *
-			 * @param INativeQuery $nativeQuery
-			 *
-			 * @return IStream
-			 */
-			public function native(INativeQuery $nativeQuery);
-
-			/**
 			 * prepare stream for the given query
 			 *
-			 * @param ISelectQuery $selectQuery
+			 * @param IQuery $query
 			 *
 			 * @return IStream
 			 */
-			public function stream(ISelectQuery $selectQuery): IStream;
+			public function stream(IQuery $query): IStream;
+
+			/**
+			 * execute the given native query and return stream as a result
+			 *
+			 * @param mixed $query
+			 * @param array $parameterList
+			 *
+			 * @return IStream
+			 */
+			public function native($query, array $parameterList = []);
 		}

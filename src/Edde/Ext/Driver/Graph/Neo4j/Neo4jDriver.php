@@ -4,7 +4,6 @@
 
 		use Edde\Api\Driver\Exception\DriverException;
 		use Edde\Api\Driver\IDriver;
-		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\NullValueException;
 		use Edde\Common\Driver\AbstractDriver;
@@ -37,7 +36,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function execute(INativeQuery $nativeQuery) {
+			public function native($query, array $parameterList = []) {
 				try {
 					return (function (Result $result) {
 						foreach ($result->getRecords() as $record) {
@@ -46,7 +45,7 @@
 								yield $value->asArray();
 							}
 						}
-					})($this->session->run($nativeQuery->getQuery(), $nativeQuery->getParameterList()));
+					})($this->session->run($query, $parameterList));
 				} catch (\Throwable $throwable) {
 					throw $this->exception($throwable);
 				}
@@ -55,7 +54,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function start() : IDriver {
+			public function start(): IDriver {
 				($this->transaction = $this->session->transaction())->begin();
 				return $this;
 			}
@@ -63,7 +62,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function commit() : IDriver {
+			public function commit(): IDriver {
 				try {
 					$this->transaction->commit();
 					$this->transaction = null;
@@ -76,7 +75,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function rollback() : IDriver {
+			public function rollback(): IDriver {
 				try {
 					$this->transaction->rollback();
 				} catch (MessageFailureException $exception) {
@@ -93,7 +92,7 @@
 				return $this;
 			}
 
-			protected function exception(\Throwable $throwable) : \Throwable {
+			protected function exception(\Throwable $throwable): \Throwable {
 				if (stripos($message = $throwable->getMessage(), 'already exists with label') !== false) {
 					return new DuplicateEntryException($message, 0, $throwable);
 				} else if (stripos($message, 'must have the property') !== false) {
@@ -102,7 +101,7 @@
 				return new DriverException($message, 0, $throwable);
 			}
 
-			protected function handleSetup() : void {
+			protected function handleSetup(): void {
 				parent::handleSetup();
 				$this->session = GraphDatabase::driver($this->url)->session();
 			}

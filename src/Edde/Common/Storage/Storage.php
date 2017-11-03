@@ -3,10 +3,7 @@
 	namespace Edde\Common\Storage;
 
 		use Edde\Api\Driver\Inject\Driver;
-		use Edde\Api\Query\INativeQuery;
-		use Edde\Api\Query\Inject\QueryBuilder;
 		use Edde\Api\Query\IQuery;
-		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Storage\Exception\ExclusiveTransactionException;
 		use Edde\Api\Storage\Exception\NoTransactionException;
 		use Edde\Api\Storage\IStorage;
@@ -14,7 +11,6 @@
 		use Edde\Common\Object\Object;
 
 		class Storage extends Object implements IStorage {
-			use QueryBuilder;
 			use Driver;
 			/**
 			 * @var int
@@ -71,20 +67,20 @@
 			 * @inheritdoc
 			 */
 			public function execute(IQuery $query) {
-				return $this->driver->transaction($this->queryBuilder->query($query));
+				return $this->driver->execute($query);
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function native(INativeQuery $nativeQuery) {
-				return $this->driver->execute($nativeQuery);
+			public function native($query, array $parameterList = []) {
+				return $this->driver->native($query, $parameterList);
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function stream(ISelectQuery $selectQuery): IStream {
-				return new Stream($this, $selectQuery);
+			public function stream(IQuery $query): IStream {
+				return new Stream($this, $query);
 			}
 		}
