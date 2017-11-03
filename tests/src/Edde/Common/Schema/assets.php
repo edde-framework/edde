@@ -86,3 +86,25 @@
 
 			public function question(): ?bool;
 		}
+
+		interface UserSchema extends GuidSchema {
+			public function name(): string;
+
+			public function email($unique): string;
+
+			public function created(): \DateTime;
+		}
+
+		interface RoleSchema extends GuidSchema {
+			public function name($unique): string;
+
+			public function label(): ?string;
+		}
+
+		interface UserRoleSchema {
+			public function user(UserSchema $guid): string;
+
+			public function role(RoleSchema $guid): string;
+
+			public function enabled(): bool;
+		}

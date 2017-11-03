@@ -17,8 +17,11 @@
 		use Edde\Common\Schema\FooBarSchema;
 		use Edde\Common\Schema\FooSchema;
 		use Edde\Common\Schema\PooSchema;
+		use Edde\Common\Schema\RoleSchema;
 		use Edde\Common\Schema\SimpleSchema;
 		use Edde\Common\Schema\SubBarSchema;
+		use Edde\Common\Schema\UserRoleSchema;
+		use Edde\Common\Schema\UserSchema;
 		use Edde\Ext\Test\TestCase;
 
 		abstract class AbstractStorageTest extends TestCase {
@@ -31,13 +34,21 @@
 			 */
 			public function testCreateSchema() {
 				$this->storage->start();
-				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(SimpleSchema::class)));
-				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(FooSchema::class)));
-				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(PooSchema::class)));
-				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(SubBarSchema::class)));
-				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(BarSchema::class)));
-				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(FooBarSchema::class)));
-				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(BarPooSchema::class)));
+				$schemaList = [
+					SimpleSchema::class,
+					FooSchema::class,
+					PooSchema::class,
+					SubBarSchema::class,
+					BarSchema::class,
+					FooBarSchema::class,
+					BarPooSchema::class,
+					UserSchema::class,
+					RoleSchema::class,
+					UserRoleSchema::class,
+				];
+				foreach ($schemaList as $name) {
+					$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load($name)));
+				}
 				$this->storage->commit();
 				self::assertTrue(true, 'everything is ok');
 			}
