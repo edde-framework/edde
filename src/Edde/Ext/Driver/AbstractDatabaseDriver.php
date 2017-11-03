@@ -154,25 +154,17 @@
 					if ($table->isSelected()) {
 						$return = $alias . '.*';
 					}
-					/**
-					 * SELECT
-					 *      b.*
-					 * FROM
-					 *      FooSchema f
-					 *      LEFT JOIN FooBarSchema fb ON f.guid = fb.foo
-					 *      LEFT JOIN BarSchema b ON fb.bar = b.guid
-					 * WHERE
-					 *      f.guid = :$guid
-					 */
 					switch ($type = $table->getType()) {
 						case 'Table':
 							$from = $this->delimite($table->getSchema()->getName()) . ' ' . $alias;
+							$joinRelation = $alias;
 							foreach ($table->getJoinList() as $name => $relation) {
-								$from .= "\n\tINNER JOIN " . $this->delimite($relation->getSchema()->getName()) . ' ' . ($relationAlias = $this->delimite('r' . sha1(random_bytes(42)))) . ' ON ';
-								$from .= $alias . '.' . $this->delimite($relation->getTargetLink()->getTargetProperty()->getName()) . ' = ' . $relationAlias . '.' . $this->delimite($relation->getSourceLink()->getSourceProperty()->getName());
+								$from .= "\n\tINNER JOIN " . $this->delimite($relation->getSchema()->getName()) . ' ' . ($relationAlias = $this->delimite('r' . substr(sha1(random_bytes(42)), 0, 4))) . ' ON ';
+								$from .= $joinRelation . '.' . $this->delimite($relation->getTargetLink()->getTargetProperty()->getName()) . ' = ' . $relationAlias . '.' . $this->delimite($relation->getSourceLink()->getSourceProperty()->getName());
 								$from .= "\n\tINNER JOIN " . $this->delimite($relation->getTargetLink()->getTargetSchema()->getName()) . ' ' . ($name = $this->delimite($name)) . ' ON ';
 								$from .= $relationAlias . '.' . $this->delimite($relation->getTargetLink()->getSourceProperty()->getName()) . ' = ' . $name . '.' . $this->delimite($relation->getSourceLink()->getTargetProperty()->getName());
 								$return = $name . '.*';
+								$joinRelation = $name;
 							}
 							$fromList[$alias] = $from;
 							break;
