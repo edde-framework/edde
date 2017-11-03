@@ -3,6 +3,7 @@
 	namespace Edde\Common\Schema;
 
 		use Edde\Api\Node\INode;
+		use Edde\Api\Schema\Exception\InvalidRelationException;
 		use Edde\Api\Schema\Exception\MultiplePrimaryException;
 		use Edde\Api\Schema\Exception\NoPrimaryPropertyException;
 		use Edde\Api\Schema\Exception\UnknownPropertyException;
@@ -172,5 +173,17 @@
 			 */
 			public function getRelationList(string $schema): array {
 				return $this->relationList[$schema] ?? [];
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getRelation(string $schema): IRelation {
+				if (($count = count($relationList = $this->getRelationList($schema))) === 0) {
+					throw new InvalidRelationException(sprintf('There are no relations from [%s] to schema [%s].', $this->getName(), $schema));
+				} else if ($count !== 1) {
+					throw new InvalidRelationException(sprintf('There are more relations from [%s] to schema [%s]. You have to specify relation schema.', $this->getName(), $schema));
+				}
+				return $relationList[0];
 			}
 		}

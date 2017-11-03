@@ -53,12 +53,7 @@
 			 * @inheritdoc
 			 */
 			public function attach(IEntity $entity): IEntity {
-				if (($count = count($relationList = $this->schema->getRelationList($schemaName = $entity->getSchema()->getName()))) === 0) {
-					throw new RelationException(sprintf('There are no relations from [%s] to schema [%s].', $this->schema->getName(), $schemaName));
-				} else if ($count !== 1) {
-					throw new RelationException(sprintf('There are more relations from [%s] to schema [%s]. You have to specify relation schema.', $this->schema->getName(), $schemaName));
-				}
-				return $this->entityManager->createEntity($relationList[0]->getSchema())->connect($this, $entity, $relationList[0]);
+				return $this->entityManager->createEntity(($relation = $this->schema->getRelation($entity->getSchema()->getName()))->getSchema())->connect($this, $entity, $relation);
 			}
 
 			/**

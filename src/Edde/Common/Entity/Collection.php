@@ -5,8 +5,8 @@
 		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\Inject\EntityManager;
+		use Edde\Api\Query\Fragment\ITable;
 		use Edde\Api\Query\ISelectQuery;
-		use Edde\Api\Schema\Exception\RelationException;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
@@ -25,6 +25,11 @@
 			 * @var ISchema
 			 */
 			protected $schema;
+			/**
+			 * @var ITable
+			 */
+			protected $table;
+			protected $joinList = null;
 
 			public function __construct(IStream $stream, ISchema $schema) {
 				$this->stream = $stream;
@@ -35,6 +40,8 @@
 			 * @inheritdoc
 			 */
 			public function query(ISelectQuery $query): ICollection {
+				$this->table = null;
+				$this->joinList = null;
 				$this->stream->query($query);
 				return $this;
 			}
@@ -75,12 +82,16 @@
 			 * @inheritdoc
 			 */
 			public function join(string $target, string $alias, array $on = []): ICollection {
-				if (($count = count($relationList = $this->schema->getRelationList($target))) === 0) {
-					throw new RelationException(sprintf('There are no relations from [%s] to schema [%s].', $this->schema->getName(), $target));
-				} else if ($count !== 1) {
-					throw new RelationException(sprintf('There are more relations from [%s] to schema [%s]. You have to specify relation schema.', $this->schema->getName(), $target));
+				if ($this->joinList === null) {
+					$this->joinList[] = $this->schema;
 				}
-				$this->stream->getQuery()->table($this->schema, 'c')->join($relationList[0], $alias, $on);
+				if ($this->table === null) {
+					$this->table = $this->stream->getQuery()->table($this->schema, 'c');
+				}
+				/** @var $current ISchema */
+				$current = end($this->joinList);
+				$this->table->join($relation = $current->getRelation($target), $alias, $on);
+				$this->joinList[] = $relation->getTargetLink()->getTargetSchema();
 				return $this;
 			}
 
@@ -96,5 +107,7 @@
 			public function __clone() {
 				parent::__clone();
 				$this->stream = clone $this->stream;
+				$this->table = null;
+				$this->joinList = null;
 			}
 		}

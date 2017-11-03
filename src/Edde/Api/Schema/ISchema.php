@@ -4,6 +4,7 @@
 
 		use Edde\Api\Config\IConfigurable;
 		use Edde\Api\Node\INode;
+		use Edde\Api\Schema\Exception\InvalidRelationException;
 		use Edde\Api\Schema\Exception\UnknownPropertyException;
 
 		interface ISchema extends IConfigurable {
@@ -121,4 +122,14 @@
 			 * @return IRelation[]
 			 */
 			public function getRelationList(string $schema): array;
+
+			/**
+			 * return a relation or throw an exception where there are zero or more relations
+			 *
+			 * @param string $schema
+			 *
+			 * @return IRelation
+			 * @throws InvalidRelationException
+			 */
+			public function getRelation(string $schema): IRelation;
 		}
