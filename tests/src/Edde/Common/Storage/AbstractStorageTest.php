@@ -249,12 +249,13 @@
 				$foo = $this->entityManager->collection(FooSchema::class)->entity('foo The First');
 				self::assertSame('foo The First', $foo->get('name'));
 				$expect = [
-					'bar The Second',
-					'bar The Third',
+					'Da Poo The First One!',
+					'Da Poo The Bigger One!',
+					'Da Poo The Hard One!',
 				];
 				$current = [];
-				foreach ($foo->collectionOf(BarSchema::class) as $bar) {
-					$current[] = $bar->get('name');
+				foreach ($foo->collectionOf(BarSchema::class)->collectionOf(PooSchema::class) as $poo) {
+					$current[] = $poo->get('name');
 				}
 				sort($expect);
 				sort($current);

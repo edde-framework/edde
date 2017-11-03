@@ -5,7 +5,8 @@
 		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\Inject\EntityManager;
-		use Edde\Api\Query\IQuery;
+		use Edde\Api\Query\ISelectQuery;
+		use Edde\Api\Schema\Exception\RelationException;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
 		use Edde\Api\Storage\IStream;
@@ -32,7 +33,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function query(IQuery $query): ICollection {
+			public function query(ISelectQuery $query): ICollection {
 				$this->stream->query($query);
 				return $this;
 			}
@@ -40,7 +41,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getQuery(): IQuery {
+			public function getQuery(): ISelectQuery {
 				return $this->stream->getQuery();
 			}
 
@@ -67,6 +68,20 @@
 					$where->or()->eq($property->getName())->to($name);
 				}
 				return $this->getEntity();
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function collectionOf(string $target): ICollection {
+				$query = $this->stream->getQuery();
+				$schema = $this->schemaManager->load($this->schema);
+				if (($count = count($relationList = $schema->getRelationList($target))) === 0) {
+					throw new RelationException(sprintf('There are no relations from [%s] to schema [%s].', $this->schema, $target));
+				} else if ($count !== 1) {
+					throw new RelationException(sprintf('There are more relations from [%s] to schema [%s]. You have to specify relation schema.', $this->schema, $target));
+				}
+//				$query->schema($schema, 'x')->link($relationList[0])->source();
 			}
 
 			/**

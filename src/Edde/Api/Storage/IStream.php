@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Storage;
 
-		use Edde\Api\Query\IQuery;
+		use Edde\Api\Query\ISelectQuery;
 		use IteratorAggregate;
 
 		/**
@@ -14,18 +14,18 @@
 			/**
 			 * override query of the stream
 			 *
-			 * @param IQuery $query
+			 * @param ISelectQuery $query
 			 *
 			 * @return IStream
 			 */
-			public function query(IQuery $query): IStream;
+			public function query(ISelectQuery $query): IStream;
 
 			/**
 			 * return query powering this stream
 			 *
-			 * @return IQuery
+			 * @return ISelectQuery
 			 */
-			public function getQuery(): IQuery;
+			public function getQuery(): ISelectQuery;
 
 			/**
 			 * @return \Traversable|array

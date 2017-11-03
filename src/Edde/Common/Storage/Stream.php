@@ -3,6 +3,7 @@
 	namespace Edde\Common\Storage;
 
 		use Edde\Api\Query\IQuery;
+		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Storage\IStorage;
 		use Edde\Api\Storage\IStream;
 		use Edde\Common\Object\Object;
@@ -14,7 +15,7 @@
 			 */
 			protected $storage;
 			/**
-			 * @var IQuery
+			 * @var ISelectQuery
 			 */
 			protected $query;
 
@@ -26,7 +27,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function query(IQuery $query): IStream {
+			public function query(ISelectQuery $query): IStream {
 				$this->query = $query;
 				return $this;
 			}
@@ -34,7 +35,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getQuery(): IQuery {
+			public function getQuery(): ISelectQuery {
 				return $this->query;
 			}
 

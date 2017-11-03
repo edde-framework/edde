@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Entity;
 
-		use Edde\Api\Query\IQuery;
+		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
 		use IteratorAggregate;
 		use Traversable;
@@ -14,18 +14,18 @@
 			/**
 			 * set custom query for this collection
 			 *
-			 * @param IQuery $query
+			 * @param ISelectQuery $query
 			 *
 			 * @return ICollection
 			 */
-			public function query(IQuery $query): ICollection;
+			public function query(ISelectQuery $query): ICollection;
 
 			/**
 			 * get the query to customize this collection
 			 *
-			 * @return IQuery
+			 * @return ISelectQuery
 			 */
-			public function getQuery(): IQuery;
+			public function getQuery(): ISelectQuery;
 
 			/**
 			 * get exactly one entity or throw an exception of the collection is empty; this
@@ -48,6 +48,15 @@
 			 * @throws EntityNotFoundException
 			 */
 			public function entity($name): IEntity;
+
+			/**
+			 * return a new collection to make a relation chain
+			 *
+			 * @param string $target
+			 *
+			 * @return ICollection
+			 */
+			public function collectionOf(string $target): ICollection;
 
 			/**
 			 * @return Traversable|IEntity[]
