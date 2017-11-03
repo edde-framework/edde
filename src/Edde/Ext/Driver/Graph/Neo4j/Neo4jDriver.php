@@ -185,38 +185,26 @@
 				$cypher = "MATCH\n\t";
 				$matchList = [];
 				$parameterList = [];
-				foreach ($selectQuery->getTableList() as $schemaFragment) {
-					$alias = $this->delimite($schemaFragment->getAlias());
-					switch ($type = $schemaFragment->getType()) {
-						case 'schema':
-							$cypher .= '(' . $alias . ':' . $this->delimite($schemaFragment->getSchema()->getName()) . ')';
+				foreach ($selectQuery->getTableList() as $table) {
+					$alias = $this->delimite($table->getAlias());
+					if ($table->isSelected()) {
+						$returnList[] = $alias;
+					}
+					switch ($type = $table->getType()) {
+						case 'Table':
+							$cypher .= '(' . $alias . ':' . $this->delimite($table->getSchema()->getName()) . ')';
 							$parameterList = [];
-							if ($schemaFragment->hasWhere()) {
-								$cypher .= "\nWHERE" . ($query = $this->fragmentWhereGroup($schemaFragment->where()))->getQuery() . "\n";
+							foreach ($table->getJoinList() as $name => $relation) {
+								$cypher .= '-[:' . $this->delimite($relation->getSchema()->getName()) . ']->(' . ($return = $this->delimite($name)) . ':' . $this->delimite($relation->getTargetLink()->getTargetSchema()->getName()) . ')';
+								$returnList = [$return];
+							}
+							if ($table->hasWhere()) {
+								$cypher .= "\nWHERE" . ($query = $this->fragmentWhereGroup($table->where()))->getQuery() . "\n";
 								$parameterList = array_merge($parameterList, $query->getParameterList());
 							}
 							break;
-						case 'link':
-							$cypher .= '(a:' . $this->delimite($schemaFragment->getSchema()->getName()) . ')';
-							$last = null;
-							$linkId = '1';
-							foreach ($schemaFragment->getLinkList() as $alias => $link) {
-								$relation = $link->getRelation();
-								$cypher .= '-[:' . $this->delimite($relation->getSchema()->getName()) . ']->(' . ($last = 'b' . $linkId++) . ':' . $this->delimite($relation->getTargetLink()->getTargetSchema()->getName()) . ')';
-							}
-							$cypher .= "\nWHERE\n\t";
-							foreach ($schemaFragment->getLinkList() as $alias => $link) {
-								$relation = $link->getRelation();
-								$cypher .= 'a.' . $this->delimite($name = $relation->getTargetLink()->getTargetProperty()->getName()) . ' = $' . ($parameterId = ('p_' . sha1(random_bytes(42))));
-								$parameterList[$parameterId] = $link->getSource()[$name];
-							}
-							$returnList[] = $last;
-							break;
 						default:
 							throw new DriverQueryException(sprintf('Unknown schema fragment type [%s].', $type));
-					}
-					if ($schemaFragment->isSelected()) {
-						$returnList[] = $alias;
 					}
 				}
 				return $this->native($cypher . implode(",\n\t", $matchList) . "\nRETURN\n\t" . implode(', ', $returnList), $parameterList);
