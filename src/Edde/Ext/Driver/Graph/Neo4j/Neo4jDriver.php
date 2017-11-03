@@ -197,16 +197,20 @@
 							}
 							break;
 						case 'link':
-							$cypher = '(a:' . $schemaFragment->getSchema()->getName() . ')';
+							$cypher .= '(a:' . $this->delimite($schemaFragment->getSchema()->getName()) . ')';
+							$last = null;
+							$linkId = '1';
 							foreach ($schemaFragment->getLinkList() as $alias => $link) {
 								$relation = $link->getRelation();
-								$cypher .= '-[:' . $this->delimite($relation->getSchema()->getName()) . ']->(b:' . $this->delimite($relation->getTargetLink()->getTargetSchema()->getName()) . ')';
+								$cypher .= '-[:' . $this->delimite($relation->getSchema()->getName()) . ']->(' . ($last = 'b' . $linkId++) . ':' . $this->delimite($relation->getTargetLink()->getTargetSchema()->getName()) . ')';
 							}
 							$cypher .= "\nWHERE\n\t";
 							foreach ($schemaFragment->getLinkList() as $alias => $link) {
 								$relation = $link->getRelation();
-								$cypher .= 'a.' . $this->delimite($relation->getTargetLink()->getTargetProperty()->getName()) . ' = $guid';
+								$cypher .= 'a.' . $this->delimite($name = $relation->getTargetLink()->getTargetProperty()->getName()) . ' = $' . ($parameterId = ('p_' . sha1(random_bytes(42))));
+								$parameterList[$parameterId] = $link->getSource()[$name];
 							}
+							$returnList[] = $last;
 							break;
 						default:
 							throw new DriverQueryException(sprintf('Unknown schema fragment type [%s].', $type));

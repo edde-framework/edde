@@ -158,10 +158,7 @@
 				$entity->set('optional', null);
 				$expect = $entity->toArray();
 				$entity->save();
-				$collection = $this->entityManager->collection(SimpleSchema::class);
-				$query = $collection->getQuery();
-				$query->schema(SimpleSchema::class, 'c')->where()->and()->eq('guid')->to($entity->get('guid'));
-				$entity = $collection->getEntity();
+				$entity = $this->entityManager->collection(SimpleSchema::class)->entity($entity->get('guid'));
 				self::assertFalse($entity->isDirty(), 'entity should NOT be dirty right after load!');
 				self::assertEquals($expect, $array = $entity->toArray());
 				self::assertTrue(($type = gettype($array['value'])) === 'double', 'value [' . $type . '] is not float!');
