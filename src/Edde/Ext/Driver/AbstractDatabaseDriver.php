@@ -157,14 +157,16 @@
 					switch ($type = $table->getType()) {
 						case 'Table':
 							$from = $this->delimite($table->getSchema()->getName()) . ' ' . $alias;
-							$joinRelation = $alias;
+							$previous = $alias;
 							foreach ($table->getJoinList() as $name => $relation) {
-								$from .= "\n\tINNER JOIN " . $this->delimite($relation->getSchema()->getName()) . ' ' . ($relationAlias = $this->delimite('r' . substr(sha1(random_bytes(42)), 0, 4))) . ' ON ';
-								$from .= $joinRelation . '.' . $this->delimite($relation->getTargetLink()->getTargetProperty()->getName()) . ' = ' . $relationAlias . '.' . $this->delimite($relation->getSourceLink()->getSourceProperty()->getName());
-								$from .= "\n\tINNER JOIN " . $this->delimite($relation->getTargetLink()->getTargetSchema()->getName()) . ' ' . ($name = $this->delimite($name)) . ' ON ';
-								$from .= $relationAlias . '.' . $this->delimite($relation->getTargetLink()->getSourceProperty()->getName()) . ' = ' . $name . '.' . $this->delimite($relation->getSourceLink()->getTargetProperty()->getName());
+								$sourceLink = $relation->getSourceLink();
+								$targetLink = $relation->getTargetLink();
+								$from .= "\n\tINNER JOIN " . $this->delimite($relation->getSchema()->getName()) . ' ' . ($join = $this->delimite('r' . sha1(random_bytes(42)))) . ' ON ';
+								$from .= $previous . '.' . $this->delimite($targetLink->getTargetProperty()->getName()) . ' = ' . $join . '.' . $this->delimite($sourceLink->getSourceProperty()->getName());
+								$from .= "\n\tINNER JOIN " . $this->delimite($targetLink->getTargetSchema()->getName()) . ' ' . ($name = $this->delimite($name)) . ' ON ';
+								$from .= $join . '.' . $this->delimite($targetLink->getSourceProperty()->getName()) . ' = ' . $name . '.' . $this->delimite($sourceLink->getTargetProperty()->getName());
 								$return = $name . '.*';
-								$joinRelation = $name;
+								$previous = $name;
 							}
 							$fromList[$alias] = $from;
 							break;
