@@ -7,57 +7,14 @@
 		use Edde\Api\Query\Fragment\IWhere;
 		use Edde\Api\Query\Fragment\IWhereGroup;
 		use Edde\Api\Query\Fragment\IWhereTo;
-		use Edde\Api\Query\ICrateSchemaQuery;
 		use Edde\Api\Query\IInsertQuery;
 		use Edde\Api\Query\IRelationQuery;
 		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Query\ITransactionQuery;
 		use Edde\Api\Query\IUpdateQuery;
-		use Edde\Common\Query\AbstractQueryBuilder;
-		use Edde\Common\Query\NativeQuery;
-		use Edde\Common\Query\TransactionQuery;
+		use Edde\Common\Object\Object;
 
-		class Neo4jQueryBuilder extends AbstractQueryBuilder {
-			protected function fragmentCreateSchema(ICrateSchemaQuery $crateSchemaQuery): ITransactionQuery {
-				/**
-				 * relations should not be physically created
-				 */
-				if (($schema = $crateSchemaQuery->getSchema())->isRelation()) {
-					return new TransactionQuery();
-				}
-				$primaryList = null;
-				$indexList = null;
-				$uniqueList = [];
-				$requiredList = [];
-				$delimited = $this->delimite($schema->getName());
-				foreach ($schema->getPropertyList() as $property) {
-					$name = $property->getName();
-					$fragment = 'n.' . $this->delimite($name);
-					if ($property->isPrimary()) {
-						$primaryList[] = $fragment;
-					} else if ($property->isUnique()) {
-						$uniqueList[] = $fragment;
-					}
-					if ($property->isRequired()) {
-						$requiredList[] = $fragment;
-					}
-				}
-				$transactionQuery = new TransactionQuery();
-				if ($indexList) {
-					$transactionQuery->query(new NativeQuery('CREATE INDEX ON :' . $delimited . '(' . implode(',', $indexList) . ')'));
-				}
-				if ($primaryList) {
-					$transactionQuery->query(new NativeQuery('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT (' . implode(', ', $primaryList) . ') IS NODE KEY'));
-				}
-				foreach ($uniqueList as $unique) {
-					$transactionQuery->query(new NativeQuery('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT ' . $unique . ' IS UNIQUE'));
-				}
-				foreach ($requiredList as $required) {
-					$transactionQuery->query(new NativeQuery('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT exists(' . $required . ')'));
-				}
-				return $transactionQuery;
-			}
-
+		class Neo4jQueryBuilder extends Object {
 			protected function fragmentInsert(IInsertQuery $insertQuery): ITransactionQuery {
 				$source = $this->schemaManager->sanitize(($schema = $insertQuery->getSchema()), $insertQuery->getSource());
 				return new TransactionQuery('CREATE (n:' . $this->delimite($schema->getName()) . ' $set)', ['set' => $source]);

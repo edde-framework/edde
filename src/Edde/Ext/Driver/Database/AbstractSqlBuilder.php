@@ -12,11 +12,10 @@
 		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Query\ITransactionQuery;
 		use Edde\Api\Query\IUpdateQuery;
-		use Edde\Common\Query\AbstractQueryBuilder;
-		use Edde\Common\Query\TransactionQuery;
+		use Edde\Common\Object\Object;
 
-		abstract class AbstractSqlBuilder extends AbstractQueryBuilder {
-			protected function fragmentCreateSchema(ICrateSchemaQuery $query) : INativeTransaction {
+		abstract class AbstractSqlBuilder extends Object {
+			protected function fragmentCreateSchema(ICrateSchemaQuery $query): INativeTransaction {
 				$schema = $query->getSchema();
 				$sql = 'CREATE TABLE ' . ($this->delimite($table = $schema->getName())) . " (\n\t";
 				$columnList = [];
@@ -39,7 +38,7 @@
 				return new TransactionQuery($sql . implode(",\n\t", $columnList) . "\n)");
 			}
 
-			protected function fragmentInsert(IInsertQuery $insertQuery) : INativeTransaction {
+			protected function fragmentInsert(IInsertQuery $insertQuery): INativeTransaction {
 				$nameList = [];
 				$parameterList = [];
 				foreach ($insertQuery->getSource() as $k => $v) {
@@ -57,7 +56,7 @@
 			 * @return ITransactionQuery
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentSelect(ISelectQuery $selectQuery) : ITransactionQuery {
+			protected function fragmentSelect(ISelectQuery $selectQuery): ITransactionQuery {
 				$columnList = [];
 				$fromList = [];
 				$whereList = null;
@@ -86,7 +85,7 @@
 			 * @return INativeTransaction
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentUpdate(IUpdateQuery $updateQuery) : INativeTransaction {
+			protected function fragmentUpdate(IUpdateQuery $updateQuery): INativeTransaction {
 				$schema = $updateQuery->getSchema();
 				$schemaFragment = $updateQuery->getSchemaFragment();
 				$sql = "UPDATE\n\t";
@@ -112,7 +111,7 @@
 			 * @return ITransactionQuery
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentWhereGroup(IWhereGroup $whereGroup) : ITransactionQuery {
+			protected function fragmentWhereGroup(IWhereGroup $whereGroup): ITransactionQuery {
 				$whereList = null;
 				$parameterList = [];
 				foreach ($whereGroup as $where) {
@@ -132,7 +131,7 @@
 			 * @return ITransactionQuery
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentWhere(IWhere $where) : ITransactionQuery {
+			protected function fragmentWhere(IWhere $where): ITransactionQuery {
 				return $this->fragment($where->getExpression());
 			}
 
@@ -143,7 +142,7 @@
 			 * @throws QueryBuilderException
 			 * @throws \Exception
 			 */
-			protected function fragmentWhereExpressionEq(IWhereTo $whereTo) : ITransactionQuery {
+			protected function fragmentWhereExpressionEq(IWhereTo $whereTo): ITransactionQuery {
 				$name = $this->delimite($whereTo->getSchemaFragment()->getAlias()) . '.' . $this->delimite($whereTo->getName());
 				switch ($target = $whereTo->getTarget()) {
 					case 'column':

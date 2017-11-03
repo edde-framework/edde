@@ -3,6 +3,7 @@
 	namespace Edde\Api\Driver;
 
 		use Edde\Api\Config\IConfigurable;
+		use Edde\Api\Driver\Exception\DriverException;
 		use Edde\Api\Query\IQuery;
 
 		/**
@@ -16,6 +17,7 @@
 			 * @param IQuery $query
 			 *
 			 * @return mixed
+			 * @throws DriverException
 			 */
 			public function execute(IQuery $query);
 
