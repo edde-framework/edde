@@ -6,7 +6,6 @@
 		use Edde\Api\Query\Fragment\IWhere;
 		use Edde\Api\Query\Fragment\IWhereGroup;
 		use Edde\Api\Query\Fragment\IWhereTo;
-		use Edde\Api\Query\ICrateSchemaQuery;
 		use Edde\Api\Query\IInsertQuery;
 		use Edde\Api\Query\INativeTransaction;
 		use Edde\Api\Query\ISelectQuery;
@@ -15,29 +14,6 @@
 		use Edde\Common\Object\Object;
 
 		abstract class AbstractSqlBuilder extends Object {
-			protected function fragmentCreateSchema(ICrateSchemaQuery $query): INativeTransaction {
-				$schema = $query->getSchema();
-				$sql = 'CREATE TABLE ' . ($this->delimite($table = $schema->getName())) . " (\n\t";
-				$columnList = [];
-				$primaryList = [];
-				foreach ($schema->getPropertyList() as $property) {
-					$column = ($name = $this->delimite($property->getName())) . ' ' . $this->type($property->getType());
-					if ($property->isPrimary()) {
-						$primaryList[] = $name;
-					} else if ($property->isUnique()) {
-						$column .= ' UNIQUE';
-					}
-					if ($property->isRequired()) {
-						$column .= ' NOT NULL';
-					}
-					$columnList[] = $column;
-				}
-				if (empty($primaryList) === false) {
-					$columnList[] = "CONSTRAINT " . $this->delimite(sha1($table . '_primary_' . $primary = implode(', ', $primaryList))) . ' PRIMARY KEY (' . $primary . ")\n";
-				}
-				return new TransactionQuery($sql . implode(",\n\t", $columnList) . "\n)");
-			}
-
 			protected function fragmentInsert(IInsertQuery $insertQuery): INativeTransaction {
 				$nameList = [];
 				$parameterList = [];

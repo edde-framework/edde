@@ -5,6 +5,7 @@
 		use Edde\Api\Driver\Exception\DriverException;
 		use Edde\Api\Driver\IDriver;
 		use Edde\Api\Query\ICrateSchemaQuery;
+		use Edde\Api\Query\IInsertQuery;
 		use Edde\Common\Driver\AbstractDriver;
 		use PDO;
 
@@ -99,6 +100,23 @@
 					$sql .= ",\n\tFOREIGN KEY (" . $this->delimite($link->getSourceProperty()->getName()) . ') REFERENCES ' . $this->delimite($link->getTargetSchema()->getName()) . '(' . $this->delimite($link->getTargetProperty()->getName()) . ') ON DELETE RESTRICT ON UPDATE RESTRICT';
 				}
 				$this->native($sql . "\n)");
+			}
+
+			/**
+			 * @param IInsertQuery $insertQuery
+			 *
+			 * @throws \Throwable
+			 */
+			protected function executeInsertQuery(IInsertQuery $insertQuery) {
+				$nameList = [];
+				$parameterList = [];
+				foreach ($insertQuery->getSource() as $k => $v) {
+					$nameList[] = $this->delimite($k);
+					$parameterList['p_' . sha1($k)] = $v;
+				}
+				$schema = $insertQuery->getSchema();
+				$sql = "INSERT INTO\n\t" . $this->delimite($schema->getName()) . " (\n\t\t" . implode(",\n\t\t", $nameList) . "\n\t) VALUES (\n\t\t";
+				$this->native($sql . ':' . implode(",\n\t\t:", array_keys($parameterList)) . "\n\t)", $parameterList);
 			}
 
 			public function handleSetup(): void {
