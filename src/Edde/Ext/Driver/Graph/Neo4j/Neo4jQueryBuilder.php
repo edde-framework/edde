@@ -7,7 +7,6 @@
 		use Edde\Api\Query\Fragment\IWhere;
 		use Edde\Api\Query\Fragment\IWhereGroup;
 		use Edde\Api\Query\Fragment\IWhereTo;
-		use Edde\Api\Query\IInsertQuery;
 		use Edde\Api\Query\IRelationQuery;
 		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Query\ITransactionQuery;
@@ -15,11 +14,6 @@
 		use Edde\Common\Object\Object;
 
 		class Neo4jQueryBuilder extends Object {
-			protected function fragmentInsert(IInsertQuery $insertQuery): ITransactionQuery {
-				$source = $this->schemaManager->sanitize(($schema = $insertQuery->getSchema()), $insertQuery->getSource());
-				return new TransactionQuery('CREATE (n:' . $this->delimite($schema->getName()) . ' $set)', ['set' => $source]);
-			}
-
 			protected function fragmentRelation(IRelationQuery $relationQuery): ITransactionQuery {
 				$relation = $relationQuery->getRelation();
 				$relationName = $relation->getSchema()->getName();

@@ -4,6 +4,11 @@
 
 		use Edde\Api\Driver\Exception\DriverException;
 		use Edde\Api\Driver\IDriver;
+		use Edde\Api\Query\Fragment\IWhereGroup;
+		use Edde\Api\Query\ICrateSchemaQuery;
+		use Edde\Api\Query\IInsertQuery;
+		use Edde\Api\Query\INativeQuery;
+		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\NullValueException;
 		use Edde\Common\Driver\AbstractDriver;
@@ -99,6 +104,89 @@
 					return new NullValueException($message, 0, $throwable);
 				}
 				return new DriverException($message, 0, $throwable);
+			}
+
+			/**
+			 * @param ICrateSchemaQuery $crateSchemaQuery
+			 *
+			 * @throws \Throwable
+			 */
+			protected function executeCreateSchemaQuery(ICrateSchemaQuery $crateSchemaQuery) {
+				if (($schema = $crateSchemaQuery->getSchema())->isRelation()) {
+					return;
+				}
+				$primaryList = null;
+				$indexList = null;
+				$delimited = $this->delimite($schema->getName());
+				foreach ($schema->getPropertyList() as $property) {
+					$name = $property->getName();
+					$fragment = 'n.' . $this->delimite($name);
+					if ($property->isPrimary()) {
+						$primaryList[] = $fragment;
+					} else if ($property->isUnique()) {
+						$this->native('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT ' . $fragment . ' IS UNIQUE');
+					}
+					if ($property->isRequired()) {
+						$this->native('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT exists(' . $fragment . ')');
+					}
+				}
+				if ($indexList) {
+					$this->native('CREATE INDEX ON :' . $delimited . '(' . implode(',', $indexList) . ')');
+				}
+				if ($primaryList) {
+					$this->native('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT (' . implode(', ', $primaryList) . ') IS NODE KEY');
+				}
+			}
+
+			/**
+			 * @param IInsertQuery $insertQuery
+			 *
+			 * @throws \Throwable
+			 */
+			protected function executeInsertQuery(IInsertQuery $insertQuery) {
+				$this->native('CREATE (n:' . $this->delimite(($schema = $insertQuery->getSchema())->getName()) . ' $set)', [
+					'set' => $this->schemaManager->sanitize($schema, $insertQuery->getSource()),
+				]);
+			}
+
+			/**
+			 * @param ISelectQuery $selectQuery
+			 *
+			 * @return mixed
+			 * @throws \Throwable
+			 */
+			protected function executeSelectQuery(ISelectQuery $selectQuery) {
+				$returnList = [];
+				$cypher = "MATCH\n\t";
+				$matchList = [];
+				$parameterList = [];
+				foreach ($selectQuery->getSchemaFragmentList() as $schemaFragment) {
+					$alias = $this->delimite($schemaFragment->getAlias());
+					switch ($schemaFragment->getType()) {
+						case 'schema':
+							$cypher .= '(' . $alias . ':' . $this->delimite($schemaFragment->getSchema()->getName()) . ')';
+							$parameterList = [];
+							if ($schemaFragment->hasWhere()) {
+								$cypher .= "\nWHERE" . ($query = $this->fragmentWhereGroup($schemaFragment->where()))->getQuery() . "\n";
+								$parameterList = array_merge($parameterList, $query->getParameterList());
+							}
+							break;
+					}
+					if ($schemaFragment->isSelected()) {
+						$returnList[] = $alias;
+					}
+				}
+				return $this->native($cypher . implode(",\n\t", $matchList) . "\nRETURN\n\t" . implode(', ', $returnList), $parameterList);
+			}
+
+			protected function fragmentWhereGroup(IWhereGroup $whereGroup): INativeQuery {
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function delimite(string $delimite): string {
+				return '`' . str_replace('`', '``', $delimite) . '`';
 			}
 
 			protected function handleSetup(): void {

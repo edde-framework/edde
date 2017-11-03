@@ -4,8 +4,6 @@
 
 		use Edde\Api\Driver\Exception\DriverException;
 		use Edde\Api\Driver\IDriver;
-		use Edde\Api\Query\ICrateSchemaQuery;
-		use Edde\Api\Query\IInsertQuery;
 		use Edde\Api\Query\IQuery;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Common\Object\Object;
@@ -27,46 +25,6 @@
 					throw new DriverException(sprintf('Unknown query type [%s] for driver [%s]: an [%s] executor is not implemented.', $class, static::class, $execute));
 				}
 				return $this->executeList[$execute]($query);
-			}
-
-			protected function executeCreateSchemaQuery(ICrateSchemaQuery $crateSchemaQuery) {
-				if (($schema = $crateSchemaQuery->getSchema())->isRelation()) {
-					return;
-				}
-				$primaryList = null;
-				$indexList = null;
-				$delimited = $this->delimite($schema->getName());
-				foreach ($schema->getPropertyList() as $property) {
-					$name = $property->getName();
-					$fragment = 'n.' . $this->delimite($name);
-					if ($property->isPrimary()) {
-						$primaryList[] = $fragment;
-					} else if ($property->isUnique()) {
-						$this->native('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT ' . $fragment . ' IS UNIQUE');
-					}
-					if ($property->isRequired()) {
-						$this->native('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT exists(' . $fragment . ')');
-					}
-				}
-				if ($indexList) {
-					$this->native('CREATE INDEX ON :' . $delimited . '(' . implode(',', $indexList) . ')');
-				}
-				if ($primaryList) {
-					$this->native('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT (' . implode(', ', $primaryList) . ') IS NODE KEY');
-				}
-			}
-
-			protected function executeInsertQuery(IInsertQuery $insertQuery) {
-				$this->native('CREATE (n:' . $this->delimite(($schema = $insertQuery->getSchema())->getName()) . ' $set)', [
-					'set' => $this->schemaManager->sanitize($schema, $insertQuery->getSource()),
-				]);
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function delimite(string $delimite): string {
-				return '`' . str_replace('`', '``', $delimite) . '`';
 			}
 
 			protected function handleSetup(): void {
