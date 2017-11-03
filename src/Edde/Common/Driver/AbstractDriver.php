@@ -34,9 +34,12 @@
 			}
 
 			/**
-			 * @inheritdoc
+			 * @param IFragment $fragment
+			 *
+			 * @return INativeQuery
+			 * @throws DriverException
 			 */
-			public function fragment(IFragment $fragment): INativeQuery {
+			protected function fragment(IFragment $fragment): INativeQuery {
 				if (isset($this->fragmentList[$name = ('fragment' . ($class = substr($class = get_class($fragment), strrpos($class, '\\') + 1)))]) === false) {
 					throw new DriverException(sprintf('Unknown fragment type [%s] for driver [%s]: a [%s] fragment is not implemented.', $class, static::class, $name));
 				}
