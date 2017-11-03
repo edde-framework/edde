@@ -178,16 +178,18 @@
 					'name' => 'foo The First',
 				]);
 				self::assertFalse($foo->exists());
-				$entity = $this->entityManager->create(FooSchema::class, [
+				$foo2 = $this->entityManager->create(FooSchema::class, [
 					'name' => 'foo The Second',
-				])->save();
-				self::assertTrue($entity->exists());
+				]);
 				$bar = $this->entityManager->create(BarSchema::class, [
 					'name' => 'bar The Second',
 				]);
 				self::assertFalse($bar->exists());
 				$bar2 = $this->entityManager->create(BarSchema::class, [
 					'name' => 'bar The Third',
+				]);
+				$bar3 = $this->entityManager->create(BarSchema::class, [
+					'name' => 'Bar for The Foo',
 				]);
 				$this->entityManager->create(BarSchema::class, [
 					'name' => 'Another, very secret bar!',
@@ -210,9 +212,13 @@
 				$bar2->attach($poo2);
 				$bar2->attach($poo3);
 				$foo->save();
+				$foo2->attach($bar3);
+				$foo2->save();
 				self::assertTrue($foo->exists());
+				self::assertTrue($foo2->exists());
 				self::assertTrue($bar->exists());
 				self::assertTrue($bar2->exists());
+				self::assertTrue($bar3->exists());
 				self::assertTrue($poo->exists());
 				self::assertTrue($poo2->exists());
 				self::assertTrue($poo3->exists());
