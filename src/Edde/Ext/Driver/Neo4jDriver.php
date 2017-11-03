@@ -166,11 +166,24 @@
 				$cypher .= 'WHERE';
 				$cypher .= "\n\ta." . ($source = $sourceLink->getTargetProperty()->getName()) . " = \$a AND";
 				$cypher .= "\n\tb." . ($target = $targetLink->getTargetProperty()->getName()) . " = \$b\n";
-				$cypher .= "MERGE\n\t(a)-[:" . $this->delimite($relation->getSchema()->getName()) . ']->(b)';
-				$this->native($cypher, [
+				$cypher .= "MERGE\n\t(a)-[:" . $this->delimite($relation->getSchema()->getName());
+				$properties = [
 					'a' => $createRelationQuery->getFrom()[$source],
 					'b' => $createRelationQuery->getTo()[$target],
-				]);
+				];
+				if ($createRelationQuery->hasSource()) {
+					$cypher .= ' {';
+					$propertyList = [];
+					foreach ($createRelationQuery->getSource() as $k => $v) {
+						if ($v !== null) {
+							$propertyList[] = $this->delimite($k) . ': $' . ($parameterId = ('p_' . sha1(random_bytes(42))));
+							$properties[$parameterId] = $v;
+						}
+					}
+					$cypher .= implode(', ', $propertyList) . '}';
+				}
+				$cypher .= ']->(b)';
+				$this->native($cypher, $properties);
 			}
 
 			/**
