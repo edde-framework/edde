@@ -181,14 +181,14 @@
 			 * @throws \Throwable
 			 */
 			protected function executeSelectQuery(ISelectQuery $selectQuery) {
-				$returnList = [];
 				$cypher = "MATCH\n\t";
 				$matchList = [];
 				$parameterList = [];
+				$return = null;
 				foreach ($selectQuery->getTableList() as $table) {
 					$alias = $this->delimite($table->getAlias());
 					if ($table->isSelected()) {
-						$returnList[] = $alias;
+						$return = $alias;
 					}
 					switch ($type = $table->getType()) {
 						case 'Table':
@@ -196,7 +196,6 @@
 							$parameterList = [];
 							foreach ($table->getJoinList() as $name => $relation) {
 								$cypher .= '-[:' . $this->delimite($relation->getSchema()->getName()) . ']-(' . ($return = $this->delimite($name)) . ':' . $this->delimite($relation->getTargetLink()->getTargetSchema()->getName()) . ')';
-								$returnList = [$return];
 							}
 							if ($table->hasWhere()) {
 								$cypher .= "\nWHERE" . ($query = $this->fragmentWhereGroup($table->where()))->getQuery() . "\n";
@@ -207,7 +206,7 @@
 							throw new DriverQueryException(sprintf('Unknown schema fragment type [%s].', $type));
 					}
 				}
-				return $this->native($cypher . implode(",\n\t", $matchList) . "\nRETURN\n\t" . implode(', ', $returnList), $parameterList);
+				return $this->native($cypher . implode(",\n\t", $matchList) . "\nRETURN\n\t" . $return, $parameterList);
 			}
 
 			/**
