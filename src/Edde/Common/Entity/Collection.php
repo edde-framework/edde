@@ -29,7 +29,10 @@
 			 * @var ITable
 			 */
 			protected $table;
-			protected $joinList = null;
+			/**
+			 * @var ISchema
+			 */
+			protected $join;
 
 			public function __construct(IStream $stream, ISchema $schema) {
 				$this->stream = $stream;
@@ -41,7 +44,7 @@
 			 */
 			public function query(ISelectQuery $query): ICollection {
 				$this->table = null;
-				$this->joinList = null;
+				$this->join = null;
 				$this->stream->query($query);
 				return $this;
 			}
@@ -82,16 +85,14 @@
 			 * @inheritdoc
 			 */
 			public function join(string $target, string $alias, array $on = []): ICollection {
-				if ($this->joinList === null) {
-					$this->joinList[] = $this->schema;
+				if ($this->join === null) {
+					$this->join = $this->schema;
 				}
 				if ($this->table === null) {
 					$this->table = $this->stream->getQuery()->table($this->schema, 'c');
 				}
-				/** @var $current ISchema */
-				$current = end($this->joinList);
-				$this->table->join($relation = $current->getRelation($target), $alias, $on);
-				$this->joinList[] = $relation->getTargetLink()->getTargetSchema();
+				$this->table->join($relation = $this->join->getRelation($target), $alias, $on);
+				$this->join = $relation->getTargetLink()->getTargetSchema();
 				return $this;
 			}
 
@@ -108,6 +109,6 @@
 				parent::__clone();
 				$this->stream = clone $this->stream;
 				$this->table = null;
-				$this->joinList = null;
+				$this->join = $this->schema;
 			}
 		}
