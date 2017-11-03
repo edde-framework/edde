@@ -12,6 +12,15 @@
 		 */
 		interface ICollection extends IteratorAggregate {
 			/**
+			 * set custom query for this collection
+			 *
+			 * @param IQuery $query
+			 *
+			 * @return ICollection
+			 */
+			public function query(IQuery $query): ICollection;
+
+			/**
 			 * get the query to customize this collection
 			 *
 			 * @return IQuery

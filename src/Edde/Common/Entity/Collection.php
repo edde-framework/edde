@@ -32,6 +32,14 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function query(IQuery $query): ICollection {
+				$this->stream->query($query);
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function getQuery(): IQuery {
 				return $this->stream->getQuery();
 			}
@@ -51,8 +59,7 @@
 			 */
 			public function entity($name): IEntity {
 				$this->stream->query($query = new SelectQuery());
-				$where = $query->schema($this->schema, 'c')->where();
-				$schema = $this->schemaManager->load($this->schema);
+				$where = $query->schema($schema = $this->schemaManager->load($this->schema), 'c')->select()->where();
 				foreach ($schema->getPrimaryList() as $property) {
 					$where->or()->eq($property->getName())->to($name);
 				}

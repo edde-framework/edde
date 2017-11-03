@@ -187,7 +187,7 @@
 				$parameterList = [];
 				foreach ($selectQuery->getSchemaFragmentList() as $schemaFragment) {
 					$alias = $this->delimite($schemaFragment->getAlias());
-					switch ($schemaFragment->getType()) {
+					switch ($type = $schemaFragment->getType()) {
 						case 'schema':
 							$cypher .= '(' . $alias . ':' . $this->delimite($schemaFragment->getSchema()->getName()) . ')';
 							$parameterList = [];
@@ -196,6 +196,20 @@
 								$parameterList = array_merge($parameterList, $query->getParameterList());
 							}
 							break;
+						case 'link':
+							$cypher = '(a:' . $schemaFragment->getSchema()->getName() . ')';
+							foreach ($schemaFragment->getLinkList() as $alias => $link) {
+								$relation = $link->getRelation();
+								$cypher .= '-[:' . $this->delimite($relation->getSchema()->getName()) . ']->(b:' . $this->delimite($relation->getTargetLink()->getTargetSchema()->getName()) . ')';
+							}
+							$cypher .= "\nWHERE\n\t";
+							foreach ($schemaFragment->getLinkList() as $alias => $link) {
+								$relation = $link->getRelation();
+								$cypher .= 'a.' . $this->delimite($relation->getTargetLink()->getTargetProperty()->getName()) . ' = $guid';
+							}
+							break;
+						default:
+							throw new DriverQueryException(sprintf('Unknown schema fragment type [%s].', $type));
 					}
 					if ($schemaFragment->isSelected()) {
 						$returnList[] = $alias;
