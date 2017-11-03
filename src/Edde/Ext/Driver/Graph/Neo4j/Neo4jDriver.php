@@ -4,14 +4,17 @@
 
 		use Edde\Api\Driver\Exception\DriverException;
 		use Edde\Api\Driver\IDriver;
+		use Edde\Api\Query\Fragment\IWhere;
 		use Edde\Api\Query\Fragment\IWhereGroup;
 		use Edde\Api\Query\ICrateSchemaQuery;
 		use Edde\Api\Query\IInsertQuery;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\ISelectQuery;
+		use Edde\Api\Query\IUpdateQuery;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\NullValueException;
 		use Edde\Common\Driver\AbstractDriver;
+		use Edde\Common\Query\NativeQuery;
 		use GraphAware\Bolt\Exception\MessageFailureException;
 		use GraphAware\Bolt\GraphDatabase;
 		use GraphAware\Bolt\Protocol\SessionInterface;
@@ -179,7 +182,53 @@
 				return $this->native($cypher . implode(",\n\t", $matchList) . "\nRETURN\n\t" . implode(', ', $returnList), $parameterList);
 			}
 
+			/**
+			 * @param IUpdateQuery $updateQuery
+			 *
+			 * @throws \Throwable
+			 */
+			protected function executeUpdateQuery(IUpdateQuery $updateQuery) {
+				$schemaFragment = $updateQuery->getSchemaFragment();
+				$cypher = "MATCH\n\t(" . ($alias = $this->delimite($schemaFragment->getAlias())) . ':' . $this->delimite(($schema = $schemaFragment->getSchema())->getName()) . ")\n";
+				$parameterList = [];
+				if ($schemaFragment->hasWhere()) {
+					$cypher .= 'WHERE' . ($query = $this->fragmentWhereGroup($schemaFragment->where()))->getQuery() . "\n";
+					$parameterList = $query->getParameterList();
+				}
+				$this->native($cypher . "SET\n\t" . $alias . ' = $set', array_merge($parameterList, [
+					'set' => $this->schemaManager->sanitize($schema, $updateQuery->getSource()),
+				]));
+			}
+
 			protected function fragmentWhereGroup(IWhereGroup $whereGroup): INativeQuery {
+				$cypher = null;
+				$parameterList = [];
+				foreach ($whereGroup as $where) {
+					$sql = "\n\t";
+					if ($cypher) {
+						$sql = ' ' . strtoupper($where->getRelation()) . "\n\t";
+					}
+					$cypher .= $sql . ($query = $this->fragmentWhere($where))->getQuery();
+					$parameterList = array_merge($parameterList, $query->getParameterList());
+				}
+				return new NativeQuery($cypher, $parameterList);
+			}
+
+			protected function fragmentWhere(IWhere $where): INativeQuery {
+				switch (($expression = $where->getExpression())->getType()) {
+					case 'where-expression-eq':
+						$name = $this->delimite($whereTo->getSchemaFragment()->getAlias()) . '.' . $this->delimite($whereTo->getName());
+						switch ($target = $whereTo->getTarget()) {
+							case 'column':
+								list($prefix, $column) = $whereTo->getValue();
+								return new TransactionQuery($name . ' = ' . $this->delimite($prefix) . '.' . $this->delimite($column));
+							case 'value':
+								return new TransactionQuery($name . ' = $' . ($parameterId = 'p_' . sha1($target . microtime(true) . random_bytes(8))), [
+									$parameterId => $whereTo->getValue(),
+								]);
+						}
+						throw new QueryBuilderException(sprintf('Unknown where expression [%s] target [%s].', $whereTo->getType(), $target));
+				}
 			}
 
 			/**

@@ -5,12 +5,10 @@
 		use Edde\Api\Query\Exception\QueryBuilderException;
 		use Edde\Api\Query\Fragment\ISchemaFragment;
 		use Edde\Api\Query\Fragment\IWhere;
-		use Edde\Api\Query\Fragment\IWhereGroup;
 		use Edde\Api\Query\Fragment\IWhereTo;
 		use Edde\Api\Query\IRelationQuery;
 		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Query\ITransactionQuery;
-		use Edde\Api\Query\IUpdateQuery;
 		use Edde\Common\Object\Object;
 
 		class Neo4jQueryBuilder extends Object {
@@ -52,22 +50,6 @@
 				return new TransactionQuery($cypher, $parameterList);
 			}
 
-			/**
-			 * @param ISchemaFragment $schemaFragment
-			 *
-			 * @return TransactionQuery
-			 * @throws QueryBuilderException
-			 */
-			protected function fragmentSchema(ISchemaFragment $schemaFragment): ITransactionQuery {
-				$cypher = '(' . $this->delimite($alias = $schemaFragment->getAlias()) . ':' . $this->delimite($schemaFragment->getSchema()->getName()) . ')';
-				$parameterList = [];
-				if ($schemaFragment->hasWhere()) {
-					$cypher .= "\nWHERE" . ($query = $this->fragmentWhereGroup($schemaFragment->where()))->getQuery() . "\n";
-					$parameterList = $query->getParameterList();
-				}
-				return new TransactionQuery($cypher, $parameterList);
-			}
-
 			protected function fragmentLink(ISchemaFragment $schemaFragment): ITransactionQuery {
 				$cypher = '(a:' . $schemaFragment->getSchema()->getName() . ')';
 				foreach ($schemaFragment->getLinkList() as $alias => $link) {
@@ -80,46 +62,6 @@
 					$cypher .= 'a.' . $this->delimite($relation->getTargetLink()->getTargetProperty()->getName()) . ' = $guid';
 				}
 				return new TransactionQuery($cypher);
-			}
-
-			/**
-			 * @param IUpdateQuery $updateQuery
-			 *
-			 * @return ITransactionQuery
-			 * @throws QueryBuilderException
-			 */
-			protected function fragmentUpdate(IUpdateQuery $updateQuery): ITransactionQuery {
-				$schemaFragment = $updateQuery->getSchemaFragment();
-				$cypher = "MATCH\n\t(" . ($alias = $this->delimite($schemaFragment->getAlias())) . ':' . $this->delimite(($schema = $schemaFragment->getSchema())->getName()) . ")\n";
-				$parameterList = [];
-				if ($schemaFragment->hasWhere()) {
-					$cypher .= 'WHERE' . ($query = $this->fragmentWhereGroup($schemaFragment->where()))->getQuery() . "\n";
-					$parameterList = $query->getParameterList();
-				}
-				$cypher .= "SET\n\t" . $alias . ' = $set';
-				return new TransactionQuery($cypher, array_merge($parameterList, [
-					'set' => $this->schemaManager->sanitize($schema, $updateQuery->getSource()),
-				]));
-			}
-
-			/**
-			 * @param IWhereGroup $whereGroup
-			 *
-			 * @return ITransactionQuery
-			 * @throws QueryBuilderException
-			 */
-			protected function fragmentWhereGroup(IWhereGroup $whereGroup): ITransactionQuery {
-				$whereList = null;
-				$parameterList = [];
-				foreach ($whereGroup as $where) {
-					$sql = "\n\t";
-					if ($whereList) {
-						$sql = ' ' . strtoupper($where->getRelation()) . "\n\t";
-					}
-					$whereList .= $sql . ($query = $this->fragmentWhere($where))->getQuery();
-					$parameterList = array_merge($parameterList, $query->getParameterList());
-				}
-				return new TransactionQuery($whereList, $parameterList);
 			}
 
 			/**
