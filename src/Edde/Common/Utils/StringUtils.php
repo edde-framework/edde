@@ -118,7 +118,7 @@
 			 */
 			public function extract(string $source, string $separator = '\\', int $index = -1): string {
 				$sourceList = explode($separator, $source);
-				return isset($sourceList[$index = $index < 0 ? count($sourceList) + $index : $index]) ? $sourceList[$index] : '';
+				return isset($sourceList[$index = ($index < 0 ? count($sourceList) + $index : $index)]) ? (string)$sourceList[$index] : '';
 			}
 
 			/**

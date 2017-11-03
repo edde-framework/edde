@@ -5,14 +5,15 @@
 		use Edde\Api\Driver\Exception\DriverException;
 		use Edde\Api\Driver\IDriver;
 		use Edde\Api\Query\ICrateSchemaQuery;
+		use Edde\Api\Query\IInsertQuery;
 		use Edde\Api\Query\IQuery;
-		use Edde\Api\Utils\Inject\StringUtils;
+		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Common\Object\Object;
 		use ReflectionClass;
 		use ReflectionMethod;
 
 		abstract class AbstractDriver extends Object implements IDriver {
-			use StringUtils;
+			use SchemaManager;
 			/**
 			 * @var callable[]
 			 */
@@ -22,7 +23,7 @@
 			 * @inheritdoc
 			 */
 			public function execute(IQuery $query) {
-				if (isset($this->executeList[$execute = ('execute' . ($class = $this->stringUtils->extract(get_class($query))))]) === false) {
+				if (isset($this->executeList[$execute = ('execute' . ($class = substr($class = get_class($query), strrpos($class, '\\') + 1)))]) === false) {
 					throw new DriverException(sprintf('Unknown query type [%s] for driver [%s]: an [%s] executor is not implemented.', $class, static::class, $execute));
 				}
 				return $this->executeList[$execute]($query);
@@ -53,6 +54,12 @@
 				if ($primaryList) {
 					$this->native('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT (' . implode(', ', $primaryList) . ') IS NODE KEY');
 				}
+			}
+
+			protected function executeInsertQuery(IInsertQuery $insertQuery) {
+				$this->native('CREATE (n:' . $this->delimite(($schema = $insertQuery->getSchema())->getName()) . ' $set)', [
+					'set' => $this->schemaManager->sanitize($schema, $insertQuery->getSource()),
+				]);
 			}
 
 			/**
