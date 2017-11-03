@@ -6,6 +6,20 @@
 
 		interface ICreateRelationQuery extends IQuery {
 			/**
+			 * has this relation some properties?
+			 *
+			 * @return bool
+			 */
+			public function hasSource(): bool;
+
+			/**
+			 * return properties of this relation
+			 *
+			 * @return array
+			 */
+			public function getSource(): array;
+
+			/**
 			 * source piece of data (should be already present in the storage)
 			 *
 			 * @param array $source

@@ -297,4 +297,43 @@
 				sort($current);
 				self::assertSame($expect, $current, 'entities are not same or not loaded by the collection!');
 			}
+
+			/**
+			 * @throws DuplicateEntryException
+			 * @throws IntegrityException
+			 * @throws StorageException
+			 * @throws UnknownSchemaException
+			 */
+			public function testRelationAttribute() {
+				$this->schemaManager->load(UserRoleSchema::class);
+				$user = $this->entityManager->create(UserSchema::class, [
+					'name'    => 'Me, The Best User Ever!',
+					'email'   => 'me@there.here',
+					'created' => new \DateTime(),
+				]);
+				$root = $this->entityManager->create(RoleSchema::class, [
+					'name'  => 'root',
+					'label' => 'he can do everything!',
+				]);
+				$guest = $this->entityManager->create(RoleSchema::class, [
+					'name'  => 'guest',
+					'label' => 'this one can do almost nothing!',
+				]);
+				$root->attach($user)->set('enabled', true);
+				$guest->attach($user)->set('enabled', false);
+				$root->save();
+				$guest->save();
+				$expect = [
+					'root',
+					'guest',
+				];
+				$current = [];
+				foreach ($user->join(RoleSchema::class, 'r') as $role) {
+					self::assertEquals(RoleSchema::class, $role->getSchema()->getName());
+					$current[] = $role->get('name');
+				}
+				sort($expect);
+				sort($current);
+				self::assertSame($expect, $current, 'looks like roles are not properly assigned!');
+			}
 		}

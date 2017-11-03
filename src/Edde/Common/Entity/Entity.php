@@ -109,7 +109,7 @@
 							throw new RelationException(sprintf('Cannot save [%s] as it does not have exactly two links', $this->schema->getName()));
 						}
 						list($from, $to) = $this->linkList;
-						$query = new CreateRelationQuery($this->relation);
+						$query = new CreateRelationQuery($this->relation, $source);
 						$query->from($from->toArray());
 						$query->to($to->toArray());
 					} else if ($this->exists) {

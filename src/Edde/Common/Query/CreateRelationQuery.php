@@ -14,6 +14,10 @@
 			 */
 			protected $relation;
 			/**
+			 * @var array|null
+			 */
+			protected $source;
+			/**
 			 * @var array
 			 */
 			protected $from;
@@ -22,9 +26,24 @@
 			 */
 			protected $to;
 
-			public function __construct(IRelation $relation) {
+			public function __construct(IRelation $relation, array $source = []) {
 				parent::__construct('CreateRelationQuery');
 				$this->relation = $relation;
+				$this->source = $source;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function hasSource(): bool {
+				return empty($this->source) === false;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getSource(): array {
+				return $this->source;
 			}
 
 			/**

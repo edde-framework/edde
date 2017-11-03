@@ -132,10 +132,10 @@
 			 * @throws \Throwable
 			 */
 			protected function executeCreateRelationQuery(ICreateRelationQuery $createRelationQuery) {
-				$this->executeInsertQuery(new InsertQuery(($relation = $createRelationQuery->getRelation())->getSchema(), [
+				$this->executeInsertQuery(new InsertQuery(($relation = $createRelationQuery->getRelation())->getSchema(), array_merge($createRelationQuery->getSource(), [
 					($sourceLink = $relation->getSourceLink())->getSourceProperty()->getName() => $createRelationQuery->getFrom()[$sourceLink->getTargetProperty()->getName()],
 					($targetLink = $relation->getTargetLink())->getSourceProperty()->getName() => $createRelationQuery->getTo()[$targetLink->getTargetProperty()->getName()],
-				]));
+				])));
 			}
 
 			/**
