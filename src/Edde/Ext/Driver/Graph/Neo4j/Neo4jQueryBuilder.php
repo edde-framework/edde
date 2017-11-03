@@ -4,15 +4,13 @@
 
 		use Edde\Api\Query\Exception\QueryBuilderException;
 		use Edde\Api\Query\Fragment\ISchemaFragment;
-		use Edde\Api\Query\Fragment\IWhere;
-		use Edde\Api\Query\Fragment\IWhereTo;
-		use Edde\Api\Query\IRelationQuery;
+		use Edde\Api\Query\ICreateRelationQuery;
 		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Query\ITransactionQuery;
 		use Edde\Common\Object\Object;
 
 		class Neo4jQueryBuilder extends Object {
-			protected function fragmentRelation(IRelationQuery $relationQuery): ITransactionQuery {
+			protected function fragmentRelation(ICreateRelationQuery $relationQuery): ITransactionQuery {
 				$relation = $relationQuery->getRelation();
 				$relationName = $relation->getSchema()->getName();
 				$cypher = 'MATCH';
@@ -64,48 +62,4 @@
 				return new TransactionQuery($cypher);
 			}
 
-			/**
-			 * @param IWhere $where
-			 *
-			 * @return ITransactionQuery
-			 * @throws QueryBuilderException
-			 */
-			protected function fragmentWhere(IWhere $where): ITransactionQuery {
-				return $this->fragment($where->getExpression());
-			}
-
-			/**
-			 * @param IWhereTo $whereTo
-			 *
-			 * @return ITransactionQuery
-			 * @throws QueryBuilderException
-			 * @throws \Exception
-			 */
-			protected function fragmentWhereExpressionEq(IWhereTo $whereTo): ITransactionQuery {
-				$name = $this->delimite($whereTo->getSchemaFragment()->getAlias()) . '.' . $this->delimite($whereTo->getName());
-				switch ($target = $whereTo->getTarget()) {
-					case 'column':
-						list($prefix, $column) = $whereTo->getValue();
-						return new TransactionQuery($name . ' = ' . $this->delimite($prefix) . '.' . $this->delimite($column));
-					case 'value':
-						return new TransactionQuery($name . ' = $' . ($parameterId = 'p_' . sha1($target . microtime(true) . random_bytes(8))), [
-							$parameterId => $whereTo->getValue(),
-						]);
-				}
-				throw new QueryBuilderException(sprintf('Unknown where expression [%s] target [%s].', $whereTo->getType(), $target));
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function delimite(string $delimite): string {
-				return '`' . str_replace('`', '``', $delimite) . '`';
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function type(string $type): string {
-				throw new QueryBuilderException(sprintf('Unknown type [%s] in query builder [%s]', $type, static::class));
-			}
 		}

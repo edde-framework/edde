@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Entity;
 
-		use Edde\Api\Query\ISelectQuery;
+		use Edde\Api\Query\IQuery;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
 		use IteratorAggregate;
 		use Traversable;
@@ -14,9 +14,9 @@
 			/**
 			 * get the query to customize this collection
 			 *
-			 * @return ISelectQuery
+			 * @return IQuery
 			 */
-			public function getQuery(): ISelectQuery;
+			public function getQuery(): IQuery;
 
 			/**
 			 * get exactly one entity or throw an exception of the collection is empty; this

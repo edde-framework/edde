@@ -2,13 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Query;
 
-		use Edde\Api\Query\IRelationQuery;
+		use Edde\Api\Query\ICreateRelationQuery;
 		use Edde\Api\Schema\IRelation;
 
 		/**
 		 * General relation query (1:n, m:n).
 		 */
-		class RelationQuery extends AbstractQuery implements IRelationQuery {
+		class CreateRelationQuery extends AbstractQuery implements ICreateRelationQuery {
 			/**
 			 * @var IRelation
 			 */
@@ -23,14 +23,14 @@
 			protected $to;
 
 			public function __construct(IRelation $relation) {
-				parent::__construct('relation');
+				parent::__construct('CreateRelationQuery');
 				$this->relation = $relation;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function from(array $source): IRelationQuery {
+			public function from(array $source): ICreateRelationQuery {
 				$this->from = $source;
 				return $this;
 			}
@@ -38,7 +38,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function to(array $source): IRelationQuery {
+			public function to(array $source): ICreateRelationQuery {
 				$this->to = $source;
 				return $this;
 			}

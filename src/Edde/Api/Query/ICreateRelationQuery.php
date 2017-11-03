@@ -4,24 +4,24 @@
 
 		use Edde\Api\Schema\IRelation;
 
-		interface IRelationQuery extends IQuery {
+		interface ICreateRelationQuery extends IQuery {
 			/**
 			 * source piece of data (should be already present in the storage)
 			 *
 			 * @param array $source
 			 *
-			 * @return IRelationQuery
+			 * @return ICreateRelationQuery
 			 */
-			public function from(array $source): IRelationQuery;
+			public function from(array $source): ICreateRelationQuery;
 
 			/**
 			 * target piece of data; this one also should be already present in the storage
 			 *
 			 * @param array $source
 			 *
-			 * @return IRelationQuery
+			 * @return ICreateRelationQuery
 			 */
-			public function to(array $source): IRelationQuery;
+			public function to(array $source): ICreateRelationQuery;
 
 			/**
 			 * @return IRelation

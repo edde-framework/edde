@@ -26,6 +26,14 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function query(IQuery $query): IStream {
+				$this->query = $query;
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function getQuery(): IQuery {
 				return $this->query;
 			}

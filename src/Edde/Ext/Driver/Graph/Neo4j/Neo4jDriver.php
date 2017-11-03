@@ -8,6 +8,7 @@
 		use Edde\Api\Query\Fragment\IWhereGroup;
 		use Edde\Api\Query\Fragment\IWhereTo;
 		use Edde\Api\Query\ICrateSchemaQuery;
+		use Edde\Api\Query\ICreateRelationQuery;
 		use Edde\Api\Query\IInsertQuery;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\ISelectQuery;
@@ -150,6 +151,26 @@
 			protected function executeInsertQuery(IInsertQuery $insertQuery) {
 				$this->native('CREATE (n:' . $this->delimite(($schema = $insertQuery->getSchema())->getName()) . ' $set)', [
 					'set' => $this->schemaManager->sanitize($schema, $insertQuery->getSource()),
+				]);
+			}
+
+			/**
+			 * @param ICreateRelationQuery $relationQuery
+			 *
+			 * @throws \Throwable
+			 */
+			protected function executeCreateRelationQuery(ICreateRelationQuery $relationQuery) {
+				$relation = $relationQuery->getRelation();
+				$cypher = 'MATCH';
+				$cypher .= "\n\t(a:" . $this->delimite(($sourceLink = $relation->getSourceLink())->getTargetSchema()->getName()) . '),';
+				$cypher .= "\n\t(b:" . $this->delimite(($targetLink = $relation->getTargetLink())->getTargetSchema()->getName()) . ")\n";
+				$cypher .= 'WHERE';
+				$cypher .= "\n\ta." . ($source = $sourceLink->getTargetProperty()->getName()) . " = \$a AND";
+				$cypher .= "\n\tb." . ($target = $targetLink->getTargetProperty()->getName()) . " = \$b\n";
+				$cypher .= "MERGE\n\t(a)-[:" . $this->delimite($relation->getSchema()->getName()) . ']->(b)';
+				$this->native($cypher, [
+					'a' => $relationQuery->getFrom()[$source],
+					'b' => $relationQuery->getTo()[$target],
 				]);
 			}
 

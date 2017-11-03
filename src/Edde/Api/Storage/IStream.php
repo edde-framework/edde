@@ -12,8 +12,16 @@
 		 */
 		interface IStream extends IteratorAggregate {
 			/**
-			 * return query powering this stream; only select queries could
-			 * be used
+			 * override query of the stream
+			 *
+			 * @param IQuery $query
+			 *
+			 * @return IStream
+			 */
+			public function query(IQuery $query): IStream;
+
+			/**
+			 * return query powering this stream
 			 *
 			 * @return IQuery
 			 */

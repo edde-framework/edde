@@ -5,11 +5,12 @@
 		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\Inject\EntityManager;
-		use Edde\Api\Query\ISelectQuery;
+		use Edde\Api\Query\IQuery;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
 		use Edde\Api\Storage\IStream;
 		use Edde\Common\Object\Object;
+		use Edde\Common\Query\SelectQuery;
 
 		class Collection extends Object implements ICollection {
 			use EntityManager;
@@ -31,7 +32,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getQuery(): ISelectQuery {
+			public function getQuery(): IQuery {
 				return $this->stream->getQuery();
 			}
 
@@ -49,7 +50,8 @@
 			 * @inheritdoc
 			 */
 			public function entity($name): IEntity {
-				$where = $this->stream->getQuery()->schema($this->schema, 'c')->where();
+				$this->stream->query($query = new SelectQuery());
+				$where = $query->schema($this->schema, 'c')->where();
 				$schema = $this->schemaManager->load($this->schema);
 				foreach ($schema->getPrimaryList() as $property) {
 					$where->or()->eq($property->getName())->to($name);
