@@ -86,7 +86,12 @@
 			 * @inheritdoc
 			 */
 			public function link(IRelation $relation, string $alias): ILink {
-				return $this->linkList[$alias] = (new Link($relation, $alias));
+				/**
+				 * change type of this query to a relation; it could be processed in a
+				 * different way if needed
+				 */
+				$this->type = 'relation';
+				return $this->linkList[$alias] = new Link($relation, $alias);
 			}
 
 			/**

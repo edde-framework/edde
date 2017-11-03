@@ -20,7 +20,7 @@
 			public function __construct(IRelation $relation, string $alias) {
 				parent::__construct($relation->getSchema(), $alias);
 				$this->relation = $relation;
-				$this->type = 'relation';
+				$this->type = 'link';
 			}
 
 			/**
