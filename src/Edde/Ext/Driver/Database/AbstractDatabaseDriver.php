@@ -3,7 +3,9 @@
 	namespace Edde\Ext\Driver\Database;
 
 		use Edde\Api\Driver\Exception\DriverException;
+		use Edde\Api\Driver\Exception\DriverQueryException;
 		use Edde\Api\Driver\IDriver;
+		use Edde\Api\Query\ICrateSchemaQuery;
 		use Edde\Common\Driver\AbstractDriver;
 		use PDO;
 
@@ -66,6 +68,65 @@
 
 			protected function exception(\Throwable $throwable): \Throwable {
 				return new DriverException('Unhandled exception: ' . $throwable->getMessage(), 0, $throwable);
+			}
+
+			/**
+			 * @param ICrateSchemaQuery $crateSchemaQuery
+			 *
+			 * @throws \Throwable
+			 */
+			protected function executeCreateSchemaQuery(ICrateSchemaQuery $crateSchemaQuery) {
+				$schema = $crateSchemaQuery->getSchema();
+				$sql = 'CREATE TABLE ' . ($this->delimite($table = $schema->getName())) . " (\n\t";
+				$columnList = [];
+				$primaryList = [];
+				foreach ($schema->getPropertyList() as $property) {
+					$column = ($name = $this->delimite($property->getName())) . ' ' . $this->type($property->getType());
+					if ($property->isPrimary()) {
+						$primaryList[] = $name;
+					} else if ($property->isUnique()) {
+						$column .= ' UNIQUE';
+					}
+					if ($property->isRequired()) {
+						$column .= ' NOT NULL';
+					}
+					$columnList[] = $column;
+				}
+				if (empty($primaryList) === false) {
+					$columnList[] = "CONSTRAINT " . $this->delimite(sha1($table . '_primary_' . $primary = implode(', ', $primaryList))) . ' PRIMARY KEY (' . $primary . ')';
+				}
+				$sql .= implode(",\n\t", $columnList);
+				foreach ($schema->getLinkList() as $link) {
+					$sql .= ",\n\tFOREIGN KEY (" . $this->delimite($link->getSourceProperty()->getName()) . ') REFERENCES ' . $this->delimite($link->getTargetSchema()->getName()) . '(' . $this->delimite($link->getTargetProperty()->getName()) . ')';
+				}
+				$this->native($sql . "\n)");
+			}
+
+			public function delimite(string $delimite): string {
+				return '`' . str_replace('`', '``', $delimite) . '`';
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function type(string $type): string {
+				switch (strtolower($type)) {
+					case 'string':
+						return 'CHARACTER VARYING(1024)';
+					case 'text':
+						return 'LONGTEXT';
+					case 'binary':
+						return 'LONGBLOB';
+					case 'int':
+						return 'INTEGER';
+					case 'float':
+						return 'DOUBLE PRECISION';
+					case 'bool':
+						return 'TINYINT';
+					case 'datetime':
+						return 'DATETIME(6)';
+				}
+				throw new DriverQueryException(sprintf('Unknown type [%s] in driver [%s]', $type, static::class));
 			}
 
 			public function handleSetup(): void {

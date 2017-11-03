@@ -18,6 +18,7 @@
 		use Edde\Common\Schema\FooSchema;
 		use Edde\Common\Schema\PooSchema;
 		use Edde\Common\Schema\SimpleSchema;
+		use Edde\Common\Schema\SubBarSchema;
 		use Edde\Ext\Test\TestCase;
 
 		abstract class AbstractStorageTest extends TestCase {
@@ -29,10 +30,13 @@
 			 * @throws UnknownSchemaException
 			 */
 			public function testCreateSchema() {
+				$this->storage->start();
 				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(SimpleSchema::class)));
 				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(FooSchema::class)));
+				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(SubBarSchema::class)));
 				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(BarSchema::class)));
 				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(FooBarSchema::class)));
+				$this->storage->commit();
 				self::assertTrue(true, 'everything is ok');
 			}
 
