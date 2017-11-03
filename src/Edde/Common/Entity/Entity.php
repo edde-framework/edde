@@ -158,7 +158,7 @@
 					throw new RelationException(sprintf('There are more relations from [%s] to schema [%s]. You have to specify relation schema.', $this->schema->getName(), $schema));
 				}
 				$query = $collection->getQuery();
-				$query->schema($this->schema->getName(), 'r')->link($relationList[0], 'r')->source($this->toArray());
+				$query->schema($this->schema->getName(), 'a')->link($relationList[0], 'r')->source($this->toArray());
 				return $collection;
 			}
 

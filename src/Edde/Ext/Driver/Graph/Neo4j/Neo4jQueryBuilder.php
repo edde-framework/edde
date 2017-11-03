@@ -107,7 +107,7 @@
 			 * @return TransactionQuery
 			 * @throws QueryBuilderException
 			 */
-			protected function fragmentSchema(ISchemaFragment $schemaFragment) {
+			protected function fragmentSchema(ISchemaFragment $schemaFragment): ITransactionQuery {
 				$cypher = '(' . $this->delimite($alias = $schemaFragment->getAlias()) . ':' . $this->delimite($schemaFragment->getSchema()->getName()) . ')';
 				$parameterList = [];
 				if ($schemaFragment->hasWhere()) {
@@ -115,6 +115,20 @@
 					$parameterList = $query->getParameterList();
 				}
 				return new TransactionQuery($cypher, $parameterList);
+			}
+
+			protected function fragmentLink(ISchemaFragment $schemaFragment): ITransactionQuery {
+				$cypher = '(a:' . $schemaFragment->getSchema()->getName() . ')';
+				foreach ($schemaFragment->getLinkList() as $alias => $link) {
+					$relation = $link->getRelation();
+					$cypher .= '-[:' . $this->delimite($relation->getSchema()->getName()) . ']->(b:' . $this->delimite($relation->getTargetLink()->getTargetSchema()->getName()) . ')';
+				}
+				$cypher .= "\nWHERE\n\t";
+				foreach ($schemaFragment->getLinkList() as $alias => $link) {
+					$relation = $link->getRelation();
+					$cypher .= 'a.' . $this->delimite($relation->getTargetLink()->getTargetProperty()->getName()) . ' = $guid';
+				}
+				return new TransactionQuery($cypher);
 			}
 
 			/**
