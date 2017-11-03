@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Schema;
 
+		use Edde\Api\Schema\Exception\MultiplePrimaryException;
 		use Edde\Api\Schema\Exception\SchemaException;
 		use Edde\Api\Schema\Exception\SchemaReflectionException;
 		use Edde\Api\Schema\ISchema;
@@ -40,6 +41,7 @@
 					$schemaBuilder = new SchemaBuilder($schema);
 					$linkCount = 0;
 					$methodCount = 0;
+					$primary = false;
 					foreach ($reflectionClass->getMethods() as $reflectionMethod) {
 						$methodCount++;
 						$propertyBuilder = $schemaBuilder->property($propertyName = $reflectionMethod->getName());
@@ -50,6 +52,10 @@
 									$propertyBuilder->unique();
 									break;
 								case 'primary':
+									if ($primary) {
+										throw new MultiplePrimaryException(sprintf('Schema [%s] has another primary key [%s]!', $schema, $propertyName));
+									}
+									$primary = true;
 									$propertyBuilder->primary();
 									$propertyBuilder->generator($propertyName);
 									break;
