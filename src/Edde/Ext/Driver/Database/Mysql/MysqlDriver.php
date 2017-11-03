@@ -13,6 +13,36 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function delimite(string $delimite): string {
+				return '`' . str_replace('`', '``', $delimite) . '`';
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function type(string $type): string {
+				switch (strtolower($type)) {
+					case 'string':
+						return 'CHARACTER VARYING(1024)';
+					case 'text':
+						return 'LONGTEXT';
+					case 'binary':
+						return 'LONGBLOB';
+					case 'int':
+						return 'INTEGER';
+					case 'float':
+						return 'DOUBLE PRECISION';
+					case 'bool':
+						return 'TINYINT';
+					case 'datetime':
+						return 'DATETIME(6)';
+				}
+				throw new DriverQueryException(sprintf('Unknown type [%s] in driver [%s]', $type, static::class));
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			protected function exception(\Throwable $throwable): \Throwable {
 				if (stripos($message = $throwable->getMessage(), 'duplicate') !== false) {
 					return new DuplicateEntryException($message, 0, $throwable);

@@ -10,6 +10,36 @@
 		use Edde\Ext\Driver\Database\AbstractDatabaseDriver;
 
 		class PostgresDriver extends AbstractDatabaseDriver {
+			/**
+			 * @inheritdoc
+			 */
+			public function delimite(string $delimite): string {
+				return '"' . str_replace('"', '""', $delimite) . '"';
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function type(string $type): string {
+				switch (strtolower($type)) {
+					case 'string':
+						return 'CHARACTER VARYING(1024)';
+					case 'text':
+						return 'TEXT';
+					case 'binary':
+						return 'BYTEA';
+					case 'int':
+						return 'INTEGER';
+					case 'float':
+						return 'DOUBLE PRECISION';
+					case 'bool':
+						return 'SMALLINT';
+					case 'datetime':
+						return 'TIMESTAMP';
+				}
+				throw new DriverQueryException(sprintf('Unknown type [%s] in driver [%s]', $type, static::class));
+			}
+
 			protected function exception(\Throwable $throwable): \Throwable {
 				if (stripos($message = $throwable->getMessage(), 'unique') !== false) {
 					return new DuplicateEntryException($message, 0, $throwable);

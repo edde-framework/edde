@@ -3,7 +3,6 @@
 	namespace Edde\Ext\Driver\Database;
 
 		use Edde\Api\Driver\Exception\DriverException;
-		use Edde\Api\Driver\Exception\DriverQueryException;
 		use Edde\Api\Driver\IDriver;
 		use Edde\Api\Query\ICrateSchemaQuery;
 		use Edde\Common\Driver\AbstractDriver;
@@ -97,36 +96,9 @@
 				}
 				$sql .= implode(",\n\t", $columnList);
 				foreach ($schema->getLinkList() as $link) {
-					$sql .= ",\n\tFOREIGN KEY (" . $this->delimite($link->getSourceProperty()->getName()) . ') REFERENCES ' . $this->delimite($link->getTargetSchema()->getName()) . '(' . $this->delimite($link->getTargetProperty()->getName()) . ')';
+					$sql .= ",\n\tFOREIGN KEY (" . $this->delimite($link->getSourceProperty()->getName()) . ') REFERENCES ' . $this->delimite($link->getTargetSchema()->getName()) . '(' . $this->delimite($link->getTargetProperty()->getName()) . ') ON DELETE RESTRICT ON UPDATE RESTRICT';
 				}
 				$this->native($sql . "\n)");
-			}
-
-			public function delimite(string $delimite): string {
-				return '`' . str_replace('`', '``', $delimite) . '`';
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function type(string $type): string {
-				switch (strtolower($type)) {
-					case 'string':
-						return 'CHARACTER VARYING(1024)';
-					case 'text':
-						return 'LONGTEXT';
-					case 'binary':
-						return 'LONGBLOB';
-					case 'int':
-						return 'INTEGER';
-					case 'float':
-						return 'DOUBLE PRECISION';
-					case 'bool':
-						return 'TINYINT';
-					case 'datetime':
-						return 'DATETIME(6)';
-				}
-				throw new DriverQueryException(sprintf('Unknown type [%s] in driver [%s]', $type, static::class));
 			}
 
 			public function handleSetup(): void {
@@ -145,4 +117,8 @@
 					$this->dsn = null;
 				}
 			}
+
+			abstract public function delimite(string $delimite): string;
+
+			abstract public function type(string $type): string;
 		}
