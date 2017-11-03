@@ -7,11 +7,13 @@
 		use Edde\Api\Driver\IDriver;
 		use Edde\Api\Query\Fragment\IWhereTo;
 		use Edde\Api\Query\ICrateSchemaQuery;
+		use Edde\Api\Query\ICreateRelationQuery;
 		use Edde\Api\Query\IInsertQuery;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Query\IUpdateQuery;
 		use Edde\Common\Driver\AbstractDriver;
+		use Edde\Common\Query\InsertQuery;
 		use Edde\Common\Query\NativeQuery;
 		use PDO;
 
@@ -122,6 +124,18 @@
 				}
 				$sql = "INSERT INTO\n\t" . $this->delimite($schema->getName()) . " (\n\t\t" . implode(",\n\t\t", $nameList) . "\n\t) VALUES (\n\t\t";
 				$this->native($sql . ':' . implode(",\n\t\t:", array_keys($parameterList)) . "\n\t)", $parameterList);
+			}
+
+			/**
+			 * @param ICreateRelationQuery $createRelationQuery
+			 *
+			 * @throws \Throwable
+			 */
+			protected function executeCreateRelationQuery(ICreateRelationQuery $createRelationQuery) {
+				$this->executeInsertQuery(new InsertQuery(($relation = $createRelationQuery->getRelation())->getSchema(), [
+					($sourceLink = $relation->getSourceLink())->getSourceProperty()->getName() => $createRelationQuery->getFrom()[$sourceLink->getTargetProperty()->getName()],
+					($targetLink = $relation->getTargetLink())->getSourceProperty()->getName() => $createRelationQuery->getTo()[$targetLink->getTargetProperty()->getName()],
+				]));
 			}
 
 			/**

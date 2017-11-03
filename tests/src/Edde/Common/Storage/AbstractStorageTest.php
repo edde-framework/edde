@@ -37,6 +37,7 @@
 				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(SubBarSchema::class)));
 				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(BarSchema::class)));
 				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(FooBarSchema::class)));
+				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(BarPooSchema::class)));
 				$this->storage->commit();
 				self::assertTrue(true, 'everything is ok');
 			}

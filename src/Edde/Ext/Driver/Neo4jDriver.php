@@ -154,12 +154,12 @@
 			}
 
 			/**
-			 * @param ICreateRelationQuery $relationQuery
+			 * @param ICreateRelationQuery $createRelationQuery
 			 *
 			 * @throws \Throwable
 			 */
-			protected function executeCreateRelationQuery(ICreateRelationQuery $relationQuery) {
-				$relation = $relationQuery->getRelation();
+			protected function executeCreateRelationQuery(ICreateRelationQuery $createRelationQuery) {
+				$relation = $createRelationQuery->getRelation();
 				$cypher = 'MATCH';
 				$cypher .= "\n\t(a:" . $this->delimite(($sourceLink = $relation->getSourceLink())->getTargetSchema()->getName()) . '),';
 				$cypher .= "\n\t(b:" . $this->delimite(($targetLink = $relation->getTargetLink())->getTargetSchema()->getName()) . ")\n";
@@ -168,8 +168,8 @@
 				$cypher .= "\n\tb." . ($target = $targetLink->getTargetProperty()->getName()) . " = \$b\n";
 				$cypher .= "MERGE\n\t(a)-[:" . $this->delimite($relation->getSchema()->getName()) . ']->(b)';
 				$this->native($cypher, [
-					'a' => $relationQuery->getFrom()[$source],
-					'b' => $relationQuery->getTo()[$target],
+					'a' => $createRelationQuery->getFrom()[$source],
+					'b' => $createRelationQuery->getTo()[$target],
 				]);
 			}
 
