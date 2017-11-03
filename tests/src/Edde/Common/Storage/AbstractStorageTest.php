@@ -272,7 +272,7 @@
 					'Da Poo The Hard One!',
 				];
 				$current = [];
-				foreach ($foo->join(BarSchema::class)->join(PooSchema::class) as $poo) {
+				foreach ($foo->join(BarSchema::class, 'b')->join(PooSchema::class, 'p') as $poo) {
 					$current[] = $poo->get('name');
 				}
 				sort($expect);
