@@ -72,8 +72,8 @@
 			public function entity($name): IEntity {
 				$this->stream->query($query = new SelectQuery());
 				$where = $query->table($this->schema, 'c')->select()->where();
-				foreach ($this->schema->getPrimaryList() as $property) {
-					$where->or()->eq($property->getName())->to($name);
+				if ($this->schema->hasPrimary()) {
+					$where->or()->eq($this->schema->getPrimary()->getName())->to($name);
 				}
 				foreach ($this->schema->getUniqueList() as $property) {
 					$where->or()->eq($property->getName())->to($name);

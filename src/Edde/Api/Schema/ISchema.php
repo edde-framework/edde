@@ -3,7 +3,6 @@
 	namespace Edde\Api\Schema;
 
 		use Edde\Api\Config\IConfigurable;
-		use Edde\Api\Node\INode;
 		use Edde\Api\Schema\Exception\InvalidRelationException;
 		use Edde\Api\Schema\Exception\UnknownPropertyException;
 
@@ -14,13 +13,6 @@
 			 * @return string
 			 */
 			public function getName(): string;
-
-			/**
-			 * return list of property nodes
-			 *
-			 * @return INode[]
-			 */
-			public function getNodeList(): array;
 
 			/**
 			 * special kind of schemas used just as a relational schemas (m:n relations, for graphs, ...)
@@ -46,11 +38,11 @@
 			public function getPropertyList(): array;
 
 			/**
-			 * return an array with all primary properties
+			 * has schema a primary property?
 			 *
-			 * @return IProperty[]
+			 * @return bool
 			 */
-			public function getPrimaryList(): array;
+			public function hasPrimary(): bool;
 
 			/**
 			 * return a primary property of this schema (should throw an exception

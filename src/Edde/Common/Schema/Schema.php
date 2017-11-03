@@ -4,7 +4,6 @@
 
 		use Edde\Api\Node\INode;
 		use Edde\Api\Schema\Exception\InvalidRelationException;
-		use Edde\Api\Schema\Exception\MultiplePrimaryException;
 		use Edde\Api\Schema\Exception\NoPrimaryPropertyException;
 		use Edde\Api\Schema\Exception\UnknownPropertyException;
 		use Edde\Api\Schema\ILink;
@@ -23,9 +22,9 @@
 			 */
 			protected $propertyList = [];
 			/**
-			 * @var array
+			 * @var IProperty
 			 */
-			protected $primaryList = null;
+			protected $primary;
 			/**
 			 * @var array
 			 */
@@ -58,13 +57,6 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getNodeList(): array {
-				return $this->node->getNode('property-list')->getNodeList();
-			}
-
-			/**
-			 * @inheritdoc
-			 */
 			public function isRelation(): bool {
 				return (bool)$this->node->getAttribute('is-relation', false);
 			}
@@ -89,29 +81,28 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getPrimaryList(): array {
-				if ($this->primaryList) {
-					return $this->primaryList;
+			public function hasPrimary(): bool {
+				try {
+					$this->getPrimary();
+					return true;
+				} catch (NoPrimaryPropertyException $exception) {
+					return false;
 				}
-				$propertyList = [];
-				foreach ($this->propertyList as $name => $property) {
-					if ($property->isPrimary()) {
-						$propertyList[$name] = $property;
-					}
-				}
-				return $this->primaryList = $propertyList;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function getPrimary(): IProperty {
-				if (empty($primaryList = $this->getPrimaryList())) {
-					throw new NoPrimaryPropertyException(sprintf('Schema [%s] has no primary properties.', $this->getName()));
-				} else if (count($primaryList) > 1) {
-					throw new MultiplePrimaryException(sprintf('Schema [%s] has more primary properties [%s].', $this->getName(), implode(', ', array_keys($primaryList))));
+				if ($this->primary) {
+					return $this->primary;
 				}
-				return reset($primaryList);
+				foreach ($this->propertyList as $property) {
+					if ($property->isPrimary()) {
+						return $this->primary = $property;
+					}
+				}
+				throw new NoPrimaryPropertyException(sprintf('Schema [%s] has no primary properties.', $this->getName()));
 			}
 
 			/**
