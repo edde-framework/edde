@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Query\Fragment;
 
+		use Edde\Api\Query\Fragment\ILink;
 		use Edde\Api\Query\Fragment\ISchemaFragment;
 		use Edde\Api\Query\Fragment\IWhereGroup;
 		use Edde\Api\Schema\IRelation;
@@ -25,19 +26,9 @@
 			 */
 			protected $where;
 			/**
-			 * @var ISchemaFragment[]
+			 * @var ILink[]
 			 */
 			protected $linkList = [];
-			/**
-			 * @var IRelation
-			 */
-			protected $relation;
-			/**
-			 * relation source
-			 *
-			 * @var array
-			 */
-			protected $source;
 
 			public function __construct(ISchema $schema, string $alias) {
 				parent::__construct('schema');
@@ -94,8 +85,8 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function link(IRelation $relation, string $alias): ISchemaFragment {
-				return $this->linkList[$alias] = (new SchemaFragment($relation->getSchema(), $alias))->relation($relation);
+			public function link(IRelation $relation, string $alias): ILink {
+				return $this->linkList[$alias] = (new Link($relation, $alias));
 			}
 
 			/**
@@ -103,42 +94,5 @@
 			 */
 			public function getLinkList(): array {
 				return $this->linkList;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function isRelation(): bool {
-				return $this->relation !== null;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function relation(IRelation $relation): ISchemaFragment {
-				$this->relation = $relation;
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getRelation(): IRelation {
-				return $this->relation;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function source(array $source): ISchemaFragment {
-				$this->source = $source;
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getSource(): array {
-				return $this->source;
 			}
 		}
