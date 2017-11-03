@@ -4,6 +4,7 @@
 
 		use Edde\Api\Query\Fragment\ISchemaFragment;
 		use Edde\Api\Query\Fragment\IWhereGroup;
+		use Edde\Api\Schema\IRelation;
 		use Edde\Api\Schema\ISchema;
 
 		class SchemaFragment extends AbstractFragment implements ISchemaFragment {
@@ -23,6 +24,10 @@
 			 * @var IWhereGroup
 			 */
 			protected $where;
+			/**
+			 * @var ISchemaFragment[]
+			 */
+			protected $relationList = [];
 
 			public function __construct(ISchema $schema, string $alias) {
 				parent::__construct('schema');
@@ -33,7 +38,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function select() : ISchemaFragment {
+			public function select(): ISchemaFragment {
 				$this->selected = true;
 				return $this;
 			}
@@ -41,38 +46,46 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function isSelected() : bool {
+			public function isSelected(): bool {
 				return $this->selected;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getSchema() : ISchema {
+			public function getSchema(): ISchema {
 				return $this->schema;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getAlias() : string {
+			public function getAlias(): string {
 				return $this->alias;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function hasWhere() : bool {
+			public function hasWhere(): bool {
 				return $this->where !== null;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function where() : IWhereGroup {
+			public function where(): IWhereGroup {
 				if ($this->where === null) {
 					$this->where = new WhereGroup($this);
 				}
 				return $this->where;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function relation(IRelation $relation, array $source, string $alias): ISchemaFragment {
+				$schemaFragment = new SchemaFragment($relation->getSchema(), $alias);
+				return $schemaFragment;
 			}
 		}
