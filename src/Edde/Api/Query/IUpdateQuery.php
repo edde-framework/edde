@@ -2,16 +2,16 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Query;
 
-		use Edde\Api\Query\Fragment\ISchemaFragment;
+		use Edde\Api\Query\Fragment\ITable;
 		use Edde\Api\Query\Fragment\IWhereGroup;
 
 		interface IUpdateQuery extends IInsertQuery {
 			/**
 			 * return schema fragment of this query
 			 *
-			 * @return ISchemaFragment
+			 * @return ITable
 			 */
-			public function getSchemaFragment(): ISchemaFragment;
+			public function getTable(): ITable;
 
 			/**
 			 * has this update query where limitation

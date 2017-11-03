@@ -8,6 +8,7 @@
 		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Schema\Exception\RelationException;
 		use Edde\Api\Schema\Inject\SchemaManager;
+		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
 		use Edde\Api\Storage\IStream;
 		use Edde\Common\Object\Object;
@@ -21,11 +22,11 @@
 			 */
 			protected $stream;
 			/**
-			 * @var string
+			 * @var ISchema
 			 */
 			protected $schema;
 
-			public function __construct(IStream $stream, string $schema) {
+			public function __construct(IStream $stream, ISchema $schema) {
 				$this->stream = $stream;
 				$this->schema = $schema;
 			}
@@ -60,11 +61,11 @@
 			 */
 			public function entity($name): IEntity {
 				$this->stream->query($query = new SelectQuery());
-				$where = $query->schema($schema = $this->schemaManager->load($this->schema), 'c')->select()->where();
-				foreach ($schema->getPrimaryList() as $property) {
+				$where = $query->table($this->schema, 'c')->select()->where();
+				foreach ($this->schema->getPrimaryList() as $property) {
 					$where->or()->eq($property->getName())->to($name);
 				}
-				foreach ($schema->getUniqueList() as $property) {
+				foreach ($this->schema->getUniqueList() as $property) {
 					$where->or()->eq($property->getName())->to($name);
 				}
 				return $this->getEntity();
@@ -73,15 +74,14 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function collectionOf(string $target): ICollection {
-				$query = $this->stream->getQuery();
-				$schema = $this->schemaManager->load($this->schema);
-				if (($count = count($relationList = $schema->getRelationList($target))) === 0) {
-					throw new RelationException(sprintf('There are no relations from [%s] to schema [%s].', $this->schema, $target));
+			public function join(string $target, string $alias): ICollection {
+				if (($count = count($relationList = $this->schema->getRelationList($target))) === 0) {
+					throw new RelationException(sprintf('There are no relations from [%s] to schema [%s].', $this->schema->getName(), $target));
 				} else if ($count !== 1) {
-					throw new RelationException(sprintf('There are more relations from [%s] to schema [%s]. You have to specify relation schema.', $this->schema, $target));
+					throw new RelationException(sprintf('There are more relations from [%s] to schema [%s]. You have to specify relation schema.', $this->schema->getName(), $target));
 				}
-//				$query->schema($schema, 'x')->link($relationList[0])->source();
+				$this->stream->getQuery()->table($this->schema, 'c')->join($relationList[0], $alias);
+				return $this;
 			}
 
 			/**

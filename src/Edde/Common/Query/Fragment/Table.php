@@ -2,13 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Query\Fragment;
 
-		use Edde\Api\Query\Fragment\ILink;
-		use Edde\Api\Query\Fragment\ISchemaFragment;
+		use Edde\Api\Query\Fragment\ITable;
 		use Edde\Api\Query\Fragment\IWhereGroup;
 		use Edde\Api\Schema\IRelation;
 		use Edde\Api\Schema\ISchema;
 
-		class SchemaFragment extends AbstractFragment implements ISchemaFragment {
+		class Table extends AbstractFragment implements ITable {
 			/**
 			 * @var ISchema
 			 */
@@ -26,12 +25,12 @@
 			 */
 			protected $where;
 			/**
-			 * @var ILink[]
+			 * @var IRelation[]
 			 */
-			protected $linkList = [];
+			protected $joinList = [];
 
 			public function __construct(ISchema $schema, string $alias) {
-				parent::__construct('schema');
+				parent::__construct('Table');
 				$this->schema = $schema;
 				$this->alias = $alias;
 			}
@@ -39,7 +38,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function select(): ISchemaFragment {
+			public function select(): ITable {
 				$this->selected = true;
 				return $this;
 			}
@@ -85,19 +84,15 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function link(IRelation $relation, string $alias): ILink {
-				/**
-				 * change type of this query to a relation; it could be processed in a
-				 * different way if needed
-				 */
-				$this->type = 'link';
-				return $this->linkList[$alias] = new Link($relation, $alias);
+			public function join(IRelation $relation, string $alias): ITable {
+				$this->joinList[$alias] = $relation;
+				return $this;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getLinkList(): array {
-				return $this->linkList;
+			public function getJoinList(): array {
+				return $this->joinList;
 			}
 		}

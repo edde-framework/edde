@@ -185,7 +185,7 @@
 				$cypher = "MATCH\n\t";
 				$matchList = [];
 				$parameterList = [];
-				foreach ($selectQuery->getSchemaFragmentList() as $schemaFragment) {
+				foreach ($selectQuery->getTableList() as $schemaFragment) {
 					$alias = $this->delimite($schemaFragment->getAlias());
 					switch ($type = $schemaFragment->getType()) {
 						case 'schema':
@@ -228,7 +228,7 @@
 			 * @throws \Throwable
 			 */
 			protected function executeUpdateQuery(IUpdateQuery $updateQuery) {
-				$schemaFragment = $updateQuery->getSchemaFragment();
+				$schemaFragment = $updateQuery->getTable();
 				$cypher = "MATCH\n\t(" . ($alias = $this->delimite($schemaFragment->getAlias())) . ':' . $this->delimite(($schema = $schemaFragment->getSchema())->getName()) . ")\n";
 				$parameterList = [];
 				if ($schemaFragment->hasWhere()) {

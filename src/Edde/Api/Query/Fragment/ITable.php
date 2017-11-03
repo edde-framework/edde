@@ -5,13 +5,13 @@
 		use Edde\Api\Schema\IRelation;
 		use Edde\Api\Schema\ISchema;
 
-		interface ISchemaFragment extends IFragment {
+		interface ITable extends IFragment {
 			/**
 			 * select this schema for data retrieval
 			 *
-			 * @return ISchemaFragment
+			 * @return ITable
 			 */
-			public function select(): ISchemaFragment;
+			public function select(): ITable;
 
 			/**
 			 * should be this fragment used as a data source?
@@ -49,19 +49,17 @@
 			public function where(): IWhereGroup;
 
 			/**
-			 * link the given relation to this schema fragment
-			 *
 			 * @param IRelation $relation
 			 * @param string    $alias
 			 *
-			 * @return ILink
+			 * @return ITable
 			 */
-			public function link(IRelation $relation, string $alias): ILink;
+			public function join(IRelation $relation, string $alias): ITable;
 
 			/**
-			 * return list of related schema fragments
+			 * return list of relations for this table
 			 *
-			 * @return ILink[]
+			 * @return IRelation[]
 			 */
-			public function getLinkList(): array;
+			public function getJoinList(): array;
 		}

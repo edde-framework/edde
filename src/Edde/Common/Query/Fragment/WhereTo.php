@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Query\Fragment;
 
-		use Edde\Api\Query\Fragment\ISchemaFragment;
+		use Edde\Api\Query\Fragment\ITable;
 		use Edde\Api\Query\Fragment\IWhereGroup;
 		use Edde\Api\Query\Fragment\IWhereTo;
 
@@ -31,7 +31,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getSchemaFragment(): ISchemaFragment {
+			public function getSchemaFragment(): ITable {
 				return $this->whereGroup->getSchemaFragment();
 			}
 		}

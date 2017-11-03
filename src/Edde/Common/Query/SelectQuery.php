@@ -2,42 +2,37 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Query;
 
-		use Edde\Api\Query\Fragment\ISchemaFragment;
-		use Edde\Api\Query\Fragment\IWhereGroup;
+		use Edde\Api\Query\Fragment\ITable;
 		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Schema\ISchema;
-		use Edde\Common\Query\Fragment\SchemaFragment;
+		use Edde\Common\Query\Fragment\Table;
 
 		class SelectQuery extends AbstractQuery implements ISelectQuery {
 			use SchemaManager;
 			/**
-			 * @var ISchemaFragment[]
+			 * @var ITable[]
 			 */
-			protected $schemaFragmentList = [];
-			/**
-			 * @var IWhereGroup
-			 */
-			protected $where;
+			protected $tableList = [];
 
 			public function __construct() {
-				parent::__construct('select');
+				parent::__construct('SelectQuery');
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function schema(ISchema $schema, string $alias): ISchemaFragment {
-				if (isset($this->schemaFragmentList[$schemaId = ($schema->getName() . $alias)]) === false) {
-					$this->schemaFragmentList[$schemaId] = new SchemaFragment($schema, $alias);
+			public function table(ISchema $schema, string $alias): ITable {
+				if (isset($this->tableList[$schemaId = ($schema->getName() . $alias)]) === false) {
+					$this->tableList[$schemaId] = new Table($schema, $alias);
 				}
-				return $this->schemaFragmentList[$schemaId];
+				return $this->tableList[$schemaId];
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getSchemaFragmentList(): array {
-				return $this->schemaFragmentList;
+			public function getTableList(): array {
+				return $this->tableList;
 			}
 		}

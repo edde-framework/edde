@@ -45,8 +45,8 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function load(string $schema, array $source): IEntity {
-				return $this->createEntity($this->schemaManager->load($schema))->load($source);
+			public function load(ISchema $schema, array $source): IEntity {
+				return $this->createEntity($schema)->load($source);
 			}
 
 			/**
@@ -55,7 +55,7 @@
 			public function collection(string $schema): ICollection {
 				if (isset($this->collectionList[$name = $schema]) === false) {
 					$query = new SelectQuery();
-					$query->schema($this->schemaManager->load($schema), 'c')->select();
+					$query->table($schema = $this->schemaManager->load($schema), 'c')->select();
 					$this->collectionList[$name] = $this->container->inject(new Collection($this->storage->stream($query), $schema));
 				}
 				return clone $this->collectionList[$name];

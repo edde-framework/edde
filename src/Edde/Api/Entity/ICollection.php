@@ -50,13 +50,14 @@
 			public function entity($name): IEntity;
 
 			/**
-			 * return a new collection to make a relation chain
+			 * join the given target schema to the current one
 			 *
 			 * @param string $target
+			 * @param string $alias
 			 *
 			 * @return ICollection
 			 */
-			public function collectionOf(string $target): ICollection;
+			public function join(string $target, string $alias): ICollection;
 
 			/**
 			 * @return Traversable|IEntity[]

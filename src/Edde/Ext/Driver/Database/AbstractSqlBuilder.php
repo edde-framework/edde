@@ -61,7 +61,7 @@
 				$fromList = [];
 				$whereList = null;
 				$parameterList = [];
-				foreach ($selectQuery->getSchemaFragmentList() as $schemaFragment) {
+				foreach ($selectQuery->getTableList() as $schemaFragment) {
 					$alias = $this->delimite($schemaFragment->getAlias());
 					if ($schemaFragment->isSelected()) {
 						$columnList[$alias] = $alias . '.*';
@@ -87,7 +87,7 @@
 			 */
 			protected function fragmentUpdate(IUpdateQuery $updateQuery): INativeTransaction {
 				$schema = $updateQuery->getSchema();
-				$schemaFragment = $updateQuery->getSchemaFragment();
+				$schemaFragment = $updateQuery->getTable();
 				$sql = "UPDATE\n\t";
 				$sql .= $this->delimite($schema->getName()) . ' ' . $this->delimite($schemaFragment->getAlias()) . "\n";
 				$sql .= "SET\n\t";

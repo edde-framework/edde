@@ -2,13 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Query\Fragment;
 
-		use Edde\Api\Query\Fragment\ISchemaFragment;
+		use Edde\Api\Query\Fragment\ITable;
 		use Edde\Api\Query\Fragment\IWhere;
 		use Edde\Api\Query\Fragment\IWhereGroup;
 
 		class WhereGroup extends AbstractFragment implements IWhereGroup {
 			/**
-			 * @var ISchemaFragment
+			 * @var ITable
 			 */
 			protected $schemaFragment;
 			/**
@@ -16,7 +16,7 @@
 			 */
 			protected $whereList = [];
 
-			public function __construct(ISchemaFragment $schemaFragment) {
+			public function __construct(ITable $schemaFragment) {
 				parent::__construct('where-group');
 				$this->schemaFragment = $schemaFragment;
 			}
@@ -38,7 +38,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getSchemaFragment(): ISchemaFragment {
+			public function getSchemaFragment(): ITable {
 				return $this->schemaFragment;
 			}
 

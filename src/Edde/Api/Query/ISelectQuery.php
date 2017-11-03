@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Query;
 
-		use Edde\Api\Query\Fragment\ISchemaFragment;
+		use Edde\Api\Query\Fragment\ITable;
 		use Edde\Api\Schema\ISchema;
 
 		/**
@@ -15,14 +15,14 @@
 			 * @param ISchema $schema
 			 * @param string  $alias
 			 *
-			 * @return ISchemaFragment
+			 * @return ITable
 			 */
-			public function schema(ISchema $schema, string $alias): ISchemaFragment;
+			public function table(ISchema $schema, string $alias): ITable;
 
 			/**
 			 * return list of schemas being queried
 			 *
-			 * @return ISchemaFragment[]
+			 * @return ITable[]
 			 */
-			public function getSchemaFragmentList(): array;
+			public function getTableList(): array;
 		}

@@ -25,7 +25,7 @@
 			/**
 			 * return schema fragment this where belongs to
 			 *
-			 * @return ISchemaFragment
+			 * @return ITable
 			 */
-			public function getSchemaFragment(): ISchemaFragment;
+			public function getSchemaFragment(): ITable;
 		}

@@ -18,9 +18,9 @@
 			public function or (): IWhere;
 
 			/**
-			 * @return ISchemaFragment
+			 * @return ITable
 			 */
-			public function getSchemaFragment(): ISchemaFragment;
+			public function getSchemaFragment(): ITable;
 
 			/**
 			 * @return \Traversable|IWhere[]
