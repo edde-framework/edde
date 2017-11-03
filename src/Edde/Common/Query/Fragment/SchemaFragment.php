@@ -90,7 +90,7 @@
 				 * change type of this query to a relation; it could be processed in a
 				 * different way if needed
 				 */
-				$this->type = 'relation';
+				$this->type = 'link';
 				return $this->linkList[$alias] = new Link($relation, $alias);
 			}
 

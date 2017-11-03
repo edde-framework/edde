@@ -3,6 +3,7 @@
 	namespace Edde\Ext\Driver\Graph\Neo4j;
 
 		use Edde\Api\Query\Exception\QueryBuilderException;
+		use Edde\Api\Query\Fragment\ISchemaFragment;
 		use Edde\Api\Query\Fragment\IWhere;
 		use Edde\Api\Query\Fragment\IWhereGroup;
 		use Edde\Api\Query\Fragment\IWhereTo;
@@ -90,17 +91,29 @@
 				$matchList = [];
 				$parameterList = [];
 				foreach ($selectQuery->getSchemaFragmentList() as $schemaFragment) {
-					$match = '(' . $this->delimite($alias = $schemaFragment->getAlias()) . ':' . $this->delimite($schemaFragment->getSchema()->getName()) . ')';
+					$matchList[] = ($query = $this->fragment($schemaFragment))->getQuery();
 					if ($schemaFragment->isSelected()) {
-						$returnList[] = $alias;
+						$returnList[] = $schemaFragment->getAlias();
 					}
-					if ($schemaFragment->hasWhere()) {
-						$match .= "\nWHERE" . ($query = $this->fragmentWhereGroup($schemaFragment->where()))->getQuery() . "\n";
-						$parameterList = array_merge($parameterList, $query->getParameterList());
-					}
-					$matchList[] = $match;
+					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
 				$cypher .= implode(",\n\t", $matchList) . "\nRETURN\n\t" . implode(', ', $returnList);
+				return new TransactionQuery($cypher, $parameterList);
+			}
+
+			/**
+			 * @param ISchemaFragment $schemaFragment
+			 *
+			 * @return TransactionQuery
+			 * @throws QueryBuilderException
+			 */
+			protected function fragmentSchema(ISchemaFragment $schemaFragment) {
+				$cypher = '(' . $this->delimite($alias = $schemaFragment->getAlias()) . ':' . $this->delimite($schemaFragment->getSchema()->getName()) . ')';
+				$parameterList = [];
+				if ($schemaFragment->hasWhere()) {
+					$cypher .= "\nWHERE" . ($query = $this->fragmentWhereGroup($schemaFragment->where()))->getQuery() . "\n";
+					$parameterList = $query->getParameterList();
+				}
 				return new TransactionQuery($cypher, $parameterList);
 			}
 
