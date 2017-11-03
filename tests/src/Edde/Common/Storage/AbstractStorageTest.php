@@ -12,6 +12,7 @@
 		use Edde\Api\Storage\Exception\StorageException;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Query\CreateSchemaQuery;
+		use Edde\Common\Query\SelectQuery;
 		use Edde\Common\Schema\BarPooSchema;
 		use Edde\Common\Schema\BarSchema;
 		use Edde\Common\Schema\FooBarSchema;
@@ -328,7 +329,17 @@
 					'guest',
 				];
 				$current = [];
-				foreach ($user->join(RoleSchema::class, 'r') as $role) {
+				/**
+				 * select query should be bound to one exact schema; the target table could
+				 * be changed by joins
+				 */
+				$query = new SelectQuery($user->getSchema());
+				/**
+				 * join should return WhereGroup to adjust join condition?
+				 */
+				$query->join($relation)->and()->eq('enabled', true);
+				$collection = $user->join(RoleSchema::class, 'r');
+				foreach ($collection as $role) {
 					self::assertEquals(RoleSchema::class, $role->getSchema()->getName());
 					$current[] = $role->get('name');
 				}
