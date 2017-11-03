@@ -3,9 +3,10 @@
 	namespace Edde\Ext\Driver\Graph\Neo4j;
 
 		use Edde\Api\Driver\Exception\DriverException;
+		use Edde\Api\Driver\Exception\DriverQueryException;
 		use Edde\Api\Driver\IDriver;
-		use Edde\Api\Query\Fragment\IWhere;
 		use Edde\Api\Query\Fragment\IWhereGroup;
+		use Edde\Api\Query\Fragment\IWhereTo;
 		use Edde\Api\Query\ICrateSchemaQuery;
 		use Edde\Api\Query\IInsertQuery;
 		use Edde\Api\Query\INativeQuery;
@@ -200,35 +201,44 @@
 				]));
 			}
 
+			/**
+			 * @param IWhereGroup $whereGroup
+			 *
+			 * @return INativeQuery
+			 * @throws DriverException
+			 */
 			protected function fragmentWhereGroup(IWhereGroup $whereGroup): INativeQuery {
 				$cypher = null;
 				$parameterList = [];
 				foreach ($whereGroup as $where) {
-					$sql = "\n\t";
+					$fragment = "\n\t";
 					if ($cypher) {
-						$sql = ' ' . strtoupper($where->getRelation()) . "\n\t";
+						$fragment = ' ' . strtoupper($where->getRelation()) . "\n\t";
 					}
-					$cypher .= $sql . ($query = $this->fragmentWhere($where))->getQuery();
+					$cypher .= $fragment . ($query = $this->fragment($where->getExpression()))->getQuery();
 					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
 				return new NativeQuery($cypher, $parameterList);
 			}
 
-			protected function fragmentWhere(IWhere $where): INativeQuery {
-				switch (($expression = $where->getExpression())->getType()) {
-					case 'where-expression-eq':
-						$name = $this->delimite($whereTo->getSchemaFragment()->getAlias()) . '.' . $this->delimite($whereTo->getName());
-						switch ($target = $whereTo->getTarget()) {
-							case 'column':
-								list($prefix, $column) = $whereTo->getValue();
-								return new TransactionQuery($name . ' = ' . $this->delimite($prefix) . '.' . $this->delimite($column));
-							case 'value':
-								return new TransactionQuery($name . ' = $' . ($parameterId = 'p_' . sha1($target . microtime(true) . random_bytes(8))), [
-									$parameterId => $whereTo->getValue(),
-								]);
-						}
-						throw new QueryBuilderException(sprintf('Unknown where expression [%s] target [%s].', $whereTo->getType(), $target));
+			/**
+			 * @param IWhereTo $whereTo
+			 *
+			 * @return INativeQuery
+			 * @throws \Exception
+			 */
+			protected function fragmentWhereTo(IWhereTo $whereTo): INativeQuery {
+				$name = $this->delimite($whereTo->getSchemaFragment()->getAlias()) . '.' . $this->delimite($whereTo->getName());
+				switch ($target = $whereTo->getTarget()) {
+					case 'column':
+						list($prefix, $column) = $whereTo->getValue();
+						return new NativeQuery($name . ' = ' . $this->delimite($prefix) . '.' . $this->delimite($column));
+					case 'value':
+						return new NativeQuery($name . ' = $' . ($parameterId = 'p_' . sha1($target . microtime(true) . random_bytes(8))), [
+							$parameterId => $whereTo->getValue(),
+						]);
 				}
+				throw new DriverQueryException(sprintf('Unknown where expression [%s] target [%s].', $whereTo->getType(), $target));
 			}
 
 			/**
