@@ -47,6 +47,12 @@
 			public function subBar(?SubBarSchema $guid): string;
 		}
 
+		interface PooSchema extends GuidSchema {
+			public function name($unique): string;
+
+			public function label(): ?string;
+		}
+
 		/**
 		 * This schema has exactly two links, thus this will be pure
 		 * relation (m:n) schema.
@@ -61,6 +67,12 @@
 			 * the same works here
 			 */
 			public function bar(BarSchema $guid): string;
+		}
+
+		interface BarPooSchema {
+			public function bar(BarSchema $guid): string;
+
+			public function poo(PooSchema $guid): string;
 		}
 
 		interface SimpleSchema extends GuidSchema {

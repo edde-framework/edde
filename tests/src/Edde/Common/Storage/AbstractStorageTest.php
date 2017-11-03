@@ -12,9 +12,11 @@
 		use Edde\Api\Storage\Exception\StorageException;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Query\CreateSchemaQuery;
+		use Edde\Common\Schema\BarPooSchema;
 		use Edde\Common\Schema\BarSchema;
 		use Edde\Common\Schema\FooBarSchema;
 		use Edde\Common\Schema\FooSchema;
+		use Edde\Common\Schema\PooSchema;
 		use Edde\Common\Schema\SimpleSchema;
 		use Edde\Ext\Test\TestCase;
 
@@ -190,14 +192,30 @@
 				$this->entityManager->create(BarSchema::class, [
 					'name' => 'Another, very secret bar!',
 				])->save();
+				$poo = $this->entityManager->create(PooSchema::class, [
+					'name' => 'Da Poo The First One!',
+				]);
+				$poo2 = $this->entityManager->create(PooSchema::class, [
+					'name' => 'Da Poo The Bigger One!',
+				]);
+				$poo3 = $this->entityManager->create(PooSchema::class, [
+					'name' => 'Da Poo The Hard One!',
+				]);
 				self::assertFalse($bar2->exists());
 				$this->schemaManager->load(FooBarSchema::class);
+				$this->schemaManager->load(BarPooSchema::class);
 				$foo->attach($bar);
 				$foo->attach($bar2);
+				$bar2->attach($poo);
+				$bar2->attach($poo2);
+				$bar2->attach($poo3);
 				$foo->save();
 				self::assertTrue($foo->exists());
 				self::assertTrue($bar->exists());
 				self::assertTrue($bar2->exists());
+				self::assertTrue($poo->exists());
+				self::assertTrue($poo2->exists());
+				self::assertTrue($poo3->exists());
 			}
 
 			/**
@@ -206,6 +224,28 @@
 			 */
 			public function testRelation() {
 				$this->schemaManager->load(FooBarSchema::class);
+				$foo = $this->entityManager->collection(FooSchema::class)->entity('foo The First');
+				self::assertSame('foo The First', $foo->get('name'));
+				$expect = [
+					'bar The Second',
+					'bar The Third',
+				];
+				$current = [];
+				foreach ($foo->collectionOf(BarSchema::class) as $bar) {
+					$current[] = $bar->get('name');
+				}
+				sort($expect);
+				sort($current);
+				self::assertSame($expect, $current, 'entities are not same or not loaded by the collection!');
+			}
+
+			/**
+			 * @throws EntityNotFoundException
+			 * @throws UnknownSchemaException
+			 */
+			public function testRelationOfRelation() {
+				$this->schemaManager->load(FooBarSchema::class);
+				$this->schemaManager->load(BarPooSchema::class);
 				$foo = $this->entityManager->collection(FooSchema::class)->entity('foo The First');
 				self::assertSame('foo The First', $foo->get('name'));
 				$expect = [

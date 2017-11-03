@@ -94,9 +94,10 @@
 			 * @inheritdoc
 			 */
 			public function save(): IEntity {
+				$isRelation = $this->schema->isRelation();
 				if ($this->saving) {
 					return $this;
-				} else if ($this->isDirty() === false) {
+				} else if ($this->isDirty() === false && $isRelation === false) {
 					return $this;
 				}
 				try {
@@ -109,7 +110,7 @@
 						$entity->save();
 					}
 					$query = new InsertQuery($this->schema, $source = $this->toArray());
-					if ($this->schema->isRelation()) {
+					if ($isRelation) {
 						if (count($this->linkList) !== 2) {
 							throw new RelationException(sprintf('Cannot save [%s] as it does not have exactly two links', $this->schema->getName()));
 						}
@@ -168,26 +169,6 @@
 			 */
 			public function exists(): bool {
 				return $this->exists;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function isDirty(): bool {
-				if (parent::isDirty()) {
-					return true;
-				}
-				foreach ($this->linkList as $entity) {
-					if ($entity->isDirty()) {
-						return true;
-					}
-				}
-				foreach ($this->relationList as $entity) {
-					if ($entity->isDirty()) {
-						return true;
-					}
-				}
-				return false;
 			}
 
 			public function toArray(): array {
