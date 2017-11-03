@@ -31,8 +31,8 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function eq(string $name): IWhereTo {
-				return $this->where = new WhereTo($this->whereGroup, __FUNCTION__, $name);
+			public function eq(string $name, string $alias = null): IWhereTo {
+				return $this->where = new WhereTo($this->whereGroup, __FUNCTION__, $name, $alias);
 			}
 
 			/**

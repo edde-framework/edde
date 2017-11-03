@@ -20,7 +20,7 @@
 			/**
 			 * @return ITable
 			 */
-			public function getSchemaFragment(): ITable;
+			public function getTable(): ITable;
 
 			/**
 			 * @return \Traversable|IWhere[]

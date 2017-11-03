@@ -20,12 +20,12 @@
 			 *
 			 * @return IWhereGroup
 			 */
-			public function toColumn(string $name, string $prefix) : IWhereGroup;
+			public function toColumn(string $name, string $prefix): IWhereGroup;
 
 			/**
-			 * return schema fragment this where belongs to
+			 * return table this where belongs to
 			 *
 			 * @return ITable
 			 */
-			public function getSchemaFragment(): ITable;
+			public function getTable(): ITable;
 		}

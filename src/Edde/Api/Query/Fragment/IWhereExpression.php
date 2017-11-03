@@ -11,6 +11,11 @@
 			public function getName(): string;
 
 			/**
+			 * @return null|string
+			 */
+			public function getAlias(): ?string;
+
+			/**
 			 * get target of an expression (column, parameter, ...)
 			 *
 			 * @return string

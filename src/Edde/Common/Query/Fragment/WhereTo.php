@@ -19,7 +19,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function toColumn(string $name, string $prefix) : IWhereGroup {
+			public function toColumn(string $name, string $prefix): IWhereGroup {
 				$this->target = 'column';
 				$this->value = [
 					$prefix,
@@ -31,7 +31,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getSchemaFragment(): ITable {
-				return $this->whereGroup->getSchemaFragment();
+			public function getTable(): ITable {
+				return $this->whereGroup->getTable();
 			}
 		}

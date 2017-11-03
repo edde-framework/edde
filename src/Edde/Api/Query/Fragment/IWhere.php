@@ -6,11 +6,12 @@
 			/**
 			 * where equals
 			 *
-			 * @param string $name
+			 * @param string      $name
+			 * @param string|null $alias
 			 *
 			 * @return IWhereTo
 			 */
-			public function eq(string $name): IWhereTo;
+			public function eq(string $name, string $alias = null): IWhereTo;
 
 			/**
 			 * greater than

@@ -87,7 +87,7 @@
 			public function join(IRelation $relation, string $alias, array $on = null): ITable {
 				$this->joinList[$alias] = $relation;
 				if ($on) {
-					$this->where()->and()->eq($property = $relation->getSourceLink()->getTargetProperty()->getName())->to($on[$property]);
+					$this->where()->and()->eq($property = $relation->getSourceLink()->getTargetProperty()->getName(), $alias)->to($on[$property]);
 				}
 				return $this;
 			}

@@ -195,8 +195,7 @@
 							$cypher .= '(' . $alias . ':' . $this->delimite($table->getSchema()->getName()) . ')';
 							$parameterList = [];
 							foreach ($table->getJoinList() as $name => $relation) {
-								$cypher .= '-[:' . $this->delimite($relation->getSchema()->getName()) . ']->(' . ($return = $this->delimite($name)) . ':' . $this->delimite($relation->getTargetLink()->getTargetSchema()->getName()) . ')';
-								$returnList = [$return];
+								$cypher .= '-[:' . $this->delimite($relation->getSchema()->getName()) . ']-(' . ($return = $this->delimite($name)) . ':' . $this->delimite($relation->getTargetLink()->getTargetSchema()->getName()) . ')';
 							}
 							if ($table->hasWhere()) {
 								$cypher .= "\nWHERE" . ($query = $this->fragmentWhereGroup($table->where()))->getQuery() . "\n";
@@ -216,11 +215,11 @@
 			 * @throws \Throwable
 			 */
 			protected function executeUpdateQuery(IUpdateQuery $updateQuery) {
-				$schemaFragment = $updateQuery->getTable();
-				$cypher = "MATCH\n\t(" . ($alias = $this->delimite($schemaFragment->getAlias())) . ':' . $this->delimite(($schema = $schemaFragment->getSchema())->getName()) . ")\n";
+				$table = $updateQuery->getTable();
+				$cypher = "MATCH\n\t(" . ($alias = $this->delimite($table->getAlias())) . ':' . $this->delimite(($schema = $table->getSchema())->getName()) . ")\n";
 				$parameterList = [];
-				if ($schemaFragment->hasWhere()) {
-					$cypher .= 'WHERE' . ($query = $this->fragmentWhereGroup($schemaFragment->where()))->getQuery() . "\n";
+				if ($table->hasWhere()) {
+					$cypher .= 'WHERE' . ($query = $this->fragmentWhereGroup($table->where()))->getQuery() . "\n";
 					$parameterList = $query->getParameterList();
 				}
 				$this->native($cypher . "SET\n\t" . $alias . ' = $set', array_merge($parameterList, [
@@ -255,11 +254,11 @@
 			 * @throws \Exception
 			 */
 			protected function fragmentWhereTo(IWhereTo $whereTo): INativeQuery {
-				$name = $this->delimite($whereTo->getSchemaFragment()->getAlias()) . '.' . $this->delimite($whereTo->getName());
+				$name = $this->delimite($whereTo->getTable()->getAlias()) . '.' . $this->delimite($whereTo->getName());
 				switch ($target = $whereTo->getTarget()) {
 					case 'column':
 						list($prefix, $column) = $whereTo->getValue();
-						return new NativeQuery($name . ' = ' . $this->delimite($prefix) . '.' . $this->delimite($column));
+						return new NativeQuery($name . ' = ' . $this->delimite($whereTo->getAlias() ?: $prefix) . '.' . $this->delimite($column));
 					case 'value':
 						return new NativeQuery($name . ' = $' . ($parameterId = 'p_' . sha1($target . microtime(true) . random_bytes(8))), [
 							$parameterId => $whereTo->getValue(),

@@ -10,15 +10,15 @@
 			/**
 			 * @var ITable
 			 */
-			protected $schemaFragment;
+			protected $table;
 			/**
 			 * @var IWhere[]
 			 */
 			protected $whereList = [];
 
-			public function __construct(ITable $schemaFragment) {
+			public function __construct(ITable $table) {
 				parent::__construct('where-group');
-				$this->schemaFragment = $schemaFragment;
+				$this->table = $table;
 			}
 
 			/**
@@ -38,8 +38,8 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getSchemaFragment(): ITable {
-				return $this->schemaFragment;
+			public function getTable(): ITable {
+				return $this->table;
 			}
 
 			/**

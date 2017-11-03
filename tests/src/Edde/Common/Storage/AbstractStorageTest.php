@@ -238,7 +238,7 @@
 					'Bar for The Foo',
 				];
 				$current = [];
-				foreach ($this->entityManager->collection(FooSchema::class)->join(BarSchema::class, 'b') as $bar) {
+				foreach ($this->entityManager->collection(BarSchema::class)->join(FooSchema::class, 'f') as $bar) {
 					$current[] = $bar->get('name');
 				}
 				sort($expect);
@@ -249,7 +249,7 @@
 					'bar The Third',
 				];
 				$current = [];
-				foreach ($foo->join(BarSchema::class, 'b') as $bar) {
+				foreach ($foo->join(BarSchema::class, 'c') as $bar) {
 					$current[] = $bar->get('name');
 				}
 				sort($expect);

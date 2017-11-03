@@ -18,6 +18,7 @@
 			 * @var string
 			 */
 			protected $name;
+			protected $alias;
 			/**
 			 * target of an expression
 			 *
@@ -26,11 +27,12 @@
 			protected $target;
 			protected $value;
 
-			public function __construct(IWhereGroup $whereGroup, string $operator, string $name) {
+			public function __construct(IWhereGroup $whereGroup, string $operator, string $name, string $alias = null) {
 				parent::__construct('where-expression-' . $operator);
 				$this->whereGroup = $whereGroup;
 				$this->operator = $operator;
 				$this->name = $name;
+				$this->alias = $alias;
 			}
 
 			/**
@@ -38,6 +40,13 @@
 			 */
 			public function getName(): string {
 				return $this->name;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getAlias(): ?string {
+				return $this->alias;
 			}
 
 			/**
