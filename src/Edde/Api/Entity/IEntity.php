@@ -86,10 +86,11 @@
 			 * prepare m:n collection of related entities
 			 *
 			 * @param string $schema
+			 * @param string $alias
 			 *
 			 * @return ICollection
 			 */
-			public function collectionOf(string $schema): ICollection;
+			public function join(string $schema, string $alias): ICollection;
 
 			/**
 			 * is the entity loaded from storage, thus it exists?

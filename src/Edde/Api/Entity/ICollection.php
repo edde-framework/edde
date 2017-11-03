@@ -54,10 +54,11 @@
 			 *
 			 * @param string $target
 			 * @param string $alias
+			 * @param array  $on
 			 *
 			 * @return ICollection
 			 */
-			public function join(string $target, string $alias): ICollection;
+			public function join(string $target, string $alias, array $on = []): ICollection;
 
 			/**
 			 * @return Traversable|IEntity[]

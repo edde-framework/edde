@@ -244,6 +244,17 @@
 				sort($expect);
 				sort($current);
 				self::assertSame($expect, $current, 'entities are not same or not loaded by the collection!');
+				$expect = [
+					'bar The Second',
+					'bar The Third',
+				];
+				$current = [];
+				foreach ($foo->join(BarSchema::class, 'b') as $bar) {
+					$current[] = $bar->get('name');
+				}
+				sort($expect);
+				sort($current);
+				self::assertSame($expect, $current, 'entities are not same or not loaded by the collection!');
 			}
 
 			/**

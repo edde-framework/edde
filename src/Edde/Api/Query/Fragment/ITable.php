@@ -51,10 +51,11 @@
 			/**
 			 * @param IRelation $relation
 			 * @param string    $alias
+			 * @param array     $on
 			 *
 			 * @return ITable
 			 */
-			public function join(IRelation $relation, string $alias): ITable;
+			public function join(IRelation $relation, string $alias, array $on = null): ITable;
 
 			/**
 			 * return list of relations for this table

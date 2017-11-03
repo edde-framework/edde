@@ -74,13 +74,13 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function join(string $target, string $alias): ICollection {
+			public function join(string $target, string $alias, array $on = []): ICollection {
 				if (($count = count($relationList = $this->schema->getRelationList($target))) === 0) {
 					throw new RelationException(sprintf('There are no relations from [%s] to schema [%s].', $this->schema->getName(), $target));
 				} else if ($count !== 1) {
 					throw new RelationException(sprintf('There are more relations from [%s] to schema [%s]. You have to specify relation schema.', $this->schema->getName(), $target));
 				}
-				$this->stream->getQuery()->table($this->schema, 'c')->join($relationList[0], $alias);
+				$this->stream->getQuery()->table($this->schema, 'c')->join($relationList[0], $alias, $on);
 				return $this;
 			}
 

@@ -13,7 +13,6 @@
 		use Edde\Common\Crate\Crate;
 		use Edde\Common\Query\CreateRelationQuery;
 		use Edde\Common\Query\InsertQuery;
-		use Edde\Common\Query\SelectQuery;
 		use Edde\Common\Query\UpdateQuery;
 
 		class Entity extends Crate implements IEntity {
@@ -152,16 +151,8 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function collectionOf(string $schema): ICollection {
-				$collection = $this->entityManager->collection($schema);
-				if (($count = count($relationList = $this->schema->getRelationList($schema))) === 0) {
-					throw new RelationException(sprintf('There are no relations from [%s] to schema [%s].', $this->schema->getName(), $schema));
-				} else if ($count !== 1) {
-					throw new RelationException(sprintf('There are more relations from [%s] to schema [%s]. You have to specify relation schema.', $this->schema->getName(), $schema));
-				}
-				$collection->query($query = new SelectQuery());
-				$query->table($this->schema, 'a')->link($relationList[0], 'r')->source($this->toArray());
-				return $collection;
+			public function join(string $schema, string $alias): ICollection {
+				return $this->entityManager->collection($this->schema->getName())->join($schema, $alias, $this->toArray());
 			}
 
 			/**

@@ -84,8 +84,11 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function join(IRelation $relation, string $alias): ITable {
+			public function join(IRelation $relation, string $alias, array $on = null): ITable {
 				$this->joinList[$alias] = $relation;
+				if ($on) {
+					$this->where()->and()->eq($property = $relation->getSourceLink()->getTargetProperty()->getName())->to($on[$property]);
+				}
 				return $this;
 			}
 
