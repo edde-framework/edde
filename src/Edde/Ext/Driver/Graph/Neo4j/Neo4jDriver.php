@@ -196,6 +196,7 @@
 							$parameterList = [];
 							foreach ($table->getJoinList() as $name => $relation) {
 								$cypher .= '-[:' . $this->delimite($relation->getSchema()->getName()) . ']-(' . ($return = $this->delimite($name)) . ':' . $this->delimite($relation->getTargetLink()->getTargetSchema()->getName()) . ')';
+								$returnList = [$return];
 							}
 							if ($table->hasWhere()) {
 								$cypher .= "\nWHERE" . ($query = $this->fragmentWhereGroup($table->where()))->getQuery() . "\n";
