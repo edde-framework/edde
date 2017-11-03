@@ -114,9 +114,6 @@
 						$query->to($to->toArray());
 					} else if ($this->exists) {
 						$query = new UpdateQuery($this->schema, $source);
-						if ($this->schema->hasPrimary()) {
-							$query->where()->and()->eq($name = $this->schema->getPrimary()->getName())->to($this->get($name));
-						}
 					}
 					$this->storage->execute($query);
 					/**

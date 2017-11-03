@@ -6,7 +6,7 @@
 		use Edde\Api\Driver\IDriver;
 		use Edde\Common\Container\Factory\ClassFactory;
 		use Edde\Ext\Container\ContainerFactory;
-		use Edde\Ext\Driver\Database\Postgres\PostgresDriver;
+		use Edde\Ext\Driver\PostgresDriver;
 
 		class PostgresStorageTest extends AbstractStorageTest {
 			public function testPrepareDatabase() {

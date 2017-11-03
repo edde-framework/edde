@@ -6,8 +6,8 @@
 		use Edde\Api\Storage\Exception\IntegrityException;
 		use Edde\Common\Query\NativeQuery;
 		use Edde\Ext\Container\ContainerFactory;
-		use Edde\Ext\Driver\Database\Postgres\PostgresDriver;
 		use Edde\Ext\Driver\Database\Postgres\PostgresQueryBuilder;
+		use Edde\Ext\Driver\PostgresDriver;
 
 		class PostgresDriverTest extends AbstractDriverTest {
 			/**

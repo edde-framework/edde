@@ -1,12 +1,18 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Ext\Driver\Database;
+	namespace Edde\Ext\Driver;
 
 		use Edde\Api\Driver\Exception\DriverException;
+		use Edde\Api\Driver\Exception\DriverQueryException;
 		use Edde\Api\Driver\IDriver;
+		use Edde\Api\Query\Fragment\IWhereTo;
 		use Edde\Api\Query\ICrateSchemaQuery;
 		use Edde\Api\Query\IInsertQuery;
+		use Edde\Api\Query\INativeQuery;
+		use Edde\Api\Query\ISelectQuery;
+		use Edde\Api\Query\IUpdateQuery;
 		use Edde\Common\Driver\AbstractDriver;
+		use Edde\Common\Query\NativeQuery;
 		use PDO;
 
 		abstract class AbstractDatabaseDriver extends AbstractDriver {
@@ -110,13 +116,85 @@
 			protected function executeInsertQuery(IInsertQuery $insertQuery) {
 				$nameList = [];
 				$parameterList = [];
-				foreach ($insertQuery->getSource() as $k => $v) {
+				foreach ($this->schemaManager->sanitize($schema = $insertQuery->getSchema(), $insertQuery->getSource()) as $k => $v) {
 					$nameList[] = $this->delimite($k);
 					$parameterList['p_' . sha1($k)] = $v;
 				}
-				$schema = $insertQuery->getSchema();
 				$sql = "INSERT INTO\n\t" . $this->delimite($schema->getName()) . " (\n\t\t" . implode(",\n\t\t", $nameList) . "\n\t) VALUES (\n\t\t";
 				$this->native($sql . ':' . implode(",\n\t\t:", array_keys($parameterList)) . "\n\t)", $parameterList);
+			}
+
+			/**
+			 * @param ISelectQuery $selectQuery
+			 *
+			 * @return \PDOStatement
+			 * @throws \Throwable
+			 */
+			protected function executeSelectQuery(ISelectQuery $selectQuery): \PDOStatement {
+				$fromList = [];
+				$whereList = null;
+				$parameterList = [];
+				$selected = null;
+				foreach ($selectQuery->getTableList() as $table) {
+					$alias = $this->delimite($table->getAlias());
+					if ($table->isSelected()) {
+						$selected = $alias . '.*';
+					}
+					$fromList[$alias] = $this->delimite($table->getSchema()->getName()) . ' ' . $alias;
+					if ($table->hasWhere()) {
+						$whereList[] = ($query = $this->fragmentWhereGroup($table->where()))->getQuery();
+						$parameterList = array_merge($parameterList, $query->getParameterList());
+					}
+				}
+				$sql = "SELECT\n\t" . $selected . "\nFROM\n\t" . implode(",\n\t", $fromList) . "\n";
+				if ($whereList) {
+					$sql .= 'WHERE' . implode("AND\n", $whereList);
+				}
+				return $this->native($sql, $parameterList);
+			}
+
+			/**
+			 * @param IUpdateQuery $updateQuery
+			 *
+			 * @throws \Throwable
+			 */
+			protected function executeUpdateQuery(IUpdateQuery $updateQuery) {
+				$sql = "UPDATE\n\t";
+				$sql .= $this->delimite(($schema = $updateQuery->getSchema())->getName()) . ' ' . $this->delimite($updateQuery->getTable()->getAlias()) . "\n";
+				$sql .= "SET\n\t";
+				$parameterList = [];
+				$nameList = [];
+				foreach ($this->schemaManager->sanitize($schema, $updateQuery->getSource()) as $k => $v) {
+					$nameList[] = $this->delimite($k) . ' = :' . ($parameterId = ('p_' . sha1($k)));
+					$parameterList[$parameterId] = $v;
+				}
+				$sql .= implode(",\n\t", $nameList) . "\n";
+				if ($updateQuery->hasWhere()) {
+					$sql .= 'WHERE' . ($query = $this->fragmentWhereGroup($updateQuery->where()))->getQuery();
+					$parameterList = array_merge($parameterList, $query->getParameterList());
+				}
+				$this->native($sql, $parameterList);
+			}
+
+			/**
+			 * @param IWhereTo $whereTo
+			 *
+			 * @return INativeQuery
+			 * @throws DriverQueryException
+			 * @throws \Exception
+			 */
+			protected function fragmentWhereTo(IWhereTo $whereTo): INativeQuery {
+				$name = $this->delimite($whereTo->getTable()->getAlias()) . '.' . $this->delimite($whereTo->getName());
+				switch ($target = $whereTo->getTarget()) {
+					case 'column':
+						list($prefix, $column) = $whereTo->getValue();
+						return new NativeQuery($name . ' = ' . $this->delimite($prefix) . '.' . $this->delimite($column));
+					case 'value':
+						return new NativeQuery($name . ' = :' . ($parameterId = 'p_' . sha1($target . microtime(true) . random_bytes(8))), [
+							$parameterId => $whereTo->getValue(),
+						]);
+				}
+				throw new DriverQueryException(sprintf('Unknown where expression [%s] target [%s].', $whereTo->getType(), $target));
 			}
 
 			public function handleSetup(): void {

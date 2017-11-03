@@ -19,8 +19,8 @@
 	use Edde\Common\Container\Factory\CascadeFactory;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
-	use Edde\Ext\Driver\Database\Postgres\PostgresDriver;
 	use Edde\Ext\Driver\Database\Postgres\PostgresQueryBuilder;
+	use Edde\Ext\Driver\PostgresDriver;
 	use Tracy\Debugger;
 
 	/**

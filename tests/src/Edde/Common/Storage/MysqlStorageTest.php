@@ -6,7 +6,7 @@
 		use Edde\Api\Driver\IDriver;
 		use Edde\Common\Container\Factory\ClassFactory;
 		use Edde\Ext\Container\ContainerFactory;
-		use Edde\Ext\Driver\Database\Mysql\MysqlDriver;
+		use Edde\Ext\Driver\MysqlDriver;
 
 		class MysqlStorageTest extends AbstractStorageTest {
 			public function testPrepareDatabase() {

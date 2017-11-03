@@ -6,8 +6,8 @@
 		use Edde\Api\Storage\Exception\IntegrityException;
 		use Edde\Common\Query\NativeQuery;
 		use Edde\Ext\Container\ContainerFactory;
-		use Edde\Ext\Driver\Database\Mysql\MysqlDriver;
 		use Edde\Ext\Driver\Database\Mysql\MysqlQueryBuilder;
+		use Edde\Ext\Driver\MysqlDriver;
 
 		class MysqlDriverTest extends AbstractDriverTest {
 			use Driver;

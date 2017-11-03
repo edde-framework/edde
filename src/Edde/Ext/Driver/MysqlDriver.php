@@ -1,13 +1,12 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Ext\Driver\Database\Mysql;
+	namespace Edde\Ext\Driver;
 
 		use Edde\Api\Driver\Exception\DriverQueryException;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\DuplicateTableException;
 		use Edde\Api\Storage\Exception\NullValueException;
 		use Edde\Api\Storage\Exception\UnknownTableException;
-		use Edde\Ext\Driver\Database\AbstractDatabaseDriver;
 
 		class MysqlDriver extends AbstractDatabaseDriver {
 			/**

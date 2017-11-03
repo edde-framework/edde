@@ -8,7 +8,7 @@
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Container\Factory\ClassFactory;
 		use Edde\Ext\Container\ContainerFactory;
-		use Edde\Ext\Driver\Graph\Neo4j\Neo4jDriver;
+		use Edde\Ext\Driver\Neo4jDriver;
 
 		class Neo4jStorageTest extends AbstractStorageTest {
 			use Storage;

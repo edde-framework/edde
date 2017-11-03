@@ -33,6 +33,7 @@
 				$this->storage->start();
 				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(SimpleSchema::class)));
 				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(FooSchema::class)));
+				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(PooSchema::class)));
 				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(SubBarSchema::class)));
 				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(BarSchema::class)));
 				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(FooBarSchema::class)));

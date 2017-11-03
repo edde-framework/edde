@@ -3,12 +3,16 @@
 	namespace Edde\Common\Driver;
 
 		use Edde\Api\Driver\Exception\DriverException;
+		use Edde\Api\Driver\Exception\DriverQueryException;
 		use Edde\Api\Driver\IDriver;
 		use Edde\Api\Query\Fragment\IFragment;
+		use Edde\Api\Query\Fragment\IWhere;
+		use Edde\Api\Query\Fragment\IWhereGroup;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\IQuery;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Common\Object\Object;
+		use Edde\Common\Query\NativeQuery;
 		use ReflectionClass;
 		use ReflectionMethod;
 
@@ -44,6 +48,37 @@
 					throw new DriverException(sprintf('Unknown fragment type [%s] for driver [%s]: a [%s] fragment is not implemented.', $class, static::class, $name));
 				}
 				return $this->fragmentList[$name]($fragment);
+			}
+
+			/**
+			 * @param IWhereGroup $whereGroup
+			 *
+			 * @return INativeQuery
+			 * @throws DriverException
+			 */
+			protected function fragmentWhereGroup(IWhereGroup $whereGroup): INativeQuery {
+				$group = null;
+				$parameterList = [];
+				foreach ($whereGroup as $where) {
+					$fragment = "\n\t";
+					if ($group) {
+						$fragment = ' ' . strtoupper($where->getRelation()) . "\n\t";
+					}
+					$group .= $fragment . ($query = $this->fragment($where->getExpression()))->getQuery();
+					$parameterList = array_merge($parameterList, $query->getParameterList());
+				}
+				return new NativeQuery($group, $parameterList);
+			}
+
+			/**
+			 * @param IWhere $where
+			 *
+			 * @return INativeQuery
+			 * @throws DriverQueryException
+			 * @throws DriverException
+			 */
+			protected function fragmentWhere(IWhere $where): INativeQuery {
+				return $this->fragment($where->getExpression());
 			}
 
 			protected function handleSetup(): void {

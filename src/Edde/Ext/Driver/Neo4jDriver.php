@@ -1,11 +1,10 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Ext\Driver\Graph\Neo4j;
+	namespace Edde\Ext\Driver;
 
 		use Edde\Api\Driver\Exception\DriverException;
 		use Edde\Api\Driver\Exception\DriverQueryException;
 		use Edde\Api\Driver\IDriver;
-		use Edde\Api\Query\Fragment\IWhereGroup;
 		use Edde\Api\Query\Fragment\IWhereTo;
 		use Edde\Api\Query\ICrateSchemaQuery;
 		use Edde\Api\Query\ICreateRelationQuery;
@@ -225,26 +224,6 @@
 				$this->native($cypher . "SET\n\t" . $alias . ' = $set', array_merge($parameterList, [
 					'set' => $this->schemaManager->sanitize($schema, $updateQuery->getSource()),
 				]));
-			}
-
-			/**
-			 * @param IWhereGroup $whereGroup
-			 *
-			 * @return INativeQuery
-			 * @throws DriverException
-			 */
-			protected function fragmentWhereGroup(IWhereGroup $whereGroup): INativeQuery {
-				$cypher = null;
-				$parameterList = [];
-				foreach ($whereGroup as $where) {
-					$fragment = "\n\t";
-					if ($cypher) {
-						$fragment = ' ' . strtoupper($where->getRelation()) . "\n\t";
-					}
-					$cypher .= $fragment . ($query = $this->fragment($where->getExpression()))->getQuery();
-					$parameterList = array_merge($parameterList, $query->getParameterList());
-				}
-				return new NativeQuery($cypher, $parameterList);
 			}
 
 			/**
