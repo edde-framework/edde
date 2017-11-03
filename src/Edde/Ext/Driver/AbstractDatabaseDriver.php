@@ -148,19 +148,43 @@
 				$fromList = [];
 				$whereList = null;
 				$parameterList = [];
-				$selected = null;
+				$return = null;
 				foreach ($selectQuery->getTableList() as $table) {
 					$alias = $this->delimite($table->getAlias());
 					if ($table->isSelected()) {
-						$selected = $alias . '.*';
+						$return = $alias . '.*';
 					}
-					$fromList[$alias] = $this->delimite($table->getSchema()->getName()) . ' ' . $alias;
+					/**
+					 * SELECT
+					 *      b.*
+					 * FROM
+					 *      FooSchema f
+					 *      LEFT JOIN FooBarSchema fb ON f.guid = fb.foo
+					 *      LEFT JOIN BarSchema b ON fb.bar = b.guid
+					 * WHERE
+					 *      f.guid = :$guid
+					 */
+					switch ($type = $table->getType()) {
+						case 'Table':
+							$from = $this->delimite($table->getSchema()->getName()) . ' ' . $alias;
+							foreach ($table->getJoinList() as $name => $relation) {
+								$from .= "\n\tINNER JOIN " . $this->delimite($relation->getSchema()->getName()) . ' ' . ($relationAlias = $this->delimite('r' . sha1(random_bytes(42)))) . ' ON ';
+								$from .= $alias . '.' . $this->delimite($relation->getTargetLink()->getTargetProperty()->getName()) . ' = ' . $relationAlias . '.' . $this->delimite($relation->getSourceLink()->getSourceProperty()->getName());
+								$from .= "\n\tINNER JOIN " . $this->delimite($relation->getTargetLink()->getTargetSchema()->getName()) . ' ' . ($name = $this->delimite($name)) . ' ON ';
+								$from .= $relationAlias . '.' . $this->delimite($relation->getTargetLink()->getSourceProperty()->getName()) . ' = ' . $name . '.' . $this->delimite($relation->getSourceLink()->getTargetProperty()->getName());
+								$return = $name . '.*';
+							}
+							$fromList[$alias] = $from;
+							break;
+						default:
+							throw new DriverQueryException(sprintf('Unknown table fragment type [%s].', $type));
+					}
 					if ($table->hasWhere()) {
 						$whereList[] = ($query = $this->fragmentWhereGroup($table->where()))->getQuery();
 						$parameterList = array_merge($parameterList, $query->getParameterList());
 					}
 				}
-				$sql = "SELECT\n\t" . $selected . "\nFROM\n\t" . implode(",\n\t", $fromList) . "\n";
+				$sql = "SELECT\n\t" . $return . "\nFROM\n\t" . implode(",\n\t", $fromList) . "\n";
 				if ($whereList) {
 					$sql .= 'WHERE' . implode("AND\n", $whereList);
 				}

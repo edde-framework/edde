@@ -245,6 +245,7 @@
 				];
 				$current = [];
 				foreach ($this->entityManager->collection(FooSchema::class)->join(BarSchema::class, 'b') as $bar) {
+					self::assertEquals(BarSchema::class, $bar->getSchema()->getName());
 					$current[] = $bar->get('name');
 				}
 				sort($expect);

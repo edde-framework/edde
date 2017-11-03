@@ -93,6 +93,7 @@
 				}
 				$this->table->join($relation = $this->join->getRelation($target), $alias, $on);
 				$this->join = $relation->getTargetLink()->getTargetSchema();
+				$this->schema = $this->schemaManager->load($target);
 				return $this;
 			}
 

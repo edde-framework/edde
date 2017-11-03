@@ -202,7 +202,7 @@
 							}
 							break;
 						default:
-							throw new DriverQueryException(sprintf('Unknown schema fragment type [%s].', $type));
+							throw new DriverQueryException(sprintf('Unknown table fragment type [%s].', $type));
 					}
 				}
 				return $this->native($cypher . implode(",\n\t", $matchList) . "\nRETURN\n\t" . $return, $parameterList);
