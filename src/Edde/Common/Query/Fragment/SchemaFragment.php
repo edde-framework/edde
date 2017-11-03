@@ -27,7 +27,17 @@
 			/**
 			 * @var ISchemaFragment[]
 			 */
-			protected $relationList = [];
+			protected $linkList = [];
+			/**
+			 * @var IRelation
+			 */
+			protected $relation;
+			/**
+			 * relation source
+			 *
+			 * @var array
+			 */
+			protected $source;
 
 			public function __construct(ISchema $schema, string $alias) {
 				parent::__construct('schema');
@@ -84,8 +94,51 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function relation(IRelation $relation, array $source, string $alias): ISchemaFragment {
-				$schemaFragment = new SchemaFragment($relation->getSchema(), $alias);
-				return $schemaFragment;
+			public function link(IRelation $relation, string $alias): ISchemaFragment {
+				return $this->linkList[$alias] = (new SchemaFragment($relation->getSchema(), $alias))->relation($relation);
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getLinkList(): array {
+				return $this->linkList;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function isRelation(): bool {
+				return $this->relation !== null;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function relation(IRelation $relation): ISchemaFragment {
+				$this->relation = $relation;
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getRelation(): IRelation {
+				return $this->relation;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function source(array $source): ISchemaFragment {
+				$this->source = $source;
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getSource(): array {
+				return $this->source;
 			}
 		}

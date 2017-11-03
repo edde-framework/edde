@@ -49,14 +49,56 @@
 			public function where(): IWhereGroup;
 
 			/**
-			 * add a relation to this fragment (schema) and return a related
-			 * schema fragment (not $this)
+			 * link the given relation to this schema fragment
 			 *
 			 * @param IRelation $relation
-			 * @param array     $source data from where filtering data should be take (for example id, guid, ...)
-			 * @param string    $alias  relation alias
+			 * @param string    $alias
 			 *
 			 * @return ISchemaFragment
 			 */
-			public function relation(IRelation $relation, array $source, string $alias): ISchemaFragment;
+			public function link(IRelation $relation, string $alias): ISchemaFragment;
+
+			/**
+			 * return list of related schema fragments
+			 *
+			 * @return ISchemaFragment[]
+			 */
+			public function getLinkList(): array;
+
+			/**
+			 * is this fragment a relation?
+			 *
+			 * @return bool
+			 */
+			public function isRelation(): bool;
+
+			/**
+			 * for internal use; make $this fragment related
+			 *
+			 * @param IRelation $relation
+			 *
+			 * @return ISchemaFragment
+			 */
+			public function relation(IRelation $relation): ISchemaFragment;
+
+			/**
+			 * return relation
+			 *
+			 * @return IRelation
+			 */
+			public function getRelation(): IRelation;
+
+			/**
+			 * attach source data for relation
+			 *
+			 * @param array $source
+			 *
+			 * @return ISchemaFragment
+			 */
+			public function source(array $source): ISchemaFragment;
+
+			/**
+			 * @return array
+			 */
+			public function getSource(): array;
 		}
