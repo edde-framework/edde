@@ -361,12 +361,13 @@
 			 * @throws StorageException
 			 */
 			public function testSimpleRelation() {
-				$bar = $this->entityManager->create(BarSchema::alias, [
+				$bar = $this->entityManager->create(BarSchema::class, [
 					'name' => 'simple-relation',
 				]);
-				$subBar = $this->entityManager->create(SubBarSchema::alias, [
+				$subBar = $this->entityManager->create(SubBarSchema::class, [
+					'label' => 'some-label',
 				]);
-				$bar->attach($subBar);
+				$bar->bind($subBar);
 				$bar->save();
 			}
 		}

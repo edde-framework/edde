@@ -26,11 +26,11 @@
 			/**
 			 * @var IEntity[]
 			 */
-			protected $linkList = [];
+			protected $bindList = [];
 			/**
 			 * @var IEntity[]
 			 */
-			protected $relationList = [];
+			protected $bindToList = [];
 			/**
 			 * @var IRelation
 			 */
@@ -61,26 +61,24 @@
 			 */
 			public function connect(IEntity $entity, IEntity $to, IRelation $relation): IEntity {
 				$this->relation = $relation;
-				$entity->relation($this);
-				$entity->link($to);
-				$this->link($entity);
-				$this->link($to);
+				$entity->bindTo($this)->bind($to);
+				$this->bind($entity)->bind($to);
 				return $this;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function link(IEntity $entity): IEntity {
-				$this->linkList[] = $entity;
+			public function bind(IEntity $entity): IEntity {
+				$this->bindList[] = $entity;
 				return $this;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function relation(IEntity $entity): IEntity {
-				$this->relationList[] = $entity;
+			public function bindTo(IEntity $entity): IEntity {
+				$this->bindToList[] = $entity;
 				return $this;
 			}
 
@@ -100,15 +98,15 @@
 					 * linked entities must be saved first as they must exists before
 					 * relations could be created
 					 */
-					foreach ($this->linkList as $entity) {
+					foreach ($this->bindList as $entity) {
 						$entity->save();
 					}
 					$query = new InsertQuery($this->schema, $source = $this->toArray());
 					if ($isRelation) {
-						if (count($this->linkList) !== 2) {
+						if (count($this->bindList) !== 2) {
 							throw new RelationException(sprintf('Cannot save [%s] as it does not have exactly two links', $this->schema->getName()));
 						}
-						list($from, $to) = $this->linkList;
+						list($from, $to) = $this->bindList;
 						$query = new UpdateRelationQuery($this->relation, $source);
 						$query->from($from->toArray());
 						$query->to($to->toArray());
@@ -119,7 +117,7 @@
 					/**
 					 * relations must be saved last as all related entities already exists
 					 */
-					foreach ($this->relationList as $entity) {
+					foreach ($this->bindToList as $entity) {
 						$entity->save();
 					}
 					$this->commit();
@@ -163,8 +161,8 @@
 
 			public function __clone() {
 				parent::__clone();
-				$this->linkList = [];
-				$this->relationList = [];
+				$this->bindList = [];
+				$this->bindToList = [];
 				$this->relation = null;
 				$this->exists = false;
 			}

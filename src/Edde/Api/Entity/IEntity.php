@@ -43,24 +43,22 @@
 			public function connect(IEntity $entity, IEntity $to, IRelation $relation): IEntity;
 
 			/**
-			 * when $this or $entity is saved, the other one is saved too; links will remain
-			 * after commit
+			 * bind the given entity to current one; bound entities are saved before $this
 			 *
 			 * @param IEntity $entity
 			 *
 			 * @return IEntity
 			 */
-			public function link(IEntity $entity): IEntity;
+			public function bind(IEntity $entity): IEntity;
 
 			/**
-			 * relation entity; they cannot be linked as it's necessary to save entity tree in
-			 * the right order
+			 * bind to the given entity; $this is saved before bound entities
 			 *
 			 * @param IEntity $entity
 			 *
 			 * @return IEntity
 			 */
-			public function relation(IEntity $entity): IEntity;
+			public function bindTo(IEntity $entity): IEntity;
 
 			/**
 			 * save this entity into storage (and all related stuff to this entity)

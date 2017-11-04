@@ -175,6 +175,25 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function hasLink(string $schema): bool {
+				return isset($this->linkList[$schema]) !== false;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getLink(string $schema): ILink {
+				if (($count = count($linkList = $this->getLinkList($schema))) === 0) {
+					throw new InvalidRelationException(sprintf('There are no links from [%s] to schema [%s].', $this->getName(), $schema));
+				} else if ($count !== 1) {
+					throw new InvalidRelationException(sprintf('There are more links from [%s] to schema [%s]. You have to specify a link.', $this->getName(), $schema));
+				}
+				return $linkList[0];
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function relationTo(IRelation $relation): ISchema {
 				$this->relationList[$relation->getTargetLink()->getTargetSchema()->getName()][] = $relation;
 				return $this;
@@ -185,6 +204,13 @@
 			 */
 			public function getRelationList(string $schema): array {
 				return $this->relationList[$schema] ?? [];
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function hasRelation(string $schema): bool {
+				return isset($this->relationList[$schema]) !== false;
 			}
 
 			/**

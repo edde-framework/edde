@@ -118,6 +118,25 @@
 			public function getLinkList(string $schema = null): array;
 
 			/**
+			 * is there a link to the given schema? (could be more than one link)
+			 *
+			 * @param string $schema
+			 *
+			 * @return bool
+			 */
+			public function hasLink(string $schema): bool;
+
+			/**
+			 * get link to the given schema or throw an exception when there is no or multiple links
+			 *
+			 * @param string $schema
+			 *
+			 * @return ILink
+			 * @throws InvalidRelationException
+			 */
+			public function getLink(string $schema): ILink;
+
+			/**
 			 * add a m:n relation to another schema through (relation) schema
 			 *
 			 * @param IRelation $relation
@@ -135,6 +154,15 @@
 			 * @return IRelation[]
 			 */
 			public function getRelationList(string $schema): array;
+
+			/**
+			 * is there a relation to the given schema? (not a link, m:n relation)
+			 *
+			 * @param string $schema
+			 *
+			 * @return bool
+			 */
+			public function hasRelation(string $schema): bool;
 
 			/**
 			 * return a relation or throw an exception where there are zero or more relations
