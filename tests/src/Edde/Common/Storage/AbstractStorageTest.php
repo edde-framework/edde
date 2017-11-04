@@ -367,7 +367,9 @@
 				$subBar = $this->entityManager->create(SubBarSchema::class, [
 					'label' => 'some-label',
 				]);
-				$bar->bind($subBar);
+				$bar->link($subBar);
 				$bar->save();
+				self::assertTrue($bar->exists());
+				self::assertTrue($subBar->exists());
 			}
 		}

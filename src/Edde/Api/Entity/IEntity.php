@@ -31,16 +31,13 @@
 			public function attach(IEntity $entity): IEntity;
 
 			/**
-			 * $this is relation entity which connects the given two entities together
-			 * using specified relation (m:n, 1:n included)
+			 * link the given entity to this one (1:N relation); return $this
 			 *
-			 * @param IEntity   $entity
-			 * @param IEntity   $to
-			 * @param IRelation $relation
+			 * @param IEntity $entity
 			 *
 			 * @return IEntity
 			 */
-			public function connect(IEntity $entity, IEntity $to, IRelation $relation): IEntity;
+			public function link(IEntity $entity): IEntity;
 
 			/**
 			 * bind the given entity to current one; bound entities are saved before $this
@@ -59,6 +56,18 @@
 			 * @return IEntity
 			 */
 			public function bindTo(IEntity $entity): IEntity;
+
+			/**
+			 * $this is relation entity which connects the given two entities together
+			 * using specified relation (m:n, 1:n included)
+			 *
+			 * @param IEntity   $entity
+			 * @param IEntity   $to
+			 * @param IRelation $relation
+			 *
+			 * @return IEntity
+			 */
+			public function connect(IEntity $entity, IEntity $to, IRelation $relation): IEntity;
 
 			/**
 			 * save this entity into storage (and all related stuff to this entity)

@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Entity;
 
+		use Edde\Api\Crate\ICrate;
 		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\Inject\EntityManager;
@@ -23,6 +24,10 @@
 			 * @var ISchema
 			 */
 			protected $schema;
+			/**
+			 * @var IEntity[]
+			 */
+			protected $linkList = [];
 			/**
 			 * @var IEntity[]
 			 */
@@ -59,10 +64,8 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function connect(IEntity $entity, IEntity $to, IRelation $relation): IEntity {
-				$this->relation = $relation;
-				$entity->bindTo($this)->bind($to);
-				$this->bind($entity)->bind($to);
+			public function link(IEntity $entity): IEntity {
+				$this->linkList[] = $entity;
 				return $this;
 			}
 
@@ -85,6 +88,16 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function connect(IEntity $entity, IEntity $to, IRelation $relation): IEntity {
+				$this->relation = $relation;
+				$entity->bindTo($this)->bind($to);
+				$this->bind($entity)->bind($to);
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function save(): IEntity {
 				$isRelation = $this->schema->isRelation();
 				if ($this->saving) {
@@ -100,6 +113,11 @@
 					 */
 					foreach ($this->bindList as $entity) {
 						$entity->save();
+					}
+					foreach ($this->linkList as $entity) {
+						$entity->save();
+						$link = $this->schema->getLink($entity->getSchema()->getName());
+						$this->set($link->getSourceProperty()->getName(), $entity->get($link->getTargetProperty()->getName()));
 					}
 					$query = new InsertQuery($this->schema, $source = $this->toArray());
 					if ($isRelation) {
@@ -151,6 +169,28 @@
 				return $this->exists;
 			}
 
+			/**
+			 * @inheritdoc
+			 */
+			public function isDirty(): bool {
+				if (parent::isDirty()) {
+					return true;
+				}
+				return empty($this->linkList) === false;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function commit(): ICrate {
+				parent::commit();
+				$this->linkList = [];
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function toArray(): array {
 				$array = [];
 				foreach ($this->schema->getPropertyList() as $k => $property) {
@@ -159,8 +199,12 @@
 				return $array;
 			}
 
+			/**
+			 * @inheritdoc
+			 */
 			public function __clone() {
 				parent::__clone();
+				$this->linkList = [];
 				$this->bindList = [];
 				$this->bindToList = [];
 				$this->relation = null;
