@@ -40,6 +40,15 @@
 			public function link(IEntity $entity): IEntity;
 
 			/**
+			 * return foreign entity based on the given property name (found by link)
+			 *
+			 * @param string $name
+			 *
+			 * @return IEntity
+			 */
+			public function entity(string $name): IEntity;
+
+			/**
 			 * bind the given entity to current one; bound entities are saved before $this
 			 *
 			 * @param IEntity $entity

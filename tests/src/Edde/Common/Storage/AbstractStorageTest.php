@@ -367,9 +367,20 @@
 				$subBar = $this->entityManager->create(SubBarSchema::class, [
 					'label' => 'some-label',
 				]);
+				$subBaBar = $this->entityManager->create(SubBarSchema::class, [
+					'label' => 'another-label',
+				]);
 				$bar->link($subBar);
 				$bar->save();
 				self::assertTrue($bar->exists());
 				self::assertTrue($subBar->exists());
+				$bar = $this->entityManager->collection(BarSchema::class)->entity('simple-relation');
+				self::assertSame('simple-relation', $bar->get('name'));
+				$subBar = $bar->entity('subBar');
+				self::assertSame('some-label', $subBar->get('label'));
+				$bar->link($subBaBar);
+				$bar->save();
+				$subBar = $bar->entity('subBar');
+				self::assertSame('another-label', $subBar->get('label'));
 			}
 		}

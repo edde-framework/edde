@@ -6,6 +6,7 @@
 		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\Inject\EntityManager;
+		use Edde\Api\Schema\Exception\LinkException;
 		use Edde\Api\Schema\Exception\RelationException;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Schema\IRelation;
@@ -67,6 +68,18 @@
 			public function link(IEntity $entity): IEntity {
 				$this->linkList[] = $entity;
 				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function entity(string $name): IEntity {
+				foreach ($this->schema->getLinkList() as $link) {
+					if ($link->getSourceProperty()->getName() === $name) {
+						return $this->entityManager->collection($link->getTargetSchema()->getName())->entity($this->get($name));
+					}
+				}
+				throw new LinkException(sprintf('Cannot find any link on property [%s::%s].', $this->schema->getName(), $name));
 			}
 
 			/**
