@@ -336,9 +336,7 @@
 				 * be changed by joins
 				 */
 				$query = new SelectQuery($user->getSchema(), 'u');
-				$query->join(UserRoleSchema::class, 'ur');
-				$query->join(RoleSchema::class, 'r');
-				$query->select('r');
+				$query->join(UserRoleSchema::class, 'ur')->join(RoleSchema::class, 'r')->select('r');
 				$query->where()->and()->eqTo('enabled', 'name', 'u');
 				$collection = $user->join(RoleSchema::class, 'r');
 				foreach ($collection as $role) {

@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Query\Fragment;
 
+		use Edde\Api\Query\Exception\QueryException;
 		use Edde\Api\Query\Fragment\ITable;
 		use Edde\Api\Query\Fragment\IWhereGroup;
-		use Edde\Api\Schema\IRelation;
 		use Edde\Api\Schema\ISchema;
 
 		class Table extends AbstractFragment implements ITable {
@@ -17,37 +17,40 @@
 			 */
 			protected $alias;
 			/**
-			 * @var bool
+			 * @var string
 			 */
-			protected $selected = false;
+			protected $select;
 			/**
 			 * @var IWhereGroup
 			 */
 			protected $where;
 			/**
-			 * @var IRelation[]
+			 * @var string[]
 			 */
 			protected $joinList = [];
 
 			public function __construct(ISchema $schema, string $alias) {
 				parent::__construct('Table');
 				$this->schema = $schema;
-				$this->alias = $alias;
+				$this->select = $this->alias = $alias;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function select(): ITable {
-				$this->selected = true;
+			public function select(string $alias): ITable {
+				if (isset($this->joinList[$alias]) === false && $this->alias !== $alias) {
+					throw new QueryException(sprintf('Cannot select unknown alias [%s]; choose select alias [%s] or one of joined aliases [%s].', $alias, $this->table->getAlias(), implode(', ', array_keys($this->joinList))));
+				}
+				$this->select = $alias;
 				return $this;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function isSelected(): bool {
-				return $this->selected;
+			public function getSelect(): string {
+				return $this->select;
 			}
 
 			/**
@@ -84,11 +87,8 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function join(IRelation $relation, string $alias, array $on = null): ITable {
-				$this->joinList[$alias] = $relation;
-				if ($on) {
-					$this->where()->and()->eq($property = $relation->getSourceLink()->getTargetProperty()->getName(), $alias)->to($on[$property]);
-				}
+			public function join(string $schema, string $alias): ITable {
+				$this->joinList[$alias] = $schema;
 				return $this;
 			}
 

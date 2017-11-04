@@ -2,23 +2,20 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Query\Fragment;
 
-		use Edde\Api\Schema\IRelation;
 		use Edde\Api\Schema\ISchema;
 
 		interface ITable extends IFragment {
 			/**
-			 * select this schema for data retrieval
-			 *
 			 * @return ITable
 			 */
-			public function select(): ITable;
+			public function select(string $alias): ITable;
 
 			/**
-			 * should be this fragment used as a data source?
+			 * return selected alias
 			 *
-			 * @return bool
+			 * @return string
 			 */
-			public function isSelected(): bool;
+			public function getSelect(): string;
 
 			/**
 			 * get schema of this fragment
@@ -49,18 +46,17 @@
 			public function where(): IWhereGroup;
 
 			/**
-			 * @param IRelation $relation
-			 * @param string    $alias
-			 * @param array     $on
+			 * @param string $schema
+			 * @param string $alias
 			 *
 			 * @return ITable
 			 */
-			public function join(IRelation $relation, string $alias, array $on = null): ITable;
+			public function join(string $schema, string $alias): ITable;
 
 			/**
-			 * return list of relations for this table
+			 * return list of joined schema names ($alias => $schemaName)
 			 *
-			 * @return IRelation[]
+			 * @return string[]
 			 */
 			public function getJoinList(): array;
 		}
