@@ -17,6 +17,8 @@
 		 * Define a Foo schema extended from guid...
 		 */
 		interface FooSchema extends GuidSchema {
+			const alias = 'foo';
+
 			/**
 			 * ...with unique string name
 			 */
@@ -32,10 +34,14 @@
 		 * Schema to test 1:n relations.
 		 */
 		interface SubBarSchema extends GuidSchema {
+			const alias = 'sub-bar';
+
 			public function label(): string;
 		}
 
 		interface BarSchema extends GuidSchema {
+			const alias = 'bar';
+
 			public function name($unique): string;
 
 			public function label(): ?string;
@@ -48,6 +54,8 @@
 		}
 
 		interface PooSchema extends GuidSchema {
+			const alias = 'poo';
+
 			public function name($unique): string;
 
 			public function label(): ?string;
@@ -58,6 +66,8 @@
 		 * relation (m:n) schema.
 		 */
 		interface FooBarSchema {
+			const alias = 'foo-bar';
+
 			/**
 			 * make property foo as a reference to FooSchema's property $guid
 			 */
@@ -70,12 +80,16 @@
 		}
 
 		interface BarPooSchema {
+			const alias = 'bar-poo';
+
 			public function bar(BarSchema $guid): string;
 
 			public function poo(PooSchema $guid): string;
 		}
 
 		interface SimpleSchema extends GuidSchema {
+			const alias = 'simple';
+
 			public function name(): string;
 
 			public function optional(): ?string;
@@ -88,6 +102,8 @@
 		}
 
 		interface UserSchema extends GuidSchema {
+			const alias = 'user';
+
 			public function name(): string;
 
 			public function email($unique): string;
@@ -96,12 +112,16 @@
 		}
 
 		interface RoleSchema extends GuidSchema {
+			const alias = 'role';
+
 			public function name($unique): string;
 
 			public function label(): ?string;
 		}
 
 		interface UserRoleSchema {
+			const alias = 'user-role';
+
 			public function user(UserSchema $guid): string;
 
 			public function role(RoleSchema $guid): string;

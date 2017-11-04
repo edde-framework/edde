@@ -15,6 +15,27 @@
 			public function getName(): string;
 
 			/**
+			 * has this schema an alias?
+			 *
+			 * @return bool
+			 */
+			public function hasAlias(): bool;
+
+			/**
+			 * get alias of this schema
+			 *
+			 * @return string
+			 */
+			public function getAlias(): string;
+
+			/**
+			 * return alias or the original schema name
+			 *
+			 * @return string
+			 */
+			public function getRealName(): string;
+
+			/**
 			 * special kind of schemas used just as a relational schemas (m:n relations, for graphs, ...)
 			 *
 			 * @return bool

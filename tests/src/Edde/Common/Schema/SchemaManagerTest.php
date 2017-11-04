@@ -13,6 +13,7 @@
 			 */
 			public function testRelationSchema() {
 				$fooBarSchema = $this->schemaManager->load(FooBarSchema::class);
+				self::assertSame($fooBarSchema, $this->schemaManager->load('foo-bar'));
 				self::assertCount(1, $linkList = $fooBarSchema->getLinkList(FooSchema::class));
 				list($link) = $linkList;
 				self::assertSame(FooBarSchema::class, $link->getSourceSchema()->getName());

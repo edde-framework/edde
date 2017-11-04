@@ -122,7 +122,7 @@
 				}
 				$primaryList = null;
 				$indexList = null;
-				$delimited = $this->delimite($schema->getName());
+				$delimited = $this->delimite($schema->getRealName());
 				foreach ($schema->getPropertyList() as $property) {
 					$name = $property->getName();
 					$fragment = 'n.' . $this->delimite($name);
@@ -149,7 +149,7 @@
 			 * @throws \Throwable
 			 */
 			protected function executeInsertQuery(IInsertQuery $insertQuery) {
-				$this->native('CREATE (n:' . $this->delimite(($schema = $insertQuery->getSchema())->getName()) . ' $set)', [
+				$this->native('CREATE (n:' . $this->delimite(($schema = $insertQuery->getSchema())->getRealName()) . ' $set)', [
 					'set' => $this->schemaManager->sanitize($schema, $insertQuery->getSource()),
 				]);
 			}
@@ -162,9 +162,9 @@
 			protected function executeUpdateRelationQuery(IUpdateRelationQuery $updateRelationQuery) {
 				$relation = $updateRelationQuery->getRelation();
 				$cypher = 'MATCH';
-				$cypher .= "\n\t(a:" . $this->delimite(($sourceLink = $relation->getSourceLink())->getTargetSchema()->getName()) . ')';
-				$cypher .= '-[r:' . $this->delimite($relation->getSchema()->getName()) . ']->';
-				$cypher .= '(b:' . $this->delimite(($targetLink = $relation->getTargetLink())->getTargetSchema()->getName()) . ")\n";
+				$cypher .= "\n\t(a:" . $this->delimite(($sourceLink = $relation->getSourceLink())->getTargetSchema()->getRealName()) . ')';
+				$cypher .= '-[r:' . $this->delimite($relation->getSchema()->getRealName()) . ']->';
+				$cypher .= '(b:' . $this->delimite(($targetLink = $relation->getTargetLink())->getTargetSchema()->getRealName()) . ")\n";
 				$cypher .= 'WHERE';
 				$cypher .= "\n\ta." . ($source = $sourceLink->getTargetProperty()->getName()) . " = \$a AND";
 				$cypher .= "\n\tb." . ($target = $targetLink->getTargetProperty()->getName()) . " = \$b\n";
@@ -184,12 +184,12 @@
 			protected function executeCreateRelationQuery(ICreateRelationQuery $createRelationQuery) {
 				$relation = $createRelationQuery->getRelation();
 				$cypher = 'MATCH';
-				$cypher .= "\n\t(a:" . $this->delimite(($sourceLink = $relation->getSourceLink())->getTargetSchema()->getName()) . '),';
-				$cypher .= "\n\t(b:" . $this->delimite(($targetLink = $relation->getTargetLink())->getTargetSchema()->getName()) . ")\n";
+				$cypher .= "\n\t(a:" . $this->delimite(($sourceLink = $relation->getSourceLink())->getTargetSchema()->getRealName()) . '),';
+				$cypher .= "\n\t(b:" . $this->delimite(($targetLink = $relation->getTargetLink())->getTargetSchema()->getRealName()) . ")\n";
 				$cypher .= 'WHERE';
 				$cypher .= "\n\ta." . ($source = $sourceLink->getTargetProperty()->getName()) . " = \$a AND";
 				$cypher .= "\n\tb." . ($target = $targetLink->getTargetProperty()->getName()) . " = \$b\n";
-				$cypher .= "MERGE\n\t(a)-[:" . $this->delimite($relation->getSchema()->getName());
+				$cypher .= "MERGE\n\t(a)-[:" . $this->delimite($relation->getSchema()->getRealName());
 				$properties = [
 					'a' => $createRelationQuery->getFrom()[$source],
 					'b' => $createRelationQuery->getTo()[$target],
@@ -220,11 +220,11 @@
 				$matchList = [];
 				$table = $selectQuery->getTable();
 				$return = $this->delimite($table->getSelect());
-				$cypher .= '(' . $this->delimite($current = $table->getAlias()) . ':' . $this->delimite($table->getSchema()->getName()) . ')';
+				$cypher .= '(' . $this->delimite($current = $table->getAlias()) . ':' . $this->delimite($table->getSchema()->getRealName()) . ')';
 				$schema = $table->getSchema();
 				foreach ($table->getJoinList() as $name => $relation) {
 					$relation = $schema->getRelation($relation);
-					$cypher .= '-[' . $this->delimite($current . '\r') . ':' . $this->delimite($relation->getSchema()->getName()) . ']-(' . ($return = $this->delimite($current = $name)) . ':' . $this->delimite(($schema = $relation->getTargetLink()->getTargetSchema())->getName()) . ')';
+					$cypher .= '-[' . $this->delimite($current . '\r') . ':' . $this->delimite($relation->getSchema()->getRealName()) . ']-(' . ($return = $this->delimite($current = $name)) . ':' . $this->delimite(($schema = $relation->getTargetLink()->getTargetSchema())->getRealName()) . ')';
 				}
 				$parameterList = [];
 				if ($table->hasWhere()) {
@@ -241,7 +241,7 @@
 			 */
 			protected function executeUpdateQuery(IUpdateQuery $updateQuery) {
 				$table = $updateQuery->getTable();
-				$cypher = "MATCH\n\t(" . ($alias = $this->delimite($table->getAlias())) . ':' . $this->delimite(($schema = $table->getSchema())->getName()) . ")\n";
+				$cypher = "MATCH\n\t(" . ($alias = $this->delimite($table->getAlias())) . ':' . $this->delimite(($schema = $table->getSchema())->getRealName()) . ")\n";
 				$parameterList = [];
 				if ($table->hasWhere()) {
 					$cypher .= 'WHERE' . ($query = $this->fragmentWhereGroup($table->where()))->getQuery() . "\n";

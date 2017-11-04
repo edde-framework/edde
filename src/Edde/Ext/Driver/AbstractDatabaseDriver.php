@@ -86,7 +86,7 @@
 			 */
 			protected function executeCreateSchemaQuery(ICrateSchemaQuery $crateSchemaQuery) {
 				$schema = $crateSchemaQuery->getSchema();
-				$sql = 'CREATE TABLE ' . ($this->delimite($table = $schema->getName())) . " (\n\t";
+				$sql = 'CREATE TABLE ' . ($this->delimite($table = $schema->getRealName())) . " (\n\t";
 				$columnList = [];
 				$primaryList = [];
 				foreach ($schema->getPropertyList() as $property) {
@@ -106,7 +106,7 @@
 				}
 				$sql .= implode(",\n\t", $columnList);
 				foreach ($schema->getLinkList() as $link) {
-					$sql .= ",\n\tFOREIGN KEY (" . $this->delimite($link->getSourceProperty()->getName()) . ') REFERENCES ' . $this->delimite($link->getTargetSchema()->getName()) . '(' . $this->delimite($link->getTargetProperty()->getName()) . ') ON DELETE RESTRICT ON UPDATE RESTRICT';
+					$sql .= ",\n\tFOREIGN KEY (" . $this->delimite($link->getSourceProperty()->getName()) . ') REFERENCES ' . $this->delimite($link->getTargetSchema()->getRealName()) . '(' . $this->delimite($link->getTargetProperty()->getName()) . ') ON DELETE RESTRICT ON UPDATE RESTRICT';
 				}
 				$this->native($sql . "\n)");
 			}
@@ -123,7 +123,7 @@
 					$nameList[] = $this->delimite($k);
 					$parameterList['p_' . sha1($k)] = $v;
 				}
-				$sql = "INSERT INTO\n\t" . $this->delimite($schema->getName()) . " (\n\t\t" . implode(",\n\t\t", $nameList) . "\n\t) VALUES (\n\t\t";
+				$sql = "INSERT INTO\n\t" . $this->delimite($schema->getRealName()) . " (\n\t\t" . implode(",\n\t\t", $nameList) . "\n\t) VALUES (\n\t\t";
 				$this->native($sql . ':' . implode(",\n\t\t:", array_keys($parameterList)) . "\n\t)", $parameterList);
 			}
 
@@ -134,7 +134,7 @@
 			 */
 			protected function executeUpdateRelationQuery(IUpdateRelationQuery $updateRelationQuery) {
 				$relation = $updateRelationQuery->getRelation();
-				$sql = "DELETE FROM\n\t" . $this->delimite($relation->getSchema()->getName()) . "\n";
+				$sql = "DELETE FROM\n\t" . $this->delimite($relation->getSchema()->getRealName()) . "\n";
 				$sql .= "WHERE\n\t";
 				$sql .= $relation->getSourceLink()->getSourceProperty()->getName() . " = :a  AND\n\t";
 				$sql .= $relation->getTargetLink()->getSourceProperty()->getName() . ' = :b';
@@ -168,14 +168,14 @@
 				$alias = $this->delimite($current = ($table = $selectQuery->getTable())->getAlias());
 				$select = $this->delimite($table->getSelect()) . '.*';
 				$schema = $table->getSchema();
-				$from = $this->delimite($table->getSchema()->getName()) . ' ' . $alias;
+				$from = $this->delimite($table->getSchema()->getRealName()) . ' ' . $alias;
 				foreach ($table->getJoinList() as $name => $relation) {
 					$relation = $schema->getRelation($relation);
 					$sourceLink = $relation->getSourceLink();
 					$targetLink = $relation->getTargetLink();
-					$from .= "\n\tINNER JOIN " . $this->delimite($relation->getSchema()->getName()) . ' ' . ($join = $this->delimite($current . '\r')) . ' ON ';
+					$from .= "\n\tINNER JOIN " . $this->delimite($relation->getSchema()->getRealName()) . ' ' . ($join = $this->delimite($current . '\r')) . ' ON ';
 					$from .= $current . '.' . $this->delimite($targetLink->getTargetProperty()->getName()) . ' = ' . $join . '.' . $this->delimite($sourceLink->getSourceProperty()->getName());
-					$from .= "\n\tINNER JOIN " . $this->delimite($targetLink->getTargetSchema()->getName()) . ' ' . ($name = $this->delimite($current = $name)) . ' ON ';
+					$from .= "\n\tINNER JOIN " . $this->delimite($targetLink->getTargetSchema()->getRealName()) . ' ' . ($name = $this->delimite($current = $name)) . ' ON ';
 					$from .= $join . '.' . $this->delimite($targetLink->getSourceProperty()->getName()) . ' = ' . $name . '.' . $this->delimite($sourceLink->getTargetProperty()->getName());
 					$select = $name . '.*';
 					$schema = $relation->getTargetLink()->getTargetSchema();
@@ -196,7 +196,7 @@
 			 */
 			protected function executeUpdateQuery(IUpdateQuery $updateQuery) {
 				$sql = "UPDATE\n\t";
-				$sql .= $this->delimite(($schema = $updateQuery->getSchema())->getName()) . ' ' . $this->delimite($updateQuery->getTable()->getAlias()) . "\n";
+				$sql .= $this->delimite(($schema = $updateQuery->getSchema())->getRealName()) . ' ' . $this->delimite($updateQuery->getTable()->getAlias()) . "\n";
 				$sql .= "SET\n\t";
 				$parameterList = [];
 				$nameList = [];

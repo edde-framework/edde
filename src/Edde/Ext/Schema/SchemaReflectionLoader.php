@@ -42,6 +42,13 @@
 					$linkCount = 0;
 					$methodCount = 0;
 					$primary = false;
+					foreach ($reflectionClass->getConstants() as $name => $value) {
+						switch ($name) {
+							case 'alias':
+								$schemaBuilder->alias($value);
+								break;
+						}
+					}
 					foreach ($reflectionClass->getMethods() as $reflectionMethod) {
 						$methodCount++;
 						$propertyBuilder = $schemaBuilder->property($propertyName = $reflectionMethod->getName());
@@ -105,7 +112,10 @@
 								break;
 						}
 					}
-					return $this->schemaList[$schema] = $schemaBuilder->getSchema();
+					if (($schema = $this->schemaList[$schema] = $schemaBuilder->getSchema())->hasAlias()) {
+						$this->schemaList[$schema->getAlias()] = $schema;
+					}
+					return $schema;
 				} catch (SchemaException $exception) {
 					throw $exception;
 				} catch (\Throwable $throwable) {

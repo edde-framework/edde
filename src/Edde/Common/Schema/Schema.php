@@ -57,6 +57,27 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function hasAlias(): bool {
+				return $this->node->getAttribute('alias') !== null;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getAlias(): string {
+				return $this->node->getAttribute('alias');
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getRealName(): string {
+				return $this->node->getAttribute('alias', $this->getName());
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function isRelation(): bool {
 				return (bool)$this->node->getAttribute('is-relation', false);
 			}
