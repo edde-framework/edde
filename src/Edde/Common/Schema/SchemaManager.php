@@ -85,7 +85,11 @@
 					$current->getTargetSchema()->relationTo(new Relation($schema, $current, $link));
 					$current = $link;
 				}
-				return $this->schemaList[$name] = $schema;
+				$this->schemaList[$name] = $schema;
+				if ($schema->hasAlias()) {
+					$this->schemaList[$schema->getAlias()] = $schema;
+				}
+				return $schema;
 			}
 
 			/**
