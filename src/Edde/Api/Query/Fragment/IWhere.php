@@ -4,23 +4,15 @@
 
 		interface IWhere extends IFragment {
 			/**
-			 * where equals
+			 * where column is <expression> to value
 			 *
-			 * @param string      $name
-			 * @param string|null $alias
+			 * @param string $column
+			 * @param string $expression
+			 * @param mixed  $value
 			 *
-			 * @return IWhereTo
+			 * @return IWhereGroup
 			 */
-			public function eq(string $name, string $alias = null): IWhereTo;
-
-			/**
-			 * greater than
-			 *
-			 * @param string $name
-			 *
-			 * @return IWhereThan
-			 */
-			public function gt(string $name): IWhereThan;
+			public function value(string $column, string $expression, $value): IWhereGroup;
 
 			/**
 			 * return logical relation (and, or, ...)

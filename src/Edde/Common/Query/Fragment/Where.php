@@ -5,8 +5,6 @@
 		use Edde\Api\Query\Fragment\IWhere;
 		use Edde\Api\Query\Fragment\IWhereExpression;
 		use Edde\Api\Query\Fragment\IWhereGroup;
-		use Edde\Api\Query\Fragment\IWhereThan;
-		use Edde\Api\Query\Fragment\IWhereTo;
 
 		class Where extends AbstractFragment implements IWhere {
 			/**
@@ -31,15 +29,9 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function eq(string $name, string $alias = null): IWhereTo {
-				return $this->where = new WhereTo($this->whereGroup, __FUNCTION__, $name, $alias);
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function gt(string $name): IWhereThan {
-				return $this->where = new WhereThan($this->whereGroup, __FUNCTION__, $name);
+			public function value(string $column, string $expression, $value): IWhereGroup {
+				$this->where = new WhereExpression($this->whereGroup, $expression, $column);
+				return $this->whereGroup;
 			}
 
 			/**

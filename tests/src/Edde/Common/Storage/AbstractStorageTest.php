@@ -336,7 +336,11 @@
 				 * be changed by joins
 				 */
 				$query = new SelectQuery($user->getSchema(), 'u');
-				$query->join(UserRoleSchema::class, 'ur')->where('enabled', '=', true)->join(RoleSchema::class, 'r')->select('r');
+				$query->join(UserRoleSchema::class, 'ur')->where('enabled', '=', true);
+				$query->join(RoleSchema::class, 'r')->select('r');
+				$query->where('u.name', '=', 'Me, The Best User Ever!');
+				foreach ($this->storage->execute($query) as $source) {
+				}
 				$collection = $user->join(RoleSchema::class, 'r');
 				foreach ($collection as $role) {
 					self::assertEquals(RoleSchema::class, $role->getSchema()->getName());

@@ -40,12 +40,14 @@
 			 * @inheritdoc
 			 */
 			public function where(string $name, string $relation, $value): ISelectQuery {
-				$alias = $this->alias;
-				if (($dot = strpos($name, '.')) !== false) {
-					$alias = substr($name, 0, $dot);
-					$name = substr($name, $dot + 1);
+				if (($dot = strpos($name, '.')) === false) {
+					$name = $this->alias . '.' . $name;
 				}
-				$this->table->where()->and()->eq($name, $alias)->to($value);
+//				if (($dot = strpos($name, '.')) !== false) {
+//					$alias = substr($name, 0, $dot);
+//					$name = substr($name, $dot + 1);
+//				}
+				$this->table->where()->and()->value($name, '=', $value);
 				return $this;
 			}
 
