@@ -16,7 +16,6 @@
 			protected $source;
 
 			public function __construct(ISchema $schema, array $source) {
-				parent::__construct('insert');
 				$this->schema = $schema;
 				$this->source = $source;
 			}

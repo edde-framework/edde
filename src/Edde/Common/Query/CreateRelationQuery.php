@@ -27,7 +27,6 @@
 			protected $to;
 
 			public function __construct(IRelation $relation, array $source = []) {
-				parent::__construct('CreateRelationQuery');
 				$this->relation = $relation;
 				$this->source = $source;
 			}

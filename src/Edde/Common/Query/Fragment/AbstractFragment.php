@@ -6,19 +6,4 @@
 		use Edde\Common\Object\Object;
 
 		abstract class AbstractFragment extends Object implements IFragment {
-			/**
-			 * @var string
-			 */
-			protected $type;
-
-			public function __construct(string $type) {
-				$this->type = $type;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getType(): string {
-				return $this->type;
-			}
 		}

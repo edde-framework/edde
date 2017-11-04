@@ -3,7 +3,6 @@
 	namespace Edde\Common\Query\Fragment;
 
 		use Edde\Api\Query\Fragment\IWhere;
-		use Edde\Api\Query\Fragment\IWhereExpression;
 		use Edde\Api\Query\Fragment\IWhereGroup;
 
 		class Where extends AbstractFragment implements IWhere {
@@ -16,12 +15,11 @@
 			 */
 			protected $relation;
 			/**
-			 * @var IWhereExpression
+			 * @var string
 			 */
 			protected $where;
 
 			public function __construct(IWhereGroup $whereGroup, string $relation) {
-				parent::__construct('where');
 				$this->whereGroup = $whereGroup;
 				$this->relation = $relation;
 			}
@@ -29,8 +27,12 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function value(string $column, string $expression, $value): IWhereGroup {
-				$this->where = new WhereExpression($this->whereGroup, $expression, $column);
+			public function value(string $column, string $type, $value): IWhereGroup {
+				$this->where = [
+					$column,
+					$this->type = 'Where' . $type,
+					$value,
+				];
 				return $this->whereGroup;
 			}
 
@@ -39,12 +41,5 @@
 			 */
 			public function getRelation(): string {
 				return $this->relation;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getExpression(): IWhereExpression {
-				return $this->where;
 			}
 		}

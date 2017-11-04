@@ -12,7 +12,6 @@
 			protected $schema;
 
 			public function __construct(ISchema $schema) {
-				parent::__construct('create-schema');
 				$this->schema = $schema;
 			}
 

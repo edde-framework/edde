@@ -5,7 +5,6 @@
 		use Edde\Api\Query\Fragment\ITable;
 		use Edde\Api\Query\Fragment\IWhereGroup;
 		use Edde\Api\Query\IUpdateQuery;
-		use Edde\Api\Schema\ISchema;
 		use Edde\Common\Query\Fragment\Table;
 
 		class UpdateQuery extends InsertQuery implements IUpdateQuery {
@@ -13,11 +12,6 @@
 			 * @var ITable
 			 */
 			protected $table;
-
-			public function __construct(ISchema $schema, array $source) {
-				parent::__construct($schema, $source);
-				$this->type = 'update';
-			}
 
 			/**
 			 * @inheritdoc

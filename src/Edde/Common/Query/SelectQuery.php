@@ -15,7 +15,6 @@
 			protected $alias;
 
 			public function __construct(ISchema $schema, string $alias) {
-				parent::__construct('SelectQuery');
 				$this->table = new Table($schema, $alias);
 				$this->alias = $alias;
 			}

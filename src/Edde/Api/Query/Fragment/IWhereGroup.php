@@ -18,11 +18,6 @@
 			public function or (): IWhere;
 
 			/**
-			 * @return ITable
-			 */
-			public function getTable(): ITable;
-
-			/**
 			 * @return \Traversable|IWhere[]
 			 */
 			public function getIterator();

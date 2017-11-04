@@ -30,7 +30,6 @@
 			protected $joinList = [];
 
 			public function __construct(ISchema $schema, string $alias) {
-				parent::__construct('Table');
 				$this->schema = $schema;
 				$this->select = $this->alias = $alias;
 			}
@@ -79,7 +78,7 @@
 			 */
 			public function where(): IWhereGroup {
 				if ($this->where === null) {
-					$this->where = new WhereGroup($this);
+					$this->where = new WhereGroup();
 				}
 				return $this->where;
 			}
