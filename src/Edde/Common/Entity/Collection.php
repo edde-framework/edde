@@ -5,7 +5,6 @@
 		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\Inject\EntityManager;
-		use Edde\Api\Query\Fragment\ITable;
 		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Schema\ISchema;
@@ -25,14 +24,6 @@
 			 * @var ISchema
 			 */
 			protected $schema;
-			/**
-			 * @var ITable
-			 */
-			protected $table;
-			/**
-			 * @var ISchema
-			 */
-			protected $join;
 
 			public function __construct(IStream $stream, ISchema $schema) {
 				$this->stream = $stream;
@@ -43,8 +34,6 @@
 			 * @inheritdoc
 			 */
 			public function query(ISelectQuery $query): ICollection {
-				$this->table = null;
-				$this->join = null;
 				$this->stream->query($query);
 				return $this;
 			}
@@ -84,16 +73,15 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function join(string $target, string $alias, array $on = []): ICollection {
-				if ($this->join === null) {
-					$this->join = $this->schema;
+			public function join(string $target, string $alias, array $on = null): ICollection {
+				/**
+				 * change target schema of this collection
+				 */
+				$this->schema = ($relation = $this->schema->getRelation($target))->getTargetLink()->getTargetSchema();
+				($query = $this->stream->getQuery())->join($target, $alias);
+				if ($on) {
+					$query->where($query->getTable()->getAlias() . '.' . ($name = $relation->getTargetLink()->getTargetProperty()->getName()), '=', $on[$name]);
 				}
-				if ($this->table === null) {
-					$this->table = $this->stream->getQuery()->table($this->schema, 'c');
-				}
-				$this->table->join($relation = $this->join->getRelation($target), $alias, $on);
-				$this->join = $relation->getTargetLink()->getTargetSchema();
-				$this->schema = $this->schemaManager->load($target);
 				return $this;
 			}
 
@@ -109,7 +97,5 @@
 			public function __clone() {
 				parent::__clone();
 				$this->stream = clone $this->stream;
-				$this->table = null;
-				$this->join = $this->schema;
 			}
 		}

@@ -146,19 +146,22 @@
 			 */
 			protected function executeSelectQuery(ISelectQuery $selectQuery): \PDOStatement {
 				$select = null;
-				$alias = $this->delimite(($table = $selectQuery->getTable())->getAlias());
+				$current = $alias = $this->delimite(($table = $selectQuery->getTable())->getAlias());
 				$select = $this->delimite($table->getSelect()) . '.*';
-//				foreach ($table->getJoinList() as $name => $relation) {
-//					$sourceLink = $relation->getSourceLink();
-//					$targetLink = $relation->getTargetLink();
-//					$from .= "\n\tINNER JOIN " . $this->delimite($relation->getSchema()->getName()) . ' ' . ($join = $this->delimite('r' . sha1(random_bytes(42)))) . ' ON ';
-//					$from .= $previous . '.' . $this->delimite($targetLink->getTargetProperty()->getName()) . ' = ' . $join . '.' . $this->delimite($sourceLink->getSourceProperty()->getName());
-//					$from .= "\n\tINNER JOIN " . $this->delimite($targetLink->getTargetSchema()->getName()) . ' ' . ($name = $this->delimite($name)) . ' ON ';
-//					$from .= $join . '.' . $this->delimite($targetLink->getSourceProperty()->getName()) . ' = ' . $name . '.' . $this->delimite($sourceLink->getTargetProperty()->getName());
-//					$select = $name . '.*';
-//					$previous = $name;
-//				}
-				$sql = "SELECT\n\t" . $select . "\nFROM\n\t" . ($this->delimite($table->getSchema()->getName()) . ' ' . $alias) . "\n";
+				$schema = $table->getSchema();
+				$from = $this->delimite($table->getSchema()->getName()) . ' ' . $alias;
+				foreach ($table->getJoinList() as $name => $relation) {
+					$relation = $schema->getRelation($relation);
+					$sourceLink = $relation->getSourceLink();
+					$targetLink = $relation->getTargetLink();
+					$from .= "\n\tINNER JOIN " . $this->delimite($relation->getSchema()->getName()) . ' ' . ($join = $this->delimite('r' . sha1(random_bytes(42)))) . ' ON ';
+					$from .= $current . '.' . $this->delimite($targetLink->getTargetProperty()->getName()) . ' = ' . $join . '.' . $this->delimite($sourceLink->getSourceProperty()->getName());
+					$from .= "\n\tINNER JOIN " . $this->delimite($targetLink->getTargetSchema()->getName()) . ' ' . ($name = $this->delimite($name)) . ' ON ';
+					$from .= $join . '.' . $this->delimite($targetLink->getSourceProperty()->getName()) . ' = ' . $name . '.' . $this->delimite($sourceLink->getTargetProperty()->getName());
+					$select = ($current = $name) . '.*';
+					$schema = $relation->getTargetLink()->getTargetSchema();
+				}
+				$sql = "SELECT\n\t" . $select . "\nFROM\n\t" . $from . "\n";
 				$parameterList = [];
 				if ($table->hasWhere()) {
 					$sql .= 'WHERE' . ($query = $this->fragmentWhereGroup($table->where()))->getQuery();

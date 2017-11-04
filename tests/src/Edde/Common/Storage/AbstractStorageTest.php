@@ -337,7 +337,7 @@
 				 * select query should be bound to one exact schema; the target table could
 				 * be changed by joins
 				 */
-				$query = new SelectQuery($user->getSchema(), 'u');
+				$query = new SelectQuery(($userSchema = $user->getSchema()), 'u');
 				$query->join(UserRoleSchema::class, 'ur')->where('enabled', '=', true);
 				$query->join(RoleSchema::class, 'r')->select('r');
 				$query->where('u.name', '=', 'Me, The Best User Ever!');
