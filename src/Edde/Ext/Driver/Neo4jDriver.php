@@ -11,6 +11,7 @@
 		use Edde\Api\Query\IInsertQuery;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\ISelectQuery;
+		use Edde\Api\Query\IUpdateLinkQuery;
 		use Edde\Api\Query\IUpdateQuery;
 		use Edde\Api\Query\IUpdateRelationQuery;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
@@ -174,6 +175,33 @@
 					'b' => $updateRelationQuery->getTo()[$target],
 				]);
 				$this->executeCreateRelationQuery($updateRelationQuery);
+			}
+
+			/**
+			 * @param IUpdateLinkQuery $updateLinkQuery
+			 *
+			 * @throws \Throwable
+			 */
+			protected function executeUpdateLinkQuery(IUpdateLinkQuery $updateLinkQuery) {
+				$link = $updateLinkQuery->getLink();
+				$cypher = 'MATCH';
+				$cypher .= "\n\t(a:" . ($sourceName = $this->delimite(($sourceSchema = $link->getSourceSchema())->getRealName())) . ')';
+				$cypher .= '-[r:' . ($relation = $this->delimite($link->getTargetSchema()->getRealName())) . ']->(:' . $relation . ')';
+				$cypher .= 'WHERE';
+				$cypher .= "\n\ta." . $this->delimite($primary = $sourceSchema->getPrimary()->getName()) . " = \$a\n";
+				$cypher .= 'DELETE r';
+				$this->native($cypher, $parameters = [
+					'a' => $updateLinkQuery->getFrom()[$primary],
+					'b' => $updateLinkQuery->getTo()[$target = $link->getTargetProperty()->getName()],
+				]);
+				$cypher = 'MATCH';
+				$cypher .= "\n\t(a:" . $sourceName . '),';
+				$cypher .= "\n\t(b:" . $relation . ")\n";
+				$cypher .= 'WHERE';
+				$cypher .= "\n\ta." . $this->delimite($primary) . " = \$a AND\n";
+				$cypher .= "\n\tb." . $this->delimite($target) . " = \$b\n";
+				$cypher .= "MERGE\n\t(a)-[:" . $relation . ']->(b)';
+				$this->native($cypher, $parameters);
 			}
 
 			/**
