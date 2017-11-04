@@ -3,6 +3,7 @@
 	namespace Edde\Common\Storage;
 
 		use Edde\Api\Entity\Inject\EntityManager;
+		use Edde\Api\Query\Exception\QueryException;
 		use Edde\Api\Schema\Exception\UnknownSchemaException;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
@@ -304,6 +305,7 @@
 			 * @throws IntegrityException
 			 * @throws StorageException
 			 * @throws UnknownSchemaException
+			 * @throws QueryException
 			 */
 			public function testRelationAttribute() {
 				$this->schemaManager->load(UserRoleSchema::class);
@@ -334,11 +336,9 @@
 				 * be changed by joins
 				 */
 				$query = new SelectQuery($user->getSchema(), 'u');
-				/**
-				 * join should return WhereGroup to adjust join condition?
-				 */
 				$query->join(UserRoleSchema::class, 'ur');
-				$query->join(RoleSchema::class, 'r')->select();
+				$query->join(RoleSchema::class, 'r');
+				$query->select('r');
 				$query->where()->and()->eqTo('enabled', 'name', 'u');
 				$collection = $user->join(RoleSchema::class, 'r');
 				foreach ($collection as $role) {
