@@ -3,7 +3,6 @@
 	namespace App\Common\Upgrade;
 
 		use App\Api\Upgrade\UpgradeSchema;
-		use App\Api\User\Schema\UserSchema;
 		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Entity\Inject\EntityManager;
 		use Edde\Api\Schema\Inject\SchemaManager;
@@ -40,7 +39,7 @@
 			 * @inheritdoc
 			 */
 			public function getCurrentList(): ICollection {
-				return $this->entityManager->collection(UserSchema::class)->order('c.stamp', false);
+				return $this->entityManager->collection(UpgradeSchema::class)->order('c.stamp', false);
 			}
 
 			/**

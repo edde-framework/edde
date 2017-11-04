@@ -9,6 +9,6 @@
 			 * @param \DateTime $value
 			 */
 			public function sanitize($value, array $options = []) {
-				return $value ? $value->format($options['format'] ?? 'Y-m-d H:i:s') : null;
+				return $value ? $value->format($options['format'] ?? 'Y-m-d H:i:s.u') : null;
 			}
 		}

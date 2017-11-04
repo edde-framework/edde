@@ -34,7 +34,7 @@
 					case 'bool':
 						return 'SMALLINT';
 					case 'datetime':
-						return 'TIMESTAMP';
+						return 'TIMESTAMP(6)';
 				}
 				throw new DriverQueryException(sprintf('Unknown type [%s] in driver [%s]', $type, static::class));
 			}
