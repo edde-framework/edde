@@ -12,6 +12,7 @@
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Query\IUpdateQuery;
+		use Edde\Api\Query\IUpdateRelationQuery;
 		use Edde\Common\Driver\AbstractDriver;
 		use Edde\Common\Query\InsertQuery;
 		use Edde\Common\Query\NativeQuery;
@@ -124,6 +125,24 @@
 				}
 				$sql = "INSERT INTO\n\t" . $this->delimite($schema->getName()) . " (\n\t\t" . implode(",\n\t\t", $nameList) . "\n\t) VALUES (\n\t\t";
 				$this->native($sql . ':' . implode(",\n\t\t:", array_keys($parameterList)) . "\n\t)", $parameterList);
+			}
+
+			/**
+			 * @param IUpdateRelationQuery $updateRelationQuery
+			 *
+			 * @throws \Throwable
+			 */
+			protected function executeUpdateRelationQuery(IUpdateRelationQuery $updateRelationQuery) {
+				$relation = $updateRelationQuery->getRelation();
+				$sql = "DELETE FROM\n\t" . $this->delimite($relation->getSchema()->getName()) . "\n";
+				$sql .= "WHERE\n\t";
+				$sql .= $relation->getSourceLink()->getSourceProperty()->getName() . " = :a  AND\n\t";
+				$sql .= $relation->getTargetLink()->getSourceProperty()->getName() . ' = :b';
+				$this->native($sql, [
+					'a' => $updateRelationQuery->getFrom()[$relation->getSourceLink()->getTargetProperty()->getName()],
+					'b' => $updateRelationQuery->getTo()[$relation->getTargetLink()->getTargetProperty()->getName()],
+				]);
+				$this->executeCreateRelationQuery($updateRelationQuery);
 			}
 
 			/**
