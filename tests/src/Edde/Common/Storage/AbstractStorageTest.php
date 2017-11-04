@@ -330,10 +330,6 @@
 				$expect = [
 					'root',
 				];
-				/**
-				 * select query should be bound to one exact schema; the target table could
-				 * be changed by joins
-				 */
 				$query = new SelectQuery(($userSchema = $user->getSchema()), 'u');
 				$query->join(RoleSchema::class, 'r')->select('r');
 				$query->where('u.name', '=', 'Me, The Best User Ever!');
@@ -382,5 +378,46 @@
 				$bar->save();
 				$subBar = $bar->entity('subBar');
 				self::assertSame('another-label', $subBar->get('label'));
+			}
+
+			/**
+			 * @throws DuplicateEntryException
+			 * @throws IntegrityException
+			 * @throws StorageException
+			 * @throws UnknownSchemaException
+			 */
+			public function testBenchmark() {
+				$this->schemaManager->load(FooBarSchema::class);
+				$this->schemaManager->load(BarPooSchema::class);
+				$this->storage->start();
+				$start = microtime(true);
+				for ($i = 0; $i < 150; $i++) {
+					$foo = $this->entityManager->create(FooSchema::class, [
+						'name' => 'foo #' . $i,
+					]);
+					$bar = $this->entityManager->create(BarSchema::class, [
+						'name' => 'bar #' . $i,
+					]);
+					$bar2 = $this->entityManager->create(BarSchema::class, [
+						'name' => 'bar 2 #' . $i,
+					]);
+					$subBar = $this->entityManager->create(SubBarSchema::class, [
+						'label' => 'sub-bar #' . $i,
+					]);
+					$subBar2 = $this->entityManager->create(SubBarSchema::class, [
+						'label' => 'sub-bar 2 #' . $i,
+					]);
+					$bar->link($subBar);
+					$foo->attach($bar);
+					$foo->attach($bar2);
+					$foo->save();
+					$bar->link($subBar2);
+					$bar->save();
+				}
+				$this->storage->commit();
+				$sum = (microtime(true) - $start);
+				$item = ($sum / $i) * 1000;
+//				printf("%.4fs, %.4f ms/operation\n", );
+				self::assertLessThanOrEqual(46, $item);
 			}
 		}
