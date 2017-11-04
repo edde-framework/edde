@@ -209,9 +209,6 @@
 							$name = $this->delimite(substr($parameters[2], 0, $dot)) . '.' . $this->delimite(substr($parameters[2], $dot + 1));
 						}
 						switch ($type) {
-							case 'column':
-								list($prefix, $column) = $whereTo->getValue();
-								return new NativeQuery($name . ' ' . $operator . ' ' . $this->delimite($prefix) . '.' . $this->delimite($column));
 							case 'value':
 								return new NativeQuery($name . ' ' . $operator . ' :' . ($parameterId = 'p_' . sha1(random_bytes(42))), [
 									$parameterId => $parameters[3],
