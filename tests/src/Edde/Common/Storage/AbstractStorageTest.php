@@ -330,21 +330,24 @@
 				$guest->save();
 				$expect = [
 					'root',
-					'guest',
 				];
-				$current = [];
 				/**
 				 * select query should be bound to one exact schema; the target table could
 				 * be changed by joins
 				 */
 				$query = new SelectQuery(($userSchema = $user->getSchema()), 'u');
-				$query->join(UserRoleSchema::class, 'ur')->where('enabled', '=', true);
 				$query->join(RoleSchema::class, 'r')->select('r');
 				$query->where('u.name', '=', 'Me, The Best User Ever!');
+				$query->where('u\r.enabled', '=', true);
+				$current = [];
 				foreach ($this->storage->execute($query) as $source) {
+					$current[] = $source['name'];
 				}
-				$collection = $user->join(RoleSchema::class, 'r');
-				foreach ($collection as $role) {
+				sort($expect);
+				sort($current);
+				self::assertSame($expect, $current, 'looks like roles are not properly assigned!');
+				$current = [];
+				foreach ($user->join(RoleSchema::class, 'r')->where('c\r.enabled', '=', true) as $role) {
 					self::assertEquals(RoleSchema::class, $role->getSchema()->getName());
 					$current[] = $role->get('name');
 				}

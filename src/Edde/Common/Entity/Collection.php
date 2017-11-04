@@ -88,6 +88,14 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function where(string $name, string $relation, $value): ICollection {
+				$this->stream->getQuery()->where($name, $relation, $value);
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function getIterator() {
 				foreach ($this->stream as $source) {
 					yield $this->entityManager->load($this->schema, $source);

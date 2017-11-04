@@ -146,7 +146,7 @@
 			 */
 			protected function executeSelectQuery(ISelectQuery $selectQuery): \PDOStatement {
 				$select = null;
-				$current = $alias = $this->delimite(($table = $selectQuery->getTable())->getAlias());
+				$alias = $this->delimite($current = ($table = $selectQuery->getTable())->getAlias());
 				$select = $this->delimite($table->getSelect()) . '.*';
 				$schema = $table->getSchema();
 				$from = $this->delimite($table->getSchema()->getName()) . ' ' . $alias;
@@ -154,11 +154,11 @@
 					$relation = $schema->getRelation($relation);
 					$sourceLink = $relation->getSourceLink();
 					$targetLink = $relation->getTargetLink();
-					$from .= "\n\tINNER JOIN " . $this->delimite($relation->getSchema()->getName()) . ' ' . ($join = $this->delimite('r' . sha1(random_bytes(42)))) . ' ON ';
+					$from .= "\n\tINNER JOIN " . $this->delimite($relation->getSchema()->getName()) . ' ' . ($join = $this->delimite($current . '\r')) . ' ON ';
 					$from .= $current . '.' . $this->delimite($targetLink->getTargetProperty()->getName()) . ' = ' . $join . '.' . $this->delimite($sourceLink->getSourceProperty()->getName());
-					$from .= "\n\tINNER JOIN " . $this->delimite($targetLink->getTargetSchema()->getName()) . ' ' . ($name = $this->delimite($name)) . ' ON ';
+					$from .= "\n\tINNER JOIN " . $this->delimite($targetLink->getTargetSchema()->getName()) . ' ' . ($name = $this->delimite($current = $name)) . ' ON ';
 					$from .= $join . '.' . $this->delimite($targetLink->getSourceProperty()->getName()) . ' = ' . $name . '.' . $this->delimite($sourceLink->getTargetProperty()->getName());
-					$select = ($current = $name) . '.*';
+					$select = $name . '.*';
 					$schema = $relation->getTargetLink()->getTargetSchema();
 				}
 				$sql = "SELECT\n\t" . $select . "\nFROM\n\t" . $from . "\n";

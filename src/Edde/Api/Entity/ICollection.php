@@ -61,6 +61,17 @@
 			public function join(string $target, string $alias, array $on = null): ICollection;
 
 			/**
+			 * simple and where
+			 *
+			 * @param string $name
+			 * @param string $relation
+			 * @param mixed  $value
+			 *
+			 * @return ICollection
+			 */
+			public function where(string $name, string $relation, $value): ICollection;
+
+			/**
 			 * @return Traversable|IEntity[]
 			 */
 			public function getIterator();
