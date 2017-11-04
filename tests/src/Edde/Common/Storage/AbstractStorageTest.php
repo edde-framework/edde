@@ -3,7 +3,6 @@
 	namespace Edde\Common\Storage;
 
 		use Edde\Api\Entity\Inject\EntityManager;
-		use Edde\Api\Query\Exception\QueryException;
 		use Edde\Api\Schema\Exception\UnknownSchemaException;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
@@ -307,7 +306,6 @@
 			 * @throws IntegrityException
 			 * @throws StorageException
 			 * @throws UnknownSchemaException
-			 * @throws QueryException
 			 */
 			public function testRelationAttribute() {
 				$this->schemaManager->load(UserRoleSchema::class);
@@ -355,5 +353,20 @@
 				sort($expect);
 				sort($current);
 				self::assertSame($expect, $current, 'looks like roles are not properly assigned!');
+			}
+
+			/**
+			 * @throws DuplicateEntryException
+			 * @throws IntegrityException
+			 * @throws StorageException
+			 */
+			public function testSimpleRelation() {
+				$bar = $this->entityManager->create(BarSchema::alias, [
+					'name' => 'simple-relation',
+				]);
+				$subBar = $this->entityManager->create(SubBarSchema::alias, [
+				]);
+				$bar->attach($subBar);
+				$bar->save();
 			}
 		}

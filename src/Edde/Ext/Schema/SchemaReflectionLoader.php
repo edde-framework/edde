@@ -39,13 +39,15 @@
 					}
 					$reflectionClass = new \ReflectionClass($schema);
 					$schemaBuilder = new SchemaBuilder($schema);
-					$linkCount = 0;
 					$methodCount = 0;
 					$primary = false;
 					foreach ($reflectionClass->getConstants() as $name => $value) {
 						switch ($name) {
 							case 'alias':
 								$schemaBuilder->alias($value);
+								break;
+							case 'relation':
+								$schemaBuilder->relation($value);
 								break;
 						}
 					}
@@ -96,7 +98,6 @@
 						if ($reflectionMethod->getNumberOfParameters() === 1) {
 							list($parameter) = $reflectionMethod->getParameters();
 							if ($type = $parameter->getType()) {
-								$schemaBuilder->relation(++$linkCount === 2);
 								$propertyBuilder->required($type->allowsNull() === false);
 								$propertyBuilder->link($type->getName(), $parameter->getName());
 							}

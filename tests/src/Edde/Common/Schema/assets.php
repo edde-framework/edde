@@ -67,6 +67,7 @@
 		 */
 		interface FooBarSchema {
 			const alias = 'foo-bar';
+			const relation = true;
 
 			/**
 			 * make property foo as a reference to FooSchema's property $guid
@@ -81,6 +82,7 @@
 
 		interface BarPooSchema {
 			const alias = 'bar-poo';
+			const relation = true;
 
 			public function bar(BarSchema $guid): string;
 
@@ -121,6 +123,7 @@
 
 		interface UserRoleSchema {
 			const alias = 'user-role';
+			const relation = true;
 
 			public function user(UserSchema $guid): string;
 
