@@ -14,6 +14,7 @@
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Crate\Crate;
 		use Edde\Common\Query\InsertQuery;
+		use Edde\Common\Query\UpdateLinkQuery;
 		use Edde\Common\Query\UpdateQuery;
 		use Edde\Common\Query\UpdateRelationQuery;
 
@@ -127,12 +128,17 @@
 					foreach ($this->bindList as $entity) {
 						$entity->save();
 					}
+					$linkList = [];
+					$source = $this->toArray();
 					foreach ($this->linkList as $entity) {
 						$entity->save();
-						$link = $this->schema->getLink($entity->getSchema()->getName());
-						$this->set($link->getSourceProperty()->getName(), $entity->get($link->getTargetProperty()->getName()));
+						$linkList[] = $query = new UpdateLinkQuery($link = $this->schema->getLink($entity->getSchema()->getName()));
+						$query->from($source);
+						$query->to($entity->toArray());
+						$this->set($name = $link->getSourceProperty()->getName(), $value = $entity->get($link->getTargetProperty()->getName()));
+						$source[$name] = $value;
 					}
-					$query = new InsertQuery($this->schema, $source = $this->toArray());
+					$query = new InsertQuery($this->schema, $source);
 					if ($isRelation) {
 						if (count($this->bindList) !== 2) {
 							throw new RelationException(sprintf('Cannot save [%s] as it does not have exactly two links', $this->schema->getName()));
@@ -150,6 +156,9 @@
 					 */
 					foreach ($this->bindToList as $entity) {
 						$entity->save();
+					}
+					foreach ($linkList as $query) {
+						$this->storage->execute($query);
 					}
 					$this->commit();
 					$this->exists = true;

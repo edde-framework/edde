@@ -11,6 +11,7 @@
 		use Edde\Api\Query\IInsertQuery;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\ISelectQuery;
+		use Edde\Api\Query\IUpdateLinkQuery;
 		use Edde\Api\Query\IUpdateQuery;
 		use Edde\Api\Query\IUpdateRelationQuery;
 		use Edde\Common\Driver\AbstractDriver;
@@ -143,6 +144,9 @@
 					'b' => $updateRelationQuery->getTo()[$relation->getTargetLink()->getTargetProperty()->getName()],
 				]);
 				$this->executeCreateRelationQuery($updateRelationQuery);
+			}
+
+			protected function executeUpdateLinkQuery(IUpdateLinkQuery $updateLinkQuery) {
 			}
 
 			/**
