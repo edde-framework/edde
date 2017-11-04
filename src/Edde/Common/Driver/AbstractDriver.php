@@ -3,10 +3,8 @@
 	namespace Edde\Common\Driver;
 
 		use Edde\Api\Driver\Exception\DriverException;
-		use Edde\Api\Driver\Exception\DriverQueryException;
 		use Edde\Api\Driver\IDriver;
 		use Edde\Api\Query\Fragment\IFragment;
-		use Edde\Api\Query\Fragment\IWhere;
 		use Edde\Api\Query\Fragment\IWhereGroup;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\IQuery;
@@ -64,21 +62,10 @@
 					if ($group) {
 						$fragment = ' ' . strtoupper($where->getRelation()) . "\n\t";
 					}
-					$group .= $fragment . ($query = $this->fragment($where->getExpression()))->getQuery();
+					$group .= $fragment . ($query = $this->fragment($where))->getQuery();
 					$parameterList = array_merge($parameterList, $query->getParameterList());
 				}
 				return new NativeQuery($group, $parameterList);
-			}
-
-			/**
-			 * @param IWhere $where
-			 *
-			 * @return INativeQuery
-			 * @throws DriverQueryException
-			 * @throws DriverException
-			 */
-			protected function fragmentWhere(IWhere $where): INativeQuery {
-				return $this->fragment($where->getExpression());
 			}
 
 			protected function handleSetup(): void {

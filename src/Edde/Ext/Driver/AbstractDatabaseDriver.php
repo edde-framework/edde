@@ -5,7 +5,7 @@
 		use Edde\Api\Driver\Exception\DriverException;
 		use Edde\Api\Driver\Exception\DriverQueryException;
 		use Edde\Api\Driver\IDriver;
-		use Edde\Api\Query\Fragment\IWhereTo;
+		use Edde\Api\Query\Fragment\IWhere;
 		use Edde\Api\Query\ICrateSchemaQuery;
 		use Edde\Api\Query\ICreateRelationQuery;
 		use Edde\Api\Query\IInsertQuery;
@@ -191,24 +191,33 @@
 			}
 
 			/**
-			 * @param IWhereTo $whereTo
+			 * @param IWhere $where
 			 *
 			 * @return INativeQuery
 			 * @throws DriverQueryException
 			 * @throws \Exception
 			 */
-			protected function fragmentWhereTo(IWhereTo $whereTo): INativeQuery {
-				$name = $this->delimite($whereTo->getTable()->getAlias()) . '.' . $this->delimite($whereTo->getName());
-				switch ($target = $whereTo->getTarget()) {
-					case 'column':
-						list($prefix, $column) = $whereTo->getValue();
-						return new NativeQuery($name . ' = ' . $this->delimite($prefix) . '.' . $this->delimite($column));
-					case 'value':
-						return new NativeQuery($name . ' = :' . ($parameterId = 'p_' . sha1($target . microtime(true) . random_bytes(8))), [
-							$parameterId => $whereTo->getValue(),
-						]);
+			protected function fragmentWhere(IWhere $where): INativeQuery {
+				list($operator, $type) = $parameters = $where->getWhere();
+				switch ($operator) {
+					case '=':
+						$name = $this->delimite($parameters[2]);
+						if (($dot = strpos($parameters[2], '.')) !== false) {
+							$name = $this->delimite(substr($parameters[2], 0, $dot)) . '.' . $this->delimite(substr($parameters[2], $dot + 1));
+						}
+						switch ($type) {
+							case 'column':
+								list($prefix, $column) = $whereTo->getValue();
+								return new NativeQuery($name . ' ' . $operator . ' ' . $this->delimite($prefix) . '.' . $this->delimite($column));
+							case 'value':
+								return new NativeQuery($name . ' ' . $operator . ' :' . ($parameterId = 'p_' . sha1(random_bytes(42))), [
+									$parameterId => $parameters[3],
+								]);
+						}
+						throw new DriverQueryException(sprintf('Unknown where operator [%s] target [%s].', get_class($where), $type));
+					default:
+						throw new DriverQueryException(sprintf('Unknown where type [%s] for clause [%s].', $operator, get_class($where)));
 				}
-				throw new DriverQueryException(sprintf('Unknown where expression [%s] target [%s].', $whereTo->getType(), $target));
 			}
 
 			public function handleSetup(): void {

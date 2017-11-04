@@ -40,7 +40,7 @@
 			protected function handleInit(): void {
 				parent::handleInit();
 				if ($this->schema->hasPrimary()) {
-					$this->where()->and()->eq($name = $this->schema->getPrimary()->getName())->to($this->source[$name]);
+					$this->where()->and()->value('u.' . ($name = $this->schema->getPrimary()->getName()), '=', $this->source[$name]);
 				}
 			}
 		}

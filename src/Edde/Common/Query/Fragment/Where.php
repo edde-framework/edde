@@ -29,9 +29,9 @@
 			 */
 			public function value(string $column, string $operator, $value): IWhereGroup {
 				$this->where = [
+					$operator,
 					'value',
 					$column,
-					$operator,
 					$value,
 				];
 				return $this->whereGroup;
