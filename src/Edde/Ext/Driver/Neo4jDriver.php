@@ -248,7 +248,7 @@
 				$matchList = [];
 				$table = $selectQuery->getTable();
 				$return = $this->delimite($table->getSelect());
-				$cypher .= '(' . $this->delimite($current = $table->getAlias()) . ':' . $this->delimite($table->getSchema()->getRealName()) . ')';
+				$cypher .= '(' . ($alias = $this->delimite($current = $table->getAlias())) . ':' . $this->delimite($table->getSchema()->getRealName()) . ')';
 				$schema = $table->getSchema();
 				foreach ($table->getJoinList() as $name => $relation) {
 					$relation = $schema->getRelation($relation);
@@ -259,7 +259,19 @@
 					$cypher .= "\nWHERE" . ($query = $this->fragmentWhereGroup($table->where()))->getQuery() . "\n";
 					$parameterList = $query->getParameterList();
 				}
-				return $this->native($cypher . implode(",\n\t", $matchList) . "\nRETURN\n\t" . $return, $parameterList);
+				$cypher .= implode(",\n\t", $matchList) . "\nRETURN\n\t" . $return;
+				if ($table->hasOrder()) {
+					$orderList = [];
+					foreach ($table->getOrderList() as $column => $asc) {
+						$name = $alias;
+						if (($dot = strpos($column, '.')) !== false) {
+							$name = $this->delimite(substr($column, 0, $dot)) . '.' . $this->delimite(substr($column, $dot + 1));
+						}
+						$orderList[] = $name . ' ' . ($asc ? 'ASC' : 'DESC');
+					}
+					$cypher .= "ORDER BY\n\t" . implode("\n\t,", $orderList);
+				}
+				return $this->native($cypher, $parameterList);
 			}
 
 			/**
