@@ -70,13 +70,13 @@
 			 * @inheritdoc
 			 */
 			public function entity($name): IEntity {
-				$this->stream->query($query = new SelectQuery());
-				$where = $query->table($this->schema, 'c')->select()->where();
+				$this->stream->query($query = new SelectQuery($this->schema, 'c'));
+				$where = $query->getTable()->where();
 				if ($this->schema->hasPrimary()) {
-					$where->or()->eq($this->schema->getPrimary()->getName())->to($name);
+					$where->or()->value('c.' . $this->schema->getPrimary()->getName(), '=', $name);
 				}
 				foreach ($this->schema->getUniqueList() as $property) {
-					$where->or()->eq($property->getName())->to($name);
+					$where->or()->value('c.' . $property->getName(), '=', $name);
 				}
 				return $this->getEntity();
 			}

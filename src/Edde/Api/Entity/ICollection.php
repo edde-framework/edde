@@ -38,7 +38,7 @@
 			public function getEntity(): IEntity;
 
 			/**
-			 * a bit magical method which try to find an entity by primary keys and all
+			 * a bit magical method which try to find an entity by primary key and all
 			 * unique keys
 			 *
 			 * @param mixed $name
