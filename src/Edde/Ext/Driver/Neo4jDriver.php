@@ -186,7 +186,7 @@
 				$link = $updateLinkQuery->getLink();
 				$cypher = 'MATCH';
 				$cypher .= "\n\t(a:" . ($sourceName = $this->delimite(($sourceSchema = $link->getSourceSchema())->getRealName())) . ')';
-				$cypher .= '-[r:' . ($relation = $this->delimite($link->getTargetSchema()->getRealName())) . ']->(:' . $relation . ')';
+				$cypher .= '-[r:' . ($targetName = $this->delimite($link->getTargetSchema()->getRealName())) . ']->(:' . $targetName . ')';
 				$cypher .= 'WHERE';
 				$cypher .= "\n\ta." . $this->delimite($primary = $sourceSchema->getPrimary()->getName()) . " = \$a\n";
 				$cypher .= 'DELETE r';
@@ -196,11 +196,11 @@
 				]);
 				$cypher = 'MATCH';
 				$cypher .= "\n\t(a:" . $sourceName . '),';
-				$cypher .= "\n\t(b:" . $relation . ")\n";
+				$cypher .= "\n\t(b:" . $targetName . ")\n";
 				$cypher .= 'WHERE';
 				$cypher .= "\n\ta." . $this->delimite($primary) . " = \$a AND\n";
 				$cypher .= "\n\tb." . $this->delimite($target) . " = \$b\n";
-				$cypher .= "MERGE\n\t(a)-[:" . $relation . ']->(b)';
+				$cypher .= "MERGE\n\t(a)-[:" . $targetName . ']->(b)';
 				$this->native($cypher, $parameters);
 			}
 
