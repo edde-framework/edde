@@ -2,27 +2,16 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Query;
 
-		use Edde\Api\Query\Fragment\ITable;
 		use Edde\Api\Schema\ISchema;
 
-		/**
-		 * Formal interface for Select Queries (also to map relevant fragments).
-		 */
 		interface ISelectQuery extends IQuery {
 			/**
-			 * add a schema to query to be queried
-			 *
-			 * @param ISchema $schema
-			 * @param string  $alias
-			 *
-			 * @return ITable
+			 * @return ISchema
 			 */
-			public function table(ISchema $schema, string $alias): ITable;
+			public function getSchema(): ISchema;
 
 			/**
-			 * return list of schemas being queried
-			 *
-			 * @return ITable[]
+			 * @return string
 			 */
-			public function getTableList(): array;
+			public function getAlias(): string;
 		}

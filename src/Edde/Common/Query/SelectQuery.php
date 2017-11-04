@@ -4,35 +4,46 @@
 
 		use Edde\Api\Query\Fragment\ITable;
 		use Edde\Api\Query\ISelectQuery;
-		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Schema\ISchema;
-		use Edde\Common\Query\Fragment\Table;
 
 		class SelectQuery extends AbstractQuery implements ISelectQuery {
-			use SchemaManager;
+			/**
+			 * @var ISchema
+			 */
+			protected $schema;
+			/**
+			 * @var string
+			 */
+			protected $alias;
 			/**
 			 * @var ITable[]
 			 */
-			protected $tableList = [];
+			protected $joinList = [];
 
-			public function __construct() {
+			public function __construct(ISchema $schema, string $alias) {
 				parent::__construct('SelectQuery');
+				$this->schema = $schema;
+				$this->alias = $alias;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function table(ISchema $schema, string $alias): ITable {
-				if (isset($this->tableList[$schemaId = ($schema->getName() . $alias)]) === false) {
-					$this->tableList[$schemaId] = new Table($schema, $alias);
-				}
-				return $this->tableList[$schemaId];
+			public function join(): ITable {
+
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getTableList(): array {
-				return $this->tableList;
+			public function getSchema(): ISchema {
+				return $this->schema;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getAlias(): string {
+				return $this->alias;
 			}
 		}

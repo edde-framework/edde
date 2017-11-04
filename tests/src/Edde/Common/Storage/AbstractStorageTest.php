@@ -333,11 +333,13 @@
 				 * select query should be bound to one exact schema; the target table could
 				 * be changed by joins
 				 */
-				$query = new SelectQuery($user->getSchema());
+				$query = new SelectQuery($user->getSchema(), 'u');
 				/**
 				 * join should return WhereGroup to adjust join condition?
 				 */
-				$query->join($relation)->and()->eq('enabled', true);
+				$query->join(UserRoleSchema::class, 'ur');
+				$query->join(RoleSchema::class, 'r')->select();
+				$query->where()->and()->eqTo('enabled', 'name', 'u');
 				$collection = $user->join(RoleSchema::class, 'r');
 				foreach ($collection as $role) {
 					self::assertEquals(RoleSchema::class, $role->getSchema()->getName());
