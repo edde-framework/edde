@@ -417,7 +417,7 @@
 				$this->storage->commit();
 				$sum = (microtime(true) - $start);
 				$item = ($sum / $i) * 1000;
-//				printf("%.4fs, %.4f ms/operation\n", );
+				fwrite(STDERR, sprintf("[%s] %.4fs, %.4f ms/operation\n", static::class, $sum, $item));
 				self::assertLessThanOrEqual($this->getEntityTimeLimit(), $item);
 			}
 
