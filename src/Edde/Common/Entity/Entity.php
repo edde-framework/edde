@@ -11,9 +11,9 @@
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Crate\Crate;
-		use Edde\Common\Query\CreateRelationQuery;
 		use Edde\Common\Query\InsertQuery;
 		use Edde\Common\Query\UpdateQuery;
+		use Edde\Common\Query\UpdateRelationQuery;
 
 		class Entity extends Crate implements IEntity {
 			use EntityManager;
@@ -109,7 +109,7 @@
 							throw new RelationException(sprintf('Cannot save [%s] as it does not have exactly two links', $this->schema->getName()));
 						}
 						list($from, $to) = $this->linkList;
-						$query = new CreateRelationQuery($this->relation, $source);
+						$query = new UpdateRelationQuery($this->relation, $source);
 						$query->from($from->toArray());
 						$query->to($to->toArray());
 					} else if ($this->exists) {

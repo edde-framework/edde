@@ -324,6 +324,7 @@
 					'name'  => 'guest',
 					'label' => 'this one can do almost nothing!',
 				]);
+				$root->attach($user)->set('enabled', false);
 				$root->attach($user)->set('enabled', true);
 				$guest->attach($user)->set('enabled', false);
 				$root->save();
