@@ -26,4 +26,8 @@
 				]);
 				$this->storage->native('set search_path to "test"');
 			}
+
+			protected function getEntityTimeLimit(): float {
+				return 10.5;
+			}
 		}

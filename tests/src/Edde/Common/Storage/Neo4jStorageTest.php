@@ -28,4 +28,8 @@
 					new ClassFactory(),
 				]);
 			}
+
+			protected function getEntityTimeLimit(): float {
+				return 50;
+			}
 		}
