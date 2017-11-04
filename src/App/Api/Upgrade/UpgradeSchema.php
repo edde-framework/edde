@@ -2,19 +2,12 @@
 	declare(strict_types=1);
 	namespace App\Api\Upgrade;
 
-		interface UpgradeSchema {
-			/**
-			 * @schema primary
-			 */
-			public function guid(): string;
+		use App\Api\Schema\GuidSchema;
 
-			/**
-			 * @schema unique
-			 */
-			public function version(): string;
+		interface UpgradeSchema extends GuidSchema {
+			const alias = 'upgrade';
 
-			/**
-			 * @schema
-			 */
+			public function version($unique): string;
+
 			public function stamp(): \DateTime;
 		}

@@ -3,13 +3,10 @@
 	namespace App\Api\User\Schema;
 
 		interface UserRoleSchema {
-			/**
-			 * @schema primary link
-			 */
-			public function user(): UserSchema;
+			const alias = 'user-role';
+			const relation = true;
 
-			/**
-			 * @schema primary link
-			 */
-			public function role(): RoleSchema;
+			public function user(UserSchema $guid): string;
+
+			public function role(RoleSchema $guid): string;
 		}

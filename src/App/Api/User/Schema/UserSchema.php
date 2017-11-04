@@ -5,10 +5,10 @@
 		use App\Api\Schema\GuidSchema;
 
 		interface UserSchema extends GuidSchema {
+			const alias = 'user';
+
 			/**
 			 * user's password could be null as it means user has disabled account (login)
-			 *
-			 * @schema
 			 */
 			public function password(): ?string;
 		}

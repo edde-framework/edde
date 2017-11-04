@@ -5,8 +5,7 @@
 		use App\Api\Schema\GuidSchema;
 
 		interface GroupSchema extends GuidSchema {
-			/**
-			 * @schema unique
-			 */
-			public function name(): string;
+			const alias = 'group';
+
+			public function name($unique): string;
 		}
