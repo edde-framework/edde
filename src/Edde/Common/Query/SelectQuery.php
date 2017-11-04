@@ -17,7 +17,6 @@
 			public function __construct(ISchema $schema, string $alias) {
 				parent::__construct('SelectQuery');
 				$this->table = new Table($schema, $alias);
-				$this->select = $alias;
 			}
 
 			/**
@@ -46,14 +45,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getSchema(): ISchema {
-				return $this->schema;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getAlias(): string {
-				return $this->alias;
+			public function getTable(): ITable {
+				return $this->table;
 			}
 		}

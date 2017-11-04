@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Query;
 
+		use Edde\Api\Query\Fragment\ITable;
 		use Edde\Api\Query\Fragment\IWhereGroup;
-		use Edde\Api\Schema\ISchema;
 
 		interface ISelectQuery extends IQuery {
 			/**
@@ -34,12 +34,9 @@
 			public function where(): IWhereGroup;
 
 			/**
-			 * @return ISchema
+			 * get base table of this query
+			 *
+			 * @return ITable
 			 */
-			public function getSchema(): ISchema;
-
-			/**
-			 * @return string
-			 */
-			public function getAlias(): string;
+			public function getTable(): ITable;
 		}

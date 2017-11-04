@@ -337,7 +337,7 @@
 				 */
 				$query = new SelectQuery($user->getSchema(), 'u');
 				$query->join(UserRoleSchema::class, 'ur')->join(RoleSchema::class, 'r')->select('r');
-				$query->where()->and()->eqTo('enabled', 'name', 'u');
+				$query->where('enabled', '=', true);
 				$collection = $user->join(RoleSchema::class, 'r');
 				foreach ($collection as $role) {
 					self::assertEquals(RoleSchema::class, $role->getSchema()->getName());
