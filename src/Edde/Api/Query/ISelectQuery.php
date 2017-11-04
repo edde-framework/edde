@@ -3,7 +3,6 @@
 	namespace Edde\Api\Query;
 
 		use Edde\Api\Query\Fragment\ITable;
-		use Edde\Api\Query\Fragment\IWhereGroup;
 
 		interface ISelectQuery extends IQuery {
 			/**
@@ -26,12 +25,12 @@
 			public function select(string $alias): ISelectQuery;
 
 			/**
-			 * preferred way, how to configure details of the query (for example
-			 * filter based on properties in joined tables)
+			 * shorthand for where and ($name $relation $value); by default it takes last
+			 * added alias
 			 *
-			 * @return IWhereGroup
+			 * @return ISelectQuery
 			 */
-			public function where(): IWhereGroup;
+			public function where(string $name, string $relation, $value): ISelectQuery;
 
 			/**
 			 * get base table of this query
