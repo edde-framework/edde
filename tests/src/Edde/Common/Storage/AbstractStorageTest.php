@@ -338,7 +338,7 @@
 				$query = new SelectQuery($user->getSchema(), 'u');
 				$query->join(UserRoleSchema::class, 'ur')->where('enabled', '=', true);
 				$query->join(RoleSchema::class, 'r')->select('r');
-				$query->where('u.name', 'eq', 'Me, The Best User Ever!');
+				$query->where('u.name', '=', 'Me, The Best User Ever!');
 				foreach ($this->storage->execute($query) as $source) {
 				}
 				$collection = $user->join(RoleSchema::class, 'r');

@@ -42,11 +42,7 @@
 				if (($dot = strpos($name, '.')) === false) {
 					$name = $this->alias . '.' . $name;
 				}
-//				if (($dot = strpos($name, '.')) !== false) {
-//					$alias = substr($name, 0, $dot);
-//					$name = substr($name, $dot + 1);
-//				}
-				$this->table->where()->and()->value($name, '=', $value);
+				$this->table->where()->and()->value($name, $relation, $value);
 				return $this;
 			}
 

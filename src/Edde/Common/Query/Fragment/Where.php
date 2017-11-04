@@ -15,7 +15,7 @@
 			 */
 			protected $relation;
 			/**
-			 * @var string
+			 * @var array
 			 */
 			protected $where;
 
@@ -27,10 +27,11 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function value(string $column, string $type, $value): IWhereGroup {
+			public function value(string $column, string $operator, $value): IWhereGroup {
 				$this->where = [
+					'value',
 					$column,
-					$this->type = 'Where' . $type,
+					$operator,
 					$value,
 				];
 				return $this->whereGroup;
@@ -41,5 +42,12 @@
 			 */
 			public function getRelation(): string {
 				return $this->relation;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getWhere(): array {
+				return $this->where;
 			}
 		}
