@@ -7,6 +7,8 @@
 		interface UserSchema extends GuidSchema {
 			const alias = 'user';
 
+			public function name(): string;
+
 			/**
 			 * user's password could be null as it means user has disabled account (login)
 			 */

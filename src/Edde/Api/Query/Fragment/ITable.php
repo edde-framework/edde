@@ -6,6 +6,8 @@
 
 		interface ITable extends IFragment {
 			/**
+			 * @param string|null $alias
+			 *
 			 * @return ITable
 			 */
 			public function select(string $alias = null): ITable;
@@ -39,13 +41,6 @@
 			public function hasWhere(): bool;
 
 			/**
-			 * get the where fragment for this query
-			 *
-			 * @return IWhereGroup
-			 */
-			public function where(): IWhereGroup;
-
-			/**
 			 * @param string $schema
 			 * @param string $alias
 			 *
@@ -59,4 +54,31 @@
 			 * @return string[]
 			 */
 			public function getJoinList(): array;
+
+			/**
+			 * get the where fragment for this query
+			 *
+			 * @return IWhereGroup
+			 */
+			public function where(): IWhereGroup;
+
+			/**
+			 * @param string $name
+			 * @param bool   $asc
+			 *
+			 * @return ITable
+			 */
+			public function order(string $name, bool $asc = true): ITable;
+
+			/**
+			 * @return bool
+			 */
+			public function hasOrder(): bool;
+
+			/**
+			 * return set of ordered columns
+			 *
+			 * @return array
+			 */
+			public function getOrderList(): array;
 		}

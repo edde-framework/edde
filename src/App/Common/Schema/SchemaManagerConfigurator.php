@@ -1,7 +1,6 @@
 <?php
 	namespace App\Common\Schema;
 
-		use App\Api\User\Schema\UserGroupSchema;
 		use App\Api\User\Schema\UserRoleSchema;
 		use Edde\Api\Container\Exception\ContainerException;
 		use Edde\Api\Container\Exception\FactoryException;
@@ -22,7 +21,6 @@
 				 * list of preloaded schemas as they enable the others to see each other
 				 */
 				$list = [
-					UserGroupSchema::class,
 					UserRoleSchema::class,
 				];
 				foreach ($list as $name) {

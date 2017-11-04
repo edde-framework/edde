@@ -190,6 +190,17 @@
 					$sql .= 'WHERE' . ($query = $this->fragmentWhereGroup($table->where()))->getQuery();
 					$parameterList = $query->getParameterList();
 				}
+				if ($table->hasOrder()) {
+					$orderList = [];
+					foreach ($table->getOrderList() as $column => $asc) {
+						$name = $alias;
+						if (($dot = strpos($column, '.')) !== false) {
+							$name = $this->delimite(substr($column, 0, $dot)) . '.' . $this->delimite(substr($column, $dot + 1));
+						}
+						$orderList[] = $name . ' ' . ($asc ? 'ASC' : 'DESC');
+					}
+					$sql .= "ORDER BY\n\t" . implode("\n\t,", $orderList);
+				}
 				return $this->native($sql, $parameterList);
 			}
 

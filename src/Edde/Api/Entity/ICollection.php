@@ -74,6 +74,14 @@
 			public function where(string $name, string $relation, $value): ICollection;
 
 			/**
+			 * @param string $name
+			 * @param bool   $asc
+			 *
+			 * @return ICollection
+			 */
+			public function order(string $name, bool $asc = true): ICollection;
+
+			/**
 			 * @return Traversable|IEntity[]
 			 */
 			public function getIterator();

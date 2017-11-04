@@ -96,6 +96,14 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function order(string $name, bool $asc = true): ICollection {
+				$this->stream->getQuery()->order($name, $asc);
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function getIterator() {
 				foreach ($this->stream as $source) {
 					yield $this->entityManager->load($this->schema, $source);

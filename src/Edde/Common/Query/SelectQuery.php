@@ -49,6 +49,17 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function order(string $name, bool $asc = true): ISelectQuery {
+				if (($dot = strpos($name, '.')) === false) {
+					$name = $this->alias . '.' . $name;
+				}
+				$this->table->order($name, $asc);
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function getTable(): ITable {
 				return $this->table;
 			}

@@ -44,6 +44,10 @@
 			 * @var string[]
 			 */
 			protected $joinList = [];
+			/**
+			 * @var string[]
+			 */
+			protected $orderList = [];
 
 			public function __construct(ISchema $schema, string $alias) {
 				$this->schema = $schema;
@@ -93,16 +97,6 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function where(): IWhereGroup {
-				if ($this->where === null) {
-					$this->where = new WhereGroup();
-				}
-				return $this->where;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
 			public function join(string $schema, string $alias): ITable {
 				$this->joinList[$this->current = $alias] = $schema;
 				return $this;
@@ -113,5 +107,37 @@
 			 */
 			public function getJoinList(): array {
 				return $this->joinList;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function where(): IWhereGroup {
+				if ($this->where === null) {
+					$this->where = new WhereGroup();
+				}
+				return $this->where;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function order(string $name, bool $asc = true): ITable {
+				$this->orderList[$name] = $asc;
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function hasOrder(): bool {
+				return empty($this->orderList) === false;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getOrderList(): array {
+				return $this->orderList;
 			}
 		}

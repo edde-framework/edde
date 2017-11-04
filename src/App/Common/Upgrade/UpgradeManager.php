@@ -40,9 +40,7 @@
 			 * @inheritdoc
 			 */
 			public function getCurrentList(): ICollection {
-				$collection = $this->entityManager->collection(UserSchema::class);
-				$collection->order()->desc('stamp');
-				return $collection;
+				return $this->entityManager->collection(UserSchema::class)->order('c.stamp', false);
 			}
 
 			/**

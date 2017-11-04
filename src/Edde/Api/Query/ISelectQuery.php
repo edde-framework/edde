@@ -28,9 +28,21 @@
 			 * shorthand for where and ($name $relation $value); by default it takes last
 			 * added alias
 			 *
+			 * @param string $name
+			 * @param string $relation
+			 * @param mixed  $value
+			 *
 			 * @return ISelectQuery
 			 */
 			public function where(string $name, string $relation, $value): ISelectQuery;
+
+			/**
+			 * @param string $name
+			 * @param bool   $asc
+			 *
+			 * @return ISelectQuery
+			 */
+			public function order(string $name, bool $asc = true): ISelectQuery;
 
 			/**
 			 * get base table of this query
