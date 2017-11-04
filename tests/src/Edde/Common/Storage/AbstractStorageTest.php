@@ -391,7 +391,7 @@
 				$this->schemaManager->load(BarPooSchema::class);
 				$this->storage->start();
 				$start = microtime(true);
-				for ($i = 0; $i < 50; $i++) {
+				for ($i = 0; $i < 100; $i++) {
 					$foo = $this->entityManager->create(FooSchema::class, [
 						'name' => 'foo #' . $i,
 					]);
@@ -417,8 +417,8 @@
 				$this->storage->commit();
 				$sum = (microtime(true) - $start);
 				$item = ($sum / $i) * 1000;
-				fwrite(STDERR, sprintf("[%s] %.4fs, %.4f ms/operation\n", static::class, $sum, $item));
-				self::assertLessThanOrEqual($this->getEntityTimeLimit(), $item);
+				fwrite(STDERR, sprintf("[%s] %.4fs, %.4f ms/operation (%.2f%% of current limit)\n", static::class, $sum, $item, (100 * $item) / ($limit = $this->getEntityTimeLimit())));
+				self::assertLessThanOrEqual($limit, $item);
 			}
 
 			abstract protected function getEntityTimeLimit(): float;
