@@ -30,7 +30,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function select(string $alias): ISelectQuery {
+			public function select(string $alias = null): ISelectQuery {
 				$this->table->select($alias);
 				return $this;
 			}

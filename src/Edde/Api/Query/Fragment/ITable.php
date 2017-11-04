@@ -8,7 +8,7 @@
 			/**
 			 * @return ITable
 			 */
-			public function select(string $alias): ITable;
+			public function select(string $alias = null): ITable;
 
 			/**
 			 * return selected alias

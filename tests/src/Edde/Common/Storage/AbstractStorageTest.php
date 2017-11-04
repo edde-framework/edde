@@ -66,8 +66,10 @@
 					'optional' => 'foo-bar',
 				]);
 				self::assertNotEmpty($entity->get('guid'));
+				self::assertFalse($entity->exists());
 				$entity->save();
 				self::assertFalse($entity->isDirty());
+				self::assertTrue($entity->exists());
 			}
 
 			/**

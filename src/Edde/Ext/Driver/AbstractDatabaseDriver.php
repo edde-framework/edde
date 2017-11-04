@@ -145,42 +145,24 @@
 			 * @throws \Throwable
 			 */
 			protected function executeSelectQuery(ISelectQuery $selectQuery): \PDOStatement {
-				$fromList = [];
-				$whereList = null;
+				$select = null;
+				$alias = $this->delimite(($table = $selectQuery->getTable())->getAlias());
+				$select = $this->delimite($table->getSelect()) . '.*';
+//				foreach ($table->getJoinList() as $name => $relation) {
+//					$sourceLink = $relation->getSourceLink();
+//					$targetLink = $relation->getTargetLink();
+//					$from .= "\n\tINNER JOIN " . $this->delimite($relation->getSchema()->getName()) . ' ' . ($join = $this->delimite('r' . sha1(random_bytes(42)))) . ' ON ';
+//					$from .= $previous . '.' . $this->delimite($targetLink->getTargetProperty()->getName()) . ' = ' . $join . '.' . $this->delimite($sourceLink->getSourceProperty()->getName());
+//					$from .= "\n\tINNER JOIN " . $this->delimite($targetLink->getTargetSchema()->getName()) . ' ' . ($name = $this->delimite($name)) . ' ON ';
+//					$from .= $join . '.' . $this->delimite($targetLink->getSourceProperty()->getName()) . ' = ' . $name . '.' . $this->delimite($sourceLink->getTargetProperty()->getName());
+//					$select = $name . '.*';
+//					$previous = $name;
+//				}
+				$sql = "SELECT\n\t" . $select . "\nFROM\n\t" . ($this->delimite($table->getSchema()->getName()) . ' ' . $alias) . "\n";
 				$parameterList = [];
-				$return = null;
-				foreach ($selectQuery->getTableList() as $table) {
-					$alias = $this->delimite($table->getAlias());
-					if ($table->isSelected()) {
-						$return = $alias . '.*';
-					}
-					switch ($type = $table->getType()) {
-						case 'Table':
-							$from = $this->delimite($table->getSchema()->getName()) . ' ' . $alias;
-							$previous = $alias;
-							foreach ($table->getJoinList() as $name => $relation) {
-								$sourceLink = $relation->getSourceLink();
-								$targetLink = $relation->getTargetLink();
-								$from .= "\n\tINNER JOIN " . $this->delimite($relation->getSchema()->getName()) . ' ' . ($join = $this->delimite('r' . sha1(random_bytes(42)))) . ' ON ';
-								$from .= $previous . '.' . $this->delimite($targetLink->getTargetProperty()->getName()) . ' = ' . $join . '.' . $this->delimite($sourceLink->getSourceProperty()->getName());
-								$from .= "\n\tINNER JOIN " . $this->delimite($targetLink->getTargetSchema()->getName()) . ' ' . ($name = $this->delimite($name)) . ' ON ';
-								$from .= $join . '.' . $this->delimite($targetLink->getSourceProperty()->getName()) . ' = ' . $name . '.' . $this->delimite($sourceLink->getTargetProperty()->getName());
-								$return = $name . '.*';
-								$previous = $name;
-							}
-							$fromList[$alias] = $from;
-							break;
-						default:
-							throw new DriverQueryException(sprintf('Unknown table fragment type [%s].', $type));
-					}
-					if ($table->hasWhere()) {
-						$whereList[] = ($query = $this->fragmentWhereGroup($table->where()))->getQuery();
-						$parameterList = array_merge($parameterList, $query->getParameterList());
-					}
-				}
-				$sql = "SELECT\n\t" . $return . "\nFROM\n\t" . implode(",\n\t", $fromList) . "\n";
-				if ($whereList) {
-					$sql .= 'WHERE' . implode("AND\n", $whereList);
+				if ($table->hasWhere()) {
+					$sql .= 'WHERE' . ($query = $this->fragmentWhereGroup($table->where()))->getQuery();
+					$parameterList = $query->getParameterList();
 				}
 				return $this->native($sql, $parameterList);
 			}

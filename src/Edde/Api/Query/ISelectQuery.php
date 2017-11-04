@@ -22,7 +22,7 @@
 			 *
 			 * @return ISelectQuery
 			 */
-			public function select(string $alias): ISelectQuery;
+			public function select(string $alias = null): ISelectQuery;
 
 			/**
 			 * shorthand for where and ($name $relation $value); by default it takes last

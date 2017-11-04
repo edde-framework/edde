@@ -9,35 +9,52 @@
 
 		class Table extends AbstractFragment implements ITable {
 			/**
+			 * schema used for this table
+			 *
 			 * @var ISchema
 			 */
 			protected $schema;
 			/**
+			 * alias of this table
+			 *
 			 * @var string
 			 */
 			protected $alias;
 			/**
+			 * current alias
+			 *
+			 * @var string
+			 */
+			protected $current;
+			/**
+			 * which alias is selected for the query (select $alis.*)
+			 *
 			 * @var string
 			 */
 			protected $select;
 			/**
+			 * where clause
+			 *
 			 * @var IWhereGroup
 			 */
 			protected $where;
 			/**
+			 * list of joins for this table
+			 *
 			 * @var string[]
 			 */
 			protected $joinList = [];
 
 			public function __construct(ISchema $schema, string $alias) {
 				$this->schema = $schema;
-				$this->select = $this->alias = $alias;
+				$this->current = $this->select = $this->alias = $alias;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function select(string $alias): ITable {
+			public function select(string $alias = null): ITable {
+				$alias = $alias ?: $this->current;
 				if (isset($this->joinList[$alias]) === false && $this->alias !== $alias) {
 					throw new QueryException(sprintf('Cannot select unknown alias [%s]; choose select alias [%s] or one of joined aliases [%s].', $alias, $this->table->getAlias(), implode(', ', array_keys($this->joinList))));
 				}
@@ -87,7 +104,7 @@
 			 * @inheritdoc
 			 */
 			public function join(string $schema, string $alias): ITable {
-				$this->joinList[$alias] = $schema;
+				$this->joinList[$this->current = $alias] = $schema;
 				return $this;
 			}
 
