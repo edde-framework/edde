@@ -8,12 +8,14 @@
 	 */
 	declare(strict_types=1);
 	use App\Common\Application\Context;
+	use App\Common\Schema\SchemaManagerConfigurator;
 	use App\Common\Upgrade\UpgradeManager;
 	use App\Ext\Upgrade\UpgradeManagerConfigurator;
 	use Edde\Api\Application\IContext;
 	use Edde\Api\Application\IRootDirectory;
 	use Edde\Api\Driver\IDriver;
 	use Edde\Api\Query\IQueryBuilder;
+	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Application\RootDirectory;
 	use Edde\Common\Container\Factory\CascadeFactory;
@@ -66,10 +68,6 @@
 			 * driver is used by storage; it implements connection details and provides exception translation
 			 */
 			IDriver::class         => ContainerFactory::instance(PostgresDriver::class, ['pgsql:dbname=edde;user=edde;password=edde;host=172.17.0.1']),
-			/**
-			 * query builder is responsible for converting IQL queries into ones consumable by a Driver
-			 */
-			IQueryBuilder::class   => PostgresQueryBuilder::class,
 		], is_array($local = @include $local) ? $local : [], [
 			/**
 			 * This stranger here must (should be) be last, because it's canHandle method is able to kill a lot of dependencies and
@@ -78,6 +76,7 @@
 			new ClassFactory(),
 		]), [
 			IUpgradeManager::class => UpgradeManagerConfigurator::class,
+			ISchemaManager::class  => SchemaManagerConfigurator::class,
 		]);
 		/**
 		 * This one is one of the most magical: this factory uses IContext::cascade() to search for class; this is quite

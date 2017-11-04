@@ -4,6 +4,7 @@
 
 		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
+		use Edde\Api\Storage\Exception\UnknownTableException;
 		use IteratorAggregate;
 		use Traversable;
 
@@ -34,6 +35,7 @@
 			 * @return IEntity
 			 *
 			 * @throws EntityNotFoundException
+			 * @throws UnknownTableException
 			 */
 			public function getEntity(): IEntity;
 

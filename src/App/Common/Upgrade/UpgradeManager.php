@@ -3,6 +3,7 @@
 	namespace App\Common\Upgrade;
 
 		use App\Api\Upgrade\UpgradeSchema;
+		use App\Api\User\Schema\UserSchema;
 		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Entity\Inject\EntityManager;
 		use Edde\Api\Schema\Inject\SchemaManager;
@@ -30,7 +31,7 @@
 					$this->storage->start();
 					$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(UpgradeSchema::class)));
 					return null;
-				} catch (EntityNotFoundException  $exception) {
+				} catch (EntityNotFoundException $exception) {
 					return null;
 				}
 			}
@@ -39,7 +40,7 @@
 			 * @inheritdoc
 			 */
 			public function getCurrentList(): ICollection {
-				$collection = $this->storage->collection(UpgradeSchema::class);
+				$collection = $this->entityManager->collection(UserSchema::class);
 				$collection->order()->desc('stamp');
 				return $collection;
 			}
@@ -48,9 +49,9 @@
 			 * @inheritdoc
 			 */
 			protected function onUpgrade(IUpgrade $upgrade): void {
-				$this->storage->insert($this->entityManager->create(UpgradeSchema::class, [
+				$this->entityManager->create(UpgradeSchema::class, [
 					'stamp'   => new \DateTime(),
 					'version' => $upgrade->getVersion(),
-				]));
+				])->save();
 			}
 		}
