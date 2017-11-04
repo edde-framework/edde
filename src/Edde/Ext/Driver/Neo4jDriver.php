@@ -198,9 +198,10 @@
 				$table = $selectQuery->getTable();
 				$return = $this->delimite($table->getSelect());
 				$cypher .= '(' . $this->delimite($current = $table->getAlias()) . ':' . $this->delimite($table->getSchema()->getName()) . ')';
+				$schema = $table->getSchema();
 				foreach ($table->getJoinList() as $name => $relation) {
-					$relation = $table->getSchema()->getRelation($relation);
-					$cypher .= '-[' . $this->delimite($current . '\r') . ':' . $this->delimite($relation->getSchema()->getName()) . ']-(' . ($return = $this->delimite($name)) . ':' . $this->delimite($relation->getTargetLink()->getTargetSchema()->getName()) . ')';
+					$relation = $schema->getRelation($relation);
+					$cypher .= '-[' . $this->delimite($current . '\r') . ':' . $this->delimite($relation->getSchema()->getName()) . ']-(' . ($return = $this->delimite($current = $name)) . ':' . $this->delimite(($schema = $relation->getTargetLink()->getTargetSchema())->getName()) . ')';
 				}
 				$parameterList = [];
 				if ($table->hasWhere()) {
