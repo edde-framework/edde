@@ -42,13 +42,4 @@
 			 * @return ICollection
 			 */
 			public function join(string $schema, string $alias): ICollection;
-
-			/**
-			 * is the entity loaded from storage, thus it exists?
-			 *
-			 * @param bool|null $exists set the flag or get the current state
-			 *
-			 * @return bool
-			 */
-			public function exists(bool $exists = null): bool;
 		}

@@ -48,8 +48,15 @@
 			public function isEmpty(): bool;
 
 			/**
-			 * commit the transaction basically means whole stuff is sent to storage
+			 * execute the transaction basically means whole stuff is sent to storage
 			 * under real storage transaction
+			 *
+			 * @return ITransaction
+			 */
+			public function execute(): ITransaction;
+
+			/**
+			 * commit all changes in this transaction back to it's entities
 			 *
 			 * @return ITransaction
 			 */

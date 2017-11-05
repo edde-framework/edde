@@ -79,7 +79,7 @@
 					$this->transaction->commit();
 					$this->transaction = null;
 				} catch (\Throwable $throwable) {
-					$this->exception($throwable);
+					throw $this->exception($throwable);
 				}
 				return $this;
 			}
@@ -168,7 +168,7 @@
 					];
 					$parameterId = $this->delimite($parameterId);
 					$cypher .= 'MERGE (' . ($id = $this->delimite($value)) . ':' . $this->delimite($schema->getRealName()) . ' {' . $this->delimite($primary->getName()) . ': $' . $parameterId . '.primary})';
-					$cypher .= ' SET ' . $id . ' = $' . $parameterId . '.set';
+					$cypher .= ' SET ' . $id . ' = $' . $parameterId . ".set\n";
 				}
 				$this->native($cypher, $parameterList);
 			}

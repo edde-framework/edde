@@ -62,58 +62,39 @@
 					'optional' => 'foo-bar',
 				]);
 				self::assertNotEmpty($entity->get('guid'));
-				self::assertFalse($entity->exists());
 				self::assertFalse($this->transaction->isEmpty(), 'there is nothing in the transaction!');
-				$this->transaction->commit();
-				self::assertFalse($entity->isDirty());
-				self::assertTrue($entity->exists());
+				$this->transaction->execute();
+				self::assertFalse($entity->isDirty(), 'entity is still dirty, oops!');
 			}
 
-			/**
-			 * @throws DuplicateEntryException
-			 * @throws IntegrityException
-			 * @throws StorageException
-			 */
 			public function testInsertException() {
 				$this->expectException(NullValueException::class);
 				$this->entityManager->create(FooSchema::class, [
 					'label' => 'kaboom',
-				])->save();
+				]);
+				$this->transaction->execute();
 			}
 
-			/**
-			 * @throws DuplicateEntryException
-			 * @throws IntegrityException
-			 * @throws StorageException
-			 */
 			public function testInsertException2() {
 				$this->expectException(NullValueException::class);
 				$this->entityManager->create(FooSchema::class, [
 					'name'  => null,
 					'label' => 'kaboom',
-				])->save();
+				]);
+				$this->transaction->execute();
 			}
 
-			/**
-			 * @throws DuplicateEntryException
-			 * @throws IntegrityException
-			 * @throws StorageException
-			 */
 			public function testInsertUnique() {
 				$this->expectException(DuplicateEntryException::class);
 				$this->entityManager->create(FooSchema::class, [
 					'name' => 'unique',
-				])->save();
+				]);
 				$this->entityManager->create(FooSchema::class, [
 					'name' => 'unique',
-				])->save();
+				]);
+				$this->transaction->execute();
 			}
 
-			/**
-			 * @throws DuplicateEntryException
-			 * @throws StorageException
-			 * @throws IntegrityException
-			 */
 			public function testSave() {
 				$entity = $this->entityManager->create(SimpleSchema::class, [
 					'name'     => 'some name for this entity',

@@ -19,7 +19,6 @@
 			 * @var ISchema
 			 */
 			protected $schema;
-			protected $exists = false;
 			protected $saving = false;
 			/**
 			 * @var IProperty
@@ -62,13 +61,6 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function exists(bool $exists = null): bool {
-				return $this->exists = ($exists !== null ? $exists : $this->exists);
-			}
-
-			/**
-			 * @inheritdoc
-			 */
 			public function toArray(): array {
 				$array = [];
 				foreach ($this->schema->getPropertyList() as $k => $property) {
@@ -82,7 +74,6 @@
 			 */
 			public function __clone() {
 				parent::__clone();
-				$this->exists = false;
 				$this->primary = null;
 			}
 		}

@@ -54,7 +54,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function commit(): ITransaction {
+			public function execute(): ITransaction {
 				if ($this->isEmpty()) {
 					return $this;
 				}
@@ -62,11 +62,22 @@
 				try {
 					$this->storage->execute(new TransactionQuery($this));
 					$this->storage->commit();
-					$this->entityList = [];
+					$this->commit();
 				} catch (\Throwable $exception) {
 					$this->storage->rollback();
 					throw $exception;
 				}
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function commit(): ITransaction {
+				foreach ($this->entityList as $entity) {
+					$entity->commit();
+				}
+				$this->entityList = [];
 				return $this;
 			}
 
