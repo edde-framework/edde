@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Entity;
 
+		use Edde\Api\Crate\IProperty;
 		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\Inject\EntityManager;
@@ -20,6 +21,10 @@
 			protected $schema;
 			protected $exists = false;
 			protected $saving = false;
+			/**
+			 * @var IProperty
+			 */
+			protected $primary = null;
 
 			public function __construct(ISchema $schema) {
 				$this->schema = $schema;
@@ -30,6 +35,13 @@
 			 */
 			public function getSchema(): ISchema {
 				return $this->schema;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getPrimary(): IProperty {
+				return $this->primary ?: $this->primary = $this->getProperty($this->schema->getPrimary()->getName());
 			}
 
 			/**
@@ -71,5 +83,6 @@
 			public function __clone() {
 				parent::__clone();
 				$this->exists = false;
+				$this->primary = null;
 			}
 		}

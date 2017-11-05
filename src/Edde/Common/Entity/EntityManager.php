@@ -42,7 +42,8 @@
 			 * @inheritdoc
 			 */
 			public function create(string $schema, array $source = []): IEntity {
-				return $this->createEntity($schema = $this->schemaManager->load($schema))->put($this->schemaManager->generate($schema, $source));
+				$this->transaction->entity($entity = $this->createEntity($schema = $this->schemaManager->load($schema))->put($this->schemaManager->generate($schema, $source)));
+				return $entity;
 			}
 
 			/**

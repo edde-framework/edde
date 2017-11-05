@@ -3,6 +3,7 @@
 	namespace Edde\Api\Entity;
 
 		use Edde\Api\Crate\ICrate;
+		use Edde\Api\Crate\IProperty;
 		use Edde\Api\Schema\ISchema;
 
 		/**
@@ -15,6 +16,13 @@
 			 * @return ISchema
 			 */
 			public function getSchema(): ISchema;
+
+			/**
+			 * return primary property of this entity
+			 *
+			 * @return IProperty
+			 */
+			public function getPrimary(): IProperty;
 
 			/**
 			 * load the given data (they should be also filtered)

@@ -3,6 +3,7 @@
 	namespace Edde\Common\Storage;
 
 		use Edde\Api\Entity\Inject\EntityManager;
+		use Edde\Api\Entity\Inject\Transaction;
 		use Edde\Api\Schema\Exception\UnknownSchemaException;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
@@ -28,6 +29,7 @@
 		abstract class AbstractStorageTest extends TestCase {
 			use EntityManager;
 			use SchemaManager;
+			use Transaction;
 			use Storage;
 
 			/**
@@ -54,11 +56,6 @@
 				self::assertTrue(true, 'everything is ok');
 			}
 
-			/**
-			 * @throws DuplicateEntryException
-			 * @throws IntegrityException
-			 * @throws StorageException
-			 */
 			public function testInsert() {
 				$entity = $this->entityManager->create(SimpleSchema::class, [
 					'name'     => 'this entity is new',
@@ -66,7 +63,8 @@
 				]);
 				self::assertNotEmpty($entity->get('guid'));
 				self::assertFalse($entity->exists());
-				$entity->save();
+				self::assertFalse($this->transaction->isEmpty(), 'there is nothing in the transaction!');
+				$this->transaction->commit();
 				self::assertFalse($entity->isDirty());
 				self::assertTrue($entity->exists());
 			}

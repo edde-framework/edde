@@ -6,17 +6,4 @@
 		use Edde\Api\Query\Fragment\IFragment;
 
 		interface IQuery extends IFragment, IConfigurable {
-			/**
-			 * parameter list of this query
-			 *
-			 * @return array
-			 */
-			public function getParameterList(): array;
-
-			/**
-			 * return friendly name for this query (when something fails, it could help find which query has failed)
-			 *
-			 * @return string
-			 */
-			public function getDescription(): ?string;
 		}

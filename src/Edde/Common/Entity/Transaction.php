@@ -47,7 +47,17 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function isEmpty(): bool {
+				return empty($this->entityList);
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function commit(): ITransaction {
+				if ($this->isEmpty()) {
+					return $this;
+				}
 				$this->storage->start();
 				try {
 					$this->storage->execute(new TransactionQuery($this));

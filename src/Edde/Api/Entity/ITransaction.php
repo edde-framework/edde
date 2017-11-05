@@ -41,6 +41,13 @@
 			public function unlink(IEntity $from, IEntity $to): ITransaction;
 
 			/**
+			 * is there something to do?
+			 *
+			 * @return bool
+			 */
+			public function isEmpty(): bool;
+
+			/**
 			 * commit the transaction basically means whole stuff is sent to storage
 			 * under real storage transaction
 			 *

@@ -11,6 +11,7 @@
 		use Edde\Api\Query\IInsertQuery;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\ISelectQuery;
+		use Edde\Api\Query\ITransactionQuery;
 		use Edde\Api\Query\IUpdateLinkQuery;
 		use Edde\Api\Query\IUpdateQuery;
 		use Edde\Api\Query\IUpdateRelationQuery;
@@ -142,6 +143,34 @@
 				if ($primaryList) {
 					$this->native('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT (' . implode(', ', $primaryList) . ') IS NODE KEY');
 				}
+			}
+
+			/**
+			 * @param ITransactionQuery $transactionQuery
+			 *
+			 * @throws \Throwable
+			 */
+			protected function executeTransactionQuery(ITransactionQuery $transactionQuery) {
+				if (($transaction = $transactionQuery->getTransaction())->isEmpty()) {
+					return;
+				}
+				$cypher = '';
+				$parameterList = [];
+				foreach ($transaction->getEntityList() as $entity) {
+					if ($entity->isDirty() === false) {
+						continue;
+					}
+					$primary = $entity->getPrimary();
+					$value = $primary->getValue();
+					$parameterList[$parameterId = 'p_' . sha1($value)] = [
+						'primary' => $value,
+						'set'     => $this->schemaManager->sanitize($schema = $entity->getSchema(), $entity->toArray()),
+					];
+					$parameterId = $this->delimite($parameterId);
+					$cypher .= 'MERGE (' . ($id = $this->delimite($value)) . ':' . $this->delimite($schema->getRealName()) . ' {' . $this->delimite($primary->getName()) . ': $' . $parameterId . '.primary})';
+					$cypher .= ' SET ' . $id . ' = $' . $parameterId . '.set';
+				}
+				$this->native($cypher, $parameterList);
 			}
 
 			protected function executeEntityQuery() {
