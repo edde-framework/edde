@@ -47,7 +47,7 @@
 			 * @inheritdoc
 			 */
 			public function load(ISchema $schema, array $source): IEntity {
-				return $this->createEntity($schema)->load($source);
+				return $this->createEntity($schema)->filter($source);
 			}
 
 			/**

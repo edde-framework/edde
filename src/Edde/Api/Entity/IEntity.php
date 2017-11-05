@@ -20,34 +20,6 @@
 			public function getSchema(): ISchema;
 
 			/**
-			 * attach the given entity to $this one using m:n relation; returned entity is the
-			 * relation entity
-			 *
-			 * @param IEntity $entity
-			 *
-			 * @return IEntity
-			 */
-			public function attach(IEntity $entity): IEntity;
-
-			/**
-			 * link the given entity to this one (1:N relation); return $this
-			 *
-			 * @param IEntity $entity
-			 *
-			 * @return IEntity
-			 */
-			public function link(IEntity $entity): IEntity;
-
-			/**
-			 * return foreign entity based on the given property name (found by link)
-			 *
-			 * @param string $name
-			 *
-			 * @return IEntity
-			 */
-			public function entity(string $name): IEntity;
-
-			/**
 			 * save this entity into storage (and all related stuff to this entity)
 			 *
 			 * @return IEntity
@@ -65,7 +37,7 @@
 			 *
 			 * @return IEntity
 			 */
-			public function load(array $source): IEntity;
+			public function filter(array $source): IEntity;
 
 			/**
 			 * prepare m:n collection of related entities

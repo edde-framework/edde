@@ -2,14 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Entity;
 
-		use Edde\Api\Crate\ICrate;
 		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\Inject\EntityManager;
-		use Edde\Api\Schema\Exception\LinkException;
 		use Edde\Api\Schema\Exception\RelationException;
 		use Edde\Api\Schema\Inject\SchemaManager;
-		use Edde\Api\Schema\IRelation;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Crate\Crate;
@@ -26,14 +23,6 @@
 			 * @var ISchema
 			 */
 			protected $schema;
-			/**
-			 * @var IEntity[]
-			 */
-			protected $linkList = [];
-			/**
-			 * @var IRelation
-			 */
-			protected $relation;
 			protected $exists = false;
 			protected $saving = false;
 
@@ -46,33 +35,6 @@
 			 */
 			public function getSchema(): ISchema {
 				return $this->schema;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function attach(IEntity $entity): IEntity {
-				return $this->entityManager->createEntity(($relation = $this->schema->getRelation($entity->getSchema()->getName()))->getSchema())->connect($this, $entity, $relation);
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function link(IEntity $entity): IEntity {
-				$this->linkList[] = $entity;
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function entity(string $name): IEntity {
-				foreach ($this->schema->getLinkList() as $link) {
-					if ($link->getSourceProperty()->getName() === $name) {
-						return $this->entityManager->collection($link->getTargetSchema()->getName())->entity($this->get($name));
-					}
-				}
-				throw new LinkException(sprintf('Cannot find any link on property [%s::%s].', $this->schema->getName(), $name));
 			}
 
 			/**
@@ -137,7 +99,7 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function load(array $source): IEntity {
+			public function filter(array $source): IEntity {
 				$this->push($this->schemaManager->filter($this->schema, $source));
 				$this->exists = true;
 				return $this;
@@ -160,25 +122,6 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function isDirty(): bool {
-				if (parent::isDirty()) {
-					return true;
-				}
-				return empty($this->linkList) === false;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function commit(): ICrate {
-				parent::commit();
-				$this->linkList = [];
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
 			public function toArray(): array {
 				$array = [];
 				foreach ($this->schema->getPropertyList() as $k => $property) {
@@ -192,8 +135,6 @@
 			 */
 			public function __clone() {
 				parent::__clone();
-				$this->linkList = [];
-				$this->relation = null;
 				$this->exists = false;
 			}
 		}
