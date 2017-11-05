@@ -147,36 +147,31 @@
 			protected function executeEntityQuery() {
 				/**
 				 * create or update, with M:N relations maintained
+				 *
+				 * - it's not possible to remove relation and create a new one to different node
 				 */
 				/** @noinspection PhpExpressionResultUnusedInspection */
 				/** @lang Cypher */
 				<<< 'CYPHER'
-MERGE
-	(`foo-1`:foo {guid: 'foo1'})
-SET
-	`foo-1` = {guid: 'foo1', name: 'foo-1'}
-MERGE
-	(`foo-2`:foo {guid: 'foo2'})
-SET
-	`foo-2` = {guid: 'foo2', name: 'foo-2'}
-MERGE
-	(`foo-3`:foo {guid: 'foo3'})
-SET
-	`foo-3` = {guid: 'foo3', name: 'foo-3'}
-MERGE
-	(`bar-1`:bar {guid: 'bar1'})
-SET
-	`bar-1` = {guid: 'bar1', name: 'bar-1'}
-MERGE
-	(`bar-2`:bar {guid: 'bar2'})
-SET
-	`bar-2` = {guid: 'bar2', name: 'bar-2'}
-MERGE
-	(`foo-1`)-[:`foo-bar`]->(`bar-1`)
-MERGE
-    (`foo-2`)-[:`foo-bar`]->(`bar-1`)
-MERGE
-    (`foo-3`)-[:`foo-bar`]->(`bar-2`)
+// new node creation using GUID as a node name
+MERGE (`foo-1`:foo {guid: 'foo1'}) SET `foo-1` = {guid: 'foo1', name: 'foo-1'}
+MERGE (`foo-2`:foo {guid: 'foo2'}) SET `foo-2` = {guid: 'foo2', name: 'foo-2'}
+MERGE (`foo-3`:foo {guid: 'foo3'}) SET `foo-3` = {guid: 'foo3', name: 'foo-3'}
+MERGE (`bar-1`:bar {guid: 'bar1'}) SET `bar-1` = {guid: 'bar1', name: 'bar-1'}
+MERGE (`bar-2`:bar {guid: 'bar2'}) SET `bar-2` = {guid: 'bar2', name: 'bar-2'}
+MERGE (`subBar-1`:`sub-bar` {guid: 'subBar-1'}) SET	`subBar-1` = {guid: 'subBar-1', label: 'subBar #1'}
+MERGE (`subBar-2`:`sub-bar` {guid: 'subBar-2'}) SET	`subBar-2` = {guid: 'subBar-2', label: 'subBar #2'}
+
+//m:n relations
+MERGE (`foo-1`)-[:`foo-bar`]->(`bar-1`)
+MERGE (`foo-2`)-[:`foo-bar`]->(`bar-1`)
+MERGE (`foo-3`)-[:`foo-bar`]->(`bar-2`)
+
+// maintain 1:n relations - this is not working
+//WITH `bar-2` MATCH (`bar-2-2` {guid: `bar-2`.guid})-[r:`sub-bar`]->(:`sub-bar`) DELETE r
+//MERGE (`bar-2`)-[:`sub-bar`]->(`subBar-2`)
+//WITH `bar-2` MATCH (`bar-2-2` {guid: `bar-2`.guid})-[r:`sub-bar`]->(:`sub-bar`) DELETE r
+//MERGE (`bar-2`)-[:`sub-bar`]->(`subBar-1`)
 CYPHER;
 			}
 
