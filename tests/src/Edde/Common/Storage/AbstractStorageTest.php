@@ -99,14 +99,14 @@
 				$entity = $this->entityManager->create(SimpleSchema::class, [
 					'name'     => 'some name for this entity',
 					'optional' => 'this string is optional, but I wanna fill it!',
-				])->save();
+				]);
 				self::assertNotEmpty($entity->get('guid'));
 				$entity = $this->entityManager->create(SimpleSchema::class, [
 					'name'     => 'another name',
 					'optional' => null,
 				]);
 				self::assertNotEmpty($entity->get('guid'));
-				$entity->save();
+				$this->transaction->execute();
 				self::assertFalse($entity->isDirty(), 'Entity is still dirty!');
 			}
 
@@ -144,9 +144,7 @@
 			}
 
 			/**
-			 * @throws DuplicateEntryException
-			 * @throws IntegrityException
-			 * @throws StorageException
+			 * @throws EntityNotFoundException
 			 */
 			public function testUpdate() {
 				$entity = $this->entityManager->create(SimpleSchema::class, [
@@ -155,10 +153,12 @@
 					'value'    => 3.14,
 					'date'     => new \DateTime('24.12.2020 12:24:13'),
 					'question' => false,
-				])->save();
+				]);
+				$this->transaction->execute();
+				$this->transaction->entity($entity);
 				$entity->set('optional', null);
 				$expect = $entity->toArray();
-				$entity->save();
+				$this->transaction->execute();
 				$entity = $this->entityManager->collection(SimpleSchema::class)->entity($entity->get('guid'));
 				self::assertFalse($entity->isDirty(), 'entity should NOT be dirty right after load!');
 				self::assertEquals($expect, $array = $entity->toArray());

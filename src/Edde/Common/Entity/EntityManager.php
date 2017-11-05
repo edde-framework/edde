@@ -52,7 +52,6 @@
 			public function load(ISchema $schema, array $source): IEntity {
 				$entity = $this->createEntity($schema);
 				$entity->filter($source);
-				$entity->exists(true);
 				return $entity;
 			}
 

@@ -161,7 +161,7 @@
 						continue;
 					}
 					$primary = $entity->getPrimary();
-					$value = $primary->getValue();
+					$value = $primary->get();
 					$parameterList[$parameterId = 'p_' . sha1($value)] = [
 						'primary' => $value,
 						'set'     => $this->schemaManager->sanitize($schema = $entity->getSchema(), $entity->toArray()),
