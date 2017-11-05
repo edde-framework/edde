@@ -3,7 +3,6 @@
 	namespace Edde\Api\Entity;
 
 		use Edde\Api\Crate\ICrate;
-		use Edde\Api\Schema\IRelation;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\IntegrityException;
@@ -47,36 +46,6 @@
 			 * @return IEntity
 			 */
 			public function entity(string $name): IEntity;
-
-			/**
-			 * bind the given entity to current one; bound entities are saved before $this
-			 *
-			 * @param IEntity $entity
-			 *
-			 * @return IEntity
-			 */
-			public function bind(IEntity $entity): IEntity;
-
-			/**
-			 * bind to the given entity; $this is saved before bound entities
-			 *
-			 * @param IEntity $entity
-			 *
-			 * @return IEntity
-			 */
-			public function bindTo(IEntity $entity): IEntity;
-
-			/**
-			 * $this is relation entity which connects the given two entities together
-			 * using specified relation (m:n, 1:n included)
-			 *
-			 * @param IEntity   $entity
-			 * @param IEntity   $to
-			 * @param IRelation $relation
-			 *
-			 * @return IEntity
-			 */
-			public function connect(IEntity $entity, IEntity $to, IRelation $relation): IEntity;
 
 			/**
 			 * save this entity into storage (and all related stuff to this entity)

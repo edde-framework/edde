@@ -6,6 +6,7 @@
 		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\IEntityManager;
+		use Edde\Api\Entity\ITransaction;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Inject\Storage;
@@ -57,5 +58,12 @@
 					$this->collectionList[$name] = $this->container->inject(new Collection($this->storage->stream(new SelectQuery($schema = $this->schemaManager->load($schema), 'c')), $schema));
 				}
 				return clone $this->collectionList[$name];
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function transaction(): ITransaction {
+				return $this->container->inject(new Transaction());
 			}
 		}

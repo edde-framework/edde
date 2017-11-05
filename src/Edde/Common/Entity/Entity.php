@@ -31,14 +31,6 @@
 			 */
 			protected $linkList = [];
 			/**
-			 * @var IEntity[]
-			 */
-			protected $bindList = [];
-			/**
-			 * @var IEntity[]
-			 */
-			protected $bindToList = [];
-			/**
 			 * @var IRelation
 			 */
 			protected $relation;
@@ -81,32 +73,6 @@
 					}
 				}
 				throw new LinkException(sprintf('Cannot find any link on property [%s::%s].', $this->schema->getName(), $name));
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function bind(IEntity $entity): IEntity {
-				$this->bindList[] = $entity;
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function bindTo(IEntity $entity): IEntity {
-				$this->bindToList[] = $entity;
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function connect(IEntity $entity, IEntity $to, IRelation $relation): IEntity {
-				$this->relation = $relation;
-				$entity->bindTo($this)->bind($to);
-				$this->bind($entity)->bind($to);
-				return $this;
 			}
 
 			/**
@@ -227,8 +193,6 @@
 			public function __clone() {
 				parent::__clone();
 				$this->linkList = [];
-				$this->bindList = [];
-				$this->bindToList = [];
 				$this->relation = null;
 				$this->exists = false;
 			}

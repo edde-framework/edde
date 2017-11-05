@@ -44,4 +44,11 @@
 			 * @return ICollection
 			 */
 			public function collection(string $schema): ICollection;
+
+			/**
+			 * creates a new transaction
+			 *
+			 * @return ITransaction
+			 */
+			public function transaction(): ITransaction;
 		}
