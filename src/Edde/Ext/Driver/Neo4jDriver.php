@@ -144,6 +144,42 @@
 				}
 			}
 
+			protected function executeEntityQuery() {
+				/**
+				 * create or update, with M:N relations maintained
+				 */
+				/** @noinspection PhpExpressionResultUnusedInspection */
+				/** @lang Cypher */
+				<<< 'CYPHER'
+MERGE
+	(`foo-1`:foo {guid: 'foo1'})
+SET
+	`foo-1` = {guid: 'foo1', name: 'foo-1'}
+MERGE
+	(`foo-2`:foo {guid: 'foo2'})
+SET
+	`foo-2` = {guid: 'foo2', name: 'foo-2'}
+MERGE
+	(`foo-3`:foo {guid: 'foo3'})
+SET
+	`foo-3` = {guid: 'foo3', name: 'foo-3'}
+MERGE
+	(`bar-1`:bar {guid: 'bar1'})
+SET
+	`bar-1` = {guid: 'bar1', name: 'bar-1'}
+MERGE
+	(`bar-2`:bar {guid: 'bar2'})
+SET
+	`bar-2` = {guid: 'bar2', name: 'bar-2'}
+MERGE
+	(`foo-1`)-[:`foo-bar`]->(`bar-1`)
+MERGE
+    (`foo-2`)-[:`foo-bar`]->(`bar-1`)
+MERGE
+    (`foo-3`)-[:`foo-bar`]->(`bar-2`)
+CYPHER;
+			}
+
 			/**
 			 * @param IInsertQuery $insertQuery
 			 *
