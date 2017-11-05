@@ -2,8 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Query;
 
-	/**
-	 * Just one query in a transaction.
-	 */
-		interface ITransactionQuery extends INativeQuery, INativeTransaction {
+		use Edde\Api\Entity\ITransaction;
+
+		interface ITransactionQuery extends IQuery {
+			/**
+			 * @return ITransaction
+			 */
+			public function getTransaction(): ITransaction;
 		}
