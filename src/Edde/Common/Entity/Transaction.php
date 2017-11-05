@@ -37,6 +37,9 @@
 				return $this;
 			}
 
+			/**
+			 * @inheritdoc
+			 */
 			public function unlink(IEntity $from, IEntity $to): ITransaction {
 				return $this;
 			}
@@ -63,5 +66,13 @@
 			public function rollback(): ITransaction {
 				$this->entityList = [];
 				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function __clone() {
+				parent::__clone();
+				$this->entityList = [];
 			}
 		}

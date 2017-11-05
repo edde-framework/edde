@@ -6,6 +6,7 @@
 		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\IEntityManager;
+		use Edde\Api\Entity\Inject\Transaction;
 		use Edde\Api\Entity\ITransaction;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Schema\ISchema;
@@ -15,6 +16,7 @@
 
 		class EntityManager extends Object implements IEntityManager {
 			use SchemaManager;
+			use Transaction;
 			use Container;
 			use Storage;
 			/**
@@ -47,7 +49,10 @@
 			 * @inheritdoc
 			 */
 			public function load(ISchema $schema, array $source): IEntity {
-				return $this->createEntity($schema)->filter($source);
+				$entity = $this->createEntity($schema);
+				$entity->filter($source);
+				$entity->exists(true);
+				return $entity;
 			}
 
 			/**
@@ -64,6 +69,6 @@
 			 * @inheritdoc
 			 */
 			public function transaction(): ITransaction {
-				return $this->container->inject(new Transaction());
+				return clone $this->transaction;
 			}
 		}

@@ -4,9 +4,6 @@
 
 		use Edde\Api\Crate\ICrate;
 		use Edde\Api\Schema\ISchema;
-		use Edde\Api\Storage\Exception\DuplicateEntryException;
-		use Edde\Api\Storage\Exception\IntegrityException;
-		use Edde\Api\Storage\Exception\StorageException;
 
 		/**
 		 * An Entity is extended Crate with some additional features.
@@ -18,17 +15,6 @@
 			 * @return ISchema
 			 */
 			public function getSchema(): ISchema;
-
-			/**
-			 * save this entity into storage (and all related stuff to this entity)
-			 *
-			 * @return IEntity
-			 *
-			 * @throws StorageException
-			 * @throws DuplicateEntryException
-			 * @throws IntegrityException
-			 */
-			public function save(): IEntity;
 
 			/**
 			 * load the given data (they should be also filtered)
@@ -52,7 +38,9 @@
 			/**
 			 * is the entity loaded from storage, thus it exists?
 			 *
+			 * @param bool|null $exists set the flag or get the current state
+			 *
 			 * @return bool
 			 */
-			public function exists(): bool;
+			public function exists(bool $exists = null): bool;
 		}
