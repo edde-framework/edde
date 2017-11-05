@@ -169,21 +169,18 @@
 			}
 
 			/**
-			 * @throws StorageException
 			 * @throws UnknownSchemaException
 			 */
 			public function testRelationTo() {
 				$foo = $this->entityManager->create(FooSchema::class, [
 					'name' => 'foo The First',
 				]);
-				self::assertFalse($foo->exists());
 				$foo2 = $this->entityManager->create(FooSchema::class, [
 					'name' => 'foo The Second',
 				]);
 				$bar = $this->entityManager->create(BarSchema::class, [
 					'name' => 'bar The Second',
 				]);
-				self::assertFalse($bar->exists());
 				$bar2 = $this->entityManager->create(BarSchema::class, [
 					'name' => 'bar The Third',
 				]);
@@ -192,7 +189,7 @@
 				]);
 				$this->entityManager->create(BarSchema::class, [
 					'name' => 'Another, very secret bar!',
-				])->save();
+				]);
 				$poo = $this->entityManager->create(PooSchema::class, [
 					'name' => 'Da Poo The First One!',
 				]);
@@ -202,25 +199,15 @@
 				$poo3 = $this->entityManager->create(PooSchema::class, [
 					'name' => 'Da Poo The Hard One!',
 				]);
-				self::assertFalse($bar2->exists());
 				$this->schemaManager->load(FooBarSchema::class);
 				$this->schemaManager->load(BarPooSchema::class);
-				$foo->attach($bar);
-				$foo->attach($bar2);
-				$bar2->attach($poo);
-				$bar2->attach($poo2);
-				$bar2->attach($poo3);
-				$foo->save();
-				$foo2->attach($bar3);
-				$foo2->save();
-				self::assertTrue($foo->exists());
-				self::assertTrue($foo2->exists());
-				self::assertTrue($bar->exists());
-				self::assertTrue($bar2->exists());
-				self::assertTrue($bar3->exists());
-				self::assertTrue($poo->exists());
-				self::assertTrue($poo2->exists());
-				self::assertTrue($poo3->exists());
+//				$foo->attach($bar);
+//				$foo->attach($bar2);
+//				$bar2->attach($poo);
+//				$bar2->attach($poo2);
+//				$bar2->attach($poo3);
+//				$foo2->attach($bar3);
+				$this->transaction->execute();
 			}
 
 			/**
