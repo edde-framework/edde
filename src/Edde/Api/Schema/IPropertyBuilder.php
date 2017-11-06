@@ -67,16 +67,6 @@
 			public function sanitizer(string $name): IPropertyBuilder;
 
 			/**
-			 * link this property to another $property in $target schema
-			 *
-			 * @param string $target   target schema of a link
-			 * @param string $property property of schema (for example primary key)
-			 *
-			 * @return IPropertyBuilder
-			 */
-			public function link(string $target, string $property): IPropertyBuilder;
-
-			/**
 			 * creates and return a property
 			 *
 			 * @return IProperty

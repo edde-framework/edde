@@ -62,7 +62,7 @@
 									break;
 								case 'primary':
 									if ($primary) {
-										throw new MultiplePrimaryException(sprintf('Schema [%s] has another primary key [%s]!', $schema, $propertyName));
+										throw new MultiplePrimaryException(sprintf('Schema [%s] has another primary key [%s]; composite primary keys are not allowed!', $schema, $propertyName));
 									}
 									$primary = true;
 									$propertyBuilder->primary();

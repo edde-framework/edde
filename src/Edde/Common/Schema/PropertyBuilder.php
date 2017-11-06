@@ -88,18 +88,6 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function link(string $target, string $property): IPropertyBuilder {
-				$this->node->getNode('link')->putAttributeList([
-					'schema' => $target,
-					'target' => $property,
-					'source' => $this->node->getAttribute('name'),
-				]);
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
 			public function getProperty(): IProperty {
 				return $this->property ?: $this->property = new Property($this->root, $this->node);
 			}
