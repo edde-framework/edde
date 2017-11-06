@@ -44,6 +44,13 @@
 			public function getSanitizer(): ?string;
 
 			/**
+			 * return name of the validator for this property, if any
+			 *
+			 * @return null|string
+			 */
+			public function getValidator(): ?string;
+
+			/**
 			 * is this property marked as unique?
 			 *
 			 * @return bool

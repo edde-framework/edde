@@ -80,4 +80,11 @@
 			public function getSanitizer(): ?string {
 				return $this->node->getAttribute('sanitizer');
 			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getValidator(): ?string {
+				return $this->node->getAttribute('validator');
+			}
 		}
