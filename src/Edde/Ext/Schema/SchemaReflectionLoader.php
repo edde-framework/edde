@@ -84,13 +84,13 @@
 									break;
 								case 'sanitizer':
 									if (($sanitizer = $parameter->getDefaultValue()) || is_string($sanitizer) === false) {
-										throw new SchemaReflectionException(sprintf('Parameter [%s::%s($sanitizer)] must have a default string  value as a sanitizer name.', $schema, $propertyName));
+										throw new SchemaReflectionException(sprintf('Parameter [%s::%s($sanitizer)] must have a default string value as a sanitizer name.', $schema, $propertyName));
 									}
 									$propertyBuilder->sanitizer($sanitizer);
 									break;
 								case 'validator':
 									if (($validator = $parameter->getDefaultValue()) || is_string($validator) === false) {
-										throw new SchemaReflectionException(sprintf('Parameter [%s::%s($validator)] must have a default string  value as a validator name.', $schema, $propertyName));
+										throw new SchemaReflectionException(sprintf('Parameter [%s::%s($validator)] must have a default string value as a validator name.', $schema, $propertyName));
 									}
 									$propertyBuilder->validator($validator);
 									break;
@@ -100,10 +100,14 @@
 							$propertyBuilder->type($propertyType = $type->getName());
 							$propertyBuilder->required($type->allowsNull() === false);
 						}
-//						if ($reflectionMethod->getNumberOfParameters() === 1 && ($parameter = $reflectionMethod->getParameters()[0]) && ($type = $parameter->getType())) {
-//							$propertyBuilder->required($type->allowsNull() === false);
-//								$propertyBuilder->link($type->getName(), $parameter->getName());
-//						}
+						if ($reflectionMethod->getNumberOfParameters() === 1 && ($parameter = $reflectionMethod->getParameters()[0]) && ($type = $parameter->getType())) {
+							$name = $isRelation ? $schema : 'some-generated-link-name';
+							$sourceSchema = $schema;
+							$sourceProperty = $propertyName;
+							$targetSchema = $type->getName();
+							$targetProperty = $parameter->getName();
+//							$schemaBuilder->link(new LinkBuilder());
+						}
 						switch ($propertyType) {
 							case 'float':
 							case 'int':

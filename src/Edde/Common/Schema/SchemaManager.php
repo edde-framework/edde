@@ -18,17 +18,17 @@
 			/**
 			 * @var ISchemaLoader[]
 			 */
-			protected $schemaLoaderList = [];
+			protected $schemaLoaders = [];
 			/**
 			 * @var ISchema[]
 			 */
-			protected $schemaList = [];
+			protected $schemas = [];
 
 			/**
 			 * @inheritdoc
 			 */
 			public function registerSchemaLoader(ISchemaLoader $schemaLoader): ISchemaManager {
-				$this->schemaLoaderList[] = $schemaLoader;
+				$this->schemaLoaders[] = $schemaLoader;
 				return $this;
 			}
 
@@ -36,7 +36,7 @@
 			 * @inheritdoc
 			 */
 			public function registerSchema(ISchema $schema): ISchemaManager {
-				$this->schemaList[$schema->getName()] = $schema;
+				$this->schemas[$schema->getName()] = $schema;
 				return $this;
 			}
 
@@ -54,11 +54,11 @@
 			 * @inheritdoc
 			 */
 			public function load(string $name): ISchema {
-				if (isset($this->schemaList[$name])) {
-					return $this->schemaList[$name];
+				if (isset($this->schemas[$name])) {
+					return $this->schemas[$name];
 				}
 				$schema = null;
-				foreach ($this->schemaLoaderList as $schemaLoader) {
+				foreach ($this->schemaLoaders as $schemaLoader) {
 					if ($schema = $schemaLoader->getSchemaBuilder($name)) {
 						break;
 					}
@@ -66,9 +66,9 @@
 				if ($schema === null) {
 					throw new UnknownSchemaException(sprintf('Requested unknown schema [%s].', $name));
 				}
-				$this->schemaList[$name] = $schema;
+				$this->schemas[$name] = $schema;
 				if ($schema->hasAlias()) {
-					$this->schemaList[$schema->getAlias()] = $schema;
+					$this->schemas[$schema->getAlias()] = $schema;
 				}
 				return $schema;
 			}

@@ -14,6 +14,13 @@
 		}
 
 		/**
+		 * This is the core of this genius idea: use native PHP features!
+		 */
+		interface RelationSchema {
+			const relation = true;
+		}
+
+		/**
 		 * Define a Foo schema extended from guid...
 		 */
 		interface FooSchema extends GuidSchema {
@@ -50,7 +57,7 @@
 			 * define a 1:n relation from Bar to SubBarSchema; subBar property
 			 * is connected to guid property of SubBarSchema
 			 */
-			public function subBar(?SubBarSchema $guid): string;
+			public function subBar(SubBarSchema $guid): ?string;
 		}
 
 		interface PooSchema extends GuidSchema {
@@ -65,9 +72,8 @@
 		 * This schema has exactly two links, thus this will be pure
 		 * relation (m:n) schema.
 		 */
-		interface FooBarSchema {
+		interface FooBarSchema extends RelationSchema {
 			const alias = 'foo-bar';
-			const relation = true;
 
 			/**
 			 * make property foo as a reference to FooSchema's property $guid
@@ -80,9 +86,8 @@
 			public function bar(BarSchema $guid): string;
 		}
 
-		interface BarPooSchema {
+		interface BarPooSchema extends RelationSchema {
 			const alias = 'bar-poo';
-			const relation = true;
 
 			public function bar(BarSchema $guid): string;
 
@@ -121,9 +126,8 @@
 			public function label(): ?string;
 		}
 
-		interface UserRoleSchema {
+		interface UserRoleSchema extends RelationSchema {
 			const alias = 'user-role';
-			const relation = true;
 
 			public function user(UserSchema $guid): string;
 
