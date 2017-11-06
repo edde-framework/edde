@@ -59,7 +59,7 @@
 				}
 				$schema = null;
 				foreach ($this->schemaLoaderList as $schemaLoader) {
-					if ($schema = $schemaLoader->getSchema($name)) {
+					if ($schema = $schemaLoader->getSchemaBuilder($name)) {
 						break;
 					}
 				}

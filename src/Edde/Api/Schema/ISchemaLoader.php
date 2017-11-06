@@ -8,7 +8,7 @@
 			 *
 			 * @param string $schema
 			 *
-			 * @return ISchema|null
+			 * @return ISchemaBuilder|null
 			 */
-			public function getSchema(string $schema): ?ISchema;
+			public function getSchemaBuilder(string $schema): ?ISchemaBuilder;
 		}

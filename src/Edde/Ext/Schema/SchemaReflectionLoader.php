@@ -5,39 +5,40 @@
 		use Edde\Api\Schema\Exception\MultiplePrimaryException;
 		use Edde\Api\Schema\Exception\SchemaException;
 		use Edde\Api\Schema\Exception\SchemaReflectionException;
-		use Edde\Api\Schema\ISchema;
+		use Edde\Api\Schema\ISchemaBuilder;
 		use Edde\Api\Schema\ISchemaLoader;
 		use Edde\Api\Utils\Inject\StringUtils;
 		use Edde\Common\Schema\AbstractSchemaLoader;
 		use Edde\Common\Schema\SchemaBuilder;
+		use ReflectionClass;
 
 		class SchemaReflectionLoader extends AbstractSchemaLoader implements ISchemaLoader {
 			use StringUtils;
 			/**
-			 * @var ISchema[]
+			 * @var ISchemaBuilder[]
 			 */
-			protected $schemaList = [];
+			protected $schemaBuilders = [];
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getSchema(string $schema): ISchema {
-				return $this->schemaList[$schema] ?? $this->schemaList[$schema] = $this->reflect($schema);
+			public function getSchemaBuilder(string $schema): ISchemaBuilder {
+				return $this->schemaBuilders[$schema] ?? $this->schemaBuilders[$schema] = $this->reflect($schema);
 			}
 
 			/**
 			 * @param string $schema
 			 *
-			 * @return ISchema
+			 * @return ISchemaBuilder
 			 * @throws SchemaReflectionException
 			 * @throws SchemaException
 			 */
-			protected function reflect(string $schema): ISchema {
+			protected function reflect(string $schema): ISchemaBuilder {
 				try {
-					if (isset($this->schemaList[$schema])) {
-						return $this->schemaList[$schema];
+					if (isset($this->schemaBuilders[$schema])) {
+						return $this->schemaBuilders[$schema];
 					}
-					$reflectionClass = new \ReflectionClass($schema);
+					$reflectionClass = new ReflectionClass($schema);
 					$schemaBuilder = new SchemaBuilder($schema);
 					$methodCount = 0;
 					$primary = false;
@@ -108,10 +109,7 @@
 								break;
 						}
 					}
-					if (($schema = $this->schemaList[$schema] = $schemaBuilder->getSchema())->hasAlias()) {
-						$this->schemaList[$schema->getAlias()] = $schema;
-					}
-					return $schema;
+					return $this->schemaBuilders[$schema] = $schemaBuilder;
 				} catch (SchemaException $exception) {
 					throw $exception;
 				} catch (\Throwable $throwable) {
