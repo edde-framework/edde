@@ -67,6 +67,15 @@
 			public function integer(string $name): IPropertyBuilder;
 
 			/**
+			 * add link builder
+			 *
+			 * @param ILinkBuilder $linkBuilder
+			 *
+			 * @return ISchemaBuilder
+			 */
+			public function link(ILinkBuilder $linkBuilder): ISchemaBuilder;
+
+			/**
 			 * build and return a schema
 			 *
 			 * @return ISchema

@@ -9,6 +9,7 @@
 		use Edde\Api\Schema\ISchemaLoader;
 		use Edde\Api\Utils\Inject\StringUtils;
 		use Edde\Common\Schema\AbstractSchemaLoader;
+		use Edde\Common\Schema\LinkBuilder;
 		use Edde\Common\Schema\SchemaBuilder;
 		use ReflectionClass;
 
@@ -101,12 +102,7 @@
 							$propertyBuilder->required($type->allowsNull() === false);
 						}
 						if ($reflectionMethod->getNumberOfParameters() === 1 && ($parameter = $reflectionMethod->getParameters()[0]) && ($type = $parameter->getType())) {
-							$name = $isRelation ? $schema : 'some-generated-link-name';
-							$sourceSchema = $schema;
-							$sourceProperty = $propertyName;
-							$targetSchema = $type->getName();
-							$targetProperty = $parameter->getName();
-//							$schemaBuilder->link(new LinkBuilder());
+							$schemaBuilder->link(new LinkBuilder($isRelation ? $schema : $propertyName, $schema, $propertyName, $type->getName(), $parameter->getName()));
 						}
 						switch ($propertyType) {
 							case 'float':

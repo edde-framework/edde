@@ -3,6 +3,8 @@
 	namespace Edde\Common\Schema;
 
 		use Edde\Api\Node\INode;
+		use Edde\Api\Schema\Exception\InvalidRelationException;
+		use Edde\Api\Schema\ILinkBuilder;
 		use Edde\Api\Schema\IPropertyBuilder;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Schema\ISchemaBuilder;
@@ -17,11 +19,15 @@
 			/**
 			 * @var IPropertyBuilder[]
 			 */
-			protected $propertyBuilderList = [];
+			protected $propertyBuilders = [];
 			/**
 			 * @var ISchema
 			 */
 			protected $schema;
+			/**
+			 * @var ILinkBuilder[]
+			 */
+			protected $linkBuilders = [];
 
 			public function __construct(string $name) {
 				$this->node = new Node('schema', null, ['name' => $name]);
@@ -48,7 +54,7 @@
 			 */
 			public function property(string $name): IPropertyBuilder {
 				$this->node->getNode('property-list')->addNode($node = new Node('property', null, ['name' => $name]));
-				return $this->propertyBuilderList[$name] = new PropertyBuilder($this->node, $node);
+				return $this->propertyBuilders[$name] = new PropertyBuilder($this->node, $node);
 			}
 
 			/**
@@ -82,12 +88,23 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function link(ILinkBuilder $linkBuilder): ISchemaBuilder {
+				$this->linkBuilders[$linkBuilder->getName()] = $linkBuilder;
+				if ($this->node->getAttribute('is-relation', false) && count($this->linkBuilders) > 2) {
+					throw new InvalidRelationException(sprintf('Relation schema [%s] must have exactly two links; if you need more links, remove "relation" flag from the schema.', $this->node->getAttribute('name')));
+				}
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function getSchema(): ISchema {
 				if ($this->schema) {
 					return $this->schema;
 				}
 				$propertyList = [];
-				foreach ($this->propertyBuilderList as $name => $propertyBuilder) {
+				foreach ($this->propertyBuilders as $name => $propertyBuilder) {
 					$propertyList[$name] = $propertyBuilder->getProperty();
 				}
 				return $this->schema = new Schema($this->node, $propertyList);
