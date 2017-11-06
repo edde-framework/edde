@@ -4,7 +4,7 @@
 
 	/**
 	 * Because there is a reflection loader, we can use php native
-	 * fetaures, that's fuckin' cool!
+	 * features, that's fuckin' cool!
 	 */
 		interface GuidSchema {
 			/**

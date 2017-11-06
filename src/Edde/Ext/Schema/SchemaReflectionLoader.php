@@ -41,13 +41,14 @@
 					$schemaBuilder = new SchemaBuilder($schema);
 					$methodCount = 0;
 					$primary = false;
+					$isRelation = false;
 					foreach ($reflectionClass->getConstants() as $name => $value) {
 						switch ($name) {
 							case 'alias':
 								$schemaBuilder->alias($value);
 								break;
 							case 'relation':
-								$schemaBuilder->relation($value);
+								$schemaBuilder->relation($isRelation = $value);
 								break;
 						}
 					}
@@ -92,15 +93,9 @@
 							$propertyBuilder->type($propertyType = $type->getName());
 							$propertyBuilder->required($type->allowsNull() === false);
 						}
-						/**
-						 * exactly one parameter means link to another schema
-						 */
-						if ($reflectionMethod->getNumberOfParameters() === 1) {
-							list($parameter) = $reflectionMethod->getParameters();
-							if ($type = $parameter->getType()) {
-								$propertyBuilder->required($type->allowsNull() === false);
-								$propertyBuilder->link($type->getName(), $parameter->getName());
-							}
+						if ($reflectionMethod->getNumberOfParameters() === 1 && ($parameter = $reflectionMethod->getParameters()[0]) && ($type = $parameter->getType())) {
+							$propertyBuilder->required($type->allowsNull() === false);
+//								$propertyBuilder->link($type->getName(), $parameter->getName());
 						}
 						switch ($propertyType) {
 							case 'float':

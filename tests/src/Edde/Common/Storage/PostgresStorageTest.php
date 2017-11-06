@@ -1,4 +1,5 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Common\Storage;
 
 		use Edde\Api\Container\Exception\ContainerException;
@@ -10,8 +11,8 @@
 
 		class PostgresStorageTest extends AbstractStorageTest {
 			public function testPrepareDatabase() {
-				$this->storage->native('drop schema if exists "test" cascade');
-				$this->storage->native('create schema "test" authorization "edde"');
+				$this->storage->native('drop schema if exists test cascade');
+				$this->storage->native('create schema test authorization "edde"');
 				$this->assertTrue(true, 'everything is OK!');
 			}
 

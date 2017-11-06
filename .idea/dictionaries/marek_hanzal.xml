@@ -6,7 +6,9 @@
       <w>autowiring</w>
       <w>bytea</w>
       <w>charlist</w>
+      <w>dbname</w>
       <w>edde</w>
+      <w>pgsql</w>
       <w>recamel</w>
       <w>usecase</w>
     </words>

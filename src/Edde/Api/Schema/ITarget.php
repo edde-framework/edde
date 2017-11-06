@@ -13,9 +13,23 @@
 			public function getSchema(): ISchema;
 
 			/**
+			 * get target schema name (shortcut for getSchema()->getName())
+			 *
+			 * @return string
+			 */
+			public function getName(): string;
+
+			/**
 			 * get target property
 			 *
 			 * @return IProperty
 			 */
 			public function getProperty(): IProperty;
+
+			/**
+			 * shortcut for a... property name!
+			 *
+			 * @return string
+			 */
+			public function getPropertyName(): string;
 		}
