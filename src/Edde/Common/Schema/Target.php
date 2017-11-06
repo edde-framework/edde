@@ -19,6 +19,7 @@
 			 * @var string
 			 */
 			protected $name;
+			protected $realName;
 			/**
 			 * @var string
 			 */
@@ -28,6 +29,7 @@
 				$this->schema = $schema;
 				$this->property = $property;
 				$this->name = $schema->getName();
+				$this->realName = $schema->getRealName();
 				$this->propertyName = $property->getName();
 			}
 
@@ -43,6 +45,13 @@
 			 */
 			public function getName(): string {
 				return $this->name;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getRealName(): string {
+				return $this->realName;
 			}
 
 			/**

@@ -20,6 +20,13 @@
 			public function getName(): string;
 
 			/**
+			 * shorthand to get schema real name
+			 *
+			 * @return string
+			 */
+			public function getRealName(): string;
+
+			/**
 			 * get target property
 			 *
 			 * @return IProperty
