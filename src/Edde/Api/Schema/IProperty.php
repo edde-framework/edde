@@ -2,8 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Schema;
 
-		use Edde\Api\Node\INode;
-
 		interface IProperty {
 			/**
 			 * get name of this property
@@ -56,16 +54,4 @@
 			 * @return bool
 			 */
 			public function isRequired(): bool;
-
-			/**
-			 * is this property a link?
-			 *
-			 * @return bool
-			 */
-			public function isLink(): bool;
-
-			/**
-			 * @return INode
-			 */
-			public function getLinkNode(): INode;
 		}

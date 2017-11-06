@@ -66,25 +66,6 @@
 				if ($schema === null) {
 					throw new UnknownSchemaException(sprintf('Requested unknown schema [%s].', $name));
 				}
-				foreach ($schema->getPropertyList() as $property) {
-					if ($property->isLink() === false) {
-						continue;
-					}
-					$schema->link($link = new Link(
-						$schema,
-						$target = $this->load(($linkNode = $property->getLinkNode())->getAttribute('schema')),
-						$schema->getProperty($linkNode->getAttribute('source')),
-						$target->getProperty($linkNode->getAttribute('target')))
-					);
-					$target->linkTo($link);
-				}
-				$linkList = $schema->getLinkList();
-				$current = array_shift($linkList);
-				foreach ($linkList as $link) {
-					$link->getTargetSchema()->relationTo(new Relation($schema, $link, $current));
-					$current->getTargetSchema()->relationTo(new Relation($schema, $current, $link));
-					$current = $link;
-				}
 				$this->schemaList[$name] = $schema;
 				if ($schema->hasAlias()) {
 					$this->schemaList[$schema->getAlias()] = $schema;

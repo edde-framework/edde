@@ -3,7 +3,6 @@
 	namespace Edde\Common\Schema;
 
 		use Edde\Api\Node\INode;
-		use Edde\Api\Schema\Exception\LinkException;
 		use Edde\Api\Schema\IProperty;
 		use Edde\Common\Object\Object;
 
@@ -80,24 +79,5 @@
 			 */
 			public function getSanitizer(): ?string {
 				return $this->node->getAttribute('sanitizer');
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function isLink(): bool {
-				return $this->node->hasNode('link');
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getLinkNode(): INode {
-				if ($this->link) {
-					return $this->link;
-				} else if ($this->isLink() === false) {
-					throw new LinkException(sprintf('Property [%s::%s] is not a link.', $this->root->getAttribute('name'), $this->getName()));
-				}
-				return $this->link = $this->node->getNode('link');
 			}
 		}
