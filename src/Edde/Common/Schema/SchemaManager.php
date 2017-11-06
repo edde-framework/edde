@@ -57,16 +57,19 @@
 				if (isset($this->schemas[$name])) {
 					return $this->schemas[$name];
 				}
-				$schema = null;
+				$schemaBuilder = null;
 				foreach ($this->schemaLoaders as $schemaLoader) {
-					if ($schema = $schemaLoader->getSchemaBuilder($name)) {
+					if ($schemaBuilder = $schemaLoader->getSchemaBuilder($name)) {
 						break;
 					}
 				}
-				if ($schema === null) {
+				if ($schemaBuilder === null) {
 					throw new UnknownSchemaException(sprintf('Requested unknown schema [%s].', $name));
 				}
-				$this->schemas[$name] = $schema;
+				$this->schemas[$name] = $schema = $schemaBuilder->getSchema();
+				foreach ($schemaBuilder->getLinks() as $link) {
+					throw new \Exception('not implemented yet!');
+				}
 				if ($schema->hasAlias()) {
 					$this->schemas[$schema->getAlias()] = $schema;
 				}

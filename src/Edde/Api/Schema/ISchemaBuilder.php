@@ -81,4 +81,9 @@
 			 * @return ISchema
 			 */
 			public function getSchema(): ISchema;
+
+			/**
+			 * @return ILinkBuilder[]
+			 */
+			public function getLinks(): array;
 		}
