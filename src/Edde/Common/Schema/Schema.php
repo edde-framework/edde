@@ -8,7 +8,6 @@
 		use Edde\Api\Schema\Exception\UnknownPropertyException;
 		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\IProperty;
-		use Edde\Api\Schema\IRelation;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Common\Object\Object;
 
@@ -37,10 +36,6 @@
 			 * @var ILink[][]
 			 */
 			protected $linkList = [];
-			/**
-			 * @var IRelation[][]
-			 */
-			protected $relationList = [];
 
 			public function __construct(INode $node, array $propertyList) {
 				$this->node = $node;
@@ -146,7 +141,7 @@
 			 * @inheritdoc
 			 */
 			public function linkTo(ILink $link): ISchema {
-				$this->linkToList[null][] = $this->linkToList[$link->getSourceSchema()->getName()][] = $link;
+				$this->linkToList[null][] = $this->linkToList[$link->getFrom()->getSchema()->getName()][] = $link;
 				return $this;
 			}
 
@@ -161,7 +156,7 @@
 			 * @inheritdoc
 			 */
 			public function link(ILink $link): ISchema {
-				$this->linkList[null][] = $this->linkList[$link->getTargetSchema()->getName()][] = $link;
+				$this->linkList[null][] = $this->linkList[$link->getTo()->getSchema()->getName()][] = $link;
 				return $this;
 			}
 
@@ -189,39 +184,5 @@
 					throw new InvalidRelationException(sprintf('There are more links from [%s] to schema [%s]. You have to specify a link.', $this->getName(), $schema));
 				}
 				return $linkList[0];
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function relationTo(IRelation $relation): ISchema {
-				$this->relationList[$relation->getTargetLink()->getTargetSchema()->getName()][] = $relation;
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getRelationList(string $schema): array {
-				return $this->relationList[$schema] ?? [];
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function hasRelation(string $schema): bool {
-				return isset($this->relationList[$schema]) !== false;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getRelation(string $schema): IRelation {
-				if (($count = count($relationList = $this->getRelationList($schema))) === 0) {
-					throw new InvalidRelationException(sprintf('There are no relations from [%s] to schema [%s].', $this->getName(), $schema));
-				} else if ($count !== 1) {
-					throw new InvalidRelationException(sprintf('There are more relations from [%s] to schema [%s]. You have to specify relation schema.', $this->getName(), $schema));
-				}
-				return $relationList[0];
 			}
 		}

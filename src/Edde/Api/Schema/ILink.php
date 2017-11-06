@@ -4,30 +4,24 @@
 
 		interface ILink {
 			/**
-			 * get source schema of the link
+			 * schema of a link contains name of a link and could
+			 * contain link properties
 			 *
 			 * @return ISchema
 			 */
-			public function getSourceSchema(): ISchema;
+			public function getSchema(): ISchema;
 
 			/**
-			 * get target schema of the link
+			 * get a from source schema/property
 			 *
-			 * @return ISchema
+			 * @return ITarget
 			 */
-			public function getTargetSchema(): ISchema;
+			public function getFrom(): ITarget;
 
 			/**
-			 * get source property (source schema -> source property)
+			 * get a target target schema/property
 			 *
-			 * @return IProperty
+			 * @return ITarget
 			 */
-			public function getSourceProperty(): IProperty;
-
-			/**
-			 * get target property (target schema -> target property)
-			 *
-			 * @return IProperty
-			 */
-			public function getTargetProperty(): IProperty;
+			public function getTo(): ITarget;
 		}

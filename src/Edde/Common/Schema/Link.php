@@ -3,60 +3,48 @@
 	namespace Edde\Common\Schema;
 
 		use Edde\Api\Schema\ILink;
-		use Edde\Api\Schema\IProperty;
 		use Edde\Api\Schema\ISchema;
+		use Edde\Api\Schema\ITarget;
 		use Edde\Common\Object\Object;
 
 		class Link extends Object implements ILink {
 			/**
 			 * @var ISchema
 			 */
-			protected $sourceSchema;
+			protected $schema;
 			/**
-			 * @var ISchema
+			 * @var ITarget
 			 */
-			protected $targetSchema;
+			protected $from;
 			/**
-			 * @var IProperty
+			 * @var ITarget
 			 */
-			protected $sourceProperty;
-			/**
-			 * @var IProperty
-			 */
-			protected $targetProperty;
+			protected $to;
 
-			public function __construct(ISchema $sourceSchema, ISchema $targetSchema, IProperty $sourceProperty, IProperty $targetProperty) {
-				$this->sourceSchema = $sourceSchema;
-				$this->targetSchema = $targetSchema;
-				$this->sourceProperty = $sourceProperty;
-				$this->targetProperty = $targetProperty;
+			public function __construct(ISchema $schema, ITarget $from, ITarget $to) {
+				$this->schema = $schema;
+				$this->from = $from;
+				$this->to = $to;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getSourceSchema(): ISchema {
-				return $this->sourceSchema;
+			public function getSchema(): ISchema {
+				return $this->schema;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getTargetSchema(): ISchema {
-				return $this->targetSchema;
+			public function getFrom(): ITarget {
+				return $this->from;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getSourceProperty(): IProperty {
-				return $this->sourceProperty;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getTargetProperty(): IProperty {
-				return $this->targetProperty;
+			public function getTo(): ITarget {
+				return $this->to;
 			}
 		}

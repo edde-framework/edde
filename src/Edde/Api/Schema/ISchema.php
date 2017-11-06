@@ -135,42 +135,4 @@
 			 * @throws InvalidRelationException
 			 */
 			public function getLink(string $schema): ILink;
-
-			/**
-			 * add a m:n relation to another schema through (relation) schema
-			 *
-			 * @param IRelation $relation
-			 *
-			 * @return ISchema
-			 */
-			public function relationTo(IRelation $relation): ISchema;
-
-			/**
-			 * return array of relations to the given schema (the given schema is target schema, not
-			 * relation schema)
-			 *
-			 * @param string $schema
-			 *
-			 * @return IRelation[]
-			 */
-			public function getRelationList(string $schema): array;
-
-			/**
-			 * is there a relation to the given schema? (not a link, m:n relation)
-			 *
-			 * @param string $schema
-			 *
-			 * @return bool
-			 */
-			public function hasRelation(string $schema): bool;
-
-			/**
-			 * return a relation or throw an exception where there are zero or more relations
-			 *
-			 * @param string $schema
-			 *
-			 * @return IRelation
-			 * @throws InvalidRelationException
-			 */
-			public function getRelation(string $schema): IRelation;
 		}
