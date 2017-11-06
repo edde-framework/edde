@@ -67,6 +67,15 @@
 			public function sanitizer(string $name): IPropertyBuilder;
 
 			/**
+			 * set a validator for this property
+			 *
+			 * @param string $name
+			 *
+			 * @return IPropertyBuilder
+			 */
+			public function validator(string $name): IPropertyBuilder;
+
+			/**
 			 * creates and return a property
 			 *
 			 * @return IProperty

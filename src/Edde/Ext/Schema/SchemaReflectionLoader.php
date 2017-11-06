@@ -72,21 +72,27 @@
 									break;
 								case 'generator':
 									if (($generator = $parameter->getDefaultValue()) || is_string($generator) === false) {
-										throw new SchemaReflectionException(sprintf('Parameter [%s::%s($generator)] must have string default value as a generator name.', $schema, $propertyName));
+										throw new SchemaReflectionException(sprintf('Parameter [%s::%s($generator)] must have default a string value as a generator name.', $schema, $propertyName));
 									}
 									$propertyBuilder->generator($generator);
 									break;
 								case 'filter':
 									if (($filter = $parameter->getDefaultValue()) || is_string($filter) === false) {
-										throw new SchemaReflectionException(sprintf('Parameter [%s::%s($filter)] must have string default value as a filter name.', $schema, $propertyName));
+										throw new SchemaReflectionException(sprintf('Parameter [%s::%s($filter)] must have a default string value as a filter name.', $schema, $propertyName));
 									}
 									$propertyBuilder->filter($filter);
 									break;
 								case 'sanitizer':
 									if (($sanitizer = $parameter->getDefaultValue()) || is_string($sanitizer) === false) {
-										throw new SchemaReflectionException(sprintf('Parameter [%s::%s($sanitizer)] must have string default value as a sanitizer name.', $schema, $propertyName));
+										throw new SchemaReflectionException(sprintf('Parameter [%s::%s($sanitizer)] must have a default string  value as a sanitizer name.', $schema, $propertyName));
 									}
 									$propertyBuilder->sanitizer($sanitizer);
+									break;
+								case 'validator':
+									if (($validator = $parameter->getDefaultValue()) || is_string($validator) === false) {
+										throw new SchemaReflectionException(sprintf('Parameter [%s::%s($validator)] must have a default string  value as a validator name.', $schema, $propertyName));
+									}
+									$propertyBuilder->validator($validator);
 									break;
 							}
 						}
@@ -94,10 +100,10 @@
 							$propertyBuilder->type($propertyType = $type->getName());
 							$propertyBuilder->required($type->allowsNull() === false);
 						}
-						if ($reflectionMethod->getNumberOfParameters() === 1 && ($parameter = $reflectionMethod->getParameters()[0]) && ($type = $parameter->getType())) {
-							$propertyBuilder->required($type->allowsNull() === false);
+//						if ($reflectionMethod->getNumberOfParameters() === 1 && ($parameter = $reflectionMethod->getParameters()[0]) && ($type = $parameter->getType())) {
+//							$propertyBuilder->required($type->allowsNull() === false);
 //								$propertyBuilder->link($type->getName(), $parameter->getName());
-						}
+//						}
 						switch ($propertyType) {
 							case 'float':
 							case 'int':
