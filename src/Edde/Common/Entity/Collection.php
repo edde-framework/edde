@@ -6,6 +6,7 @@
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\Inject\EntityManager;
 		use Edde\Api\Query\ISelectQuery;
+		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
@@ -68,6 +69,14 @@
 					$where->or()->value('c.' . $property->getName(), '=', $name);
 				}
 				return $this->getEntity();
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function link(IEntity $entity, ILink $link): ICollection {
+				$this->stream->getQuery()->link($entity, $link);
+				return $this;
 			}
 
 			/**

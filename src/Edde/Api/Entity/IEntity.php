@@ -47,9 +47,9 @@
 			 *
 			 * @param string $schema
 			 *
-			 * @return IEntity
+			 * @return ICollection
 			 */
-			public function link(string $schema): IEntity;
+			public function link(string $schema): ICollection;
 
 			/**
 			 * prepare m:n collection of related entities

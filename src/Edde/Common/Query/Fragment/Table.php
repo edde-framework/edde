@@ -2,9 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Query\Fragment;
 
+		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Query\Exception\QueryException;
 		use Edde\Api\Query\Fragment\ITable;
 		use Edde\Api\Query\Fragment\IWhereGroup;
+		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\ISchema;
 
 		class Table extends AbstractFragment implements ITable {
@@ -92,6 +94,13 @@
 			 */
 			public function hasWhere(): bool {
 				return $this->where !== null;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function link(IEntity $entity, ILink $link): ITable {
+				return $this;
 			}
 
 			/**

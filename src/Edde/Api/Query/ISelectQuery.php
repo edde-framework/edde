@@ -2,9 +2,21 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Query;
 
+		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Query\Fragment\ITable;
+		use Edde\Api\Schema\ILink;
 
 		interface ISelectQuery extends IQuery {
+			/**
+			 * make a link using the given entity
+			 *
+			 * @param IEntity $entity
+			 * @param ILink   $link
+			 *
+			 * @return ISelectQuery
+			 */
+			public function link(IEntity $entity, ILink $link): ISelectQuery;
+
 			/**
 			 * join the given schema the previously joined schema
 			 *

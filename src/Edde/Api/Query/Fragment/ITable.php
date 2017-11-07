@@ -2,6 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Query\Fragment;
 
+		use Edde\Api\Entity\IEntity;
+		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\ISchema;
 
 		interface ITable extends IFragment {
@@ -39,6 +41,14 @@
 			 * @return bool
 			 */
 			public function hasWhere(): bool;
+
+			/**
+			 * @param IEntity $entity
+			 * @param ILink   $link
+			 *
+			 * @return ITable
+			 */
+			public function link(IEntity $entity, ILink $link): ITable;
 
 			/**
 			 * @param string $schema

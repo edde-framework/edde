@@ -64,16 +64,15 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function link(string $schema): IEntity {
-				$link = $this->schema->getLink($schema);
-				return $this->entityManager->collection($schema)->where('c.' . $link->getTo()->getPropertyName(), '=', $this->get($link->getFrom()->getPropertyName()))->getEntity();
+			public function link(string $schema): ICollection {
+				return $this->entityManager->collection($schema)->link($this, $this->schema->getLink($schema));
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function join(string $schema, string $alias): ICollection {
-				return $this->entityManager->collection($this->schema->getName())->join($schema, $alias, $this->toArray());
+				return $this->entityManager->collection($this->schema->getName())->join($schema, $alias, $this);
 			}
 
 			/**
