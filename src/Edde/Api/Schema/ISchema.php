@@ -4,6 +4,7 @@
 
 		use Edde\Api\Config\IConfigurable;
 		use Edde\Api\Schema\Exception\InvalidRelationException;
+		use Edde\Api\Schema\Exception\LinkException;
 		use Edde\Api\Schema\Exception\UnknownPropertyException;
 
 		interface ISchema extends IConfigurable {
@@ -132,7 +133,44 @@
 			 * @param string $schema
 			 *
 			 * @return ILink
-			 * @throws InvalidRelationException
+			 * @throws LinkException
 			 */
 			public function getLink(string $schema): ILink;
+
+			/**
+			 * add a new relation to this schema (relation is jump through another schema to the target)
+			 *
+			 * @param IRelation $relation
+			 *
+			 * @return ISchema
+			 */
+			public function relation(IRelation $relation): ISchema;
+
+			/**
+			 * return all relations or relations to the given schema
+			 *
+			 * @param string|null $schema
+			 *
+			 * @return IRelation[]
+			 */
+			public function getRelations(string $schema = null): array;
+
+			/**
+			 * is there any relation to the given schema?
+			 *
+			 * @param string $schema
+			 *
+			 * @return bool
+			 */
+			public function hasRelation(string $schema): bool;
+
+			/**
+			 * shorthand to get a relation; if there are more relations, exception should be thrown
+			 *
+			 * @param string $schema
+			 *
+			 * @return IRelation
+			 * @throws InvalidRelationException
+			 */
+			public function getRelation(string $schema): IRelation;
 		}

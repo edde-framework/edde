@@ -13,7 +13,6 @@
 			 */
 			public function testRelationSchema() {
 				$fooBarSchema = $this->schemaManager->load(FooBarSchema::class);
-				$barSchema = $this->schemaManager->load(BarSchema::class);
 				self::assertSame($fooBarSchema, $this->schemaManager->load('foo-bar'));
 				self::assertTrue($fooBarSchema->isRelation(), 'relation schema... is not a relation schema!');
 				self::assertCount(1, $linkList = $fooBarSchema->getLinks(FooSchema::class));
@@ -22,10 +21,9 @@
 				self::assertSame(FooSchema::class, ($to = $link->getTo())->getName());
 				self::assertSame('foo', $from->getPropertyName());
 				self::assertSame('guid', $to->getPropertyName());
-				self::assertTrue($fooBarSchema->isRelation(), 'foo bar schema should be automagically relation!');
 				$fooSchema = $this->schemaManager->load(FooSchema::class);
 				self::assertCount(1, $linkList = $fooSchema->getLinkToList(FooBarSchema::class));
-				list($link) = $linkList;;
+				list($link) = $linkList;
 				self::assertSame(FooBarSchema::class, ($from = $link->getFrom())->getName());
 				self::assertSame(FooSchema::class, ($to = $link->getTo())->getName());
 				self::assertSame('foo', $from->getPropertyName());

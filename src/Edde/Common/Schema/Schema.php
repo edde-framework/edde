@@ -3,11 +3,12 @@
 	namespace Edde\Common\Schema;
 
 		use Edde\Api\Node\INode;
-		use Edde\Api\Schema\Exception\InvalidRelationException;
+		use Edde\Api\Schema\Exception\LinkException;
 		use Edde\Api\Schema\Exception\NoPrimaryPropertyException;
 		use Edde\Api\Schema\Exception\UnknownPropertyException;
 		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\IProperty;
+		use Edde\Api\Schema\IRelation;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Common\Object\Object;
 
@@ -36,6 +37,10 @@
 			 * @var ILink[][]
 			 */
 			protected $links = [];
+			/**
+			 * @var IRelation[][]
+			 */
+			protected $relations = [];
 
 			public function __construct(INode $node, array $propertyList) {
 				$this->node = $node;
@@ -178,11 +183,44 @@
 			 * @inheritdoc
 			 */
 			public function getLink(string $schema): ILink {
-				if (($count = count($linkList = $this->getLinks($schema))) === 0) {
-					throw new InvalidRelationException(sprintf('There are no links from [%s] to schema [%s].', $this->getName(), $schema));
+				if (($count = count($links = $this->getLinks($schema))) === 0) {
+					throw new LinkException(sprintf('There are no links from [%s] to schema [%s].', $this->getName(), $schema));
 				} else if ($count !== 1) {
-					throw new InvalidRelationException(sprintf('There are more links from [%s] to schema [%s]. You have to specify a link.', $this->getName(), $schema));
+					throw new LinkException(sprintf('There are more links from [%s] to schema [%s]. You have to specify a link.', $this->getName(), $schema));
 				}
-				return $linkList[0];
+				return $links[0];
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function relation(IRelation $relation): ISchema {
+//				$this->links[null][] = $this->links[$link->getTo()->getName()][] = $link;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getRelations(string $schema = null): array {
+				return $this->relations[$schema] ?? [];
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function hasRelation(string $schema): bool {
+				return isset($this->relation[$schema]) !== false;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getRelation(string $schema): IRelation {
+				if (($count = count($relations = $this->getRelations($schema))) === 0) {
+					throw new LinkException(sprintf('There are no relations from [%s] to schema [%s].', $this->getName(), $schema));
+				} else if ($count !== 1) {
+					throw new LinkException(sprintf('There are more relations from [%s] to schema [%s]. You have to specify a relation.', $this->getName(), $schema));
+				}
+				return $relations[0];
 			}
 		}

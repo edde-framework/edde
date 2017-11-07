@@ -89,7 +89,7 @@
 			 * @inheritdoc
 			 */
 			public function link(ILinkBuilder $linkBuilder): ISchemaBuilder {
-				$this->linkBuilders[$linkBuilder->getName()] = $linkBuilder;
+				$this->linkBuilders[] = $linkBuilder;
 				if ($this->node->getAttribute('is-relation', false) && count($this->linkBuilders) > 2) {
 					throw new InvalidRelationException(sprintf('Relation schema [%s] must have exactly two links; if you need more links, remove "relation" flag from the schema.', $this->node->getAttribute('name')));
 				}
