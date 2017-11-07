@@ -11,6 +11,7 @@
 		use Edde\Api\Storage\Exception\IntegrityException;
 		use Edde\Api\Storage\Exception\NullValueException;
 		use Edde\Api\Storage\Exception\StorageException;
+		use Edde\Api\Storage\Exception\UnknownTableException;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Query\CreateSchemaQuery;
 		use Edde\Common\Query\SelectQuery;
@@ -190,6 +191,18 @@
 				}
 				self::assertArrayHasKey('name', $source);
 				self::assertSame('the name of this epic Poo!', $source['name']);
+			}
+
+			/**
+			 * @throws EntityNotFoundException
+			 * @throws UnknownSchemaException
+			 * @throws UnknownTableException
+			 */
+			public function testSelectQuery() {
+				$collection = $this->entityManager->collection(FooSchema::alias);
+				$collection->query($query = new SelectQuery($this->schemaManager->load(FooSchema::class), 'f'));
+				$table = $query->getTable();
+				$entity = $collection->getEntity();
 			}
 
 			public function testUnlink() {
