@@ -156,6 +156,18 @@
 				}
 				$cypher = '';
 				$parameterList = [];
+				foreach ($transaction->getEntityLinks() as $entityLink) {
+					$link = $entityLink->getLink();
+					$primary = $entityLink->getFrom()->getPrimary();
+					$cypher .= "MATCH (:" . $this->delimite($link->getFrom()->getRealName()) . " {" . $this->delimite($primary->getName()) . ": \$a})-";
+					$cypher .= '[r:' . ($entityLink->getLink()->getName()) . ']';
+					$cypher .= "->(:" . $this->delimite($link->getTo()->getRealName()) . ') ';
+					$cypher .= 'DELETE r';
+					$parameterList = ['a' => $primary->get()];
+					$this->native($cypher, $parameterList);
+				}
+				$cypher = '';
+				$parameterList = [];
 				foreach ($transaction->getEntities() as $entity) {
 					if ($entity->isDirty() === false) {
 						continue;
