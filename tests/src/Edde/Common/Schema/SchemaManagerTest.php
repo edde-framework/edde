@@ -16,7 +16,7 @@
 				$barSchema = $this->schemaManager->load(BarSchema::class);
 				self::assertSame($fooBarSchema, $this->schemaManager->load('foo-bar'));
 				self::assertTrue($fooBarSchema->isRelation(), 'relation schema... is not a relation schema!');
-				self::assertCount(1, $linkList = $fooBarSchema->getLinkList(FooSchema::class));
+				self::assertCount(1, $linkList = $fooBarSchema->getLinks(FooSchema::class));
 				list($link) = $linkList;
 				self::assertSame(FooBarSchema::class, ($from = $link->getFrom())->getName());
 				self::assertSame(FooSchema::class, ($to = $link->getTo())->getName());

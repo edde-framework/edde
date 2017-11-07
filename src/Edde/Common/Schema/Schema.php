@@ -35,7 +35,7 @@
 			/**
 			 * @var ILink[][]
 			 */
-			protected $linkList = [];
+			protected $links = [];
 
 			public function __construct(INode $node, array $propertyList) {
 				$this->node = $node;
@@ -156,29 +156,29 @@
 			 * @inheritdoc
 			 */
 			public function link(ILink $link): ISchema {
-				$this->linkList[null][] = $this->linkList[$link->getTo()->getName()][] = $link;
+				$this->links[null][] = $this->links[$link->getTo()->getName()][] = $link;
 				return $this;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getLinkList(string $schema = null): array {
-				return $this->linkList[$schema] ?? [];
+			public function getLinks(string $schema = null): array {
+				return $this->links[$schema] ?? [];
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function hasLink(string $schema): bool {
-				return isset($this->linkList[$schema]) !== false;
+				return isset($this->links[$schema]) !== false;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function getLink(string $schema): ILink {
-				if (($count = count($linkList = $this->getLinkList($schema))) === 0) {
+				if (($count = count($linkList = $this->getLinks($schema))) === 0) {
 					throw new InvalidRelationException(sprintf('There are no links from [%s] to schema [%s].', $this->getName(), $schema));
 				} else if ($count !== 1) {
 					throw new InvalidRelationException(sprintf('There are more links from [%s] to schema [%s]. You have to specify a link.', $this->getName(), $schema));

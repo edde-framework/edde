@@ -106,7 +106,7 @@
 					$columnList[] = "CONSTRAINT " . $this->delimite(sha1($table . '_primary_' . $primary = implode(', ', $primaryList))) . ' PRIMARY KEY (' . $primary . ')';
 				}
 				$sql .= implode(",\n\t", $columnList);
-				foreach ($schema->getLinkList() as $link) {
+				foreach ($schema->getLinks() as $link) {
 					$sql .= ",\n\tFOREIGN KEY (" . $this->delimite($link->getSourceProperty()->getName()) . ') REFERENCES ' . $this->delimite($link->getTargetSchema()->getRealName()) . '(' . $this->delimite($link->getTargetProperty()->getName()) . ') ON DELETE RESTRICT ON UPDATE RESTRICT';
 				}
 				$this->native($sql . "\n)");

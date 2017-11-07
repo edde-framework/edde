@@ -115,7 +115,7 @@
 			 *
 			 * @return ILink[]
 			 */
-			public function getLinkList(string $schema = null): array;
+			public function getLinks(string $schema = null): array;
 
 			/**
 			 * is there a link to the given schema? (could be more than one link)
