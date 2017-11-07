@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Query\Fragment;
 
-		use Edde\Api\Query\Exception\QueryException;
 		use Edde\Api\Query\Fragment\ITable;
 		use Edde\Api\Query\Fragment\IWhereGroup;
 		use Edde\Api\Schema\ISchema;
@@ -63,9 +62,9 @@
 			 */
 			public function select(string $alias = null): ITable {
 				$alias = $alias ?: $this->current;
-				if (isset($this->joins[$alias]) === false && isset($this->link[$alias]) === false && $this->alias !== $alias) {
-					throw new QueryException(sprintf('Cannot select unknown alias [%s]; choose select alias [%s] or one of joined aliases [%s].', $alias, $this->getAlias(), implode(', ', array_keys($this->joins))));
-				}
+//				if (isset($this->joins[$alias]) === false && isset($this->link) && $this->link[1] !== $alias && $this->alias !== $alias) {
+//					throw new QueryException(sprintf('Cannot select unknown alias [%s]; choose select alias [%s] or one of joined aliases [%s].', $alias, $this->getAlias(), implode(', ', array_keys($this->joins))));
+//				}
 				$this->select = $alias;
 				return $this;
 			}
@@ -102,15 +101,8 @@
 			 * @inheritdoc
 			 */
 			public function link(string $schema, string $alias, array $source): ITable {
-				$this->link[$this->current = $alias] = [$schema, $alias, $source];
+				$this->link = [$schema, $this->current = $alias, $source];
 				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function hasLink(): bool {
-				return $this->link !== null;
 			}
 
 			/**

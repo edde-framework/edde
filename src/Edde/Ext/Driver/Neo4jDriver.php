@@ -197,18 +197,20 @@
 				$return = $this->delimite($table->getSelect());
 				$cypher .= '(' . ($alias = $this->delimite($current = $table->getAlias())) . ':' . $this->delimite($table->getSchema()->getRealName());
 				$schema = $table->getSchema();
-				if ($isLink = $table->hasLink()) {
-					list($name, $alias, $source) = $table->getLink();
-					$link = $schema->getLink($name);
+				if ($linkSource = $table->getLink()) {
+					$link = $schema->getLink($linkSource[0]);
+					$primary = $schema->getPrimary();
+					$cypher .= ' {' . ($this->delimite($name = $primary->getName())) . ': $' . $this->delimite($parameterId = sha1(random_bytes(42))) . '}';
+					$parameterList[$parameterId] = $linkSource[2][$name];
 				}
 				$cypher .= ')';
 				foreach ($table->getJoins() as $name => $relation) {
 					$relation = $schema->getRelation($relation);
 					$cypher .= '-[' . $this->delimite($current . '\r') . ':' . $this->delimite($relation->getSchema()->getRealName()) . ']-(' . ($return = $this->delimite($current = $name)) . ':' . $this->delimite(($schema = $relation->getTargetLink()->getTargetSchema())->getRealName()) . ')';
 				}
-				if ($isLink) {
+				if (isset($link)) {
 					$cypher .= '-[:' . $this->delimite($link->getName()) . ']';
-					$cypher .= '->(' . $this->delimite($alias) . ':' . $this->delimite($link->getTo()->getRealName()) . ')';
+					$cypher .= '->(' . $this->delimite($linkSource[1]) . ':' . $this->delimite($link->getTo()->getRealName()) . ')';
 				}
 				if ($table->hasWhere()) {
 					$cypher .= "\nWHERE" . ($query = $this->fragmentWhereGroup($table->where()))->getQuery() . "\n";

@@ -50,14 +50,9 @@
 			public function link(string $schema, string $alias, array $source): ITable;
 
 			/**
-			 * @return bool
-			 */
-			public function hasLink(): bool;
-
-			/**
 			 * @return array
 			 */
-			public function getLink(): array;
+			public function getLink(): ?array;
 
 			/**
 			 * @param string $schema
