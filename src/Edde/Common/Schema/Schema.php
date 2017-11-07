@@ -195,7 +195,8 @@
 			 * @inheritdoc
 			 */
 			public function relation(IRelation $relation): ISchema {
-//				$this->links[null][] = $this->links[$link->getTo()->getName()][] = $link;
+				$this->relations[null][] = $this->relations[$relation->getTo()->getTo()->getName()][] = $relation;
+				return $this;
 			}
 
 			/**

@@ -73,7 +73,7 @@
 				}
 				if ($schema->isRelation()) {
 					list($from, $to) = $schema->getLinks();
-					$from->getTo()->getSchema()->relation($relation = new Relation($schema, $from->getFrom(), $to->getTo()));
+					$from->getTo()->getSchema()->relation($relation = new Relation($schema, $from, $to));
 					$to->getTo()->getSchema()->relation($relation);
 				}
 				if ($schema->hasAlias()) {
