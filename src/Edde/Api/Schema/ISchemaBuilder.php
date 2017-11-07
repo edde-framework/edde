@@ -85,5 +85,5 @@
 			/**
 			 * @return ILinkBuilder[]
 			 */
-			public function getLinks(): array;
+			public function getLinkBuilders(): array;
 		}

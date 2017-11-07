@@ -4,6 +4,13 @@
 
 		interface ILink {
 			/**
+			 * return name of a link
+			 *
+			 * @return string
+			 */
+			public function getName(): string;
+
+			/**
 			 * get a from source schema/property
 			 *
 			 * @return ITarget

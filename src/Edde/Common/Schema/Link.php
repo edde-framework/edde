@@ -8,6 +8,10 @@
 
 		class Link extends Object implements ILink {
 			/**
+			 * @var string
+			 */
+			protected $name;
+			/**
 			 * @var ITarget
 			 */
 			protected $from;
@@ -16,9 +20,17 @@
 			 */
 			protected $to;
 
-			public function __construct(ITarget $from, ITarget $to) {
+			public function __construct(string $name, ITarget $from, ITarget $to) {
+				$this->name = $name;
 				$this->from = $from;
 				$this->to = $to;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getName(): string {
+				return $this->name;
 			}
 
 			/**

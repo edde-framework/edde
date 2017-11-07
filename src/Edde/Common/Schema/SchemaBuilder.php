@@ -109,4 +109,11 @@
 				}
 				return $this->schema = new Schema($this->node, $propertyList);
 			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getLinkBuilders(): array {
+				return $this->linkBuilders;
+			}
 		}

@@ -67,8 +67,9 @@
 					throw new UnknownSchemaException(sprintf('Requested unknown schema [%s].', $name));
 				}
 				$this->schemas[$name] = $schema = $schemaBuilder->getSchema();
-				foreach ($schemaBuilder->getLinks() as $link) {
-					throw new \Exception('not implemented yet!');
+				foreach ($schemaBuilder->getLinkBuilders() as $link) {
+					$schema->link(new Link($name = $link->getName(), $from = new Target($schema, $schema->getProperty($link->getSourceProperty())), $to = new Target($target = $this->load($link->getTargetSchema()), $target->getProperty($link->getTargetProperty()))));
+					$target->linkTo(new Link($name, $from, $to));
 				}
 				if ($schema->hasAlias()) {
 					$this->schemas[$schema->getAlias()] = $schema;

@@ -13,6 +13,7 @@
 			 */
 			public function testRelationSchema() {
 				$fooBarSchema = $this->schemaManager->load(FooBarSchema::class);
+				$barSchema = $this->schemaManager->load(BarSchema::class);
 				self::assertSame($fooBarSchema, $this->schemaManager->load('foo-bar'));
 				self::assertTrue($fooBarSchema->isRelation(), 'relation schema... is not a relation schema!');
 				self::assertCount(1, $linkList = $fooBarSchema->getLinkList(FooSchema::class));
