@@ -155,7 +155,6 @@
 					return;
 				}
 				$cypher = '';
-				$parameterList = [];
 				foreach ($transaction->getEntityLinks() as $entityLink) {
 					$link = $entityLink->getLink();
 					$primary = $entityLink->getFrom()->getPrimary();
@@ -163,8 +162,7 @@
 					$cypher .= '[r:' . ($entityLink->getLink()->getName()) . ']';
 					$cypher .= "->(:" . $this->delimite($link->getTo()->getRealName()) . ') ';
 					$cypher .= 'DELETE r';
-					$parameterList = ['a' => $primary->get()];
-					$this->native($cypher, $parameterList);
+					$this->native($cypher, ['a' => $primary->get()]);
 				}
 				$cypher = '';
 				$parameterList = [];
@@ -181,6 +179,9 @@
 					$parameterId = $this->delimite($parameterId);
 					$cypher .= 'MERGE (' . ($id = $this->delimite($value)) . ':' . $this->delimite($schema->getRealName()) . ' {' . $this->delimite($primary->getName()) . ': $' . $parameterId . '.primary})';
 					$cypher .= ' SET ' . $id . ' = $' . $parameterId . ".set\n";
+				}
+				foreach ($transaction->getEntityLinks() as $entityLink) {
+					$cypher .= 'MERGE (' . $this->delimite($entityLink->getFrom()->getPrimary()->get()) . ')-[:' . $this->delimite($entityLink->getLink()->getName()) . ']->(' . $this->delimite($entityLink->getTo()->getPrimary()->get()) . ")\n";
 				}
 				$this->native($cypher, $parameterList);
 			}

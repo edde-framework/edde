@@ -175,7 +175,11 @@
 					'name'  => 'the name of this epic Poo!',
 					'label' => 'smells like Hell',
 				]);
+				$anotherPoo = $this->entityManager->create(PooSchema::class, [
+					'name' => 'this is another poo!',
+				]);
 				$foo->link($poo);
+				$foo->link($anotherPoo);
 				$this->transaction->execute();
 			}
 
