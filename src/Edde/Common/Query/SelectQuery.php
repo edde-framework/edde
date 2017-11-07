@@ -2,10 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Query;
 
-		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Query\Fragment\ITable;
 		use Edde\Api\Query\ISelectQuery;
-		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Common\Query\Fragment\Table;
 
@@ -27,8 +25,8 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function link(IEntity $entity, ILink $link): ISelectQuery {
-				$this->table->link($entity, $link);
+			public function link(string $schema, string $alias, array $source): ISelectQuery {
+				$this->table->link($schema, $alias, $source);
 				return $this;
 			}
 

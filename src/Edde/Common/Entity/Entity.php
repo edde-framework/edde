@@ -57,22 +57,23 @@
 			 * @inheritdoc
 			 */
 			public function linkTo(IEntity $entity): IEntity {
-				$this->transaction->link($this, $entity, $this->schema->getLink($entity->getSchema()->getName()));
+				$this->transaction->link($this, $entity, $link = $this->schema->getLink($entity->getSchema()->getName()));
+				$this->set($link->getFrom()->getPropertyName(), $entity->get($link->getTo()->getPropertyName()));
 				return $this;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function link(string $schema): ICollection {
-				return $this->entityManager->collection($schema)->link($this, $this->schema->getLink($schema));
+			public function link(string $schema, string $alias): ICollection {
+				return $this->entityManager->collection($this->schema->getName())->link($schema, $alias, $this->toArray());
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function join(string $schema, string $alias): ICollection {
-				return $this->entityManager->collection($this->schema->getName())->join($schema, $alias, $this);
+				return $this->entityManager->collection($this->schema->getName())->join($schema, $alias, $this->toArray());
 			}
 
 			/**

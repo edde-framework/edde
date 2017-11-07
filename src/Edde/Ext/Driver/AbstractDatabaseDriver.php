@@ -173,7 +173,7 @@
 				$select = $this->delimite($table->getSelect()) . '.*';
 				$schema = $table->getSchema();
 				$from = $this->delimite($table->getSchema()->getRealName()) . ' ' . $alias;
-				foreach ($table->getJoinList() as $name => $relation) {
+				foreach ($table->getJoins() as $name => $relation) {
 					$relation = $schema->getRelation($relation);
 					$sourceLink = $relation->getSourceLink();
 					$targetLink = $relation->getTargetLink();
@@ -192,7 +192,7 @@
 				}
 				if ($table->hasOrder()) {
 					$orderList = [];
-					foreach ($table->getOrderList() as $column => $asc) {
+					foreach ($table->getOrders() as $column => $asc) {
 						$name = $alias;
 						if (($dot = strpos($column, '.')) !== false) {
 							$name = $this->delimite(substr($column, 0, $dot)) . '.' . $this->delimite(substr($column, $dot + 1));

@@ -3,7 +3,6 @@
 	namespace Edde\Api\Entity;
 
 		use Edde\Api\Query\ISelectQuery;
-		use Edde\Api\Schema\ILink;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
 		use Edde\Api\Storage\Exception\UnknownTableException;
 		use IteratorAggregate;
@@ -55,12 +54,13 @@
 			/**
 			 * make a link to the given entity (foreign key or relation to)
 			 *
-			 * @param IEntity $entity
-			 * @param ILink   $link
+			 * @param string $schema
+			 * @param string $alias
+			 * @param array  $source
 			 *
 			 * @return ICollection
 			 */
-			public function link(IEntity $entity, ILink $link): ICollection;
+			public function link(string $schema, string $alias, array $source): ICollection;
 
 			/**
 			 * join the given target schema to the current one

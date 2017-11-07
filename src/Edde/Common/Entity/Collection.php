@@ -6,7 +6,6 @@
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\Inject\EntityManager;
 		use Edde\Api\Query\ISelectQuery;
-		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
@@ -74,8 +73,8 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function link(IEntity $entity, ILink $link): ICollection {
-				$this->stream->getQuery()->link($entity, $link);
+			public function link(string $schema, string $alias, array $source): ICollection {
+				$this->stream->getQuery()->link($schema, $alias, $source)->select();
 				return $this;
 			}
 
@@ -86,10 +85,10 @@
 				/**
 				 * change target schema of this collection
 				 */
-				$this->schema = ($relation = $this->schema->getRelation($target))->getTargetLink()->getTargetSchema();
+				$this->schema = ($link = ($relation = $this->schema->getRelation($target))->getTo())->getTo()->getSchema();
 				($query = $this->stream->getQuery())->join($target, $alias);
 				if ($on) {
-					$query->where($query->getTable()->getAlias() . '.' . ($name = $relation->getTargetLink()->getTargetProperty()->getName()), '=', $on[$name]);
+					$query->where($query->getTable()->getAlias() . '.' . ($name = $link->getTo()->getPropertyName()), '=', $on[$name]);
 				}
 				return $this;
 			}

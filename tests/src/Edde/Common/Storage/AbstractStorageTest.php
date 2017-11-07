@@ -11,6 +11,7 @@
 		use Edde\Api\Storage\Exception\IntegrityException;
 		use Edde\Api\Storage\Exception\NullValueException;
 		use Edde\Api\Storage\Exception\StorageException;
+		use Edde\Api\Storage\Exception\UnknownTableException;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Query\CreateSchemaQuery;
 		use Edde\Common\Query\SelectQuery;
@@ -166,6 +167,10 @@
 				self::assertFalse($array['question']);
 			}
 
+			/**
+			 * @throws EntityNotFoundException
+			 * @throws UnknownTableException
+			 */
 			public function testLink() {
 				$foo = $this->entityManager->create(FooSchema::class, [
 					'name'  => 'foo with poo',
@@ -182,7 +187,7 @@
 				$foo->linkTo($anotherPoo);
 				$foo->linkTo($poo);
 				$this->transaction->execute();
-				$poo = $foo->link(PooSchema::class);
+				$poo = $foo->link(PooSchema::class, 'p')->getEntity();
 				self::assertSame('the name of this epic Poo!', $poo->get('name'));
 			}
 

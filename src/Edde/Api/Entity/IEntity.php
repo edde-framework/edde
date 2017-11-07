@@ -46,10 +46,11 @@
 			 * get an entity by the given schema
 			 *
 			 * @param string $schema
+			 * @param string $alias
 			 *
 			 * @return ICollection
 			 */
-			public function link(string $schema): ICollection;
+			public function link(string $schema, string $alias): ICollection;
 
 			/**
 			 * prepare m:n collection of related entities

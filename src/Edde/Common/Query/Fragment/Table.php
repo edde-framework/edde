@@ -2,11 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Query\Fragment;
 
-		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Query\Exception\QueryException;
 		use Edde\Api\Query\Fragment\ITable;
 		use Edde\Api\Query\Fragment\IWhereGroup;
-		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\ISchema;
 
 		class Table extends AbstractFragment implements ITable {
@@ -41,15 +39,19 @@
 			 */
 			protected $where;
 			/**
+			 * @var array
+			 */
+			protected $link;
+			/**
 			 * list of joins for this table
 			 *
 			 * @var string[]
 			 */
-			protected $joinList = [];
+			protected $joins = [];
 			/**
 			 * @var string[]
 			 */
-			protected $orderList = [];
+			protected $orders = [];
 
 			public function __construct(ISchema $schema, string $alias) {
 				$this->schema = $schema;
@@ -61,8 +63,8 @@
 			 */
 			public function select(string $alias = null): ITable {
 				$alias = $alias ?: $this->current;
-				if (isset($this->joinList[$alias]) === false && $this->alias !== $alias) {
-					throw new QueryException(sprintf('Cannot select unknown alias [%s]; choose select alias [%s] or one of joined aliases [%s].', $alias, $this->table->getAlias(), implode(', ', array_keys($this->joinList))));
+				if (isset($this->joins[$alias]) === false && isset($this->link[$alias]) === false && $this->alias !== $alias) {
+					throw new QueryException(sprintf('Cannot select unknown alias [%s]; choose select alias [%s] or one of joined aliases [%s].', $alias, $this->getAlias(), implode(', ', array_keys($this->joins))));
 				}
 				$this->select = $alias;
 				return $this;
@@ -99,23 +101,38 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function link(IEntity $entity, ILink $link): ITable {
+			public function link(string $schema, string $alias, array $source): ITable {
+				$this->link[$this->current = $alias] = [$schema, $alias, $source];
 				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function hasLink(): bool {
+				return $this->link !== null;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getLink(): array {
+				return $this->link;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function join(string $schema, string $alias): ITable {
-				$this->joinList[$this->current = $alias] = $schema;
+				$this->joins[$this->current = $alias] = $schema;
 				return $this;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getJoinList(): array {
-				return $this->joinList;
+			public function getJoins(): array {
+				return $this->joins;
 			}
 
 			/**
@@ -132,7 +149,7 @@
 			 * @inheritdoc
 			 */
 			public function order(string $name, bool $asc = true): ITable {
-				$this->orderList[$name] = $asc;
+				$this->orders[$name] = $asc;
 				return $this;
 			}
 
@@ -140,13 +157,13 @@
 			 * @inheritdoc
 			 */
 			public function hasOrder(): bool {
-				return empty($this->orderList) === false;
+				return empty($this->orders) === false;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getOrderList(): array {
-				return $this->orderList;
+			public function getOrders(): array {
+				return $this->orders;
 			}
 		}

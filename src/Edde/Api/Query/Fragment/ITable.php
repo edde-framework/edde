@@ -2,8 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Query\Fragment;
 
-		use Edde\Api\Entity\IEntity;
-		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\ISchema;
 
 		interface ITable extends IFragment {
@@ -43,12 +41,23 @@
 			public function hasWhere(): bool;
 
 			/**
-			 * @param IEntity $entity
-			 * @param ILink   $link
+			 * @param string $schema
+			 * @param string $alias
+			 * @param array  $source
 			 *
 			 * @return ITable
 			 */
-			public function link(IEntity $entity, ILink $link): ITable;
+			public function link(string $schema, string $alias, array $source): ITable;
+
+			/**
+			 * @return bool
+			 */
+			public function hasLink(): bool;
+
+			/**
+			 * @return array
+			 */
+			public function getLink(): array;
 
 			/**
 			 * @param string $schema
@@ -63,7 +72,7 @@
 			 *
 			 * @return string[]
 			 */
-			public function getJoinList(): array;
+			public function getJoins(): array;
 
 			/**
 			 * get the where fragment for this query
@@ -90,5 +99,5 @@
 			 *
 			 * @return array
 			 */
-			public function getOrderList(): array;
+			public function getOrders(): array;
 		}

@@ -192,15 +192,24 @@
 			protected function executeSelectQuery(ISelectQuery $selectQuery) {
 				$cypher = "MATCH\n\t";
 				$matchList = [];
+				$parameterList = [];
 				$table = $selectQuery->getTable();
 				$return = $this->delimite($table->getSelect());
-				$cypher .= '(' . ($alias = $this->delimite($current = $table->getAlias())) . ':' . $this->delimite($table->getSchema()->getRealName()) . ')';
+				$cypher .= '(' . ($alias = $this->delimite($current = $table->getAlias())) . ':' . $this->delimite($table->getSchema()->getRealName());
 				$schema = $table->getSchema();
-				foreach ($table->getJoinList() as $name => $relation) {
+				if ($isLink = $table->hasLink()) {
+					list($name, $alias, $source) = $table->getLink();
+					$link = $schema->getLink($name);
+				}
+				$cypher .= ')';
+				foreach ($table->getJoins() as $name => $relation) {
 					$relation = $schema->getRelation($relation);
 					$cypher .= '-[' . $this->delimite($current . '\r') . ':' . $this->delimite($relation->getSchema()->getRealName()) . ']-(' . ($return = $this->delimite($current = $name)) . ':' . $this->delimite(($schema = $relation->getTargetLink()->getTargetSchema())->getRealName()) . ')';
 				}
-				$parameterList = [];
+				if ($isLink) {
+					$cypher .= '-[:' . $this->delimite($link->getName()) . ']';
+					$cypher .= '->(' . $this->delimite($alias) . ':' . $this->delimite($link->getTo()->getRealName()) . ')';
+				}
 				if ($table->hasWhere()) {
 					$cypher .= "\nWHERE" . ($query = $this->fragmentWhereGroup($table->where()))->getQuery() . "\n";
 					$parameterList = $query->getParameterList();
@@ -208,7 +217,7 @@
 				$cypher .= implode(",\n\t", $matchList) . "\nRETURN\n\t" . $return;
 				if ($table->hasOrder()) {
 					$orderList = [];
-					foreach ($table->getOrderList() as $column => $asc) {
+					foreach ($table->getOrders() as $column => $asc) {
 						$name = $alias;
 						if (($dot = strpos($column, '.')) !== false) {
 							$name = $this->delimite(substr($column, 0, $dot)) . '.' . $this->delimite(substr($column, $dot + 1));
