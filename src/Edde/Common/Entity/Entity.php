@@ -56,9 +56,17 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function link(IEntity $entity): IEntity {
+			public function linkTo(IEntity $entity): IEntity {
 				$this->transaction->link($this, $entity, $this->schema->getLink($entity->getSchema()->getName()));
 				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function link(string $schema): IEntity {
+				$link = $this->schema->getLink($schema);
+				return $this->entityManager->collection($schema)->where('c.' . $link->getTo()->getPropertyName(), '=', $this->get($link->getFrom()->getPropertyName()))->getEntity();
 			}
 
 			/**

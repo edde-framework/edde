@@ -178,9 +178,12 @@
 				$anotherPoo = $this->entityManager->create(PooSchema::class, [
 					'name' => 'this is another poo!',
 				]);
-				$foo->link($poo);
-				$foo->link($anotherPoo);
+				$foo->linkTo($poo);
+				$foo->linkTo($anotherPoo);
+				$foo->linkTo($poo);
 				$this->transaction->execute();
+				$poo = $foo->link(PooSchema::class);
+				self::assertSame('the name of this epic Poo!', $poo->get('name'));
 			}
 
 			public function testUnlink() {
@@ -350,7 +353,7 @@
 				$subBaBar = $this->entityManager->create(SubBarSchema::class, [
 					'label' => 'another-label',
 				]);
-				$bar->link($subBar);
+				$bar->linkTo($subBar);
 				$bar->save();
 				self::assertTrue($bar->exists());
 				self::assertTrue($subBar->exists());
@@ -358,7 +361,7 @@
 				self::assertSame('simple-relation', $bar->get('name'));
 				$subBar = $bar->entity('subBar');
 				self::assertSame('some-label', $subBar->get('label'));
-				$bar->link($subBaBar);
+				$bar->linkTo($subBaBar);
 				$bar->save();
 				$subBar = $bar->entity('subBar');
 				self::assertSame('another-label', $subBar->get('label'));
@@ -391,11 +394,11 @@
 					$subBar2 = $this->entityManager->create(SubBarSchema::class, [
 						'label' => 'sub-bar 2 #' . $i,
 					]);
-					$bar->link($subBar);
+					$bar->linkTo($subBar);
 					$foo->attach($bar);
 					$foo->attach($bar2);
 					$foo->save();
-					$bar->link($subBar2);
+					$bar->linkTo($subBar2);
 					$bar->save();
 				}
 				$this->storage->commit();

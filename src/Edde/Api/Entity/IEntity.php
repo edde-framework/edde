@@ -40,7 +40,16 @@
 			 *
 			 * @return IEntity $this
 			 */
-			public function link(IEntity $entity): IEntity;
+			public function linkTo(IEntity $entity): IEntity;
+
+			/**
+			 * get an entity by the given schema
+			 *
+			 * @param string $schema
+			 *
+			 * @return IEntity
+			 */
+			public function link(string $schema): IEntity;
 
 			/**
 			 * prepare m:n collection of related entities
