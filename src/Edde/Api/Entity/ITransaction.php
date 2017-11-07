@@ -2,6 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Entity;
 
+		use Edde\Api\Schema\ILink;
+
 		interface ITransaction {
 			/**
 			 * add an entity to the transaction
@@ -18,17 +20,18 @@
 			 *
 			 * @return IEntity[]
 			 */
-			public function getEntityList(): array;
+			public function getEntities(): array;
 
 			/**
 			 * make a link between the source and target entity
 			 *
 			 * @param IEntity $from
 			 * @param IEntity $to
+			 * @param ILink   $link
 			 *
 			 * @return ITransaction
 			 */
-			public function link(IEntity $from, IEntity $to): ITransaction;
+			public function link(IEntity $from, IEntity $to, ILink $link): ITransaction;
 
 			/**
 			 * unlink the given entity from the source entity (remove a relation)
@@ -39,6 +42,11 @@
 			 * @return ITransaction
 			 */
 			public function unlink(IEntity $from, IEntity $to): ITransaction;
+
+			/**
+			 * @return IEntityLink[]
+			 */
+			public function getEntityLinks(): array;
 
 			/**
 			 * is there something to do?

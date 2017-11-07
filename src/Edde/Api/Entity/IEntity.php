@@ -34,6 +34,15 @@
 			public function filter(array $source): IEntity;
 
 			/**
+			 * make a link from $this to the $entity (basically 1:N relation)
+			 *
+			 * @param IEntity $entity
+			 *
+			 * @return IEntity $this
+			 */
+			public function link(IEntity $entity): IEntity;
+
+			/**
 			 * prepare m:n collection of related entities
 			 *
 			 * @param string $schema

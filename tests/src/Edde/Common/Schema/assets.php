@@ -35,15 +35,14 @@
 			 * ...and optional string label
 			 */
 			public function label(): ?string;
-		}
 
-		/**
-		 * Schema to test 1:n relations.
-		 */
-		interface SubBarSchema extends GuidSchema {
-			const alias = 'sub-bar';
-
-			public function label(): string;
+			/**
+			 * define a 1:n relation from this to PooSchema; poo property
+			 * is connected to guid property of PooSchema
+			 *
+			 * the relation is optional as there is ?string
+			 */
+			public function poo(PooSchema $guid): ?string;
 		}
 
 		interface BarSchema extends GuidSchema {
@@ -52,12 +51,6 @@
 			public function name($unique): string;
 
 			public function label(): ?string;
-
-			/**
-			 * define a 1:n relation from Bar to SubBarSchema; subBar property
-			 * is connected to guid property of SubBarSchema
-			 */
-			public function subBar(SubBarSchema $guid): ?string;
 		}
 
 		interface PooSchema extends GuidSchema {

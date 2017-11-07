@@ -21,7 +21,6 @@
 		use Edde\Common\Schema\PooSchema;
 		use Edde\Common\Schema\RoleSchema;
 		use Edde\Common\Schema\SimpleSchema;
-		use Edde\Common\Schema\SubBarSchema;
 		use Edde\Common\Schema\UserRoleSchema;
 		use Edde\Common\Schema\UserSchema;
 		use Edde\Ext\Test\TestCase;
@@ -41,7 +40,6 @@
 					SimpleSchema::class,
 					FooSchema::class,
 					PooSchema::class,
-					SubBarSchema::class,
 					BarSchema::class,
 					FooBarSchema::class,
 					BarPooSchema::class,
@@ -166,6 +164,22 @@
 				self::assertInstanceOf(\DateTime::class, $array['date']);
 				self::assertTrue(($type = gettype($array['question'])) === 'boolean', 'question [' . $type . '] is not bool!');
 				self::assertFalse($array['question']);
+			}
+
+			public function testLink() {
+				$foo = $this->entityManager->create(FooSchema::class, [
+					'name'  => 'foo with poo',
+					'label' => 'I wanna have a label on this one',
+				]);
+				$poo = $this->entityManager->create(PooSchema::class, [
+					'name'  => 'the name of this epic Poo!',
+					'label' => 'smells like Hell',
+				]);
+				$foo->link($poo);
+				$this->transaction->execute();
+			}
+
+			public function testUnlink() {
 			}
 
 			/**

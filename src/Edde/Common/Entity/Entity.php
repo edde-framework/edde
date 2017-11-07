@@ -6,6 +6,7 @@
 		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\Inject\EntityManager;
+		use Edde\Api\Entity\Inject\Transaction;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Inject\Storage;
@@ -14,6 +15,7 @@
 		class Entity extends Crate implements IEntity {
 			use EntityManager;
 			use SchemaManager;
+			use Transaction;
 			use Storage;
 			/**
 			 * @var ISchema
@@ -48,6 +50,14 @@
 			 */
 			public function filter(array $source): IEntity {
 				$this->push($this->schemaManager->filter($this->schema, $source));
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function link(IEntity $entity): IEntity {
+				$this->transaction->link($this, $entity, $this->schema->getLink($entity->getSchema()->getName()));
 				return $this;
 			}
 

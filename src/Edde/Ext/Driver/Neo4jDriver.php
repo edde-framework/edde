@@ -156,7 +156,7 @@
 				}
 				$cypher = '';
 				$parameterList = [];
-				foreach ($transaction->getEntityList() as $entity) {
+				foreach ($transaction->getEntities() as $entity) {
 					if ($entity->isDirty() === false) {
 						continue;
 					}

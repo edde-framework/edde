@@ -3,7 +3,9 @@
 	namespace Edde\Common\Entity;
 
 		use Edde\Api\Entity\IEntity;
+		use Edde\Api\Entity\IEntityLink;
 		use Edde\Api\Entity\ITransaction;
+		use Edde\Api\Schema\ILink;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Object\Object;
 		use Edde\Common\Query\TransactionQuery;
@@ -13,27 +15,32 @@
 			/**
 			 * @var IEntity[]
 			 */
-			protected $entityList = [];
+			protected $entities = [];
+			/**
+			 * @var IEntityLink[]
+			 */
+			protected $entityLinks = [];
 
 			/**
 			 * @inheritdoc
 			 */
 			public function entity(IEntity $entity): ITransaction {
-				$this->entityList[] = $entity;
+				$this->entities[] = $entity;
 				return $this;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function getEntityList(): array {
-				return $this->entityList;
+			public function getEntities(): array {
+				return $this->entities;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
-			public function link(IEntity $from, IEntity $to): ITransaction {
+			public function link(IEntity $from, IEntity $to, ILink $link): ITransaction {
+				$this->entityLinks[] = new EntityLink($from, $to, $link);
 				return $this;
 			}
 
@@ -41,14 +48,22 @@
 			 * @inheritdoc
 			 */
 			public function unlink(IEntity $from, IEntity $to): ITransaction {
+				throw new \Exception('not supported yet: ' . __METHOD__);
 				return $this;
 			}
 
 			/**
 			 * @inheritdoc
 			 */
+			public function getEntityLinks(): array {
+				return $this->entityLinks;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function isEmpty(): bool {
-				return empty($this->entityList);
+				return empty($this->entities) && empty($this->entityLinks);
 			}
 
 			/**
@@ -74,10 +89,10 @@
 			 * @inheritdoc
 			 */
 			public function commit(): ITransaction {
-				foreach ($this->entityList as $entity) {
+				foreach ($this->entities as $entity) {
 					$entity->commit();
 				}
-				$this->entityList = [];
+				$this->entities = [];
 				return $this;
 			}
 
@@ -85,7 +100,7 @@
 			 * @inheritdoc
 			 */
 			public function rollback(): ITransaction {
-				$this->entityList = [];
+				$this->entities = [];
 				return $this;
 			}
 
@@ -94,6 +109,6 @@
 			 */
 			public function __clone() {
 				parent::__clone();
-				$this->entityList = [];
+				$this->entities = [];
 			}
 		}
