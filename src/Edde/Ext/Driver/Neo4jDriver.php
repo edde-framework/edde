@@ -162,14 +162,15 @@
 				$cypher = null;
 				$parameterList = [];
 				foreach ($transaction->getEntities() as $entity) {
-					if ($entity->isDirty() === false) {
+					$schema = $entity->getSchema();
+					if ($entity->isDirty() === false || $schema->isRelation()) {
 						continue;
 					}
 					$primary = $entity->getPrimary();
 					$value = $primary->get();
 					$parameterList[$parameterId = 'p_' . sha1($value)] = [
 						'primary' => $value,
-						'set'     => $this->schemaManager->sanitize($schema = $entity->getSchema(), $entity->toArray()),
+						'set'     => $this->schemaManager->sanitize($schema, $entity->toArray()),
 					];
 					$parameterId = $this->delimite($parameterId);
 					$cypher .= 'MERGE (' . ($id = $this->delimite($value)) . ':' . $this->delimite($schema->getRealName()) . ' {' . $this->delimite($primary->getName()) . ': $' . $parameterId . '.primary})';
@@ -183,17 +184,18 @@
 				foreach ($transaction->getEntityRelations() as $entityRelation) {
 					$cypher .= 'MERGE (' . $this->delimite($entityRelation->getEntity()->getPrimary()->get()) . ')';
 					$cypher .= '-[:' . $this->delimite($entityRelation->getRelation()->getSchema()->getRealName());
-//					if ($createRelationQuery->hasSource()) {
-//						$cypher .= ' {';
-//						$propertyList = [];
-//						foreach ($createRelationQuery->getSource() as $k => $v) {
-//							if ($v !== null) {
-//								$propertyList[] = $this->delimite($k) . ': $' . ($parameterId = ('p_' . sha1(random_bytes(42))));
-//								$properties[$parameterId] = $v;
-//							}
-//						}
-//						$cypher .= implode(', ', $propertyList) . '}';
-//					}
+					$using = $entityRelation->getUsing();
+					if (empty($source = $using->toArray()) === false) {
+						$cypher .= ' {';
+						$propertyList = [];
+						foreach ($this->schemaManager->sanitize($using->getSchema(), $source) as $k => $v) {
+							if ($v !== null) {
+								$propertyList[] = $this->delimite($k) . ': $' . ($parameterId = ('p_' . sha1(random_bytes(42))));
+								$parameterList[$parameterId] = $v;
+							}
+						}
+						$cypher .= implode(', ', $propertyList) . '}';
+					}
 					$cypher .= ']';
 					$cypher .= '->(' . $this->delimite($entityRelation->getTarget()->getPrimary()->get()) . ")\n";
 				}

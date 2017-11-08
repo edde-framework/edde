@@ -373,8 +373,7 @@
 				$root->attach($user)->set('enabled', false);
 				$root->attach($user)->set('enabled', true);
 				$guest->attach($user)->set('enabled', false);
-				$root->save();
-				$guest->save();
+				$this->transaction->execute();
 				$expect = [
 					'root',
 				];

@@ -404,6 +404,18 @@
     </phpInfoCache>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
+  <component name="PhpStepFilterConfiguration">
+    <option name="skippedFunctions">
+      <list>
+        <option value="Edde\Common\Storage\Neo4jStorageTest-&gt;__get" />
+        <option value="Edde\Common\Storage\Storage-&gt;execute" />
+        <option value="Edde\Common\Container\Container-&gt;create" />
+        <option value="Edde\Common\Storage\Neo4jStorageTest-&gt;__set" />
+        <option value="Edde\Common\Container\Container-&gt;getFactory" />
+        <option value="Edde\Common\Container\Container-&gt;factory" />
+      </list>
+    </option>
+  </component>
   <component name="PhpUnit">
     <phpunit_settings>
       <phpunit_by_interpreter interpreter_id="93d14aac-b6dc-4047-bab4-f53d26de1169" load_method="CUSTOM_LOADER" bootstrap_file_path="/opt/project/tests/src/loader.php" configuration_file_path="/opt/project/phpunit.xml" custom_loader_path="/opt/project/lib/autoload.php" phpunit_phar_path="" use_bootstrap_file="true" use_configuration_file="true" />

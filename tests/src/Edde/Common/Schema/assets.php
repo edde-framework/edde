@@ -16,7 +16,7 @@
 		/**
 		 * This is the core of this genius idea: use native PHP features!
 		 */
-		interface RelationSchema {
+		interface RelationSchema extends GuidSchema {
 			const relation = true;
 		}
 
