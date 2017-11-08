@@ -212,14 +212,21 @@
 
 			/**
 			 * @throws EntityNotFoundException
+			 * @throws UnknownSchemaException
+			 * @throws UnknownTableException
 			 */
 			public function testUnlink() {
+				$this->expectException(EntityNotFoundException::class);
 				$foo = $this->entityManager->collection(FooSchema::class)->entity('foo with poo');
 				/**
 				 * there should be just exactly one relation, thus it's not necessary to say which poo should be unlinked
 				 */
 				$foo->unlink(PooSchema::class);
 				$this->transaction->execute();
+				$collection = $this->entityManager->collection(FooSchema::class);
+				$collection->query($query = new SelectQuery($this->schemaManager->load(FooSchema::class), 'f'));
+				$query->link(PooSchema::class, 'p')->return()->order('p.name');
+				$collection->getEntity();
 			}
 
 			/**
