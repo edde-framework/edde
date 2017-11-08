@@ -26,7 +26,6 @@
 	"minimum-stability": "dev",
 	"require": {
 		"php": ">=7.1",
-		"graphaware/neo4j-bolt": "*",
 		"roave/security-advisories": "dev-master"
 	},
 	"require-dev": {

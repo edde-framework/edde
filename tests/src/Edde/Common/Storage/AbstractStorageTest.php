@@ -404,7 +404,7 @@
 				$this->schemaManager->load(BarPooSchema::class);
 				$this->storage->start();
 				$start = microtime(true);
-				for ($i = 0; $i < 10; $i++) {
+				for ($i = 0; $i < 50; $i++) {
 					$foo = $this->entityManager->create(FooSchema::class, [
 						'name' => 'foo #' . $i,
 					]);
