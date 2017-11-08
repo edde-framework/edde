@@ -415,6 +415,8 @@
         <option value="Edde\Common\Container\Container-&gt;factory" />
         <option value="Edde\Common\Container\Factory\InterfaceFactory-&gt;fetch" />
         <option value="Edde\Common\Storage\Storage-&gt;isSetup" />
+        <option value="Edde\Common\Entity\Transaction-&gt;isSetup" />
+        <option value="Edde\Common\Query\TransactionQuery-&gt;__construct" />
       </list>
     </option>
   </component>

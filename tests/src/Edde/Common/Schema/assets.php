@@ -51,6 +51,8 @@
 			public function name($unique): string;
 
 			public function label(): ?string;
+
+			public function poo(PooSchema $guid): ?string;
 		}
 
 		interface PooSchema extends GuidSchema {

@@ -8,9 +8,7 @@
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
-		use Edde\Api\Storage\Exception\IntegrityException;
 		use Edde\Api\Storage\Exception\NullValueException;
-		use Edde\Api\Storage\Exception\StorageException;
 		use Edde\Api\Storage\Exception\UnknownTableException;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Query\CreateSchemaQuery;
@@ -389,7 +387,7 @@
 				sort($current);
 				self::assertSame($expect, $current, 'looks like roles are not properly assigned!');
 				$current = [];
-				foreach ($user->join(RoleSchema::class, 'r')->where('c\r.enabled', '=', true) as $role) {
+				foreach ($user->join(RoleSchema::class, 'r')->where('c\r.enabled', '=', 1) as $role) {
 					self::assertEquals(RoleSchema::class, $role->getSchema()->getName());
 					$current[] = $role->get('name');
 				}
@@ -399,38 +397,6 @@
 			}
 
 			/**
-			 * @throws DuplicateEntryException
-			 * @throws IntegrityException
-			 * @throws StorageException
-			 */
-			public function testSimpleRelation() {
-				$bar = $this->entityManager->create(BarSchema::class, [
-					'name' => 'simple-relation',
-				]);
-				$subBar = $this->entityManager->create(SubBarSchema::class, [
-					'label' => 'some-label',
-				]);
-				$subBaBar = $this->entityManager->create(SubBarSchema::class, [
-					'label' => 'another-label',
-				]);
-				$bar->linkTo($subBar);
-				$bar->save();
-				self::assertTrue($bar->exists());
-				self::assertTrue($subBar->exists());
-				$bar = $this->entityManager->collection(BarSchema::class)->entity('simple-relation');
-				self::assertSame('simple-relation', $bar->get('name'));
-				$subBar = $bar->entity('subBar');
-				self::assertSame('some-label', $subBar->get('label'));
-				$bar->linkTo($subBaBar);
-				$bar->save();
-				$subBar = $bar->entity('subBar');
-				self::assertSame('another-label', $subBar->get('label'));
-			}
-
-			/**
-			 * @throws DuplicateEntryException
-			 * @throws IntegrityException
-			 * @throws StorageException
 			 * @throws UnknownSchemaException
 			 */
 			public function testBenchmark() {
@@ -438,9 +404,13 @@
 				$this->schemaManager->load(BarPooSchema::class);
 				$this->storage->start();
 				$start = microtime(true);
-				for ($i = 0; $i < 100; $i++) {
+				for ($i = 0; $i < 10; $i++) {
 					$foo = $this->entityManager->create(FooSchema::class, [
 						'name' => 'foo #' . $i,
+					]);
+					$poo = $this->entityManager->create(PooSchema::class, [
+						'name'  => 'poo of foo $' . $i,
+						'label' => "and it's labeled #$i",
 					]);
 					$bar = $this->entityManager->create(BarSchema::class, [
 						'name' => 'bar #' . $i,
@@ -448,19 +418,12 @@
 					$bar2 = $this->entityManager->create(BarSchema::class, [
 						'name' => 'bar 2 #' . $i,
 					]);
-					$subBar = $this->entityManager->create(SubBarSchema::class, [
-						'label' => 'sub-bar #' . $i,
-					]);
-					$subBar2 = $this->entityManager->create(SubBarSchema::class, [
-						'label' => 'sub-bar 2 #' . $i,
-					]);
-					$bar->linkTo($subBar);
+					$foo->linkTo($poo);
 					$foo->attach($bar);
 					$foo->attach($bar2);
-					$foo->save();
-					$bar->linkTo($subBar2);
-					$bar->save();
+					$bar->linkTo($poo);
 				}
+				$this->transaction->execute();
 				$this->storage->commit();
 				$sum = (microtime(true) - $start);
 				$item = ($sum / $i) * 1000;
