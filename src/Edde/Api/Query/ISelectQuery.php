@@ -41,15 +41,6 @@
 			public function getJoins(): array;
 
 			/**
-			 * which source should be returned (selected) for the output (alias must exists)
-			 *
-			 * @param string $alias
-			 *
-			 * @return ISelectQuery
-			 */
-			public function return(string $alias = null): ISelectQuery;
-
-			/**
 			 * @return string
 			 */
 			public function getReturn(): string;
@@ -93,4 +84,13 @@
 			 * @return string[]
 			 */
 			public function getOrders(): array;
+
+			/**
+			 * which source should be returned (selected) for the output (alias must exists)
+			 *
+			 * @param string $alias
+			 *
+			 * @return ISelectQuery
+			 */
+			public function return(string $alias = null): ISelectQuery;
 		}

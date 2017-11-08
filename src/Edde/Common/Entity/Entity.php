@@ -95,6 +95,7 @@
 			public function join(string $schema, string $alias): ICollection {
 				$collection = $this->entityManager->collection($this->schema->getName());
 				$collection->join($schema, $alias, $this->toArray());
+				$collection->return($alias);
 				return $collection;
 			}
 

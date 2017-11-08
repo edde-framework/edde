@@ -73,22 +73,19 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function link(string $schema, string $alias, array $source): ICollection {
-				$this->stream->getQuery()->link($schema, $alias, $source)->return();
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
 			public function join(string $target, string $alias, array $on = null): ICollection {
+				$relation = $this->schema->getRelation($target);
+				$link = $relation->getTo();
+				$linkTo = $link->getTo();
 				/**
 				 * change target schema of this collection
 				 */
-				$this->schema = ($link = ($relation = $this->schema->getRelation($target))->getTo())->getTo()->getSchema();
-				($query = $this->stream->getQuery())->join($target, $alias);
+				$this->schema = $linkTo->getSchema();
+				$query = $this->stream->getQuery();
+				$query->join($target, $alias);
 				if ($on) {
-					$query->where($query->getTable()->getAlias() . '.' . ($name = $link->getTo()->getPropertyName()), '=', $on[$name]);
+					$propertyName = $linkTo->getPropertyName();
+					$query->where($query->getAlias() . '.' . $propertyName, '=', $on[$propertyName]);
 				}
 				return $this;
 			}
@@ -106,6 +103,14 @@
 			 */
 			public function order(string $name, bool $asc = true): ICollection {
 				$this->stream->getQuery()->order($name, $asc);
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function return(string $alias = null): ICollection {
+				$this->stream->getQuery()->return($alias);
 				return $this;
 			}
 

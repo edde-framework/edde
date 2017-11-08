@@ -269,6 +269,29 @@
 				$bar2->attach($poo3);
 				$foo2->attach($bar3);
 				$this->transaction->execute();
+				$barList = [];
+				$expected = [
+					'bar The Second',
+					'bar The Third',
+				];
+				foreach ($foo->join(BarSchema::class, 'b') as $entity) {
+					self::assertSame(BarSchema::class, $entity->getSchema()->getName());
+					$barList[] = $entity->get('name');
+				}
+				sort($barList);
+				sort($expected);
+				self::assertEquals($expected, $barList);
+				$barList = [];
+				$expected = [
+					'Bar for The Foo',
+				];
+				foreach ($foo2->join(BarSchema::class, 'b') as $entity) {
+					self::assertSame(BarSchema::class, $entity->getSchema()->getName());
+					$barList[] = $entity->get('name');
+				}
+				sort($barList);
+				sort($expected);
+				self::assertEquals($expected, $barList);
 			}
 
 			/**
@@ -321,6 +344,7 @@
 				];
 				$current = [];
 				foreach ($foo->join(BarSchema::class, 'b')->join(PooSchema::class, 'p') as $poo) {
+					self::assertSame(PooSchema::class, $poo->getSchema()->getName());
 					$current[] = $poo->get('name');
 				}
 				sort($expect);
@@ -329,9 +353,6 @@
 			}
 
 			/**
-			 * @throws DuplicateEntryException
-			 * @throws IntegrityException
-			 * @throws StorageException
 			 * @throws UnknownSchemaException
 			 */
 			public function testRelationAttribute() {

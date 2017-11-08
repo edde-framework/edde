@@ -52,17 +52,6 @@
 			public function entity($name): IEntity;
 
 			/**
-			 * make a link to the given entity (foreign key or relation to)
-			 *
-			 * @param string $schema
-			 * @param string $alias
-			 * @param array  $source
-			 *
-			 * @return ICollection
-			 */
-			public function link(string $schema, string $alias, array $source): ICollection;
-
-			/**
 			 * join the given target schema to the current one
 			 *
 			 * @param string $target
@@ -91,6 +80,13 @@
 			 * @return ICollection
 			 */
 			public function order(string $name, bool $asc = true): ICollection;
+
+			/**
+			 * @param string|null $alias
+			 *
+			 * @return ICollection
+			 */
+			public function return(string $alias = null): ICollection;
 
 			/**
 			 * @return Traversable|IEntity[]
