@@ -149,19 +149,17 @@
 				if (($transaction = $transactionQuery->getTransaction())->isEmpty()) {
 					return;
 				}
-				$links = [];
-				foreach ($transaction->getEntityLinks() as $entityLink) {
+				foreach ($transaction->getEntityUnlinks() as $entityLink) {
 					$cypher = '';
 					$link = $entityLink->getLink();
-					$primary = $entityLink->getFrom()->getPrimary();
+					$primary = $entityLink->getEntity()->getPrimary();
 					$cypher .= "MATCH (:" . $this->delimite($link->getFrom()->getRealName()) . " {" . $this->delimite($primary->getName()) . ": \$a})-";
 					$cypher .= '[r:' . ($entityLink->getLink()->getName()) . ']';
 					$cypher .= "->(:" . $this->delimite($link->getTo()->getRealName()) . ') ';
 					$cypher .= 'DELETE r';
 					$this->native($cypher, ['a' => $value = $primary->get()]);
-					$links[$value . $link->getName() . $link->getTo()->getRealName()] = $entityLink;
 				}
-				$cypher = '';
+				$cypher = null;
 				$parameterList = [];
 				foreach ($transaction->getEntities() as $entity) {
 					if ($entity->isDirty() === false) {
@@ -177,10 +175,12 @@
 					$cypher .= 'MERGE (' . ($id = $this->delimite($value)) . ':' . $this->delimite($schema->getRealName()) . ' {' . $this->delimite($primary->getName()) . ': $' . $parameterId . '.primary})';
 					$cypher .= ' SET ' . $id . ' = $' . $parameterId . ".set\n";
 				}
-				foreach ($links as $entityLink) {
-					$cypher .= 'MERGE (' . $this->delimite($entityLink->getFrom()->getPrimary()->get()) . ')-[:' . $this->delimite($entityLink->getLink()->getName()) . ']->(' . $this->delimite($entityLink->getTo()->getPrimary()->get()) . ")\n";
+				foreach ($transaction->getEntityLinks() as $entityLink) {
+					$cypher .= 'MERGE (' . $this->delimite($entityLink->getEntity()->getPrimary()->get()) . ')-[:' . $this->delimite($entityLink->getLink()->getName()) . ']->(' . $this->delimite($entityLink->getTo()->getPrimary()->get()) . ")\n";
 				}
-				$this->native($cypher, $parameterList);
+				if ($cypher) {
+					$this->native($cypher, $parameterList);
+				}
 			}
 
 			/**

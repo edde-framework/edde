@@ -210,7 +210,16 @@
 				self::assertSame('the name of this epic Poo!', $entity->get('name'));
 			}
 
+			/**
+			 * @throws EntityNotFoundException
+			 */
 			public function testUnlink() {
+				$foo = $this->entityManager->collection(FooSchema::class)->entity('foo with poo');
+				/**
+				 * there should be just exactly one relation, thus it's not necessary to say which poo should be unlinked
+				 */
+				$foo->unlink(PooSchema::class);
+				$this->transaction->execute();
 			}
 
 			/**

@@ -53,6 +53,15 @@
 			public function link(string $schema, string $alias): ICollection;
 
 			/**
+			 * unlink the given schema (unset 1:N relation)
+			 *
+			 * @param string $schema
+			 *
+			 * @return IEntity
+			 */
+			public function unlink(string $schema): IEntity;
+
+			/**
 			 * prepare m:n collection of related entities
 			 *
 			 * @param string $schema

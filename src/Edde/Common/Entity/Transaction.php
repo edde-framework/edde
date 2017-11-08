@@ -4,6 +4,7 @@
 
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\IEntityLink;
+		use Edde\Api\Entity\IEntityUnlink;
 		use Edde\Api\Entity\ITransaction;
 		use Edde\Api\Schema\ILink;
 		use Edde\Api\Storage\Inject\Storage;
@@ -20,6 +21,10 @@
 			 * @var IEntityLink[]
 			 */
 			protected $entityLinks = [];
+			/**
+			 * @var IEntityUnlink[]
+			 */
+			protected $entityUnlinks = [];
 
 			/**
 			 * @inheritdoc
@@ -40,15 +45,11 @@
 			 * @inheritdoc
 			 */
 			public function link(IEntity $from, IEntity $to, ILink $link): ITransaction {
-				$this->entityLinks[] = new EntityLink($from, $to, $link);
-				return $this;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function unlink(IEntity $from, IEntity $to): ITransaction {
-				throw new \Exception('not supported yet: ' . __METHOD__);
+				/**
+				 * maintain 1:N relation, thus create a new link, remove the old one
+				 */
+				$this->entityLinks[$from->getPrimary()->get() . $from->getSchema()->getName() . $link->getName() . $link->getTo()->getName()] = new EntityLink($from, $link, $to);
+				$this->unlink($from, $link);
 				return $this;
 			}
 
@@ -62,8 +63,26 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function unlink(IEntity $entity, ILink $link): ITransaction {
+				/**
+				 * generate kind of unique key to have just one unlink per entity type/guid
+				 */
+				$this->entityUnlinks[$entity->getPrimary()->get() . $entity->getSchema()->getName() . $link->getName() . $link->getTo()->getName()] = new EntityUnlink($entity, $link);
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getEntityUnlinks(): array {
+				return $this->entityUnlinks;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function isEmpty(): bool {
-				return empty($this->entities) && empty($this->entityLinks);
+				return empty($this->entities) && empty($this->entityLinks) && empty($this->entityUnlinks);
 			}
 
 			/**
@@ -93,6 +112,8 @@
 					$entity->commit();
 				}
 				$this->entities = [];
+				$this->entityLinks = [];
+				$this->entityUnlinks = [];
 				return $this;
 			}
 
@@ -101,6 +122,8 @@
 			 */
 			public function rollback(): ITransaction {
 				$this->entities = [];
+				$this->entityLinks = [];
+				$this->entityUnlinks = [];
 				return $this;
 			}
 
@@ -110,5 +133,7 @@
 			public function __clone() {
 				parent::__clone();
 				$this->entities = [];
+				$this->entityLinks = [];
+				$this->entityUnlinks = [];
 			}
 		}

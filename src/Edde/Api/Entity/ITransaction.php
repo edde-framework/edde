@@ -34,19 +34,24 @@
 			public function link(IEntity $from, IEntity $to, ILink $link): ITransaction;
 
 			/**
-			 * unlink the given entity from the source entity (remove a relation)
-			 *
-			 * @param IEntity $from
-			 * @param IEntity $to
-			 *
-			 * @return ITransaction
-			 */
-			public function unlink(IEntity $from, IEntity $to): ITransaction;
-
-			/**
 			 * @return IEntityLink[]
 			 */
 			public function getEntityLinks(): array;
+
+			/**
+			 * remove relation (1:n) to the given schema
+			 *
+			 * @param IEntity $entity
+			 * @param ILink   $link
+			 *
+			 * @return ITransaction
+			 */
+			public function unlink(IEntity $entity, ILink $link): ITransaction;
+
+			/**
+			 * @return IEntityUnlink[]
+			 */
+			public function getEntityUnlinks(): array;
 
 			/**
 			 * is there something to do?

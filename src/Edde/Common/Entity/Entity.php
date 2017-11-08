@@ -72,6 +72,14 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function unlink(string $schema): IEntity {
+				$this->transaction->unlink($this, $this->schema->getLink($schema));
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function join(string $schema, string $alias): ICollection {
 				return $this->entityManager->collection($this->schema->getName())->join($schema, $alias, $this->toArray());
 			}

@@ -5,33 +5,16 @@
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\IEntityLink;
 		use Edde\Api\Schema\ILink;
-		use Edde\Common\Object\Object;
 
-		class EntityLink extends Object implements IEntityLink {
-			/**
-			 * @var IEntity
-			 */
-			protected $from;
+		class EntityLink extends EntityUnlink implements IEntityLink {
 			/**
 			 * @var IEntity
 			 */
 			protected $to;
-			/**
-			 * @var ILink
-			 */
-			protected $link;
 
-			public function __construct(IEntity $from, IEntity $to, ILink $link) {
-				$this->from = $from;
+			public function __construct(IEntity $entity, ILink $link, IEntity $to) {
+				parent::__construct($entity, $link);
 				$this->to = $to;
-				$this->link = $link;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getFrom(): IEntity {
-				return $this->from;
 			}
 
 			/**
@@ -39,12 +22,5 @@
 			 */
 			public function getTo(): IEntity {
 				return $this->to;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getLink(): ILink {
-				return $this->link;
 			}
 		}
