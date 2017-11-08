@@ -370,9 +370,9 @@
 					'name'  => 'guest',
 					'label' => 'this one can do almost nothing!',
 				]);
-				$root->attach($user)->set('enabled', false);
-				$root->attach($user)->set('enabled', true);
-				$guest->attach($user)->set('enabled', false);
+				$user->attach($root)->set('enabled', false);
+				$user->attach($root)->set('enabled', true);
+				$user->attach($guest)->set('enabled', false);
 				$this->transaction->execute();
 				$expect = [
 					'root',
@@ -380,7 +380,7 @@
 				$query = new SelectQuery(($userSchema = $user->getSchema()), 'u');
 				$query->join(RoleSchema::class, 'r')->return('r');
 				$query->where('u.name', '=', 'Me, The Best User Ever!');
-				$query->where('u\r.enabled', '=', true);
+				$query->where('u\r.enabled', '=', 1);
 				$current = [];
 				foreach ($this->storage->execute($query) as $source) {
 					$current[] = $source['name'];

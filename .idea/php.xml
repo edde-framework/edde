@@ -413,6 +413,8 @@
         <option value="Edde\Common\Storage\Neo4jStorageTest-&gt;__set" />
         <option value="Edde\Common\Container\Container-&gt;getFactory" />
         <option value="Edde\Common\Container\Container-&gt;factory" />
+        <option value="Edde\Common\Container\Factory\InterfaceFactory-&gt;fetch" />
+        <option value="Edde\Common\Storage\Storage-&gt;isSetup" />
       </list>
     </option>
   </component>
