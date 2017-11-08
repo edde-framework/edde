@@ -200,9 +200,14 @@
 			 */
 			public function testSelectQuery() {
 				$collection = $this->entityManager->collection(FooSchema::class);
+				/**
+				 * this query should return the first entity with foo->poo relation (as there is no where
+				 * to limit)
+				 */
 				$collection->query($query = new SelectQuery($this->schemaManager->load(FooSchema::class), 'f'));
-				$query->link(PooSchema::class, 'p')->return();
+				$query->link(PooSchema::class, 'p')->return()->order('p.name');
 				$entity = $collection->getEntity();
+				self::assertSame('the name of this epic Poo!', $entity->get('name'));
 			}
 
 			public function testUnlink() {

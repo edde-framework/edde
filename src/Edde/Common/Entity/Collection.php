@@ -52,7 +52,7 @@
 				foreach ($this as $entity) {
 					return $entity;
 				}
-				throw new EntityNotFoundException(sprintf('Cannot load any Entity by query [%s].', $this->stream->getQuery()->getDescription()));
+				throw new EntityNotFoundException(sprintf('Cannot load any Entity of schema [%s].', $this->schema->getName()));
 			}
 
 			/**
