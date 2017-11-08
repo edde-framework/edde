@@ -337,7 +337,7 @@
 					'root',
 				];
 				$query = new SelectQuery(($userSchema = $user->getSchema()), 'u');
-				$query->join(RoleSchema::class, 'r')->select('r');
+				$query->join(RoleSchema::class, 'r')->return('r');
 				$query->where('u.name', '=', 'Me, The Best User Ever!');
 				$query->where('u\r.enabled', '=', true);
 				$current = [];

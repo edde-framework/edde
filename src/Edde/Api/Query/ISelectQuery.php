@@ -2,17 +2,14 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Query;
 
-		use Edde\Api\Query\Fragment\ITable;
-
 		interface ISelectQuery extends IQuery {
 			/**
 			 * @param string $schema
 			 * @param string $alias
-			 * @param array  $source
 			 *
 			 * @return ISelectQuery
 			 */
-			public function link(string $schema, string $alias, array $source): ISelectQuery;
+			public function link(string $schema, string $alias): ISelectQuery;
 
 			/**
 			 * join the given schema the previously joined schema
@@ -25,13 +22,13 @@
 			public function join(string $schema, string $alias): ISelectQuery;
 
 			/**
-			 * which source should be selected for the output (alias must exists)
+			 * which source should be returned (selected) for the output (alias must exists)
 			 *
 			 * @param string $alias
 			 *
 			 * @return ISelectQuery
 			 */
-			public function select(string $alias = null): ISelectQuery;
+			public function return(string $alias = null): ISelectQuery;
 
 			/**
 			 * shorthand for where and ($name $relation $value); by default it takes last
@@ -52,11 +49,4 @@
 			 * @return ISelectQuery
 			 */
 			public function order(string $name, bool $asc = true): ISelectQuery;
-
-			/**
-			 * get base table of this query
-			 *
-			 * @return ITable
-			 */
-			public function getTable(): ITable;
 		}

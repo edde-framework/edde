@@ -74,7 +74,7 @@
 			 * @inheritdoc
 			 */
 			public function link(string $schema, string $alias, array $source): ICollection {
-				$this->stream->getQuery()->link($schema, $alias, $source)->select();
+				$this->stream->getQuery()->link($schema, $alias, $source)->return();
 				return $this;
 			}
 
