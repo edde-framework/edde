@@ -176,7 +176,26 @@
 					$cypher .= ' SET ' . $id . ' = $' . $parameterId . ".set\n";
 				}
 				foreach ($transaction->getEntityLinks() as $entityLink) {
-					$cypher .= 'MERGE (' . $this->delimite($entityLink->getEntity()->getPrimary()->get()) . ')-[:' . $this->delimite($entityLink->getLink()->getName()) . ']->(' . $this->delimite($entityLink->getTo()->getPrimary()->get()) . ")\n";
+					$cypher .= 'MERGE (' . $this->delimite($entityLink->getEntity()->getPrimary()->get()) . ')';
+					$cypher .= '-[:' . $this->delimite($entityLink->getLink()->getName()) . ']';
+					$cypher .= '->(' . $this->delimite($entityLink->getTo()->getPrimary()->get()) . ")\n";
+				}
+				foreach ($transaction->getEntityRelations() as $entityRelation) {
+					$cypher .= 'MERGE (' . $this->delimite($entityRelation->getEntity()->getPrimary()->get()) . ')';
+					$cypher .= '-[:' . $this->delimite($entityRelation->getRelation()->getSchema()->getRealName());
+//					if ($createRelationQuery->hasSource()) {
+//						$cypher .= ' {';
+//						$propertyList = [];
+//						foreach ($createRelationQuery->getSource() as $k => $v) {
+//							if ($v !== null) {
+//								$propertyList[] = $this->delimite($k) . ': $' . ($parameterId = ('p_' . sha1(random_bytes(42))));
+//								$properties[$parameterId] = $v;
+//							}
+//						}
+//						$cypher .= implode(', ', $propertyList) . '}';
+//					}
+					$cypher .= ']';
+					$cypher .= '->(' . $this->delimite($entityRelation->getTarget()->getPrimary()->get()) . ")\n";
 				}
 				if ($cypher) {
 					$this->native($cypher, $parameterList);
