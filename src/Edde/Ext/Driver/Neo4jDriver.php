@@ -193,33 +193,24 @@
 				$cypher = "MATCH\n\t";
 				$matchList = [];
 				$parameterList = [];
-				$table = $selectQuery->getTable();
-				$return = $this->delimite($table->getSelect());
-				$cypher .= '(' . ($alias = $this->delimite($current = $table->getAlias())) . ':' . $this->delimite($table->getSchema()->getRealName());
-				$schema = $table->getSchema();
-				if ($linkSource = $table->getLink()) {
-					$link = $schema->getLink($linkSource[0]);
-					$primary = $schema->getPrimary();
-					$cypher .= ' {' . ($this->delimite($name = $primary->getName())) . ': $' . $this->delimite($parameterId = sha1(random_bytes(42))) . '}';
-					$parameterList[$parameterId] = $linkSource[2][$name];
+				$return = $this->delimite($selectQuery->getReturn());
+				$cypher .= '(' . ($alias = $this->delimite($current = $selectQuery->getAlias())) . ':' . $this->delimite(($schema = $selectQuery->getSchema())->getRealName()) . ')';
+				foreach ($selectQuery->getJoins() as $name => $join) {
+					if ($join->isLink()) {
+						continue;
+					}
+					$relation = $schema->getRelation($join->getSchema());
+					$cypher .= '-[' . $this->delimite($current . '\r') . ':' . $this->delimite($relation->getSchema()->getRealName()) . ']';
+					$cypher .= '-(' . ($return = $this->delimite($current = $name)) . ':' . $this->delimite(($schema = $relation->getTo()->getTo()->getSchema())->getRealName()) . ')';
 				}
-				$cypher .= ')';
-				foreach ($table->getJoins() as $name => $relation) {
-					$relation = $schema->getRelation($relation);
-					$cypher .= '-[' . $this->delimite($current . '\r') . ':' . $this->delimite($relation->getSchema()->getRealName()) . ']-(' . ($return = $this->delimite($current = $name)) . ':' . $this->delimite(($schema = $relation->getTargetLink()->getTargetSchema())->getRealName()) . ')';
-				}
-				if (isset($link)) {
-					$cypher .= '-[:' . $this->delimite($link->getName()) . ']';
-					$cypher .= '->(' . $this->delimite($linkSource[1]) . ':' . $this->delimite($link->getTo()->getRealName()) . ')';
-				}
-				if ($table->hasWhere()) {
-					$cypher .= "\nWHERE" . ($query = $this->fragmentWhereGroup($table->where()))->getQuery() . "\n";
+				if ($selectQuery->hasWhere()) {
+					$cypher .= "\nWHERE" . ($query = $this->fragmentWhereGroup($selectQuery->getWhere()))->getQuery() . "\n";
 					$parameterList = $query->getParameterList();
 				}
 				$cypher .= implode(",\n\t", $matchList) . "\nRETURN\n\t" . $return;
-				if ($table->hasOrder()) {
+				if ($selectQuery->hasOrder()) {
 					$orderList = [];
-					foreach ($table->getOrders() as $column => $asc) {
+					foreach ($selectQuery->getOrders() as $column => $asc) {
 						$name = $alias;
 						if (($dot = strpos($column, '.')) !== false) {
 							$name = $this->delimite(substr($column, 0, $dot)) . '.' . $this->delimite(substr($column, $dot + 1));

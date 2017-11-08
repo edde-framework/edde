@@ -60,7 +60,7 @@
 			 */
 			public function entity($name): IEntity {
 				$this->stream->query($query = new SelectQuery($this->schema, 'c'));
-				$where = $query->getTable()->where();
+				$where = $query->getWhere();
 				if ($this->schema->hasPrimary()) {
 					$where->or()->value('c.' . $this->schema->getPrimary()->getName(), '=', $name);
 				}

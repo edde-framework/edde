@@ -199,9 +199,9 @@
 			 * @throws UnknownTableException
 			 */
 			public function testSelectQuery() {
-				$collection = $this->entityManager->collection(FooSchema::alias);
+				$collection = $this->entityManager->collection(FooSchema::class);
 				$collection->query($query = new SelectQuery($this->schemaManager->load(FooSchema::class), 'f'));
-				$table = $query->getTable();
+				$query->link(PooSchema::class, 'p')->return();
 				$entity = $collection->getEntity();
 			}
 

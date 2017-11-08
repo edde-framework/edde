@@ -48,7 +48,14 @@
 
 			public function __construct(ISchema $schema, string $alias) {
 				$this->schema = $schema;
-				$this->alias = $alias;
+				$this->return = $this->alias = $alias;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getSchema(): ISchema {
+				return $this->schema;
 			}
 
 			/**
@@ -77,6 +84,13 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function getJoins(): array {
+				return $this->joins;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function return(string $alias = null): ISelectQuery {
 				$alias = $this->alias ?: $this->current;
 				if (isset($this->joins[$alias]) === false && $this->alias !== $alias) {
@@ -89,12 +103,33 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function getReturn(): string {
+				return $this->return;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function where(string $name, string $relation, $value): ISelectQuery {
 				if (($dot = strpos($name, '.')) === false) {
 					$name = $this->alias . '.' . $name;
 				}
-				($this->where ?: $this->where = new WhereGroup())->and()->value($name, $relation, $value);
+				$this->getWhere()->and()->value($name, $relation, $value);
 				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function hasWhere(): bool {
+				return $this->where !== null;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getWhere(): IWhereGroup {
+				return $this->where ?: $this->where = new WhereGroup();
 			}
 
 			/**
@@ -106,5 +141,19 @@
 				}
 				$this->orders[$name] = $asc;
 				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function hasOrder(): bool {
+				return empty($this->orders) === false;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getOrders(): array {
+				return $this->orders;
 			}
 		}
