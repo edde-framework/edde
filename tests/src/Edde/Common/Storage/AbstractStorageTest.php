@@ -255,12 +255,12 @@
 				]);
 				$this->schemaManager->load(FooBarSchema::class);
 				$this->schemaManager->load(BarPooSchema::class);
-//				$foo->attach($bar);
-//				$foo->attach($bar2);
-//				$bar2->attach($poo);
-//				$bar2->attach($poo2);
-//				$bar2->attach($poo3);
-//				$foo2->attach($bar3);
+				$foo->attach($bar);
+				$foo->attach($bar2);
+				$bar2->attach($poo);
+				$bar2->attach($poo2);
+				$bar2->attach($poo3);
+				$foo2->attach($bar3);
 				$this->transaction->execute();
 			}
 

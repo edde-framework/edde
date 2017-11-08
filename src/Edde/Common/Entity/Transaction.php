@@ -7,6 +7,7 @@
 		use Edde\Api\Entity\IEntityUnlink;
 		use Edde\Api\Entity\ITransaction;
 		use Edde\Api\Schema\ILink;
+		use Edde\Api\Schema\IRelation;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Object\Object;
 		use Edde\Common\Query\TransactionQuery;
@@ -25,6 +26,7 @@
 			 * @var IEntityUnlink[]
 			 */
 			protected $entityUnlinks = [];
+			protected $entityRelaitons = [];
 
 			/**
 			 * @inheritdoc
@@ -76,6 +78,21 @@
 			 */
 			public function getEntityUnlinks(): array {
 				return $this->entityUnlinks;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function attach(IEntity $entity, IEntity $target, IEntity $using, IRelation $relation): ITransaction {
+				$this->entityRelaitons[] = new EntityRelation($entity, $target, $using, $relation);
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function getEntityRelations(): array {
+				return $this->entityRelaitons;
 			}
 
 			/**

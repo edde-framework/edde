@@ -62,6 +62,15 @@
 			public function unlink(string $schema): IEntity;
 
 			/**
+			 * attach an entity and return a relation entity (returned entity !== $this)
+			 *
+			 * @param IEntity $entity
+			 *
+			 * @return IEntity
+			 */
+			public function attach(IEntity $entity): IEntity;
+
+			/**
 			 * prepare m:n collection of related entities
 			 *
 			 * @param string $schema

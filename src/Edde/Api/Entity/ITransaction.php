@@ -3,6 +3,7 @@
 	namespace Edde\Api\Entity;
 
 		use Edde\Api\Schema\ILink;
+		use Edde\Api\Schema\IRelation;
 
 		interface ITransaction {
 			/**
@@ -52,6 +53,21 @@
 			 * @return IEntityUnlink[]
 			 */
 			public function getEntityUnlinks(): array;
+
+			/**
+			 * @param IEntity   $entity   use this entity
+			 * @param IEntity   $target   join this entity
+			 * @param IEntity   $using    through this relational entity
+			 * @param IRelation $relation using thins relation
+			 *
+			 * @return ITransaction
+			 */
+			public function attach(IEntity $entity, IEntity $target, IEntity $using, IRelation $relation): ITransaction;
+
+			/**
+			 * @return IEntityRelation[]
+			 */
+			public function getEntityRelations(): array;
 
 			/**
 			 * is there something to do?
