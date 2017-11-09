@@ -19,8 +19,8 @@
 			/** @var string */
 			protected $url;
 			protected $client;
-			/** @var bool */
-			protected $transaction = false;
+			/** @var string */
+			protected $transaction = null;
 
 			/**
 			 * @param string $url
@@ -35,18 +35,18 @@
 			public function native($query, array $params = []) {
 				try {
 					if ($this->transaction) {
-						$response = $this->client->post(str_replace('/commit', '', $this->transaction), ['Accept' => 'application/json', 'Content-Type' => 'application/json', 'X-Stream' => true], json_encode([
+						$response = $this->send('POST', str_replace('/commit', '', $this->transaction), json_encode([
 							'statements' => [
 								'statement'  => $query,
 								'parameters' => $params,
 							],
-						]))->send();
+						]));
 						return;
 					}
-					$reponse = $this->client->post('/db/data/cypher', ['Accept' => 'application/json', 'Content-Type' => 'application/json'], [
+					$reponse = $this->send('POST', '/db/data/cypher', [
 						'query'  => $query,
 						'params' => $params,
-					])->send();
+					]);
 				} catch (\Throwable $throwable) {
 					throw $this->exception($throwable);
 				}
@@ -56,8 +56,7 @@
 			 * @inheritdoc
 			 */
 			public function start(): IDriver {
-				$response = $this->client->post('/db/data/transaction', ['Accept' => 'application/json'])->send();
-				$this->transaction = json_decode($response->getBody(true))->commit;
+				$this->transaction = $this->send('POST', '/db/data/transaction')->commit;
 				return $this;
 			}
 
@@ -65,7 +64,7 @@
 			 * @inheritdoc
 			 */
 			public function commit(): IDriver {
-				$response = $this->client->post($this->transaction)->send();
+				$response = $this->send('POST', $this->transaction);
 				$this->transaction = null;
 				return $this;
 			}
@@ -74,7 +73,7 @@
 			 * @inheritdoc
 			 */
 			public function rollback(): IDriver {
-				$response = $this->client->delete($this->transaction)->send();
+				$response = $this->send('DELETE', $this->transaction);
 				$this->transaction = null;
 				return $this;
 			}
@@ -260,7 +259,18 @@
 				return '`' . str_replace('`', '``', $delimite) . '`';
 			}
 
+			protected function send(string $method, string $path, array $parameters = []) {
+				$result = file_get_contents(strpos($path, 'http') === 0 ? $path : ($this->url . $path), false, stream_context_create([
+					'http' => [
+						'method'  => $method,
+						'header'  => "Content-Type: application/json\r\nContent-Length: " . strlen($json = json_encode($parameters)) . "\r\nX-Stream: true\r\n",
+						'content' => $json,
+					],
+				]));
+			}
+
 			protected function handleSetup(): void {
 				parent::handleSetup();
+				$this->client = curl_init();
 			}
 		}
