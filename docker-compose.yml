@@ -43,8 +43,8 @@ services:
       - ./.assets/logs:/server/.assets/logs
       - ./.assets/temp:/server/.assets/temp
       - ./.assets/cache:/server/.assets/cache
-      - ./.docker/server/xdebug.ini:/etc/php/7.1/fpm/conf.d/21-xdebug-custom.ini
-      - ./.docker/server/mod-disable.ini:/etc/php/7.1/fpm/conf.d/10-opcache.ini
+#      - ./.docker/server/xdebug.ini:/etc/php/7.1/fpm/conf.d/21-xdebug-custom.ini
+#      - ./.docker/server/mod-disable.ini:/etc/php/7.1/fpm/conf.d/10-opcache.ini
       - ./.docker/server/mod-disable.ini:/etc/php/7.1/fpm/conf.d/20-apcu.ini
       - ./.docker/server/mod-disable.ini:/etc/php/7.1/fpm/conf.d/20-apcu_bc.ini
       - ./.docker/server/mod-disable.ini:/etc/php/7.1/fpm/conf.d/20-ftp.ini
