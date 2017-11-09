@@ -7,12 +7,14 @@
 		use Edde\Api\Driver\IDriver;
 		use Edde\Api\Query\Fragment\IWhere;
 		use Edde\Api\Query\ICrateSchemaQuery;
+		use Edde\Api\Query\IEntityQueueQuery;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Query\ITransactionQuery;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\NullValueException;
 		use Edde\Common\Driver\AbstractDriver;
+		use Edde\Common\Query\EntityQueueQuery;
 		use Edde\Common\Query\NativeQuery;
 
 		class Neo4jDriver extends AbstractDriver {
@@ -135,13 +137,13 @@
 			}
 
 			/**
-			 * @param ITransactionQuery $transactionQuery
+			 * @param IEntityQueueQuery $entityQueueQuery
 			 *
+			 * @throws \Exception
 			 * @throws \Throwable
 			 */
-			protected function executeTransactionQuery(ITransactionQuery $transactionQuery) {
-				$transaction = $transactionQuery->getTransaction();
-				$entityQueue = $transaction->getEntityQueue();
+			protected function executeEntityQueueQuery(IEntityQueueQuery $entityQueueQuery) {
+				$entityQueue = $entityQueueQuery->getEntityQueue();
 				if ($entityQueue->isEmpty()) {
 					return;
 				}
@@ -198,6 +200,15 @@
 				if ($cypher) {
 					$this->native($cypher, $parameterList);
 				}
+			}
+
+			/**
+			 * @param ITransactionQuery $transactionQuery
+			 *
+			 * @throws \Throwable
+			 */
+			protected function executeTransactionQuery(ITransactionQuery $transactionQuery) {
+				$this->executeEntityQueueQuery(new EntityQueueQuery($transactionQuery->getTransaction()->getEntityQueue()));
 			}
 
 			/**

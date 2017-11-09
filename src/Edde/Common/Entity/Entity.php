@@ -11,6 +11,7 @@
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Crate\Crate;
+		use Edde\Common\Query\EntityQueueQuery;
 
 		class Entity extends Crate implements IEntity {
 			use EntityManager;
@@ -98,9 +99,14 @@
 			 * @inheritdoc
 			 */
 			public function save(): IEntity {
-				$transaction = $this->entityManager->transaction($this->entityQueue);
-				$transaction->queue($this);
-				$transaction->execute();
+				foreach ($this->entityQueue as $entity) {
+					if ($entity === $this) {
+						continue;
+					}
+					$entity->save();
+				}
+				$this->entityQueue->queue($this);
+				$this->storage->execute(new EntityQueueQuery($this->entityQueue));
 				return $this;
 			}
 
