@@ -168,21 +168,17 @@
 				}
 				foreach ($entityQueue->getEntities() as $entity) {
 					$cypher = null;
-					$params = [];
 					$schema = $entity->getSchema();
 					if ($entity->isDirty() === false || $schema->isRelation()) {
 						continue;
 					}
 					$primary = $entity->getPrimary();
-					$primaryId = $primary->get();
-					$params[$primaryId] = [
-						'primary' => $primaryId,
+					$cypher .= 'MERGE (a:' . $this->delimite($schema->getRealName()) . ' {' . $this->delimite($primary->getName()) . ': $primary})';
+					$cypher .= " SET a = \$set\n";
+					$this->native($cypher, [
+						'primary' => $primary->get(),
 						'set'     => $this->schemaManager->sanitize($schema, $entity->toArray()),
-					];
-					$primaryId = $this->delimite($primaryId);
-					$cypher .= 'MERGE (' . ($id = $this->delimite($primaryId)) . ':' . $this->delimite($schema->getRealName()) . ' {' . $this->delimite($primary->getName()) . ': $' . $primaryId . '.primary})';
-					$cypher .= ' SET ' . $id . ' = $' . $primaryId . ".set\n";
-					$this->native($cypher, $params);
+					]);
 				}
 				foreach ($entityQueue->getEntityLinks() as $entityLink) {
 					$cypher = null;
@@ -201,24 +197,14 @@
 						$entity[0]->getPrimary(),
 						$entity[1]->getPrimary(),
 					];
-					/** @var $schema string[] */
-					$primaryId = [
-						$primary[0]->get(),
-						$primary[1]->get(),
-					];
-					/** @var $schema string[] */
-					$delimited = [
-						$this->delimite($primaryId[0]),
-						$this->delimite($primaryId[1]),
-					];
-					$cypher .= 'MERGE (' . $delimited[0] . ':' . $this->delimite($schema[0]) . ' {' . $this->delimite($primary[0]->getName()) . ': $' . $this->delimite($primaryId[0]) . "})\n";
-					$cypher .= 'MERGE (' . $delimited[1] . ':' . $this->delimite($schema[1]) . ' {' . $this->delimite($primary[1]->getName()) . ': $' . $this->delimite($primaryId[1]) . "})\n";
-					$cypher .= 'MERGE (' . $delimited[0] . ')';
+					$cypher .= 'MERGE (a:' . $this->delimite($schema[0]) . ' {' . $this->delimite($primary[0]->getName()) . ": \$a})\n";
+					$cypher .= 'MERGE (b:' . $this->delimite($schema[1]) . ' {' . $this->delimite($primary[1]->getName()) . ": \$b})\n";
+					$cypher .= 'MERGE (a)';
 					$cypher .= '-[:' . $this->delimite($entityLink->getLink()->getName()) . ']';
-					$cypher .= '->(' . $delimited[1] . ")\n";
+					$cypher .= "->(b)\n";
 					$this->native($cypher, [
-						$primaryId[0] => $primaryId[0],
-						$primaryId[1] => $primaryId[1],
+						'a' => $primary[0]->get(),
+						'b' => $primary[1]->get(),
 					]);
 				}
 				foreach ($entityQueue->getEntityRelations() as $entityRelation) {
@@ -238,23 +224,13 @@
 						$entity[0]->getPrimary(),
 						$entity[1]->getPrimary(),
 					];
-					/** @var $schema string[] */
-					$primaryId = [
-						$primary[0]->get(),
-						$primary[1]->get(),
-					];
-					/** @var $schema string[] */
-					$delimited = [
-						$this->delimite($primaryId[0]),
-						$this->delimite($primaryId[1]),
-					];
 					$params = [
-						$primaryId[0] => $primaryId[0],
-						$primaryId[1] => $primaryId[1],
+						'a' => $primary[0]->get(),
+						'b' => $primary[1]->get(),
 					];
-					$cypher .= 'MERGE (' . $delimited[0] . ':' . $this->delimite($schema[0]) . ' {' . $this->delimite($primary[0]->getName()) . ': $' . $this->delimite($primaryId[0]) . "})\n";
-					$cypher .= 'MERGE (' . $delimited[1] . ':' . $this->delimite($schema[1]) . ' {' . $this->delimite($primary[1]->getName()) . ': $' . $this->delimite($primaryId[1]) . "})\n";
-					$cypher .= 'MERGE (' . $this->delimite($primaryId[0]) . ')';
+					$cypher .= 'MERGE (a:' . $this->delimite($schema[0]) . ' {' . $this->delimite($primary[0]->getName()) . ": \$a})\n";
+					$cypher .= 'MERGE (b:' . $this->delimite($schema[1]) . ' {' . $this->delimite($primary[1]->getName()) . ": \$b})\n";
+					$cypher .= 'MERGE (a)';
 					$cypher .= '-[:' . $this->delimite($entityRelation->getRelation()->getSchema()->getRealName());
 					$using = $entityRelation->getUsing();
 					if (empty($source = $using->toArray()) === false) {
@@ -269,7 +245,7 @@
 						$cypher .= implode(', ', $propertyList) . '}';
 					}
 					$cypher .= ']';
-					$cypher .= '->(' . $this->delimite($primaryId[1]) . ")\n";
+					$cypher .= "->(b)\n";
 					$this->native($cypher, $params);
 				}
 			}
