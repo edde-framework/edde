@@ -32,6 +32,8 @@
 			 * @inheritdoc
 			 */
 			public function link(IEntity $from, IEntity $to, ILink $link): IEntityQueue {
+				$this->queue($from);
+				$this->queue($to);
 				/**
 				 * maintain 1:N relation, thus create a new link, remove the old one
 				 */
@@ -55,6 +57,9 @@
 			 * @inheritdoc
 			 */
 			public function attach(IEntity $entity, IEntity $target, IEntity $using, IRelation $relation): IEntityQueue {
+				$this->queue($entity);
+				$this->queue($target);
+				$this->queue($using);
 				$this->entityRelations[] = new EntityRelation($entity, $target, $using, $relation);
 				return $this;
 			}

@@ -77,4 +77,11 @@
 			 * @return ICollection
 			 */
 			public function join(string $schema, string $alias): ICollection;
+
+			/**
+			 * save this entity and all related entities (entity queue in a transaction)
+			 *
+			 * @return IEntity
+			 */
+			public function save(): IEntity;
 		}

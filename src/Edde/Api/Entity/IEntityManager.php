@@ -48,7 +48,9 @@
 			/**
 			 * creates a new transaction
 			 *
+			 * @param IEntityQueue|null $entityQueue
+			 *
 			 * @return ITransaction
 			 */
-			public function transaction(): ITransaction;
+			public function transaction(IEntityQueue $entityQueue = null): ITransaction;
 		}

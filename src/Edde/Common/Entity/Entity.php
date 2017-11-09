@@ -99,6 +99,16 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function save(): IEntity {
+				$transaction = $this->entityManager->transaction($this->entityQueue);
+				$transaction->queue($this);
+				$transaction->execute();
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function toArray(): array {
 				$array = [];
 				foreach ($this->schema->getPropertyList() as $k => $property) {
