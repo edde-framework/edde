@@ -11,10 +11,14 @@
 			 */
 			protected $mime;
 			/**
-			 * @var array
+			 * @var string[]
 			 */
 			protected $parameterList;
 
+			/**
+			 * @param string   $mime
+			 * @param string[] $parameterList
+			 */
 			public function __construct(string $mime, array $parameterList = []) {
 				$this->mime = $mime;
 				$this->parameterList = $parameterList;
