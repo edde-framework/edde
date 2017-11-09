@@ -35,17 +35,19 @@
 			public function native($query, array $params = []) {
 				try {
 					if ($this->transaction) {
-						$response = $this->send('POST', str_replace('/commit', '', $this->transaction), json_encode([
+						$response = $this->send('POST', str_replace('/commit', '', $this->transaction), [
 							'statements' => [
-								'statement'  => $query,
-								'parameters' => $params,
+								[
+									'statement'  => $query,
+									'parameters' => (object)$params,
+								],
 							],
-						]));
+						]);
 						return;
 					}
 					$reponse = $this->send('POST', '/db/data/cypher', [
 						'query'  => $query,
-						'params' => $params,
+						'params' => (object)$params,
 					]);
 				} catch (\Throwable $throwable) {
 					throw $this->exception($throwable);
@@ -259,16 +261,32 @@
 				return '`' . str_replace('`', '``', $delimite) . '`';
 			}
 
+			/**
+			 * @param string     $method
+			 * @param string     $path
+			 * @param array|null $parameters
+			 *
+			 * @return \stdClass
+			 * @throws DriverException
+			 */
 			protected function send(string $method, string $path, array $parameters = null) {
 				$json = json_encode((object)$parameters);
 				$length = $parameters ? strlen($json) : 0;
-				$result = @file_get_contents(strpos($path, 'http') === 0 ? $path : ($this->url . $path), false, stream_context_create([
+				$result = file_get_contents(strpos($path, 'http') === 0 ? $path : ($this->url . $path), false, stream_context_create([
 					'http' => [
 						'method'  => $method,
 						'header'  => "Content-Type: application/json\r\nContent-Length: $length\r\n",
 						'content' => $json,
 					],
 				]));
+				if (is_string($result)) {
+					$result = json_decode($result);
+					foreach ($result->errors ?? [] as $error) {
+						throw new DriverException($error->message);
+					}
+					return $result;
+				}
+				throw new DriverException(sprintf('Communication problem, kaboom!'));
 			}
 
 			protected function handleSetup(): void {
