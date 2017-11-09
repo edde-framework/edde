@@ -6,7 +6,6 @@
 		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\IEntityManager;
-		use Edde\Api\Entity\Inject\Transaction;
 		use Edde\Api\Entity\ITransaction;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Schema\ISchema;
@@ -16,34 +15,28 @@
 
 		class EntityManager extends Object implements IEntityManager {
 			use SchemaManager;
-			use Transaction;
 			use Container;
 			use Storage;
-			/**
-			 * @var IEntity[]
-			 */
-			protected $entityList = [];
-			/**
-			 * @var ICollection[]
-			 */
-			protected $collectionList = [];
+			/** @var IEntity[] */
+			protected $entities = [];
+			/** @var ICollection[] */
+			protected $collections = [];
 
 			/**
 			 * @inheritdoc
 			 */
 			public function createEntity(ISchema $schema): IEntity {
-				if (isset($this->entityList[$name = $schema->getName()]) === false) {
-					$this->entityList[$name] = $this->container->inject(new Entity($schema));
+				if (isset($this->entities[$name = $schema->getName()]) === false) {
+					$this->entities[$name] = $this->container->inject(new Entity($schema));
 				}
-				return clone $this->entityList[$name];
+				return clone $this->entities[$name];
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function create(string $schema, array $source = []): IEntity {
-				$this->transaction->entity($entity = $this->createEntity($schema = $this->schemaManager->load($schema))->put($this->schemaManager->generate($schema, $source)));
-				return $entity;
+				return $this->createEntity($schema = $this->schemaManager->load($schema))->put($this->schemaManager->generate($schema, $source));
 			}
 
 			/**
@@ -59,16 +52,16 @@
 			 * @inheritdoc
 			 */
 			public function collection(string $schema): ICollection {
-				if (isset($this->collectionList[$name = $schema]) === false) {
-					$this->collectionList[$name] = $this->container->inject(new Collection($this->storage->stream(new SelectQuery($schema = $this->schemaManager->load($schema), 'c')), $schema));
+				if (isset($this->collections[$name = $schema]) === false) {
+					$this->collections[$name] = $this->container->inject(new Collection($this->storage->stream(new SelectQuery($schema = $this->schemaManager->load($schema), 'c')), $schema));
 				}
-				return clone $this->collectionList[$name];
+				return clone $this->collections[$name];
 			}
 
 			/**
 			 * @inheritdoc
 			 */
 			public function transaction(): ITransaction {
-				return clone $this->transaction;
+				return new Transaction($this->storage, new EntityQueue());
 			}
 		}

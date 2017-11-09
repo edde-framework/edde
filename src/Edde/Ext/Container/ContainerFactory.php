@@ -17,7 +17,6 @@
 		use Edde\Api\Driver\IDriver;
 		use Edde\Api\EddeException;
 		use Edde\Api\Entity\IEntityManager;
-		use Edde\Api\Entity\ITransaction;
 		use Edde\Api\Filter\IFilterManager;
 		use Edde\Api\Generator\IGeneratorManager;
 		use Edde\Api\Http\IHttpUtils;
@@ -48,7 +47,6 @@
 		use Edde\Common\Converter\ConverterManager;
 		use Edde\Common\Crypt\RandomService;
 		use Edde\Common\Entity\EntityManager;
-		use Edde\Common\Entity\Transaction;
 		use Edde\Common\Filter\FilterManager;
 		use Edde\Common\Generator\GeneratorManager;
 		use Edde\Common\Http\HttpUtils;
@@ -312,41 +310,40 @@
 					/**
 					 * schema support
 					 */
-					ISchemaManager::class    => SchemaManager::class,
+					ISchemaManager::class      => SchemaManager::class,
 					/**
 					 * generator (related to schema) support
 					 */
-					IGeneratorManager::class => GeneratorManager::class,
-					IFilterManager::class    => FilterManager::class,
-					ISanitizerManager::class => SanitizerManager::class,
+					IGeneratorManager::class   => GeneratorManager::class,
+					IFilterManager::class      => FilterManager::class,
+					ISanitizerManager::class   => SanitizerManager::class,
 					/**
 					 * random & security support
 					 */
-					IRandomService::class    => RandomService::class,
+					IRandomService::class      => RandomService::class,
 					/**
 					 * storage support
 					 */
-					IEntityManager::class    => EntityManager::class,
-					ITransaction::class      => Transaction::class,
-					IStorage::class          => Storage::class,
-					IDriver::class           => self::exception(sprintf('Please register driver to use Storage.', IDriver::class)),
+					IEntityManager::class      => EntityManager::class,
+					IStorage::class            => Storage::class,
+					IDriver::class             => self::exception(sprintf('Please register driver to use Storage.', IDriver::class)),
 					/**
 					 * an application upgrades support
 					 */
-					IUpgradeManager::class   => self::exception(sprintf('You have to provide you own implementation of [%s]; you can use [%s] to get some little help.', IUpgradeManager::class, AbstractUpgradeManager::class)),
+					IUpgradeManager::class     => self::exception(sprintf('You have to provide you own implementation of [%s]; you can use [%s] to get some little help.', IUpgradeManager::class, AbstractUpgradeManager::class)),
 					/**
 					 * Xml support
 					 */
-					IXmlExport::class        => XmlExport::class,
-					IXmlParser::class        => XmlParser::class,
+					IXmlExport::class          => XmlExport::class,
+					IXmlParser::class          => XmlParser::class,
 					/**
 					 * an application handles lifecycle workflow
 					 */
-					IApplication::class      => Application::class,
+					IApplication::class        => Application::class,
 					/**
 					 * magical factory for an application execution
 					 */
-					'application'            => IApplication::class . '::run',
+					'application'              => IApplication::class . '::run',
 				];
 			}
 

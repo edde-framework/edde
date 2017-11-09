@@ -25,6 +25,14 @@
 			public function getPrimary(): IProperty;
 
 			/**
+			 * unique representation of this entity (including persistence, this could
+			 * be for example guid, ...); shortcut for primary->get()
+			 *
+			 * @return string
+			 */
+			public function getHash(): string;
+
+			/**
 			 * load the given data (they should be also filtered)
 			 *
 			 * @param array $source

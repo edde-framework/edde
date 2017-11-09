@@ -48,6 +48,13 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function getHash(): string {
+				return $this->getPrimary()->get();
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function filter(array $source): IEntity {
 				$this->push($this->schemaManager->filter($this->schema, $source));
 				return $this;
