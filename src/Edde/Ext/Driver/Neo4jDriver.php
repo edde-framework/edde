@@ -140,10 +140,12 @@
 			 * @throws \Throwable
 			 */
 			protected function executeTransactionQuery(ITransactionQuery $transactionQuery) {
-				if (($transaction = $transactionQuery->getTransaction())->isEmpty()) {
+				$transaction = $transactionQuery->getTransaction();
+				$entityQueue = $transaction->getEntityQueue();
+				if ($entityQueue->isEmpty()) {
 					return;
 				}
-				foreach ($transaction->getEntityUnlinks() as $entityLink) {
+				foreach ($entityQueue->getEntityUnlinks() as $entityLink) {
 					$cypher = '';
 					$link = $entityLink->getLink();
 					$primary = $entityLink->getEntity()->getPrimary();
@@ -155,7 +157,7 @@
 				}
 				$cypher = null;
 				$parameterList = [];
-				foreach ($transaction->getEntities() as $entity) {
+				foreach ($entityQueue->getEntities() as $entity) {
 					$schema = $entity->getSchema();
 					if ($entity->isDirty() === false || $schema->isRelation()) {
 						continue;
@@ -170,12 +172,12 @@
 					$cypher .= 'MERGE (' . ($id = $this->delimite($value)) . ':' . $this->delimite($schema->getRealName()) . ' {' . $this->delimite($primary->getName()) . ': $' . $parameterId . '.primary})';
 					$cypher .= ' SET ' . $id . ' = $' . $parameterId . ".set\n";
 				}
-				foreach ($transaction->getEntityLinks() as $entityLink) {
+				foreach ($entityQueue->getEntityLinks() as $entityLink) {
 					$cypher .= 'MERGE (' . $this->delimite($entityLink->getEntity()->getPrimary()->get()) . ')';
 					$cypher .= '-[:' . $this->delimite($entityLink->getLink()->getName()) . ']';
 					$cypher .= '->(' . $this->delimite($entityLink->getTo()->getPrimary()->get()) . ")\n";
 				}
-				foreach ($transaction->getEntityRelations() as $entityRelation) {
+				foreach ($entityQueue->getEntityRelations() as $entityRelation) {
 					$cypher .= 'MERGE (' . $this->delimite($entityRelation->getEntity()->getPrimary()->get()) . ')';
 					$cypher .= '-[:' . $this->delimite($entityRelation->getRelation()->getSchema()->getRealName());
 					$using = $entityRelation->getUsing();

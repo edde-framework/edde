@@ -79,6 +79,11 @@
 			public function getEntityUnlinks(): array;
 
 			/**
+			 * @return IEntityRelation[]
+			 */
+			public function getEntityRelations(): array;
+
+			/**
 			 * @return \Traversable|IEntity[]
 			 */
 			public function getIterator();

@@ -3,7 +3,6 @@
 	namespace Edde\Common\Storage;
 
 		use Edde\Api\Entity\Inject\EntityManager;
-		use Edde\Api\Entity\Inject\Transaction;
 		use Edde\Api\Schema\Exception\UnknownSchemaException;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
@@ -27,7 +26,6 @@
 		abstract class AbstractStorageTest extends TestCase {
 			use EntityManager;
 			use SchemaManager;
-			use Transaction;
 			use Storage;
 
 			/**
@@ -58,52 +56,60 @@
 					'name'     => 'this entity is new',
 					'optional' => 'foo-bar',
 				]);
+				$transaction = $this->entityManager->transaction();
+				$transaction->queue($entity);
 				self::assertNotEmpty($entity->get('guid'));
-				self::assertFalse($this->transaction->isEmpty(), 'there is nothing in the transaction!');
-				$this->transaction->execute();
+				self::assertFalse($transaction->isEmpty(), 'there is nothing in the transaction!');
+				$transaction->execute();
 				self::assertFalse($entity->isDirty(), 'entity is still dirty, oops!');
 			}
 
 			public function testInsertException() {
 				$this->expectException(NullValueException::class);
-				$this->entityManager->create(FooSchema::class, [
+				$entity = $this->entityManager->create(FooSchema::class, [
 					'label' => 'kaboom',
 				]);
-				$this->transaction->execute();
+				$transaction = $this->entityManager->transaction();
+				$transaction->queue($entity);
+				$transaction->execute();
 			}
 
 			public function testInsertException2() {
 				$this->expectException(NullValueException::class);
-				$this->entityManager->create(FooSchema::class, [
+				$entity = $this->entityManager->create(FooSchema::class, [
 					'name'  => null,
 					'label' => 'kaboom',
 				]);
-				$this->transaction->execute();
+				$transaction = $this->entityManager->transaction();
+				$transaction->queue($entity);
+				$transaction->execute();
 			}
 
 			public function testInsertUnique() {
 				$this->expectException(DuplicateEntryException::class);
-				$this->entityManager->create(FooSchema::class, [
+				$transaction = $this->entityManager->transaction();
+				$transaction->queue($this->entityManager->create(FooSchema::class, [
 					'name' => 'unique',
-				]);
-				$this->entityManager->create(FooSchema::class, [
+				]));
+				$transaction->queue($this->entityManager->create(FooSchema::class, [
 					'name' => 'unique',
-				]);
-				$this->transaction->execute();
+				]));
+				$transaction->execute();
 			}
 
 			public function testSave() {
-				$entity = $this->entityManager->create(SimpleSchema::class, [
+				$transaction = $this->entityManager->transaction();
+				$transaction->queue($entity = $this->entityManager->create(SimpleSchema::class, [
 					'name'     => 'some name for this entity',
 					'optional' => 'this string is optional, but I wanna fill it!',
-				]);
+				]));
 				self::assertNotEmpty($entity->get('guid'));
-				$entity = $this->entityManager->create(SimpleSchema::class, [
+				$transaction->queue($entity = $this->entityManager->create(SimpleSchema::class, [
 					'name'     => 'another name',
 					'optional' => null,
-				]);
+				]));
 				self::assertNotEmpty($entity->get('guid'));
-				$this->transaction->execute();
+				$transaction->execute();
 				self::assertFalse($entity->isDirty(), 'Entity is still dirty!');
 			}
 
@@ -144,18 +150,19 @@
 			 * @throws EntityNotFoundException
 			 */
 			public function testUpdate() {
-				$entity = $this->entityManager->create(SimpleSchema::class, [
+				$transaction = $this->entityManager->transaction();
+				$transaction->queue($entity = $this->entityManager->create(SimpleSchema::class, [
 					'name'     => 'to-be-updated',
 					'optional' => 'this is a new nice and updated string',
 					'value'    => 3.14,
 					'date'     => new \DateTime('24.12.2020 12:24:13'),
 					'question' => false,
-				]);
-				$this->transaction->execute();
-				$this->transaction->entity($entity);
+				]));
+				$transaction->execute();
+				$transaction->queue($entity);
 				$entity->set('optional', null);
 				$expect = $entity->toArray();
-				$this->transaction->execute();
+				$transaction->execute();
 				$entity = $this->entityManager->collection(SimpleSchema::class)->entity($entity->get('guid'));
 				self::assertFalse($entity->isDirty(), 'entity should NOT be dirty right after load!');
 				self::assertEquals($expect, $array = $entity->toArray());
@@ -166,21 +173,22 @@
 			}
 
 			public function testLink() {
-				$foo = $this->entityManager->create(FooSchema::class, [
+				$transaction = $this->entityManager->transaction();
+				$transaction->queue($foo = $this->entityManager->create(FooSchema::class, [
 					'name'  => 'foo with poo',
 					'label' => 'I wanna have a label on this one',
-				]);
-				$poo = $this->entityManager->create(PooSchema::class, [
+				]));
+				$transaction->queue($poo = $this->entityManager->create(PooSchema::class, [
 					'name'  => 'the name of this epic Poo!',
 					'label' => 'smells like Hell',
-				]);
-				$anotherPoo = $this->entityManager->create(PooSchema::class, [
+				]));
+				$transaction->queue($anotherPoo = $this->entityManager->create(PooSchema::class, [
 					'name' => 'this is another poo!',
-				]);
+				]));
 				$foo->linkTo($poo);
 				$foo->linkTo($anotherPoo);
 				$foo->linkTo($poo);
-				$this->transaction->execute();
+				$transaction->execute();
 				$source = null;
 				foreach ($this->storage->native('MATCH (a:foo)-[:poo]->(p:poo) WHERE a.guid = $a RETURN p', [
 					'a' => $foo->get('guid'),
@@ -215,12 +223,13 @@
 			 */
 			public function testUnlink() {
 				$this->expectException(EntityNotFoundException::class);
-				$foo = $this->entityManager->collection(FooSchema::class)->entity('foo with poo');
+				$transaction = $this->entityManager->transaction();
+				$transaction->queue($foo = $this->entityManager->collection(FooSchema::class)->entity('foo with poo'));
 				/**
 				 * there should be just exactly one relation, thus it's not necessary to say which poo should be unlinked
 				 */
 				$foo->unlink(PooSchema::class);
-				$this->transaction->execute();
+				$transaction->execute();
 				$collection = $this->entityManager->collection(FooSchema::class);
 				$collection->query($query = new SelectQuery($this->schemaManager->load(FooSchema::class), 'f'));
 				$query->link(PooSchema::class, 'p')->return()->order('p.name');
@@ -231,33 +240,34 @@
 			 * @throws UnknownSchemaException
 			 */
 			public function testRelationTo() {
-				$foo = $this->entityManager->create(FooSchema::class, [
+				$transaction = $this->entityManager->transaction();
+				$transaction->queue($foo = $this->entityManager->create(FooSchema::class, [
 					'name' => 'foo The First',
-				]);
-				$foo2 = $this->entityManager->create(FooSchema::class, [
+				]));
+				$transaction->queue($foo2 = $this->entityManager->create(FooSchema::class, [
 					'name' => 'foo The Second',
-				]);
-				$bar = $this->entityManager->create(BarSchema::class, [
+				]));
+				$transaction->queue($bar = $this->entityManager->create(BarSchema::class, [
 					'name' => 'bar The Second',
-				]);
-				$bar2 = $this->entityManager->create(BarSchema::class, [
+				]));
+				$transaction->queue($bar2 = $this->entityManager->create(BarSchema::class, [
 					'name' => 'bar The Third',
-				]);
-				$bar3 = $this->entityManager->create(BarSchema::class, [
+				]));
+				$transaction->queue($bar3 = $this->entityManager->create(BarSchema::class, [
 					'name' => 'Bar for The Foo',
-				]);
-				$this->entityManager->create(BarSchema::class, [
+				]));
+				$transaction->queue($this->entityManager->create(BarSchema::class, [
 					'name' => 'Another, very secret bar!',
-				]);
-				$poo = $this->entityManager->create(PooSchema::class, [
+				]));
+				$transaction->queue($poo = $this->entityManager->create(PooSchema::class, [
 					'name' => 'Da Poo The First One!',
-				]);
-				$poo2 = $this->entityManager->create(PooSchema::class, [
+				]));
+				$transaction->queue($poo2 = $this->entityManager->create(PooSchema::class, [
 					'name' => 'Da Poo The Bigger One!',
-				]);
-				$poo3 = $this->entityManager->create(PooSchema::class, [
+				]));
+				$transaction->queue($poo3 = $this->entityManager->create(PooSchema::class, [
 					'name' => 'Da Poo The Hard One!',
-				]);
+				]));
 				$this->schemaManager->load(FooBarSchema::class);
 				$this->schemaManager->load(BarPooSchema::class);
 				$foo->attach($bar);
@@ -266,7 +276,7 @@
 				$bar2->attach($poo2);
 				$bar2->attach($poo3);
 				$foo2->attach($bar3);
-				$this->transaction->execute();
+				$transaction->execute();
 				$barList = [];
 				$expected = [
 					'bar The Second',
@@ -355,23 +365,24 @@
 			 */
 			public function testRelationAttribute() {
 				$this->schemaManager->load(UserRoleSchema::class);
-				$user = $this->entityManager->create(UserSchema::class, [
+				$transaction = $this->entityManager->transaction();
+				$transaction->queue($user = $this->entityManager->create(UserSchema::class, [
 					'name'    => 'Me, The Best User Ever!',
 					'email'   => 'me@there.here',
 					'created' => new \DateTime(),
-				]);
-				$root = $this->entityManager->create(RoleSchema::class, [
+				]));
+				$transaction->queue($root = $this->entityManager->create(RoleSchema::class, [
 					'name'  => 'root',
 					'label' => 'he can do everything!',
-				]);
-				$guest = $this->entityManager->create(RoleSchema::class, [
+				]));
+				$transaction->queue($guest = $this->entityManager->create(RoleSchema::class, [
 					'name'  => 'guest',
 					'label' => 'this one can do almost nothing!',
-				]);
+				]));
 				$user->attach($root)->set('enabled', false);
 				$user->attach($root)->set('enabled', true);
 				$user->attach($guest)->set('enabled', false);
-				$this->transaction->execute();
+				$transaction->execute();
 				$expect = [
 					'root',
 				];
@@ -394,6 +405,11 @@
 				sort($expect);
 				sort($current);
 				self::assertSame($expect, $current, 'looks like roles are not properly assigned!');
+				$current = [];
+				foreach ($user->join(RoleSchema::class, 'r') as $role) {
+					$current[] = $role->get('name');
+				}
+				self::assertSame(['root'], $current);
 			}
 
 			/**
@@ -405,24 +421,25 @@
 				$this->storage->start();
 				$start = microtime(true);
 				for ($i = 0; $i < 10; $i++) {
-					$foo = $this->entityManager->create(FooSchema::class, [
+					$transaction = $this->entityManager->transaction();
+					$transaction->queue($foo = $this->entityManager->create(FooSchema::class, [
 						'name' => 'foo #' . $i,
-					]);
-					$poo = $this->entityManager->create(PooSchema::class, [
+					]));
+					$transaction->queue($poo = $this->entityManager->create(PooSchema::class, [
 						'name'  => 'poo of foo $' . $i,
 						'label' => "and it's labeled #$i",
-					]);
-					$bar = $this->entityManager->create(BarSchema::class, [
+					]));
+					$transaction->queue($bar = $this->entityManager->create(BarSchema::class, [
 						'name' => 'bar #' . $i,
-					]);
-					$bar2 = $this->entityManager->create(BarSchema::class, [
+					]));
+					$transaction->queue($bar2 = $this->entityManager->create(BarSchema::class, [
 						'name' => 'bar 2 #' . $i,
-					]);
+					]));
 					$foo->linkTo($poo);
 //					$foo->attach($bar);
 //					$foo->attach($bar2);
 					$bar->linkTo($poo);
-					$this->transaction->execute();
+					$transaction->execute();
 				}
 				$this->storage->commit();
 				$sum = (microtime(true) - $start);

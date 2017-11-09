@@ -63,7 +63,7 @@
 			 * @inheritdoc
 			 */
 			public function isEmpty(): bool {
-				return empty($this->entities) && empty($this->entityLinks) && empty($this->entityUnlinks);
+				return empty($this->entities) && empty($this->entityLinks) && empty($this->entityUnlinks) && empty($this->entityRelations);
 			}
 
 			/**
@@ -76,6 +76,7 @@
 				$this->entities = [];
 				$this->entityLinks = [];
 				$this->entityUnlinks = [];
+				$this->entityRelations = [];
 				return $this;
 			}
 
@@ -103,6 +104,13 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function getEntityRelations(): array {
+				return $this->entityRelations;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function getIterator() {
 				yield from $this->entities;
 			}
@@ -115,5 +123,6 @@
 				$this->entities = [];
 				$this->entityLinks = [];
 				$this->entityUnlinks = [];
+				$this->entityRelations = [];
 			}
 		}
