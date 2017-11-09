@@ -2,9 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Driver;
 
+		use Edde\Api\Crate\IProperty;
 		use Edde\Api\Driver\Exception\DriverException;
 		use Edde\Api\Driver\Exception\DriverQueryException;
 		use Edde\Api\Driver\IDriver;
+		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Query\Fragment\IWhere;
 		use Edde\Api\Query\ICrateSchemaQuery;
 		use Edde\Api\Query\IEntityQueueQuery;
@@ -184,23 +186,40 @@
 				}
 				foreach ($entityQueue->getEntityLinks() as $entityLink) {
 					$cypher = null;
-					$params = [];
-					$entity = $entityLink->getEntity();
-					$primary = $entity->getPrimary();
-					$primaryId = $primary->get();
-					$delimitedFrom = $this->delimite($primaryId);
-					$params[$primaryId] = $primaryId;
-					$cypher .= 'MERGE (' . $delimitedFrom . ':' . $this->delimite($entity->getSchema()->getRealName()) . ' {' . $this->delimite($primary->getName()) . ': $' . $this->delimite($primaryId) . "})\n";
-					$entity = $entityLink->getTo();
-					$primary = $entity->getPrimary();
-					$primaryId = $primary->get();
-					$delimitedTo = $this->delimite($primaryId);
-					$params[$primaryId] = $primaryId;
-					$cypher .= 'MERGE (' . $delimitedTo . ':' . $this->delimite($entity->getSchema()->getRealName()) . ' {' . $this->delimite($primary->getName()) . ': $' . $this->delimite($primaryId) . "})\n";
-					$cypher .= 'MERGE (' . $delimitedFrom . ')';
+					/** @var $entity IEntity[] */
+					$entity = [
+						$entityLink->getEntity(),
+						$entityLink->getTo(),
+					];
+					/** @var $schema string[] */
+					$schema = [
+						$entity[0]->getSchema()->getRealName(),
+						$entity[1]->getSchema()->getRealName(),
+					];
+					/** @var $primary IProperty[] */
+					$primary = [
+						$entity[0]->getPrimary(),
+						$entity[1]->getPrimary(),
+					];
+					/** @var $schema string[] */
+					$primaryId = [
+						$primary[0]->get(),
+						$primary[1]->get(),
+					];
+					/** @var $schema string[] */
+					$delimited = [
+						$this->delimite($primaryId[0]),
+						$this->delimite($primaryId[1]),
+					];
+					$cypher .= 'MERGE (' . $delimited[0] . ':' . $this->delimite($schema[0]) . ' {' . $this->delimite($primary[0]->getName()) . ': $' . $this->delimite($primaryId[0]) . "})\n";
+					$cypher .= 'MERGE (' . $delimited[1] . ':' . $this->delimite($schema[1]) . ' {' . $this->delimite($primary[1]->getName()) . ': $' . $this->delimite($primaryId[1]) . "})\n";
+					$cypher .= 'MERGE (' . $delimited[0] . ')';
 					$cypher .= '-[:' . $this->delimite($entityLink->getLink()->getName()) . ']';
-					$cypher .= '->(' . $delimitedTo . ")\n";
-					$this->native($cypher, $params);
+					$cypher .= '->(' . $delimited[1] . ")\n";
+					$this->native($cypher, [
+						$primaryId[0] => $primaryId[0],
+						$primaryId[1] => $primaryId[1],
+					]);
 				}
 				foreach ($entityQueue->getEntityRelations() as $entityRelation) {
 					$cypher = null;
