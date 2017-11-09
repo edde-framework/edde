@@ -14,7 +14,7 @@
 		 * "No", said Little Johnny. His grandpa replied, "Then you're not old enough."
 		 *
 		 * The next day, Little Johnny saw his grandpa drinking beer. He asked, "Grandpa, can I drink some of your beer?" His grandpa replied, "Can your penis reach your asshole?"
-		 * "No" said Little Johhny. "Then you're not old enough." his grandpa replied.
+		 * "No" said Little Johny. "Then you're not old enough." his grandpa replied.
 		 *
 		 * The next day, Little Johnny was eating cookies. His grandpa asked, "Can I have some of your cookies?" Little Johnny replied, "Can your penis reach your asshole?"
 		 * His grandpa replied, "It most certainly can!" Little Johnny replied, "Then go fuck yourself."

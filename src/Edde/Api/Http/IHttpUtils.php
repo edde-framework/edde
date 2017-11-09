@@ -15,7 +15,7 @@
 			public function accept(string $accept = null): array;
 
 			/**
-			 * parse an input language string (Accept-Language header) and return langauge order
+			 * parse an input language string (Accept-Language header) and return language order
 			 *
 			 * @param string|null $language
 			 * @param string      $default

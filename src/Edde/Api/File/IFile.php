@@ -9,7 +9,7 @@
 
 		interface IFile extends IResource {
 			/**
-			 * create file handle; if the file is not availble, exceptio nshould be thrown
+			 * create file handle; if the file is not available, exception should be thrown
 			 *
 			 * @param string $mode
 			 * @param bool   $exclusive if the file is already opened, exception should be thrown

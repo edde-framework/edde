@@ -12,11 +12,9 @@
 		use Edde\Api\Query\IEntityQueueQuery;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Query\ISelectQuery;
-		use Edde\Api\Query\ITransactionQuery;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\NullValueException;
 		use Edde\Common\Driver\AbstractDriver;
-		use Edde\Common\Query\EntityQueueQuery;
 		use Edde\Common\Query\NativeQuery;
 		use GraphAware\Bolt\Exception\MessageFailureException;
 		use GraphAware\Bolt\GraphDatabase;
@@ -246,15 +244,6 @@
 				$cypher .= ']';
 				$cypher .= "->(b)\n";
 				$this->native($cypher, $params);
-			}
-
-			/**
-			 * @param ITransactionQuery $transactionQuery
-			 *
-			 * @throws \Throwable
-			 */
-			protected function executeTransactionQuery(ITransactionQuery $transactionQuery) {
-				$this->executeEntityQueueQuery(new EntityQueueQuery($transactionQuery->getTransaction()->getEntityQueue()));
 			}
 
 			/**

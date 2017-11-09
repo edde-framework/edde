@@ -67,7 +67,7 @@
 			public function moveNodeList(IAbstractNode $sourceNode, bool $move = false) : IAbstractNode;
 
 			/**
-			 * remove the given node from the list of this node; if node is not found (by object comparsion), exception is thrown
+			 * remove the given node from the list of this node; if node is not found (by object comparision), exception is thrown
 			 *
 			 * @param IAbstractNode $abstractNode
 			 * @param bool          $soft
@@ -171,7 +171,7 @@
 			public function getNodeCount() : int;
 
 			/**
-			 * insert the given node under current one (current one will have excatly one children)
+			 * insert the given node under current one (current one will have exactly one children)
 			 *
 			 * @param IAbstractNode $abstractNode
 			 *

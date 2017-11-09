@@ -44,13 +44,4 @@
 			 * @return ICollection
 			 */
 			public function collection(string $schema): ICollection;
-
-			/**
-			 * creates a new transaction
-			 *
-			 * @param IEntityQueue|null $entityQueue
-			 *
-			 * @return ITransaction
-			 */
-			public function transaction(IEntityQueue $entityQueue = null): ITransaction;
 		}

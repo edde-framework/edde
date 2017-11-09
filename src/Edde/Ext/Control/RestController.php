@@ -44,10 +44,12 @@
 			 * @throws NoHttpException
 			 */
 			public function actionOptions() {
-				(new Response())->headers([
+				$response = new Response();
+				$response->headers([
 					'Access-Control-Allow-Methods' => implode(', ', $this->getAllowedList()),
 					'Access-Control-Allow-Origin'  => '*',
 					'Access-Control-Allow-Headers' => $this->requestService->getHeaders()->get('Access-Control-Request-Headers', '*'),
-				])->execute();
+				]);
+				$response->execute();
 			}
 		}
