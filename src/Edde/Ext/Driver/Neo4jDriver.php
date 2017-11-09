@@ -259,11 +259,13 @@
 				return '`' . str_replace('`', '``', $delimite) . '`';
 			}
 
-			protected function send(string $method, string $path, array $parameters = []) {
-				$result = file_get_contents(strpos($path, 'http') === 0 ? $path : ($this->url . $path), false, stream_context_create([
+			protected function send(string $method, string $path, array $parameters = null) {
+				$json = json_encode((object)$parameters);
+				$length = $parameters ? strlen($json) : 0;
+				$result = @file_get_contents(strpos($path, 'http') === 0 ? $path : ($this->url . $path), false, stream_context_create([
 					'http' => [
 						'method'  => $method,
-						'header'  => "Content-Type: application/json\r\nContent-Length: " . strlen($json = json_encode($parameters)) . "\r\nX-Stream: true\r\n",
+						'header'  => "Content-Type: application/json\r\nContent-Length: $length\r\n",
 						'content' => $json,
 					],
 				]));
