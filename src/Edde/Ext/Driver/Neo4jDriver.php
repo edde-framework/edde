@@ -16,12 +16,24 @@
 		use Edde\Common\Driver\AbstractDriver;
 		use Edde\Common\Query\EntityQueueQuery;
 		use Edde\Common\Query\NativeQuery;
+		use GraphAware\Bolt\Exception\MessageFailureException;
+		use GraphAware\Bolt\GraphDatabase;
+		use GraphAware\Bolt\Protocol\SessionInterface;
+		use GraphAware\Bolt\Protocol\V1\Transaction;
+		use GraphAware\Bolt\Result\Result;
+		use GraphAware\Common\Type\Node;
 
 		class Neo4jDriver extends AbstractDriver {
 			/** @var string */
 			protected $url;
-			/** @var string */
-			protected $transaction = null;
+			/**
+			 * @var SessionInterface
+			 */
+			protected $session;
+			/**
+			 * @var Transaction
+			 */
+			protected $transaction;
 
 			/**
 			 * @param string $url
@@ -35,27 +47,14 @@
 			 */
 			public function native($query, array $params = []) {
 				try {
-					$path = '/db/data/cypher';
-					$parameters = [
-						'query'  => $query,
-						'params' => (object)$params,
-					];
-					if ($this->transaction) {
-						$path = str_replace('/commit', '', $this->transaction);
-						$parameters = [
-							'statements' => [
-								[
-									'statement'  => $query,
-									'parameters' => (object)$params,
-								],
-							],
-						];
-					}
-					return (function (array $source) {
-						foreach ($source as list($item)) {
-							yield (array)$item->data;
+					return (function (Result $result) {
+						foreach ($result->getRecords() as $record) {
+							/** @var $value Node */
+							foreach ($record->values() as $value) {
+								yield $value->asArray();
+							}
 						}
-					})($this->send('POST', $path, $parameters)->data ?? []);
+					})($this->session->run($query, $params));
 				} catch (\Throwable $throwable) {
 					$this->transaction = null;
 					throw $this->exception($throwable);
@@ -66,7 +65,7 @@
 			 * @inheritdoc
 			 */
 			public function start(): IDriver {
-				$this->transaction = $this->send('POST', '/db/data/transaction')->commit;
+				($this->transaction = $this->session->transaction())->begin();
 				return $this;
 			}
 
@@ -75,11 +74,10 @@
 			 */
 			public function commit(): IDriver {
 				try {
-					$this->send('POST', $this->transaction);
-				} catch (\Throwable $throwable) {
-					throw $this->exception($throwable);
-				} finally {
+					$this->transaction->commit();
 					$this->transaction = null;
+				} catch (\Throwable $throwable) {
+					$this->exception($throwable);
 				}
 				return $this;
 			}
@@ -88,10 +86,19 @@
 			 * @inheritdoc
 			 */
 			public function rollback(): IDriver {
-				if ($this->transaction) {
-					$this->send('DELETE', str_replace('/commit', '', $this->transaction));
-					$this->transaction = null;
+				try {
+					$this->transaction->rollback();
+				} catch (MessageFailureException $exception) {
+					/**
+					 * this is incredibly ugly, but transaction state should be tracked in this driver, so it's
+					 * possible to suppress this transaction; related to Neo4j, it's dying on transaction commit, thus
+					 * making whole this stuff a bit more complicated
+					 */
+					if ($exception->getMessage() !== 'No current transaction to rollback.') {
+						throw $exception;
+					}
 				}
+				$this->transaction = null;
 				return $this;
 			}
 
@@ -174,29 +181,32 @@
 					$cypher .= 'MERGE (' . ($id = $this->delimite($value)) . ':' . $this->delimite($schema->getRealName()) . ' {' . $this->delimite($primary->getName()) . ': $' . $parameterId . '.primary})';
 					$cypher .= ' SET ' . $id . ' = $' . $parameterId . ".set\n";
 				}
-				foreach ($entityQueue->getEntityLinks() as $entityLink) {
-					$cypher .= 'MERGE (' . $this->delimite($entityLink->getEntity()->getPrimary()->get()) . ')';
-					$cypher .= '-[:' . $this->delimite($entityLink->getLink()->getName()) . ']';
-					$cypher .= '->(' . $this->delimite($entityLink->getTo()->getPrimary()->get()) . ")\n";
+				if ($cypher) {
+					$this->native($cypher, $parameterList);
 				}
-				foreach ($entityQueue->getEntityRelations() as $entityRelation) {
-					$cypher .= 'MERGE (' . $this->delimite($entityRelation->getEntity()->getPrimary()->get()) . ')';
-					$cypher .= '-[:' . $this->delimite($entityRelation->getRelation()->getSchema()->getRealName());
-					$using = $entityRelation->getUsing();
-					if (empty($source = $using->toArray()) === false) {
-						$cypher .= ' {';
-						$propertyList = [];
-						foreach ($this->schemaManager->sanitize($using->getSchema(), $source) as $k => $v) {
-							if ($v !== null) {
-								$propertyList[] = $this->delimite($k) . ': $' . $this->delimite($parameterId = (sha1(random_bytes(42))));
-								$parameterList[$parameterId] = $v;
-							}
-						}
-						$cypher .= implode(', ', $propertyList) . '}';
-					}
-					$cypher .= ']';
-					$cypher .= '->(' . $this->delimite($entityRelation->getTarget()->getPrimary()->get()) . ")\n";
-				}
+//				foreach ($entityQueue->getEntityLinks() as $entityLink) {
+//					$cypher .= 'MERGE (' . $this->delimite($entityLink->getEntity()->getPrimary()->get()) . ')';
+//					$cypher .= '-[:' . $this->delimite($entityLink->getLink()->getName()) . ']';
+//					$cypher .= '->(' . $this->delimite($entityLink->getTo()->getPrimary()->get()) . ")\n";
+//				}
+//				foreach ($entityQueue->getEntityRelations() as $entityRelation) {
+//					$cypher .= 'MERGE (' . $this->delimite($entityRelation->getEntity()->getPrimary()->get()) . ')';
+//					$cypher .= '-[:' . $this->delimite($entityRelation->getRelation()->getSchema()->getRealName());
+//					$using = $entityRelation->getUsing();
+//					if (empty($source = $using->toArray()) === false) {
+//						$cypher .= ' {';
+//						$propertyList = [];
+//						foreach ($this->schemaManager->sanitize($using->getSchema(), $source) as $k => $v) {
+//							if ($v !== null) {
+//								$propertyList[] = $this->delimite($k) . ': $' . $this->delimite($parameterId = (sha1(random_bytes(42))));
+//								$parameterList[$parameterId] = $v;
+//							}
+//						}
+//						$cypher .= implode(', ', $propertyList) . '}';
+//					}
+//					$cypher .= ']';
+//					$cypher .= '->(' . $this->delimite($entityRelation->getTarget()->getPrimary()->get()) . ")\n";
+//				}
 				if ($cypher) {
 					$this->native($cypher, $parameterList);
 				}
@@ -313,5 +323,10 @@
 					return $result;
 				}
 				throw new DriverException(sprintf('Communication problem, kaboom!'));
+			}
+
+			protected function handleSetup(): void {
+				parent::handleSetup();
+				$this->session = GraphDatabase::driver($this->url)->session();
 			}
 		}

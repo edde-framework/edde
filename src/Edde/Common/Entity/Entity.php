@@ -107,6 +107,7 @@
 				}
 				$this->entityQueue->queue($this);
 				$this->storage->execute(new EntityQueueQuery($this->entityQueue));
+				$this->entityQueue->commit();
 				return $this;
 			}
 
