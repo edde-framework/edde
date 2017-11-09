@@ -18,7 +18,6 @@
 		class Neo4jDriver extends AbstractDriver {
 			/** @var string */
 			protected $url;
-			protected $client;
 			/** @var string */
 			protected $transaction = null;
 
@@ -34,22 +33,29 @@
 			 */
 			public function native($query, array $params = []) {
 				try {
+					$path = '/db/data/cypher';
+					$parameters = [
+						'query'  => $query,
+						'params' => (object)$params,
+					];
 					if ($this->transaction) {
-						$response = $this->send('POST', str_replace('/commit', '', $this->transaction), [
+						$path = str_replace('/commit', '', $this->transaction);
+						$parameters = [
 							'statements' => [
 								[
 									'statement'  => $query,
 									'parameters' => (object)$params,
 								],
 							],
-						]);
-						return;
+						];
 					}
-					$reponse = $this->send('POST', '/db/data/cypher', [
-						'query'  => $query,
-						'params' => (object)$params,
-					]);
+					return (function (array $source) {
+						foreach ($source as list($item)) {
+							yield (array)$item->data;
+						}
+					})($this->send('POST', $path, $parameters)->data ?? []);
 				} catch (\Throwable $throwable) {
+					$this->transaction = null;
 					throw $this->exception($throwable);
 				}
 			}
@@ -66,8 +72,13 @@
 			 * @inheritdoc
 			 */
 			public function commit(): IDriver {
-				$response = $this->send('POST', $this->transaction);
-				$this->transaction = null;
+				try {
+					$this->send('POST', $this->transaction);
+				} catch (\Throwable $throwable) {
+					throw $this->exception($throwable);
+				} finally {
+					$this->transaction = null;
+				}
 				return $this;
 			}
 
@@ -75,8 +86,10 @@
 			 * @inheritdoc
 			 */
 			public function rollback(): IDriver {
-				$response = $this->send('DELETE', $this->transaction);
-				$this->transaction = null;
+				if ($this->transaction) {
+					$this->send('DELETE', str_replace('/commit', '', $this->transaction));
+					$this->transaction = null;
+				}
 				return $this;
 			}
 
@@ -149,7 +162,7 @@
 					}
 					$primary = $entity->getPrimary();
 					$value = $primary->get();
-					$parameterList[$parameterId = 'p_' . sha1($value)] = [
+					$parameterList[$parameterId = sha1($value)] = [
 						'primary' => $value,
 						'set'     => $this->schemaManager->sanitize($schema, $entity->toArray()),
 					];
@@ -171,7 +184,7 @@
 						$propertyList = [];
 						foreach ($this->schemaManager->sanitize($using->getSchema(), $source) as $k => $v) {
 							if ($v !== null) {
-								$propertyList[] = $this->delimite($k) . ': $' . ($parameterId = ('p_' . sha1(random_bytes(42))));
+								$propertyList[] = $this->delimite($k) . ': $' . $this->delimite($parameterId = (sha1(random_bytes(42))));
 								$parameterList[$parameterId] = $v;
 							}
 						}
@@ -244,7 +257,7 @@
 						}
 						switch ($type) {
 							case 'value':
-								return new NativeQuery($name . ' ' . $operator . ' $' . ($parameterId = 'p_' . sha1(random_bytes(42))), [
+								return new NativeQuery($name . ' ' . $operator . ' $' . $this->delimite($parameterId = sha1(random_bytes(42))), [
 									$parameterId => $parameters[3],
 								]);
 						}
@@ -275,7 +288,7 @@
 				$result = file_get_contents(strpos($path, 'http') === 0 ? $path : ($this->url . $path), false, stream_context_create([
 					'http' => [
 						'method'  => $method,
-						'header'  => "Content-Type: application/json\r\nContent-Length: $length\r\n",
+						'header'  => "X-Stream: true\r\nContent-Type: application/json\r\nContent-Length: $length\r\n",
 						'content' => $json,
 					],
 				]));
@@ -287,10 +300,5 @@
 					return $result;
 				}
 				throw new DriverException(sprintf('Communication problem, kaboom!'));
-			}
-
-			protected function handleSetup(): void {
-				parent::handleSetup();
-				$this->client = curl_init();
 			}
 		}

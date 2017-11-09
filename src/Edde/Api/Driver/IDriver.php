@@ -28,6 +28,7 @@
 			 * @param array $params
 			 *
 			 * @return mixed
+			 * @throws DriverException
 			 */
 			public function native($query, array $params = []);
 

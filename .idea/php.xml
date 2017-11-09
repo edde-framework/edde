@@ -417,6 +417,26 @@
         <option value="Edde\Common\Storage\Storage-&gt;isSetup" />
         <option value="Edde\Common\Entity\Transaction-&gt;isSetup" />
         <option value="Edde\Common\Query\TransactionQuery-&gt;__construct" />
+        <option value="Edde\Common\Container\Factory\ExceptionFactory-&gt;canHandle" />
+        <option value="Edde\Common\Container\Factory\ProxyFactory-&gt;canHandle" />
+        <option value="Edde\Common\Container\Factory\InterfaceFactory-&gt;canHandle" />
+        <option value="Edde\Common\Container\Factory\InterfaceFactory-&gt;getFactory" />
+        <option value="Edde\Common\Container\Factory\InterfaceFactory-&gt;getReflection" />
+        <option value="Edde\Common\Container\Factory\InterfaceFactory-&gt;factory" />
+        <option value="Edde\Common\Container\Factory\InterfaceFactory-&gt;parameters" />
+        <option value="Edde\Common\Container\Reflection-&gt;getParameterList" />
+        <option value="Edde\Common\Container\Container-&gt;dependency" />
+        <option value="Edde\Common\Container\Reflection-&gt;getLazyList" />
+        <option value="Edde\Common\Container\Reflection-&gt;getInjectList" />
+        <option value="Edde\Common\Container\Parameter-&gt;getName" />
+        <option value="Edde\Common\Container\Parameter-&gt;getClass" />
+        <option value="Edde\Common\Entity\EntityManager-&gt;lazy" />
+        <option value="Edde\Common\Entity\EntityManager-&gt;Edde\Common\Container\{closure}" />
+        <option value="Edde\Common\Container\Reflection-&gt;getConfiguratorList" />
+        <option value="Edde\Common\Entity\EntityManager-&gt;setConfiguratorList" />
+        <option value="Edde\Common\Entity\EntityManager-&gt;init" />
+        <option value="Edde\Common\Container\Factory\InterfaceFactory-&gt;push" />
+        <option value="Edde\Common\Entity\EntityManager-&gt;isSetup" />
       </list>
     </option>
   </component>

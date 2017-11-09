@@ -404,7 +404,7 @@
 				$this->schemaManager->load(BarPooSchema::class);
 				$this->storage->start();
 				$start = microtime(true);
-				for ($i = 0; $i < 50; $i++) {
+				for ($i = 0; $i < 100; $i++) {
 					$foo = $this->entityManager->create(FooSchema::class, [
 						'name' => 'foo #' . $i,
 					]);
@@ -419,11 +419,11 @@
 						'name' => 'bar 2 #' . $i,
 					]);
 					$foo->linkTo($poo);
-					$foo->attach($bar);
-					$foo->attach($bar2);
+//					$foo->attach($bar);
+//					$foo->attach($bar2);
 					$bar->linkTo($poo);
+					$this->transaction->execute();
 				}
-				$this->transaction->execute();
 				$this->storage->commit();
 				$sum = (microtime(true) - $start);
 				$item = ($sum / $i) * 1000;
