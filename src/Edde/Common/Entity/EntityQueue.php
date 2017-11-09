@@ -60,7 +60,8 @@
 				$this->queue($entity);
 				$this->queue($target);
 				$this->queue($using);
-				$this->entityRelations[] = new EntityRelation($entity, $target, $using, $relation);
+				$hash = sha1($entity->getHash() . $entity->getSchema()->getName() . $target->getHash() . $target->getSchema()->getName() . $using->getHash() . $using->getSchema()->getName());
+				$this->entityRelations[$hash] = new EntityRelation($entity, $target, $using, $relation);
 				return $this;
 			}
 
