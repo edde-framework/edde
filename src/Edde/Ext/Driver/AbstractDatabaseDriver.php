@@ -40,12 +40,12 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function native($query, array $parameterList = []) {
+			public function native($query, array $params = []) {
 				$exception = null;
 				try {
 					$statement = $this->pdo->prepare($query);
 					$statement->setFetchMode(PDO::FETCH_ASSOC);
-					$statement->execute($parameterList);
+					$statement->execute($params);
 					return $statement;
 				} catch (\PDOException $exception) {
 					throw $this->exception($exception);

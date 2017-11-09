@@ -14,24 +14,13 @@
 		use Edde\Api\Storage\Exception\NullValueException;
 		use Edde\Common\Driver\AbstractDriver;
 		use Edde\Common\Query\NativeQuery;
-		use GraphAware\Bolt\Exception\MessageFailureException;
-		use GraphAware\Bolt\GraphDatabase;
-		use GraphAware\Bolt\Protocol\SessionInterface;
-		use GraphAware\Bolt\Protocol\V1\Transaction;
-		use GraphAware\Bolt\Result\Result;
-		use GraphAware\Common\Type\Node;
 
 		class Neo4jDriver extends AbstractDriver {
 			/** @var string */
 			protected $url;
-			/**
-			 * @var SessionInterface
-			 */
-			protected $session;
-			/**
-			 * @var Transaction
-			 */
-			protected $transaction;
+			protected $client;
+			/** @var bool */
+			protected $transaction = false;
 
 			/**
 			 * @param string $url
@@ -43,16 +32,21 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function native($query, array $parameterList = []) {
+			public function native($query, array $params = []) {
 				try {
-					return (function (Result $result) {
-						foreach ($result->getRecords() as $record) {
-							/** @var $value Node */
-							foreach ($record->values() as $value) {
-								yield $value->asArray();
-							}
-						}
-					})($this->session->run($query, $parameterList));
+					if ($this->transaction) {
+						$response = $this->client->post(str_replace('/commit', '', $this->transaction), ['Accept' => 'application/json', 'Content-Type' => 'application/json', 'X-Stream' => true], json_encode([
+							'statements' => [
+								'statement'  => $query,
+								'parameters' => $params,
+							],
+						]))->send();
+						return;
+					}
+					$reponse = $this->client->post('/db/data/cypher', ['Accept' => 'application/json', 'Content-Type' => 'application/json'], [
+						'query'  => $query,
+						'params' => $params,
+					])->send();
 				} catch (\Throwable $throwable) {
 					throw $this->exception($throwable);
 				}
@@ -62,7 +56,8 @@
 			 * @inheritdoc
 			 */
 			public function start(): IDriver {
-				($this->transaction = $this->session->transaction())->begin();
+				$response = $this->client->post('/db/data/transaction', ['Accept' => 'application/json'])->send();
+				$this->transaction = json_decode($response->getBody(true))->commit;
 				return $this;
 			}
 
@@ -70,12 +65,8 @@
 			 * @inheritdoc
 			 */
 			public function commit(): IDriver {
-				try {
-					$this->transaction->commit();
-					$this->transaction = null;
-				} catch (\Throwable $throwable) {
-					throw $this->exception($throwable);
-				}
+				$response = $this->client->post($this->transaction)->send();
+				$this->transaction = null;
 				return $this;
 			}
 
@@ -83,18 +74,7 @@
 			 * @inheritdoc
 			 */
 			public function rollback(): IDriver {
-				try {
-					$this->transaction->rollback();
-				} catch (MessageFailureException $exception) {
-					/**
-					 * this is incredibly ugly, but transaction state should be tracked in this driver, so it's
-					 * possible to suppress this transaction; related to Neo4j, it's dying on transaction commit, thus
-					 * making whole this stuff a bit more complicated
-					 */
-					if ($exception->getMessage() !== 'No current transaction to rollback.') {
-						throw $exception;
-					}
-				}
+				$response = $this->client->delete($this->transaction)->send();
 				$this->transaction = null;
 				return $this;
 			}
@@ -282,6 +262,5 @@
 
 			protected function handleSetup(): void {
 				parent::handleSetup();
-				$this->session = GraphDatabase::driver($this->url)->session();
 			}
 		}

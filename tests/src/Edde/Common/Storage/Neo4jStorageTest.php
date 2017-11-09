@@ -24,7 +24,7 @@
 			 */
 			protected function setUp() {
 				ContainerFactory::inject($this, [
-					IDriver::class => ContainerFactory::instance(Neo4jDriver::class, ['bolt://172.17.0.1']),
+					IDriver::class => ContainerFactory::instance(Neo4jDriver::class, ['http://172.17.0.1:7474']),
 					new ClassFactory(),
 				]);
 			}

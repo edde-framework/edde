@@ -25,11 +25,11 @@
 			 * execute native query on this driver without any additional processing
 			 *
 			 * @param mixed $query
-			 * @param array $parameterList
+			 * @param array $params
 			 *
 			 * @return mixed
 			 */
-			public function native($query, array $parameterList = []);
+			public function native($query, array $params = []);
 
 			/**
 			 * start a transaction
