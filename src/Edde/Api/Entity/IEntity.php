@@ -84,4 +84,11 @@
 			 * @return IEntity
 			 */
 			public function save(): IEntity;
+
+			/**
+			 * return sanitized array of this entity
+			 *
+			 * @return array
+			 */
+			public function sanitize(): array;
 		}

@@ -114,6 +114,13 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function sanitize(): array {
+				return $this->schemaManager->sanitize($this->schema, $this->toArray());
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function toArray(): array {
 				$array = [];
 				foreach ($this->schema->getPropertyList() as $k => $property) {

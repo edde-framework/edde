@@ -181,73 +181,71 @@
 					]);
 				}
 				foreach ($entityQueue->getEntityLinks() as $entityLink) {
-					$cypher = null;
-					/** @var $entity IEntity[] */
-					$entity = [
+					$this->link(
 						$entityLink->getEntity(),
 						$entityLink->getTo(),
-					];
-					/** @var $schema string[] */
-					$schema = [
-						$entity[0]->getSchema()->getRealName(),
-						$entity[1]->getSchema()->getRealName(),
-					];
-					/** @var $primary IProperty[] */
-					$primary = [
-						$entity[0]->getPrimary(),
-						$entity[1]->getPrimary(),
-					];
-					$cypher .= 'MERGE (a:' . $this->delimite($schema[0]) . ' {' . $this->delimite($primary[0]->getName()) . ": \$a})\n";
-					$cypher .= 'MERGE (b:' . $this->delimite($schema[1]) . ' {' . $this->delimite($primary[1]->getName()) . ": \$b})\n";
-					$cypher .= 'MERGE (a)';
-					$cypher .= '-[:' . $this->delimite($entityLink->getLink()->getName()) . ']';
-					$cypher .= "->(b)\n";
-					$this->native($cypher, [
-						'a' => $primary[0]->get(),
-						'b' => $primary[1]->get(),
-					]);
+						$entityLink->getLink()->getName()
+					);
 				}
 				foreach ($entityQueue->getEntityRelations() as $entityRelation) {
-					$cypher = null;
-					/** @var $entity IEntity[] */
-					$entity = [
+					$using = $entityRelation->getUsing();
+					$source = empty($source = $using->toArray()) === false ? $using->sanitize() : null;
+					$this->link(
 						$entityRelation->getEntity(),
 						$entityRelation->getTarget(),
-					];
-					/** @var $schema string[] */
-					$schema = [
-						$entity[0]->getSchema()->getRealName(),
-						$entity[1]->getSchema()->getRealName(),
-					];
-					/** @var $primary IProperty[] */
-					$primary = [
-						$entity[0]->getPrimary(),
-						$entity[1]->getPrimary(),
-					];
-					$params = [
-						'a' => $primary[0]->get(),
-						'b' => $primary[1]->get(),
-					];
-					$cypher .= 'MERGE (a:' . $this->delimite($schema[0]) . ' {' . $this->delimite($primary[0]->getName()) . ": \$a})\n";
-					$cypher .= 'MERGE (b:' . $this->delimite($schema[1]) . ' {' . $this->delimite($primary[1]->getName()) . ": \$b})\n";
-					$cypher .= 'MERGE (a)';
-					$cypher .= '-[:' . $this->delimite($entityRelation->getRelation()->getSchema()->getRealName());
-					$using = $entityRelation->getUsing();
-					if (empty($source = $using->toArray()) === false) {
-						$cypher .= ' {';
-						$propertyList = [];
-						foreach ($this->schemaManager->sanitize($using->getSchema(), $source) as $k => $v) {
-							if ($v !== null) {
-								$propertyList[] = $this->delimite($k) . ': $' . $this->delimite($parameterId = (sha1(random_bytes(42))));
-								$params[$parameterId] = $v;
-							}
-						}
-						$cypher .= implode(', ', $propertyList) . '}';
-					}
-					$cypher .= ']';
-					$cypher .= "->(b)\n";
-					$this->native($cypher, $params);
+						$entityRelation->getRelation()->getSchema()->getRealName(),
+						$source
+					);
 				}
+			}
+
+			/**
+			 * @param IEntity    $from
+			 * @param IEntity    $to
+			 * @param string     $relation
+			 * @param array|null $attributes
+			 *
+			 * @throws \Throwable
+			 */
+			protected function link(IEntity $from, IEntity $to, string $relation, array $attributes = null) {
+				$cypher = null;
+				/** @var $entity IEntity[] */
+				$entity = [
+					$from,
+					$to,
+				];
+				/** @var $schema string[] */
+				$schema = [
+					$entity[0]->getSchema()->getRealName(),
+					$entity[1]->getSchema()->getRealName(),
+				];
+				/** @var $primary IProperty[] */
+				$primary = [
+					$entity[0]->getPrimary(),
+					$entity[1]->getPrimary(),
+				];
+				$params = [
+					'a' => $primary[0]->get(),
+					'b' => $primary[1]->get(),
+				];
+				$cypher .= 'MERGE (a:' . $this->delimite($schema[0]) . ' {' . $this->delimite($primary[0]->getName()) . ": \$a})\n";
+				$cypher .= 'MERGE (b:' . $this->delimite($schema[1]) . ' {' . $this->delimite($primary[1]->getName()) . ": \$b})\n";
+				$cypher .= 'MERGE (a)';
+				$cypher .= '-[:' . $this->delimite($relation);
+				if (empty($attributes) === false) {
+					$cypher .= ' {';
+					$propertyList = [];
+					foreach ($attributes as $k => $v) {
+						if ($v !== null) {
+							$propertyList[] = $this->delimite($k) . ': $' . $this->delimite($parameterId = (sha1($k)));
+							$params[$parameterId] = $v;
+						}
+					}
+					$cypher .= implode(', ', $propertyList) . '}';
+				}
+				$cypher .= ']';
+				$cypher .= "->(b)\n";
+				$this->native($cypher, $params);
 			}
 
 			/**
@@ -318,7 +316,7 @@
 						}
 						switch ($type) {
 							case 'value':
-								return new NativeQuery($name . ' ' . $operator . ' $' . $this->delimite($parameterId = sha1(random_bytes(42))), [
+								return new NativeQuery($name . ' ' . $operator . ' $' . $this->delimite($parameterId = sha1($name . $operator)), [
 									$parameterId => $parameters[3],
 								]);
 						}
