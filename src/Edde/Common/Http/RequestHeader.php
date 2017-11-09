@@ -7,7 +7,7 @@
 
 		class RequestHeader extends Object implements IRequestHeader {
 			/**
-			 * @var array
+			 * @var string[]
 			 */
 			protected $header;
 
