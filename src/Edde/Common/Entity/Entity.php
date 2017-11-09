@@ -20,8 +20,6 @@
 			protected $schema;
 			/** @var IEntityQueue */
 			protected $entityQueue;
-			/** @var bool */
-			protected $saving = false;
 			/** @var IProperty */
 			protected $primary = null;
 
