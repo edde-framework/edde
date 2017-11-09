@@ -417,8 +417,8 @@
 						'name' => 'bar 2 #' . $i,
 					]);
 					$foo->linkTo($poo);
-//					$foo->attach($bar);
-//					$foo->attach($bar2);
+					$foo->attach($bar);
+					$foo->attach($bar2);
 					$bar->linkTo($poo);
 					$foo->save();
 				}
