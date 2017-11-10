@@ -4,6 +4,7 @@
 
 		use Edde\Api\Driver\Exception\DriverException;
 		use Edde\Api\Driver\IDriver;
+		use Edde\Api\Entity\Query\IQueryQueue;
 		use Edde\Api\Storage\Query\ICrateSchemaQuery;
 		use Edde\Common\Driver\AbstractDriver;
 		use PDO;
@@ -99,6 +100,43 @@
 					$sql .= ",\n\tFOREIGN KEY (" . $this->delimite($link->getFrom()->getPropertyName()) . ') REFERENCES ' . $this->delimite($link->getTo()->getRealName()) . '(' . $this->delimite($link->getTo()->getPropertyName()) . ') ON DELETE RESTRICT ON UPDATE RESTRICT';
 				}
 				$this->native($sql . "\n)");
+			}
+
+			/**
+			 * @param IQueryQueue $queryQueue
+			 *
+			 * @throws DriverException
+			 * @throws \Throwable
+			 */
+			protected function executeQueryQueue(IQueryQueue $queryQueue) {
+				$entityQueue = $queryQueue->getEntityQueue();
+				if ($entityQueue->isEmpty()) {
+					return;
+				}
+				foreach ($entityQueue->getEntities() as $entity) {
+					$schema = $entity->getSchema();
+					if ($entity->isDirty() === false || $schema->isRelation()) {
+						continue;
+					}
+					$sql = 'INSERT INTO ' . $this->delimite($schema->getRealName()) . ' (';
+					$params = [];
+					$columns = [];
+					$values = [];
+					$set = [];
+					$source = $this->schemaManager->sanitize($schema, $entity->toArray());
+					foreach ($source as $k => $v) {
+						$columns[] = $delimited = $this->delimite($k);
+						$params[$values[] = $paramId = sha1($k)] = $v;
+						$params[$paramId = sha1($paramId)] = $v;
+						$set[] = $delimited . ' = :' . $paramId;
+					}
+					$sql .= implode(', ', $columns);
+					$sql .= ') VALUES (:' . implode(', :', $values) . ') ON DUPLICATE KEY UPDATE ' . implode(', ', $set);
+					$this->native($sql, $params);
+				}
+				foreach ($entityQueue->getQueries() as $query) {
+					$this->execute($query);
+				}
 			}
 
 			public function handleSetup(): void {

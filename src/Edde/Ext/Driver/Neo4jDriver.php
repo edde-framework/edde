@@ -160,13 +160,12 @@
 					return;
 				}
 				foreach ($entityQueue->getEntities() as $entity) {
-					$cypher = null;
 					$schema = $entity->getSchema();
 					if ($entity->isDirty() === false || $schema->isRelation()) {
 						continue;
 					}
 					$primary = $entity->getPrimary();
-					$cypher .= 'MERGE (a:' . $this->delimite($schema->getRealName()) . ' {' . $this->delimite($primary->getName()) . ': $primary})';
+					$cypher = 'MERGE (a:' . $this->delimite($schema->getRealName()) . ' {' . $this->delimite($primary->getName()) . ': $primary})';
 					$cypher .= " SET a = \$set\n";
 					$this->native($cypher, [
 						'primary' => $primary->get(),
