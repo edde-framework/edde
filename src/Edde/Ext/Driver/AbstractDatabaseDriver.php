@@ -3,10 +3,14 @@
 	namespace Edde\Ext\Driver;
 
 		use Edde\Api\Driver\Exception\DriverException;
+		use Edde\Api\Driver\Exception\DriverQueryException;
 		use Edde\Api\Driver\IDriver;
 		use Edde\Api\Entity\Query\IQueryQueue;
+		use Edde\Api\Storage\Query\Fragment\IWhere;
 		use Edde\Api\Storage\Query\ICrateSchemaQuery;
+		use Edde\Api\Storage\Query\ISelectQuery;
 		use Edde\Common\Driver\AbstractDriver;
+		use Edde\Common\Storage\Query\NativeQuery;
 		use PDO;
 
 		abstract class AbstractDatabaseDriver extends AbstractDriver {
@@ -100,6 +104,54 @@
 					$sql .= ",\n\tFOREIGN KEY (" . $this->delimite($link->getFrom()->getPropertyName()) . ') REFERENCES ' . $this->delimite($link->getTo()->getRealName()) . '(' . $this->delimite($link->getTo()->getPropertyName()) . ') ON DELETE RESTRICT ON UPDATE RESTRICT';
 				}
 				$this->native($sql . "\n)");
+			}
+
+			/**
+			 * @param ISelectQuery $selectQuery
+			 *
+			 * @return \PDOStatement
+			 * @throws DriverException
+			 * @throws \Throwable
+			 */
+			protected function executeSelectQuery(ISelectQuery $selectQuery) {
+				$return = $this->delimite($selectQuery->getReturn());
+				$alias = $this->delimite($selectQuery->getAlias());
+				$sql = 'SELECT ' . $return . '.* FROM ' . $this->delimite($selectQuery->getSchema()->getRealName()) . ' ' . $alias;
+				$params = [];
+				if ($selectQuery->hasWhere()) {
+					$sql .= ' WHERE' . ($query = $this->fragmentWhereGroup($selectQuery->getWhere()))->getQuery();
+					$params = $query->getParams();
+				}
+				if ($selectQuery->hasOrder()) {
+					$sql .= 'ORDER';
+				}
+				return $this->native($sql, $params);
+			}
+
+			/**
+			 * @param IWhere $where
+			 *
+			 * @return NativeQuery
+			 * @throws DriverQueryException
+			 */
+			protected function fragmentWhere(IWhere $where) {
+				list($operator, $type) = $params = $where->getWhere();
+				switch ($operator) {
+					case '=':
+						$name = $this->delimite($params[2]);
+						if (($dot = strpos($params[2], '.')) !== false) {
+							$name = $this->delimite(substr($params[2], 0, $dot)) . '.' . $this->delimite(substr($params[2], $dot + 1));
+						}
+						switch ($type) {
+							case 'value':
+								return new NativeQuery($name . ' ' . $operator . ' :' . ($parameterId = sha1($name . $operator)), [
+									$parameterId => $params[3],
+								]);
+						}
+						throw new DriverQueryException(sprintf('Unknown where operator [%s] target [%s].', get_class($where), $type));
+					default:
+						throw new DriverQueryException(sprintf('Unknown where type [%s] for clause [%s].', $operator, get_class($where)));
+				}
 			}
 
 			/**

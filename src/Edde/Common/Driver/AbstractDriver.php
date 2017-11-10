@@ -58,9 +58,9 @@
 				$group = null;
 				$params = [];
 				foreach ($whereGroup as $where) {
-					$fragment = "\n\t";
+					$fragment = ' ';
 					if ($group) {
-						$fragment = ' ' . strtoupper($where->getRelation()) . "\n\t";
+						$fragment = ' ' . strtoupper($where->getRelation());
 					}
 					$group .= $fragment . ($query = $this->fragment($where))->getQuery();
 					$params = array_merge($params, $query->getParams());
