@@ -12,82 +12,58 @@
 		use Edde\Common\Object\Object;
 
 		class SchemaBuilder extends Object implements ISchemaBuilder {
-			/**
-			 * @var INode
-			 */
+			/** @var INode */
 			protected $node;
-			/**
-			 * @var IPropertyBuilder[]
-			 */
+			/** @var IPropertyBuilder[] */
 			protected $propertyBuilders = [];
-			/**
-			 * @var ISchema
-			 */
+			/** @var ISchema */
 			protected $schema;
-			/**
-			 * @var ILinkBuilder[]
-			 */
+			/** @var ILinkBuilder[] */
 			protected $linkBuilders = [];
 
 			public function __construct(string $name) {
 				$this->node = new Node('schema', null, ['name' => $name]);
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function alias(string $alias): ISchemaBuilder {
 				$this->node->setAttribute('alias', $alias);
 				return $this;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function relation(bool $relation): ISchemaBuilder {
 				$this->node->setAttribute('is-relation', $relation);
 				return $this;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function property(string $name): IPropertyBuilder {
 				$this->node->getNode('property-list')->addNode($node = new Node('property', null, ['name' => $name]));
 				return $this->propertyBuilders[$name] = new PropertyBuilder($this->node, $node);
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function primary(string $name): IPropertyBuilder {
 				return $this->property($name)->primary();
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function string(string $name): IPropertyBuilder {
 				return $this->property($name)->type('string');
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function text(string $name): IPropertyBuilder {
 				return $this->property($name)->type('text');
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function integer(string $name): IPropertyBuilder {
 				return $this->property($name)->type('int');
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function link(ILinkBuilder $linkBuilder): ISchemaBuilder {
 				$this->linkBuilders[] = $linkBuilder;
 				if ($this->node->getAttribute('is-relation', false) && count($this->linkBuilders) > 2) {
@@ -96,9 +72,7 @@
 				return $this;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function getSchema(): ISchema {
 				if ($this->schema) {
 					return $this->schema;
@@ -107,12 +81,15 @@
 				foreach ($this->propertyBuilders as $name => $propertyBuilder) {
 					$propertyList[$name] = $propertyBuilder->getProperty();
 				}
-				return $this->schema = new Schema($this->node, $propertyList);
+				return $this->schema = new Schema(
+					$this->node->getAttribute('name'),
+					$propertyList,
+					(bool)$this->node->getAttribute('is-relation', false),
+					$this->node->getAttribute('alias')
+				);
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function getLinkBuilders(): array {
 				return $this->linkBuilders;
 			}

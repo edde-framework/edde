@@ -128,7 +128,7 @@
 				$primaryList = null;
 				$indexList = null;
 				$delimited = $this->delimite($schema->getRealName());
-				foreach ($schema->getPropertyList() as $property) {
+				foreach ($schema->getProperties() as $property) {
 					$name = $property->getName();
 					$fragment = 'n.' . $this->delimite($name);
 					if ($property->isPrimary()) {

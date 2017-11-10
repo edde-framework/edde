@@ -109,7 +109,7 @@
 			/** @inheritdoc */
 			public function toArray(): array {
 				$array = [];
-				foreach ($this->schema->getPropertyList() as $k => $property) {
+				foreach ($this->schema->getProperties() as $k => $property) {
 					$array[$k] = $this->get($k);
 				}
 				return $array;

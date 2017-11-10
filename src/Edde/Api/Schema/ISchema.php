@@ -57,7 +57,7 @@
 			 *
 			 * @return IProperty[]
 			 */
-			public function getPropertyList(): array;
+			public function getProperties(): array;
 
 			/**
 			 * has schema a primary property?
@@ -79,7 +79,7 @@
 			 *
 			 * @return IProperty[]
 			 */
-			public function getUniqueList(): array;
+			public function getUniques(): array;
 
 			/**
 			 * link $this schema to the target $schema using the given $link (relation is

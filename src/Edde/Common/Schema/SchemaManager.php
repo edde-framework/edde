@@ -87,7 +87,7 @@
 			 */
 			public function generate(ISchema $schema, array $source): array {
 				$result = $source;
-				foreach ($schema->getPropertyList() as $property) {
+				foreach ($schema->getProperties() as $property) {
 					if (isset($source[$name = $property->getName()]) === false && ($generator = $property->getGenerator())) {
 						$result[$name] = $this->generatorManager->getGenerator($generator)->generate();
 					}

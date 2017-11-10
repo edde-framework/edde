@@ -79,7 +79,7 @@
 				$sql = 'CREATE TABLE ' . ($this->delimite($table = $schema->getRealName())) . " (\n\t";
 				$columnList = [];
 				$primaryList = [];
-				foreach ($schema->getPropertyList() as $property) {
+				foreach ($schema->getProperties() as $property) {
 					$column = ($name = $this->delimite($property->getName())) . ' ' . $this->type($property->getType());
 					if ($property->isPrimary()) {
 						$primaryList[] = $name;

@@ -64,7 +64,7 @@
 				if ($this->schema->hasPrimary()) {
 					$where->or()->value('c.' . $this->schema->getPrimary()->getName(), '=', $name);
 				}
-				foreach ($this->schema->getUniqueList() as $property) {
+				foreach ($this->schema->getUniques() as $property) {
 					$where->or()->value('c.' . $property->getName(), '=', $name);
 				}
 				return $this->getEntity();

@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Schema;
 
-		use Edde\Api\Node\INode;
 		use Edde\Api\Schema\Exception\LinkException;
 		use Edde\Api\Schema\Exception\NoPrimaryPropertyException;
 		use Edde\Api\Schema\Exception\UnknownPropertyException;
@@ -13,95 +12,71 @@
 		use Edde\Common\Object\Object;
 
 		class Schema extends Object implements ISchema {
-			/**
-			 * @var INode
-			 */
-			protected $node;
-			/**
-			 * @var IProperty[]
-			 */
-			protected $propertyList = [];
-			/**
-			 * @var IProperty
-			 */
+			/** @var string */
+			protected $name;
+			/** @var bool */
+			protected $relation;
+			/** @var string|null */
+			protected $alias;
+			/** @var IProperty[] */
+			protected $properties = [];
+			/** @var IProperty */
 			protected $primary;
-			/**
-			 * @var array
-			 */
-			protected $uniqueList = null;
-			/**
-			 * @var ILink[][]
-			 */
+			/** @var IProperty[] */
+			protected $uniques = null;
+			/** @var ILink[][] */
 			protected $linkToList = [];
-			/**
-			 * @var ILink[][]
-			 */
+			/** @var ILink[][] */
 			protected $links = [];
-			/**
-			 * @var IRelation[][]
-			 */
+			/** @var IRelation[][] */
 			protected $relations = [];
 
-			public function __construct(INode $node, array $propertyList) {
-				$this->node = $node;
-				$this->propertyList = $propertyList;
+			public function __construct(string $name, array $properties, bool $relation, string $alias = null) {
+				$this->name = $name;
+				$this->properties = $properties;
+				$this->relation = $relation;
+				$this->alias = $alias;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function getName(): string {
-				return $this->node->getAttribute('name');
+				return $this->name;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function hasAlias(): bool {
-				return $this->node->getAttribute('alias') !== null;
+				return $this->alias !== null;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function getAlias(): string {
-				return $this->node->getAttribute('alias');
+				return $this->alias;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function getRealName(): string {
-				return $this->node->getAttribute('alias', $this->getName());
+				return $this->alias ?: $this->name;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function isRelation(): bool {
-				return (bool)$this->node->getAttribute('is-relation', false);
+				return $this->relation;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function getProperty(string $name): IProperty {
-				if (isset($this->propertyList[$name]) === false) {
+				if (isset($this->properties[$name]) === false) {
 					throw new UnknownPropertyException(sprintf('Requested unknown property [%s] on schema [%s].', $name, $this->getName()));
 				}
-				return $this->propertyList[$name];
+				return $this->properties[$name];
 			}
 
-			/**
-			 * @inheritdoc
-			 */
-			public function getPropertyList(): array {
-				return $this->propertyList;
+			/** @inheritdoc */
+			public function getProperties(): array {
+				return $this->properties;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function hasPrimary(): bool {
 				try {
 					$this->getPrimary();
@@ -111,14 +86,12 @@
 				}
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function getPrimary(): IProperty {
 				if ($this->primary) {
 					return $this->primary;
 				}
-				foreach ($this->propertyList as $property) {
+				foreach ($this->properties as $property) {
 					if ($property->isPrimary()) {
 						return $this->primary = $property;
 					}
@@ -126,62 +99,48 @@
 				throw new NoPrimaryPropertyException(sprintf('Schema [%s] has no primary properties.', $this->getName()));
 			}
 
-			/**
-			 * @inheritdoc
-			 */
-			public function getUniqueList(): array {
-				if ($this->uniqueList) {
-					return $this->uniqueList;
+			/** @inheritdoc */
+			public function getUniques(): array {
+				if ($this->uniques) {
+					return $this->uniques;
 				}
-				$this->uniqueList = [];
-				foreach ($this->propertyList as $name => $property) {
+				$this->uniques = [];
+				foreach ($this->properties as $name => $property) {
 					if ($property->isUnique() && $property->isPrimary() === false) {
-						$this->uniqueList[$name] = $property;
+						$this->uniques[$name] = $property;
 					}
 				}
-				return $this->uniqueList;
+				return $this->uniques;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function linkTo(ILink $link): ISchema {
 				$this->linkToList[null][] = $this->linkToList[$link->getFrom()->getName()][] = $link;
 				return $this;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function getLinkToList(string $schema = null): array {
 				return $this->linkToList[$schema] ?? [];
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function link(ILink $link): ISchema {
 				$this->links[null][] = $this->links[$link->getTo()->getName()][] = $link;
 				return $this;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function getLinks(string $schema = null): array {
 				return $this->links[$schema] ?? [];
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function hasLink(string $schema): bool {
 				return isset($this->links[$schema]) !== false;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function getLink(string $schema): ILink {
 				if (($count = count($links = $this->getLinks($schema))) === 0) {
 					throw new LinkException(sprintf('There are no links from [%s] to schema [%s].', $this->getName(), $schema));
@@ -191,31 +150,23 @@
 				return $links[0];
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function relation(IRelation $relation): ISchema {
 				$this->relations[null][] = $this->relations[$relation->getTo()->getTo()->getName()][] = $relation;
 				return $this;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function getRelations(string $schema = null): array {
 				return $this->relations[$schema] ?? [];
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function hasRelation(string $schema): bool {
 				return isset($this->relation[$schema]) !== false;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function getRelation(string $schema): IRelation {
 				if (($count = count($relations = $this->getRelations($schema))) === 0) {
 					throw new LinkException(sprintf('There are no relations from [%s] to schema [%s].', $this->getName(), $schema));
