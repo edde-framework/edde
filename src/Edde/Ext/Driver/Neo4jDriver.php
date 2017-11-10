@@ -212,12 +212,11 @@
 			 */
 			protected function executeRelationQuery(IRelationQuery $relationQuery) {
 				$using = $relationQuery->getUsing();
-				$source = empty($source = $using->toArray()) === false ? $using->sanitize() : null;
 				$this->link(
 					$relationQuery->getEntity(),
 					$relationQuery->getTarget(),
 					$relationQuery->getRelation()->getSchema()->getRealName(),
-					$source
+					empty($source = $using->toArray()) === false ? $using->sanitize() : null
 				);
 			}
 

@@ -35,8 +35,8 @@
 				/**
 				 * maintain 1:N relation, thus create a new link, remove the old one
 				 */
-				$this->queries[] = new LinkQuery($from, $link, $to);
 				$this->unlink($from, $link);
+				$this->queries[] = new LinkQuery($from, $link, $to);
 				return $this;
 			}
 

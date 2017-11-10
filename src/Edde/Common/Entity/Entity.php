@@ -59,8 +59,7 @@
 			 * @inheritdoc
 			 */
 			public function linkTo(IEntity $entity): IEntity {
-				$link = $this->schema->getLink($entity->getSchema()->getName());
-				$this->entityQueue->link($this, $entity, $link);
+				$this->entityQueue->link($this, $entity, $this->schema->getLink($entity->getSchema()->getName()));
 				return $this;
 			}
 
