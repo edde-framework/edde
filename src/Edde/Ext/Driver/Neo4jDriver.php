@@ -9,6 +9,7 @@
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\Query\IDeleteQuery;
 		use Edde\Api\Entity\Query\IDetachQuery;
+		use Edde\Api\Entity\Query\IDisconnectQuery;
 		use Edde\Api\Entity\Query\ILinkQuery;
 		use Edde\Api\Entity\Query\IQueryQueue;
 		use Edde\Api\Entity\Query\IRelationQuery;
@@ -205,17 +206,39 @@
 					$entity[0]->getPrimary(),
 					$entity[1]->getPrimary(),
 				];
-				$params = [
-					'a' => $primary[0]->get(),
-					'b' => $primary[1]->get(),
-				];
+				$params = [];
 				$cypher = 'MATCH (:' . $this->delimite($entity[0]->getSchema()->getRealName()) . " {" . $this->delimite($primary[0]->getName()) . ': $a})';
 				$cypher .= '-[r:' . $this->delimite($detachQuery->getRelation()->getSchema()->getRealName()) . ']';
 				$cypher .= '->(:' . $this->delimite($entity[1]->getSchema()->getRealName()) . " {" . $this->delimite($primary[1]->getName()) . ': $b})';
 				if ($detachQuery->hasWhere()) {
 					$cypher .= ' WHERE' . ($query = $this->fragmentWhereGroup($detachQuery->getWhere()))->getQuery();
-					$params = array_merge($params, $query->getParams());
+					$params = $query->getParams();
 				}
+				$params['a'] = $primary[0]->get();
+				$params['b'] = $primary[1]->get();
+				$cypher .= ' DELETE r';
+				$this->native($cypher, $params);
+			}
+
+			/**
+			 * @param IDisconnectQuery $disconnectQuery
+			 *
+			 * @throws DriverException
+			 * @throws \Throwable
+			 */
+			protected function executeDisconnectQuery(IDisconnectQuery $disconnectQuery) {
+				$entity = $disconnectQuery->getEntity();
+				$relation = $disconnectQuery->getRelation();
+				$primary = $entity->getPrimary();
+				$cypher = 'MATCH (:' . $this->delimite($entity->getSchema()->getRealName()) . " {" . $this->delimite($primary->getName()) . ': $a})';
+				$cypher .= '-[r:' . $this->delimite($relation->getSchema()->getRealName()) . ']';
+				$cypher .= '->(:' . $this->delimite($relation->getTo()->getTo()->getRealName()) . ')';
+				$params = [];
+				if ($disconnectQuery->hasWhere()) {
+					$cypher .= ' WHERE' . ($query = $this->fragmentWhereGroup($disconnectQuery->getWhere()))->getQuery();
+					$params = $query->getParams();
+				}
+				$params['a'] = $primary->get();
 				$cypher .= ' DELETE r';
 				$this->native($cypher, $params);
 			}

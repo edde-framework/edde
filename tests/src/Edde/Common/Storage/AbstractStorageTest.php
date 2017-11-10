@@ -488,6 +488,7 @@
 				self::assertSame($roles, $current);
 				$current = [];
 				$user->disconnect(RoleSchema::class);
+				$user->save();
 				foreach ($user->join(RoleSchema::class, 'r') as $entity) {
 					self::assertSame(RoleSchema::class, $entity->getSchema()->getName());
 					$current[] = $entity->get('name');
