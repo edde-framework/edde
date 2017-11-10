@@ -9,16 +9,17 @@
 		use Edde\Api\Storage\Exception\UnknownTableException;
 
 		class PostgresDriver extends AbstractDatabaseDriver {
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
+			protected function getDeleteSql(string $relation): string {
+				return 'DELETE FROM ' . $this->delimite($relation) . ' AS r WHERE ';
+			}
+
+			/** @inheritdoc */
 			public function delimite(string $delimite): string {
 				return '"' . str_replace('"', '""', $delimite) . '"';
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function type(string $type): string {
 				switch (strtolower($type)) {
 					case 'string':
@@ -39,6 +40,7 @@
 				throw new DriverQueryException(sprintf('Unknown type [%s] in driver [%s]', $type, static::class));
 			}
 
+			/** @inheritdoc */
 			protected function exception(\Throwable $throwable): \Throwable {
 				if (stripos($message = $throwable->getMessage(), 'unique') !== false) {
 					return new DuplicateEntryException($message, 0, $throwable);
