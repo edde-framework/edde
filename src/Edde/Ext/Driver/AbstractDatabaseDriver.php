@@ -76,27 +76,27 @@
 			 */
 			protected function executeCreateSchemaQuery(ICrateSchemaQuery $crateSchemaQuery) {
 				$schema = $crateSchemaQuery->getSchema();
-				$sql = 'CREATE TABLE ' . ($this->delimite($table = $schema->getRealName())) . " (\n\t";
-				$columnList = [];
-				$primaryList = [];
+				$sql = 'CREATE TABLE ' . $this->delimite($table = $schema->getRealName()) . " (\n\t";
+				$columns = [];
+				$primaries = [];
 				foreach ($schema->getProperties() as $property) {
 					$column = ($name = $this->delimite($property->getName())) . ' ' . $this->type($property->getType());
 					if ($property->isPrimary()) {
-						$primaryList[] = $name;
+						$primaries[] = $name;
 					} else if ($property->isUnique()) {
 						$column .= ' UNIQUE';
 					}
 					if ($property->isRequired()) {
 						$column .= ' NOT NULL';
 					}
-					$columnList[] = $column;
+					$columns[] = $column;
 				}
-				if (empty($primaryList) === false) {
-					$columnList[] = "CONSTRAINT " . $this->delimite(sha1($table . '_primary_' . $primary = implode(', ', $primaryList))) . ' PRIMARY KEY (' . $primary . ')';
+				if (empty($primaries) === false) {
+					$columns[] = "CONSTRAINT " . $this->delimite(sha1($table . '_primary_' . $primary = implode(', ', $primaries))) . ' PRIMARY KEY (' . $primary . ')';
 				}
-				$sql .= implode(",\n\t", $columnList);
+				$sql .= implode(",\n\t", $columns);
 				foreach ($schema->getLinks() as $link) {
-					$sql .= ",\n\tFOREIGN KEY (" . $this->delimite($link->getFrom()->getName()) . ') REFERENCES ' . $this->delimite($link->getTo()->getRealName()) . '(' . $this->delimite($link->getTo()->getName()) . ') ON DELETE RESTRICT ON UPDATE RESTRICT';
+					$sql .= ",\n\tFOREIGN KEY (" . $this->delimite($link->getFrom()->getPropertyName()) . ') REFERENCES ' . $this->delimite($link->getTo()->getRealName()) . '(' . $this->delimite($link->getTo()->getPropertyName()) . ') ON DELETE RESTRICT ON UPDATE RESTRICT';
 				}
 				$this->native($sql . "\n)");
 			}

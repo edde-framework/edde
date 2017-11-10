@@ -35,8 +35,8 @@
 				$this->storage->start();
 				$schemaList = [
 					SimpleSchema::class,
-					FooSchema::class,
 					PooSchema::class,
+					FooSchema::class,
 					BarSchema::class,
 					FooBarSchema::class,
 					BarPooSchema::class,
