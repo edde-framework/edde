@@ -7,7 +7,10 @@
 		use Edde\Api\Driver\Exception\DriverQueryException;
 		use Edde\Api\Driver\IDriver;
 		use Edde\Api\Entity\IEntity;
+		use Edde\Api\Entity\Query\ILinkQuery;
 		use Edde\Api\Entity\Query\IQueryQueue;
+		use Edde\Api\Entity\Query\IRelationQuery;
+		use Edde\Api\Entity\Query\IUnlinkQuery;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\NullValueException;
 		use Edde\Api\Storage\INativeQuery;
@@ -154,19 +157,6 @@
 				if ($entityQueue->isEmpty()) {
 					return;
 				}
-				foreach ($entityQueue->getQueries() as $query) {
-					$this->execute($query);
-				}
-//				foreach ($entityQueue->getEntityUnlinks() as $entityLink) {
-//					$cypher = '';
-//					$link = $entityLink->getLink();
-//					$primary = $entityLink->getEntity()->getPrimary();
-//					$cypher .= "MATCH (:" . $this->delimite($link->getFrom()->getRealName()) . " {" . $this->delimite($primary->getName()) . ": \$a})-";
-//					$cypher .= '[r:' . ($entityLink->getLink()->getName()) . ']';
-//					$cypher .= "->(:" . $this->delimite($link->getTo()->getRealName()) . ') ';
-//					$cypher .= 'DELETE r';
-//					$this->native($cypher, ['a' => $primary->get()]);
-//				}
 				foreach ($entityQueue->getEntities() as $entity) {
 					$cypher = null;
 					$schema = $entity->getSchema();
@@ -181,23 +171,54 @@
 						'set'     => $this->schemaManager->sanitize($schema, $entity->toArray()),
 					]);
 				}
-//				foreach ($entityQueue->getEntityLinks() as $entityLink) {
-//					$this->link(
-//						$entityLink->getEntity(),
-//						$entityLink->getTo(),
-//						$entityLink->getLink()->getName()
-//					);
-//				}
-//				foreach ($entityQueue->getEntityRelations() as $entityRelation) {
-//					$using = $entityRelation->getUsing();
-//					$source = empty($source = $using->toArray()) === false ? $using->sanitize() : null;
-//					$this->link(
-//						$entityRelation->getEntity(),
-//						$entityRelation->getTarget(),
-//						$entityRelation->getRelation()->getSchema()->getRealName(),
-//						$source
-//					);
-//				}
+				foreach ($entityQueue->getQueries() as $query) {
+					$this->execute($query);
+				}
+			}
+
+			/**
+			 * @param ILinkQuery $linkQuery
+			 *
+			 * @throws \Throwable
+			 */
+			protected function executeLinkQuery(ILinkQuery $linkQuery) {
+				$this->link(
+					$linkQuery->getEntity(),
+					$linkQuery->getTo(),
+					$linkQuery->getLink()->getName()
+				);
+			}
+
+			/**
+			 * @param IUnlinkQuery $unlinkQuery
+			 *
+			 * @throws \Throwable
+			 */
+			protected function executeUnlinkQuery(IUnlinkQuery $unlinkQuery) {
+				$cypher = '';
+				$link = $unlinkQuery->getLink();
+				$primary = $unlinkQuery->getEntity()->getPrimary();
+				$cypher .= "MATCH (:" . $this->delimite($link->getFrom()->getRealName()) . " {" . $this->delimite($primary->getName()) . ": \$a})-";
+				$cypher .= '[r:' . ($unlinkQuery->getLink()->getName()) . ']';
+				$cypher .= "->(:" . $this->delimite($link->getTo()->getRealName()) . ') ';
+				$cypher .= 'DELETE r';
+				$this->native($cypher, ['a' => $primary->get()]);
+			}
+
+			/**
+			 * @param IRelationQuery $relationQuery
+			 *
+			 * @throws \Throwable
+			 */
+			protected function executeRelationQuery(IRelationQuery $relationQuery) {
+				$using = $relationQuery->getUsing();
+				$source = empty($source = $using->toArray()) === false ? $using->sanitize() : null;
+				$this->link(
+					$relationQuery->getEntity(),
+					$relationQuery->getTarget(),
+					$relationQuery->getRelation()->getSchema()->getRealName(),
+					$source
+				);
 			}
 
 			/**
