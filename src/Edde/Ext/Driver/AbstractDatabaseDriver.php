@@ -8,6 +8,7 @@
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\Query\IDeleteQuery;
 		use Edde\Api\Entity\Query\IDetachQuery;
+		use Edde\Api\Entity\Query\IDisconnectQuery;
 		use Edde\Api\Entity\Query\ILinkQuery;
 		use Edde\Api\Entity\Query\IQueryQueue;
 		use Edde\Api\Entity\Query\IRelationQuery;
@@ -243,14 +244,34 @@
 					$detachQuery->getEntity(),
 					$detachQuery->getTarget(),
 				];
-				$params = [
-					'a' => $entity[0]->getPrimary()->get(),
-					'b' => $entity[1]->getPrimary()->get(),
-				];
+				$params = [];
 				if ($detachQuery->hasWhere()) {
 					$sql .= ' AND (' . ($query = $this->fragmentWhereGroup($detachQuery->getWhere()))->getQuery() . ')';
-					$params = array_merge($params, $query->getParams());
+					$params = $query->getParams();
 				}
+				$params['a'] = $entity[0]->getPrimary()->get();
+				$params['b'] = $entity[1]->getPrimary()->get();
+				$this->native($sql, $params);
+			}
+
+			/**
+			 * @param IDisconnectQuery $disconnectQuery
+			 *
+			 * @throws DriverException
+			 * @throws \Throwable
+			 */
+			protected function executeDisconnectQuery(IDisconnectQuery $disconnectQuery) {
+				$relation = $disconnectQuery->getRelation();
+				$sql = $this->getDeleteSql($relation->getSchema()->getRealName());
+				$sql .= '(r.' . $this->delimite($relation->getFrom()->getTo()->getPropertyName()) . ' = :a)';
+				$entity = $disconnectQuery->getEntity();
+				$primary = $entity->getPrimary();
+				$params = [];
+				if ($disconnectQuery->hasWhere()) {
+					$sql .= ' AND (' . ($query = $this->fragmentWhereGroup($disconnectQuery->getWhere()))->getQuery() . ')';
+					$params = $query->getParams();
+				}
+				$params['a'] = $primary->get();
 				$this->native($sql, $params);
 			}
 
