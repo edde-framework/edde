@@ -1,9 +1,9 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Query;
+	namespace Edde\Api\Entity\Query;
 
-		use Edde\Api\Query\Fragment\IJoin;
-		use Edde\Api\Query\Fragment\IWhereGroup;
+		use Edde\Api\Entity\Query\Fragment\IJoin;
+		use Edde\Api\Entity\Query\Fragment\IWhereGroup;
 		use Edde\Api\Schema\ISchema;
 
 		interface ISelectQuery extends IQuery {

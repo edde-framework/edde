@@ -1,11 +1,11 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Query;
+	namespace Edde\Common\Entity\Query;
 
 		use Edde\Api\Entity\IEntityQueue;
-		use Edde\Api\Query\IEntityQueueQuery;
+		use Edde\Api\Entity\Query\IQueryQueue;
 
-		class EntityQueueQuery extends AbstractQuery implements IEntityQueueQuery {
+		class QueryQueue extends AbstractQuery implements IQueryQueue {
 			/** @var IEntityQueue */
 			protected $entityQueue;
 

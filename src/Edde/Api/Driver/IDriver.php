@@ -4,7 +4,7 @@
 
 		use Edde\Api\Config\IConfigurable;
 		use Edde\Api\Driver\Exception\DriverException;
-		use Edde\Api\Query\IQuery;
+		use Edde\Api\Entity\Query\IQuery;
 
 		/**
 		 * General driver for storage implementation; one storage could have more drivers to choose from.

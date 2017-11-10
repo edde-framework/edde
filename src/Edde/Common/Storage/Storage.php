@@ -3,7 +3,7 @@
 	namespace Edde\Common\Storage;
 
 		use Edde\Api\Driver\Inject\Driver;
-		use Edde\Api\Query\IQuery;
+		use Edde\Api\Entity\Query\IQuery;
 		use Edde\Api\Storage\Exception\ExclusiveTransactionException;
 		use Edde\Api\Storage\Exception\NoTransactionException;
 		use Edde\Api\Storage\IStorage;

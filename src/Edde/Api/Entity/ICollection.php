@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Entity;
 
-		use Edde\Api\Query\ISelectQuery;
+		use Edde\Api\Entity\Query\ISelectQuery;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
 		use Edde\Api\Storage\Exception\UnknownTableException;
 		use IteratorAggregate;
@@ -15,7 +15,7 @@
 			/**
 			 * set custom query for this collection
 			 *
-			 * @param ISelectQuery $query
+			 * @param \Edde\Api\Entity\Query\ISelectQuery $query
 			 *
 			 * @return ICollection
 			 */
@@ -24,7 +24,7 @@
 			/**
 			 * get the query to customize this collection
 			 *
-			 * @return ISelectQuery
+			 * @return \Edde\Api\Entity\Query\ISelectQuery
 			 */
 			public function getQuery(): ISelectQuery;
 

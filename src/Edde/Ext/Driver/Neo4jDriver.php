@@ -7,15 +7,15 @@
 		use Edde\Api\Driver\Exception\DriverQueryException;
 		use Edde\Api\Driver\IDriver;
 		use Edde\Api\Entity\IEntity;
-		use Edde\Api\Query\Fragment\IWhere;
-		use Edde\Api\Query\ICrateSchemaQuery;
-		use Edde\Api\Query\IEntityQueueQuery;
+		use Edde\Api\Entity\Query\Fragment\IWhere;
+		use Edde\Api\Entity\Query\ICrateSchemaQuery;
+		use Edde\Api\Entity\Query\IQueryQueue;
+		use Edde\Api\Entity\Query\ISelectQuery;
 		use Edde\Api\Query\INativeQuery;
-		use Edde\Api\Query\ISelectQuery;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\NullValueException;
 		use Edde\Common\Driver\AbstractDriver;
-		use Edde\Common\Query\NativeQuery;
+		use Edde\Common\Entity\Query\NativeQuery;
 		use GraphAware\Bolt\Exception\MessageFailureException;
 		use GraphAware\Bolt\GraphDatabase;
 		use GraphAware\Bolt\Protocol\SessionInterface;
@@ -112,7 +112,7 @@
 			}
 
 			/**
-			 * @param ICrateSchemaQuery $crateSchemaQuery
+			 * @param \Edde\Api\Entity\Query\ICrateSchemaQuery $crateSchemaQuery
 			 *
 			 * @throws \Throwable
 			 */
@@ -144,12 +144,12 @@
 			}
 
 			/**
-			 * @param IEntityQueueQuery $entityQueueQuery
+			 * @param \Edde\Api\Entity\Query\IQueryQueue $entityQueueQuery
 			 *
 			 * @throws \Exception
 			 * @throws \Throwable
 			 */
-			protected function executeEntityQueueQuery(IEntityQueueQuery $entityQueueQuery) {
+			protected function executeEntityQueueQuery(IQueryQueue $entityQueueQuery) {
 				$entityQueue = $entityQueueQuery->getEntityQueue();
 				if ($entityQueue->isEmpty()) {
 					return;
@@ -247,7 +247,7 @@
 			}
 
 			/**
-			 * @param ISelectQuery $selectQuery
+			 * @param \Edde\Api\Entity\Query\ISelectQuery $selectQuery
 			 *
 			 * @return mixed
 			 * @throws \Throwable

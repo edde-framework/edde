@@ -1,10 +1,10 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Query;
+	namespace Edde\Api\Entity\Query;
 
 		use Edde\Api\Entity\IEntityQueue;
 
-		interface IEntityQueueQuery extends IQuery {
+		interface IQueryQueue extends IQuery {
 			/**
 			 * @return IEntityQueue
 			 */

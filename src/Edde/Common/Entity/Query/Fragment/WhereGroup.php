@@ -1,9 +1,9 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Query\Fragment;
+	namespace Edde\Common\Entity\Query\Fragment;
 
-		use Edde\Api\Query\Fragment\IWhere;
-		use Edde\Api\Query\Fragment\IWhereGroup;
+		use Edde\Api\Entity\Query\Fragment\IWhere;
+		use Edde\Api\Entity\Query\Fragment\IWhereGroup;
 
 		class WhereGroup extends AbstractFragment implements IWhereGroup {
 			/**

@@ -1,9 +1,9 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Entity;
+	namespace Edde\Common\Entity\Query;
 
 		use Edde\Api\Entity\IEntity;
-		use Edde\Api\Entity\IUnlinkQuery;
+		use Edde\Api\Entity\Query\IUnlinkQuery;
 		use Edde\Api\Schema\ILink;
 		use Edde\Common\Object\Object;
 

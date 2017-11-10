@@ -2,6 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Entity;
 
+		use Edde\Api\Entity\Query\ILinkQuery;
+		use Edde\Api\Entity\Query\IRelationQuery;
+		use Edde\Api\Entity\Query\IUnlinkQuery;
 		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\IRelation;
 		use IteratorAggregate;
@@ -79,7 +82,7 @@
 			public function getEntityUnlinks(): array;
 
 			/**
-			 * @return IEntityRelation[]
+			 * @return IRelationQuery[]
 			 */
 			public function getEntityRelations(): array;
 

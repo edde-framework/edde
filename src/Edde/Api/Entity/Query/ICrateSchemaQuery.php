@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Query;
+	namespace Edde\Api\Entity\Query;
 
 		use Edde\Api\Schema\ISchema;
 

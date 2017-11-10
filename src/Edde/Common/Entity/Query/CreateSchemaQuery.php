@@ -1,8 +1,8 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Query;
+	namespace Edde\Common\Entity\Query;
 
-		use Edde\Api\Query\ICrateSchemaQuery;
+		use Edde\Api\Entity\Query\ICrateSchemaQuery;
 		use Edde\Api\Schema\ISchema;
 
 		class CreateSchemaQuery extends AbstractQuery implements ICrateSchemaQuery {

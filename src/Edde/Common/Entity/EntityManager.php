@@ -10,9 +10,9 @@
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Inject\Storage;
+		use Edde\Common\Entity\Query\QueryQueue;
+		use Edde\Common\Entity\Query\SelectQuery;
 		use Edde\Common\Object\Object;
-		use Edde\Common\Query\EntityQueueQuery;
-		use Edde\Common\Query\SelectQuery;
 
 		class EntityManager extends Object implements IEntityManager {
 			use SchemaManager;
@@ -63,7 +63,7 @@
 			 * @inheritdoc
 			 */
 			public function execute(IEntityQueue $entityQueue): IEntityManager {
-				$this->storage->execute(new EntityQueueQuery($entityQueue));
+				$this->storage->execute(new QueryQueue($entityQueue));
 				$entityQueue->commit();
 				return $this;
 			}

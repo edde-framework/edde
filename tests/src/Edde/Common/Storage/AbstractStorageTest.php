@@ -10,8 +10,8 @@
 		use Edde\Api\Storage\Exception\NullValueException;
 		use Edde\Api\Storage\Exception\UnknownTableException;
 		use Edde\Api\Storage\Inject\Storage;
-		use Edde\Common\Query\CreateSchemaQuery;
-		use Edde\Common\Query\SelectQuery;
+		use Edde\Common\Entity\Query\CreateSchemaQuery;
+		use Edde\Common\Entity\Query\SelectQuery;
 		use Edde\Common\Schema\BarPooSchema;
 		use Edde\Common\Schema\BarSchema;
 		use Edde\Common\Schema\FooBarSchema;

@@ -3,7 +3,7 @@
 	namespace Edde\Api\Storage;
 
 		use Edde\Api\Config\IConfigurable;
-		use Edde\Api\Query\IQuery;
+		use Edde\Api\Entity\Query\IQuery;
 
 		interface IStorage extends IConfigurable {
 			/**
@@ -32,7 +32,7 @@
 			/**
 			 * execute the given query; query will be translated into native query
 			 *
-			 * @param IQuery $query
+			 * @param \Edde\Api\Entity\Query\IQuery $query
 			 *
 			 * @return IStream
 			 */
@@ -41,7 +41,7 @@
 			/**
 			 * prepare stream for the given query
 			 *
-			 * @param IQuery $query
+			 * @param \Edde\Api\Entity\Query\IQuery $query
 			 *
 			 * @return IStream
 			 */

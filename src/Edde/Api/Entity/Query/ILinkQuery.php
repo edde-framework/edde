@@ -1,6 +1,8 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Entity;
+	namespace Edde\Api\Entity\Query;
+
+		use Edde\Api\Entity\IEntity;
 
 		interface ILinkQuery extends IUnlinkQuery {
 			/**

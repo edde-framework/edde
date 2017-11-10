@@ -4,11 +4,14 @@
 
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\IEntityQueue;
-		use Edde\Api\Entity\IEntityRelation;
-		use Edde\Api\Entity\ILinkQuery;
-		use Edde\Api\Entity\IUnlinkQuery;
+		use Edde\Api\Entity\Query\ILinkQuery;
+		use Edde\Api\Entity\Query\IRelationQuery;
+		use Edde\Api\Entity\Query\IUnlinkQuery;
 		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\IRelation;
+		use Edde\Common\Entity\Query\LinkQuery;
+		use Edde\Common\Entity\Query\RelationQuery;
+		use Edde\Common\Entity\Query\UnlinkQuery;
 		use Edde\Common\Object\Object;
 
 		class EntityQueue extends Object implements IEntityQueue {
@@ -18,7 +21,7 @@
 			protected $entityLinks = [];
 			/** @var IUnlinkQuery[] */
 			protected $entityUnlinks = [];
-			/** @var IEntityRelation[] */
+			/** @var IRelationQuery[] */
 			protected $entityRelations = [];
 
 			/**
@@ -62,7 +65,7 @@
 				$this->queue($target);
 				$this->queue($using);
 				$hash = sha1($entity->getHash() . $entity->getSchema()->getName() . $target->getHash() . $target->getSchema()->getName() . $using->getHash() . $using->getSchema()->getName());
-				$this->entityRelations[$hash] = new EntityRelation($entity, $target, $using, $relation);
+				$this->entityRelations[$hash] = new RelationQuery($entity, $target, $using, $relation);
 				return $this;
 			}
 

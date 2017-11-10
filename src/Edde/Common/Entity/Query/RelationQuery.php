@@ -1,13 +1,13 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Entity;
+	namespace Edde\Common\Entity\Query;
 
 		use Edde\Api\Entity\IEntity;
-		use Edde\Api\Entity\IEntityRelation;
+		use Edde\Api\Entity\Query\IRelationQuery;
 		use Edde\Api\Schema\IRelation;
 		use Edde\Common\Object\Object;
 
-		class EntityRelation extends Object implements IEntityRelation {
+		class RelationQuery extends Object implements IRelationQuery {
 			/**
 			 * @var IEntity
 			 */

@@ -1,10 +1,11 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Entity;
+	namespace Edde\Api\Entity\Query;
 
+		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Schema\IRelation;
 
-		interface IEntityRelation {
+		interface IRelationQuery extends IQuery {
 			/**
 			 * @return IEntity
 			 */
