@@ -156,6 +156,11 @@
 				self::assertFalse($array['question']);
 			}
 
+			/**
+			 * @throws EntityNotFoundException
+			 * @throws UnknownSchemaException
+			 * @throws UnknownTableException
+			 */
 			public function testLink() {
 				$foo = $this->entityManager->create(FooSchema::class, [
 					'name'  => 'foo with poo',
@@ -173,14 +178,12 @@
 				$foo->linkTo($poo);
 				$foo->save();
 				$source = null;
-				foreach ($this->storage->native('MATCH (a:foo)-[:poo]->(p:poo) WHERE a.guid = $a RETURN p', [
-					'a' => $foo->get('guid'),
-				]) as $source) {
-					break;
-				}
-				self::assertNotNull($source, 'no result has been returned!');
-				self::assertArrayHasKey('name', $source);
-				self::assertSame('the name of this epic Poo!', $source['name']);
+				$collection = $this->entityManager->collection(PooSchema::class);
+				$collection->query($query = new SelectQuery($this->schemaManager->load(FooSchema::class), 'f'));
+				$query->link(PooSchema::class, 'p')->return();
+				$poo = $collection->getEntity();
+				self::assertSame(PooSchema::class, $poo->getSchema()->getName());
+				self::assertSame('the name of this epic Poo!', $poo->get('name'));
 			}
 
 			/**

@@ -118,8 +118,25 @@
 			protected function executeSelectQuery(ISelectQuery $selectQuery) {
 				$return = $this->delimite($selectQuery->getReturn());
 				$alias = $this->delimite($selectQuery->getAlias());
-				$sql = 'SELECT ' . $return . '.* FROM ' . $this->delimite($selectQuery->getSchema()->getRealName()) . ' ' . $alias;
 				$params = [];
+				$schema = $selectQuery->getSchema();
+				$current = $selectQuery->getAlias();
+				$sql = '';
+				foreach ($selectQuery->getJoins() as $name => $join) {
+					if ($join->isLink()) {
+						$link = $schema->getLink($join->getSchema());
+						$sql .= ' INNER JOIN ' . $this->delimite($link->getTo()->getRealName()) . ' ' . $relation = $this->delimite($name);
+						$from = ($this->delimite($current) . '.' . $this->delimite($link->getFrom()->getPropertyName()));
+						$sql .= ' ON ' . $relation . '.' . $this->delimite($link->getTo()->getPropertyName()) . ' = ' . $from;
+						$schema = $link->getTo()->getSchema();
+						$return = $this->delimite($current = $name);
+						continue;
+					}
+//					$relation = $schema->getRelation($join->getSchema());
+//					$cypher .= '-[' . $this->delimite($current . '\r') . ':' . $this->delimite($relation->getSchema()->getRealName()) . ']';
+//					$cypher .= '->(' . ($return = $this->delimite($current = $name)) . ':' . $this->delimite(($schema = $relation->getTo()->getTo()->getSchema())->getRealName()) . ')';
+				}
+				$sql = 'SELECT ' . $return . '.* FROM ' . $this->delimite($selectQuery->getSchema()->getRealName()) . ' ' . $alias . $sql;
 				if ($selectQuery->hasWhere()) {
 					$sql .= ' WHERE' . ($query = $this->fragmentWhereGroup($selectQuery->getWhere()))->getQuery();
 					$params = $query->getParams();

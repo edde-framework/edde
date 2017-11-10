@@ -323,12 +323,15 @@
 				$matchList = [];
 				$params = [];
 				$return = $this->delimite($selectQuery->getReturn());
-				$cypher .= '(' . ($alias = $this->delimite($current = $selectQuery->getAlias())) . ':' . $this->delimite(($schema = $selectQuery->getSchema())->getRealName()) . ')';
+				$schema = $selectQuery->getSchema();
+				$current = $selectQuery->getAlias();
+				$cypher .= '(' . ($alias = $this->delimite($current)) . ':' . $this->delimite($schema->getRealName()) . ')';
 				foreach ($selectQuery->getJoins() as $name => $join) {
 					if ($join->isLink()) {
 						$link = $schema->getLink($join->getSchema());
 						$cypher .= '-[' . $this->delimite($current . '\r') . ':' . $this->delimite($link->getName()) . ']';
-						$cypher .= '->(' . ($return = $this->delimite($current = $name)) . ':' . $this->delimite(($schema = $link->getTo()->getSchema())->getRealName()) . ')';
+						$schema = $link->getTo()->getSchema();
+						$cypher .= '->(' . ($return = $this->delimite($current = $name)) . ':' . $this->delimite($schema->getRealName()) . ')';
 						continue;
 					}
 					$relation = $schema->getRelation($join->getSchema());
