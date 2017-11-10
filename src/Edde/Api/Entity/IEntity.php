@@ -69,6 +69,15 @@
 			public function attach(IEntity $entity): IEntity;
 
 			/**
+			 * detach all relations to the given entity (entity will be detached on save)
+			 *
+			 * @param IEntity $entity
+			 *
+			 * @return IEntity
+			 */
+			public function detach(IEntity $entity): IEntity;
+
+			/**
 			 * prepare m:n collection of related entities
 			 *
 			 * @param string $schema

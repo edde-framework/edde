@@ -8,6 +8,7 @@
 		use Edde\Api\Driver\IDriver;
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\Query\IDeleteQuery;
+		use Edde\Api\Entity\Query\IDetachQuery;
 		use Edde\Api\Entity\Query\ILinkQuery;
 		use Edde\Api\Entity\Query\IQueryQueue;
 		use Edde\Api\Entity\Query\IRelationQuery;
@@ -190,6 +191,32 @@
 			}
 
 			/**
+			 * @param IDetachQuery $detachQuery
+			 *
+			 * @throws \Throwable
+			 */
+			protected function executeDetachQuery(IDetachQuery $detachQuery) {
+				/** @var $entity IEntity[] */
+				$entity = [
+					$detachQuery->getEntity(),
+					$detachQuery->getTarget(),
+				];
+				/** @var $entity IProperty[] */
+				$primary = [
+					$entity[0]->getPrimary(),
+					$entity[1]->getPrimary(),
+				];
+				$cypher = 'MATCH (:' . $this->delimite($entity[0]->getSchema()->getRealName()) . " {" . $this->delimite($primary[0]->getName()) . ': $a})';
+				$cypher .= '-[r:' . $this->delimite($detachQuery->getRelation()->getSchema()->getRealName()) . ']';
+				$cypher .= '->(:' . $this->delimite($entity[1]->getSchema()->getRealName()) . " {" . $this->delimite($primary[1]->getName()) . ': $b})';
+				$cypher .= ' DELETE r';
+				$this->native($cypher, [
+					'a' => $primary[0]->get(),
+					'b' => $primary[1]->get(),
+				]);
+			}
+
+			/**
 			 * @param ILinkQuery $linkQuery
 			 *
 			 * @throws \Throwable
@@ -208,13 +235,12 @@
 			 * @throws \Throwable
 			 */
 			protected function executeUnlinkQuery(IUnlinkQuery $unlinkQuery) {
-				$cypher = '';
 				$link = $unlinkQuery->getLink();
 				$primary = $unlinkQuery->getEntity()->getPrimary();
-				$cypher .= "MATCH (:" . $this->delimite($link->getFrom()->getRealName()) . " {" . $this->delimite($primary->getName()) . ": \$a})-";
+				$cypher = 'MATCH (:' . $this->delimite($link->getFrom()->getRealName()) . " {" . $this->delimite($primary->getName()) . ': $a})-';
 				$cypher .= '[r:' . ($unlinkQuery->getLink()->getName()) . ']';
-				$cypher .= "->(:" . $this->delimite($link->getTo()->getRealName()) . ') ';
-				$cypher .= 'DELETE r';
+				$cypher .= '->(:' . $this->delimite($link->getTo()->getRealName()) . ')';
+				$cypher .= ' DELETE r';
 				$this->native($cypher, ['a' => $primary->get()]);
 			}
 

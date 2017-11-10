@@ -26,54 +26,40 @@
 				$this->entityQueue = new EntityQueue();
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function getSchema(): ISchema {
 				return $this->schema;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function getPrimary(): IProperty {
 				return $this->primary ?: $this->primary = $this->getProperty($this->schema->getPrimary()->getName());
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function getHash(): string {
 				return $this->getPrimary()->get();
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function filter(array $source): IEntity {
 				$this->push($this->schemaManager->filter($this->schema, $source));
 				return $this;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function linkTo(IEntity $entity): IEntity {
 				$this->entityQueue->link($this, $entity, $this->schema->getLink($entity->getSchema()->getName()));
 				return $this;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function unlink(string $schema): IEntity {
 				$this->entityQueue->unlink($this, $this->schema->getLink($schema));
 				return $this;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function attach(IEntity $entity): IEntity {
 				$relation = $this->schema->getRelation($entity->getSchema()->getName());
 				$use = $this->entityManager->create($relation->getSchema()->getName());
@@ -81,9 +67,14 @@
 				return $use;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
+			public function detach(IEntity $entity): IEntity {
+				$relation = $this->schema->getRelation($entity->getSchema()->getName());
+				$this->entityQueue->detach($this, $entity, $relation);
+				return $this;
+			}
+
+			/** @inheritdoc */
 			public function join(string $schema, string $alias): ICollection {
 				$collection = $this->entityManager->collection($this->schema->getName());
 				$collection->join($schema, $alias, $this->toArray());
@@ -91,17 +82,13 @@
 				return $collection;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function delete(): IEntity {
 				$this->entityQueue->delete($this);
 				return $this;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function save(): IEntity {
 				foreach ($this->entityQueue as $entity) {
 					if ($entity === $this) {
@@ -114,16 +101,12 @@
 				return $this;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function sanitize(): array {
 				return $this->schemaManager->sanitize($this->schema, $this->toArray());
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function toArray(): array {
 				$array = [];
 				foreach ($this->schema->getPropertyList() as $k => $property) {
@@ -132,9 +115,7 @@
 				return $array;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function __clone() {
 				parent::__clone();
 				$this->primary = null;

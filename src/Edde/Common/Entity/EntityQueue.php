@@ -8,6 +8,7 @@
 		use Edde\Api\Schema\IRelation;
 		use Edde\Api\Storage\Query\IQuery;
 		use Edde\Common\Entity\Query\DeleteQuery;
+		use Edde\Common\Entity\Query\DetachQuery;
 		use Edde\Common\Entity\Query\LinkQuery;
 		use Edde\Common\Entity\Query\RelationQuery;
 		use Edde\Common\Entity\Query\UnlinkQuery;
@@ -19,17 +20,13 @@
 			/** @var IQuery[] */
 			protected $queries = [];
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function queue(IEntity $entity): IEntityQueue {
 				$this->entities[$entity->getHash()] = $entity;
 				return $this;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function link(IEntity $from, IEntity $to, ILink $link): IEntityQueue {
 				$this->queue($from);
 				$this->queue($to);
@@ -41,9 +38,7 @@
 				return $this;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function unlink(IEntity $entity, ILink $link): IEntityQueue {
 				/**
 				 * generate kind of unique key to have just one unlink per entity type/guid
@@ -52,9 +47,7 @@
 				return $this;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function attach(IEntity $entity, IEntity $target, IEntity $using, IRelation $relation): IEntityQueue {
 				$this->queue($entity);
 				$this->queue($target);
@@ -63,24 +56,24 @@
 				return $this;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
+			public function detach(IEntity $entity, IEntity $target, IRelation $relation): IEntityQueue {
+				$this->queries[] = new DetachQuery($entity, $target, $relation);
+				return $this;
+			}
+
+			/** @inheritdoc */
 			public function delete(IEntity $entity): IEntityQueue {
 				$this->queries[] = new DeleteQuery($entity);
 				return $this;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function isEmpty(): bool {
 				return empty($this->entities) && empty($this->queries);
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function commit(): IEntityQueue {
 				foreach ($this->entities as $entity) {
 					$entity->commit();
@@ -90,30 +83,22 @@
 				return $this;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function getEntities(): array {
 				return $this->entities;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function getQueries(): array {
 				return $this->queries;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function getIterator() {
 				yield from $this->entities;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function __clone() {
 				parent::__clone();
 				$this->entities = [];

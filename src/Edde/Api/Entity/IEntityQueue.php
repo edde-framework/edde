@@ -51,6 +51,17 @@
 			public function attach(IEntity $entity, IEntity $target, IEntity $using, IRelation $relation): IEntityQueue;
 
 			/**
+			 * delete all relations to the given entity
+			 *
+			 * @param IEntity   $entity
+			 * @param IEntity   $target
+			 * @param IRelation $relation
+			 *
+			 * @return IEntityQueue
+			 */
+			public function detach(IEntity $entity, IEntity $target, IRelation $relation): IEntityQueue;
+
+			/**
 			 * mark the given entity for deletation
 			 *
 			 * @param IEntity $entity

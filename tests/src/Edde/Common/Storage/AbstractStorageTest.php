@@ -420,6 +420,44 @@
 
 			/**
 			 * @throws UnknownSchemaException
+			 * @throws EntityNotFoundException
+			 */
+			public function testEntityDetach() {
+				$this->schemaManager->load(UserRoleSchema::class);
+				$user = $this->entityManager->create(UserSchema::class, [
+					'name'    => 'foo-user',
+					'email'   => 'foo@user.com',
+					'created' => new \DateTime(),
+				]);
+				$root = $this->entityManager->collection(RoleSchema::alias)->entity('root');
+				$guest = $this->entityManager->collection(RoleSchema::alias)->entity('guest');
+				$user->attach($root);
+				$user->attach($guest);
+				$user->save();
+				$roles = ['guest', 'root'];
+				$current = [];
+				foreach ($user->join(RoleSchema::class, 'r') as $entity) {
+					self::assertSame(RoleSchema::class, $entity->getSchema()->getName());
+					$current[] = $entity->get('name');
+				}
+				sort($roles);
+				sort($current);
+				self::assertSame($roles, $current);
+				$roles = ['guest'];
+				$current = [];
+				$user->detach($root);
+				$user->save();
+				foreach ($user->join(RoleSchema::class, 'r') as $entity) {
+					self::assertSame(RoleSchema::class, $entity->getSchema()->getName());
+					$current[] = $entity->get('name');
+				}
+				sort($roles);
+				sort($current);
+				self::assertSame($roles, $current);
+			}
+
+			/**
+			 * @throws UnknownSchemaException
 			 */
 			public function testBenchmark() {
 				$this->schemaManager->load(FooBarSchema::class);
