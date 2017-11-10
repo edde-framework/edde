@@ -118,20 +118,26 @@
 					if ($entity->isDirty() === false || $schema->isRelation()) {
 						continue;
 					}
-					$sql = 'INSERT INTO ' . $this->delimite($schema->getRealName()) . ' (';
-					$params = [];
-					$columns = [];
-					$values = [];
-					$set = [];
+					$table = $this->delimite($schema->getRealName());
+					$primary = $entity->getPrimary();
+					$count = ['count' => 0];
+					foreach ($this->native('SELECT COUNT(' . ($delimitedPrimary = $this->delimite($primary->getName())) . ') AS count FROM ' . $table . ' WHERE ' . $delimitedPrimary . ' = :a LIMIT 1', ['a' => $primary->get()]) as $count) {
+						break;
+					}
 					$source = $this->schemaManager->sanitize($schema, $entity->toArray());
+					$columns = [];
+					$params = [];
+					$set = [];
 					foreach ($source as $k => $v) {
 						$columns[] = $delimited = $this->delimite($k);
-						$params[$values[] = $paramId = sha1($k)] = $v;
-						$params[$paramId = sha1($paramId)] = $v;
+						$params[$paramId = sha1($k)] = $v;
 						$set[] = $delimited . ' = :' . $paramId;
 					}
-					$sql .= implode(', ', $columns);
-					$sql .= ') VALUES (:' . implode(', :', $values) . ') ON DUPLICATE KEY UPDATE ' . implode(', ', $set);
+					$sql = 'INSERT INTO ' . $table . ' (' . implode(', ', $columns) . ') VALUES (:' . implode(', :', array_keys($params)) . ')';
+					if ($count['count'] !== 0) {
+						$sql = 'UPDATE ' . $table . ' SET ' . implode(', ', $set) . ' WHERE ' . $delimitedPrimary . ' = :a';
+						$params['a'] = $primary->get();
+					}
 					$this->native($sql, $params);
 				}
 				foreach ($entityQueue->getQueries() as $query) {
