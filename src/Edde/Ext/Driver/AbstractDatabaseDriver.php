@@ -5,7 +5,9 @@
 		use Edde\Api\Driver\Exception\DriverException;
 		use Edde\Api\Driver\Exception\DriverQueryException;
 		use Edde\Api\Driver\IDriver;
+		use Edde\Api\Entity\Query\ILinkQuery;
 		use Edde\Api\Entity\Query\IQueryQueue;
+		use Edde\Api\Entity\Query\IUnlinkQuery;
 		use Edde\Api\Storage\Query\Fragment\IWhere;
 		use Edde\Api\Storage\Query\ICrateSchemaQuery;
 		use Edde\Api\Storage\Query\ISelectQuery;
@@ -126,6 +128,32 @@
 					$sql .= 'ORDER';
 				}
 				return $this->native($sql, $params);
+			}
+
+			/**
+			 * @param IUnlinkQuery $unlinkQuery
+			 *
+			 * @throws \Throwable
+			 */
+			protected function executeUnlinkQuery(IUnlinkQuery $unlinkQuery) {
+				$link = $unlinkQuery->getLink();
+				$entity = $unlinkQuery->getEntity();
+				$primary = $entity->getPrimary();
+				$sql = 'UPDATE ' . $this->delimite($entity->getSchema()->getRealName()) . ' SET ' . $this->delimite($link->getFrom()->getPropertyName()) . ' = null WHERE ' . $this->delimite($primary->getName()) . ' = :a';
+				$this->native($sql, ['a' => $primary->get()]);
+			}
+
+			/**
+			 * @param ILinkQuery $linkQuery
+			 *
+			 * @throws \Throwable
+			 */
+			protected function executeLinkQuery(ILinkQuery $linkQuery) {
+				$link = $linkQuery->getLink();
+				$entity = $linkQuery->getEntity();
+				$primary = $entity->getPrimary();
+				$sql = 'UPDATE ' . $this->delimite($entity->getSchema()->getRealName()) . ' SET ' . $this->delimite($link->getFrom()->getPropertyName()) . ' = :b WHERE ' . $this->delimite($primary->getName()) . ' = :a';
+				$this->native($sql, ['a' => $primary->get(), 'b' => $linkQuery->getTo()->getPrimary()->get()]);
 			}
 
 			/**
