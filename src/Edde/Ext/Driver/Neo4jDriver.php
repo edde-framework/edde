@@ -8,14 +8,14 @@
 		use Edde\Api\Driver\IDriver;
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\Query\IQueryQueue;
-		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\NullValueException;
+		use Edde\Api\Storage\INativeQuery;
 		use Edde\Api\Storage\Query\Fragment\IWhere;
 		use Edde\Api\Storage\Query\ICrateSchemaQuery;
 		use Edde\Api\Storage\Query\ISelectQuery;
 		use Edde\Common\Driver\AbstractDriver;
-		use Edde\Common\Entity\Query\NativeQuery;
+		use Edde\Common\Storage\Query\NativeQuery;
 		use GraphAware\Bolt\Exception\MessageFailureException;
 		use GraphAware\Bolt\GraphDatabase;
 		use GraphAware\Bolt\Protocol\SessionInterface;
@@ -274,7 +274,7 @@
 				}
 				if ($selectQuery->hasWhere()) {
 					$cypher .= "\nWHERE" . ($query = $this->fragmentWhereGroup($selectQuery->getWhere()))->getQuery() . "\n";
-					$parameterList = $query->getParameterList();
+					$parameterList = $query->getParams();
 				}
 				$cypher .= implode(",\n\t", $matchList) . "\nRETURN\n\t" . $return;
 				if ($selectQuery->hasOrder()) {
@@ -323,34 +323,6 @@
 			 */
 			public function delimite(string $delimite): string {
 				return '`' . str_replace('`', '``', $delimite) . '`';
-			}
-
-			/**
-			 * @param string     $method
-			 * @param string     $path
-			 * @param array|null $parameters
-			 *
-			 * @return \stdClass
-			 * @throws DriverException
-			 */
-			protected function send(string $method, string $path, array $parameters = null) {
-				$json = json_encode((object)$parameters);
-				$length = $parameters ? strlen($json) : 0;
-				$result = file_get_contents(strpos($path, 'http') === 0 ? $path : ($this->url . $path), false, stream_context_create([
-					'http' => [
-						'method'  => $method,
-						'header'  => "X-Stream: true\r\nContent-Type: application/json\r\nContent-Length: $length\r\n",
-						'content' => $json,
-					],
-				]));
-				if (is_string($result)) {
-					$result = json_decode($result);
-					foreach ($result->errors ?? [] as $error) {
-						throw new DriverException($error->message);
-					}
-					return $result;
-				}
-				throw new DriverException(sprintf('Communication problem, kaboom!'));
 			}
 
 			protected function handleSetup(): void {

@@ -5,4 +5,13 @@
 		use Edde\Api\Storage\Query\IQuery;
 
 		interface INativeQuery extends IQuery {
+			/**
+			 * @return string
+			 */
+			public function getQuery(): string;
+
+			/**
+			 * @return array
+			 */
+			public function getParams(): array;
 		}
