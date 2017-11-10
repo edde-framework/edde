@@ -14,9 +14,7 @@
 				$this->entityQueue = $entityQueue;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function getEntityQueue(): IEntityQueue {
 				return $this->entityQueue;
 			}

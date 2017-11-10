@@ -79,6 +79,13 @@
 			public function join(string $schema, string $alias): ICollection;
 
 			/**
+			 * mark this entity for delete (it's not deleted until save)
+			 *
+			 * @return IEntity
+			 */
+			public function delete(): IEntity;
+
+			/**
 			 * save this entity and all related entities (entity queue in a transaction)
 			 *
 			 * @return IEntity

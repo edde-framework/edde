@@ -106,7 +106,7 @@
 		interface UserSchema extends GuidSchema {
 			const alias = 'user';
 
-			public function name(): string;
+			public function name($unique): string;
 
 			public function email($unique): string;
 

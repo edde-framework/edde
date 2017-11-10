@@ -94,6 +94,14 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function delete(): IEntity {
+				$this->entityQueue->delete($this);
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function save(): IEntity {
 				foreach ($this->entityQueue as $entity) {
 					if ($entity === $this) {

@@ -7,6 +7,7 @@
 		use Edde\Api\Driver\Exception\DriverQueryException;
 		use Edde\Api\Driver\IDriver;
 		use Edde\Api\Entity\IEntity;
+		use Edde\Api\Entity\Query\IDeleteQuery;
 		use Edde\Api\Entity\Query\ILinkQuery;
 		use Edde\Api\Entity\Query\IQueryQueue;
 		use Edde\Api\Entity\Query\IRelationQuery;
@@ -174,6 +175,18 @@
 				foreach ($entityQueue->getQueries() as $query) {
 					$this->execute($query);
 				}
+			}
+
+			/**
+			 * @param IDeleteQuery $deleteQuery
+			 *
+			 * @throws \Throwable
+			 */
+			protected function executeDeleteQuery(IDeleteQuery $deleteQuery) {
+				$entity = $deleteQuery->getEntity();
+				$primary = $entity->getPrimary();
+				$cypher = 'MATCH (n:' . $this->delimite($entity->getSchema()->getRealName()) . ' {' . $this->delimite($primary->getName()) . ': $a}) DETACH DELETE n';
+				$this->native($cypher, ['a' => $primary->get()]);
 			}
 
 			/**

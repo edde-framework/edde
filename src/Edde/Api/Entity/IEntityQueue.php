@@ -51,6 +51,15 @@
 			public function attach(IEntity $entity, IEntity $target, IEntity $using, IRelation $relation): IEntityQueue;
 
 			/**
+			 * mark the given entity for deletation
+			 *
+			 * @param IEntity $entity
+			 *
+			 * @return IEntityQueue
+			 */
+			public function delete(IEntity $entity): IEntityQueue;
+
+			/**
 			 * is there something to do?
 			 *
 			 * @return bool

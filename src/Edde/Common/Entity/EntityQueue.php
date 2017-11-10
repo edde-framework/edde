@@ -7,6 +7,7 @@
 		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\IRelation;
 		use Edde\Api\Storage\Query\IQuery;
+		use Edde\Common\Entity\Query\DeleteQuery;
 		use Edde\Common\Entity\Query\LinkQuery;
 		use Edde\Common\Entity\Query\RelationQuery;
 		use Edde\Common\Entity\Query\UnlinkQuery;
@@ -65,8 +66,16 @@
 			/**
 			 * @inheritdoc
 			 */
+			public function delete(IEntity $entity): IEntityQueue {
+				$this->queries[] = new DeleteQuery($entity);
+				return $this;
+			}
+
+			/**
+			 * @inheritdoc
+			 */
 			public function isEmpty(): bool {
-				return empty($this->entities) && empty($this->entityLinks) && empty($this->entityUnlinks) && empty($this->entityRelations);
+				return empty($this->entities) && empty($this->queries);
 			}
 
 			/**

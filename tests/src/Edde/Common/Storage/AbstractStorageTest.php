@@ -403,6 +403,22 @@
 			}
 
 			/**
+			 * @throws EntityNotFoundException
+			 */
+			public function testDeleteEntity() {
+				$this->expectException(EntityNotFoundException::class);
+				$user = null;
+				try {
+					$user = $this->entityManager->collection(UserSchema::class)->entity('Me, The Best User Ever!');
+				} catch (EntityNotFoundException $exception) {
+					self::fail('Entity has not been found!');
+				}
+				$user->delete();
+				$user->save();
+				$this->entityManager->collection(UserSchema::class)->entity('Me, The Best User Ever!');
+			}
+
+			/**
 			 * @throws UnknownSchemaException
 			 */
 			public function testBenchmark() {
