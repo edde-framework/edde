@@ -457,6 +457,35 @@
 			}
 
 			/**
+			 * @throws EntityNotFoundException
+			 * @throws UnknownSchemaException
+			 */
+			public function testUnlinkRelation() {
+				$this->schemaManager->load(UserRoleSchema::class);
+				$user = $this->entityManager->create(UserSchema::class, [
+					'name'    => 'root-user',
+					'email'   => 'root@user.com',
+					'created' => new \DateTime(),
+				]);
+				$root = $this->entityManager->collection(RoleSchema::alias)->entity('root');
+				$guest = $this->entityManager->collection(RoleSchema::alias)->entity('guest');
+				$user->attach($root)->set('enabled', false);
+				$user->attach($root)->set('enabled', true);
+				$user->attach($guest);
+				$user->save();
+				$roles = ['guest', 'root', 'root'];
+				$current = [];
+				foreach ($user->join(RoleSchema::class, 'r') as $entity) {
+					self::assertSame(RoleSchema::class, $entity->getSchema()->getName());
+					$current[] = $entity->get('name');
+				}
+				sort($roles);
+				sort($current);
+				self::assertSame($roles, $current);
+				$user->detach($root)->where('r.enabled', '=', 1);
+			}
+
+			/**
 			 * @throws UnknownSchemaException
 			 */
 			public function testBenchmark() {
