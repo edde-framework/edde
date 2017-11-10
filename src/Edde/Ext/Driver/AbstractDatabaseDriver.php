@@ -5,7 +5,9 @@
 		use Edde\Api\Driver\Exception\DriverException;
 		use Edde\Api\Driver\Exception\DriverQueryException;
 		use Edde\Api\Driver\IDriver;
+		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\Query\IDeleteQuery;
+		use Edde\Api\Entity\Query\IDetachQuery;
 		use Edde\Api\Entity\Query\ILinkQuery;
 		use Edde\Api\Entity\Query\IQueryQueue;
 		use Edde\Api\Entity\Query\IRelationQuery;
@@ -223,6 +225,33 @@
 				$primary = $entity->getPrimary();
 				$sql = 'DELETE FROM ' . $this->delimite($entity->getSchema()->getRealName()) . ' WHERE ' . $this->delimite($primary->getName()) . ' = :a';
 				$this->native($sql, ['a' => $primary->get()]);
+			}
+
+			/**
+			 * @param IDetachQuery $detachQuery
+			 *
+			 * @throws DriverException
+			 * @throws \Throwable
+			 */
+			protected function executeDetachQuery(IDetachQuery $detachQuery) {
+				$relation = $detachQuery->getRelation();
+				$sql = 'DELETE FROM ' . $this->delimite($relation->getSchema()->getRealName()) . ' WHERE ';
+				$sql .= '(' . $this->delimite($relation->getFrom()->getTo()->getPropertyName()) . ' = :a AND ';
+				$sql .= $this->delimite($relation->getTo()->getFrom()->getPropertyName()) . ' = :b) ';
+				/** @var $entity IEntity[] */
+				$entity = [
+					$detachQuery->getEntity(),
+					$detachQuery->getTarget(),
+				];
+				$params = [
+					'a' => $entity[0]->getPrimary()->get(),
+					'b' => $entity[1]->getPrimary()->get(),
+				];
+				if ($detachQuery->hasWhere()) {
+					$sql .= ' AND (' . ($query = $this->fragmentWhereGroup($detachQuery->getWhere()))->getQuery() . ')';
+					$params = array_merge($params, $query->getParams());
+				}
+				$this->native($sql, $params);
 			}
 
 			/**
