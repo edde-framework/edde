@@ -1,6 +1,8 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Entity\Query\Fragment;
+	namespace Edde\Api\Storage\Query\Fragment;
+
+		use Edde\Api\Storage\Query\IFragment;
 
 		interface IWhereGroup extends IFragment, \IteratorAggregate {
 			/**

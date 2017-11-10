@@ -1,14 +1,14 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Entity\Query;
+	namespace Edde\Common\Storage\Query;
 
-		use Edde\Api\Entity\Exception\QueryException;
-		use Edde\Api\Entity\Query\Fragment\IJoin;
-		use Edde\Api\Entity\Query\Fragment\IWhereGroup;
-		use Edde\Api\Entity\Query\ISelectQuery;
 		use Edde\Api\Schema\ISchema;
-		use Edde\Common\Entity\Query\Fragment\Join;
-		use Edde\Common\Entity\Query\Fragment\WhereGroup;
+		use Edde\Api\Storage\Exception\QueryException;
+		use Edde\Api\Storage\Query\Fragment\IJoin;
+		use Edde\Api\Storage\Query\Fragment\IWhereGroup;
+		use Edde\Api\Storage\Query\ISelectQuery;
+		use Edde\Common\Storage\Query\Fragment\Join;
+		use Edde\Common\Storage\Query\Fragment\WhereGroup;
 
 		class SelectQuery extends AbstractQuery implements ISelectQuery {
 			/**

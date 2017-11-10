@@ -11,8 +11,8 @@
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Entity\Query\QueryQueue;
-		use Edde\Common\Entity\Query\SelectQuery;
 		use Edde\Common\Object\Object;
+		use Edde\Common\Storage\Query\SelectQuery;
 
 		class EntityManager extends Object implements IEntityManager {
 			use SchemaManager;

@@ -8,7 +8,7 @@
 		use Edde\Api\Entity\Inject\EntityManager;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Storage\Inject\Storage;
-		use Edde\Common\Entity\Query\CreateSchemaQuery;
+		use Edde\Common\Storage\Query\CreateSchemaQuery;
 		use Edde\Common\Upgrade\AbstractUpgrade;
 
 		class ZeroUpgrade extends AbstractUpgrade {

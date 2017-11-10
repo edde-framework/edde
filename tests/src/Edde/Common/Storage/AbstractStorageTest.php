@@ -10,8 +10,6 @@
 		use Edde\Api\Storage\Exception\NullValueException;
 		use Edde\Api\Storage\Exception\UnknownTableException;
 		use Edde\Api\Storage\Inject\Storage;
-		use Edde\Common\Entity\Query\CreateSchemaQuery;
-		use Edde\Common\Entity\Query\SelectQuery;
 		use Edde\Common\Schema\BarPooSchema;
 		use Edde\Common\Schema\BarSchema;
 		use Edde\Common\Schema\FooBarSchema;
@@ -21,6 +19,8 @@
 		use Edde\Common\Schema\SimpleSchema;
 		use Edde\Common\Schema\UserRoleSchema;
 		use Edde\Common\Schema\UserSchema;
+		use Edde\Common\Storage\Query\CreateSchemaQuery;
+		use Edde\Common\Storage\Query\SelectQuery;
 		use Edde\Ext\Test\TestCase;
 
 		abstract class AbstractStorageTest extends TestCase {

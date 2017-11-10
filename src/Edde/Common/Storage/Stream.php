@@ -2,10 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Storage;
 
-		use Edde\Api\Entity\Query\IQuery;
-		use Edde\Api\Entity\Query\ISelectQuery;
 		use Edde\Api\Storage\IStorage;
 		use Edde\Api\Storage\IStream;
+		use Edde\Api\Storage\Query\IQuery;
+		use Edde\Api\Storage\Query\ISelectQuery;
 		use Edde\Common\Object\Object;
 		use Traversable;
 

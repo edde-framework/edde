@@ -4,7 +4,7 @@
 
 		use Edde\Api\Driver\Exception\DriverException;
 		use Edde\Api\Driver\IDriver;
-		use Edde\Api\Entity\Query\ICrateSchemaQuery;
+		use Edde\Api\Storage\Query\ICrateSchemaQuery;
 		use Edde\Common\Driver\AbstractDriver;
 		use PDO;
 

@@ -4,6 +4,7 @@
 
 		use Edde\Api\Entity\IEntityQueue;
 		use Edde\Api\Entity\Query\IQueryQueue;
+		use Edde\Common\Storage\Query\AbstractQuery;
 
 		class QueryQueue extends AbstractQuery implements IQueryQueue {
 			/** @var IEntityQueue */

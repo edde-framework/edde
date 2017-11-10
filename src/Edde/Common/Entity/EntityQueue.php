@@ -4,11 +4,9 @@
 
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\IEntityQueue;
-		use Edde\Api\Entity\Query\ILinkQuery;
-		use Edde\Api\Entity\Query\IRelationQuery;
-		use Edde\Api\Entity\Query\IUnlinkQuery;
 		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\IRelation;
+		use Edde\Api\Storage\Query\IQuery;
 		use Edde\Common\Entity\Query\LinkQuery;
 		use Edde\Common\Entity\Query\RelationQuery;
 		use Edde\Common\Entity\Query\UnlinkQuery;
@@ -17,12 +15,8 @@
 		class EntityQueue extends Object implements IEntityQueue {
 			/** @var IEntity[] */
 			protected $entities;
-			/** @var ILinkQuery[] */
-			protected $entityLinks = [];
-			/** @var IUnlinkQuery[] */
-			protected $entityUnlinks = [];
-			/** @var IRelationQuery[] */
-			protected $entityRelations = [];
+			/** @var IQuery[] */
+			protected $queries = [];
 
 			/**
 			 * @inheritdoc
@@ -41,7 +35,7 @@
 				/**
 				 * maintain 1:N relation, thus create a new link, remove the old one
 				 */
-				$this->entityLinks[$from->getHash() . $from->getSchema()->getName() . $link->getName() . $link->getTo()->getName()] = new LinkQuery($from, $link, $to);
+				$this->queries[] = new LinkQuery($from, $link, $to);
 				$this->unlink($from, $link);
 				return $this;
 			}
@@ -53,7 +47,7 @@
 				/**
 				 * generate kind of unique key to have just one unlink per entity type/guid
 				 */
-				$this->entityUnlinks[$entity->getHash() . $entity->getSchema()->getName() . $link->getName() . $link->getTo()->getName()] = new UnlinkQuery($entity, $link);
+				$this->queries[] = new UnlinkQuery($entity, $link);
 				return $this;
 			}
 
@@ -64,8 +58,7 @@
 				$this->queue($entity);
 				$this->queue($target);
 				$this->queue($using);
-				$hash = sha1($entity->getHash() . $entity->getSchema()->getName() . $target->getHash() . $target->getSchema()->getName() . $using->getHash() . $using->getSchema()->getName());
-				$this->entityRelations[$hash] = new RelationQuery($entity, $target, $using, $relation);
+				$this->queries[] = new RelationQuery($entity, $target, $using, $relation);
 				return $this;
 			}
 
@@ -84,9 +77,7 @@
 					$entity->commit();
 				}
 				$this->entities = [];
-				$this->entityLinks = [];
-				$this->entityUnlinks = [];
-				$this->entityRelations = [];
+				$this->queries = [];
 				return $this;
 			}
 
@@ -100,22 +91,8 @@
 			/**
 			 * @inheritdoc
 			 */
-			public function getEntityLinks(): array {
-				return $this->entityLinks;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getEntityUnlinks(): array {
-				return $this->entityUnlinks;
-			}
-
-			/**
-			 * @inheritdoc
-			 */
-			public function getEntityRelations(): array {
-				return $this->entityRelations;
+			public function getQueries(): array {
+				return $this->queries;
 			}
 
 			/**
@@ -131,8 +108,6 @@
 			public function __clone() {
 				parent::__clone();
 				$this->entities = [];
-				$this->entityLinks = [];
-				$this->entityUnlinks = [];
-				$this->entityRelations = [];
+				$this->queries = [];
 			}
 		}

@@ -4,6 +4,7 @@
 
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Schema\IRelation;
+		use Edde\Api\Storage\Query\IQuery;
 
 		interface IRelationQuery extends IQuery {
 			/**

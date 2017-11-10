@@ -3,11 +3,11 @@
 	namespace Edde\Common\Storage;
 
 		use Edde\Api\Driver\Inject\Driver;
-		use Edde\Api\Entity\Query\IQuery;
 		use Edde\Api\Storage\Exception\ExclusiveTransactionException;
 		use Edde\Api\Storage\Exception\NoTransactionException;
 		use Edde\Api\Storage\IStorage;
 		use Edde\Api\Storage\IStream;
+		use Edde\Api\Storage\Query\IQuery;
 		use Edde\Common\Object\Object;
 
 		class Storage extends Object implements IStorage {

@@ -7,13 +7,13 @@
 		use Edde\Api\Driver\Exception\DriverQueryException;
 		use Edde\Api\Driver\IDriver;
 		use Edde\Api\Entity\IEntity;
-		use Edde\Api\Entity\Query\Fragment\IWhere;
-		use Edde\Api\Entity\Query\ICrateSchemaQuery;
 		use Edde\Api\Entity\Query\IQueryQueue;
-		use Edde\Api\Entity\Query\ISelectQuery;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Storage\Exception\DuplicateEntryException;
 		use Edde\Api\Storage\Exception\NullValueException;
+		use Edde\Api\Storage\Query\Fragment\IWhere;
+		use Edde\Api\Storage\Query\ICrateSchemaQuery;
+		use Edde\Api\Storage\Query\ISelectQuery;
 		use Edde\Common\Driver\AbstractDriver;
 		use Edde\Common\Entity\Query\NativeQuery;
 		use GraphAware\Bolt\Exception\MessageFailureException;
@@ -112,7 +112,7 @@
 			}
 
 			/**
-			 * @param \Edde\Api\Entity\Query\ICrateSchemaQuery $crateSchemaQuery
+			 * @param ICrateSchemaQuery $crateSchemaQuery
 			 *
 			 * @throws \Throwable
 			 */
@@ -144,26 +144,29 @@
 			}
 
 			/**
-			 * @param \Edde\Api\Entity\Query\IQueryQueue $entityQueueQuery
+			 * @param IQueryQueue $queryQueue
 			 *
 			 * @throws \Exception
 			 * @throws \Throwable
 			 */
-			protected function executeEntityQueueQuery(IQueryQueue $entityQueueQuery) {
-				$entityQueue = $entityQueueQuery->getEntityQueue();
+			protected function executeQueryQueue(IQueryQueue $queryQueue) {
+				$entityQueue = $queryQueue->getEntityQueue();
 				if ($entityQueue->isEmpty()) {
 					return;
 				}
-				foreach ($entityQueue->getEntityUnlinks() as $entityLink) {
-					$cypher = '';
-					$link = $entityLink->getLink();
-					$primary = $entityLink->getEntity()->getPrimary();
-					$cypher .= "MATCH (:" . $this->delimite($link->getFrom()->getRealName()) . " {" . $this->delimite($primary->getName()) . ": \$a})-";
-					$cypher .= '[r:' . ($entityLink->getLink()->getName()) . ']';
-					$cypher .= "->(:" . $this->delimite($link->getTo()->getRealName()) . ') ';
-					$cypher .= 'DELETE r';
-					$this->native($cypher, ['a' => $primary->get()]);
+				foreach ($entityQueue->getQueries() as $query) {
+					$this->execute($query);
 				}
+//				foreach ($entityQueue->getEntityUnlinks() as $entityLink) {
+//					$cypher = '';
+//					$link = $entityLink->getLink();
+//					$primary = $entityLink->getEntity()->getPrimary();
+//					$cypher .= "MATCH (:" . $this->delimite($link->getFrom()->getRealName()) . " {" . $this->delimite($primary->getName()) . ": \$a})-";
+//					$cypher .= '[r:' . ($entityLink->getLink()->getName()) . ']';
+//					$cypher .= "->(:" . $this->delimite($link->getTo()->getRealName()) . ') ';
+//					$cypher .= 'DELETE r';
+//					$this->native($cypher, ['a' => $primary->get()]);
+//				}
 				foreach ($entityQueue->getEntities() as $entity) {
 					$cypher = null;
 					$schema = $entity->getSchema();
@@ -178,23 +181,23 @@
 						'set'     => $this->schemaManager->sanitize($schema, $entity->toArray()),
 					]);
 				}
-				foreach ($entityQueue->getEntityLinks() as $entityLink) {
-					$this->link(
-						$entityLink->getEntity(),
-						$entityLink->getTo(),
-						$entityLink->getLink()->getName()
-					);
-				}
-				foreach ($entityQueue->getEntityRelations() as $entityRelation) {
-					$using = $entityRelation->getUsing();
-					$source = empty($source = $using->toArray()) === false ? $using->sanitize() : null;
-					$this->link(
-						$entityRelation->getEntity(),
-						$entityRelation->getTarget(),
-						$entityRelation->getRelation()->getSchema()->getRealName(),
-						$source
-					);
-				}
+//				foreach ($entityQueue->getEntityLinks() as $entityLink) {
+//					$this->link(
+//						$entityLink->getEntity(),
+//						$entityLink->getTo(),
+//						$entityLink->getLink()->getName()
+//					);
+//				}
+//				foreach ($entityQueue->getEntityRelations() as $entityRelation) {
+//					$using = $entityRelation->getUsing();
+//					$source = empty($source = $using->toArray()) === false ? $using->sanitize() : null;
+//					$this->link(
+//						$entityRelation->getEntity(),
+//						$entityRelation->getTarget(),
+//						$entityRelation->getRelation()->getSchema()->getRealName(),
+//						$source
+//					);
+//				}
 			}
 
 			/**
@@ -247,7 +250,7 @@
 			}
 
 			/**
-			 * @param \Edde\Api\Entity\Query\ISelectQuery $selectQuery
+			 * @param \Edde\Api\Storage\Query\ISelectQuery $selectQuery
 			 *
 			 * @return mixed
 			 * @throws \Throwable

@@ -3,6 +3,7 @@
 	namespace Edde\Api\Entity\Query;
 
 		use Edde\Api\Entity\IEntityQueue;
+		use Edde\Api\Storage\Query\IQuery;
 
 		interface IQueryQueue extends IQuery {
 			/**

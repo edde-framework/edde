@@ -5,13 +5,13 @@
 		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\Inject\EntityManager;
-		use Edde\Api\Entity\Query\ISelectQuery;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
 		use Edde\Api\Storage\IStream;
-		use Edde\Common\Entity\Query\SelectQuery;
+		use Edde\Api\Storage\Query\ISelectQuery;
 		use Edde\Common\Object\Object;
+		use Edde\Common\Storage\Query\SelectQuery;
 
 		class Collection extends Object implements ICollection {
 			use EntityManager;

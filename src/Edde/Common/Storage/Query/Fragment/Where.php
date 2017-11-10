@@ -1,9 +1,10 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Entity\Query\Fragment;
+	namespace Edde\Common\Storage\Query\Fragment;
 
-		use Edde\Api\Entity\Query\Fragment\IWhere;
-		use Edde\Api\Entity\Query\Fragment\IWhereGroup;
+		use Edde\Api\Storage\Query\Fragment\IWhere;
+		use Edde\Api\Storage\Query\Fragment\IWhereGroup;
+		use Edde\Common\Storage\Query\AbstractFragment;
 
 		class Where extends AbstractFragment implements IWhere {
 			/**

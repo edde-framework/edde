@@ -1,8 +1,9 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Entity\Query\Fragment;
+	namespace Edde\Common\Storage\Query\Fragment;
 
-		use Edde\Api\Entity\Query\Fragment\IJoin;
+		use Edde\Api\Storage\Query\Fragment\IJoin;
+		use Edde\Common\Storage\Query\AbstractFragment;
 
 		class Join extends AbstractFragment implements IJoin {
 			/**

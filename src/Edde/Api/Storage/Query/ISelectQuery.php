@@ -1,10 +1,10 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Entity\Query;
+	namespace Edde\Api\Storage\Query;
 
-		use Edde\Api\Entity\Query\Fragment\IJoin;
-		use Edde\Api\Entity\Query\Fragment\IWhereGroup;
 		use Edde\Api\Schema\ISchema;
+		use Edde\Api\Storage\Query\Fragment\IJoin;
+		use Edde\Api\Storage\Query\Fragment\IWhereGroup;
 
 		interface ISelectQuery extends IQuery {
 			/**

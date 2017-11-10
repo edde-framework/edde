@@ -2,11 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Entity;
 
-		use Edde\Api\Entity\Query\ILinkQuery;
-		use Edde\Api\Entity\Query\IRelationQuery;
-		use Edde\Api\Entity\Query\IUnlinkQuery;
 		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\IRelation;
+		use Edde\Api\Storage\Query\IQuery;
 		use IteratorAggregate;
 
 		interface IEntityQueue extends IteratorAggregate {
@@ -72,19 +70,11 @@
 			public function getEntities(): array;
 
 			/**
-			 * @return ILinkQuery[]
+			 * return queries to be executed (link, unlink, attach, delete, ...)
+			 *
+			 * @return IQuery[]
 			 */
-			public function getEntityLinks(): array;
-
-			/**
-			 * @return IUnlinkQuery[]
-			 */
-			public function getEntityUnlinks(): array;
-
-			/**
-			 * @return IRelationQuery[]
-			 */
-			public function getEntityRelations(): array;
+			public function getQueries(): array;
 
 			/**
 			 * @return \Traversable|IEntity[]

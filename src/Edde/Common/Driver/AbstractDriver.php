@@ -4,11 +4,11 @@
 
 		use Edde\Api\Driver\Exception\DriverException;
 		use Edde\Api\Driver\IDriver;
-		use Edde\Api\Entity\Query\Fragment\IFragment;
-		use Edde\Api\Entity\Query\Fragment\IWhereGroup;
-		use Edde\Api\Entity\Query\IQuery;
 		use Edde\Api\Query\INativeQuery;
 		use Edde\Api\Schema\Inject\SchemaManager;
+		use Edde\Api\Storage\Query\Fragment\IWhereGroup;
+		use Edde\Api\Storage\Query\IFragment;
+		use Edde\Api\Storage\Query\IQuery;
 		use Edde\Common\Entity\Query\NativeQuery;
 		use Edde\Common\Object\Object;
 		use ReflectionClass;

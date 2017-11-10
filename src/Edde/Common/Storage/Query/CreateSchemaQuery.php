@@ -1,9 +1,9 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Entity\Query;
+	namespace Edde\Common\Storage\Query;
 
-		use Edde\Api\Entity\Query\ICrateSchemaQuery;
 		use Edde\Api\Schema\ISchema;
+		use Edde\Api\Storage\Query\ICrateSchemaQuery;
 
 		class CreateSchemaQuery extends AbstractQuery implements ICrateSchemaQuery {
 			/**

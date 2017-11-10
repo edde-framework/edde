@@ -9,7 +9,7 @@
 		use Edde\Api\Storage\Exception\EntityNotFoundException;
 		use Edde\Api\Storage\Exception\UnknownTableException;
 		use Edde\Api\Upgrade\IUpgrade;
-		use Edde\Common\Entity\Query\CreateSchemaQuery;
+		use Edde\Common\Storage\Query\CreateSchemaQuery;
 		use Edde\Common\Upgrade\AbstractUpgradeManager;
 
 		class UpgradeManager extends AbstractUpgradeManager {
