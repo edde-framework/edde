@@ -7,6 +7,7 @@
 		use Edde\Api\Driver\IDriver;
 		use Edde\Api\Entity\Query\ILinkQuery;
 		use Edde\Api\Entity\Query\IQueryQueue;
+		use Edde\Api\Entity\Query\IRelationQuery;
 		use Edde\Api\Entity\Query\IUnlinkQuery;
 		use Edde\Api\Storage\Query\Fragment\IWhere;
 		use Edde\Api\Storage\Query\ICrateSchemaQuery;
@@ -179,6 +180,30 @@
 				$primary = $entity->getPrimary();
 				$sql = 'UPDATE ' . $this->delimite($entity->getSchema()->getRealName()) . ' SET ' . $this->delimite($link->getFrom()->getPropertyName()) . ' = :b WHERE ' . $this->delimite($primary->getName()) . ' = :a';
 				$this->native($sql, ['a' => $primary->get(), 'b' => $linkQuery->getTo()->getPrimary()->get()]);
+			}
+
+			/**
+			 * @param IRelationQuery $relationQuery
+			 *
+			 * @throws \Throwable
+			 */
+			protected function executeRelationQuery(IRelationQuery $relationQuery) {
+				$using = $relationQuery->getUsing();
+				$relation = $relationQuery->getRelation();
+				$columns = [];
+				$values = [];
+				$params = [];
+				$using->set($relation->getFrom()->getTo()->getPropertyName(), $relationQuery->getEntity()->get($relation->getFrom()->getFrom()->getPropertyName()));
+				$using->set($relation->getTo()->getFrom()->getPropertyName(), $relationQuery->getTarget()->get($relation->getTo()->getTo()->getPropertyName()));
+				foreach ($using->sanitize() as $k => $v) {
+					$columns[] = $this->delimite($k);
+					$params[$paramId = sha1($k)] = $v;
+					$values[] = $paramId;
+				}
+				$sql = 'INSERT INTO ' . $this->delimite($relation->getSchema()->getRealName()) . ' (' . implode(', ', $columns) . ') VALUES (';
+				$sql .= ':' . implode(', :', $values);
+				$sql .= ')';
+				$this->native($sql, $params);
 			}
 
 			/**
