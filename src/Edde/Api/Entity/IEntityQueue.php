@@ -69,12 +69,12 @@
 			public function getEntities(): array;
 
 			/**
-			 * @return IEntityLink[]
+			 * @return ILinkQuery[]
 			 */
 			public function getEntityLinks(): array;
 
 			/**
-			 * @return IEntityUnlink[]
+			 * @return IUnlinkQuery[]
 			 */
 			public function getEntityUnlinks(): array;
 

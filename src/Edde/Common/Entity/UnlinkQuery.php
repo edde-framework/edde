@@ -3,11 +3,11 @@
 	namespace Edde\Common\Entity;
 
 		use Edde\Api\Entity\IEntity;
-		use Edde\Api\Entity\IEntityUnlink;
+		use Edde\Api\Entity\IUnlinkQuery;
 		use Edde\Api\Schema\ILink;
 		use Edde\Common\Object\Object;
 
-		class EntityUnlink extends Object implements IEntityUnlink {
+		class UnlinkQuery extends Object implements IUnlinkQuery {
 			/**
 			 * @var IEntity
 			 */

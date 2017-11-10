@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Entity;
 
-		interface IEntityLink extends IEntityUnlink {
+		interface ILinkQuery extends IUnlinkQuery {
 			/**
 			 * right side of the link
 			 *

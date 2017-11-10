@@ -4,7 +4,7 @@
 
 		use Edde\Api\Schema\ILink;
 
-		interface IEntityUnlink {
+		interface IUnlinkQuery {
 			/**
 			 * @return IEntity
 			 */

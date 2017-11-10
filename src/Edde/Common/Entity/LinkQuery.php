@@ -3,10 +3,10 @@
 	namespace Edde\Common\Entity;
 
 		use Edde\Api\Entity\IEntity;
-		use Edde\Api\Entity\IEntityLink;
+		use Edde\Api\Entity\ILinkQuery;
 		use Edde\Api\Schema\ILink;
 
-		class EntityLink extends EntityUnlink implements IEntityLink {
+		class LinkQuery extends UnlinkQuery implements ILinkQuery {
 			/**
 			 * @var IEntity
 			 */

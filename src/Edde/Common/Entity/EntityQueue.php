@@ -3,10 +3,10 @@
 	namespace Edde\Common\Entity;
 
 		use Edde\Api\Entity\IEntity;
-		use Edde\Api\Entity\IEntityLink;
 		use Edde\Api\Entity\IEntityQueue;
 		use Edde\Api\Entity\IEntityRelation;
-		use Edde\Api\Entity\IEntityUnlink;
+		use Edde\Api\Entity\ILinkQuery;
+		use Edde\Api\Entity\IUnlinkQuery;
 		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\IRelation;
 		use Edde\Common\Object\Object;
@@ -14,9 +14,9 @@
 		class EntityQueue extends Object implements IEntityQueue {
 			/** @var IEntity[] */
 			protected $entities;
-			/** @var IEntityLink[] */
+			/** @var ILinkQuery[] */
 			protected $entityLinks = [];
-			/** @var IEntityUnlink[] */
+			/** @var IUnlinkQuery[] */
 			protected $entityUnlinks = [];
 			/** @var IEntityRelation[] */
 			protected $entityRelations = [];
@@ -38,7 +38,7 @@
 				/**
 				 * maintain 1:N relation, thus create a new link, remove the old one
 				 */
-				$this->entityLinks[$from->getHash() . $from->getSchema()->getName() . $link->getName() . $link->getTo()->getName()] = new EntityLink($from, $link, $to);
+				$this->entityLinks[$from->getHash() . $from->getSchema()->getName() . $link->getName() . $link->getTo()->getName()] = new LinkQuery($from, $link, $to);
 				$this->unlink($from, $link);
 				return $this;
 			}
@@ -50,7 +50,7 @@
 				/**
 				 * generate kind of unique key to have just one unlink per entity type/guid
 				 */
-				$this->entityUnlinks[$entity->getHash() . $entity->getSchema()->getName() . $link->getName() . $link->getTo()->getName()] = new EntityUnlink($entity, $link);
+				$this->entityUnlinks[$entity->getHash() . $entity->getSchema()->getName() . $link->getName() . $link->getTo()->getName()] = new UnlinkQuery($entity, $link);
 				return $this;
 			}
 
