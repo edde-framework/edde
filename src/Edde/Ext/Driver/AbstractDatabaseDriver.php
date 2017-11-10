@@ -5,6 +5,7 @@
 		use Edde\Api\Driver\Exception\DriverException;
 		use Edde\Api\Driver\Exception\DriverQueryException;
 		use Edde\Api\Driver\IDriver;
+		use Edde\Api\Entity\Query\IDeleteQuery;
 		use Edde\Api\Entity\Query\ILinkQuery;
 		use Edde\Api\Entity\Query\IQueryQueue;
 		use Edde\Api\Entity\Query\IRelationQuery;
@@ -104,7 +105,7 @@
 				}
 				$sql .= implode(",\n\t", $columns);
 				foreach ($schema->getLinks() as $link) {
-					$sql .= ",\n\tFOREIGN KEY (" . $this->delimite($link->getFrom()->getPropertyName()) . ') REFERENCES ' . $this->delimite($link->getTo()->getRealName()) . '(' . $this->delimite($link->getTo()->getPropertyName()) . ') ON DELETE RESTRICT ON UPDATE RESTRICT';
+					$sql .= ",\n\tFOREIGN KEY (" . $this->delimite($link->getFrom()->getPropertyName()) . ') REFERENCES ' . $this->delimite($link->getTo()->getRealName()) . '(' . $this->delimite($link->getTo()->getPropertyName()) . ') ON DELETE CASCADE ON UPDATE CASCADE';
 				}
 				$this->native($sql . "\n)");
 			}
@@ -210,6 +211,18 @@
 				$sql .= ':' . implode(', :', $values);
 				$sql .= ')';
 				$this->native($sql, $params);
+			}
+
+			/**
+			 * @param IDeleteQuery $deleteQuery
+			 *
+			 * @throws \Throwable
+			 */
+			protected function executeDeleteQuery(IDeleteQuery $deleteQuery) {
+				$entity = $deleteQuery->getEntity();
+				$primary = $entity->getPrimary();
+				$sql = 'DELETE FROM ' . $this->delimite($entity->getSchema()->getRealName()) . ' WHERE ' . $this->delimite($primary->getName()) . ' = :a';
+				$this->native($sql, ['a' => $primary->get()]);
 			}
 
 			/**
