@@ -313,7 +313,7 @@
 			}
 
 			/**
-			 * @param \Edde\Api\Storage\Query\ISelectQuery $selectQuery
+			 * @param ISelectQuery $selectQuery
 			 *
 			 * @return mixed
 			 * @throws \Throwable
@@ -336,7 +336,8 @@
 					}
 					$relation = $schema->getRelation($join->getSchema());
 					$cypher .= '-[' . $this->delimite($current . '\r') . ':' . $this->delimite($relation->getSchema()->getRealName()) . ']';
-					$cypher .= '->(' . ($return = $this->delimite($current = $name)) . ':' . $this->delimite(($schema = $relation->getTo()->getTo()->getSchema())->getRealName()) . ')';
+					$schema = $relation->getTo()->getTo()->getSchema();
+					$cypher .= '->(' . ($return = $this->delimite($current = $name)) . ':' . $this->delimite($schema->getRealName()) . ')';
 				}
 				if ($selectQuery->hasWhere()) {
 					$cypher .= ' WHERE' . ($query = $this->fragmentWhereGroup($selectQuery->getWhere()))->getQuery();

@@ -133,9 +133,15 @@
 						$return = $this->delimite($current = $name);
 						continue;
 					}
-//					$relation = $schema->getRelation($join->getSchema());
-//					$cypher .= '-[' . $this->delimite($current . '\r') . ':' . $this->delimite($relation->getSchema()->getRealName()) . ']';
-//					$cypher .= '->(' . ($return = $this->delimite($current = $name)) . ':' . $this->delimite(($schema = $relation->getTo()->getTo()->getSchema())->getRealName()) . ')';
+					$relation = $schema->getRelation($join->getSchema());
+					$sql .= ' INNER JOIN ' . $this->delimite($relation->getSchema()->getRealName()) . ' ' . ($join = $this->delimite($current . '\\r'));
+					$from = ($this->delimite($current) . '.' . $this->delimite($relation->getFrom()->getFrom()->getPropertyName()));
+					$sql .= ' ON ' . $join . '.' . $this->delimite($relation->getFrom()->getTo()->getPropertyName()) . ' = ' . $from;
+					$sql .= ' INNER JOIN ' . $this->delimite($relation->getTo()->getTo()->getRealName()) . ' ' . $this->delimite($name);
+					$to = $this->delimite($name) . '.' . $this->delimite($relation->getTo()->getTo()->getPropertyName());
+					$sql .= ' ON ' . $join . '.' . $this->delimite($relation->getTo()->getFrom()->getPropertyName()) . ' = ' . $to;
+					$schema = $relation->getTo()->getTo()->getSchema();
+					$return = $this->delimite($current = $name);
 				}
 				$sql = 'SELECT ' . $return . '.* FROM ' . $this->delimite($selectQuery->getSchema()->getRealName()) . ' ' . $alias . $sql;
 				if ($selectQuery->hasWhere()) {
