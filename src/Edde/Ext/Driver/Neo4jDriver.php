@@ -344,15 +344,15 @@
 				}
 				$cypher .= implode(', ', $matchList) . ' RETURN ' . $return;
 				if ($selectQuery->hasOrder()) {
-					$orderList = [];
+					$orders = [];
 					foreach ($selectQuery->getOrders() as $column => $asc) {
 						$name = $alias;
 						if (($dot = strpos($column, '.')) !== false) {
 							$name = $this->delimite(substr($column, 0, $dot)) . '.' . $this->delimite(substr($column, $dot + 1));
 						}
-						$orderList[] = $name . ' ' . ($asc ? 'ASC' : 'DESC');
+						$orders[] = $name . ' ' . ($asc ? 'ASC' : 'DESC');
 					}
-					$cypher .= 'ORDER BY ' . implode(', ', $orderList);
+					$cypher .= 'ORDER BY ' . implode(', ', $orders);
 				}
 				return $this->native($cypher, $params);
 			}

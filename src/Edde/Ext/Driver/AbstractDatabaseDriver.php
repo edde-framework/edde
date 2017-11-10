@@ -142,7 +142,15 @@
 					$params = $query->getParams();
 				}
 				if ($selectQuery->hasOrder()) {
-					$sql .= 'ORDER';
+					$orders = [];
+					foreach ($selectQuery->getOrders() as $column => $asc) {
+						$name = $alias;
+						if (($dot = strpos($column, '.')) !== false) {
+							$name = $this->delimite(substr($column, 0, $dot)) . '.' . $this->delimite(substr($column, $dot + 1));
+						}
+						$orders[] = $name . ' ' . ($asc ? 'ASC' : 'DESC');
+					}
+					$sql .= ' ORDER BY ' . implode(', ', $orders);
 				}
 				return $this->native($sql, $params);
 			}
