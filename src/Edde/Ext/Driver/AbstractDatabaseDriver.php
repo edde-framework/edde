@@ -235,9 +235,9 @@
 			 */
 			protected function executeDetachQuery(IDetachQuery $detachQuery) {
 				$relation = $detachQuery->getRelation();
-				$sql = 'DELETE FROM ' . $this->delimite($relation->getSchema()->getRealName()) . ' WHERE ';
-				$sql .= '(' . $this->delimite($relation->getFrom()->getTo()->getPropertyName()) . ' = :a AND ';
-				$sql .= $this->delimite($relation->getTo()->getFrom()->getPropertyName()) . ' = :b) ';
+				$sql = 'DELETE r FROM ' . $this->delimite($relation->getSchema()->getRealName()) . ' r WHERE ';
+				$sql .= '(r.' . $this->delimite($relation->getFrom()->getTo()->getPropertyName()) . ' = :a AND ';
+				$sql .= 'r.' . $this->delimite($relation->getTo()->getFrom()->getPropertyName()) . ' = :b) ';
 				/** @var $entity IEntity[] */
 				$entity = [
 					$detachQuery->getEntity(),
