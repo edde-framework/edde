@@ -44,4 +44,13 @@
 			 * @return ICollection
 			 */
 			public function collection(string $schema): ICollection;
+
+			/**
+			 * execute queued changes
+			 *
+			 * @param IEntityQueue $entityQueue
+			 *
+			 * @return IEntityManager
+			 */
+			public function execute(IEntityQueue $entityQueue): IEntityManager;
 		}

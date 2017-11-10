@@ -9,14 +9,11 @@
 		use Edde\Api\Entity\Inject\EntityManager;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Schema\ISchema;
-		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Crate\Crate;
-		use Edde\Common\Query\EntityQueueQuery;
 
 		class Entity extends Crate implements IEntity {
 			use EntityManager;
 			use SchemaManager;
-			use Storage;
 			/** @var ISchema */
 			protected $schema;
 			/** @var IEntityQueue */
@@ -106,8 +103,7 @@
 					$entity->save();
 				}
 				$this->entityQueue->queue($this);
-				$this->storage->execute(new EntityQueueQuery($this->entityQueue));
-				$this->entityQueue->commit();
+				$this->entityManager->execute($this->entityQueue);
 				return $this;
 			}
 

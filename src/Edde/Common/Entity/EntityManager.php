@@ -6,10 +6,12 @@
 		use Edde\Api\Entity\ICollection;
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\IEntityManager;
+		use Edde\Api\Entity\IEntityQueue;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Api\Storage\Inject\Storage;
 		use Edde\Common\Object\Object;
+		use Edde\Common\Query\EntityQueueQuery;
 		use Edde\Common\Query\SelectQuery;
 
 		class EntityManager extends Object implements IEntityManager {
@@ -55,5 +57,14 @@
 					$this->collections[$name] = $this->container->inject(new Collection($this->storage->stream(new SelectQuery($schema = $this->schemaManager->load($schema), 'c')), $schema));
 				}
 				return clone $this->collections[$name];
+			}
+
+			/**
+			 * @inheritdoc
+			 */
+			public function execute(IEntityQueue $entityQueue): IEntityManager {
+				$this->storage->execute(new EntityQueueQuery($entityQueue));
+				$entityQueue->commit();
+				return $this;
 			}
 		}

@@ -254,6 +254,7 @@
 				$this->schemaManager->load(BarPooSchema::class);
 				$foo->attach($bar);
 				$foo->attach($bar2);
+				$foo->linkTo($poo);
 				$bar2->attach($poo);
 				$bar2->attach($poo2);
 				$bar2->attach($poo3);
