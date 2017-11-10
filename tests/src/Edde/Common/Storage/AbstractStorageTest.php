@@ -463,6 +463,42 @@
 			 * @throws EntityNotFoundException
 			 * @throws UnknownSchemaException
 			 */
+			public function testDisconnect() {
+				$this->schemaManager->load(UserRoleSchema::class);
+				$user = $this->entityManager->create(UserSchema::class, [
+					'name'    => 'mrdka',
+					'email'   => 'mrdka@mrdka.mrdka',
+					'created' => new \DateTime(),
+				]);
+				$root = $this->entityManager->collection(RoleSchema::alias)->entity('root');
+				$guest = $this->entityManager->collection(RoleSchema::alias)->entity('guest');
+				$user->attach($root);
+				$user->attach($root);
+				$user->attach($root);
+				$user->attach($guest);
+				$user->save();
+				$roles = ['guest', 'root', 'root', 'root'];
+				$current = [];
+				foreach ($user->join(RoleSchema::class, 'r') as $entity) {
+					self::assertSame(RoleSchema::class, $entity->getSchema()->getName());
+					$current[] = $entity->get('name');
+				}
+				sort($roles);
+				sort($current);
+				self::assertSame($roles, $current);
+				$current = [];
+				$user->disconnect(RoleSchema::class);
+				foreach ($user->join(RoleSchema::class, 'r') as $entity) {
+					self::assertSame(RoleSchema::class, $entity->getSchema()->getName());
+					$current[] = $entity->get('name');
+				}
+				self::assertEmpty($current, 'disconnect is not working?');
+			}
+
+			/**
+			 * @throws EntityNotFoundException
+			 * @throws UnknownSchemaException
+			 */
 			public function testUnlinkRelation() {
 				$this->schemaManager->load(UserRoleSchema::class);
 				$user = $this->entityManager->create(UserSchema::class, [

@@ -5,6 +5,7 @@
 		use Edde\Api\Crate\ICrate;
 		use Edde\Api\Crate\IProperty;
 		use Edde\Api\Entity\Query\IDetachQuery;
+		use Edde\Api\Entity\Query\IDisconnectQuery;
 		use Edde\Api\Schema\ISchema;
 
 		/**
@@ -77,6 +78,15 @@
 			 * @return IDetachQuery
 			 */
 			public function detach(IEntity $entity): IDetachQuery;
+
+			/**
+			 * detach all relations to the given schema
+			 *
+			 * @param string $schema
+			 *
+			 * @return IDisconnectQuery
+			 */
+			public function disconnect(string $schema): IDisconnectQuery;
 
 			/**
 			 * prepare m:n collection of related entities

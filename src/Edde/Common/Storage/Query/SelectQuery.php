@@ -11,9 +11,7 @@
 		use Edde\Common\Storage\Query\Fragment\WhereGroup;
 
 		class SelectQuery extends AbstractQuery implements ISelectQuery {
-			/**
-			 * @var ISchema
-			 */
+			/** @var ISchema */
 			protected $schema;
 			/**
 			 * alias assigned to source schema
@@ -27,17 +25,11 @@
 			 * @var string
 			 */
 			protected $current;
-			/**
-			 * @var IJoin[]
-			 */
+			/** @var IJoin[] */
 			protected $joins = [];
-			/**
-			 * @var IWhereGroup
-			 */
+			/** @var IWhereGroup */
 			protected $where;
-			/**
-			 * @var string[]
-			 */
+			/** @var string[] */
 			protected $orders = [];
 			/**
 			 * which alias will be returned as a query result
@@ -51,53 +43,39 @@
 				$this->return = $this->alias = $alias;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function getSchema(): ISchema {
 				return $this->schema;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function getAlias(): string {
 				return $this->alias;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function link(string $schema, string $alias): ISelectQuery {
 				$this->joins[$this->current = $alias] = new Join($schema, $alias, true);
 				return $this;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function join(string $schema, string $alias): ISelectQuery {
 				$this->joins[$this->current = $alias] = new Join($schema, $alias);
 				return $this;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function getJoins(): array {
 				return $this->joins;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function getReturn(): string {
 				return $this->return;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function where(string $name, string $relation, $value): ISelectQuery {
 				if (($dot = strpos($name, '.')) === false) {
 					$name = $this->alias . '.' . $name;
@@ -106,23 +84,17 @@
 				return $this;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function hasWhere(): bool {
 				return $this->where !== null;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function getWhere(): IWhereGroup {
 				return $this->where ?: $this->where = new WhereGroup();
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function order(string $name, bool $asc = true): ISelectQuery {
 				if (($dot = strpos($name, '.')) === false) {
 					$name = $this->alias . '.' . $name;
@@ -131,23 +103,17 @@
 				return $this;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function hasOrder(): bool {
 				return empty($this->orders) === false;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function getOrders(): array {
 				return $this->orders;
 			}
 
-			/**
-			 * @inheritdoc
-			 */
+			/** @inheritdoc */
 			public function return(string $alias = null): ISelectQuery {
 				$alias = $this->alias ?: $this->current;
 				if (isset($this->joins[$alias]) === false && $this->alias !== $alias) {

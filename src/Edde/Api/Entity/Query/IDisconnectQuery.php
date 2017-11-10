@@ -7,16 +7,11 @@
 		use Edde\Api\Storage\Query\Fragment\IWhereGroup;
 		use Edde\Api\Storage\Query\IQuery;
 
-		interface IDetachQuery extends IQuery {
+		interface IDisconnectQuery extends IQuery {
 			/**
 			 * @return IEntity
 			 */
 			public function getEntity(): IEntity;
-
-			/**
-			 * @return IEntity
-			 */
-			public function getTarget(): IEntity;
 
 			/**
 			 * @return IRelation
@@ -24,13 +19,16 @@
 			public function getRelation(): IRelation;
 
 			/**
+			 * shorthand for where and ($name $relation $value); by default it takes last
+			 * added alias
+			 *
 			 * @param string $name
 			 * @param string $relation
-			 * @param        $value
+			 * @param mixed  $value
 			 *
-			 * @return IDetachQuery
+			 * @return IDisconnectQuery
 			 */
-			public function where(string $name, string $relation, $value): IDetachQuery;
+			public function where(string $name, string $relation, $value): IDisconnectQuery;
 
 			/**
 			 * @return bool

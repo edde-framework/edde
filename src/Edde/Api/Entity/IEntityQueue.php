@@ -3,6 +3,7 @@
 	namespace Edde\Api\Entity;
 
 		use Edde\Api\Entity\Query\IDetachQuery;
+		use Edde\Api\Entity\Query\IDisconnectQuery;
 		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\IRelation;
 		use Edde\Api\Storage\Query\IQuery;
@@ -61,6 +62,14 @@
 			 * @return IDetachQuery
 			 */
 			public function detach(IEntity $entity, IEntity $target, IRelation $relation): IDetachQuery;
+
+			/**
+			 * @param IEntity   $entity
+			 * @param IRelation $relation
+			 *
+			 * @return IDisconnectQuery
+			 */
+			public function disconnect(IEntity $entity, IRelation $relation): IDisconnectQuery;
 
 			/**
 			 * mark the given entity for deletation

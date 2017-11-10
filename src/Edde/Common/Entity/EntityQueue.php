@@ -5,11 +5,13 @@
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\IEntityQueue;
 		use Edde\Api\Entity\Query\IDetachQuery;
+		use Edde\Api\Entity\Query\IDisconnectQuery;
 		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\IRelation;
 		use Edde\Api\Storage\Query\IQuery;
 		use Edde\Common\Entity\Query\DeleteQuery;
 		use Edde\Common\Entity\Query\DetachQuery;
+		use Edde\Common\Entity\Query\DisconnectQuery;
 		use Edde\Common\Entity\Query\LinkQuery;
 		use Edde\Common\Entity\Query\RelationQuery;
 		use Edde\Common\Entity\Query\UnlinkQuery;
@@ -60,6 +62,11 @@
 			/** @inheritdoc */
 			public function detach(IEntity $entity, IEntity $target, IRelation $relation): IDetachQuery {
 				return $this->queries[] = new DetachQuery($entity, $target, $relation);
+			}
+
+			/** @inheritdoc */
+			public function disconnect(IEntity $entity, IRelation $relation): IDisconnectQuery {
+				return $this->queries[] = new DisconnectQuery($entity, $relation);
 			}
 
 			/** @inheritdoc */
