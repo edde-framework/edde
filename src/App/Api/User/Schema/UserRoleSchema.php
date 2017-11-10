@@ -2,7 +2,9 @@
 	declare(strict_types=1);
 	namespace App\Api\User\Schema;
 
-		interface UserRoleSchema {
+		use App\Api\Schema\GuidSchema;
+
+		interface UserRoleSchema extends GuidSchema {
 			const alias = 'user-role';
 			const relation = true;
 
