@@ -4,6 +4,7 @@
 
 		use Edde\Api\Crate\ICrate;
 		use Edde\Api\Crate\IProperty;
+		use Edde\Api\Entity\Query\IDetachQuery;
 		use Edde\Api\Schema\ISchema;
 
 		/**
@@ -73,9 +74,9 @@
 			 *
 			 * @param IEntity $entity
 			 *
-			 * @return IEntity
+			 * @return IDetachQuery
 			 */
-			public function detach(IEntity $entity): IEntity;
+			public function detach(IEntity $entity): IDetachQuery;
 
 			/**
 			 * prepare m:n collection of related entities

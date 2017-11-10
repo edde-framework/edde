@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Entity;
 
+		use Edde\Api\Entity\Query\IDetachQuery;
 		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\IRelation;
 		use Edde\Api\Storage\Query\IQuery;
@@ -57,9 +58,9 @@
 			 * @param IEntity   $target
 			 * @param IRelation $relation
 			 *
-			 * @return IEntityQueue
+			 * @return IDetachQuery
 			 */
-			public function detach(IEntity $entity, IEntity $target, IRelation $relation): IEntityQueue;
+			public function detach(IEntity $entity, IEntity $target, IRelation $relation): IDetachQuery;
 
 			/**
 			 * mark the given entity for deletation

@@ -4,6 +4,7 @@
 
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\IEntityQueue;
+		use Edde\Api\Entity\Query\IDetachQuery;
 		use Edde\Api\Schema\ILink;
 		use Edde\Api\Schema\IRelation;
 		use Edde\Api\Storage\Query\IQuery;
@@ -57,9 +58,8 @@
 			}
 
 			/** @inheritdoc */
-			public function detach(IEntity $entity, IEntity $target, IRelation $relation): IEntityQueue {
-				$this->queries[] = new DetachQuery($entity, $target, $relation);
-				return $this;
+			public function detach(IEntity $entity, IEntity $target, IRelation $relation): IDetachQuery {
+				return $this->queries[] = new DetachQuery($entity, $target, $relation);
 			}
 
 			/** @inheritdoc */

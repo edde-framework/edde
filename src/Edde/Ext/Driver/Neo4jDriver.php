@@ -206,14 +206,19 @@
 					$entity[0]->getPrimary(),
 					$entity[1]->getPrimary(),
 				];
+				$params = [
+					'a' => $primary[0]->get(),
+					'b' => $primary[1]->get(),
+				];
 				$cypher = 'MATCH (:' . $this->delimite($entity[0]->getSchema()->getRealName()) . " {" . $this->delimite($primary[0]->getName()) . ': $a})';
 				$cypher .= '-[r:' . $this->delimite($detachQuery->getRelation()->getSchema()->getRealName()) . ']';
 				$cypher .= '->(:' . $this->delimite($entity[1]->getSchema()->getRealName()) . " {" . $this->delimite($primary[1]->getName()) . ': $b})';
+				if ($detachQuery->hasWhere()) {
+					$cypher .= ' WHERE' . ($query = $this->fragmentWhereGroup($detachQuery->getWhere()))->getQuery();
+					$params = array_merge($params, $query->getParams());
+				}
 				$cypher .= ' DELETE r';
-				$this->native($cypher, [
-					'a' => $primary[0]->get(),
-					'b' => $primary[1]->get(),
-				]);
+				$this->native($cypher, $params);
 			}
 
 			/**
@@ -315,7 +320,7 @@
 			 * @throws \Throwable
 			 */
 			protected function executeSelectQuery(ISelectQuery $selectQuery) {
-				$cypher = "MATCH\n\t";
+				$cypher = 'MATCH ';
 				$matchList = [];
 				$parameterList = [];
 				$return = $this->delimite($selectQuery->getReturn());
@@ -332,10 +337,10 @@
 					$cypher .= '->(' . ($return = $this->delimite($current = $name)) . ':' . $this->delimite(($schema = $relation->getTo()->getTo()->getSchema())->getRealName()) . ')';
 				}
 				if ($selectQuery->hasWhere()) {
-					$cypher .= "\nWHERE" . ($query = $this->fragmentWhereGroup($selectQuery->getWhere()))->getQuery() . "\n";
+					$cypher .= ' WHERE' . ($query = $this->fragmentWhereGroup($selectQuery->getWhere()))->getQuery();
 					$parameterList = $query->getParams();
 				}
-				$cypher .= implode(",\n\t", $matchList) . "\nRETURN\n\t" . $return;
+				$cypher .= implode(', ', $matchList) . ' RETURN ' . $return;
 				if ($selectQuery->hasOrder()) {
 					$orderList = [];
 					foreach ($selectQuery->getOrders() as $column => $asc) {
@@ -345,7 +350,7 @@
 						}
 						$orderList[] = $name . ' ' . ($asc ? 'ASC' : 'DESC');
 					}
-					$cypher .= "ORDER BY\n\t" . implode("\n\t,", $orderList);
+					$cypher .= 'ORDER BY ' . implode(', ', $orderList);
 				}
 				return $this->native($cypher, $parameterList);
 			}

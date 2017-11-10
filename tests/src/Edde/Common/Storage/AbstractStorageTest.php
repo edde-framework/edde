@@ -471,7 +471,7 @@
 				$guest = $this->entityManager->collection(RoleSchema::alias)->entity('guest');
 				$user->attach($root)->set('enabled', false);
 				$user->attach($root)->set('enabled', true);
-				$user->attach($guest);
+				$user->attach($guest)->set('enabled', false);
 				$user->save();
 				$roles = ['guest', 'root', 'root'];
 				$current = [];
@@ -483,6 +483,13 @@
 				sort($current);
 				self::assertSame($roles, $current);
 				$user->detach($root)->where('r.enabled', '=', 1);
+				$user->save();
+				$current = [];
+				foreach ($user->join(RoleSchema::class, 'r')->where('c\r.enabled', '=', 1) as $entity) {
+					self::assertSame(RoleSchema::class, $entity->getSchema()->getName());
+					$current[] = $entity->get('name');
+				}
+				self::assertEmpty($current);
 			}
 
 			/**

@@ -7,6 +7,7 @@
 		use Edde\Api\Entity\IEntity;
 		use Edde\Api\Entity\IEntityQueue;
 		use Edde\Api\Entity\Inject\EntityManager;
+		use Edde\Api\Entity\Query\IDetachQuery;
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Common\Crate\Crate;
@@ -68,10 +69,9 @@
 			}
 
 			/** @inheritdoc */
-			public function detach(IEntity $entity): IEntity {
+			public function detach(IEntity $entity): IDetachQuery {
 				$relation = $this->schema->getRelation($entity->getSchema()->getName());
-				$this->entityQueue->detach($this, $entity, $relation);
-				return $this;
+				return $this->entityQueue->detach($this, $entity, $relation);
 			}
 
 			/** @inheritdoc */
