@@ -53,6 +53,15 @@
 			public function linkTo(IEntity $entity): IEntity;
 
 			/**
+			 * load 1:n link (kind of foreign key)
+			 *
+			 * @param string $schema
+			 *
+			 * @return IEntity
+			 */
+			public function link(string $schema): IEntity;
+
+			/**
 			 * unlink the given schema (unset 1:N relation)
 			 *
 			 * @param string $schema

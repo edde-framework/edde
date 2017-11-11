@@ -189,7 +189,8 @@
 				$entity = $linkQuery->getEntity();
 				$primary = $entity->getPrimary();
 				$sql = 'UPDATE ' . $this->delimite($entity->getSchema()->getRealName()) . ' SET ' . $this->delimite($link->getFrom()->getPropertyName()) . ' = :b WHERE ' . $this->delimite($primary->getName()) . ' = :a';
-				$this->native($sql, ['a' => $primary->get(), 'b' => $linkQuery->getTo()->getPrimary()->get()]);
+				$entity->set($link->getFrom()->getPropertyName(), $to = $linkQuery->getTo()->getPrimary()->get());
+				$this->native($sql, ['a' => $primary->get(), 'b' => $to]);
 			}
 
 			/**

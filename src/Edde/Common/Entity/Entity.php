@@ -12,6 +12,7 @@
 		use Edde\Api\Schema\Inject\SchemaManager;
 		use Edde\Api\Schema\ISchema;
 		use Edde\Common\Crate\Crate;
+		use Edde\Common\Storage\Query\SelectQuery;
 
 		class Entity extends Crate implements IEntity {
 			use EntityManager;
@@ -53,6 +54,16 @@
 			public function linkTo(IEntity $entity): IEntity {
 				$this->entityQueue->link($this, $entity, $this->schema->getLink($entity->getSchema()->getName()));
 				return $this;
+			}
+
+			/** @inheritdoc */
+			public function link(string $schema): IEntity {
+				$link = $this->schema->getLink($schema);
+				$collection = $this->entityManager->collection($schema);
+				$collection->query($query = new SelectQuery($this->schema, 'c'));
+				$query->link($schema, 'l')->return();
+				$query->where('l.' . $link->getTo()->getPropertyName(), '=', $this->get($link->getFrom()->getPropertyName()));
+				return $collection->getEntity();
 			}
 
 			/** @inheritdoc */

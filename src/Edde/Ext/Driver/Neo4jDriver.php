@@ -249,11 +249,13 @@
 			 * @throws \Throwable
 			 */
 			protected function executeLinkQuery(ILinkQuery $linkQuery) {
+				$link = $linkQuery->getLink();
 				$this->link(
-					$linkQuery->getEntity(),
+					$entity = $linkQuery->getEntity(),
 					$linkQuery->getTo(),
-					$linkQuery->getLink()->getName()
+					$link->getName()
 				);
+				$entity->set($link->getFrom()->getPropertyName(), $to = $linkQuery->getTo()->getPrimary()->get());
 			}
 
 			/**
@@ -343,7 +345,6 @@
 			 */
 			protected function executeSelectQuery(ISelectQuery $selectQuery) {
 				$cypher = 'MATCH ';
-				$matchList = [];
 				$params = [];
 				$return = $this->delimite($selectQuery->getReturn());
 				$schema = $selectQuery->getSchema();
@@ -366,7 +367,7 @@
 					$cypher .= ' WHERE' . ($query = $this->fragmentWhereGroup($selectQuery->getWhere()))->getQuery();
 					$params = $query->getParams();
 				}
-				$cypher .= implode(', ', $matchList) . ' RETURN ' . $return;
+				$cypher .= ' RETURN ' . $return;
 				if ($selectQuery->hasOrder()) {
 					$orders = [];
 					foreach ($selectQuery->getOrders() as $column => $asc) {

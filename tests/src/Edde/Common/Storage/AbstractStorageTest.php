@@ -184,6 +184,8 @@
 				$poo = $collection->getEntity();
 				self::assertSame(PooSchema::class, $poo->getSchema()->getName());
 				self::assertSame('the name of this epic Poo!', $poo->get('name'));
+				$poo = $foo->link(PooSchema::class);
+				self::assertSame('the name of this epic Poo!', $poo->get('name'));
 			}
 
 			/**
