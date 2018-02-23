@@ -14,8 +14,9 @@ services:
                         - com.df.letsencrypt.email=ssl@edde-framework.org
                         - com.df.serviceDomain=api.edde-framework.org
                         - com.df.servicePath=/
-                        - com.df.srcPort=443
+                        - com.df.srcPort=80,443
                         - com.df.port=80
+                        - com.df.httpsOnly=true
 
         doc:
                 image: $IMAGE_DOC
@@ -29,8 +30,10 @@ services:
                         - com.df.letsencrypt.email=ssl@edde-framework.org
                         - com.df.serviceDomain=edde-framework.org
                         - com.df.servicePath=/
-                        - com.df.srcPort=443
+                        - com.df.srcPort=80,443
                         - com.df.port=80
+                        - com.df.httpsOnly=true
+
 
 networks:
         proxy:

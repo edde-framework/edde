@@ -1,7 +1,9 @@
 image: docker:latest
+
 variables:
     IMAGE_API: $CI_REGISTRY_IMAGE/api:$CI_COMMIT_REF_NAME
     IMAGE_DOC: $CI_REGISTRY_IMAGE/doc:$CI_COMMIT_REF_NAME
+    IMAGE_TEST: $CI_REGISTRY_IMAGE/test:$CI_COMMIT_REF_NAME
 
 before_script:
     - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
@@ -14,15 +16,22 @@ stages:
 
 build api:
     stage: build
-    script: docker build --pull -t $IMAGE_API -f .docker/api.Dockerfile .
+    script: docker build --pull -t $IMAGE_API -f .docker/api/Dockerfile .
 
 build doc:
     stage: build
-    script: docker build --pull -t $IMAGE_DOC -f .docker/doc.Dockerfile .
+    script: docker build --pull -t $IMAGE_DOC -f .docker/doc/Dockerfile .
 
 test:
     stage: test
-    script: /bin/true
+    script:
+        - docker build --pull -t $IMAGE_TEST -f .docker/test/Dockerfile .
+        - apk add -U py-pip >/dev/null 2>&1
+        - pip install docker-compose >/dev/null 2>&1
+        - docker-compose -f .docker/test/docker-compose.yml up -d >/dev/null 2>&1
+        - docker exec $PROJECT-$CI_COMMIT_REF_NAME ./test.sh
+    after_script:
+        - docker-compose -f .docker/test/docker-compose.yml down --volumes >/dev/null 2>&1
 
 publish api:
     stage: publish
@@ -34,6 +43,6 @@ publish doc:
 
 release:
     stage: release
-    script: docker stack deploy --with-registry-auth --prune -c docker-compose.yml edde-framework-org
+    script: docker stack deploy --with-registry-auth --prune -c .docker/dc.production.yml edde-framework-org
     only:
         - master

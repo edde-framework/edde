@@ -7,7 +7,7 @@ WORKDIR /opt/app
 RUN apk update && apk upgrade apk-tools && apk add \
 	nginx curl ca-certificates unzip bash
 
-COPY .docker/doc.nginx.conf /etc/nginx/nginx.conf
+COPY .docker/doc/nginx.conf /etc/nginx/nginx.conf
 
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && ln -sf /dev/stderr /var/log/nginx/error.log
 
@@ -15,7 +15,7 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log && ln -sf /dev/stderr /var/log/
 
 ADD src src
 
-COPY .docker/doc.sh /entrypoint.sh
+COPY .docker/doc/start.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
