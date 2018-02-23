@@ -9,6 +9,8 @@
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Driver\Neo4jDriver;
+	use function explode;
+	use function getenv;
 
 	class Neo4jStorageTest extends AbstractStorageTest {
 		use Storage;
@@ -24,7 +26,10 @@
 		 */
 		protected function setUp() {
 			ContainerFactory::inject($this, [
-				IDriver::class => ContainerFactory::instance(Neo4jDriver::class, ['bolt://172.17.0.1:47687']),
+				IDriver::class => ContainerFactory::instance(Neo4jDriver::class, [
+					'bolt://neo4j:7687',
+					explode('/', getenv('NEO4J_AUTH')),
+				]),
 				new ClassFactory(),
 			]);
 		}

@@ -4,18 +4,41 @@ services:
                 image: $IMAGE_TEST
                 container_name: $PROJECT-$CI_COMMIT_REF_NAME
                 environment:
-                    - DATABASE=neo4j
-                    - DATABASE_AUTH=neo4j/eeQFXk7kkqSm
+                    - NEO4J_AUTH=neo4j/eeQFXk7kkqSm
+                    - POSTGRES_PASSWORD=PBXxSgEWY3LT
+                    - MYSQL_PASSWORD=enPUxu8SRctV
                 networks:
-                    - neo4j-network
+                    - test-network
+                depends_on:
+                    - neo4j
+                    - postgres
+                    - mysql
 
         neo4j:
-                image: neo4j
+                image: neo4j:3.3-enterprise
                 environment:
                     - NEO4J_AUTH=neo4j/eeQFXk7kkqSm
                     - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
                 networks:
-                    - neo4j-network
+                    - test-network
+
+        postgres:
+            image: postgres:latest
+            environment:
+                - POSTGRES_USER=edde
+                - POSTGRES_PASSWORD=PBXxSgEWY3LT
+            networks:
+                - test-network
+
+        mysql:
+            image: mariadb:latest
+            environment:
+                - MYSQL_ROOT_PASSWORD=enPUxu8SRctV
+                - MYSQL_DATABASE=edde
+                - MYSQL_USER=edde
+                - MYSQL_PASSWORD=enPUxu8SRctV
+            networks:
+                - test-network
 
 networks:
-        neo4j-network:
+        test-network:

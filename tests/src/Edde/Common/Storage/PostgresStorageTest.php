@@ -8,6 +8,7 @@
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Driver\PostgresDriver;
+	use function getenv;
 
 	class PostgresStorageTest extends AbstractStorageTest {
 		public function testPrepareDatabase() {
@@ -22,7 +23,7 @@
 		 */
 		protected function setUp() {
 			ContainerFactory::inject($this, [
-				IDriver::class => ContainerFactory::instance(PostgresDriver::class, ['pgsql:dbname=edde;user=edde;password=edde;host=172.17.0.1;port=45432']),
+				IDriver::class => ContainerFactory::instance(PostgresDriver::class, ['pgsql:dbname=edde;user=edde;password=' . getenv('POSTGRES_PASSWORD') . ';host=postgres;port=5432']),
 				new ClassFactory(),
 			]);
 			$this->storage->native('set search_path to "test"');

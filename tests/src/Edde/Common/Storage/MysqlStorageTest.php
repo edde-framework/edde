@@ -8,6 +8,7 @@
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Ext\Driver\MysqlDriver;
+	use function getenv;
 
 	class MysqlStorageTest extends AbstractStorageTest {
 		public function testPrepareDatabase() {
@@ -24,9 +25,9 @@
 			parent::setUp();
 			ContainerFactory::inject($this, [
 				IDriver::class => ContainerFactory::instance(MysqlDriver::class, [
-					'mysql:dbname=edde;host=172.17.0.1;port=43306',
+					'mysql:dbname=edde;host=mysql;port=3306',
 					'edde',
-					'edde',
+					getenv('MYSQL_PASSWORD'),
 				]),
 				new ClassFactory(),
 			]);
