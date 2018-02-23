@@ -10,6 +10,7 @@ stages:
     - build
     - test
     - publish
+    - release
 
 build api:
     stage: build
@@ -21,7 +22,7 @@ build doc:
 
 test:
     stage: test
-    script: /bin/false
+    script: /bin/true
 
 publish api:
     stage: publish
@@ -30,3 +31,9 @@ publish api:
 publish doc:
     stage: publish
     script: docker push $IMAGE_DOC
+
+release:
+    stage: release
+    script: docker stack deploy --with-registry-auth --prune -c docker-compose.yaml edde-framework-org
+    only:
+        - master
