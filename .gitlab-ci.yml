@@ -26,7 +26,7 @@ test:
     stage: test
     script:
         - docker build --pull -t $IMAGE_TEST -f .docker/test/Dockerfile .
-        - docker-compose -f .docker/test/docker-compose.yml up -d >/dev/null 2>&1
+        - docker-compose -f .docker/test/docker-compose.yml up -d
         - docker exec $PROJECT-$CI_COMMIT_REF_NAME /opt/app/test.sh
     after_script:
         - docker-compose -f .docker/test/docker-compose.yml down --volumes >/dev/null 2>&1
