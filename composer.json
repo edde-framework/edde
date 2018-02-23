@@ -1,0 +1,37 @@
+{
+	"name": "edde/edde",
+	"homepage": "https://edde-framework.org",
+	"license": "Apache-2.0",
+	"type": "library",
+	"description": "Epic, fast and full featured modern PHP framework.",
+	"keywords": [
+		"php",
+		"framework"
+	],
+	"authors": [
+		{
+			"name": "Marek Hanzal",
+			"email": "marek.hanzal@edde-framework.org"
+		}
+	],
+	"config": {
+		"optimize-autoloader": true,
+		"vendor-dir": "lib"
+	},
+	"autoload": {
+		"classmap": [
+			"src/"
+		]
+	},
+	"minimum-stability": "dev",
+	"require": {
+		"php": ">=7.1",
+		"roave/security-advisories": "dev-master",
+		"graphaware/neo4j-bolt": "dev-master"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "6.*",
+		"tracy/tracy": "dev-master",
+		"codeclimate/php-test-reporter": "*"
+	}
+}

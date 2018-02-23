@@ -1,0 +1,6 @@
+<root>
+	<foo
+		name="foo"
+		device-class="bar"
+	/>
+</root>

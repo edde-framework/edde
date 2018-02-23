@@ -1,0 +1,8 @@
+<root r="oot">
+	<item></item>
+	<item2 koo="poo"/>
+	<internal>
+		<hidden-tag/>
+		<tag-with-value>value here :)</tag-with-value>
+	</internal>
+</root>

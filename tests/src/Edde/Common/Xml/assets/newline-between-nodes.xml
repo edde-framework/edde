@@ -1,0 +1,5 @@
+<r>
+	<node attr="ibute" another-attribute="foo"/>
+
+	<another-node foo="bar" boo="poo"/>
+</r>
