@@ -21,7 +21,7 @@ build doc:
 
 test:
     stage: test
-    script: false
+    script: /bin/false
 
 publish api:
     stage: publish
