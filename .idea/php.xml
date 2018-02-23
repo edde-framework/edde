@@ -46,6 +46,9 @@
       <path value="$PROJECT_DIR$/lib/symfony/console" />
       <path value="$PROJECT_DIR$/lib/symfony/polyfill-mbstring" />
       <path value="$PROJECT_DIR$/lib/symfony/process" />
+      <path value="$PROJECT_DIR$/lib/sebastian/object-reflector" />
+      <path value="$PROJECT_DIR$/lib/phar-io/manifest" />
+      <path value="$PROJECT_DIR$/lib/phar-io/version" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
