@@ -3,3 +3,7 @@ services:
         test:
                 image: edde-doc
                 container_name: edde-doc
+                ports:
+                        - 5380:1111
+                volumes:
+                        - '../../:/opt/app'
