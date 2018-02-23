@@ -1,0 +1,32 @@
+image: docker:latest
+variables:
+    IMAGE_API: $CI_REGISTRY_IMAGE/api:$CI_COMMIT_REF_NAME
+    IMAGE_DOC: $CI_REGISTRY_IMAGE/doc:$CI_COMMIT_REF_NAME
+
+before_script:
+    - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
+
+stages:
+    - build
+    - test
+    - publish
+
+build api:
+    stage: build
+    script: docker build --pull -t $IMAGE_API -f .docker/api.Dockerfile .
+
+build doc:
+    stage: build
+    script: docker build --pull -t $IMAGE_DOC -f .docker/doc.Dockerfile .
+
+test:
+    stage: test
+    script: false
+
+publish api:
+    stage: publish
+    script: docker push $IMAGE_API
+
+publish doc:
+    stage: publish
+    script: docker push $IMAGE_DOC
