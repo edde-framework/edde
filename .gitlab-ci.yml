@@ -16,16 +16,16 @@ stages:
 
 build api:
     stage: build
-    script: docker build --pull -t $IMAGE_API -f .docker/api/Dockerfile .
+    script: docker build -t $IMAGE_API -f .docker/api/Dockerfile .
 
 build doc:
     stage: build
-    script: docker build --pull -t $IMAGE_DOC -f .docker/doc/Dockerfile .
+    script: docker build -t $IMAGE_DOC -f .docker/doc/Dockerfile .
 
 test:
     stage: test
     script:
-        - docker build --pull -t $IMAGE_TEST -f .docker/test/Dockerfile .
+        - docker build -t $IMAGE_TEST -f .docker/test/Dockerfile .
         - docker-compose -f .docker/test/docker-compose.yml up -d
         - docker exec $PROJECT-$CI_COMMIT_REF_NAME /opt/app/test.sh
     after_script:
