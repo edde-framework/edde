@@ -26,7 +26,7 @@ build doc:
 test:
     stage: test
     script:
-        - docker build -t $IMAGE_TEST -f .docker/test/Dockerfile .
+        - docker build -t $IMAGE_TEST -f .docker/test/Dockerfile . >/dev/null 2>&1
         - apk add -U py-pip >/dev/null 2>&1
         - pip install docker-compose >/dev/null 2>&1
         - docker-compose -f .docker/test/docker-compose.yml up -d
