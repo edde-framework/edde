@@ -4,6 +4,7 @@ variables:
     IMAGE_API: $CI_REGISTRY_IMAGE/api:$CI_COMMIT_REF_NAME
     IMAGE_DOC: $CI_REGISTRY_IMAGE/doc:$CI_COMMIT_REF_NAME
     IMAGE_TEST: $CI_REGISTRY_IMAGE/test:$CI_COMMIT_REF_NAME
+    PROJECT: edde
 
 before_script:
     - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
