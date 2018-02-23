@@ -30,7 +30,7 @@
 		"graphaware/neo4j-bolt": "dev-master"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "6",
+		"phpunit/phpunit": "6.*",
 		"tracy/tracy": "dev-master",
 		"sami/sami": "^4.0@dev"
 	}
