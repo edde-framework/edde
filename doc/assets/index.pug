@@ -2,11 +2,12 @@ doctype html
 html
     head
         title Edde Framework
+        meta(charset='utf-8')
         link(rel='stylesheet', href='css/style.css')
     body
-        section.hero.is-info.is-fullheight
+        section.hero.is-info.is-small
             div.hero-head
-                nav.navbar
+                nav.navbar.has-shadow
                     div.container
                         div.navbar-brand
                             a.navbar-item(href='') Edde Framework
@@ -21,9 +22,48 @@ html
                                         span.icon
                                             i.fab.fa-gitlab
                                         span GitLab
+
             div.hero-body
                 div.container
                     h1.title.is-size-1 Edde Framework
                     h2.subtitle The Ultimate PHP Framework
                     img(src='https://git.x32.cz/edde/edde/badges/master/pipeline.svg')
                     img(src='https://git.x32.cz/edde/edde/badges/master/coverage.svg')
+
+            div.hero-foot
+                nav.tabs.is-boxed.is-fullwidth
+                    div.container
+                        ul
+                            li.is-active
+                                a
+                                    span.icon
+                                        i.fas.fa-globe
+                                    span Overview
+                            li
+                                a
+                                    span.icon
+                                        i.fas.fa-cog
+                                    span Features
+                            li
+                                a
+                                    span.icon
+                                        i.fas.fa-bookmark
+                                    span Installation
+
+        nav.navbar.has-shadow
+            div.container
+                div.navbar-tabs
+                    a.navbar-item.is-tab.is-active About Edde
+                    a.navbar-item.is-tab Blablabla
+                    a.navbar-item.is-tab Blablabla 2
+                    a.navbar-item.is-tab Blablabla 3
+
+        section.hero.is-info.is-large.is-bold
+            div.hero-body
+                div.container
+                    div Hello!
+
+        footer.footer
+            div.container
+                div.content.has-text-centered
+                    p Fůtr
