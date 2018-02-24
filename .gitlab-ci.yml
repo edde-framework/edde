@@ -42,9 +42,46 @@ publish doc:
     stage: publish
     script: docker push $IMAGE_DOC
 
+start review:
+    stage: release
+    variables:
+        FQDN: ${CI_ENVIRONMENT_SLUG}.edde-framework.org
+        COMPOSE_PROJECT_NAME: $PROJECT-$CI_ENVIRONMENT_SLUG
+    script:
+        - docker stack deploy --with-registry-auth -c .docker/dc.review.yml $PROJECT-$CI_ENVIRONMENT_SLUG
+    environment:
+        name: review/$CI_COMMIT_REF_NAME
+        url: http://${CI_ENVIRONMENT_SLUG}.edde-framework.org
+        on_stop: stop review
+    only:
+        - branches
+    except:
+        - master
+
+stop review:
+    stage: release
+    variables:
+        FQDN: ${CI_ENVIRONMENT_SLUG}.edde-framework.org
+        COMPOSE_PROJECT_NAME: $PROJECT-$CI_ENVIRONMENT_SLUG
+        GIT_STRATEGY: none
+    script:
+        - docker stack rm $PROJECT-$CI_ENVIRONMENT_SLUG
+    when: manual
+    environment:
+        name: review/$CI_COMMIT_REF_NAME
+        url: http://${CI_ENVIRONMENT_SLUG}.edde-framework.org
+        action: stop
+    only:
+        - branches
+    except:
+        - master
+
 release:
     stage: release
     script: docker stack deploy --with-registry-auth --prune -c .docker/dc.production.yml edde-framework-org
     only:
         - master
         - tags
+    environment:
+        name: production
+        url: https://edde-framework.org

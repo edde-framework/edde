@@ -1,0 +1,29 @@
+version: '3'
+services:
+    edde-api:
+        image: $IMAGE_API
+        networks:
+            - proxy
+        deploy:
+            labels:
+                - com.df.notify=true
+                - com.df.distribute=true
+                - com.df.serviceDomain=api.$FQDN
+                - com.df.servicePath=/
+                - com.df.port=80
+
+    edde-doc:
+        image: $IMAGE_DOC
+        networks:
+            - proxy
+        deploy:
+            labels:
+                - com.df.notify=true
+                - com.df.distribute=true
+                - com.df.serviceDomain=$FQDN
+                - com.df.servicePath=/
+                - com.df.port=80
+
+networks:
+    proxy:
+        external: true
