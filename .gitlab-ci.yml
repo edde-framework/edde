@@ -38,9 +38,9 @@ publish api:
     stage: publish
     script: docker push $IMAGE_API
 
-#publish doc:
-#    stage: publish
-#    script: docker push $IMAGE_DOC
+publish doc:
+    stage: publish
+    script: docker push $IMAGE_DOC
 
 release:
     stage: release
