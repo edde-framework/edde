@@ -1,0 +1,8 @@
+{
+  "author": "Marek Hanzal",
+  "license": "Apache-2.0",
+  "private": true,
+  "dependencies": {
+    "parcel-bundler": "^1.6.2"
+  }
+}

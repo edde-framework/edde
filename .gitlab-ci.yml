@@ -19,9 +19,9 @@ build api:
     stage: build
     script: docker build -t $IMAGE_API -f api/.docker/Dockerfile .
 
-#build doc:
-#    stage: build
-#    script: docker build -t $IMAGE_DOC -f doc/.docker/Dockerfile .
+build doc:
+    stage: build
+    script: docker build -t $IMAGE_DOC -f doc/.docker/Dockerfile .
 
 #test:
 #    stage: test
@@ -47,3 +47,4 @@ release:
     script: docker stack deploy --with-registry-auth --prune -c .docker/dc.production.yml edde-framework-org
     only:
         - master
+        - tags
