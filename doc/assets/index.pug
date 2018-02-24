@@ -5,24 +5,19 @@ html
         meta(charset='utf-8')
         link(rel='stylesheet', href='css/style.css')
     body
-        section.hero.is-info.is-small
-            div.hero-head
-                nav.navbar.has-shadow
-                    div.container
-                        div.navbar-brand
-                            a.navbar-item(href='') Edde Framework
-                        div.navbar-menu
-                            div.navbar-end
-                                a.navbar-item(href='https://api.edde-framework.org')
-                                    span.icon
-                                        i.fas.fa-book
-                                    span API
-                                span.navbar-item
-                                    a.button.is-info.is-inverted.is-outlined(target='_blank', href='https://git.x32.cz/edde/edde/')
-                                        span.icon
-                                            i.fab.fa-gitlab
-                                        span GitLab
+        nav.navbar.is-link.has-shadow
+            div.container
+                div.navbar-brand
+                    a.navbar-item(href='') Edde Framework
+                div.navbar-menu
+                    div.navbar-end
+                        span.navbar-item
+                            a.button.is-info.is-inverted.is-outlined(href='https://git.x32.cz/edde/edde/')
+                                span.icon
+                                    i.fab.fa-gitlab
+                                span GitLab
 
+        section.hero.is-info.is-bold
             div.hero-body
                 div.container
                     h1.title.is-size-1 Edde Framework
@@ -49,6 +44,16 @@ html
                                     span.icon
                                         i.fas.fa-bookmark
                                     span Installation
+                            li
+                                a
+                                    span.icon
+                                        i.fas.fa-book
+                                    span Documentation
+                            li
+                                a(href='https://api.edde-framework.org')
+                                    span.icon
+                                        i.fas.fa-book
+                                    span API
 
         nav.navbar.has-shadow
             div.container
@@ -58,7 +63,7 @@ html
                     a.navbar-item.is-tab Blablabla 2
                     a.navbar-item.is-tab Blablabla 3
 
-        section.hero.is-info.is-large.is-bold
+        section.hero.is-info.is-large
             div.hero-body
                 div.container
                     div Hello!
