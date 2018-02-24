@@ -8,7 +8,7 @@ RUN apk update && apk add \
 	nginx git curl ca-certificates bash \
 	nodejs yarn
 
-COPY api/.docker/nginx.conf /etc/nginx/nginx.conf
+COPY doc/.docker/nginx.conf /etc/nginx/nginx.conf
 
 # end of a mandatory system configuration
 

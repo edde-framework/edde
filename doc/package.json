@@ -3,6 +3,12 @@
   "license": "Apache-2.0",
   "private": true,
   "dependencies": {
-    "parcel-bundler": "^1.6.2"
+    "bulma": "^0.6.2",
+    "parcel-bundler": "^1.6.2",
+    "parcel-plugin-pug": "^0.2.5",
+    "typescript": "next"
+  },
+  "scripts": {
+    "build": "node_modules/.bin/parcel build --detailed-report --out-dir public --public-url / assets/index.pug"
   }
 }

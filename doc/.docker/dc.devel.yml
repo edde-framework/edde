@@ -4,6 +4,6 @@ services:
                 image: edde-doc
                 container_name: edde-doc
                 ports:
-                        - 5380:80
+                        - 5480:80
                 volumes:
                     - ../.:/opt/app
