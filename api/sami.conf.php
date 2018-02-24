@@ -4,11 +4,11 @@
 	use Sami\Version\GitVersionCollection;
 
 	$src = __DIR__ . '/src/Edde';
-	$versions = GitVersionCollection::create($src)
-	                                ->addFromTags('v*')
-	                                ->add('master', 'master');
 	return new Sami($src, [
 		'title'                => 'Edde Framework',
+		'versions'             => GitVersionCollection::create($src)
+		                                              ->addFromTags('v*')
+		                                              ->add('master', 'master'),
 		'build_dir'            => __DIR__ . '/public/%version%',
 		'cache_dir'            => __DIR__ . '/temp/%version%',
 		'default_opened_level' => 1,

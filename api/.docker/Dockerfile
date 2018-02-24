@@ -22,11 +22,12 @@ COPY api/.docker/nginx.conf /etc/nginx/nginx.conf
 COPY api/composer.json .
 COPY api/composer.lock .
 COPY api/sami.conf.php .
-ADD .git .
+ADD .git ./.git
 
 RUN composer install --no-dev --prefer-dist -q --no-progress
 
 ADD framework/src src
+RUN git reset --hard
 RUN lib/bin/sami.php update sami.conf.php
 COPY favicon.ico public
 
