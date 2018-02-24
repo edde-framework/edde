@@ -5,17 +5,7 @@ html
         meta(charset='utf-8')
         link(rel='stylesheet', href='css/style.css')
     body
-        nav.navbar.is-link.has-shadow
-            div.container
-                div.navbar-brand
-                    a.navbar-item(href='') Edde Framework
-                div.navbar-menu
-                    div.navbar-end
-                        span.navbar-item
-                            a.button.is-info.is-inverted.is-outlined(href='https://git.x32.cz/edde/edde/')
-                                span.icon
-                                    i.fab.fa-gitlab
-                                span GitLab
+        include controls/header.pug
 
         section.hero.is-info.is-bold
             div.hero-body
@@ -29,7 +19,7 @@ html
                 nav.tabs.is-boxed.is-fullwidth
                     div.container
                         ul
-                            li.is-active
+                            li
                                 a
                                     span.icon
                                         i.fas.fa-globe
@@ -52,21 +42,11 @@ html
                             li
                                 a(href='https://api.edde-framework.org')
                                     span.icon
-                                        i.fas.fa-book
+                                        i.fas.fa-code-branch
                                     span API
 
-        nav.navbar.has-shadow
-            div.container
-                div.navbar-tabs
-                    a.navbar-item.is-tab.is-active About Edde
-                    a.navbar-item.is-tab Blablabla
-                    a.navbar-item.is-tab Blablabla 2
-                    a.navbar-item.is-tab Blablabla 3
-
-        section.hero.is-info.is-large
-            div.hero-body
-                div.container
-                    div Hello!
+        include controls/overview/index.pug
+        include controls/features.pug
 
         footer.footer
             div.container
