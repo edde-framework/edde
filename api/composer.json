@@ -1,0 +1,10 @@
+{
+	"config": {
+		"optimize-autoloader": true,
+		"vendor-dir": "lib"
+	},
+	"require": {
+		"roave/security-advisories": "dev-master",
+		"sami/sami": "^4.0@dev"
+	}
+}

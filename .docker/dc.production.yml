@@ -1,11 +1,9 @@
 version: '3'
 services:
-        api:
+        edde-api:
                 image: $IMAGE_API
                 networks:
                     - proxy
-                ports:
-                    - 5280:80
                 deploy:
                     labels:
                         - com.df.notify=true
@@ -18,21 +16,21 @@ services:
                         - com.df.port=80
                         - com.df.httpsOnly=true
 
-        doc:
-                image: $IMAGE_DOC
-                networks:
-                    - proxy
-                deploy:
-                    labels:
-                        - com.df.notify=true
-                        - com.df.distribute=true
-                        - com.df.letsencrypt.host=edde-framework.org
-                        - com.df.letsencrypt.email=ssl@edde-framework.org
-                        - com.df.serviceDomain=edde-framework.org
-                        - com.df.servicePath=/
-                        - com.df.srcPort=80,443
-                        - com.df.port=80
-                        - com.df.httpsOnly=true
+#        edde-doc:
+#                image: $IMAGE_DOC
+#                networks:
+#                    - proxy
+#                deploy:
+#                    labels:
+#                        - com.df.notify=true
+#                        - com.df.distribute=true
+#                        - com.df.letsencrypt.host=edde-framework.org
+#                        - com.df.letsencrypt.email=ssl@edde-framework.org
+#                        - com.df.serviceDomain=edde-framework.org
+#                        - com.df.servicePath=/
+#                        - com.df.srcPort=80,443
+#                        - com.df.port=80
+#                        - com.df.httpsOnly=true
 
 
 networks:
