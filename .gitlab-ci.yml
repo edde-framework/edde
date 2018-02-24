@@ -17,30 +17,30 @@ stages:
 
 build api:
     stage: build
-    script: docker build -t $IMAGE_API -f .docker/api/Dockerfile .
+    script: docker build -t $IMAGE_API -f api/.docker/Dockerfile .
 
-build doc:
-    stage: build
-    script: docker build -t $IMAGE_DOC -f .docker/doc/Dockerfile .
+#build doc:
+#    stage: build
+#    script: docker build -t $IMAGE_DOC -f doc/.docker/Dockerfile .
 
-test:
-    stage: test
-    script:
-        - docker build -t $IMAGE_TEST -f .docker/test/Dockerfile . >/dev/null 2>&1
-        - apk add -U py-pip >/dev/null 2>&1
-        - pip install docker-compose >/dev/null 2>&1
-        - docker-compose -f .docker/test/docker-compose.yml up -d >/dev/null 2>&1
-        - docker exec $PROJECT-$CI_COMMIT_REF_NAME /opt/app/test.sh
-    after_script:
-        - docker-compose -f .docker/test/docker-compose.yml down --volumes >/dev/null 2>&1
+#test:
+#    stage: test
+#    script:
+#        - docker build -t $IMAGE_TEST -f .docker/test/Dockerfile . >/dev/null 2>&1
+#        - apk add -U py-pip >/dev/null 2>&1
+#        - pip install docker-compose >/dev/null 2>&1
+#        - docker-compose -f .docker/test/docker-compose.yml up -d >/dev/null 2>&1
+#        - docker exec $PROJECT-$CI_COMMIT_REF_NAME /opt/app/test.sh
+#    after_script:
+#        - docker-compose -f .docker/test/docker-compose.yml down --volumes >/dev/null 2>&1
 
 publish api:
     stage: publish
     script: docker push $IMAGE_API
 
-publish doc:
-    stage: publish
-    script: docker push $IMAGE_DOC
+#publish doc:
+#    stage: publish
+#    script: docker push $IMAGE_DOC
 
 release:
     stage: release
