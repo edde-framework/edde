@@ -2,7 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Entity;
 
+	use Edde\Api\Schema\Exception\InvalidRelationException;
+	use Edde\Api\Schema\Exception\UnknownSchemaException;
 	use Edde\Api\Storage\Exception\EntityNotFoundException;
+	use Edde\Api\Storage\Exception\QueryException;
 	use Edde\Api\Storage\Exception\UnknownTableException;
 	use Edde\Api\Storage\Query\ISelectQuery;
 	use IteratorAggregate;
@@ -59,6 +62,7 @@
 		 * @param array  $on
 		 *
 		 * @return ICollection
+		 * @throws InvalidRelationException
 		 */
 		public function join(string $target, string $alias, array $on = null): ICollection;
 
@@ -112,10 +116,13 @@
 
 		/**
 		 * @param string|null $alias
+		 * @param string|null $schema schema of the returned collection
 		 *
 		 * @return ICollection
+		 * @throws QueryException
+		 * @throws UnknownSchemaException
 		 */
-		public function return(string $alias = null): ICollection;
+		public function return(string $schema, ?string $alias): ICollection;
 
 		/**
 		 * @return Traversable|IEntity[]
