@@ -116,13 +116,21 @@
 
 		/**
 		 * @param string|null $alias
-		 * @param string|null $schema schema of the returned collection
 		 *
 		 * @return ICollection
 		 * @throws QueryException
+		 */
+		public function return(string $alias = null): ICollection;
+
+		/**
+		 * change collection schema, useful when changing return piece of collection
+		 *
+		 * @param string $schema
+		 *
+		 * @return ICollection
 		 * @throws UnknownSchemaException
 		 */
-		public function return(string $schema, ?string $alias): ICollection;
+		public function schema(string $schema): ICollection;
 
 		/**
 		 * @return Traversable|IEntity[]

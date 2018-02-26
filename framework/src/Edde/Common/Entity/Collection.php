@@ -117,9 +117,14 @@
 		}
 
 		/** @inheritdoc */
-		public function return(string $schema, ?string $alias): ICollection {
-			$this->schema = $this->schemaManager->load($schema);
+		public function return(string $alias = null): ICollection {
 			$this->stream->getQuery()->return($alias);
+			return $this;
+		}
+
+		/** @inheritdoc */
+		public function schema(string $schema): ICollection {
+			$this->schema = $this->schemaManager->load($schema);
 			return $this;
 		}
 
