@@ -131,7 +131,6 @@
 		 * @param string $alias
 		 *
 		 * @return ISelectQuery
-		 * @throws QueryException
 		 */
 		public function return(string $alias = null): ISelectQuery;
 	}

@@ -3,7 +3,6 @@
 	namespace Edde\Common\Storage\Query;
 
 	use Edde\Api\Schema\ISchema;
-	use Edde\Api\Storage\Exception\QueryException;
 	use Edde\Api\Storage\Query\Fragment\IJoin;
 	use Edde\Api\Storage\Query\Fragment\IWhereGroup;
 	use Edde\Api\Storage\Query\ISelectQuery;
@@ -144,11 +143,7 @@
 
 		/** @inheritdoc */
 		public function return(string $alias = null): ISelectQuery {
-			$alias = $alias ?: $this->current;
-			if (isset($this->joins[$alias]) === false && $this->alias !== $alias) {
-				throw new QueryException(sprintf('Cannot select unknown alias [%s]; choose select alias [%s] or one of joined aliases [%s].', $alias, $this->getAlias(), implode(', ', array_keys($this->joins))));
-			}
-			$this->return = $alias;
+			$this->return = $alias ?: $this->current;
 			return $this;
 		}
 	}
