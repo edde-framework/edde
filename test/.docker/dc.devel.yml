@@ -1,0 +1,5 @@
+version: '2'
+services:
+        edde-test:
+                image: edde-test
+                container_name: edde-test
