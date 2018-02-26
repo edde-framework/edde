@@ -1,5 +1,5 @@
 {
-	"name": "edde/edde",
+	"name": "edde-framework/edde",
 	"homepage": "https://edde-framework.org",
 	"license": "Apache-2.0",
 	"type": "library",
@@ -16,11 +16,11 @@
 	],
 	"config": {
 		"optimize-autoloader": true,
-		"vendor-dir": "lib"
+		"vendor-dir": "framework/lib"
 	},
 	"autoload": {
 		"classmap": [
-			"src/"
+			"framework/src/"
 		]
 	},
 	"minimum-stability": "dev",
