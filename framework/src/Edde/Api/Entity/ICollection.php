@@ -15,7 +15,7 @@
 		/**
 		 * set custom query for this collection
 		 *
-		 * @param \Edde\Api\Storage\Query\ISelectQuery $query
+		 * @param ISelectQuery $query
 		 *
 		 * @return ICollection
 		 */
@@ -24,7 +24,7 @@
 		/**
 		 * get the query to customize this collection
 		 *
-		 * @return \Edde\Api\Storage\Query\ISelectQuery
+		 * @return ISelectQuery
 		 */
 		public function getQuery(): ISelectQuery;
 
