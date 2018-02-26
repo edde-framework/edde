@@ -46,7 +46,9 @@ github sync:
     stage: publish
     script:
         - apk add -U git >/dev/null 2>&1
-        - git clone --mirror $CI_REPOSITORY_URL edde
+        - git clone --mirror $CI_REPOSITORY_URL edde.git
+        - cd edde.git
+        - git remote set-url --push origin https://&GITHUB_TOKEN@github.com/edde-framework/edde
 
 start review:
     stage: release
