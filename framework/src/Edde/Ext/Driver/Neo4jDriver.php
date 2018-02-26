@@ -28,7 +28,7 @@
 	use GraphAware\Bolt\Protocol\SessionInterface;
 	use GraphAware\Bolt\Protocol\V1\Transaction;
 	use GraphAware\Bolt\Result\Result;
-	use GraphAware\Common\Type\Node;
+	use GraphAware\Common\Type\MapAccessor;
 
 	class Neo4jDriver extends AbstractDriver {
 		/** @var string */
@@ -61,7 +61,7 @@
 					foreach ($result->getRecords() as $record) {
 						/** @var $value Node */
 						foreach ($record->values() as $value) {
-							yield $value instanceof Node ? $value->asArray() : $value;
+							yield $value instanceof MapAccessor ? $value->asArray() : $value;
 						}
 					}
 				})($this->session->run($query, $params));
