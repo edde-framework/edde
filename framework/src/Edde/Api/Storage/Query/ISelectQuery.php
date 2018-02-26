@@ -3,6 +3,7 @@
 	namespace Edde\Api\Storage\Query;
 
 	use Edde\Api\Schema\ISchema;
+	use Edde\Api\Storage\Exception\QueryException;
 	use Edde\Api\Storage\Query\Fragment\IJoin;
 	use Edde\Api\Storage\Query\Fragment\IWhereGroup;
 
@@ -130,6 +131,7 @@
 		 * @param string $alias
 		 *
 		 * @return ISelectQuery
+		 * @throws QueryException
 		 */
 		public function return(string $alias = null): ISelectQuery;
 	}

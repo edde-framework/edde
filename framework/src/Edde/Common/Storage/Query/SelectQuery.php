@@ -144,7 +144,7 @@
 
 		/** @inheritdoc */
 		public function return(string $alias = null): ISelectQuery {
-			$alias = $this->alias ?: $this->current;
+			$alias = $alias ?: $this->current;
 			if (isset($this->joins[$alias]) === false && $this->alias !== $alias) {
 				throw new QueryException(sprintf('Cannot select unknown alias [%s]; choose select alias [%s] or one of joined aliases [%s].', $alias, $this->getAlias(), implode(', ', array_keys($this->joins))));
 			}
