@@ -18,6 +18,7 @@ COPY doc/yarn.lock .
 RUN yarn install --production --silent --non-interactive
 
 ADD doc/assets assets
+ADD doc/src src
 
 RUN yarn run build
 COPY favicon.ico public
