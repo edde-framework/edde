@@ -14,7 +14,6 @@ stages:
     - test
     - publish
     - release
-    - github
 
 build api:
     stage: build
@@ -42,6 +41,12 @@ publish api:
 publish doc:
     stage: publish
     script: docker push $IMAGE_DOC
+
+github sync:
+    stage: publish
+    script:
+        - apk add -U git >/dev/null 2>&1
+        - git clone --mirror $CI_REPOSITORY_URL edde
 
 start review:
     stage: release
@@ -86,8 +91,3 @@ release:
     environment:
         name: production
         url: https://edde-framework.org
-
-github sync:
-    stage: github
-    script:
-        - git clone --mirror $CI_REPOSITORY_URL
