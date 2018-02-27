@@ -6,6 +6,7 @@
 	use Edde\Api\Driver\Exception\DriverException;
 	use Edde\Api\Entity\Exception\RecordException;
 	use Edde\Api\Entity\Exception\UnknownAliasException;
+	use Edde\Api\Entity\IEntity;
 	use Edde\Api\Entity\Inject\EntityManager;
 	use Edde\Api\Schema\Exception\InvalidRelationException;
 	use Edde\Api\Schema\Exception\SchemaException;
@@ -15,6 +16,8 @@
 	use Edde\Api\Storage\Exception\DuplicateEntryException;
 	use Edde\Api\Storage\Exception\DuplicateTableException;
 	use Edde\Api\Storage\Exception\EntityNotFoundException;
+	use Edde\Api\Storage\Exception\ExclusiveTransactionException;
+	use Edde\Api\Storage\Exception\NoTransactionException;
 	use Edde\Api\Storage\Exception\StorageException;
 	use Edde\Api\Storage\Exception\UnknownTableException;
 	use Edde\Api\Storage\Inject\Storage;
@@ -39,9 +42,13 @@
 		use Storage;
 
 		/**
+		 * @throws DriverException
 		 * @throws DuplicateTableException
 		 * @throws StorageException
+		 * @throws UnknownPropertyException
 		 * @throws UnknownSchemaException
+		 * @throws ExclusiveTransactionException
+		 * @throws NoTransactionException
 		 */
 		public function testCreateSchema() {
 			$this->storage->start();
@@ -64,6 +71,8 @@
 		}
 
 		/**
+		 * @throws SchemaException
+		 * @throws UnknownSchemaException
 		 * @throws ValidationException
 		 */
 		public function testValidator() {
@@ -76,6 +85,8 @@
 		/**
 		 * @throws BatchValidationException
 		 * @throws DuplicateEntryException
+		 * @throws SchemaException
+		 * @throws UnknownSchemaException
 		 * @throws ValidationException
 		 */
 		public function testInsert() {
@@ -91,6 +102,8 @@
 		/**
 		 * @throws BatchValidationException
 		 * @throws DuplicateEntryException
+		 * @throws SchemaException
+		 * @throws UnknownSchemaException
 		 * @throws ValidationException
 		 */
 		public function testInsertException() {
@@ -104,6 +117,8 @@
 		/**
 		 * @throws BatchValidationException
 		 * @throws DuplicateEntryException
+		 * @throws SchemaException
+		 * @throws UnknownSchemaException
 		 * @throws ValidationException
 		 */
 		public function testInsertException2() {
@@ -118,6 +133,8 @@
 		/**
 		 * @throws BatchValidationException
 		 * @throws DuplicateEntryException
+		 * @throws SchemaException
+		 * @throws UnknownSchemaException
 		 * @throws ValidationException
 		 */
 		public function testInsertUnique() {
@@ -133,6 +150,8 @@
 		/**
 		 * @throws BatchValidationException
 		 * @throws DuplicateEntryException
+		 * @throws SchemaException
+		 * @throws UnknownSchemaException
 		 * @throws ValidationException
 		 */
 		public function testSave() {
@@ -149,6 +168,11 @@
 			self::assertFalse($entity->isDirty(), 'Entity is still dirty!');
 		}
 
+		/**
+		 * @throws RecordException
+		 * @throws SchemaException
+		 * @throws UnknownSchemaException
+		 */
 		public function testCollection() {
 			$entities = [];
 			foreach ($this->entityManager->collection('c', SimpleSchema::class) as $record) {
@@ -183,9 +207,15 @@
 		}
 
 		/**
-		 * @throws EntityNotFoundException
-		 * @throws ValidationException
+		 * @throws BatchValidationException
 		 * @throws DuplicateEntryException
+		 * @throws EntityNotFoundException
+		 * @throws RecordException
+		 * @throws SchemaException
+		 * @throws UnknownAliasException
+		 * @throws UnknownSchemaException
+		 * @throws UnknownTableException
+		 * @throws ValidationException
 		 */
 		public function testUpdate() {
 			$entity = $this->entityManager->create(SimpleSchema::class, [
@@ -340,6 +370,7 @@
 				'bar The Second',
 				'bar The Third',
 			];
+			/** @var $foo IEntity */
 			foreach ($foo->join('b', BarSchema::class) as $record) {
 				$foo = $record->getEntity('e');
 				$bar = $record->getEntity('b');

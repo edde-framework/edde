@@ -1,28 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2448c0c1-6f90-4e7d-a3c1-58e6f0b1d37d" name="Default" comment="Common: Enabled tests">
-      <change afterPath="$PROJECT_DIR$/src/Edde/Api/Entity/Exception/RecordException.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Edde/Api/Entity/Exception/UnknownAliasException.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Edde/Api/Entity/IRecord.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Edde/Api/Storage/Exception/InvalidSourceException.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Edde/Api/Storage/Exception/StreamException.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Edde/Api/Storage/Exception/UnknownAliasException.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Edde/Common/Entity/Record.php" afterDir="false" />
+    <list default="true" id="2448c0c1-6f90-4e7d-a3c1-58e6f0b1d37d" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Edde/Api/Entity/ICollection.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Api/Entity/ICollection.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Edde/Api/Entity/IEntity.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Api/Entity/IEntity.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Edde/Api/Entity/IEntityManager.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Api/Entity/IEntityManager.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Edde/Api/Storage/IStorage.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Api/Storage/IStorage.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Edde/Api/Storage/IStream.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Api/Storage/IStream.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Edde/Api/Storage/Query/ISelectQuery.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Api/Storage/Query/ISelectQuery.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Edde/Common/Entity/Collection.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Common/Entity/Collection.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Edde/Common/Entity/Entity.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Common/Entity/Entity.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Edde/Common/Entity/EntityManager.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Common/Entity/EntityManager.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Edde/Common/Storage/Query/SelectQuery.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Common/Storage/Query/SelectQuery.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Edde/Common/Storage/Stream.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Common/Storage/Stream.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Edde/Ext/Driver/AbstractDatabaseDriver.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Ext/Driver/AbstractDatabaseDriver.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Edde/Ext/Driver/Neo4jDriver.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Ext/Driver/Neo4jDriver.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/src/Edde/Common/Storage/AbstractStorageTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/src/Edde/Common/Storage/AbstractStorageTest.php" afterDir="false" />
     </list>
     <ignored mask="rest-client.private.env.json" />
@@ -62,8 +42,8 @@
       <file leaf-file-name="AbstractStorageTest.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tests/src/Edde/Common/Storage/AbstractStorageTest.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="506">
-              <caret line="698" column="9" selection-start-line="698" selection-start-column="9" selection-end-line="698" selection-end-column="9" />
+            <state relative-caret-position="494">
+              <caret line="372" column="33" selection-start-line="372" selection-start-column="33" selection-end-line="372" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -404,7 +384,8 @@
     <MESSAGE value="Doc: Preparing static-site for edde-framework.org" />
     <MESSAGE value="Doc: So, let's try spike" />
     <MESSAGE value="Common: Updated composer.json" />
-    <option name="LAST_COMMIT_MESSAGE" value="Common: Updated composer.json" />
+    <MESSAGE value="Collection: Added support for Records&#10;&#10;- currently MySQL is passing (PostgreSQL?)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Collection: Added support for Records&#10;&#10;- currently MySQL is passing (PostgreSQL?)" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -714,8 +695,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/src/Edde/Common/Storage/AbstractStorageTest.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="506">
-          <caret line="698" column="9" selection-start-line="698" selection-start-column="9" selection-end-line="698" selection-end-column="9" />
+        <state relative-caret-position="494">
+          <caret line="372" column="33" selection-start-line="372" selection-start-column="33" selection-end-line="372" selection-end-column="33" />
         </state>
       </provider>
     </entry>
