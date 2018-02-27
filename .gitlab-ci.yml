@@ -28,11 +28,11 @@ test:
     script:
         - apk add -U py-pip >/dev/null 2>&1
         - pip install docker-compose >/dev/null 2>&1
-        - docker build -t $IMAGE_TEST -f test/.docker/Dockerfile .
-        - docker-compose -f test/.docker/dc.test.yml up -d
+        - docker build -t $IMAGE_TEST -f test/.docker/Dockerfile . >/dev/null 2>&1
+        - docker-compose -f test/.docker/dc.test.yml up -d >/dev/null 2>&1
         - docker exec $PROJECT-$CI_COMMIT_REF_NAME /opt/app/test.sh
     after_script:
-        - docker-compose -f test/.docker/dc.test.yml down --volumes
+        - docker-compose -f test/.docker/dc.test.yml down --volumes >/dev/null 2>&1
 
 publish api:
     stage: publish
