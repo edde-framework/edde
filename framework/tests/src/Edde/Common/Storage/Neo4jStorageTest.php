@@ -35,6 +35,6 @@
 		}
 
 		protected function getEntityTimeLimit(): float {
-			return 70;
+			return 120;
 		}
 	}

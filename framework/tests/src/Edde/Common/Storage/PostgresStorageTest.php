@@ -4,6 +4,7 @@
 
 	use Edde\Api\Container\Exception\ContainerException;
 	use Edde\Api\Container\Exception\FactoryException;
+	use Edde\Api\Driver\Exception\DriverException;
 	use Edde\Api\Driver\IDriver;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Ext\Container\ContainerFactory;
@@ -11,6 +12,9 @@
 	use function getenv;
 
 	class PostgresStorageTest extends AbstractStorageTest {
+		/**
+		 * @throws DriverException
+		 */
 		public function testPrepareDatabase() {
 			$this->storage->native('drop schema if exists test cascade');
 			$this->storage->native('create schema test authorization "edde"');
@@ -20,6 +24,7 @@
 		/**
 		 * @throws ContainerException
 		 * @throws FactoryException
+		 * @throws DriverException
 		 */
 		protected function setUp() {
 			ContainerFactory::inject($this, [
@@ -30,7 +35,7 @@
 		}
 
 		protected function getEntityTimeLimit(): float {
-			return 35;
+			return 40;
 		}
 
 		protected function getBenchmarkLimit(): int {

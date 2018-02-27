@@ -52,7 +52,7 @@
 		 */
 		public function testCreateSchema() {
 			$this->storage->start();
-			$schemaList = [
+			$schemas = [
 				SimpleSchema::class,
 				PooSchema::class,
 				FooSchema::class,
@@ -63,7 +63,7 @@
 				RoleSchema::class,
 				UserRoleSchema::class,
 			];
-			foreach ($schemaList as $name) {
+			foreach ($schemas as $name) {
 				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load($name)));
 			}
 			$this->storage->commit();
@@ -742,14 +742,14 @@
 		 * @throws ValidationException
 		 */
 		public function testBenchmark() {
-			$schemaList = [
+			$schemas = [
 				PooSchema::class,
 				FooSchema::class,
 				BarSchema::class,
 				FooBarSchema::class,
 				BarPooSchema::class,
 			];
-			foreach ($schemaList as $name) {
+			foreach ($schemas as $name) {
 				try {
 					$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load($name)));
 				} catch (DuplicateTableException $exception) {
@@ -783,7 +783,7 @@
 			$sum = (microtime(true) - $start);
 			$item = ($sum / $i) * 1000;
 			$limit = $this->getEntityTimeLimit();
-			self::assertLessThanOrEqual($limit, $item, sprintf("[%s] %.2fs, %.2f ms/operation (%.2f%% of %dms limit)", static::class, $sum, $item, $limit, (100 * $item) / $limit));
+			self::assertLessThanOrEqual($limit, $item, sprintf("[%s] %.2fs, %.2f ms/operation (%.2f%% of %dms limit)", static::class, $sum, $item, (100 * $item) / $limit, $limit));
 		}
 
 		protected function beforeBenchmark() {
