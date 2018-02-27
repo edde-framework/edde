@@ -10,7 +10,7 @@ RUN apk update && apk add \
 	php7-bcmath php7-xml php7-curl php7-intl \
 	php7-mbstring php7-xml php7-zip php7-zlib php7-openssl php7-json php7-phar \
 	php7-fileinfo php7-tokenizer php7-dom php7-xmlwriter php7-xmlreader php7-ctype \
-	php7-simplexml
+	php7-simplexml >/dev/null 2>&1
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 RUN composer global require hirak/prestissimo -q --prefer-dist --no-progress
