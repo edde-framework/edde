@@ -33,6 +33,7 @@
 			return $this->query;
 		}
 
+		/** @inheritdoc */
 		public function emit(array $source): array {
 			$item = [];
 			foreach ($source as $k => $v) {

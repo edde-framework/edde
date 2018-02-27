@@ -6,6 +6,7 @@
 	use Edde\Api\Storage\Exception\StreamException;
 	use Edde\Api\Storage\Query\ISelectQuery;
 	use IteratorAggregate;
+	use Traversable;
 
 	/**
 	 * Quite strange name for a stream from the storage; stream means
@@ -40,7 +41,7 @@
 		public function emit(array $source): array;
 
 		/**
-		 * @return \Traversable|array
+		 * @return Traversable|array
 		 * @throws InvalidSourceException
 		 * @throws StreamException
 		 */

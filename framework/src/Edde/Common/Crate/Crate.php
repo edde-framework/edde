@@ -10,7 +10,7 @@
 		/**
 		 * @var IProperty[]
 		 */
-		protected $propertyList = [];
+		protected $properties = [];
 		/**
 		 * @var bool
 		 */
@@ -35,17 +35,17 @@
 		 * @inheritdoc
 		 */
 		public function hasProperty(string $name): bool {
-			return isset($this->propertyList[$name]);
+			return isset($this->properties[$name]);
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function getProperty(string $name): IProperty {
-			if (isset($this->propertyList[$name]) === false) {
-				$this->propertyList[$name] = new Property($name);
+			if (isset($this->properties[$name]) === false) {
+				$this->properties[$name] = new Property($name);
 			}
-			return $this->propertyList[$name];
+			return $this->properties[$name];
 		}
 
 		/**
@@ -72,7 +72,7 @@
 		 * @inheritdoc
 		 */
 		public function commit(): ICrate {
-			foreach ($this->propertyList as $property) {
+			foreach ($this->properties as $property) {
 				$property->commit();
 			}
 			$this->dirty = null;
@@ -94,7 +94,7 @@
 			if ($this->dirty !== null) {
 				return $this->dirty;
 			}
-			foreach ($this->propertyList as $property) {
+			foreach ($this->properties as $property) {
 				if ($property->isDirty()) {
 					return true;
 				}
@@ -107,7 +107,7 @@
 		 */
 		public function getDirtyProperties(): array {
 			$dirtyList = [];
-			foreach ($this->propertyList as $name => $property) {
+			foreach ($this->properties as $name => $property) {
 				if ($property->isDirty()) {
 					$dirtyList[$name] = $property;
 				}
@@ -119,7 +119,7 @@
 		 * @inheritdoc
 		 */
 		public function isEmpty(): bool {
-			foreach ($this->propertyList as $property) {
+			foreach ($this->properties as $property) {
 				if ($property->isEmpty() === false) {
 					return false;
 				}
@@ -132,7 +132,7 @@
 		 */
 		public function toArray(): array {
 			$source = [];
-			foreach ($this->propertyList as $name => $property) {
+			foreach ($this->properties as $name => $property) {
 				$source[$name] = $property->get();
 			}
 			return $source;
@@ -140,7 +140,7 @@
 
 		public function __clone() {
 			parent::__clone();
-			$this->propertyList = [];
+			$this->properties = [];
 			$this->dirty = null;
 		}
 	}

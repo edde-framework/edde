@@ -8,7 +8,7 @@
 		/**
 		 * @var IConfigurator[]
 		 */
-		protected $tConfiguratorList = [];
+		protected $tConfigurators = [];
 		/**
 		 * @var bool
 		 */
@@ -22,15 +22,15 @@
 		 * @inheritdoc
 		 */
 		public function addConfigurator(IConfigurator $configurator) {
-			$this->tConfiguratorList[] = $configurator;
+			$this->tConfigurators[] = $configurator;
 			return $this;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function setConfiguratorList(array $configuratorList) {
-			$this->tConfiguratorList = $configuratorList;
+		public function setConfigurators(array $configurators) {
+			$this->tConfigurators = $configurators;
 			return $this;
 		}
 
@@ -55,7 +55,7 @@
 			}
 			$this->tSetup = true;
 			$this->init();
-			foreach ($this->tConfiguratorList as $configHandler) {
+			foreach ($this->tConfigurators as $configHandler) {
 				$configHandler->configure($this);
 			}
 			$this->handleSetup();

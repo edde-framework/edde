@@ -87,12 +87,12 @@
 		 *
 		 * @param IFactory $factory
 		 * @param string   $name
-		 * @param array    $parameterList
+		 * @param array    $params
 		 * @param string   $source
 		 *
 		 * @return mixed
 		 */
-		public function factory(IFactory $factory, string $name, array $parameterList = [], string $source = null);
+		public function factory(IFactory $factory, string $name, array $params = [], string $source = null);
 
 		/**
 		 * try to autowire dependencies to $instance

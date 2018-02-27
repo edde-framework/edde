@@ -18,11 +18,11 @@
 		/**
 		 * register set of config handlers
 		 *
-		 * @param IConfigurator[] $configuratorList
+		 * @param IConfigurator[] $configurators
 		 *
 		 * @return $this
 		 */
-		public function setConfiguratorList(array $configuratorList);
+		public function setConfigurators(array $configurators);
 
 		/**
 		 * this method should be called after all dependencies are

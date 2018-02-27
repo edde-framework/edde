@@ -20,6 +20,7 @@
 	use Edde\Common\Storage\Query\NativeQuery;
 	use PDO;
 	use PDOException;
+	use Throwable;
 	use function implode;
 
 	abstract class AbstractDatabaseDriver extends AbstractDriver {
@@ -80,14 +81,14 @@
 			return $this;
 		}
 
-		protected function exception(\Throwable $throwable): \Throwable {
+		protected function exception(Throwable $throwable): Throwable {
 			return new DriverException('Unhandled exception: ' . $throwable->getMessage(), 0, $throwable);
 		}
 
 		/**
 		 * @param ICrateSchemaQuery $crateSchemaQuery
 		 *
-		 * @throws \Throwable
+		 * @throws Throwable
 		 */
 		protected function executeCreateSchemaQuery(ICrateSchemaQuery $crateSchemaQuery) {
 			$schema = $crateSchemaQuery->getSchema();
@@ -121,7 +122,7 @@
 		 *
 		 * @return \PDOStatement
 		 * @throws DriverException
-		 * @throws \Throwable
+		 * @throws Throwable
 		 */
 		protected function executeSelectQuery(ISelectQuery $selectQuery) {
 			$alias = $this->delimite($selectQuery->getAlias());
@@ -190,7 +191,7 @@
 		/**
 		 * @param IUnlinkQuery $unlinkQuery
 		 *
-		 * @throws \Throwable
+		 * @throws Throwable
 		 */
 		protected function executeUnlinkQuery(IUnlinkQuery $unlinkQuery) {
 			$link = $unlinkQuery->getLink();
@@ -203,7 +204,7 @@
 		/**
 		 * @param ILinkQuery $linkQuery
 		 *
-		 * @throws \Throwable
+		 * @throws Throwable
 		 */
 		protected function executeLinkQuery(ILinkQuery $linkQuery) {
 			$link = $linkQuery->getLink();
@@ -217,7 +218,7 @@
 		/**
 		 * @param IRelationQuery $relationQuery
 		 *
-		 * @throws \Throwable
+		 * @throws Throwable
 		 */
 		protected function executeRelationQuery(IRelationQuery $relationQuery) {
 			$using = $relationQuery->getUsing();
@@ -241,7 +242,7 @@
 		/**
 		 * @param IDeleteQuery $deleteQuery
 		 *
-		 * @throws \Throwable
+		 * @throws Throwable
 		 */
 		protected function executeDeleteQuery(IDeleteQuery $deleteQuery) {
 			$entity = $deleteQuery->getEntity();
@@ -254,7 +255,7 @@
 		 * @param IDetachQuery $detachQuery
 		 *
 		 * @throws DriverException
-		 * @throws \Throwable
+		 * @throws Throwable
 		 */
 		protected function executeDetachQuery(IDetachQuery $detachQuery) {
 			$relation = $detachQuery->getRelation();
@@ -280,7 +281,7 @@
 		 * @param IDisconnectQuery $disconnectQuery
 		 *
 		 * @throws DriverException
-		 * @throws \Throwable
+		 * @throws Throwable
 		 */
 		protected function executeDisconnectQuery(IDisconnectQuery $disconnectQuery) {
 			$relation = $disconnectQuery->getRelation();
@@ -331,7 +332,7 @@
 		 * @param IQueryQueue $queryQueue
 		 *
 		 * @throws DriverException
-		 * @throws \Throwable
+		 * @throws Throwable
 		 */
 		protected function executeQueryQueue(IQueryQueue $queryQueue) {
 			$entityQueue = $queryQueue->getEntityQueue();

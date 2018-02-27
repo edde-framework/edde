@@ -10,20 +10,20 @@
 	use Edde\Common\Object\Exception\PropertyWriteException;
 
 	trait AutowireTrait {
-		protected $tAutowireList = [];
-		protected $tLazyList = [];
+		protected $tAutowires = [];
+		protected $tLazies = [];
 
 		public function autowire(string $property, $dependency) {
-			$this->tAutowireList[$property] = $dependency;
+			$this->tAutowires[$property] = $dependency;
 			$this->{$property} = $dependency;
 			return $this;
 		}
 
-		public function lazy(string $property, IContainer $container, string $dependency, array $parameterList = []) {
-			$this->tLazyList[$property] = [
+		public function lazy(string $property, IContainer $container, string $dependency, array $params = []) {
+			$this->tLazies[$property] = [
 				$container,
 				$dependency,
-				$parameterList,
+				$params,
 			];
 			call_user_func(\Closure::bind(function (string $property) {
 				unset($this->{$property});
@@ -40,9 +40,9 @@
 		 * @throws FactoryException
 		 */
 		public function __get(string $name) {
-			if (isset($this->tLazyList[$name])) {
+			if (isset($this->tLazies[$name])) {
 				/** @var $container IContainer */
-				[$container, $dependency, $parameters] = $this->tLazyList[$name];
+				[$container, $dependency, $parameters] = $this->tLazies[$name];
 				/** @var $instance IConfigurable */
 				if (($instance = $this->{$name} = $container->create($dependency, $parameters, static::class)) instanceof IConfigurable && $instance->isSetup() === false) {
 					$instance->setup();
@@ -60,7 +60,7 @@
 		 * @throws PropertyWriteException
 		 */
 		public function __set(string $name, $value) {
-			if (isset($this->tLazyList[$name])) {
+			if (isset($this->tLazies[$name])) {
 				$this->{$name} = $value;
 				return $this;
 			}

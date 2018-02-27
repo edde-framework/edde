@@ -19,14 +19,14 @@
 		 *
 		 * @return IParameter[]
 		 */
-		public function getInjectList(): array;
+		public function getInjects(): array;
 
 		/**
 		 * get list of lazy parameters
 		 *
 		 * @return IParameter[]
 		 */
-		public function getLazyList(): array;
+		public function getLazies(): array;
 
 		/**
 		 * return list of configurator names

@@ -42,14 +42,14 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getInjectList(): array {
+		public function getInjects(): array {
 			return $this->injectList;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function getLazyList(): array {
+		public function getLazies(): array {
 			return $this->lazyInjectList;
 		}
 

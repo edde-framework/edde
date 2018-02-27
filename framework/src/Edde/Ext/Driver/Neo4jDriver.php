@@ -29,6 +29,8 @@
 	use GraphAware\Bolt\Protocol\V1\Transaction;
 	use GraphAware\Bolt\Result\Result;
 	use GraphAware\Common\Type\MapAccessor;
+	use Throwable;
+	use function implode;
 
 	class Neo4jDriver extends AbstractDriver {
 		/** @var string */
@@ -59,13 +61,21 @@
 			try {
 				return (function (Result $result) {
 					foreach ($result->getRecords() as $record) {
+						$keys = $record->keys();
+						$item = [];
 						/** @var $value Node */
-						foreach ($record->values() as $value) {
-							yield $value instanceof MapAccessor ? $value->asArray() : $value;
+						foreach ($record->values() as $index => $value) {
+							if ($value instanceof MapAccessor) {
+								foreach ($value->asArray() as $k => $v) {
+									$item[$keys[$index] . '.' . $k] = $v;
+								}
+							}
 						}
+						yield $item;
 					}
 				})($this->session->run($query, $params));
-			} catch (\Throwable $throwable) {
+			} catch (Throwable $throwable) {
+				/** @noinspection PhpUnhandledExceptionInspection */
 				throw $this->exception($throwable);
 			}
 		}
@@ -85,7 +95,7 @@
 			try {
 				$this->transaction->commit();
 				$this->transaction = null;
-			} catch (\Throwable $throwable) {
+			} catch (Throwable $throwable) {
 				$this->exception($throwable);
 			}
 			return $this;
@@ -111,7 +121,7 @@
 			return $this;
 		}
 
-		protected function exception(\Throwable $throwable): \Throwable {
+		protected function exception(Throwable $throwable): Throwable {
 			if (stripos($message = $throwable->getMessage(), 'already exists with label') !== false) {
 				return new DuplicateEntryException($message, 0, $throwable);
 			} else if (stripos($message, 'must have the property') !== false) {
@@ -123,7 +133,7 @@
 		/**
 		 * @param ICrateSchemaQuery $crateSchemaQuery
 		 *
-		 * @throws \Throwable
+		 * @throws Throwable
 		 */
 		protected function executeCreateSchemaQuery(ICrateSchemaQuery $crateSchemaQuery) {
 			if (($schema = $crateSchemaQuery->getSchema())->isRelation()) {
@@ -156,7 +166,7 @@
 		 * @param IQueryQueue $queryQueue
 		 *
 		 * @throws \Exception
-		 * @throws \Throwable
+		 * @throws Throwable
 		 */
 		protected function executeQueryQueue(IQueryQueue $queryQueue) {
 			$entityQueue = $queryQueue->getEntityQueue();
@@ -184,7 +194,7 @@
 		/**
 		 * @param IDeleteQuery $deleteQuery
 		 *
-		 * @throws \Throwable
+		 * @throws Throwable
 		 */
 		protected function executeDeleteQuery(IDeleteQuery $deleteQuery) {
 			$entity = $deleteQuery->getEntity();
@@ -196,7 +206,7 @@
 		/**
 		 * @param IDetachQuery $detachQuery
 		 *
-		 * @throws \Throwable
+		 * @throws Throwable
 		 */
 		protected function executeDetachQuery(IDetachQuery $detachQuery) {
 			/** @var $entity IEntity[] */
@@ -227,7 +237,7 @@
 		 * @param IDisconnectQuery $disconnectQuery
 		 *
 		 * @throws DriverException
-		 * @throws \Throwable
+		 * @throws Throwable
 		 */
 		protected function executeDisconnectQuery(IDisconnectQuery $disconnectQuery) {
 			$entity = $disconnectQuery->getEntity();
@@ -249,22 +259,24 @@
 		/**
 		 * @param ILinkQuery $linkQuery
 		 *
-		 * @throws \Throwable
+		 * @throws Throwable
 		 */
 		protected function executeLinkQuery(ILinkQuery $linkQuery) {
 			$link = $linkQuery->getLink();
+			$entity = $linkQuery->getEntity();
+			$entity->set($link->getFrom()->getPropertyName(), $linkQuery->getTo()->getPrimary()->get());
 			$this->link(
-				$entity = $linkQuery->getEntity(),
+				$entity,
 				$linkQuery->getTo(),
-				$link->getName()
+				$link->getName(),
+				empty($entity->toArray()) === false ? $entity->sanitize() : null
 			);
-			$entity->set($link->getFrom()->getPropertyName(), $to = $linkQuery->getTo()->getPrimary()->get());
 		}
 
 		/**
 		 * @param IUnlinkQuery $unlinkQuery
 		 *
-		 * @throws \Throwable
+		 * @throws Throwable
 		 */
 		protected function executeUnlinkQuery(IUnlinkQuery $unlinkQuery) {
 			$link = $unlinkQuery->getLink();
@@ -279,15 +291,18 @@
 		/**
 		 * @param IRelationQuery $relationQuery
 		 *
-		 * @throws \Throwable
+		 * @throws Throwable
 		 */
 		protected function executeRelationQuery(IRelationQuery $relationQuery) {
 			$using = $relationQuery->getUsing();
+			$relation = $relationQuery->getRelation();
+			$using->set($relation->getFrom()->getTo()->getPropertyName(), $relationQuery->getEntity()->get($relation->getFrom()->getFrom()->getPropertyName()));
+			$using->set($relation->getTo()->getFrom()->getPropertyName(), $relationQuery->getTarget()->get($relation->getTo()->getTo()->getPropertyName()));
 			$this->link(
 				$relationQuery->getEntity(),
 				$relationQuery->getTarget(),
 				$relationQuery->getRelation()->getSchema()->getRealName(),
-				empty($source = $using->toArray()) === false ? $using->sanitize() : null
+				empty($using->toArray()) === false ? $using->sanitize() : null
 			);
 		}
 
@@ -297,7 +312,7 @@
 		 * @param string     $relation
 		 * @param array|null $attributes
 		 *
-		 * @throws \Throwable
+		 * @throws Throwable
 		 */
 		protected function link(IEntity $from, IEntity $to, string $relation, array $attributes = null) {
 			$cypher = null;
@@ -344,14 +359,13 @@
 		 * @param ISelectQuery $selectQuery
 		 *
 		 * @return mixed
-		 * @throws \Throwable
+		 * @throws Throwable
 		 */
 		protected function executeSelectQuery(ISelectQuery $selectQuery) {
 			$cypher = 'MATCH ';
 			$params = [];
-			$return = $this->delimite($selectQuery->getSchemas());
 			$schema = $selectQuery->getSchema();
-			$current = $selectQuery->getSchema();
+			$current = $selectQuery->getAlias();
 			$cypher .= '(' . ($alias = $this->delimite($current)) . ':' . $this->delimite($schema->getRealName()) . ')';
 			foreach ($selectQuery->getJoins() as $name => $join) {
 				if ($join->isLink()) {
@@ -370,7 +384,17 @@
 				$cypher .= ' WHERE' . ($query = $this->fragmentWhereGroup($selectQuery->getWhere()))->getQuery();
 				$params = $query->getParams();
 			}
-			$cypher .= ' RETURN ' . ($selectQuery->isCount() ? 'COUNT(' . $return . ')' : $return);
+			if ($selectQuery->isCount()) {
+				$cypher .= 'COUNT(' . $selectQuery->getCount() . ')';
+			} else {
+				$returns = [];
+				foreach ($selectQuery->getSchemas() as $return => $_) {
+					if (empty($return) === false) {
+						$returns[] = $this->delimite($return);
+					}
+				}
+				$cypher .= ' RETURN ' . implode(',', $returns);
+			}
 			if ($selectQuery->hasOrder()) {
 				$orders = [];
 				foreach ($selectQuery->getOrders() as $column => $asc) {
