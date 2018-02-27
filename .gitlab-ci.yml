@@ -26,9 +26,9 @@ build doc:
 test:
     stage: test
     script:
-        - docker build -t $IMAGE_TEST -f .docker/test/Dockerfile . >/dev/null 2>&1
         - apk add -U py-pip
         - pip install docker-compose
+        - docker build -t $IMAGE_TEST -f .docker/test/Dockerfile .
         - docker-compose -f test/.docker/dc.test.yml up -d
         - docker exec $PROJECT-$CI_COMMIT_REF_NAME /opt/app/test.sh
     after_script:
