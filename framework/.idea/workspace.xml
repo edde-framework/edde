@@ -2,24 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2448c0c1-6f90-4e7d-a3c1-58e6f0b1d37d" name="Default" comment="Common: Enabled tests">
-      <change afterPath="$PROJECT_DIR$/../test/.docker/test.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../test/.docker/xdebug.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.docker/test/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.docker/test/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../test/.docker/dc.test.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.docker/test/nginx.conf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.docker/test/php-fpm.conf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.docker/test/start.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.docker/test/test.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.dockerignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.dockerignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.gitlab-ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitlab-ci.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/../composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/src/Edde/Common/Storage/MysqlStorageTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/src/Edde/Common/Storage/MysqlStorageTest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/src/Edde/Common/Storage/PostgresStorageTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/src/Edde/Common/Storage/PostgresStorageTest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test/.docker/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../test/.docker/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test/.docker/dc.devel.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../test/.docker/dc.devel.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <ignored mask="rest-client.private.env.json" />
     <ignored mask="http-client.private.env.json" />
@@ -41,11 +27,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="AbstractStorageTest.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/tests/src/Edde/Common/Storage/AbstractStorageTest.php">
+      <file leaf-file-name="PostgresStorageTest.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tests/src/Edde/Common/Storage/PostgresStorageTest.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="394">
-              <caret line="216" column="56" lean-forward="true" selection-start-line="216" selection-start-column="56" selection-end-line="216" selection-end-column="56" />
+            <state relative-caret-position="442">
+              <caret line="32" column="21" selection-start-line="32" selection-start-column="21" selection-end-line="32" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -396,17 +382,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/tests/src/Edde/Common/Storage/AbstractStorageTest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="445">
+          <caret line="219" column="62" selection-start-line="219" selection-start-column="62" selection-end-line="219" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tests/src/Edde/Common/Storage/PostgresStorageTest.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="442">
           <caret line="32" column="21" selection-start-line="32" selection-start-column="21" selection-end-line="32" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/src/Edde/Common/Storage/AbstractStorageTest.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="394">
-          <caret line="216" column="56" lean-forward="true" selection-start-line="216" selection-start-column="56" selection-end-line="216" selection-end-column="56" />
         </state>
       </provider>
     </entry>
