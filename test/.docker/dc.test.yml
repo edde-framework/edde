@@ -1,6 +1,9 @@
+#
+# docker-compose indented to be used in CI
+#
 version: '2'
 services:
-        test:
+        edde-test:
                 image: $IMAGE_TEST
                 container_name: $PROJECT-$CI_COMMIT_REF_NAME
                 environment:

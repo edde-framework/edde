@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="PhpAnalysisConfiguration" call_tree_analysis_depth="3" />
+  <component name="PhpProjectServersManager">
+    <servers>
+      <server host="docker" id="e3bb7314-d632-437c-9245-867ab19a49ec" name="edde-test" use_path_mappings="true">
+        <path_mappings>
+          <mapping local-root="$PROJECT_DIR$" remote-root="/opt/app" />
+        </path_mappings>
+      </server>
+    </servers>
+  </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
 </project>

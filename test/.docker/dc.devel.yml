@@ -3,3 +3,47 @@ services:
         edde-test:
                 image: edde-test
                 container_name: edde-test
+                environment:
+                    - NEO4J_AUTH=neo4j/eeQFXk7kkqSm
+                    - POSTGRES_PASSWORD=PBXxSgEWY3LT
+                    - MYSQL_PASSWORD=enPUxu8SRctV
+                    - XDEBUG_IP=$XDEBUG_IP
+                    - PHP_IDE_CONFIG=serverName=edde-test
+                volumes:
+                    - ../../framework:/opt/app/framework
+                    - ./xdebug.ini:/etc/php7/conf.d/xdebug.ini
+                networks:
+                    - test-network
+                depends_on:
+                    - neo4j
+                    - postgres
+                    - mysql
+
+        neo4j:
+                image: neo4j:3.3-enterprise
+                environment:
+                    - NEO4J_AUTH=neo4j/eeQFXk7kkqSm
+                    - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
+                networks:
+                    - test-network
+
+        postgres:
+            image: postgres:latest
+            environment:
+                - POSTGRES_USER=edde
+                - POSTGRES_PASSWORD=PBXxSgEWY3LT
+            networks:
+                - test-network
+
+        mysql:
+            image: mariadb:latest
+            environment:
+                - MYSQL_ROOT_PASSWORD=enPUxu8SRctV
+                - MYSQL_DATABASE=edde
+                - MYSQL_USER=edde
+                - MYSQL_PASSWORD=enPUxu8SRctV
+            networks:
+                - test-network
+
+networks:
+        test-network:

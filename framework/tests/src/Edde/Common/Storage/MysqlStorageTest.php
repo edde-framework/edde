@@ -39,7 +39,7 @@
 		}
 
 		protected function getEntityTimeLimit(): float {
-			return 30;
+			return 45;
 		}
 
 		protected function getBenchmarkLimit(): int {
