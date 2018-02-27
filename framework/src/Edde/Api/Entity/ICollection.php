@@ -3,7 +3,6 @@
 	namespace Edde\Api\Entity;
 
 	use Edde\Api\Schema\Exception\InvalidRelationException;
-	use Edde\Api\Schema\Exception\UnknownSchemaException;
 	use Edde\Api\Storage\Exception\EntityNotFoundException;
 	use Edde\Api\Storage\Exception\QueryException;
 	use Edde\Api\Storage\Exception\UnknownTableException;
@@ -121,16 +120,6 @@
 		 * @throws QueryException
 		 */
 		public function return(string $alias = null): ICollection;
-
-		/**
-		 * change collection schema, useful when changing return piece of collection
-		 *
-		 * @param string $schema
-		 *
-		 * @return ICollection
-		 * @throws UnknownSchemaException
-		 */
-		public function schema(string $schema): ICollection;
 
 		/**
 		 * @return Traversable|IEntity[]

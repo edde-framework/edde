@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2448c0c1-6f90-4e7d-a3c1-58e6f0b1d37d" name="Default" comment="Common: Enabled tests">
-      <change beforePath="$PROJECT_DIR$/../.gitlab-ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitlab-ci.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Edde/Api/Entity/ICollection.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Api/Entity/ICollection.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Edde/Common/Entity/Collection.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Common/Entity/Collection.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Edde/Ext/Driver/Neo4jDriver.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Ext/Driver/Neo4jDriver.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/src/Edde/Common/Storage/AbstractStorageTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/src/Edde/Common/Storage/AbstractStorageTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../test/.docker/dc.devel.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../test/.docker/dc.devel.yml" afterDir="false" />
     </list>
     <ignored mask="rest-client.private.env.json" />
     <ignored mask="http-client.private.env.json" />
@@ -24,11 +29,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="PostgresStorageTest.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/tests/src/Edde/Common/Storage/PostgresStorageTest.php">
+      <file leaf-file-name="Neo4jDriver.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Edde/Ext/Driver/Neo4jDriver.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="32" column="21" selection-start-line="32" selection-start-column="21" selection-end-line="32" selection-end-column="21" />
+            <state relative-caret-position="488">
+              <caret line="366" column="44" selection-start-line="366" selection-start-column="44" selection-end-line="366" selection-end-column="44" />
             </state>
           </provider>
         </entry>
@@ -90,6 +95,10 @@
         <option value="$PROJECT_DIR$/composer.json" />
         <option value="$PROJECT_DIR$/tests/src/Edde/Common/Storage/MysqlStorageTest.php" />
         <option value="$PROJECT_DIR$/tests/src/Edde/Common/Storage/PostgresStorageTest.php" />
+        <option value="$PROJECT_DIR$/tests/src/Edde/Common/Storage/AbstractStorageTest.php" />
+        <option value="$PROJECT_DIR$/src/Edde/Common/Entity/Collection.php" />
+        <option value="$PROJECT_DIR$/src/Edde/Api/Entity/ICollection.php" />
+        <option value="$PROJECT_DIR$/src/Edde/Ext/Driver/Neo4jDriver.php" />
       </list>
     </option>
   </component>
@@ -313,13 +322,6 @@
     <entry file="file://$PROJECT_DIR$/run.sh" />
     <entry file="file://$PROJECT_DIR$/.docker/api/Dockerfile" />
     <entry file="file://$PROJECT_DIR$/.docker/test/php-fpm.conf" />
-    <entry file="file://$PROJECT_DIR$/src/Edde/Ext/Driver/Neo4jDriver.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="32" column="10" selection-start-line="32" selection-start-column="10" selection-end-line="32" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.docker/test/nginx.conf" />
     <entry file="file://$PROJECT_DIR$/test.sh" />
     <entry file="file://$PROJECT_DIR$/.gitignore" />
@@ -365,13 +367,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tests/src/Edde/Common/Storage/MysqlStorageTest.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="413">
-          <caret line="41" column="21" selection-start-line="41" selection-start-column="21" selection-end-line="41" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tests/src/Edde/Common/Storage/Neo4jStorageTest.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="493">
@@ -379,17 +374,51 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tests/src/Edde/Common/Storage/AbstractStorageTest.php">
+    <entry file="file://$PROJECT_DIR$/tests/fdgfdggf">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/src/Edde/Common/Storage/MysqlStorageTest.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="445">
-          <caret line="219" column="62" selection-start-line="219" selection-start-column="62" selection-end-line="219" selection-end-column="62" />
+        <state relative-caret-position="663">
+          <caret line="45" column="23" lean-forward="true" selection-start-line="45" selection-start-column="23" selection-end-line="45" selection-end-column="23" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/src/Edde/Common/Storage/PostgresStorageTest.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="32" column="21" selection-start-line="32" selection-start-column="21" selection-end-line="32" selection-end-column="21" />
+        <state relative-caret-position="493">
+          <caret line="35" column="27" selection-start-line="35" selection-start-column="27" selection-end-line="35" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/src/Edde/Common/Storage/AbstractStorageTest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="457">
+          <caret line="612" column="35" lean-forward="true" selection-start-line="612" selection-start-column="35" selection-end-line="612" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Edde/Api/Entity/ICollection.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="853">
+          <caret line="122" lean-forward="true" selection-start-line="122" selection-end-line="122" />
+          <folding>
+            <element signature="e#62#117#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Edde/Common/Entity/Collection.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="717">
+          <caret line="123" lean-forward="true" selection-start-line="123" selection-end-line="123" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Edde/Ext/Driver/Neo4jDriver.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="488">
+          <caret line="366" column="44" selection-start-line="366" selection-start-column="44" selection-end-line="366" selection-end-column="44" />
         </state>
       </provider>
     </entry>

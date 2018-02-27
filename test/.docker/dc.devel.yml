@@ -11,6 +11,8 @@ services:
                     - PHP_IDE_CONFIG=serverName=edde-test
                 volumes:
                     - ../../framework:/opt/app/framework
+                    - ../../composer.json:/opt/app/composer.json
+                    - ../../composer.lock:/opt/app/composer.lock
                     - ./xdebug.ini:/etc/php7/conf.d/xdebug.ini
                 networks:
                     - test-network

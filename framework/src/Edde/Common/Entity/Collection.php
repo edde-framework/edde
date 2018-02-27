@@ -123,12 +123,6 @@
 		}
 
 		/** @inheritdoc */
-		public function schema(string $schema): ICollection {
-			$this->schema = $this->schemaManager->load($schema);
-			return $this;
-		}
-
-		/** @inheritdoc */
 		public function getIterator() {
 			foreach ($this->stream as $source) {
 				yield $this->entityManager->load($this->schema, $source);
