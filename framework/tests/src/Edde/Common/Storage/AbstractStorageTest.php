@@ -653,8 +653,8 @@
 			$this->storage->commit();
 			$sum = (microtime(true) - $start);
 			$item = ($sum / $i) * 1000;
-			fwrite(STDERR, sprintf("[%s] %.2fs, %.2f ms/operation (%.2f%% of current limit)\n", static::class, $sum, $item, (100 * $item) / ($limit = $this->getEntityTimeLimit())));
-			self::assertLessThanOrEqual($limit, $item);
+			$limit = $this->getEntityTimeLimit();
+			self::assertLessThanOrEqual($limit, $item, sprintf("[%s] %.2fs, %.2f ms/operation (%.2f%% of %ms limit)", static::class, $sum, $item, $limit, (100 * $item) / $limit));
 		}
 
 		protected function beforeBenchmark() {
