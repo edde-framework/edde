@@ -69,7 +69,9 @@
 								foreach ($value->asArray() as $k => $v) {
 									$item[$keys[$index] . '.' . $k] = $v;
 								}
+								continue;
 							}
+							yield [$keys[$index] => $value];
 						}
 						yield $item;
 					}
@@ -385,7 +387,7 @@
 				$params = $query->getParams();
 			}
 			if ($selectQuery->isCount()) {
-				$cypher .= 'COUNT(' . $selectQuery->getCount() . ')';
+				$cypher .= ' RETURN COUNT(' . $this->delimite($selectQuery->getCount()) . ') AS ' . $this->delimite($selectQuery->getCount() . '.count');
 			} else {
 				$returns = [];
 				foreach ($selectQuery->getSchemas() as $return => $_) {
