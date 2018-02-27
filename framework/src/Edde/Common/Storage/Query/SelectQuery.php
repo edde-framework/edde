@@ -3,6 +3,7 @@
 	namespace Edde\Common\Storage\Query;
 
 	use Edde\Api\Schema\ISchema;
+	use Edde\Api\Storage\Exception\UnknownAliasException;
 	use Edde\Api\Storage\Query\Fragment\IJoin;
 	use Edde\Api\Storage\Query\Fragment\IWhereGroup;
 	use Edde\Api\Storage\Query\ISelectQuery;
@@ -10,20 +11,8 @@
 	use Edde\Common\Storage\Query\Fragment\WhereGroup;
 
 	class SelectQuery extends AbstractQuery implements ISelectQuery {
-		/** @var ISchema */
-		protected $schema;
-		/**
-		 * alias assigned to source schema
-		 *
-		 * @var string
-		 */
+		/** @var string */
 		protected $alias;
-		/**
-		 * current alias
-		 *
-		 * @var string
-		 */
-		protected $current;
 		/** @var IJoin[] */
 		protected $joins = [];
 		/** @var IWhereGroup */
@@ -31,38 +20,25 @@
 		/** @var string[] */
 		protected $orders = [];
 		protected $limit;
-		protected $count = false;
-		/**
-		 * which alias will be returned as a query result
-		 *
-		 * @var string
-		 */
-		protected $return;
+		/** @var string */
+		protected $count;
+		/** @var ISchema[] */
+		protected $schemas;
 
 		public function __construct(ISchema $schema, string $alias) {
-			$this->schema = $schema;
-			$this->return = $this->alias = $alias;
+			$this->alias = $alias;
+			$this->schemas[null] = $this->schemas[$alias] = $schema;
 		}
 
 		/** @inheritdoc */
-		public function getSchema(): ISchema {
-			return $this->schema;
-		}
-
-		/** @inheritdoc */
-		public function getAlias(): string {
-			return $this->alias;
-		}
-
-		/** @inheritdoc */
-		public function link(string $schema, string $alias): ISelectQuery {
-			$this->joins[$this->current = $alias] = new Join($schema, $alias, true);
+		public function link(string $alias, string $schema): ISelectQuery {
+			$this->joins[$alias] = new Join($schema, $alias, true);
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function join(string $schema, string $alias): ISelectQuery {
-			$this->joins[$this->current = $alias] = new Join($schema, $alias);
+		public function join(string $alias, string $schema): ISelectQuery {
+			$this->joins[$alias] = new Join($schema, $alias);
 			return $this;
 		}
 
@@ -72,8 +48,8 @@
 		}
 
 		/** @inheritdoc */
-		public function getReturn(): string {
-			return $this->return;
+		public function getSchemas(): array {
+			return $this->schemas;
 		}
 
 		/** @inheritdoc */
@@ -131,19 +107,37 @@
 		}
 
 		/** @inheritdoc */
-		public function count(bool $count = true): ISelectQuery {
-			$this->count = $count;
+		public function count(string $alias = null): ISelectQuery {
+			$this->count = $alias;
 			return $this;
 		}
 
 		/** @inheritdoc */
 		public function isCount(): bool {
+			return $this->count !== null;
+		}
+
+		/** @inheritdoc */
+		public function getCount(): string {
 			return $this->count;
 		}
 
 		/** @inheritdoc */
-		public function return(string $alias = null): ISelectQuery {
-			$this->return = $alias ?: $this->current;
+		public function alias(string $alias, ISchema $schema): ISelectQuery {
+			$this->schemas[$alias] = $schema;
 			return $this;
+		}
+
+		/** @inheritdoc */
+		public function getAlias(): string {
+			return $this->alias;
+		}
+
+		/** @inheritdoc */
+		public function getSchema(string $alias = null): ISchema {
+			if (isset($this->schemas[$alias]) === false) {
+				throw new UnknownAliasException(sprintf('Requested unknown alias [%s] in query.', $alias));
+			}
+			return $this->schemas[$alias];
 		}
 	}

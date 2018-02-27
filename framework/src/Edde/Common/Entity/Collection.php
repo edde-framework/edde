@@ -2,9 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Entity;
 
+	use Edde\Api\Container\Inject\Container;
+	use Edde\Api\Entity\Exception\RecordException;
+	use Edde\Api\Entity\Exception\UnknownAliasException;
 	use Edde\Api\Entity\ICollection;
 	use Edde\Api\Entity\IEntity;
-	use Edde\Api\Entity\Inject\EntityManager;
+	use Edde\Api\Entity\IRecord;
 	use Edde\Api\Schema\Inject\SchemaManager;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Storage\Exception\EntityNotFoundException;
@@ -14,16 +17,30 @@
 	use Edde\Common\Storage\Query\SelectQuery;
 
 	class Collection extends Object implements ICollection {
-		use EntityManager;
 		use SchemaManager;
+		use Container;
 		/** @var IStream */
 		protected $stream;
-		/** @var ISchema */
-		protected $schema;
+		/** @var ISchema[] */
+		protected $schemas;
 
-		public function __construct(IStream $stream, ISchema $schema) {
+		public function __construct(IStream $stream) {
 			$this->stream = $stream;
-			$this->schema = $schema;
+		}
+
+		/** @inheritdoc */
+		public function schema(string $alias, ISchema $schema): ICollection {
+			$this->schemas[$alias] = $schema;
+			$this->stream->getQuery()->alias($alias, $schema);
+			return $this;
+		}
+
+		/** @inheritdoc */
+		public function getSchema(string $alias): ISchema {
+			if (isset($this->schemas[$alias]) === false) {
+				throw new UnknownAliasException(sprintf('Requested schema for unknown alias [%s].', $alias));
+			}
+			return $this->schemas[$alias];
 		}
 
 		/** @inheritdoc */
@@ -38,41 +55,48 @@
 		}
 
 		/** @inheritdoc */
-		public function getEntity(): IEntity {
-			foreach ($this as $entity) {
-				return $entity;
+		public function getEntity(string $alias): IEntity {
+			/** @var $record IRecord */
+			foreach ($this as $record) {
+				return $record->getEntity($alias);
 			}
-			throw new EntityNotFoundException(sprintf('Cannot load any Entity of schema [%s].', $this->schema->getName()));
+			throw new EntityNotFoundException('Cannot load any Entity for Collection.');
 		}
 
 		/** @inheritdoc */
-		public function entity($name): IEntity {
-			$this->stream->query($query = new SelectQuery($this->schema, 'c'));
+		public function getRecord(): IRecord {
+			foreach ($this as $record) {
+				return $record;
+			}
+			throw new RecordException('Cannot load any Record for Collection.');
+		}
+
+		/** @inheritdoc */
+		public function entity(string $alias, $name): IEntity {
+			$schema = $this->getSchema($alias);
+			$this->stream->query($query = new SelectQuery($schema, $alias));
 			$where = $query->getWhere();
-			if ($this->schema->hasPrimary()) {
-				$where->or()->value('c.' . $this->schema->getPrimary()->getName(), '=', $name);
+			if ($schema->hasPrimary()) {
+				$where->or()->value($alias . '.' . $schema->getPrimary()->getName(), '=', $name);
 			}
-			foreach ($this->schema->getUniques() as $property) {
-				$where->or()->value('c.' . $property->getName(), '=', $name);
+			foreach ($schema->getUniques() as $property) {
+				$where->or()->value($alias . '.' . $property->getName(), '=', $name);
 			}
-			return $this->getEntity();
+			return $this->getEntity($alias);
 		}
 
 		/** @inheritdoc */
-		public function join(string $target, string $alias, array $on = null): ICollection {
-			$relation = $this->schema->getRelation($target);
-			$link = $relation->getTo();
-			$linkTo = $link->getTo();
-			/**
-			 * change target schema of this collection
-			 */
-			$this->schema = $linkTo->getSchema();
+		public function join(string $source, string $target, string $alias, array $on = null): ICollection {
+			$schema = $this->getSchema($source);
+			$relation = $schema->getRelation($target);
 			$query = $this->stream->getQuery();
-			$query->join($target, $alias);
+			$query->join($alias, $target);
 			if ($on) {
-				$propertyName = $linkTo->getPropertyName();
-				$query->where($query->getAlias() . '.' . $propertyName, '=', $on[$propertyName]);
+				$propertyName = $relation->getTo()->getTo()->getPropertyName();
+				$query->where($source . '.' . $propertyName, '=', $on[$propertyName]);
 			}
+			$this->schema($source . '\r', $relation->getSchema());
+			$this->schema($alias, $this->schemaManager->load($target));
 			return $this;
 		}
 
@@ -105,33 +129,30 @@
 		}
 
 		/** @inheritdoc */
-		public function count(): int {
-			$this->stream->getQuery()->count();
-			$count = 0;
-			foreach ($this->stream as $count) {
-				$count = (int)(is_int($count) ? $count : (isset($count['count']) ? $count['count'] : 0));
-				break;
-			}
-			$this->stream->getQuery()->count(false);
-			return $count;
+		public function link(string $alias, string $schema): ICollection {
+			$this->getQuery()->link($alias, $schema);
+			$this->schema($alias, $this->schemaManager->load($schema));
+			return $this;
 		}
 
 		/** @inheritdoc */
-		public function return(string $alias = null): ICollection {
-			$this->stream->getQuery()->return($alias);
-			return $this;
+		public function count(string $alias = null): int {
+			$query = $this->stream->getQuery();
+			$query->count($alias ?: $query->getAlias());
+			$count = 0;
+			foreach ($this->stream as $count) {
+				$count = $count[$alias];
+				$count = (int)(is_int($count) ? $count : (isset($count['count']) ? $count['count'] : 0));
+				break;
+			}
+			$query->count(null);
+			return $count;
 		}
 
 		/** @inheritdoc */
 		public function getIterator() {
 			foreach ($this->stream as $source) {
-				yield $this->entityManager->load($this->schema, $source);
+				yield $this->container->inject(new Record($this->schemas, $source));
 			}
-		}
-
-		/** @inheritdoc */
-		public function __clone() {
-			parent::__clone();
-			$this->stream = clone $this->stream;
 		}
 	}

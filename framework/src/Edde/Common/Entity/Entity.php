@@ -13,7 +13,6 @@
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Validator\Exception\ValidationException;
 	use Edde\Common\Crate\Crate;
-	use Edde\Common\Storage\Query\SelectQuery;
 
 	class Entity extends Crate implements IEntity {
 		use EntityManager;
@@ -54,11 +53,11 @@
 		/** @inheritdoc */
 		public function link(string $schema): IEntity {
 			$link = $this->schema->getLink($schema);
-			$collection = $this->entityManager->collection($schema);
-			$collection->query($query = new SelectQuery($this->schema, 'c'));
-			$query->link($schema, 'l')->return();
-			$query->where('l.' . $link->getTo()->getPropertyName(), '=', $this->get($link->getFrom()->getPropertyName()));
-			return $collection->getEntity();
+			$collection = $this->entityManager->collection('c', $this->schema->getName());
+			$collection->getQuery()->link('l', $schema);
+			$collection->schema('l', $this->schemaManager->load($schema));
+			$collection->where('l.' . $link->getTo()->getPropertyName(), '=', $this->get($link->getFrom()->getPropertyName()));
+			return $collection->getEntity('l');
 		}
 
 		/** @inheritdoc */
@@ -85,11 +84,11 @@
 			return $this->entityQueue->disconnect($this, $this->schema->getRelation($schema));
 		}
 
-		/** @inheritdoc */
-		public function join(string $schema, string $alias): ICollection {
-			$collection = $this->entityManager->collection($this->schema->getName());
-			$collection->join($schema, $alias, $this->toArray());
-			$collection->return($alias);
+		/** @inheritdoc
+		 */
+		public function join(string $alias, string $schema): ICollection {
+			$collection = $this->entityManager->collection('e', $this->schema->getName());
+			$collection->join('e', $schema, $alias, $this->toArray());
 			return $collection;
 		}
 

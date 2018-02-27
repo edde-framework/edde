@@ -4,8 +4,12 @@
 
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Crate\IProperty;
+	use Edde\Api\Entity\Exception\UnknownAliasException;
 	use Edde\Api\Entity\Query\IDetachQuery;
 	use Edde\Api\Entity\Query\IDisconnectQuery;
+	use Edde\Api\Schema\Exception\InvalidRelationException;
+	use Edde\Api\Schema\Exception\LinkException;
+	use Edde\Api\Schema\Exception\SchemaException;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Storage\Exception\DuplicateEntryException;
 	use Edde\Api\Validator\Exception\BatchValidationException;
@@ -52,6 +56,7 @@
 		 * @param string $schema
 		 *
 		 * @return IEntity
+		 * @throws LinkException
 		 */
 		public function link(string $schema): IEntity;
 
@@ -88,18 +93,22 @@
 		 * @param string $schema
 		 *
 		 * @return IDisconnectQuery
+		 * @throws InvalidRelationException
 		 */
 		public function disconnect(string $schema): IDisconnectQuery;
 
 		/**
 		 * prepare m:n collection of related entities
 		 *
-		 * @param string $schema
 		 * @param string $alias
+		 * @param string $schema
 		 *
 		 * @return ICollection
+		 * @throws SchemaException
+		 * @throws InvalidRelationException
+		 * @throws UnknownAliasException
 		 */
-		public function join(string $schema, string $alias): ICollection;
+		public function join(string $alias, string $schema): ICollection;
 
 		/**
 		 * mark this entity for delete (it's not deleted until save)

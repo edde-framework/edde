@@ -2,12 +2,28 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2448c0c1-6f90-4e7d-a3c1-58e6f0b1d37d" name="Default" comment="Common: Enabled tests">
+      <change afterPath="$PROJECT_DIR$/src/Edde/Api/Entity/Exception/RecordException.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Edde/Api/Entity/Exception/UnknownAliasException.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Edde/Api/Entity/IRecord.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Edde/Api/Storage/Exception/InvalidSourceException.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Edde/Api/Storage/Exception/StreamException.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Edde/Api/Storage/Exception/UnknownAliasException.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Edde/Common/Entity/Record.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Edde/Api/Entity/ICollection.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Api/Entity/ICollection.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Edde/Api/Entity/IEntity.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Api/Entity/IEntity.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Edde/Api/Entity/IEntityManager.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Api/Entity/IEntityManager.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Edde/Api/Storage/IStorage.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Api/Storage/IStorage.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Edde/Api/Storage/IStream.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Api/Storage/IStream.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Edde/Api/Storage/Query/ISelectQuery.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Api/Storage/Query/ISelectQuery.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Edde/Common/Entity/Collection.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Common/Entity/Collection.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Edde/Common/Entity/Entity.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Common/Entity/Entity.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Edde/Common/Entity/EntityManager.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Common/Entity/EntityManager.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Edde/Common/Storage/Query/SelectQuery.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Common/Storage/Query/SelectQuery.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Edde/Common/Storage/Stream.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Common/Storage/Stream.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Edde/Ext/Driver/AbstractDatabaseDriver.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Ext/Driver/AbstractDatabaseDriver.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Edde/Ext/Driver/Neo4jDriver.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Edde/Ext/Driver/Neo4jDriver.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/src/Edde/Common/Storage/AbstractStorageTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/src/Edde/Common/Storage/AbstractStorageTest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test/.docker/dc.devel.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../test/.docker/dc.devel.yml" afterDir="false" />
     </list>
     <ignored mask="rest-client.private.env.json" />
     <ignored mask="http-client.private.env.json" />
@@ -21,6 +37,20 @@
   <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
   </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
   <component name="FileColors">
     <fileColor scope="Non-Project Files (Material Default)" color="2E3C43" />
     <fileColor scope="Non-Project Files (Material Darker)" color="323232" />
@@ -29,11 +59,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Neo4jDriver.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/Edde/Ext/Driver/Neo4jDriver.php">
+      <file leaf-file-name="AbstractStorageTest.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tests/src/Edde/Common/Storage/AbstractStorageTest.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="488">
-              <caret line="366" column="44" selection-start-line="366" selection-start-column="44" selection-end-line="366" selection-end-column="44" />
+            <state relative-caret-position="506">
+              <caret line="698" column="9" selection-start-line="698" selection-start-column="9" selection-end-line="698" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -45,26 +75,33 @@
       <find>ctype</find>
       <find>xdebug</find>
       <find>phpun</find>
+      <find>schemaMana</find>
+      <find>return</find>
+      <find>getAlia</find>
+      <find>count</find>
+      <find>this-&gt;curr</find>
+      <find>this-&gt;sch</find>
+      <find>entityMan</find>
+      <find>$schema</find>
+      <find>$sql</find>
+      <find>alias</find>
     </findStrings>
+    <replaceStrings>
+      <replace>$sourceSchema</replace>
+      <replace>$linkSql</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="master" />
+      </map>
+    </option>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/.docker/php-fpm.conf" />
-        <option value="$PROJECT_DIR$/.docker/xdebug.ini" />
-        <option value="$PROJECT_DIR$/Dockerfile" />
-        <option value="$PROJECT_DIR$/sami.conf.php" />
-        <option value="$PROJECT_DIR$/.docker/doc.sh" />
-        <option value="$PROJECT_DIR$/.docker/nginx.conf" />
-        <option value="$PROJECT_DIR$/.docker/doc.nginx.conf" />
-        <option value="$PROJECT_DIR$/.docker/doc.Dockerfile" />
-        <option value="$PROJECT_DIR$/.docker/api.sh" />
-        <option value="$PROJECT_DIR$/docker-compose.yml" />
-        <option value="$PROJECT_DIR$/.docker/api.Dockerfile" />
-        <option value="$PROJECT_DIR$/.docker/dc.test.yml" />
         <option value="$PROJECT_DIR$/.docker/dc.production.yml" />
         <option value="$PROJECT_DIR$/.docker/test.sh" />
         <option value="$PROJECT_DIR$/.docker/test.Dockerfile" />
@@ -95,10 +132,27 @@
         <option value="$PROJECT_DIR$/composer.json" />
         <option value="$PROJECT_DIR$/tests/src/Edde/Common/Storage/MysqlStorageTest.php" />
         <option value="$PROJECT_DIR$/tests/src/Edde/Common/Storage/PostgresStorageTest.php" />
-        <option value="$PROJECT_DIR$/tests/src/Edde/Common/Storage/AbstractStorageTest.php" />
-        <option value="$PROJECT_DIR$/src/Edde/Common/Entity/Collection.php" />
-        <option value="$PROJECT_DIR$/src/Edde/Api/Entity/ICollection.php" />
         <option value="$PROJECT_DIR$/src/Edde/Ext/Driver/Neo4jDriver.php" />
+        <option value="$PROJECT_DIR$/src/Edde/Api/Entity/Exception/UnknownAliasException.php" />
+        <option value="$PROJECT_DIR$/src/Edde/Api/Storage/IStorage.php" />
+        <option value="$PROJECT_DIR$/src/Edde/Api/Storage/Exception/UnknownAliasException.php" />
+        <option value="$PROJECT_DIR$/src/Edde/Api/Storage/Exception/StreamException.php" />
+        <option value="$PROJECT_DIR$/src/Edde/Api/Storage/Exception/InvalidSourceException.php" />
+        <option value="$PROJECT_DIR$/src/Edde/Api/Storage/IStream.php" />
+        <option value="$PROJECT_DIR$/src/Edde/Common/Storage/Stream.php" />
+        <option value="$PROJECT_DIR$/src/Edde/Api/Entity/Exception/RecordException.php" />
+        <option value="$PROJECT_DIR$/src/Edde/Api/Entity/IRecord.php" />
+        <option value="$PROJECT_DIR$/src/Edde/Api/Entity/IEntityManager.php" />
+        <option value="$PROJECT_DIR$/src/Edde/Common/Entity/EntityManager.php" />
+        <option value="$PROJECT_DIR$/src/Edde/Common/Storage/Query/SelectQuery.php" />
+        <option value="$PROJECT_DIR$/src/Edde/Api/Entity/ICollection.php" />
+        <option value="$PROJECT_DIR$/src/Edde/Common/Entity/Entity.php" />
+        <option value="$PROJECT_DIR$/src/Edde/Api/Entity/IEntity.php" />
+        <option value="$PROJECT_DIR$/src/Edde/Api/Storage/Query/ISelectQuery.php" />
+        <option value="$PROJECT_DIR$/src/Edde/Ext/Driver/AbstractDatabaseDriver.php" />
+        <option value="$PROJECT_DIR$/src/Edde/Common/Entity/Collection.php" />
+        <option value="$PROJECT_DIR$/src/Edde/Common/Entity/Record.php" />
+        <option value="$PROJECT_DIR$/tests/src/Edde/Common/Storage/AbstractStorageTest.php" />
       </list>
     </option>
   </component>
@@ -175,6 +229,7 @@
     <option name="height" value="874" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <OptionsSetting value="false" id="Update" />
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectView">
@@ -189,6 +244,64 @@
               <item name="framework" type="b2602c69:ProjectViewProjectNode" />
               <item name="framework" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
+            <path>
+              <item name="framework" type="b2602c69:ProjectViewProjectNode" />
+              <item name="framework" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="framework" type="b2602c69:ProjectViewProjectNode" />
+              <item name="framework" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Edde" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="framework" type="b2602c69:ProjectViewProjectNode" />
+              <item name="framework" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Edde" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Api" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="framework" type="b2602c69:ProjectViewProjectNode" />
+              <item name="framework" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Edde" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Api" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Entity" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="framework" type="b2602c69:ProjectViewProjectNode" />
+              <item name="framework" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Edde" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Api" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Entity" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Exception" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="framework" type="b2602c69:ProjectViewProjectNode" />
+              <item name="framework" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Edde" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Common" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="framework" type="b2602c69:ProjectViewProjectNode" />
+              <item name="framework" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Edde" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Common" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Entity" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="framework" type="b2602c69:ProjectViewProjectNode" />
+              <item name="framework" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Edde" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Common" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="Storage" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -202,6 +315,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="php.override.implement.member.chooser.php.doc" value="NONE" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RecentsManager">
@@ -232,11 +346,12 @@
     <frame x="0" y="0" width="1920" height="1080" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
-      <window_info anchor="right" id="Database" order="3" />
+      <window_info anchor="right" id="Database" order="3" weight="0.3296875" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32986766" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -247,10 +362,9 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="Messages" order="7" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Messages" order="7" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -296,50 +410,47 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <breakpoints-dialog>
+        <breakpoints-dialog />
+      </breakpoints-dialog>
+      <option name="time" value="89" />
     </breakpoint-manager>
   </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>$query-&gt;getSchema()-&gt;getName()</expression-string>
+        <language-id>PHP</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>$record-&gt;getEntity('f')-&gt;get('name')</expression-string>
+        <language-id>PHP</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>$this-&gt;delimite($selectQuery-&gt;getAlias())</expression-string>
+        <language-id>PHP</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>$selectQuery-&gt;getAlias()</expression-string>
+        <language-id>PHP</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>$selectQuery-&gt;getSchemas()[null]</expression-string>
+        <language-id>PHP</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>$selectQuery-&gt;getSchemas()</expression-string>
+        <language-id>PHP</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tests/src/loader.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/loader.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.docker/php-fpm.conf" />
-    <entry file="file://$PROJECT_DIR$/.docker/xdebug.ini" />
-    <entry file="file://$PROJECT_DIR$/sami.conf.php" />
-    <entry file="file://$PROJECT_DIR$/.docker/api/nginx.conf" />
-    <entry file="file://$PROJECT_DIR$/.docker/dc.production.yml" />
-    <entry file="file://$PROJECT_DIR$/run.sh" />
-    <entry file="file://$PROJECT_DIR$/.docker/api/Dockerfile" />
-    <entry file="file://$PROJECT_DIR$/.docker/test/php-fpm.conf" />
-    <entry file="file://$PROJECT_DIR$/.docker/test/nginx.conf" />
-    <entry file="file://$PROJECT_DIR$/test.sh" />
-    <entry file="file://$PROJECT_DIR$/.gitignore" />
-    <entry file="file://$PROJECT_DIR$/.dockerignore" />
-    <entry file="file://$PROJECT_DIR$/.docker/test/start.sh" />
-    <entry file="file://$PROJECT_DIR$/.docker/test/test.sh" />
-    <entry file="file://$PROJECT_DIR$/.docker/test/Dockerfile" />
-    <entry file="file://$PROJECT_DIR$/phpunit.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="61" lean-forward="true" selection-start-line="15" selection-start-column="61" selection-end-line="15" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md" />
-    <entry file="file://$PROJECT_DIR$/.docker/doc/nginx.conf" />
-    <entry file="file://$PROJECT_DIR$/.docker/api/start.sh" />
-    <entry file="file://$PROJECT_DIR$/doc.sh" />
     <entry file="file://$PROJECT_DIR$/.docker/doc/start.sh" />
     <entry file="file://$PROJECT_DIR$/.docker/test/docker-compose.yml" />
     <entry file="file://$PROJECT_DIR$/doc/app.production.js" />
@@ -374,51 +485,237 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tests/fdgfdggf">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/src/Edde/Common/Storage/MysqlStorageTest.php">
+    <entry file="file://$PROJECT_DIR$/src/Edde/Ext/Driver/Neo4jDriver.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="663">
-          <caret line="45" column="23" lean-forward="true" selection-start-line="45" selection-start-column="23" selection-end-line="45" selection-end-column="23" />
+        <state relative-caret-position="488">
+          <caret line="366" column="44" selection-start-line="366" selection-start-column="44" selection-end-line="366" selection-end-column="44" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/src/Edde/Common/Storage/PostgresStorageTest.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="35" column="27" selection-start-line="35" selection-start-column="27" selection-end-line="35" selection-end-column="27" />
+        <state relative-caret-position="102">
+          <caret line="12" column="50" selection-start-line="12" selection-start-column="50" selection-end-line="12" selection-end-column="50" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tests/src/Edde/Common/Storage/AbstractStorageTest.php">
+    <entry file="file://$PROJECT_DIR$/src/Edde/Api/Storage/IStorage.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="457">
-          <caret line="612" column="35" lean-forward="true" selection-start-line="612" selection-start-column="35" selection-end-line="612" selection-end-column="35" />
+        <state relative-caret-position="219">
+          <caret line="48" column="34" lean-forward="true" selection-start-line="48" selection-start-column="34" selection-end-line="48" selection-end-column="34" />
+          <folding>
+            <element signature="e#63#97#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/src/Edde/Common/Storage/MysqlStorageTest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="12" column="46" lean-forward="true" selection-start-line="12" selection-start-column="46" selection-end-line="12" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Edde/Api/Storage/Exception/UnknownAliasException.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="55" selection-start-line="4" selection-start-column="55" selection-end-line="4" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Edde/Api/Storage/Exception/InvalidSourceException.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Edde/Api/Storage/Exception/StreamException.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Edde/Api/Storage/IStream.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="646">
+          <caret line="38" column="11" lean-forward="true" selection-start-line="38" selection-start-column="11" selection-end-line="38" selection-end-column="11" />
+          <folding>
+            <element signature="e#63#117#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Edde/Api/Entity/Exception/UnknownAliasException.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Edde/Api/Entity/Exception/RecordException.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="54" selection-start-line="4" selection-start-column="54" selection-end-line="4" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Edde/Api/Entity/IEntityManager.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="29" column="34" selection-start-line="29" selection-start-column="34" selection-end-line="29" selection-end-column="34" />
+          <folding>
+            <element signature="e#62#96#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Edde/Common/Entity/EntityManager.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="734">
+          <caret line="54" column="38" selection-start-line="54" selection-start-column="38" selection-end-line="54" selection-end-column="38" />
+          <folding>
+            <element signature="e#65#105#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/src/Edde/Common/Schema/assets.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="51" lean-forward="true" selection-start-line="51" selection-end-line="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Edde/Api/Storage/Query/ISelectQuery.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="12" selection-start-line="12" selection-end-line="12" />
+          <folding>
+            <element signature="e#69#97#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Edde/Api/Entity/IEntity.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="267">
+          <caret line="110" column="24" selection-start-line="110" selection-start-column="24" selection-end-line="110" selection-end-column="24" />
+          <folding>
+            <element signature="e#62#88#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Edde/Api/Entity/ICollection.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="853">
-          <caret line="122" lean-forward="true" selection-start-line="122" selection-end-line="122" />
+        <state relative-caret-position="836">
+          <caret line="162" column="24" selection-start-line="162" selection-start-column="24" selection-end-line="162" selection-end-column="24" />
           <folding>
-            <element signature="e#62#117#0#PHP" expanded="true" />
+            <element signature="e#62#108#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/phpunit/phpunit/src/Framework/Assert.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="364">
+          <caret line="541" selection-start-line="541" selection-end-line="541" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Edde/Common/Container/AutowireTrait.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="424">
+          <caret line="49" selection-start-line="49" selection-end-line="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Edde/Common/Entity/Entity.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="91" selection-start-line="91" selection-end-line="91" />
+          <folding>
+            <element signature="e#65#94#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Edde/Common/Storage/Query/SelectQuery.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="60" selection-start-line="60" selection-end-line="60" />
+          <folding>
+            <element signature="e#72#100#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Edde/Common/Entity/Collection.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="717">
-          <caret line="123" lean-forward="true" selection-start-line="123" selection-end-line="123" />
+        <state relative-caret-position="447">
+          <caret line="153" selection-start-line="153" selection-end-line="153" />
+          <folding>
+            <element signature="e#65#105#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Edde/Ext/Driver/Neo4jDriver.php">
+    <entry file="file://$PROJECT_DIR$/src/Edde/Common/Storage/Stream.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="488">
-          <caret line="366" column="44" selection-start-line="366" selection-start-column="44" selection-end-line="366" selection-end-column="44" />
+        <state relative-caret-position="384">
+          <caret line="50" selection-start-line="50" selection-end-line="50" />
+          <folding>
+            <element signature="e#66#120#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Edde/Common/Storage/Storage.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="243">
+          <caret line="69" selection-start-line="69" selection-end-line="69" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Edde/Ext/Driver/AbstractDatabaseDriver.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="158" selection-start-line="158" selection-end-line="158" />
+          <folding>
+            <element signature="e#62#108#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Edde/Common/Driver/AbstractDriver.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="34" selection-start-line="34" selection-end-line="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Edde/Api/Entity/IRecord.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" column="24" selection-start-line="19" selection-start-column="24" selection-end-line="19" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Edde/Common/Entity/Record.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="26" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
+          <folding>
+            <element signature="e#65#111#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/phpunit/phpunit/src/Framework/TestCase.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="471">
+          <caret line="1082" column="25" lean-forward="true" selection-start-line="1082" selection-start-column="25" selection-end-line="1082" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/src/Edde/Common/Storage/AbstractStorageTest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="506">
+          <caret line="698" column="9" selection-start-line="698" selection-start-column="9" selection-end-line="698" selection-end-column="9" />
         </state>
       </provider>
     </entry>

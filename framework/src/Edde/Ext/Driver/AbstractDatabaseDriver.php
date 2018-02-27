@@ -19,6 +19,8 @@
 	use Edde\Common\Driver\AbstractDriver;
 	use Edde\Common\Storage\Query\NativeQuery;
 	use PDO;
+	use PDOException;
+	use function implode;
 
 	abstract class AbstractDatabaseDriver extends AbstractDriver {
 		/**
@@ -48,7 +50,8 @@
 				$statement->setFetchMode(PDO::FETCH_ASSOC);
 				$statement->execute($params);
 				return $statement;
-			} catch (\PDOException $exception) {
+			} catch (PDOException $exception) {
+				/** @noinspection PhpUnhandledExceptionInspection */
 				throw $this->exception($exception);
 			}
 		}
@@ -121,33 +124,47 @@
 		 * @throws \Throwable
 		 */
 		protected function executeSelectQuery(ISelectQuery $selectQuery) {
-			$return = $this->delimite($selectQuery->getReturn());
 			$alias = $this->delimite($selectQuery->getAlias());
+			$current = $selectQuery->getAlias();
 			$params = [];
 			$schema = $selectQuery->getSchema();
-			$current = $selectQuery->getAlias();
-			$sql = '';
+			$linkSql = '';
 			foreach ($selectQuery->getJoins() as $name => $join) {
 				if ($join->isLink()) {
 					$link = $schema->getLink($join->getSchema());
-					$sql .= ' INNER JOIN ' . $this->delimite($link->getTo()->getRealName()) . ' ' . $relation = $this->delimite($name);
+					$linkSql .= ' INNER JOIN ' . $this->delimite($link->getTo()->getRealName()) . ' ' . $relation = $this->delimite($name);
 					$from = ($this->delimite($current) . '.' . $this->delimite($link->getFrom()->getPropertyName()));
-					$sql .= ' ON ' . $relation . '.' . $this->delimite($link->getTo()->getPropertyName()) . ' = ' . $from;
+					$linkSql .= ' ON ' . $relation . '.' . $this->delimite($link->getTo()->getPropertyName()) . ' = ' . $from;
 					$schema = $link->getTo()->getSchema();
-					$return = $this->delimite($current = $name);
+					$current = $name;
 					continue;
 				}
 				$relation = $schema->getRelation($join->getSchema());
-				$sql .= ' INNER JOIN ' . $this->delimite($relation->getSchema()->getRealName()) . ' ' . ($join = $this->delimite($current . '\\r'));
+				$linkSql .= ' INNER JOIN ' . $this->delimite($relation->getSchema()->getRealName()) . ' ' . ($join = $this->delimite($current . '\\r'));
 				$from = ($this->delimite($current) . '.' . $this->delimite($relation->getFrom()->getFrom()->getPropertyName()));
-				$sql .= ' ON ' . $join . '.' . $this->delimite($relation->getFrom()->getTo()->getPropertyName()) . ' = ' . $from;
-				$sql .= ' INNER JOIN ' . $this->delimite($relation->getTo()->getTo()->getRealName()) . ' ' . $this->delimite($name);
+				$linkSql .= ' ON ' . $join . '.' . $this->delimite($relation->getFrom()->getTo()->getPropertyName()) . ' = ' . $from;
+				$linkSql .= ' INNER JOIN ' . $this->delimite($relation->getTo()->getTo()->getRealName()) . ' ' . $this->delimite($name);
 				$to = $this->delimite($name) . '.' . $this->delimite($relation->getTo()->getTo()->getPropertyName());
-				$sql .= ' ON ' . $join . '.' . $this->delimite($relation->getTo()->getFrom()->getPropertyName()) . ' = ' . $to;
+				$linkSql .= ' ON ' . $join . '.' . $this->delimite($relation->getTo()->getFrom()->getPropertyName()) . ' = ' . $to;
 				$schema = $relation->getTo()->getTo()->getSchema();
-				$return = $this->delimite($current = $name);
+				$current = $name;
 			}
-			$sql = 'SELECT ' . ($selectQuery->isCount() ? 'COUNT(' . $return . '.' . $this->delimite($schema->getPrimary()->getName()) . ') AS count' : ($return . '.*')) . ' FROM ' . $this->delimite($selectQuery->getSchema()->getRealName()) . ' ' . $alias . $sql;
+			$sql = 'SELECT ';
+			$columns = [];
+			foreach ($selectQuery->getSchemas() as $name => $sourceSchema) {
+				if (empty($name)) {
+					continue;
+				}
+				foreach ($sourceSchema->getProperties() as $property) {
+					$columns[] = $this->delimite($name) . '.' . $this->delimite($property->getName()) . ' AS ' . $this->delimite($name . '.' . $property->getName());
+				}
+			}
+			$sql .= implode(', ', $columns);
+			if ($selectQuery->isCount()) {
+				$sql = 'SELECT COUNT(' . $selectQuery->getCount() . '.' . $this->delimite($schema->getPrimary()->getName()) . ') AS ' . $this->delimite($selectQuery->getCount() . '.count');
+			}
+			$sql .= ' FROM ' . $this->delimite($selectQuery->getSchema()->getRealName()) . ' ' . $alias;
+			$sql .= $linkSql;
 			if ($selectQuery->hasWhere()) {
 				$sql .= ' WHERE' . ($query = $this->fragmentWhereGroup($selectQuery->getWhere()))->getQuery();
 				$params = $query->getParams();
@@ -363,6 +380,7 @@
 				$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$this->pdo->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
 				$this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+				$this->pdo->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_EMPTY_STRING);
 				$this->pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
 				$this->pdo->setAttribute(PDO::ATTR_TIMEOUT, 120);
 			} finally {

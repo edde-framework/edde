@@ -43,6 +43,7 @@
 		 * @param IQuery $query
 		 *
 		 * @return IStream
+		 *
 		 * @throws StorageException
 		 * @throws DuplicateTableException
 		 * @throws DriverException

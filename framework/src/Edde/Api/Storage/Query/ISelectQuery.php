@@ -3,38 +3,28 @@
 	namespace Edde\Api\Storage\Query;
 
 	use Edde\Api\Schema\ISchema;
-	use Edde\Api\Storage\Exception\QueryException;
+	use Edde\Api\Storage\Exception\UnknownAliasException;
 	use Edde\Api\Storage\Query\Fragment\IJoin;
 	use Edde\Api\Storage\Query\Fragment\IWhereGroup;
 
 	interface ISelectQuery extends IQuery {
 		/**
-		 * @return ISchema
-		 */
-		public function getSchema(): ISchema;
-
-		/**
-		 * @return string
-		 */
-		public function getAlias(): string;
-
-		/**
-		 * @param string $schema
 		 * @param string $alias
+		 * @param string $schema
 		 *
 		 * @return ISelectQuery
 		 */
-		public function link(string $schema, string $alias): ISelectQuery;
+		public function link(string $alias, string $schema): ISelectQuery;
 
 		/**
 		 * join the given schema the previously joined schema
 		 *
-		 * @param string $schema
 		 * @param string $alias
+		 * @param string $schema
 		 *
 		 * @return ISelectQuery
 		 */
-		public function join(string $schema, string $alias): ISelectQuery;
+		public function join(string $alias, string $schema): ISelectQuery;
 
 		/**
 		 * @return IJoin[]
@@ -42,9 +32,9 @@
 		public function getJoins(): array;
 
 		/**
-		 * @return string
+		 * @return ISchema[]
 		 */
-		public function getReturn(): string;
+		public function getSchemas(): array;
 
 		/**
 		 * shorthand for where and ($name $relation $value); by default it takes last
@@ -112,13 +102,13 @@
 		public function getLimit(): array;
 
 		/**
-		 * setup query to get item count
+		 * which alias should be counted
 		 *
-		 * @param bool $count
+		 * @param string $alias
 		 *
 		 * @return ISelectQuery
 		 */
-		public function count(bool $count = true): ISelectQuery;
+		public function count(string $alias = null): ISelectQuery;
 
 		/**
 		 * @return bool
@@ -126,11 +116,34 @@
 		public function isCount(): bool;
 
 		/**
-		 * which source should be returned (selected) for the output (alias must exists)
+		 * @return string
+		 */
+		public function getCount(): string;
+
+		/**
+		 * this method could be called many times; it marks data which should be returned in Collection's Record
 		 *
-		 * @param string $alias
+		 * @param string  $alias
+		 * @param ISchema $schema
 		 *
 		 * @return ISelectQuery
 		 */
-		public function return(string $alias = null): ISelectQuery;
+		public function alias(string $alias, ISchema $schema): ISelectQuery;
+
+		/**
+		 * return source alias
+		 *
+		 * @return string
+		 */
+		public function getAlias(): string;
+
+		/**
+		 * get schema for the given alias
+		 *
+		 * @param string $alias
+		 *
+		 * @return ISchema
+		 * @throws UnknownAliasException
+		 */
+		public function getSchema(string $alias = null): ISchema;
 	}

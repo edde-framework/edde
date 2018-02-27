@@ -349,9 +349,9 @@
 		protected function executeSelectQuery(ISelectQuery $selectQuery) {
 			$cypher = 'MATCH ';
 			$params = [];
-			$return = $this->delimite($selectQuery->getReturn());
+			$return = $this->delimite($selectQuery->getSchemas());
 			$schema = $selectQuery->getSchema();
-			$current = $selectQuery->getAlias();
+			$current = $selectQuery->getSchema();
 			$cypher .= '(' . ($alias = $this->delimite($current)) . ':' . $this->delimite($schema->getRealName()) . ')';
 			foreach ($selectQuery->getJoins() as $name => $join) {
 				if ($join->isLink()) {

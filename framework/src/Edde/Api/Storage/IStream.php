@@ -2,6 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Storage;
 
+	use Edde\Api\Storage\Exception\InvalidSourceException;
+	use Edde\Api\Storage\Exception\StreamException;
 	use Edde\Api\Storage\Query\ISelectQuery;
 	use IteratorAggregate;
 
@@ -28,7 +30,19 @@
 		public function getQuery(): ISelectQuery;
 
 		/**
+		 * translate raw input from a storage to expected output format
+		 *
+		 * @param array $source
+		 *
+		 * @return array
+		 * @throws InvalidSourceException
+		 */
+		public function emit(array $source): array;
+
+		/**
 		 * @return \Traversable|array
+		 * @throws InvalidSourceException
+		 * @throws StreamException
 		 */
 		public function getIterator();
 	}

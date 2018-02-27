@@ -20,8 +20,6 @@
 		use Storage;
 		/** @var IEntity[] */
 		protected $entities = [];
-		/** @var ICollection[] */
-		protected $collections = [];
 
 		/**
 		 * @inheritdoc
@@ -52,11 +50,10 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function collection(string $schema): ICollection {
-			if (isset($this->collections[$name = $schema]) === false) {
-				$this->collections[$name] = $this->container->inject(new Collection($this->storage->stream(new SelectQuery($schema = $this->schemaManager->load($schema), 'c')), $schema));
-			}
-			return clone $this->collections[$name];
+		public function collection(string $alias, string $schema): ICollection {
+			$this->container->inject($collection = new Collection($this->storage->stream(new SelectQuery($schema = $this->schemaManager->load($schema), $alias))));
+			$collection->schema($alias, $schema);
+			return $collection;
 		}
 
 		/**
