@@ -12,4 +12,4 @@ docker-compose -f test/.docker/dc.test.yml up -d
 echo "Executing tests"
 docker exec $PROJECT-$CI_COMMIT_REF_NAME /opt/app/test.sh
 echo "Yaay!"
-docker-compose -f test/.docker/docker-compose.yml down --volume
+docker-compose -f test/.docker/dc.test.yml down --volume

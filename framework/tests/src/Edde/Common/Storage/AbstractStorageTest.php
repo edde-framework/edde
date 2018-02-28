@@ -741,50 +741,50 @@
 		 * @throws UnknownSchemaException
 		 * @throws ValidationException
 		 */
-//		public function testBenchmark() {
-//			$schemas = [
-//				PooSchema::class,
-//				FooSchema::class,
-//				BarSchema::class,
-//				FooBarSchema::class,
-//				BarPooSchema::class,
-//			];
-//			foreach ($schemas as $name) {
-//				try {
-//					$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load($name)));
-//				} catch (DuplicateTableException $exception) {
-//				}
-//			}
-//			$this->schemaManager->load(FooBarSchema::class);
-//			$this->schemaManager->load(BarPooSchema::class);
-//			$this->storage->start();
-//			$start = microtime(true);
-//			for ($i = 0; $i < $this->getBenchmarkLimit(); $i++) {
-//				$foo = $this->entityManager->create(FooSchema::class, [
-//					'name' => 'foo #' . $i,
-//				]);
-//				$poo = $this->entityManager->create(PooSchema::class, [
-//					'name'  => 'poo of foo $' . $i,
-//					'label' => "and it's labeled #$i",
-//				]);
-//				$bar = $this->entityManager->create(BarSchema::class, [
-//					'name' => 'bar #' . $i,
-//				]);
-//				$bar2 = $this->entityManager->create(BarSchema::class, [
-//					'name' => 'bar 2 #' . $i,
-//				]);
-//				$foo->linkTo($poo);
-//				$foo->attach($bar);
-//				$foo->attach($bar2);
-//				$bar->linkTo($poo);
-//				$foo->save();
-//			}
-//			$this->storage->commit();
-//			$sum = (microtime(true) - $start);
-//			$item = ($sum / $i) * 1000;
-//			$limit = $this->getEntityTimeLimit();
-//			self::assertLessThanOrEqual($limit, $item, sprintf("[%s] %.2fs, %.2f ms/operation (%.2f%% of %dms limit)", static::class, $sum, $item, (100 * $item) / $limit, $limit));
-//		}
+		public function testBenchmark() {
+			$schemas = [
+				PooSchema::class,
+				FooSchema::class,
+				BarSchema::class,
+				FooBarSchema::class,
+				BarPooSchema::class,
+			];
+			foreach ($schemas as $name) {
+				try {
+					$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load($name)));
+				} catch (DuplicateTableException $exception) {
+				}
+			}
+			$this->schemaManager->load(FooBarSchema::class);
+			$this->schemaManager->load(BarPooSchema::class);
+			$this->storage->start();
+			$start = microtime(true);
+			for ($i = 0; $i < $this->getBenchmarkLimit(); $i++) {
+				$foo = $this->entityManager->create(FooSchema::class, [
+					'name' => 'foo #' . $i,
+				]);
+				$poo = $this->entityManager->create(PooSchema::class, [
+					'name'  => 'poo of foo $' . $i,
+					'label' => "and it's labeled #$i",
+				]);
+				$bar = $this->entityManager->create(BarSchema::class, [
+					'name' => 'bar #' . $i,
+				]);
+				$bar2 = $this->entityManager->create(BarSchema::class, [
+					'name' => 'bar 2 #' . $i,
+				]);
+				$foo->linkTo($poo);
+				$foo->attach($bar);
+				$foo->attach($bar2);
+				$bar->linkTo($poo);
+				$foo->save();
+			}
+			$this->storage->commit();
+			$sum = (microtime(true) - $start);
+			$item = ($sum / $i) * 1000;
+			$limit = $this->getEntityTimeLimit();
+			self::assertLessThanOrEqual($limit, $item, sprintf("[%s] %.2fs, %.2f ms/operation (%.2f%% of %dms limit)", static::class, $sum, $item, (100 * $item) / $limit, $limit));
+		}
 
 		protected function beforeBenchmark() {
 		}

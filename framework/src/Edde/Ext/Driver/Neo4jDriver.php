@@ -374,13 +374,13 @@
 					$link = $schema->getLink($join->getSchema());
 					$cypher .= '-[' . $this->delimite($current . '\r') . ':' . $this->delimite($link->getName()) . ']';
 					$schema = $link->getTo()->getSchema();
-					$cypher .= '->(' . ($return = $this->delimite($current = $name)) . ':' . $this->delimite($schema->getRealName()) . ')';
+					$cypher .= '->(' . $this->delimite($current = $name) . ':' . $this->delimite($schema->getRealName()) . ')';
 					continue;
 				}
 				$relation = $schema->getRelation($join->getSchema());
 				$cypher .= '-[' . $this->delimite($current . '\r') . ':' . $this->delimite($relation->getSchema()->getRealName()) . ']';
 				$schema = $relation->getTo()->getTo()->getSchema();
-				$cypher .= '-(' . ($return = $this->delimite($current = $name)) . ':' . $this->delimite($schema->getRealName()) . ')';
+				$cypher .= '-(' . $this->delimite($current = $name) . ':' . $this->delimite($schema->getRealName()) . ')';
 			}
 			if ($selectQuery->hasWhere()) {
 				$cypher .= ' WHERE' . ($query = $this->fragmentWhereGroup($selectQuery->getWhere()))->getQuery();
