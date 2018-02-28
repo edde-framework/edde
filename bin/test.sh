@@ -6,10 +6,10 @@ export PROJECT=edde
 export CI_COMMIT_REF_NAME=test
 
 echo "Building"
-docker build -f .docker/test/Dockerfile -t $IMAGE_TEST .
+docker build -f test/.docker/Dockerfile -t $IMAGE_TEST .
 echo "Starting"
-docker-compose -f .docker/test/docker-compose.yml up -d
+docker-compose -f test/.docker/dc.test.yml up -d
 echo "Executing tests"
 docker exec $PROJECT-$CI_COMMIT_REF_NAME /opt/app/test.sh
 echo "Yaay!"
-docker-compose -f .docker/test/docker-compose.yml down --volume
+docker-compose -f test/.docker/docker-compose.yml down --volume

@@ -152,7 +152,8 @@
 
 		/** @inheritdoc */
 		public function relation(IRelation $relation): ISchema {
-			$this->relations[null][] = $this->relations[$relation->getTo()->getTo()->getName()][] = $relation;
+			$schema = $relation->getSchema()->getName();
+			$this->relations[null][$schema] = $this->relations[$relation->getTo()->getTo()->getName()][$schema] = $relation;
 			return $this;
 		}
 
@@ -173,6 +174,6 @@
 			} else if ($count !== 1) {
 				throw new LinkException(sprintf('There are more relations from [%s] to schema [%s]. You have to specify a relation.', $this->getName(), $schema));
 			}
-			return $relations[0];
+			return reset($relations);
 		}
 	}

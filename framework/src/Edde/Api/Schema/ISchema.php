@@ -3,8 +3,8 @@
 	namespace Edde\Api\Schema;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Schema\Exception\InvalidRelationException;
 	use Edde\Api\Schema\Exception\LinkException;
+	use Edde\Api\Schema\Exception\NoPrimaryPropertyException;
 	use Edde\Api\Schema\Exception\UnknownPropertyException;
 
 	interface ISchema extends IConfigurable {
@@ -71,6 +71,7 @@
 		 * when there are more primary properties)
 		 *
 		 * @return IProperty
+		 * @throws NoPrimaryPropertyException
 		 */
 		public function getPrimary(): IProperty;
 
@@ -170,7 +171,7 @@
 		 * @param string $schema
 		 *
 		 * @return IRelation
-		 * @throws InvalidRelationException
+		 * @throws LinkException
 		 */
 		public function getRelation(string $schema): IRelation;
 	}

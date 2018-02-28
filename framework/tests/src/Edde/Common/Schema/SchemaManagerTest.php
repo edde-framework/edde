@@ -4,6 +4,7 @@
 	use Edde\Api\Schema\Exception\UnknownSchemaException;
 	use Edde\Api\Schema\Inject\SchemaManager;
 	use Edde\Ext\Test\TestCase;
+	use function array_values;
 
 	class SchemaManagerTest extends TestCase {
 		use SchemaManager;
@@ -21,13 +22,13 @@
 			 * links test
 			 */
 			self::assertCount(1, $links = $fooBarSchema->getLinks(FooSchema::class));
-			list($link) = $links;
+			[$link] = $links;
 			self::assertSame(FooBarSchema::class, ($from = $link->getFrom())->getName());
 			self::assertSame(FooSchema::class, ($to = $link->getTo())->getName());
 			self::assertSame('foo', $from->getPropertyName());
 			self::assertSame('uuid', $to->getPropertyName());
 			self::assertCount(1, $links = $fooBarSchema->getLinks(BarSchema::class));
-			list($link) = $links;
+			[$link] = $links;
 			self::assertSame(FooBarSchema::class, ($from = $link->getFrom())->getName());
 			self::assertSame(BarSchema::class, ($to = $link->getTo())->getName());
 			self::assertSame('bar', $from->getPropertyName());
@@ -36,7 +37,7 @@
 			 * one way relation test
 			 */
 			self::assertCount(1, $relations = $fooSchema->getRelations(BarSchema::class));
-			list($relation) = $relations;
+			[$relation] = array_values($relations);
 			self::assertSame(FooSchema::class, ($fromLink = $relation->getFrom())->getFrom()->getName());
 			self::assertSame('uuid', $fromLink->getFrom()->getPropertyName());
 			self::assertSame(FooBarSchema::class, $fromLink->getTo()->getName());
@@ -49,7 +50,7 @@
 			 * reverse way relation test
 			 */
 			self::assertCount(1, $relations = $barSchema->getRelations(FooSchema::class));
-			list($relation) = $relations;
+			[$relation] = array_values($relations);
 			self::assertSame(BarSchema::class, ($fromLink = $relation->getFrom())->getFrom()->getName());
 			self::assertSame('uuid', $fromLink->getFrom()->getPropertyName());
 			self::assertSame(FooBarSchema::class, $fromLink->getTo()->getName());
