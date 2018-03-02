@@ -136,7 +136,7 @@
 		}
 
 		/** @inheritdoc */
-		public function count(string $alias = null): int {
+		public function count(string $alias): int {
 			$query = $this->stream->getQuery();
 			$query->count($alias ?: $query->getAlias());
 			$count = 0;

@@ -160,7 +160,7 @@
 		 *
 		 * @return int
 		 */
-		public function count(string $alias = null): int;
+		public function count(string $alias): int;
 
 		/**
 		 * @return Traversable|IRecord[]
