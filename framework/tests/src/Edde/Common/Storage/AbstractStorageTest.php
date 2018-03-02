@@ -9,6 +9,8 @@
 	use Edde\Api\Entity\IEntity;
 	use Edde\Api\Entity\Inject\EntityManager;
 	use Edde\Api\Schema\Exception\InvalidRelationException;
+	use Edde\Api\Schema\Exception\NoPrimaryPropertyException;
+	use Edde\Api\Schema\Exception\RelationException;
 	use Edde\Api\Schema\Exception\SchemaException;
 	use Edde\Api\Schema\Exception\UnknownPropertyException;
 	use Edde\Api\Schema\Exception\UnknownSchemaException;
@@ -565,27 +567,66 @@
 		}
 
 		/**
+		 * @throws BatchValidationException
+		 * @throws DuplicateEntryException
 		 * @throws InvalidRelationException
+		 * @throws RecordException
 		 * @throws SchemaException
 		 * @throws UnknownAliasException
 		 * @throws UnknownPropertyException
 		 * @throws UnknownSchemaException
+		 * @throws ValidationException
+		 * @throws RelationException
 		 */
 		public function testMoreRelations() {
 			$this->schemaManager->load(SourceOneTargetSchema::class);
 			$this->schemaManager->load(SourceTwoTargetSchema::class);
 			$source = $this->entityManager->create(SourceSchema::class);
 			$target = $this->entityManager->create(TargetSchema::class);
-			$source->set('name', 'source-uapee');
+			$source->set('name', 'source-yapee');
 			$target->set('name', 'yapee');
 			$source->attach($target, SourceTwoTargetSchema::class);
 			$source->save();
-			$expected = [];
+			$current = [];
 			foreach ($source->join('t', TargetSchema::class, SourceTwoTargetSchema::class) as $record) {
-				$expected[] = $record->getEntity('t')->get('name');
+				$current[] = $record->getEntity('t')->get('name');
 			}
-			self::assertEquals(['yapee'], $expected);
+			self::assertEquals(['yapee'], $current);
 			self::assertSame(0, $source->join('t', TargetSchema::class, SourceOneTargetSchema::class)->count('t'));
+		}
+
+		/**
+		 * @throws BatchValidationException
+		 * @throws DuplicateEntryException
+		 * @throws EntityNotFoundException
+		 * @throws InvalidRelationException
+		 * @throws RecordException
+		 * @throws SchemaException
+		 * @throws UnknownAliasException
+		 * @throws UnknownPropertyException
+		 * @throws UnknownSchemaException
+		 * @throws UnknownTableException
+		 * @throws ValidationException
+		 * @throws NoPrimaryPropertyException
+		 */
+		public function testReverseRelation() {
+			$this->schemaManager->load(SourceOneTargetSchema::class);
+			$this->schemaManager->load(SourceTwoTargetSchema::class);
+			$target = $this->entityManager->create(TargetSchema::class, ['name' => 'boo'])->save();
+			$source = $this->entityManager->collection('s', SourceSchema::class)->entity('s', 'source-yapee');
+			$source->attach($target, SourceTwoTargetSchema::class);
+			$source->save();
+			$current = [];
+			foreach ($source->join('t', TargetSchema::class, SourceTwoTargetSchema::class) as $record) {
+				$current[] = $record->getEntity('t')->get('name');
+			}
+			sort($current);
+			self::assertEquals(['boo', 'yapee'], $current);
+			$current = [];
+			foreach ($target->reverseJoin('s', SourceSchema::class, SourceTwoTargetSchema::class) as $record) {
+				$current[] = $record->getEntity('s')->get('name');
+			}
+			self::assertEquals(['source-yapee'], $current);
 		}
 
 		/**

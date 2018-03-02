@@ -132,11 +132,11 @@
 	}
 
 	interface SourceSchema extends UuidSchema {
-		public function name(): string;
+		public function name($unique): string;
 	}
 
 	interface TargetSchema extends UuidSchema {
-		public function name(): string;
+		public function name($unique): string;
 	}
 
 	interface SourceOneTargetSchema extends RelationSchema {

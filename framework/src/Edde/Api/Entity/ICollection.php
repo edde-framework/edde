@@ -111,6 +111,17 @@
 		public function join(string $source, string $target, string $alias, array $on = null, string $relation = null): ICollection;
 
 		/**
+		 * @param string      $source
+		 * @param string      $target
+		 * @param string      $alias
+		 * @param array|null  $on
+		 * @param string|null $relation
+		 *
+		 * @return ICollection
+		 */
+		public function reverseJoin(string $source, string $target, string $alias, array $on = null, string $relation = null): ICollection;
+
+		/**
 		 * simple and where
 		 *
 		 * @param string $name

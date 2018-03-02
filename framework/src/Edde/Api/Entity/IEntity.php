@@ -115,6 +115,15 @@
 		public function join(string $alias, string $schema, string $relation = null): ICollection;
 
 		/**
+		 * @param string      $alias
+		 * @param string      $schema
+		 * @param string|null $relation
+		 *
+		 * @return ICollection
+		 */
+		public function reverseJoin(string $alias, string $schema, string $relation = null): ICollection;
+
+		/**
 		 * mark this entity for delete (it's not deleted until save)
 		 *
 		 * @return IEntity
