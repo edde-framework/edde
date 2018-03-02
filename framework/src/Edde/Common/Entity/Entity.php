@@ -75,8 +75,8 @@
 		}
 
 		/** @inheritdoc */
-		public function detach(IEntity $entity): IDetachQuery {
-			return $this->entityQueue->detach($this, $entity, $this->schema->getRelation($entity->getSchema()->getName()));
+		public function detach(IEntity $entity, string $relation = null): IDetachQuery {
+			return $this->entityQueue->detach($this, $entity, $this->schema->getRelation($entity->getSchema()->getName(), $relation));
 		}
 
 		/** @inheritdoc */

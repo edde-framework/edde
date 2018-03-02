@@ -84,11 +84,12 @@
 		/**
 		 * detach all relations to the given entity (entity will be detached on save)
 		 *
-		 * @param IEntity $entity
+		 * @param IEntity     $entity
+		 * @param string|null $relation
 		 *
 		 * @return IDetachQuery
 		 */
-		public function detach(IEntity $entity): IDetachQuery;
+		public function detach(IEntity $entity, string $relation = null): IDetachQuery;
 
 		/**
 		 * detach all relations to the given schema
