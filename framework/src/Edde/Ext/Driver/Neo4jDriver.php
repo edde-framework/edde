@@ -377,7 +377,7 @@
 					$cypher .= '->(' . $this->delimite($current = $name) . ':' . $this->delimite($schema->getRealName()) . ')';
 					continue;
 				}
-				$relation = $schema->getRelation($join->getSchema());
+				$relation = $schema->getRelation($join->getSchema(), $join->getRelation());
 				$cypher .= '-[' . $this->delimite($current . '\r') . ':' . $this->delimite($relation->getSchema()->getRealName()) . ']';
 				$schema = $relation->getTo()->getTo()->getSchema();
 				$cypher .= '->(' . $this->delimite($current = $name) . ':' . $this->delimite($schema->getRealName()) . ')';

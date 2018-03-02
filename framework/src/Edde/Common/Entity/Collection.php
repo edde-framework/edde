@@ -90,7 +90,7 @@
 			$schema = $this->getSchema($source);
 			$relation = $schema->getRelation($target, $relation);
 			$query = $this->stream->getQuery();
-			$query->join($alias, $target);
+			$query->join($alias, $target, $relation->getSchema()->getName());
 			if ($on) {
 				$propertyName = $relation->getTo()->getTo()->getPropertyName();
 				$query->where($source . '.' . $propertyName, '=', $on[$propertyName]);

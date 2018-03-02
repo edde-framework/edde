@@ -30,6 +30,10 @@
 	use Edde\Common\Schema\PooSchema;
 	use Edde\Common\Schema\RoleSchema;
 	use Edde\Common\Schema\SimpleSchema;
+	use Edde\Common\Schema\SourceOneTargetSchema;
+	use Edde\Common\Schema\SourceSchema;
+	use Edde\Common\Schema\SourceTwoTargetSchema;
+	use Edde\Common\Schema\TargetSchema;
 	use Edde\Common\Schema\UserRoleSchema;
 	use Edde\Common\Schema\UserSchema;
 	use Edde\Common\Storage\Query\CreateSchemaQuery;
@@ -62,6 +66,10 @@
 				UserSchema::class,
 				RoleSchema::class,
 				UserRoleSchema::class,
+				SourceSchema::class,
+				TargetSchema::class,
+				SourceOneTargetSchema::class,
+				SourceTwoTargetSchema::class,
 			];
 			foreach ($schemas as $name) {
 				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load($name)));
@@ -557,6 +565,30 @@
 		}
 
 		/**
+		 * @throws InvalidRelationException
+		 * @throws SchemaException
+		 * @throws UnknownAliasException
+		 * @throws UnknownPropertyException
+		 * @throws UnknownSchemaException
+		 */
+		public function testMoreRelations() {
+			$this->schemaManager->load(SourceOneTargetSchema::class);
+			$this->schemaManager->load(SourceTwoTargetSchema::class);
+			$source = $this->entityManager->create(SourceSchema::class);
+			$target = $this->entityManager->create(TargetSchema::class);
+			$source->set('name', 'source-uapee');
+			$target->set('name', 'yapee');
+			$source->attach($target, SourceTwoTargetSchema::class);
+			$source->save();
+			$expected = [];
+			foreach ($source->join('t', TargetSchema::class, SourceTwoTargetSchema::class) as $record) {
+				$expected[] = $record->getEntity('t')->get('name');
+			}
+			self::assertEquals(['yapee'], $expected);
+			self::assertSame(0, $source->join('t', TargetSchema::class, SourceOneTargetSchema::class)->count('t'));
+		}
+
+		/**
 		 * @throws BatchValidationException
 		 * @throws DuplicateEntryException
 		 * @throws EntityNotFoundException
@@ -741,51 +773,50 @@
 		 * @throws UnknownSchemaException
 		 * @throws ValidationException
 		 */
-		public function testBenchmark() {
-			$schemas = [
-				PooSchema::class,
-				FooSchema::class,
-				BarSchema::class,
-				FooBarSchema::class,
-				BarPooSchema::class,
-			];
-			foreach ($schemas as $name) {
-				try {
-					$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load($name)));
-				} catch (DuplicateTableException $exception) {
-				}
-			}
-			$this->schemaManager->load(FooBarSchema::class);
-			$this->schemaManager->load(BarPooSchema::class);
-			$this->storage->start();
-			$start = microtime(true);
-			for ($i = 0; $i < $this->getBenchmarkLimit(); $i++) {
-				$foo = $this->entityManager->create(FooSchema::class, [
-					'name' => 'foo #' . $i,
-				]);
-				$poo = $this->entityManager->create(PooSchema::class, [
-					'name'  => 'poo of foo $' . $i,
-					'label' => "and it's labeled #$i",
-				]);
-				$bar = $this->entityManager->create(BarSchema::class, [
-					'name' => 'bar #' . $i,
-				]);
-				$bar2 = $this->entityManager->create(BarSchema::class, [
-					'name' => 'bar 2 #' . $i,
-				]);
-				$foo->linkTo($poo);
-				$foo->attach($bar);
-				$foo->attach($bar2);
-				$bar->linkTo($poo);
-				$foo->save();
-			}
-			$this->storage->commit();
-			$sum = (microtime(true) - $start);
-			$item = ($sum / $i) * 1000;
-			$limit = $this->getEntityTimeLimit();
-			self::assertLessThanOrEqual($limit, $item, sprintf("[%s] %.2fs, %.2f ms/operation (%.2f%% of %dms limit)", static::class, $sum, $item, (100 * $item) / $limit, $limit));
-		}
-
+//		public function testBenchmark() {
+//			$schemas = [
+//				PooSchema::class,
+//				FooSchema::class,
+//				BarSchema::class,
+//				FooBarSchema::class,
+//				BarPooSchema::class,
+//			];
+//			foreach ($schemas as $name) {
+//				try {
+//					$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load($name)));
+//				} catch (DuplicateTableException $exception) {
+//				}
+//			}
+//			$this->schemaManager->load(FooBarSchema::class);
+//			$this->schemaManager->load(BarPooSchema::class);
+//			$this->storage->start();
+//			$start = microtime(true);
+//			for ($i = 0; $i < $this->getBenchmarkLimit(); $i++) {
+//				$foo = $this->entityManager->create(FooSchema::class, [
+//					'name' => 'foo #' . $i,
+//				]);
+//				$poo = $this->entityManager->create(PooSchema::class, [
+//					'name'  => 'poo of foo $' . $i,
+//					'label' => "and it's labeled #$i",
+//				]);
+//				$bar = $this->entityManager->create(BarSchema::class, [
+//					'name' => 'bar #' . $i,
+//				]);
+//				$bar2 = $this->entityManager->create(BarSchema::class, [
+//					'name' => 'bar 2 #' . $i,
+//				]);
+//				$foo->linkTo($poo);
+//				$foo->attach($bar);
+//				$foo->attach($bar2);
+//				$bar->linkTo($poo);
+//				$foo->save();
+//			}
+//			$this->storage->commit();
+//			$sum = (microtime(true) - $start);
+//			$item = ($sum / $i) * 1000;
+//			$limit = $this->getEntityTimeLimit();
+//			self::assertLessThanOrEqual($limit, $item, sprintf("[%s] %.2fs, %.2f ms/operation (%.2f%% of %dms limit)", static::class, $sum, $item, (100 * $item) / $limit, $limit));
+//		}
 		protected function beforeBenchmark() {
 		}
 

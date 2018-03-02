@@ -19,12 +19,13 @@
 		/**
 		 * join the given schema the previously joined schema
 		 *
-		 * @param string $alias
-		 * @param string $schema
+		 * @param string      $alias
+		 * @param string      $schema
+		 * @param string|null $relation
 		 *
 		 * @return ISelectQuery
 		 */
-		public function join(string $alias, string $schema): ISelectQuery;
+		public function join(string $alias, string $schema, string $relation = null): ISelectQuery;
 
 		/**
 		 * @return IJoin[]

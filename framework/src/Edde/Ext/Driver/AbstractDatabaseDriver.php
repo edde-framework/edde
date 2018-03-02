@@ -140,7 +140,7 @@
 					$current = $name;
 					continue;
 				}
-				$relation = $schema->getRelation($join->getSchema());
+				$relation = $schema->getRelation($join->getSchema(), $join->getRelation());
 				$linkSql .= ' INNER JOIN ' . $this->delimite($relation->getSchema()->getRealName()) . ' ' . ($join = $this->delimite($current . '\\r'));
 				$from = ($this->delimite($current) . '.' . $this->delimite($relation->getFrom()->getFrom()->getPropertyName()));
 				$linkSql .= ' ON ' . $join . '.' . $this->delimite($relation->getFrom()->getTo()->getPropertyName()) . ' = ' . $from;

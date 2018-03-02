@@ -9,6 +9,7 @@
 	use Edde\Api\Entity\Query\IDisconnectQuery;
 	use Edde\Api\Schema\Exception\InvalidRelationException;
 	use Edde\Api\Schema\Exception\LinkException;
+	use Edde\Api\Schema\Exception\RelationException;
 	use Edde\Api\Schema\Exception\SchemaException;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Storage\Exception\DuplicateEntryException;
@@ -72,11 +73,13 @@
 		/**
 		 * attach an entity and return a relation entity (returned entity !== $this)
 		 *
-		 * @param IEntity $entity
+		 * @param IEntity     $entity
+		 * @param string|null $relation
 		 *
 		 * @return IEntity
+		 * @throws RelationException
 		 */
-		public function attach(IEntity $entity): IEntity;
+		public function attach(IEntity $entity, string $relation = null): IEntity;
 
 		/**
 		 * detach all relations to the given entity (entity will be detached on save)

@@ -67,8 +67,8 @@
 		}
 
 		/** @inheritdoc */
-		public function attach(IEntity $entity): IEntity {
-			$relation = $this->schema->getRelation($entity->getSchema()->getName());
+		public function attach(IEntity $entity, string $relation = null): IEntity {
+			$relation = $this->schema->getRelation($entity->getSchema()->getName(), $relation);
 			$use = $this->entityManager->create($relation->getSchema()->getName());
 			$this->entityQueue->attach($this, $entity, $use, $relation);
 			return $use;

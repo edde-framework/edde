@@ -19,4 +19,9 @@
 		 * @return bool
 		 */
 		public function isLink(): bool;
+
+		/**
+		 * @return null|string
+		 */
+		public function getRelation(): ?string;
 	}

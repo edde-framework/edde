@@ -37,8 +37,8 @@
 		}
 
 		/** @inheritdoc */
-		public function join(string $alias, string $schema): ISelectQuery {
-			$this->joins[$alias] = new Join($schema, $alias);
+		public function join(string $alias, string $schema, string $relation = null): ISelectQuery {
+			$this->joins[$alias] = new Join($schema, $alias, false, $relation);
 			return $this;
 		}
 

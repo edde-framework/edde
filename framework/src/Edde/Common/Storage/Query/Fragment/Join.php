@@ -6,43 +6,39 @@
 	use Edde\Common\Storage\Query\AbstractFragment;
 
 	class Join extends AbstractFragment implements IJoin {
-		/**
-		 * @var string
-		 */
+		/** @var string */
 		protected $schema;
-		/**
-		 * @var string
-		 */
+		/** @var string */
 		protected $alias;
-		/**
-		 * @var bool
-		 */
+		/** @var bool */
 		protected $link;
+		/** @var string */
+		protected $relation;
 
-		public function __construct(string $schema, string $alias, bool $link = false) {
+		public function __construct(string $schema, string $alias, bool $link = false, string $relation = null) {
 			$this->schema = $schema;
 			$this->alias = $alias;
 			$this->link = $link;
+			$this->relation = $relation;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getSchema(): string {
 			return $this->schema;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getAlias(): string {
 			return $this->alias;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function isLink(): bool {
 			return $this->link;
+		}
+
+		/** @inheritdoc */
+		public function getRelation(): ?string {
+			return $this->relation;
 		}
 	}
