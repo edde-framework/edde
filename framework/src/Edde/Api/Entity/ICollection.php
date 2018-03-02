@@ -5,6 +5,8 @@
 	use Edde\Api\Entity\Exception\RecordException;
 	use Edde\Api\Entity\Exception\UnknownAliasException;
 	use Edde\Api\Schema\Exception\InvalidRelationException;
+	use Edde\Api\Schema\Exception\NoPrimaryPropertyException;
+	use Edde\Api\Schema\Exception\RelationException;
 	use Edde\Api\Schema\Exception\SchemaException;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Storage\Exception\EntityNotFoundException;
@@ -87,6 +89,7 @@
 		 * @throws UnknownTableException
 		 * @throws UnknownAliasException
 		 * @throws RecordException
+		 * @throws NoPrimaryPropertyException
 		 */
 		public function entity(string $alias, $name): IEntity;
 
@@ -97,12 +100,15 @@
 		 * @param string $target
 		 * @param string $alias
 		 * @param array  $on
+		 * @param array  $relation
 		 *
 		 * @return ICollection
 		 * @throws InvalidRelationException
 		 * @throws UnknownAliasException
+		 * @throws RelationException
+		 * @throws SchemaException
 		 */
-		public function join(string $source, string $target, string $alias, array $on = null): ICollection;
+		public function join(string $source, string $target, string $alias, array $on = null, string $relation = null): ICollection;
 
 		/**
 		 * simple and where

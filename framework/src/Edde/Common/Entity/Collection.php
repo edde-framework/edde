@@ -86,9 +86,9 @@
 		}
 
 		/** @inheritdoc */
-		public function join(string $source, string $target, string $alias, array $on = null): ICollection {
+		public function join(string $source, string $target, string $alias, array $on = null, string $relation = null): ICollection {
 			$schema = $this->getSchema($source);
-			$relation = $schema->getRelation($target);
+			$relation = $schema->getRelation($target, $relation);
 			$query = $this->stream->getQuery();
 			$query->join($alias, $target);
 			if ($on) {

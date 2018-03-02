@@ -4,6 +4,7 @@
 
 	use Edde\Api\Schema\Exception\LinkException;
 	use Edde\Api\Schema\Exception\NoPrimaryPropertyException;
+	use Edde\Api\Schema\Exception\RelationException;
 	use Edde\Api\Schema\Exception\UnknownPropertyException;
 	use Edde\Api\Schema\ILink;
 	use Edde\Api\Schema\IProperty;
@@ -168,11 +169,15 @@
 		}
 
 		/** @inheritdoc */
-		public function getRelation(string $schema): IRelation {
+		public function getRelation(string $schema, string $relation = null): IRelation {
 			if (($count = count($relations = $this->getRelations($schema))) === 0) {
-				throw new LinkException(sprintf('There are no relations from [%s] to schema [%s].', $this->getName(), $schema));
-			} else if ($count !== 1) {
-				throw new LinkException(sprintf('There are more relations from [%s] to schema [%s]. You have to specify a relation.', $this->getName(), $schema));
+				throw new RelationException(sprintf('There are no relations from [%s] to schema [%s].', $this->getName(), $schema));
+			} else if ($count !== 1 && $relation === null) {
+				throw new RelationException(sprintf('There are more relations from [%s] to schema [%s]. You have to specify a relation.', $this->getName(), $schema));
+			} else if ($count > 1 && $relation && isset($relations[$relation]) === false) {
+				throw new RelationException(sprintf('Requested relation schema [%s] does not exists between [%s] and [%s].', $relation, $this->getName(), $schema));
+			} else if ($count > 1 && $relation) {
+				return $relations[$relation];
 			}
 			return reset($relations);
 		}

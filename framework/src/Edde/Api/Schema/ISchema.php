@@ -5,6 +5,7 @@
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Schema\Exception\LinkException;
 	use Edde\Api\Schema\Exception\NoPrimaryPropertyException;
+	use Edde\Api\Schema\Exception\RelationException;
 	use Edde\Api\Schema\Exception\UnknownPropertyException;
 
 	interface ISchema extends IConfigurable {
@@ -168,10 +169,11 @@
 		/**
 		 * shorthand to get a relation; if there are more relations, exception should be thrown
 		 *
-		 * @param string $schema
+		 * @param string      $schema
+		 * @param string|null $relation optional relation name if there are more relations between targets
 		 *
 		 * @return IRelation
-		 * @throws LinkException
+		 * @throws RelationException
 		 */
-		public function getRelation(string $schema): IRelation;
+		public function getRelation(string $schema, string $relation = null): IRelation;
 	}

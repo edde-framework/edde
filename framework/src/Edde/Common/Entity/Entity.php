@@ -86,9 +86,9 @@
 
 		/** @inheritdoc
 		 */
-		public function join(string $alias, string $schema): ICollection {
+		public function join(string $alias, string $schema, string $relation = null): ICollection {
 			$collection = $this->entityManager->collection('e', $this->schema->getName());
-			$collection->join('e', $schema, $alias, $this->toArray());
+			$collection->join('e', $schema, $alias, $this->toArray(), $relation);
 			return $collection;
 		}
 

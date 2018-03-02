@@ -130,3 +130,25 @@
 
 		public function enabled($default = true): bool;
 	}
+
+	interface SourceSchema extends UuidSchema {
+		public function name(): string;
+	}
+
+	interface TargetSchema extends UuidSchema {
+		public function name(): string;
+	}
+
+	interface SourceOneTargetSchema extends RelationSchema {
+		public function source(SourceSchema $uuid): string;
+
+		public function target(TargetSchema $uuid): string;
+	}
+
+	interface SourceTwoTargetSchema extends RelationSchema {
+		const alias = 'source-two-target';
+
+		public function source(SourceSchema $uuid): string;
+
+		public function target(TargetSchema $uuid): string;
+	}

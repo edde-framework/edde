@@ -1,6 +1,8 @@
 <?php
 	namespace Edde\Common\Schema;
 
+	use Edde\Api\Schema\Exception\RelationException;
+	use Edde\Api\Schema\Exception\UnknownPropertyException;
 	use Edde\Api\Schema\Exception\UnknownSchemaException;
 	use Edde\Api\Schema\Inject\SchemaManager;
 	use Edde\Ext\Test\TestCase;
@@ -11,6 +13,7 @@
 
 		/**
 		 * @throws UnknownSchemaException
+		 * @throws UnknownPropertyException
 		 */
 		public function testRelationSchema() {
 			$fooBarSchema = $this->schemaManager->load(FooBarSchema::class);
@@ -59,5 +62,46 @@
 			self::assertSame('foo', $toLink->getFrom()->getPropertyName());
 			self::assertSame(FooSchema::class, $toLink->getTo()->getName());
 			self::assertSame('uuid', $toLink->getTo()->getPropertyName());
+		}
+
+		/**
+		 * @throws RelationException
+		 * @throws UnknownPropertyException
+		 * @throws UnknownSchemaException
+		 */
+		public function testGetRelationException() {
+			$this->expectException(RelationException::class);
+			$this->expectExceptionMessage('There are more relations from [Edde\Common\Schema\SourceSchema] to schema [Edde\Common\Schema\TargetSchema]. You have to specify a relation.');
+			$this->schemaManager->load(SourceOneTargetSchema::class);
+			$this->schemaManager->load(SourceTwoTargetSchema::class);
+			$sourceSchema = $this->schemaManager->load(SourceSchema::class);
+			$sourceSchema->getRelation(TargetSchema::class);
+		}
+
+		/**
+		 * @throws RelationException
+		 * @throws UnknownPropertyException
+		 * @throws UnknownSchemaException
+		 */
+		public function testGetRelationUnknownException() {
+			$this->expectException(RelationException::class);
+			$this->expectExceptionMessage('Requested relation schema [nope] does not exists between [Edde\Common\Schema\SourceSchema] and [Edde\Common\Schema\TargetSchema].');
+			$this->schemaManager->load(SourceOneTargetSchema::class);
+			$this->schemaManager->load(SourceTwoTargetSchema::class);
+			$sourceSchema = $this->schemaManager->load(SourceSchema::class);
+			$sourceSchema->getRelation(TargetSchema::class, 'nope');
+		}
+
+		/**
+		 * @throws RelationException
+		 * @throws UnknownPropertyException
+		 * @throws UnknownSchemaException
+		 */
+		public function testGetRelation() {
+			$this->schemaManager->load(SourceOneTargetSchema::class);
+			$this->schemaManager->load(SourceTwoTargetSchema::class);
+			$sourceSchema = $this->schemaManager->load(SourceSchema::class);
+			$relation = $sourceSchema->getRelation(TargetSchema::class, SourceTwoTargetSchema::class);
+			self::assertSame(SourceTwoTargetSchema::class, $relation->getSchema()->getName());
 		}
 	}

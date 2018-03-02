@@ -100,15 +100,16 @@
 		/**
 		 * prepare m:n collection of related entities
 		 *
-		 * @param string $alias
-		 * @param string $schema
+		 * @param string      $alias
+		 * @param string      $schema
+		 * @param string|null $relation if there are more relation schemas, which one should be used
 		 *
 		 * @return ICollection
 		 * @throws SchemaException
 		 * @throws InvalidRelationException
 		 * @throws UnknownAliasException
 		 */
-		public function join(string $alias, string $schema): ICollection;
+		public function join(string $alias, string $schema, string $relation = null): ICollection;
 
 		/**
 		 * mark this entity for delete (it's not deleted until save)
