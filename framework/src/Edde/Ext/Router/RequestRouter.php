@@ -48,15 +48,15 @@
 
 		/** @inheritdoc */
 		protected function createCliRequest(): IRequest {
-			$parameterList = $this->runtime->getArguments();
+			$parameters = $this->runtime->getArguments();
 			/**
 			 * first parameter must be plain string in the same format, like in URL (for example foo.bar-service/do-this)
 			 */
-			if (isset($parameterList[1]) === false || is_string($parameterList[1]) === false) {
+			if (isset($parameters[1]) === false || is_string($parameters[1]) === false) {
 				throw new RouterException('First argument must be plain (just string)!');
 			}
-			if ($match = $this->stringUtils->match($parameterList[1], self::PREG_CONTROLLER, true, true)) {
-				return $this->factory($match['class'], $match['method'], 'Cli', array_slice($parameterList, 2));
+			if ($match = $this->stringUtils->match($parameters[1], self::PREG_CONTROLLER, true, true)) {
+				return $this->factory($match['class'], $match['method'], 'Cli', array_slice($parameters, 2));
 			}
 			throw new RouterException('Cannot handle current Cli request.');
 		}
@@ -78,7 +78,7 @@
 				'\\',
 				'',
 			], $this->stringUtils->capitalize(str_replace('.', ' ', $class))));
-			array_splice($class, -1, 0, $type);
+			array_splice($class, 0, 0, $type);
 			/**
 			 * this is synthetic restriction to keep requests just for controller classes
 			 */
