@@ -64,9 +64,9 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function factory(IContainer $container, array $parameterList, IReflection $dependency, string $name = null) {
+		public function factory(IContainer $container, array $parameters, IReflection $dependency, string $name = null) {
 			/** @var $instance IConfigurable */
-			if (($instance = $container->create($this->target, $parameterList, $this->name)) instanceof IConfigurable) {
+			if (($instance = $container->create($this->target, $parameters, $this->name)) instanceof IConfigurable) {
 				$instance->setup();
 			}
 			return $instance->{$this->method}(...$this->parameterList);

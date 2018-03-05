@@ -62,12 +62,12 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function factory(IContainer $container, array $parameterList, IReflection $dependency, string $name = null) {
-			$parameterList = $this->parameters($container, $parameterList, $dependency);
-			if (empty($parameterList)) {
+		public function factory(IContainer $container, array $parameters, IReflection $dependency, string $name = null) {
+			$parameters = $this->parameters($container, $parameters, $dependency);
+			if (empty($parameters)) {
 				return new $name();
 			}
-			return new $name(...$parameterList);
+			return new $name(...$parameters);
 		}
 
 		/**

@@ -82,7 +82,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function factory(IContainer $container, array $parameterList, IReflection $dependency, string $name = null) {
+		public function factory(IContainer $container, array $parameters, IReflection $dependency, string $name = null) {
 			if ($this->instance === null) {
 				$this->instance = $container->dependency($this->instance = parent::factory($container, $this->parameterList, $dependency, $this->class), $dependency);
 			}

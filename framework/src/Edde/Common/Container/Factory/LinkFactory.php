@@ -73,7 +73,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function factory(IContainer $container, array $parameterList, IReflection $dependency, string $name = null) {
-			return $this->instance ?: $this->instance = $this->getFactory($container)->factory($container, $parameterList, $dependency, $name);
+		public function factory(IContainer $container, array $parameters, IReflection $dependency, string $name = null) {
+			return $this->instance ?: $this->instance = $this->getFactory($container)->factory($container, $parameters, $dependency, $name);
 		}
 	}

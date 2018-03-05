@@ -48,13 +48,13 @@
 
 		/**
 		 * @param IContainer  $container
-		 * @param array       $parameterList
+		 * @param array       $parameters
 		 * @param IReflection $dependency
 		 * @param string      $name
 		 *
 		 * @return mixed
 		 */
-		public function factory(IContainer $container, array $parameterList, IReflection $dependency, string $name = null);
+		public function factory(IContainer $container, array $parameters, IReflection $dependency, string $name = null);
 
 		/**
 		 * factory can optionally push dependency to some kind of cache (this instance should be returned on fetch())

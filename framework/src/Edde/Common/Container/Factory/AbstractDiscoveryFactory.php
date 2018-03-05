@@ -12,7 +12,7 @@
 		/**
 		 * @var string[]
 		 */
-		protected $nameList = [];
+		protected $names = [];
 
 		/**
 		 * @inheritdoc
@@ -34,21 +34,21 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function factory(IContainer $container, array $parameterList, IReflection $dependency, string $name = null) {
-			return parent::factory($container, $parameterList, $dependency, $this->search($name));
+		public function factory(IContainer $container, array $parameters, IReflection $dependency, string $name = null) {
+			return parent::factory($container, $parameters, $dependency, $this->search($name));
 		}
 
 		protected function search(string $name) {
-			if (isset($this->nameList[$name]) || array_key_exists($name, $this->nameList)) {
-				return $this->nameList[$name];
+			if (isset($this->names[$name]) || array_key_exists($name, $this->names)) {
+				return $this->names[$name];
 			}
 			/** @noinspection ForeachSourceInspection */
 			foreach ($this->discover($name) as $source) {
 				if (class_exists($source)) {
-					return $this->nameList[$name] = $source;
+					return $this->names[$name] = $source;
 				}
 			}
-			return $this->nameList[$name] = null;
+			return $this->names[$name] = null;
 		}
 
 		/**

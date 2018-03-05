@@ -76,7 +76,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function factory(IContainer $container, array $parameterList, IReflection $dependency, string $name = null) {
+		public function factory(IContainer $container, array $parameters, IReflection $dependency, string $name = null) {
 			$exception = $this->exception;
 			throw new $exception($this->message);
 		}

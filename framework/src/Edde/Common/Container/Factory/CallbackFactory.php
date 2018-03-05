@@ -56,8 +56,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function factory(IContainer $container, array $parameterList, IReflection $dependency, string $name = null) {
+		public function factory(IContainer $container, array $parameters, IReflection $dependency, string $name = null) {
 			$callback = $this->callback;
-			return $callback(...$this->parameters($container, $parameterList, $dependency));
+			return $callback(...$this->parameters($container, $parameters, $dependency));
 		}
 	}
