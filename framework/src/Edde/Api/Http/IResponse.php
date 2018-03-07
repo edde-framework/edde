@@ -20,6 +20,8 @@
 		 */
 		const R200_PARTIAL_CONTENT = 206;
 		const R400_BAD_REQUEST = 400;
+		const R400_UNAUTHORIZED = 401;
+		const R400_FORBIDDEN = 403;
 		const R400_NOT_FOUND = 404;
 		const R400_NOT_ALLOWED = 405;
 		const R500_SERVER_ERROR = 500;
