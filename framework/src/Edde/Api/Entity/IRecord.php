@@ -10,6 +10,16 @@
 	 */
 	interface IRecord {
 		/**
+		 * get source for the given alias (this will not create an entity)
+		 *
+		 * @param string $alias
+		 *
+		 * @return array
+		 * @throws RecordException
+		 */
+		public function getSource(string $alias): array;
+
+		/**
 		 * get an entity by the given alias
 		 *
 		 * @param string $alias

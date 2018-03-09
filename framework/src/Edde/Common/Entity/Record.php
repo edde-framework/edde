@@ -28,15 +28,21 @@
 		}
 
 		/** @inheritdoc */
+		public function getSource(string $alias): array {
+			if (isset($this->source[$alias]) === false) {
+				throw new RecordException(sprintf('Requested unknown source alias [%s].', $alias));
+			}
+			return $this->source[$alias];
+		}
+
+		/** @inheritdoc */
 		public function getEntity(string $alias): IEntity {
 			if (isset($this->entities[$alias])) {
 				return $this->entities[$alias];
 			}
 			if (isset($this->schemas[$alias]) === false) {
 				throw new RecordException(sprintf('Requested unknown schema alias [%s].', $alias));
-			} else if (isset($this->source[$alias]) === false) {
-				throw new RecordException(sprintf('Requested unknown source alias [%s].', $alias));
 			}
-			return $this->entities[$alias] = $this->entityManager->load($this->schemas[$alias], $this->source[$alias]);
+			return $this->entities[$alias] = $this->entityManager->load($this->schemas[$alias], $this->getSource($alias));
 		}
 	}
