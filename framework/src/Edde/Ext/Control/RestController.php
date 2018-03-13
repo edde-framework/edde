@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Control;
 
+	use Edde\Api\Http\Exception\EmptyBodyException;
 	use Edde\Api\Http\Exception\NoHttpException;
 	use Edde\Api\Http\IResponse;
 	use Edde\Api\Utils\Inject\StringUtils;
@@ -11,6 +12,7 @@
 	use Edde\Common\Http\Response;
 	use ReflectionClass;
 	use ReflectionException;
+	use Throwable;
 
 	/**
 	 * Provides helpful methods around implementing REST service.
@@ -19,7 +21,11 @@
 		use HttpController;
 		use StringUtils;
 
-		/** @inheritdoc */
+		/**
+		 * @inheritdoc
+		 *
+		 * @throws ReflectionException
+		 */
 		public function __call(string $name, $arguments) {
 			$response = new Response();
 			$response->setCode(IResponse::R400_BAD_REQUEST);
@@ -32,17 +38,28 @@
 		}
 
 		/**
+		 * @param string $type
+		 *
+		 * @return mixed
+		 *
+		 * @throws EmptyBodyException
+		 */
+		protected function getContent(string $type = 'array') {
+			return $this->requestService->getContent($type);
+		}
+
+		/**
 		 * wrap callback into try-catch with standard json responses
 		 *
 		 * @param callable $exec exec should return array to be jsoned
 		 * @param string   $schema
 		 *
-		 * @throws \Throwable
+		 * @throws Throwable
 		 */
 		protected function rest(callable $exec, string $schema) {
 			try {
 				$this->validate($schema);
-				$this->json($exec($this->requestService->getContent('array')), IResponse::R200_OK);
+				$this->json($exec($this->getContent()), IResponse::R200_OK);
 			} catch (BatchValidationException $exception) {
 				$this->json([
 					'error'       => $exception->getMessage(),
@@ -56,7 +73,7 @@
 					'code'      => $exception->getCode(),
 					'exception' => get_class($exception),
 				], IResponse::R400_BAD_REQUEST);
-			} catch (\Throwable $exception) {
+			} catch (Throwable $exception) {
 				$this->json([
 					'error'     => $exception->getMessage(),
 					'code'      => $exception->getCode(),
@@ -68,6 +85,7 @@
 
 		/**
 		 * @return string[]
+		 *
 		 * @throws ReflectionException
 		 */
 		protected function getAllowedList(): array {
