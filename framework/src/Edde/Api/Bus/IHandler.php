@@ -4,6 +4,7 @@
 
 	use Edde\Api\Bus\Exception\InvalidElementException;
 	use Edde\Api\Config\IConfigurable;
+	use Edde\Api\Container\Exception\ContainerException;
 	use Edde\Api\Validator\Exception\ValidationException;
 
 	/**
@@ -35,6 +36,7 @@
 		 * @param IElement $element
 		 *
 		 * @return IElement
+		 *
 		 * @throws InvalidElementException
 		 * @throws ValidationException
 		 */
@@ -46,8 +48,10 @@
 		 * @param IElement $element
 		 *
 		 * @return IElement|null
+		 *
 		 * @throws InvalidElementException
 		 * @throws ValidationException
+		 * @throws ContainerException
 		 */
 		public function execute(IElement $element): ?IElement;
 	}

@@ -8,6 +8,7 @@
 	use Edde\Api\Log\Inject\LogService;
 	use Edde\Api\Router\Inject\RouterService;
 	use Edde\Common\Object\Object;
+	use Throwable;
 
 	class Application extends Object implements IApplication {
 		use RequestService;
@@ -34,7 +35,7 @@
 				 * when there is an abort exception, it's code is used as primary response
 				 */
 				return ($code = $exception->getCode()) === 0 ? -1 : $code;
-			} catch (\Throwable $exception) {
+			} catch (Throwable $exception) {
 				$this->logService->exception($exception, [
 					'edde',
 					'exception',

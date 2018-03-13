@@ -6,13 +6,10 @@
 	use Edde\Api\Http\Exception\NoHttpException;
 	use Edde\Api\Http\IResponse;
 	use Edde\Api\Utils\Inject\StringUtils;
-	use Edde\Api\Validator\Exception\BatchValidationException;
-	use Edde\Api\Validator\Exception\ValidatorException;
 	use Edde\Common\Content\JsonContent;
 	use Edde\Common\Http\Response;
 	use ReflectionClass;
 	use ReflectionException;
-	use Throwable;
 
 	/**
 	 * Provides helpful methods around implementing REST service.
@@ -46,41 +43,6 @@
 		 */
 		protected function getContent(string $type = 'array') {
 			return $this->requestService->getContent($type);
-		}
-
-		/**
-		 * wrap callback into try-catch with standard json responses
-		 *
-		 * @param callable $exec exec should return array to be jsoned
-		 * @param string   $schema
-		 *
-		 * @throws Throwable
-		 */
-		protected function rest(callable $exec, string $schema) {
-			try {
-				$this->validate($schema);
-				$this->json($exec($this->getContent()), IResponse::R200_OK);
-			} catch (BatchValidationException $exception) {
-				$this->json([
-					'error'       => $exception->getMessage(),
-					'code'        => $exception->getCode(),
-					'exception'   => get_class($exception),
-					'validations' => $exception->getValidations(),
-				], IResponse::R400_BAD_REQUEST);
-			} catch (ValidatorException $exception) {
-				$this->json([
-					'error'     => $exception->getMessage(),
-					'code'      => $exception->getCode(),
-					'exception' => get_class($exception),
-				], IResponse::R400_BAD_REQUEST);
-			} catch (Throwable $exception) {
-				$this->json([
-					'error'     => $exception->getMessage(),
-					'code'      => $exception->getCode(),
-					'exception' => get_class($exception),
-				], IResponse::R500_SERVER_ERROR);
-				throw $exception;
-			}
 		}
 
 		/**
