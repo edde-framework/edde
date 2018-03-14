@@ -9,7 +9,7 @@
 		/** @var array */
 		protected $params;
 
-		public function __construct(string $query, array $params) {
+		public function __construct(string $query, array $params = []) {
 			$this->query = $query;
 			$this->params = $params;
 		}

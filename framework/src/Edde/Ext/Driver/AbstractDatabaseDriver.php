@@ -323,6 +323,18 @@
 							]);
 					}
 					throw new DriverQueryException(sprintf('Unknown where operator [%s] target [%s].', get_class($where), $type));
+				case 'null':
+					$name = $this->delimite($params[2]);
+					if (($dot = strpos($params[2], '.')) !== false) {
+						$name = $this->delimite(substr($params[2], 0, $dot)) . '.' . $this->delimite(substr($params[2], $dot + 1));
+					}
+					return new NativeQuery($name . ' IS NULL');
+				case 'not-null':
+					$name = $this->delimite($params[2]);
+					if (($dot = strpos($params[2], '.')) !== false) {
+						$name = $this->delimite(substr($params[2], 0, $dot)) . '.' . $this->delimite(substr($params[2], $dot + 1));
+					}
+					return new NativeQuery($name . ' IS NOT NULL');
 				default:
 					throw new DriverQueryException(sprintf('Unknown where type [%s] for clause [%s].', $expression, get_class($where)));
 			}
