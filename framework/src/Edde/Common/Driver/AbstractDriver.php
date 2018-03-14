@@ -12,6 +12,7 @@
 	use Edde\Common\Object\Object;
 	use Edde\Common\Storage\Query\NativeQuery;
 	use ReflectionClass;
+	use ReflectionException;
 	use ReflectionMethod;
 
 	abstract class AbstractDriver extends Object implements IDriver {
@@ -68,6 +69,9 @@
 			return new NativeQuery($group, $params);
 		}
 
+		/**
+		 * @throws ReflectionException
+		 */
 		protected function handleSetup(): void {
 			parent::handleSetup();
 			foreach ((new ReflectionClass($this))->getMethods(ReflectionMethod::IS_PROTECTED) as $reflectionMethod) {

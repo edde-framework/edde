@@ -9,12 +9,12 @@
 		 * where column is <expression> to value
 		 *
 		 * @param string $column
-		 * @param string $operator
+		 * @param string $expression
 		 * @param mixed  $value
 		 *
 		 * @return IWhereGroup
 		 */
-		public function value(string $column, string $operator, $value): IWhereGroup;
+		public function expression(string $column, string $expression, $value = null): IWhereGroup;
 
 		/**
 		 * return logical relation (and, or, ...)

@@ -125,12 +125,12 @@
 		 * simple and where
 		 *
 		 * @param string $name
-		 * @param string $relation
+		 * @param string $expression
 		 * @param mixed  $value
 		 *
 		 * @return ICollection
 		 */
-		public function where(string $name, string $relation, $value): ICollection;
+		public function where(string $name, string $expression, $value = null): ICollection;
 
 		/**
 		 * @param string $name

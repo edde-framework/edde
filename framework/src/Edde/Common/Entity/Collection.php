@@ -8,6 +8,9 @@
 	use Edde\Api\Entity\ICollection;
 	use Edde\Api\Entity\IEntity;
 	use Edde\Api\Entity\IRecord;
+	use Edde\Api\Schema\Exception\RelationException;
+	use Edde\Api\Schema\Exception\UnknownPropertyException;
+	use Edde\Api\Schema\Exception\UnknownSchemaException;
 	use Edde\Api\Schema\Inject\SchemaManager;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Storage\Exception\EntityNotFoundException;
@@ -77,10 +80,10 @@
 			$this->stream->query($query = new SelectQuery($schema, $alias));
 			$where = $query->getWhere();
 			if ($schema->hasPrimary()) {
-				$where->or()->value($alias . '.' . $schema->getPrimary()->getName(), '=', $name);
+				$where->or()->expression($alias . '.' . $schema->getPrimary()->getName(), '=', $name);
 			}
 			foreach ($schema->getUniques() as $property) {
-				$where->or()->value($alias . '.' . $property->getName(), '=', $name);
+				$where->or()->expression($alias . '.' . $property->getName(), '=', $name);
 			}
 			return $this->getEntity($alias);
 		}
@@ -100,7 +103,14 @@
 			return $this;
 		}
 
-		/** @inheritdoc */
+		/**
+		 * @inheritdoc
+		 *
+		 * @throws UnknownAliasException
+		 * @throws RelationException
+		 * @throws UnknownPropertyException
+		 * @throws UnknownSchemaException
+		 */
 		public function reverseJoin(string $source, string $target, string $alias, array $on = null, string $relation = null): ICollection {
 			$schema = $this->getSchema($source);
 			$relation = $schema->getRelation($target, $relation);
@@ -116,8 +126,8 @@
 		}
 
 		/** @inheritdoc */
-		public function where(string $name, string $relation, $value): ICollection {
-			$this->stream->getQuery()->where($name, $relation, $value);
+		public function where(string $name, string $expression, $value = null): ICollection {
+			$this->stream->getQuery()->where($name, $expression, $value);
 			return $this;
 		}
 

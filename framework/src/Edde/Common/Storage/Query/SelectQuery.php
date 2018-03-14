@@ -53,11 +53,11 @@
 		}
 
 		/** @inheritdoc */
-		public function where(string $name, string $relation, $value): ISelectQuery {
+		public function where(string $name, string $expression, $value = null): ISelectQuery {
 			if (($dot = strpos($name, '.')) === false) {
 				$name = $this->alias . '.' . $name;
 			}
-			$this->getWhere()->and()->value($name, $relation, $value);
+			$this->getWhere()->and()->expression($name, $expression, $value);
 			return $this;
 		}
 

@@ -423,22 +423,22 @@
 		 * @throws \Exception
 		 */
 		protected function fragmentWhere(IWhere $where): INativeQuery {
-			[$operator, $type] = $params = $where->getWhere();
-			switch ($operator) {
+			[$expression, $type] = $params = $where->getWhere();
+			switch ($expression) {
 				case '=':
 					$name = $this->delimite($params[2]);
 					if (($dot = strpos($params[2], '.')) !== false) {
 						$name = $this->delimite(substr($params[2], 0, $dot)) . '.' . $this->delimite(substr($params[2], $dot + 1));
 					}
 					switch ($type) {
-						case 'value':
-							return new NativeQuery($name . ' ' . $operator . ' $' . $this->delimite($parameterId = sha1($name . $operator)), [
+						case 'expression':
+							return new NativeQuery($name . ' ' . $expression . ' $' . $this->delimite($parameterId = sha1($name . $expression)), [
 								$parameterId => $params[3],
 							]);
 					}
 					throw new DriverQueryException(sprintf('Unknown where operator [%s] target [%s].', get_class($where), $type));
 				default:
-					throw new DriverQueryException(sprintf('Unknown where type [%s] for clause [%s].', $operator, get_class($where)));
+					throw new DriverQueryException(sprintf('Unknown where type [%s] for clause [%s].', $expression, get_class($where)));
 			}
 		}
 

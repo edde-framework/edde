@@ -42,12 +42,12 @@
 		 * added alias
 		 *
 		 * @param string $name
-		 * @param string $relation
+		 * @param string $expression
 		 * @param mixed  $value
 		 *
 		 * @return ISelectQuery
 		 */
-		public function where(string $name, string $relation, $value): ISelectQuery;
+		public function where(string $name, string $expression, $value = null): ISelectQuery;
 
 		/**
 		 * @return bool

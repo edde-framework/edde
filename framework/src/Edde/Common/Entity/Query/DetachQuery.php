@@ -42,7 +42,7 @@
 
 		/** @inheritdoc */
 		public function where(string $name, string $relation, $value): IDetachQuery {
-			$this->getWhere()->and()->value($name, $relation, $value);
+			$this->getWhere()->and()->expression($name, $relation, $value);
 			return $this;
 		}
 
