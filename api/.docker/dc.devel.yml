@@ -1,7 +1,0 @@
-version: '3'
-services:
-        edde-api:
-                image: edde-api
-                container_name: edde-api
-                ports:
-                        - 5280:80

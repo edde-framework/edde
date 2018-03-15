@@ -1,9 +1,0 @@
-version: '3'
-services:
-        edde-doc:
-                image: edde-doc
-                container_name: edde-doc
-                ports:
-                        - 5480:80
-                volumes:
-                    - ../.:/opt/app

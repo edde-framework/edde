@@ -1,0 +1,10 @@
+<root foo="bar" bar="fo&quot;o">
+	<foo/>
+	<bar>
+		<node-inside-node moo="hello"/>
+		<node-inside-node>
+			<a-little-secret-here>whoaaaaa</a-little-secret-here>
+		</node-inside-node>
+		<node-inside-node-node/>
+	</bar>
+</root>

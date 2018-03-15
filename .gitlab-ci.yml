@@ -1,46 +1,13 @@
 image: docker:latest
 
 variables:
-    IMAGE_API: $CI_REGISTRY_IMAGE/api:$CI_COMMIT_REF_NAME
-    IMAGE_DOC: $CI_REGISTRY_IMAGE/doc:$CI_COMMIT_REF_NAME
-    IMAGE_TEST: $CI_REGISTRY_IMAGE/test:$CI_COMMIT_REF_NAME
     PROJECT: edde
 
 before_script:
     - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
 
 stages:
-    - build
-    - test
     - publish
-    - release
-
-build api:
-    stage: build
-    script: docker build -t $IMAGE_API -f api/.docker/Dockerfile .
-
-build doc:
-    stage: build
-    script: docker build -t $IMAGE_DOC -f doc/.docker/Dockerfile .
-
-test:
-    stage: test
-    script:
-        - apk add -U py-pip >/dev/null 2>&1
-        - pip install docker-compose >/dev/null 2>&1
-        - docker build -t $IMAGE_TEST -f test/.docker/Dockerfile . >/dev/null 2>&1
-        - docker-compose -f test/.docker/dc.test.yml up -d >/dev/null 2>&1
-        - docker exec $PROJECT-$CI_COMMIT_REF_NAME /opt/app/test.sh
-    after_script:
-        - docker-compose -f test/.docker/dc.test.yml down --volumes >/dev/null 2>&1
-
-publish api:
-    stage: publish
-    script: docker push $IMAGE_API
-
-publish doc:
-    stage: publish
-    script: docker push $IMAGE_DOC
 
 github sync:
     stage: publish
@@ -52,47 +19,3 @@ github sync:
     only:
         - master
         - tags
-
-start review:
-    stage: release
-    variables:
-        FQDN: ${CI_ENVIRONMENT_SLUG}.edde-framework.org
-        COMPOSE_PROJECT_NAME: $PROJECT-$CI_ENVIRONMENT_SLUG
-    script:
-        - docker stack deploy --with-registry-auth -c .docker/dc.review.yml $PROJECT-$CI_ENVIRONMENT_SLUG
-    environment:
-        name: review/$CI_COMMIT_REF_NAME
-        url: http://${CI_ENVIRONMENT_SLUG}.edde-framework.org
-        on_stop: stop review
-    only:
-        - branches
-    except:
-        - master
-
-stop review:
-    stage: release
-    variables:
-        FQDN: ${CI_ENVIRONMENT_SLUG}.edde-framework.org
-        COMPOSE_PROJECT_NAME: $PROJECT-$CI_ENVIRONMENT_SLUG
-        GIT_STRATEGY: none
-    script:
-        - docker stack rm $PROJECT-$CI_ENVIRONMENT_SLUG
-    when: manual
-    environment:
-        name: review/$CI_COMMIT_REF_NAME
-        url: http://${CI_ENVIRONMENT_SLUG}.edde-framework.org
-        action: stop
-    only:
-        - branches
-    except:
-        - master
-
-release:
-    stage: release
-    script: docker stack deploy --with-registry-auth --prune -c .docker/dc.production.yml edde-framework-org
-    only:
-        - master
-        - tags
-    environment:
-        name: production
-        url: https://edde-framework.org
