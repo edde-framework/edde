@@ -16,6 +16,8 @@ services:
                     - ./xdebug.ini:/etc/php7/conf.d/xdebug.ini
                 networks:
                     - test-network
+                ports:
+                    - "4722:22"
                 depends_on:
                     - neo4j
                     - postgres
@@ -27,8 +29,8 @@ services:
                     - NEO4J_AUTH=neo4j/eeQFXk7kkqSm
                     - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
                 ports:
-                    - 7474:7474
-                    - 7687:7687
+                    - "7474:7474"
+                    - "7687:7687"
                 networks:
                     - test-network
 
@@ -39,6 +41,8 @@ services:
                 - POSTGRES_PASSWORD=PBXxSgEWY3LT
             networks:
                 - test-network
+            ports:
+                - "5432:5432"
 
         mysql:
             image: mariadb:latest
@@ -49,6 +53,8 @@ services:
                 - MYSQL_PASSWORD=enPUxu8SRctV
             networks:
                 - test-network
+            ports:
+                - "3306:3306"
 
 networks:
         test-network:
