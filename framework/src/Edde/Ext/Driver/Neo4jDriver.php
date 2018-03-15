@@ -30,6 +30,8 @@
 	use GraphAware\Bolt\Result\Result;
 	use GraphAware\Common\Type\MapAccessor;
 	use Throwable;
+	use function array_merge;
+	use function extract;
 	use function implode;
 
 	class Neo4jDriver extends AbstractDriver {
@@ -342,19 +344,24 @@
 			$cypher .= 'MERGE (a)';
 			$cypher .= '-[:' . $this->delimite($relation);
 			if (empty($attributes) === false) {
-				$cypher .= ' {';
-				$propertyList = [];
-				foreach ($attributes as $k => $v) {
-					if ($v !== null) {
-						$propertyList[] = $this->delimite($k) . ': $' . $this->delimite($parameterId = (sha1($k)));
-						$params[$parameterId] = $v;
-					}
-				}
-				$cypher .= implode(', ', $propertyList) . '}';
+				$nativeQuery = $this->formatAttributes($attributes);
+				$cypher .= $nativeQuery->getQuery();
+				$params = array_merge($params, $nativeQuery->getParams());
 			}
 			$cypher .= ']';
 			$cypher .= "->(b)\n";
 			$this->native($cypher, $params);
+		}
+
+		protected function formatAttributes(array $attributes): INativeQuery {
+			$propertyList = [];
+			foreach ($attributes as $k => $v) {
+				if ($v !== null) {
+					$propertyList[] = $this->delimite($k) . ': $' . $this->delimite($parameterId = (sha1($k)));
+					$params[$parameterId] = $v;
+				}
+			}
+			return new NativeQuery('{' . implode(', ', $propertyList) . '}', $params);
 		}
 
 		/**
@@ -449,6 +456,16 @@
 						$name = $this->delimite(substr($params[2], 0, $dot)) . '.' . $this->delimite(substr($params[2], $dot + 1));
 					}
 					return new NativeQuery($name . ' IS NOT NULL');
+				case 'not-related':
+					extract($params[3]);
+					$fragment = 'NOT (' . $this->delimite($alias) . ')-[:' . $this->delimite($relation) . ']-';
+					$fragment .= '(:' . $this->delimite($target);
+					if (empty($params) === false) {
+						$nativeQuery = $this->formatAttributes($params);
+						$fragment .= ' ' . $nativeQuery->getQuery();
+					}
+					$fragment .= ')';
+					return new NativeQuery($fragment, isset($nativeQuery) ? $nativeQuery->getParams() : []);
 				default:
 					throw new DriverQueryException(sprintf('Unknown where type [%s] for clause [%s].', $expression, get_class($where)));
 			}
