@@ -458,6 +458,9 @@
 					return new NativeQuery($name . ' IS NOT NULL');
 				case 'not-related':
 					extract($params[3]);
+					/** @var $alias string */
+					/** @var $relation string */
+					/** @var $target string */
 					$fragment = 'NOT (' . $this->delimite($alias) . ')-[:' . $this->delimite($relation) . ']-';
 					$fragment .= '(:' . $this->delimite($target);
 					if (empty($params) === false) {
