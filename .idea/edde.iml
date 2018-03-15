@@ -16,7 +16,9 @@
       <excludeFolder url="file://$MODULE_DIR$/lib/nikic/php-parser" />
       <excludeFolder url="file://$MODULE_DIR$/lib/phar-io/manifest" />
       <excludeFolder url="file://$MODULE_DIR$/lib/phar-io/version" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phpdocumentor/reflection-common" />
       <excludeFolder url="file://$MODULE_DIR$/lib/phpdocumentor/reflection-docblock" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phpdocumentor/type-resolver" />
       <excludeFolder url="file://$MODULE_DIR$/lib/phpspec/prophecy" />
       <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/php-code-coverage" />
       <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/php-file-iterator" />
@@ -51,6 +53,7 @@
       <excludeFolder url="file://$MODULE_DIR$/lib/theseer/tokenizer" />
       <excludeFolder url="file://$MODULE_DIR$/lib/tracy/tracy" />
       <excludeFolder url="file://$MODULE_DIR$/lib/twig/twig" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/webmozart/assert" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -6,6 +6,7 @@
          beStrictAboutOutputDuringTests="true"
          beStrictAboutTestsThatDoNotTestAnything="true"
          beStrictAboutTodoAnnotatedTests="true"
+         bootstrap="tests/src/loader.php"
          verbose="false">
 	<testsuite>
 		<directory suffix=".php">tests/src</directory>

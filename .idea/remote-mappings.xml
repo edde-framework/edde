@@ -6,7 +6,7 @@
         <remote-mappings server-id="php@b6711a25-b459-4e6a-8ac9-ebac21883e33">
           <settings>
             <list>
-              <mapping local-root="D:" remote-root="/storage" />
+              <mapping local-root="$PROJECT_DIR$" remote-root="/edde" />
             </list>
           </settings>
         </remote-mappings>
