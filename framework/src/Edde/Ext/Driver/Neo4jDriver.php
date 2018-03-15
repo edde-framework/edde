@@ -456,6 +456,19 @@
 						$name = $this->delimite(substr($params[2], 0, $dot)) . '.' . $this->delimite(substr($params[2], $dot + 1));
 					}
 					return new NativeQuery($name . ' IS NOT NULL');
+				case 'related':
+					extract($params[3]);
+					/** @var $alias string */
+					/** @var $relation string */
+					/** @var $target string */
+					$fragment = ' (' . $this->delimite($alias) . ')-[:' . $this->delimite($relation) . ']-';
+					$fragment .= '(:' . $this->delimite($target);
+					if (empty($params) === false) {
+						$nativeQuery = $this->formatAttributes($params);
+						$fragment .= ' ' . $nativeQuery->getQuery();
+					}
+					$fragment .= ')';
+					return new NativeQuery($fragment, isset($nativeQuery) ? $nativeQuery->getParams() : []);
 				case 'not-related':
 					extract($params[3]);
 					/** @var $alias string */
