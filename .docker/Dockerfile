@@ -21,6 +21,7 @@ COPY .docker/nginx.conf /etc/nginx/nginx.conf
 COPY .docker/php-fpm.conf /etc/php7/php-fpm.d/zz-www.conf
 
 COPY .docker/start.sh /edde/.docker/start.sh
+RUN chmod +x /edde/.docker/start.sh
 
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && ln -sf /dev/stderr /var/log/nginx/error.log
 RUN ln -sf /dev/stdout /var/log/php-fpm-access.log && ln -sf /dev/stderr /var/log/php-fpm-error.log
