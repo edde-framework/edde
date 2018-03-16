@@ -12,8 +12,8 @@ test:
         - docker build -t $CI_COMMIT_REF_NAME --file .docker/Dockerfile . >/dev/null 2>&1
         - docker-compose -f .docker/dc.test.yml up -d >/dev/null 2>&1
         - docker exec $CI_COMMIT_REF_NAME ./test.sh
-        - docker-compose -f .docker/dc.test.yml down --volumes >/dev/null 2>&1
         - ls -la .
+        - docker-compose -f .docker/dc.test.yml down --volumes >/dev/null 2>&1
 
 github sync:
     stage: publish
