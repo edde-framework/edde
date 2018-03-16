@@ -1,13 +1,13 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Application;
+	namespace Edde\Service\Application;
 
-	use Edde\Api\Application\Exception\AbortException;
 	use Edde\Api\Application\IApplication;
 	use Edde\Api\Bus\Inject\RequestService;
 	use Edde\Api\Log\Inject\LogService;
 	use Edde\Api\Router\Inject\RouterService;
 	use Edde\Common\Object\Object;
+	use Edde\Exception\Application\AbortException;
 	use Throwable;
 
 	class Application extends Object implements IApplication {

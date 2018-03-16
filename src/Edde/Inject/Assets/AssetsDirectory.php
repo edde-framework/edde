@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Assets\Inject;
+	namespace Edde\Inject\Assets;
 
 	use Edde\Api\Assets\IAssetsDirectory;
 

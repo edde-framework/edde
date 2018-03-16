@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Control;
 
-	use Edde\Api\Application\Exception\AbortException;
 	use Edde\Api\Utils\Inject\StringUtils;
+	use Edde\Exception\Application\AbortException;
 
 	/**
 	 * Control used for a command line content rendering.
@@ -18,7 +18,7 @@
 		 * @param int             $code
 		 * @param \Throwable|null $throwable
 		 *
-		 * @throws AbortException
+		 * @throws \Edde\Exception\Application\AbortException
 		 */
 		public function abort(string $message, int $code = -1, \Throwable $throwable = null) {
 			throw new AbortException($message, $code, $throwable);

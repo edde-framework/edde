@@ -1,8 +1,8 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Application\Inject;
+	namespace Edde\Inject\Assets;
 
-	use Edde\Api\Application\ITempDirectory;
+	use Edde\Api\Assets\ITempDirectory;
 
 	trait TempDirectory {
 		/**

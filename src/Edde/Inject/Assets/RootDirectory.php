@@ -1,8 +1,8 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Application\Inject;
+	namespace Edde\Inject\Assets;
 
-	use Edde\Api\Application\IRootDirectory;
+	use Edde\Api\Assets\IRootDirectory;
 
 	trait RootDirectory {
 		/**

@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Application\Inject;
+	namespace Edde\Inject\Application;
 
 	use Edde\Api\Application\IApplication;
 

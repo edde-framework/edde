@@ -3,11 +3,10 @@
 	namespace Edde\Ext\Container;
 
 	use Edde\Api\Application\IApplication;
-	use Edde\Api\Application\ILogDirectory;
-	use Edde\Api\Application\Inject\LogDirectory;
-	use Edde\Api\Application\IRootDirectory;
-	use Edde\Api\Application\ITempDirectory;
 	use Edde\Api\Assets\IAssetsDirectory;
+	use Edde\Api\Assets\ILogDirectory;
+	use Edde\Api\Assets\IRootDirectory;
+	use Edde\Api\Assets\ITempDirectory;
 	use Edde\Api\Bus\Event\IEventBus;
 	use Edde\Api\Bus\IMessageBus;
 	use Edde\Api\Bus\IMessageService;
@@ -38,9 +37,6 @@
 	use Edde\Api\Validator\IValidatorManager;
 	use Edde\Api\Xml\IXmlExport;
 	use Edde\Api\Xml\IXmlParser;
-	use Edde\Common\Application\Application;
-	use Edde\Common\Application\TempDirectory;
-	use Edde\Common\Assets\AssetsDirectory;
 	use Edde\Common\Bus\Event\EventBus;
 	use Edde\Common\Bus\MessageBus;
 	use Edde\Common\Bus\MessageService;
@@ -82,9 +78,15 @@
 	use Edde\Ext\Sanitizer\SanitizerManagerConfigurator;
 	use Edde\Ext\Schema\SchemaManagerConfigurator;
 	use Edde\Ext\Validator\ValidatorManagerConfigurator;
+	use Edde\Service\Application\Application;
+	use Edde\Service\Assets\AssetsDirectory;
+	use Edde\Service\Assets\LogDirectory;
+	use Edde\Service\Assets\TempDirectory;
 	use Edde\Service\Config\ConfigLoader;
 	use Edde\Service\Config\ConfigService;
+	use ReflectionException;
 	use ReflectionMethod;
+	use stdClass;
 
 	/**
 	 * A young man and his date were parked on a back road some distance from town.
@@ -118,7 +120,9 @@
 		 * @param array $factoryList
 		 *
 		 * @return IFactory[]
+		 *
 		 * @throws FactoryException
+		 * @throws ReflectionException
 		 */
 		static public function createFactoryList(array $factoryList): array {
 			$factories = [];
@@ -127,13 +131,13 @@
 				if ($factory instanceof \stdClass) {
 					switch ($factory->type) {
 						case 'instance':
-							$current = new InstanceFactory($name, $factory->class, $factory->parameterList, null, $factory->cloneable);
+							$current = new InstanceFactory($name, $factory->class, $factory->params, null, $factory->cloneable);
 							break;
 						case 'exception':
 							$current = new ExceptionFactory($name, $factory->class, $factory->message);
 							break;
 						case 'proxy':
-							$current = new ProxyFactory($name, $factory->factory, $factory->method, $factory->parameterList);
+							$current = new ProxyFactory($name, $factory->factory, $factory->method, $factory->params);
 							break;
 					}
 				} else if (is_string($factory) && strpos($factory, '::') !== false) {
@@ -166,17 +170,17 @@
 		 * create instance factory
 		 *
 		 * @param string $class
-		 * @param array  $parameterList
+		 * @param array  $params
 		 * @param bool   $cloneable
 		 *
-		 * @return object
+		 * @return stdClass
 		 */
-		static public function instance(string $class, array $parameterList, bool $cloneable = false) {
+		static public function instance(string $class, array $params, bool $cloneable = false): stdClass {
 			return (object)[
-				'type'          => __FUNCTION__,
-				'class'         => $class,
-				'parameterList' => $parameterList,
-				'cloneable'     => $cloneable,
+				'type'      => __FUNCTION__,
+				'class'     => $class,
+				'params'    => $params,
+				'cloneable' => $cloneable,
 			];
 		}
 
@@ -186,9 +190,9 @@
 		 * @param string      $message
 		 * @param string|null $class
 		 *
-		 * @return object
+		 * @return stdClass
 		 */
-		static public function exception(string $message, string $class = null) {
+		static public function exception(string $message, string $class = null): stdClass {
 			return (object)[
 				'type'    => __FUNCTION__,
 				'message' => $message,
@@ -201,16 +205,16 @@
 		 *
 		 * @param string $factory
 		 * @param string $method
-		 * @param array  $parameterList
+		 * @param array  $params
 		 *
-		 * @return object
+		 * @return stdClass
 		 */
-		static public function proxy(string $factory, string $method, array $parameterList) {
+		static public function proxy(string $factory, string $method, array $params): stdClass {
 			return (object)[
-				'type'          => __FUNCTION__,
-				'factory'       => $factory,
-				'method'        => $method,
-				'parameterList' => $parameterList,
+				'type'    => __FUNCTION__,
+				'factory' => $factory,
+				'method'  => $method,
+				'params'  => $params,
 			];
 		}
 
@@ -223,6 +227,7 @@
 		 * @return IContainer
 		 * @throws ContainerException
 		 * @throws FactoryException
+		 * @throws ReflectionException
 		 */
 		static public function create(array $factoryList = [], array $configuratorList = []): IContainer {
 			/** @var $container IContainer */
@@ -242,12 +247,13 @@
 		/**
 		 * create a default container with set of services from Edde; they can be simply redefined
 		 *
-		 * @param array    $factoryListI
+		 * @param array    $factoryList
 		 * @param string[] $configuratorList
 		 *
 		 * @return IContainer
 		 * @throws ContainerException
 		 * @throws FactoryException
+		 * @throws ReflectionException
 		 */
 		static public function container(array $factoryList = [], array $configuratorList = []): IContainer {
 			return self::create(array_merge(self::getDefaultFactoryList(), $factoryList), array_filter(array_merge(self::getDefaultConfiguratorList(), $configuratorList)));
@@ -261,8 +267,10 @@
 		 * @param array $configuratorList
 		 *
 		 * @return IContainer
+		 *
 		 * @throws ContainerException
 		 * @throws FactoryException
+		 * @throws ReflectionException
 		 */
 		static public function inject($instance, array $factoryList = [], array $configuratorList = []): IContainer {
 			$container = self::container(empty($factoryList) ? [new ClassFactory()] : $factoryList, $configuratorList);
@@ -272,7 +280,7 @@
 
 		static public function getDefaultFactoryList(): array {
 			return [
-				IRootDirectory::class      => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
+				IRootDirectory::class    => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
 				IAssetsDirectory::class    => self::proxy(IRootDirectory::class, 'directory', [
 					'.assets',
 					AssetsDirectory::class,
@@ -326,45 +334,45 @@
 				IGeneratorManager::class   => GeneratorManager::class,
 				IFilterManager::class      => FilterManager::class,
 				ISanitizerManager::class   => SanitizerManager::class,
-				IValidatorManager::class   => ValidatorManager::class,
+				IValidatorManager::class => ValidatorManager::class,
 				/**
 				 * random & security support
 				 */
-				IRandomService::class      => RandomService::class,
-				IPasswordService::class    => PasswordService::class,
+				IRandomService::class    => RandomService::class,
+				IPasswordService::class  => PasswordService::class,
 				/**
 				 * storage support
 				 */
-				IEntityManager::class      => EntityManager::class,
-				IStorage::class            => Storage::class,
-				IDriver::class             => self::exception(sprintf('Please register driver to use Storage.', IDriver::class)),
+				IEntityManager::class    => EntityManager::class,
+				IStorage::class          => Storage::class,
+				IDriver::class           => self::exception(sprintf('Please register driver to use Storage.', IDriver::class)),
 				/**
 				 * an application upgrades support
 				 */
-				IUpgradeManager::class => self::exception(sprintf('You have to provide you own implementation of [%s]; you can use [%s] to get some little help.', IUpgradeManager::class, AbstractUpgradeManager::class)),
+				IUpgradeManager::class   => self::exception(sprintf('You have to provide you own implementation of [%s]; you can use [%s] to get some little help.', IUpgradeManager::class, AbstractUpgradeManager::class)),
 				/**
 				 * Xml support
 				 */
-				IXmlExport::class      => XmlExport::class,
-				IXmlParser::class      => XmlParser::class,
+				IXmlExport::class        => XmlExport::class,
+				IXmlParser::class        => XmlParser::class,
 				/**
 				 * Message bus support; probably most important stuff of the
 				 * framework and the top killing feature :)
 				 */
-				IMessageBus::class     => MessageBus::class,
-				IMessageService::class => MessageService::class,
-				IEventBus::class       => EventBus::class,
-				IRequestService::class => RequestService::class,
-				IConfigService::class  => ConfigService::class,
-				IConfigLoader::class   => ConfigLoader::class,
+				IMessageBus::class       => MessageBus::class,
+				IMessageService::class   => MessageService::class,
+				IEventBus::class         => EventBus::class,
+				IRequestService::class   => RequestService::class,
+				IConfigService::class    => ConfigService::class,
+				IConfigLoader::class     => ConfigLoader::class,
 				/**
 				 * an application handles lifecycle workflow
 				 */
-				IApplication::class    => Application::class,
+				IApplication::class      => Application::class,
 				/**
 				 * magical factory for an application execution
 				 */
-				'application'          => IApplication::class . '::run',
+				'application'            => IApplication::class . '::run',
 			];
 		}
 

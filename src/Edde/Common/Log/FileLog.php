@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Log;
 
-	use Edde\Api\Application\Inject\LogDirectory;
 	use Edde\Api\File\Exception\FileWriteException;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Log\ILog;
@@ -12,7 +11,7 @@
 	 * Default file based log.
 	 */
 	class FileLog extends AbstractLog {
-		use LogDirectory;
+		use Edde\Inject\Assets\LogDirectory;
 		/**
 		 * @var string
 		 */
