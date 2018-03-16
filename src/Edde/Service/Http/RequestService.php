@@ -2,11 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Http;
 
-	use Edde\Api\Http\IContentType;
-	use Edde\Api\Http\ICookies;
-	use Edde\Api\Http\IHeaders;
-	use Edde\Api\Http\IRequest;
-	use Edde\Api\Http\IRequestService;
 	use Edde\Common\Http\Cookie;
 	use Edde\Common\Http\Cookies;
 	use Edde\Common\Http\Request;
@@ -16,6 +11,10 @@
 	use Edde\Exception\Http\EmptyBodyException;
 	use Edde\Exception\Http\NoHttpException;
 	use Edde\Exception\Url\UrlException;
+	use Edde\Http\IContentType;
+	use Edde\Http\ICookies;
+	use Edde\Http\IHeaders;
+	use Edde\Http\IRequestService;
 	use Edde\Inject\Converter\ConverterManager;
 	use Edde\Inject\Http\HttpUtils;
 	use Edde\Object;
@@ -24,7 +23,7 @@
 	class RequestService extends Object implements IRequestService {
 		use HttpUtils;
 		use ConverterManager;
-		/** @var IRequest */
+		/** @var \Edde\Http\IRequest */
 		protected $request;
 
 		/**
@@ -32,7 +31,7 @@
 		 *
 		 * @throws UrlException
 		 */
-		public function getRequest(): IRequest {
+		public function getRequest(): \Edde\Http\IRequest {
 			if ($this->request) {
 				return $this->request;
 			}
@@ -100,7 +99,7 @@
 		 * @throws \Edde\Exception\Http\NoHttpException
 		 * @throws \Edde\Exception\Url\UrlException
 		 */
-		public function getHeaders(): IHeaders {
+		public function getHeaders(): \Edde\Http\IHeaders {
 			return $this->getRequest()->getHeaders();
 		}
 

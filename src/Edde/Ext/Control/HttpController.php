@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Control;
 
-	use Edde\Api\Http\IResponse;
 	use Edde\Common\Http\Response;
 	use Edde\Content\GeneratorContent;
 	use Edde\Content\HtmlContent;
@@ -10,6 +9,7 @@
 	use Edde\Content\TextContent;
 	use Edde\Exception\Http\EmptyBodyException;
 	use Edde\File\IFile;
+	use Edde\Http\IResponse;
 	use Edde\Inject\Http\RequestService;
 	use Edde\Inject\Schema\SchemaManager;
 
@@ -44,7 +44,7 @@
 		 * @param mixed $content
 		 * @param int   $code
 		 *
-		 * @return IResponse
+		 * @return \Edde\Http\IResponse
 		 */
 		public function json($content, int $code = IResponse::R200_OK): IResponse {
 			return $this->response(new Response(new JsonContent(json_encode($content))), $code);
@@ -56,7 +56,7 @@
 		 * @param string|IFile $content
 		 * @param int          $code
 		 *
-		 * @return IResponse
+		 * @return \Edde\Http\IResponse
 		 */
 		public function html($content, int $code = IResponse::R200_OK): IResponse {
 			return $this->response(new Response(new HtmlContent($content)), $code);
@@ -79,7 +79,7 @@
 		 * @param string   $type
 		 * @param int      $code
 		 *
-		 * @return IResponse
+		 * @return \Edde\Http\IResponse
 		 */
 		public function generator(callable $generator, string $type = 'text/plain', int $code = IResponse::R200_OK): IResponse {
 			return $this->response(new Response(new GeneratorContent($generator, $type)), $code);

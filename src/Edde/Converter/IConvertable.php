@@ -15,7 +15,7 @@
 		/**
 		 * return subject content
 		 *
-		 * @return \Edde\Content\IContent
+		 * @return IContent
 		 */
 		public function getContent(): IContent;
 
@@ -29,7 +29,7 @@
 		/**
 		 * try to convert an input
 		 *
-		 * @return \Edde\Content\IContent
+		 * @return IContent
 		 */
 		public function convert(): IContent;
 	}

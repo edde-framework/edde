@@ -3,7 +3,6 @@
 	namespace Edde\Common\Storage;
 
 	use DateTime;
-	use Edde\Api\Entity\IEntity;
 	use Edde\Common\Schema\BarPooSchema;
 	use Edde\Common\Schema\BarSchema;
 	use Edde\Common\Schema\FooBarSchema;
@@ -300,7 +299,7 @@
 				'bar The Second',
 				'bar The Third',
 			];
-			/** @var $foo IEntity */
+			/** @var $foo \Edde\Entity\IEntity */
 			foreach ($foo->join('b', BarSchema::class) as $record) {
 				$foo = $record->getEntity('e');
 				$bar = $record->getEntity('b');

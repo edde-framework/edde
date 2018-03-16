@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Driver;
 
-	use Edde\Api\Storage\Query\IQuery;
 	use Edde\Config\IConfigurable;
+	use Edde\Query\IQuery;
 
 	/**
 	 * General driver for storage implementation; one storage could have more drivers to choose from.
@@ -13,7 +13,7 @@
 		 * execute the given query and return native driver's result; this method does quite heavy
 		 * job with translating input query into native query for this driver
 		 *
-		 * @param IQuery $query
+		 * @param \Edde\Query\IQuery $query
 		 *
 		 * @return mixed
 		 *

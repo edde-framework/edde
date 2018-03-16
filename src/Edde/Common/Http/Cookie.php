@@ -2,10 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Http;
 
-	use Edde\Api\Http\ICookie;
 	use Edde\Object;
 
-	class Cookie extends Object implements ICookie {
+	class Cookie extends Object implements \Edde\Http\ICookie {
 		/**
 		 * @var array
 		 */

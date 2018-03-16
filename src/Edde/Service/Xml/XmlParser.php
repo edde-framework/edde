@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Xml;
 
-	use Edde\Api\Resource\IResource;
-	use Edde\Common\File\File;
 	use Edde\Exception\Xml\XmlParserException;
+	use Edde\File\File;
 	use Edde\Inject\Utils\StringUtils;
 	use Edde\Object;
+	use Edde\Resource\IResource;
 	use Edde\Xml\IXmlHandler;
 	use Iterator;
 

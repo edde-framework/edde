@@ -2,19 +2,18 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Storage;
 
-	use Edde\Api\Storage\IStorage;
-	use Edde\Api\Storage\IStream;
-	use Edde\Api\Storage\Query\IQuery;
-	use Edde\Api\Storage\Query\ISelectQuery;
 	use Edde\Exception\Storage\InvalidSourceException;
 	use Edde\Object;
+	use Edde\Query\IQuery;
+	use Edde\Storage\IStorage;
+	use Edde\Storage\Query\ISelectQuery;
 	use function explode;
 	use function strpos;
 
-	class Stream extends Object implements IStream {
+	class Stream extends Object implements \Edde\Storage\IStream {
 		/** @var IStorage */
 		protected $storage;
-		/** @var ISelectQuery */
+		/** @var \Edde\Storage\Query\ISelectQuery */
 		protected $query;
 
 		public function __construct(IStorage $storage, IQuery $query) {
@@ -23,7 +22,7 @@
 		}
 
 		/** @inheritdoc */
-		public function query(ISelectQuery $query): IStream {
+		public function query(ISelectQuery $query): \Edde\Storage\IStream {
 			$this->query = $query;
 			return $this;
 		}

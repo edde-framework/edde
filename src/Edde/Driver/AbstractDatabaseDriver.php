@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Driver;
 
-	use Edde\Api\Entity\IEntity;
 	use Edde\Api\Entity\Query\IDeleteQuery;
 	use Edde\Api\Entity\Query\IDetachQuery;
 	use Edde\Api\Entity\Query\IDisconnectQuery;
@@ -10,11 +9,12 @@
 	use Edde\Api\Entity\Query\IQueryQueue;
 	use Edde\Api\Entity\Query\IRelationQuery;
 	use Edde\Api\Entity\Query\IUnlinkQuery;
-	use Edde\Api\Storage\Query\Fragment\IWhere;
-	use Edde\Api\Storage\Query\ICrateSchemaQuery;
-	use Edde\Api\Storage\Query\ISelectQuery;
 	use Edde\Common\Storage\Query\NativeQuery;
 	use Edde\Config\ConfigException;
+	use Edde\Entity\IEntity;
+	use Edde\Storage\Query\Fragment\IWhere;
+	use Edde\Storage\Query\ICrateSchemaQuery;
+	use Edde\Storage\Query\ISelectQuery;
 	use PDO;
 	use PDOException;
 	use PDOStatement;
@@ -88,7 +88,7 @@
 		}
 
 		/**
-		 * @param ICrateSchemaQuery $crateSchemaQuery
+		 * @param \Edde\Storage\Query\ICrateSchemaQuery $crateSchemaQuery
 		 *
 		 * @return mixed|PDOStatement
 		 *

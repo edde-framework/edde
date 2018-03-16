@@ -2,10 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Http;
 
-	use Edde\Api\Http\IResponseHeader;
 	use Edde\Object;
 
-	class ResponseHeader extends Object implements IResponseHeader {
+	class ResponseHeader extends Object implements \Edde\Http\IResponseHeader {
 		/**
 		 * @var array
 		 */

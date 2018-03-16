@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Utils;
 
-	use Edde\Api\Utils\IStringUtils;
 	use Edde\Object;
+	use Edde\Utils\IStringUtils;
 
 	class StringUtils extends Object implements IStringUtils {
 		const SEPARATOR_LIST = [

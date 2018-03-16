@@ -2,12 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Http;
 
-	use Edde\Api\Http\IContentType;
-	use Edde\Api\Http\ICookie;
-	use Edde\Api\Http\IHeaders;
-	use Edde\Api\Http\IHttpUtils;
-	use Edde\Api\Http\IRequestHeader;
-	use Edde\Api\Http\IResponseHeader;
 	use Edde\Common\Http\ContentType;
 	use Edde\Common\Http\Cookie;
 	use Edde\Common\Http\Headers;
@@ -15,6 +9,12 @@
 	use Edde\Common\Http\ResponseHeader;
 	use Edde\Common\Url\Url;
 	use Edde\Exception\Http\HttpUtilsException;
+	use Edde\Http\IContentType;
+	use Edde\Http\ICookie;
+	use Edde\Http\IHeaders;
+	use Edde\Http\IHttpUtils;
+	use Edde\Http\IRequestHeader;
+	use Edde\Http\IResponseHeader;
 	use Edde\Inject\Utils\StringUtils;
 	use Edde\Object;
 

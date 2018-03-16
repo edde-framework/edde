@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Http;
 
-	use Edde\Api\Http\IContentType;
+	use Edde\Http\IContentType;
 	use Edde\Object;
 
 	class ContentType extends Object implements IContentType {

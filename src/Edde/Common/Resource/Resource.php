@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Resource;
 
-	use Edde\Api\Resource\IResource;
 	use Edde\Exception\Resource\ResourceException;
 	use Edde\Object;
+	use Edde\Resource\IResource;
 	use Edde\Url\IUrl;
 
 	/**

@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Inject\Http;
 
-	use Edde\Api\Http\IRequestService;
+	use Edde\Http\IRequestService;
 
 	trait RequestService {
 		/**

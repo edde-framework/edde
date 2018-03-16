@@ -2,20 +2,20 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Storage\Query;
 
-	use Edde\Api\Storage\Query\Fragment\IJoin;
-	use Edde\Api\Storage\Query\Fragment\IWhereGroup;
-	use Edde\Api\Storage\Query\ISelectQuery;
 	use Edde\Common\Storage\Query\Fragment\Join;
 	use Edde\Common\Storage\Query\Fragment\WhereGroup;
 	use Edde\Exception\Storage\UnknownAliasException;
 	use Edde\Schema\ISchema;
+	use Edde\Storage\Query\Fragment\IJoin;
+	use Edde\Storage\Query\Fragment\IWhereGroup;
+	use Edde\Storage\Query\ISelectQuery;
 
 	class SelectQuery extends AbstractQuery implements ISelectQuery {
 		/** @var string */
 		protected $alias;
 		/** @var IJoin[] */
 		protected $joins = [];
-		/** @var IWhereGroup */
+		/** @var \Edde\Storage\Query\Fragment\IWhereGroup */
 		protected $where;
 		/** @var string[] */
 		protected $orders = [];
@@ -53,7 +53,7 @@
 		}
 
 		/** @inheritdoc */
-		public function where(string $name, string $expression, $value = null): ISelectQuery {
+		public function where(string $name, string $expression, $value = null): \Edde\Storage\Query\ISelectQuery {
 			if (($dot = strpos($name, '.')) === false) {
 				$name = $this->alias . '.' . $name;
 			}
@@ -72,7 +72,7 @@
 		}
 
 		/** @inheritdoc */
-		public function order(string $name, bool $asc = true): ISelectQuery {
+		public function order(string $name, bool $asc = true): \Edde\Storage\Query\ISelectQuery {
 			if (($dot = strpos($name, '.')) === false) {
 				$name = $this->alias . '.' . $name;
 			}
@@ -107,7 +107,7 @@
 		}
 
 		/** @inheritdoc */
-		public function count(string $alias = null): ISelectQuery {
+		public function count(string $alias = null): \Edde\Storage\Query\ISelectQuery {
 			$this->count = $alias;
 			return $this;
 		}

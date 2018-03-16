@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Inject\Storage;
 
-	use Edde\Api\Storage\IStorage;
+	use Edde\Storage\IStorage;
 
 	trait Storage {
 		/**
@@ -11,7 +11,7 @@
 		protected $storage;
 
 		/**
-		 * @param IStorage $storage
+		 * @param \Edde\Storage\IStorage $storage
 		 */
 		public function lazyStorage(IStorage $storage) {
 			$this->storage = $storage;

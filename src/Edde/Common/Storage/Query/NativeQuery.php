@@ -1,7 +1,7 @@
 <?php
 	namespace Edde\Common\Storage\Query;
 
-	use Edde\Api\Storage\INativeQuery;
+	use Edde\Storage\INativeQuery;
 
 	class NativeQuery extends AbstractQuery implements INativeQuery {
 		/** @var string */

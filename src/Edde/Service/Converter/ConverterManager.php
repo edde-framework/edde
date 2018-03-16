@@ -2,10 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Converter;
 
-	use Edde\Common\Converter\Convertable;
 	use Edde\Common\Converter\PassConverter;
 	use Edde\Content\IContent;
-	use Edde\Converter\IConverter;
 	use Edde\Converter\IConverterManager;
 	use Edde\Object;
 
@@ -46,18 +44,18 @@
 			$mime = $content->getType();
 			foreach ($targetList ?? [] as $target) {
 				if ($mime === $target) {
-					return new Convertable(new PassConverter(), $content, $mime);
+					return new \Edde\Converter\Convertable(new PassConverter(), $content, $mime);
 				}
 				if (isset($this->converters[$id = ($mime . '|' . $target)])) {
 					$unknown = false;
 					try {
-						return new Convertable($this->converters[$id], $content, $target);
+						return new \Edde\Converter\Convertable($this->converters[$id], $content, $target);
 					} catch (\Exception $exception) {
 					}
 				}
 			}
 			if ($targetList === null || $mime === reset($targetList)) {
-				return new Convertable(new PassConverter(), $content, $content->getType());
+				return new \Edde\Converter\Convertable(new PassConverter(), $content, $content->getType());
 			}
 			throw new \Edde\Converter\ConverterException(sprintf('Cannot convert %ssource mime [%s] to any of [%s].', $unknown ? 'unknown/unsupported ' : '', $mime, implode(', ', $targetList)), 0, $exception);
 		}

@@ -2,14 +2,14 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Http;
 
-	use Edde\Api\Http\IContentType;
-	use Edde\Api\Http\ICookies;
-	use Edde\Api\Http\IHeaders;
-	use Edde\Api\Http\IHttp;
 	use Edde\Content\IContent;
+	use Edde\Http\IContentType;
+	use Edde\Http\ICookies;
+	use Edde\Http\IHeaders;
+	use Edde\Http\IHttp;
 	use Edde\Object;
 
-	abstract class AbstractHttp extends Object implements IHttp {
+	abstract class AbstractHttp extends Object implements \Edde\Http\IHttp {
 		/**
 		 * @var IHeaders
 		 */
@@ -24,10 +24,10 @@
 		protected $content;
 
 		/**
-		 * @param IHeaders $headers
-		 * @param ICookies $cookies
+		 * @param \Edde\Http\IHeaders $headers
+		 * @param \Edde\Http\ICookies $cookies
 		 */
-		public function __construct(IHeaders $headers, ICookies $cookies) {
+		public function __construct(\Edde\Http\IHeaders $headers, ICookies $cookies) {
 			$this->headers = $headers;
 			$this->cookies = $cookies;
 		}
@@ -35,7 +35,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getHeaders(): IHeaders {
+		public function getHeaders(): \Edde\Http\IHeaders {
 			return $this->headers;
 		}
 
@@ -65,7 +65,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function setContent(IContent $content = null): IHttp {
+		public function setContent(IContent $content = null): \Edde\Http\IHttp {
 			$this->content = $content;
 			return $this;
 		}
@@ -80,7 +80,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function setContentType(IContentType $contentType): IHttp {
+		public function setContentType(\Edde\Http\IContentType $contentType): \Edde\Http\IHttp {
 			$this->headers->setContentType($contentType);
 			return $this;
 		}

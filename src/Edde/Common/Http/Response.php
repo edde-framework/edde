@@ -2,10 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Http;
 
-	use Edde\Api\Http\IResponse;
 	use Edde\Content\IContent;
 
-	class Response extends AbstractHttp implements IResponse {
+	class Response extends AbstractHttp implements \Edde\Http\IResponse {
 		/**
 		 * @var int
 		 */
@@ -20,7 +19,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function setCode(int $code): IResponse {
+		public function setCode(int $code): \Edde\Http\IResponse {
 			$this->code = $code;
 			return $this;
 		}
@@ -35,7 +34,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function execute(): IResponse {
+		public function execute(): \Edde\Http\IResponse {
 			http_response_code($this->code);
 			if ($this->content && $this->headers->has('Content-Type') === false) {
 				$this->headers->setContentType(new ContentType($this->content->getType()));

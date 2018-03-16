@@ -2,14 +2,14 @@
 	declare(strict_types=1);
 	namespace Edde\Driver;
 
-	use Edde\Api\Storage\INativeQuery;
-	use Edde\Api\Storage\Query\Fragment\IWhereGroup;
-	use Edde\Api\Storage\Query\IFragment;
-	use Edde\Api\Storage\Query\IQuery;
 	use Edde\Common\Storage\Query\NativeQuery;
 	use Edde\Inject\Config\ConfigService;
 	use Edde\Inject\Schema\SchemaManager;
 	use Edde\Object;
+	use Edde\Query\IQuery;
+	use Edde\Storage\INativeQuery;
+	use Edde\Storage\Query\Fragment\IWhereGroup;
+	use Edde\Storage\Query\IFragment;
 	use ReflectionClass;
 	use ReflectionException;
 	use ReflectionMethod;
@@ -46,7 +46,7 @@
 		}
 
 		/**
-		 * @param IFragment $fragment
+		 * @param \Edde\Storage\Query\IFragment $fragment
 		 *
 		 * @return INativeQuery
 		 * @throws DriverException

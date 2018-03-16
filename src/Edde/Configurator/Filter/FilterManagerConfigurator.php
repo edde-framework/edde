@@ -3,12 +3,7 @@
 	namespace Edde\Configurator\Filter;
 
 	use DateTime;
-	use Edde\Common\Filter\BoolFilter;
-	use Edde\Common\Filter\DateTimeFilter;
-	use Edde\Common\Filter\FloatFilter;
-	use Edde\Common\Filter\IntFilter;
 	use Edde\Config\AbstractConfigurator;
-	use Edde\Filter\IFilterManager;
 	use Edde\Inject\Container\Container;
 
 	class FilterManagerConfigurator extends AbstractConfigurator {
@@ -20,12 +15,12 @@
 		public function configure($instance) {
 			parent::configure($instance);
 			$instance->registerFilters([
-				'bool'          => $filter = $this->container->create(BoolFilter::class, [], __METHOD__),
+				'bool'          => $filter = $this->container->create(\Edde\Filter\BoolFilter::class, [], __METHOD__),
 				'boolean'       => $filter,
-				'int'           => $this->container->create(IntFilter::class, [], __METHOD__),
-				'float'         => $filter = $this->container->create(FloatFilter::class, [], __METHOD__),
+				'int'           => $this->container->create(\Edde\Filter\IntFilter::class, [], __METHOD__),
+				'float'         => $filter = $this->container->create(\Edde\Filter\FloatFilter::class, [], __METHOD__),
 				'double'        => $filter,
-				DateTime::class => $filter = $this->container->create(DateTimeFilter::class, [], __METHOD__),
+				DateTime::class => $filter = $this->container->create(\Edde\Filter\DateTimeFilter::class, [], __METHOD__),
 				'datetime'      => $filter,
 			]);
 		}

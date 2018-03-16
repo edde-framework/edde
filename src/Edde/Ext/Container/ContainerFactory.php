@@ -2,12 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Container;
 
-	use Edde\Api\Entity\IEntityManager;
-	use Edde\Api\Http\IHttpUtils;
-	use Edde\Api\Http\IRequestService as IHttpRequestService;
-	use Edde\Api\Storage\IStorage;
-	use Edde\Api\Upgrade\IUpgradeManager;
-	use Edde\Api\Utils\IStringUtils;
 	use Edde\Application\Application;
 	use Edde\Application\IApplication;
 	use Edde\Assets\AssetsDirectory;
@@ -25,13 +19,6 @@
 	use Edde\Bus\MessageBus;
 	use Edde\Bus\MessageService;
 	use Edde\Bus\RequestService;
-	use Edde\Common\Container\Factory\CallbackFactory;
-	use Edde\Common\Container\Factory\ClassFactory;
-	use Edde\Common\Container\Factory\ExceptionFactory;
-	use Edde\Common\Container\Factory\InstanceFactory;
-	use Edde\Common\Container\Factory\InterfaceFactory;
-	use Edde\Common\Container\Factory\LinkFactory;
-	use Edde\Common\Container\Factory\ProxyFactory;
 	use Edde\Common\Upgrade\AbstractUpgradeManager;
 	use Edde\Config\IConfigLoader;
 	use Edde\Config\IConfigService;
@@ -46,6 +33,13 @@
 	use Edde\Configurator\Validator\ValidatorManagerConfigurator;
 	use Edde\Container\Container;
 	use Edde\Container\ContainerException;
+	use Edde\Container\Factory\CallbackFactory;
+	use Edde\Container\Factory\ClassFactory;
+	use Edde\Container\Factory\ExceptionFactory;
+	use Edde\Container\Factory\InstanceFactory;
+	use Edde\Container\Factory\InterfaceFactory;
+	use Edde\Container\Factory\LinkFactory;
+	use Edde\Container\Factory\ProxyFactory;
 	use Edde\Container\IContainer;
 	use Edde\Container\IFactory;
 	use Edde\Converter\IConverterManager;
@@ -53,8 +47,11 @@
 	use Edde\Crypt\IRandomService;
 	use Edde\Driver\IDriver;
 	use Edde\EddeException;
+	use Edde\Entity\IEntityManager;
 	use Edde\Filter\IFilterManager;
 	use Edde\Generator\IGeneratorManager;
+	use Edde\Http\IHttpUtils;
+	use Edde\Http\IRequestService as IHttpRequestService;
 	use Edde\Log\ILogService;
 	use Edde\Object;
 	use Edde\Router\IRouterService;
@@ -80,6 +77,9 @@
 	use Edde\Service\Utils\StringUtils;
 	use Edde\Service\Xml\XmlExport;
 	use Edde\Service\Xml\XmlParser;
+	use Edde\Storage\IStorage;
+	use Edde\Upgrade\IUpgradeManager;
+	use Edde\Utils\IStringUtils;
 	use Edde\Validator\IValidatorManager;
 	use Edde\Validator\ValidatorManager;
 	use Edde\Xml\IXmlExport;

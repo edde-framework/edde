@@ -2,22 +2,22 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Storage;
 
-	use Edde\Api\Storage\IStorage;
-	use Edde\Api\Storage\IStream;
-	use Edde\Api\Storage\Query\IQuery;
 	use Edde\Common\Storage\Stream;
 	use Edde\Exception\Storage\ExclusiveTransactionException;
 	use Edde\Exception\Storage\NoTransactionException;
 	use Edde\Inject\Driver\Driver;
 	use Edde\Object;
+	use Edde\Query\IQuery;
+	use Edde\Storage\IStorage;
+	use Edde\Storage\IStream;
 
-	class Storage extends Object implements IStorage {
+	class Storage extends Object implements \Edde\Storage\IStorage {
 		use Driver;
 		/** @var int */
 		protected $transaction = 0;
 
 		/** @inheritdoc */
-		public function start(bool $exclusive = false): IStorage {
+		public function start(bool $exclusive = false): \Edde\Storage\IStorage {
 			if ($this->transaction > 0) {
 				if ($exclusive === false) {
 					$this->transaction++;
@@ -46,7 +46,7 @@
 		}
 
 		/** @inheritdoc */
-		public function rollback(): IStorage {
+		public function rollback(): \Edde\Storage\IStorage {
 			if ($this->transaction === 0) {
 				throw new NoTransactionException('Cannot rollback a transaction - there is no one running!');
 			} else if ($this->transaction === 1) {

@@ -2,13 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Storage\Query\Fragment;
 
-	use Edde\Api\Storage\Query\Fragment\IWhere;
-	use Edde\Api\Storage\Query\Fragment\IWhereGroup;
 	use Edde\Common\Storage\Query\AbstractFragment;
+	use Edde\Storage\Query\Fragment\IWhere;
+	use Edde\Storage\Query\Fragment\IWhereGroup;
 
 	class Where extends AbstractFragment implements IWhere {
 		/**
-		 * @var IWhereGroup
+		 * @var \Edde\Storage\Query\Fragment\IWhereGroup
 		 */
 		protected $whereGroup;
 		/**
@@ -28,7 +28,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function expression(string $column, string $expression, $value = null): IWhereGroup {
+		public function expression(string $column, string $expression, $value = null): \Edde\Storage\Query\Fragment\IWhereGroup {
 			$this->where = [
 				$expression,
 				'expression',

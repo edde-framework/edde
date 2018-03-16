@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Response;
 
-	use Edde\Api\Response\IResponse;
 	use Edde\Content\IContent;
 	use Edde\Object;
+	use Edde\Response\IResponse;
 
-	class Response extends Object implements IResponse {
+	class Response extends Object implements \Edde\Response\IResponse {
 		/**
 		 * @var \Edde\Content\IContent
 		 */

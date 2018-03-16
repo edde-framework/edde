@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Storage\Query;
 
-	use Edde\Api\Storage\Query\ICrateSchemaQuery;
 	use Edde\Schema\ISchema;
+	use Edde\Storage\Query\ICrateSchemaQuery;
 
 	class CreateSchemaQuery extends AbstractQuery implements ICrateSchemaQuery {
 		/**

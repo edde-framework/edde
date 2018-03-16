@@ -2,27 +2,25 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Storage\Query\Fragment;
 
-	use Edde\Api\Storage\Query\Fragment\IWhere;
-	use Edde\Api\Storage\Query\Fragment\IWhereGroup;
 	use Edde\Common\Storage\Query\AbstractFragment;
 
-	class WhereGroup extends AbstractFragment implements IWhereGroup {
+	class WhereGroup extends AbstractFragment implements \Edde\Storage\Query\Fragment\IWhereGroup {
 		/**
-		 * @var IWhere[]
+		 * @var \Edde\Storage\Query\Fragment\IWhere[]
 		 */
 		protected $whereList = [];
 
 		/**
 		 * @inheritdoc
 		 */
-		public function and (): IWhere {
+		public function and (): \Edde\Storage\Query\Fragment\IWhere {
 			return $this->whereList[] = new Where($this, 'and');
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function or (): IWhere {
+		public function or (): \Edde\Storage\Query\Fragment\IWhere {
 			return $this->whereList[] = new Where($this, 'or');
 		}
 

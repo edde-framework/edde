@@ -2,12 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Container;
 
-	use Edde\Common\Container\Factory\CallbackFactory;
-	use Edde\Common\Container\Factory\ExceptionFactory;
-	use Edde\Common\Container\Factory\InstanceFactory;
-	use Edde\Common\Container\Factory\LinkFactory;
-	use Edde\Common\Container\Factory\ProxyFactory;
 	use Edde\Container\ContainerException;
+	use Edde\Container\Factory\CallbackFactory;
+	use Edde\Container\Factory\ExceptionFactory;
+	use Edde\Container\Factory\InstanceFactory;
+	use Edde\Container\Factory\LinkFactory;
+	use Edde\Container\Factory\ProxyFactory;
 	use Edde\Container\IContainer;
 	use Edde\EddeException;
 	use Edde\Inject\Container\Container;

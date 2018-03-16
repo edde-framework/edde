@@ -2,8 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Upgrade;
 
-	use Edde\Api\Upgrade\IUpgrade;
-	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Exception\Upgrade\CurrentVersionException;
 	use Edde\Exception\Upgrade\InvalidVersionException;
 	use Edde\Exception\Upgrade\NoUpgradesAvailableException;
@@ -12,21 +10,22 @@
 	use Edde\Inject\Log\LogService;
 	use Edde\Inject\Storage\Storage;
 	use Edde\Object;
+	use Edde\Upgrade\IUpgrade;
 
-	abstract class AbstractUpgradeManager extends Object implements IUpgradeManager {
+	abstract class AbstractUpgradeManager extends Object implements \Edde\Upgrade\IUpgradeManager {
 		use Storage;
 		use LogService;
 		/** @var IUpgrade[] */
 		protected $upgrades = [];
 
 		/** @inheritdoc */
-		public function registerUpgrade(IUpgrade $upgrade): IUpgradeManager {
+		public function registerUpgrade(\Edde\Upgrade\IUpgrade $upgrade): \Edde\Upgrade\IUpgradeManager {
 			$this->upgrades[$upgrade->getVersion()] = $upgrade;
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function registerUpgrades(array $upgrades): IUpgradeManager {
+		public function registerUpgrades(array $upgrades): \Edde\Upgrade\IUpgradeManager {
 			foreach ($upgrades as $upgrade) {
 				$this->registerUpgrade($upgrade);
 			}
@@ -34,7 +33,7 @@
 		}
 
 		/** @inheritdoc */
-		public function upgrade(string $version = null): IUpgrade {
+		public function upgrade(string $version = null): \Edde\Upgrade\IUpgrade {
 			$last = null;
 			try {
 				$this->onUpgradeStart();
@@ -83,20 +82,20 @@
 		}
 
 		/** @inheritdoc */
-		public function rollback(string $version = null): IUpgrade {
+		public function rollback(string $version = null): \Edde\Upgrade\IUpgrade {
 			throw new UpgradeException('Rollback is not supported in [%s].', static::class);
 		}
 
 		protected function onUpgradeStart(): void {
 		}
 
-		protected function onUpgrade(IUpgrade $upgrade): void {
+		protected function onUpgrade(\Edde\Upgrade\IUpgrade $upgrade): void {
 		}
 
-		protected function onUpgradeEnd(IUpgrade $upgrade): void {
+		protected function onUpgradeEnd(\Edde\Upgrade\IUpgrade $upgrade): void {
 		}
 
-		protected function onUpgradeFailed(\Throwable $throwable, IUpgrade $upgrade = null): void {
+		protected function onUpgradeFailed(\Throwable $throwable, \Edde\Upgrade\IUpgrade $upgrade = null): void {
 			$this->logService->exception($throwable);
 		}
 	}

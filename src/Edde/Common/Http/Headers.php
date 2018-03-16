@@ -2,14 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Http;
 
-	use Edde\Api\Http\IContentType;
-	use Edde\Api\Http\IHeaders;
+	use Edde\Http\IHeaders;
 	use Edde\Object;
 
 	/**
 	 * Simple header list implementation over an array.
 	 */
-	class Headers extends Object implements IHeaders {
+	class Headers extends Object implements \Edde\Http\IHeaders {
 		protected $headers = [];
 
 		/**
@@ -23,7 +22,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function add(string $name, $value): IHeaders {
+		public function add(string $name, $value): \Edde\Http\IHeaders {
 			/**
 			 * more same headers force the original value to became an array with
 			 * embedded headers
@@ -42,7 +41,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function put(array $headers): IHeaders {
+		public function put(array $headers): \Edde\Http\IHeaders {
 			foreach ($headers as $name => $header) {
 				if (is_array($header)) {
 					foreach ($header as $v) {
@@ -72,7 +71,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function setContentType(IContentType $contentType): IHeaders {
+		public function setContentType(\Edde\Http\IContentType $contentType): IHeaders {
 			$this->set('Content-Type', $contentType);
 			return $this;
 		}
@@ -80,7 +79,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getContentType(): ?IContentType {
+		public function getContentType(): ?\Edde\Http\IContentType {
 			return $this->get('Content-Type');
 		}
 

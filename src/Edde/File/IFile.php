@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\File;
 
-	use Edde\Api\Resource\IResource;
+	use Edde\Resource\IResource;
 
 	interface IFile extends IResource {
 		/**

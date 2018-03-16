@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Container;
 
-	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Config\IConfigurable;
+	use Edde\Container\Factory\ClassFactory;
 	use SplStack;
 
 	/**

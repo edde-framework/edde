@@ -1,6 +1,7 @@
 <?php
 	namespace Edde\Common\File;
 
+	use Edde\File\Directory;
 	use Edde\TestCase;
 
 	class DirectoryTest extends TestCase {

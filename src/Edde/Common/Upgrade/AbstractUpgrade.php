@@ -2,12 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Upgrade;
 
-	use Edde\Api\Upgrade\IUpgrade;
 	use Edde\Exception\Storage\ExclusiveTransactionException;
 	use Edde\Exception\Storage\NoTransactionException;
 	use Edde\Inject\Log\LogService;
 	use Edde\Inject\Storage\Storage;
 	use Edde\Object;
+	use Edde\Upgrade\IUpgrade;
 	use Throwable;
 
 	abstract class AbstractUpgrade extends Object implements IUpgrade {

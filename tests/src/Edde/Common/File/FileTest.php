@@ -1,6 +1,7 @@
 <?php
 	namespace Edde\Common\File;
 
+	use Edde\File\File;
 	use Edde\TestCase;
 
 	class FileTest extends TestCase {

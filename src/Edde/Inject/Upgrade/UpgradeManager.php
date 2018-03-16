@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Inject\Upgrade;
 
-	use Edde\Api\Upgrade\IUpgradeManager;
+	use Edde\Upgrade\IUpgradeManager;
 
 	trait UpgradeManager {
 		/**

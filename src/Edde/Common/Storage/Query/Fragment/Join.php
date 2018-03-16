@@ -2,10 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Storage\Query\Fragment;
 
-	use Edde\Api\Storage\Query\Fragment\IJoin;
 	use Edde\Common\Storage\Query\AbstractFragment;
 
-	class Join extends AbstractFragment implements IJoin {
+	class Join extends AbstractFragment implements \Edde\Storage\Query\Fragment\IJoin {
 		/** @var string */
 		protected $schema;
 		/** @var string */

@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Bus;
 
-	use Edde\Common\Converter\AbstractConverter;
 	use Edde\Content\Content;
 	use Edde\Content\IContent;
+	use Edde\Converter\AbstractConverter;
 	use Edde\Converter\ConverterException;
 	use Edde\Element\IElement;
 	use Edde\Inject\Bus\MessageBus;

@@ -3,6 +3,7 @@
 	namespace Edde\Common\Container\Factory;
 
 	use Edde\Container\Container;
+	use Edde\Container\Factory\CallbackFactory;
 	use Edde\Container\Parameter;
 	use Edde\Container\Reflection;
 	use Edde\Test\FooObject;

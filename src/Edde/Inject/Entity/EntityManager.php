@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Inject\Entity;
 
-	use Edde\Api\Entity\IEntityManager;
+	use Edde\Entity\IEntityManager;
 
 	trait EntityManager {
 		/**
@@ -13,7 +13,7 @@
 		/**
 		 * @param IEntityManager $entityManager
 		 */
-		public function lazyEntityManager(IEntityManager $entityManager) {
+		public function lazyEntityManager(\Edde\Entity\IEntityManager $entityManager) {
 			$this->entityManager = $entityManager;
 		}
 	}

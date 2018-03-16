@@ -2,10 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Http;
 
-	use Edde\Api\Http\ICookies;
-	use Edde\Api\Http\IHeaders;
-	use Edde\Api\Http\IRequest;
 	use Edde\Common\Url\Url;
+	use Edde\Http\IHeaders;
+	use Edde\Http\IRequest;
 	use Edde\Url\IUrl;
 
 	/**
@@ -21,7 +20,7 @@
 	 * “Son, there’s been a change of plan,” his father replied.
 	 * “Your mother did want a baby, but now she wants a BMW.”
 	 */
-	class Request extends AbstractHttp implements IRequest {
+	class Request extends AbstractHttp implements \Edde\Http\IRequest {
 		/**
 		 * @var \Edde\Url\IUrl
 		 */
@@ -44,11 +43,11 @@
 		protected $referer;
 
 		/**
-		 * @param \Edde\Url\IUrl $url
-		 * @param IHeaders       $headers
-		 * @param ICookies       $cookies
+		 * @param \Edde\Url\IUrl      $url
+		 * @param IHeaders            $headers
+		 * @param \Edde\Http\ICookies $cookies
 		 */
-		public function __construct(IUrl $url, IHeaders $headers, ICookies $cookies) {
+		public function __construct(IUrl $url, IHeaders $headers, \Edde\Http\ICookies $cookies) {
 			parent::__construct($headers, $cookies);
 			$this->url = $url;
 		}

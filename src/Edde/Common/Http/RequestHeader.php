@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Http;
 
-	use Edde\Api\Http\IRequestHeader;
+	use Edde\Http\IRequestHeader;
 	use Edde\Object;
 
 	class RequestHeader extends Object implements IRequestHeader {

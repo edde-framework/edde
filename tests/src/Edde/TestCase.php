@@ -3,11 +3,11 @@
 	namespace Edde;
 
 	use Edde\Assets\IRootDirectory;
-	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Config\AbstractConfigurator;
 	use Edde\Config\IConfigLoader;
 	use Edde\Container\AutowireTrait;
 	use Edde\Container\ContainerException;
+	use Edde\Container\Factory\ClassFactory;
 	use Edde\Container\IAutowire;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Inject\Assets\RootDirectory;

@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Driver;
 
-	use Edde\Api\Entity\IEntity;
 	use Edde\Api\Entity\Query\IDeleteQuery;
 	use Edde\Api\Entity\Query\IDetachQuery;
 	use Edde\Api\Entity\Query\IDisconnectQuery;
@@ -10,15 +9,16 @@
 	use Edde\Api\Entity\Query\IQueryQueue;
 	use Edde\Api\Entity\Query\IRelationQuery;
 	use Edde\Api\Entity\Query\IUnlinkQuery;
-	use Edde\Api\Storage\INativeQuery;
-	use Edde\Api\Storage\Query\Fragment\IWhere;
-	use Edde\Api\Storage\Query\ICrateSchemaQuery;
-	use Edde\Api\Storage\Query\ISelectQuery;
 	use Edde\Common\Storage\Query\NativeQuery;
 	use Edde\Config\ConfigException;
 	use Edde\Crate\IProperty;
+	use Edde\Entity\IEntity;
 	use Edde\Exception\Storage\DuplicateEntryException;
 	use Edde\Exception\Storage\NullValueException;
+	use Edde\Storage\INativeQuery;
+	use Edde\Storage\Query\Fragment\IWhere;
+	use Edde\Storage\Query\ICrateSchemaQuery;
+	use Edde\Storage\Query\ISelectQuery;
 	use Exception;
 	use GraphAware\Bolt\Configuration;
 	use GraphAware\Bolt\Exception\MessageFailureException;
@@ -197,7 +197,7 @@
 		 * @throws Throwable
 		 */
 		protected function executeDetachQuery(IDetachQuery $detachQuery) {
-			/** @var $entity IEntity[] */
+			/** @var $entity \Edde\Entity\IEntity[] */
 			$entity = [
 				$detachQuery->getEntity(),
 				$detachQuery->getTarget(),
@@ -304,7 +304,7 @@
 		 */
 		protected function link(IEntity $from, IEntity $to, string $relation, array $attributes = null) {
 			$cypher = null;
-			/** @var $entity IEntity[] */
+			/** @var $entity \Edde\Entity\IEntity[] */
 			$entity = [
 				$from,
 				$to,
@@ -349,7 +349,7 @@
 		}
 
 		/**
-		 * @param ISelectQuery $selectQuery
+		 * @param \Edde\Storage\Query\ISelectQuery $selectQuery
 		 *
 		 * @return mixed
 		 * @throws Throwable
@@ -407,9 +407,9 @@
 		}
 
 		/**
-		 * @param IWhere $where
+		 * @param \Edde\Storage\Query\Fragment\IWhere $where
 		 *
-		 * @return INativeQuery
+		 * @return \Edde\Storage\INativeQuery
 		 *
 		 * @throws DriverException
 		 */
