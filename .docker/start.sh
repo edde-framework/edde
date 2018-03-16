@@ -8,8 +8,6 @@ while ! timeout bash -c "echo > /dev/tcp/mysql/3306"; do sleep 6; done > /dev/nu
 echo "Waiting for PostgreSQL"
 while ! timeout bash -c "echo > /dev/tcp/postgres/5432"; do sleep 6; done > /dev/null
 
-composer update --prefer-dist
-
 ssh-keygen -A
 /usr/sbin/sshd
 /usr/sbin/php-fpm7

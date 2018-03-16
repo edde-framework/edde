@@ -1,7 +1,7 @@
 version: '2'
 services:
         edde:
-                image: edde
+                image: $CI_COMMIT_REF_NAME
                 container_name: $CI_COMMIT_REF_NAME
                 environment:
                     - XDEBUG_IP=$XDEBUG_IP
