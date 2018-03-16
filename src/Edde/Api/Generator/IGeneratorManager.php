@@ -19,11 +19,11 @@
 		/**
 		 * register list of generators
 		 *
-		 * @param IGenerator[] $generatorList
+		 * @param IGenerator[] $generators
 		 *
 		 * @return IGeneratorManager
 		 */
-		public function registerGeneratorList(array $generatorList): IGeneratorManager;
+		public function registerGenerators(array $generators): IGeneratorManager;
 
 		/**
 		 * @param string $name

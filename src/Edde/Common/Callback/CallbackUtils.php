@@ -3,6 +3,7 @@
 	namespace Edde\Common\Callback;
 
 	use Edde\Common\Object\Object;
+	use Throwable;
 
 	/**
 	 * Useful set of methods around callable reflections.
@@ -16,7 +17,8 @@
 		 * @param callable $callback
 		 *
 		 * @return mixed
-		 * @throws \Exception
+		 *
+		 * @throws Throwable
 		 */
 		static public function invoke(callable $function, array $args, callable $callback) {
 			/** @noinspection PhpUnusedLocalVariableInspection */
@@ -32,7 +34,7 @@
 				$result = call_user_func_array($function, $args);
 				restore_error_handler();
 				return $result;
-			} catch (\Exception $e) {
+			} catch (Throwable $e) {
 				restore_error_handler();
 				throw $e;
 			}

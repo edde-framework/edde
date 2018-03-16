@@ -35,11 +35,6 @@
 	use Edde\Api\Validator\IValidatorManager;
 	use Edde\Api\Xml\IXmlExport;
 	use Edde\Api\Xml\IXmlParser;
-	use Edde\Common\Bus\Event\EventBus;
-	use Edde\Common\Bus\MessageBus;
-	use Edde\Common\Bus\MessageService;
-	use Edde\Common\Bus\Request\RequestService;
-	use Edde\Common\Container\Container;
 	use Edde\Common\Container\Factory\CallbackFactory;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Common\Container\Factory\ExceptionFactory;
@@ -47,26 +42,8 @@
 	use Edde\Common\Container\Factory\InterfaceFactory;
 	use Edde\Common\Container\Factory\LinkFactory;
 	use Edde\Common\Container\Factory\ProxyFactory;
-	use Edde\Common\Converter\ConverterManager;
-	use Edde\Common\Crypt\PasswordService;
-	use Edde\Common\Crypt\RandomService;
-	use Edde\Common\Entity\EntityManager;
-	use Edde\Common\Filter\FilterManager;
-	use Edde\Common\Generator\GeneratorManager;
-	use Edde\Common\Http\HttpUtils;
-	use Edde\Common\Http\RequestService as HttpRequestService;
-	use Edde\Common\Log\LogService;
 	use Edde\Common\Object\Object;
-	use Edde\Common\Router\RouterService;
-	use Edde\Common\Runtime\Runtime;
-	use Edde\Common\Sanitizer\SanitizerManager;
-	use Edde\Common\Schema\SchemaManager;
-	use Edde\Common\Storage\Storage;
 	use Edde\Common\Upgrade\AbstractUpgradeManager;
-	use Edde\Common\Utils\StringUtils;
-	use Edde\Common\Validator\ValidatorManager;
-	use Edde\Common\Xml\XmlExport;
-	use Edde\Common\Xml\XmlParser;
 	use Edde\Exception\Container\ContainerException;
 	use Edde\Exception\Container\FactoryException;
 	use Edde\Exception\EddeException;
@@ -82,8 +59,31 @@
 	use Edde\Service\Assets\AssetsDirectory;
 	use Edde\Service\Assets\LogDirectory;
 	use Edde\Service\Assets\TempDirectory;
+	use Edde\Service\Bus\Event\EventBus;
+	use Edde\Service\Bus\MessageBus;
+	use Edde\Service\Bus\MessageService;
+	use Edde\Service\Bus\Request\RequestService;
 	use Edde\Service\Config\ConfigLoader;
 	use Edde\Service\Config\ConfigService;
+	use Edde\Service\Container\Container;
+	use Edde\Service\Converter\ConverterManager;
+	use Edde\Service\Crypt\PasswordService;
+	use Edde\Service\Crypt\RandomService;
+	use Edde\Service\Entity\EntityManager;
+	use Edde\Service\Filter\FilterManager;
+	use Edde\Service\Generator\GeneratorManager;
+	use Edde\Service\Http\HttpUtils;
+	use Edde\Service\Http\RequestService as HttpRequestService;
+	use Edde\Service\Log\LogService;
+	use Edde\Service\Router\RouterService;
+	use Edde\Service\Runtime\Runtime;
+	use Edde\Service\Sanitizer\SanitizerManager;
+	use Edde\Service\Schema\SchemaManager;
+	use Edde\Service\Storage\Storage;
+	use Edde\Service\Utils\StringUtils;
+	use Edde\Service\Validator\ValidatorManager;
+	use Edde\Service\Xml\XmlExport;
+	use Edde\Service\Xml\XmlParser;
 	use ReflectionException;
 	use ReflectionMethod;
 	use stdClass;
@@ -231,7 +231,7 @@
 		 */
 		static public function create(array $factories = [], array $configurators = []): IContainer {
 			/** @var $container IContainer */
-			$container = new Container();
+			$container = new \Edde\Service\Container\Container();
 			/**
 			 * this trick ensures that container is properly configured when some internal dependency needs it while container is construction
 			 */

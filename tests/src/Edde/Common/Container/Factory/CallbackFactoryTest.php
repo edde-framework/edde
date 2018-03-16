@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Container\Factory;
 
-	use Edde\Common\Container\Container;
 	use Edde\Common\Container\Parameter;
 	use Edde\Common\Container\Reflection;
+	use Edde\Service\Container\Container;
 	use Edde\Test\FooObject;
 	use Edde\TestCase;
 

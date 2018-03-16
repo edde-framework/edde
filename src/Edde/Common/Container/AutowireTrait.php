@@ -4,10 +4,9 @@
 
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Container\IContainer;
-	use Edde\Common\Object\Exception\PropertyReadException;
-	use Edde\Common\Object\Exception\PropertyWriteException;
-	use Edde\Exception\Container\ContainerException;
 	use Edde\Exception\Container\FactoryException;
+	use Edde\Exception\Object\PropertyReadException;
+	use Edde\Exception\Object\PropertyWriteException;
 
 	trait AutowireTrait {
 		protected $tAutowires = [];

@@ -4,8 +4,8 @@
 
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Container\IAutowire;
-	use Edde\Common\Object\Exception\PropertyReadException;
-	use Edde\Common\Object\Exception\PropertyWriteException;
+	use Edde\Exception\Object\PropertyReadException;
+	use Edde\Exception\Object\PropertyWriteException;
 	use Edde\Test\BarObject;
 	use Edde\Test\FooBarObject;
 	use Edde\Test\FooObject;

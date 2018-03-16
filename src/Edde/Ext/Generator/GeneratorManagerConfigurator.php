@@ -21,7 +21,7 @@
 		 */
 		public function configure($instance) {
 			parent::configure($instance);
-			$instance->registerGeneratorList([
+			$instance->registerGenerators([
 				'uuid'  => $this->container->create(UuidGenerator::class, [], __METHOD__),
 				'stamp' => $this->container->create(DateTimeGenerator::class, [], __METHOD__),
 			]);

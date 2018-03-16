@@ -25,11 +25,11 @@
 		/**
 		 * register list of converters
 		 *
-		 * @param IConverter[] $converterList
+		 * @param IConverter[] $converters
 		 *
 		 * @return IConverterManager
 		 */
-		public function registerConverterList(array $converterList): IConverterManager;
+		public function registerConverters(array $converters): IConverterManager;
 
 		/**
 		 * choose convertable for the given content and target list
