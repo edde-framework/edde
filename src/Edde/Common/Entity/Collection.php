@@ -8,9 +8,8 @@
 	use Edde\Api\Storage\IStream;
 	use Edde\Api\Storage\Query\ISelectQuery;
 	use Edde\Common\Storage\Query\SelectQuery;
-	use Edde\Exception\Entity\RecordException;
-	use Edde\Exception\Entity\UnknownAliasException;
-	use Edde\Exception\Storage\EntityNotFoundException;
+	use Edde\Entity\EntityException;
+	use Edde\Entity\EntityNotFoundException;
 	use Edde\Inject\Container\Container;
 	use Edde\Inject\Schema\SchemaManager;
 	use Edde\Object;
@@ -21,7 +20,7 @@
 		use Container;
 		/** @var IStream */
 		protected $stream;
-		/** @var \Edde\Schema\ISchema[] */
+		/** @var ISchema[] */
 		protected $schemas;
 
 		public function __construct(IStream $stream) {
@@ -38,7 +37,7 @@
 		/** @inheritdoc */
 		public function getSchema(string $alias): ISchema {
 			if (isset($this->schemas[$alias]) === false) {
-				throw new UnknownAliasException(sprintf('Requested schema for unknown alias [%s].', $alias));
+				throw new EntityException(sprintf('Requested schema for unknown alias [%s].', $alias));
 			}
 			return $this->schemas[$alias];
 		}
@@ -68,7 +67,7 @@
 			foreach ($this as $record) {
 				return $record;
 			}
-			throw new RecordException('Cannot load any Record for Collection.');
+			throw new EntityException('Cannot load any Record for Collection.');
 		}
 
 		/** @inheritdoc */

@@ -112,7 +112,7 @@
 		}
 
 		/**
-		 * @throws \Edde\Exception\Converter\ConverterException
+		 * @throws \Edde\Converter\ConverterException
 		 */
 		public function testMessageImport() {
 			$request = new Element('request', 'uuid', $attributes = [

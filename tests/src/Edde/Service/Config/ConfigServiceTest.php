@@ -2,9 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Config;
 
-	use Edde\Exception\Config\RequiredConfigException;
-	use Edde\Exception\Config\RequiredSectionException;
-	use Edde\Exception\Config\RequiredValueException;
+	use Edde\Config\ConfigException;
 	use Edde\Inject\Config\ConfigLoader;
 	use Edde\Inject\Config\ConfigService;
 	use Edde\TestCase;
@@ -14,11 +12,10 @@
 		use ConfigLoader;
 
 		/**
-		 * @throws RequiredConfigException
-		 * @throws RequiredSectionException
+		 * @throws ConfigException
 		 */
 		public function testConfigException() {
-			$this->expectException(RequiredSectionException::class);
+			$this->expectException(ConfigException::class);
 			$this->expectExceptionMessage('Requested section [boo] is not available!');
 			$this->configLoader
 				->require(__DIR__ . '/assets/config.ini')
@@ -28,18 +25,17 @@
 		}
 
 		/**
-		 * @throws RequiredConfigException
+		 * @throws ConfigException
 		 */
 		public function testRequiredConfigException() {
-			$this->expectException(RequiredConfigException::class);
+			$this->expectException(ConfigException::class);
 			$this->expectExceptionMessage('Required config file [nope] is not available!');
 			$this->configLoader->require('nope');
 			$this->configLoader->compile();
 		}
 
 		/**
-		 * @throws RequiredConfigException
-		 * @throws RequiredSectionException
+		 * @throws ConfigException
 		 */
 		public function testSection() {
 			$this->configLoader->clear();
@@ -61,7 +57,7 @@
 		}
 
 		/**
-		 * @throws RequiredConfigException
+		 * @throws ConfigException
 		 */
 		public function testCompileOptional() {
 			$this->configLoader->require(__DIR__ . '/assets/config.ini');
@@ -70,22 +66,20 @@
 		}
 
 		/**
-		 * @throws RequiredConfigException
-		 * @throws RequiredSectionException
+		 * @throws ConfigException
 		 */
 		public function testRequiredSection() {
-			$this->expectException(RequiredSectionException::class);
+			$this->expectException(ConfigException::class);
 			$this->expectExceptionMessage('Requested section [nope] is not available!');
 			$this->configLoader->require(__DIR__ . '/assets/config.ini');
 			$this->configService->require('nope');
 		}
 
 		/**
-		 * @throws RequiredConfigException
-		 * @throws RequiredValueException
+		 * @throws ConfigException
 		 */
 		public function testRequiredValue() {
-			$this->expectException(RequiredValueException::class);
+			$this->expectException(ConfigException::class);
 			$this->expectExceptionMessage('Required section value [foo::nope] is not available!');
 			$this->configLoader->require(__DIR__ . '/assets/config.ini');
 			$section = $this->configService->optional('foo');
@@ -93,8 +87,7 @@
 		}
 
 		/**
-		 * @throws RequiredConfigException
-		 * @throws RequiredValueException
+		 * @throws ConfigException
 		 */
 		public function testYep() {
 			$this->configLoader->require(__DIR__ . '/assets/config.ini');

@@ -17,13 +17,10 @@
 	use Edde\Api\Storage\Query\ICrateSchemaQuery;
 	use Edde\Api\Storage\Query\ISelectQuery;
 	use Edde\Common\Storage\Query\NativeQuery;
-	use Edde\Exception\Config\RequiredConfigException;
-	use Edde\Exception\Config\RequiredSectionException;
-	use Edde\Exception\Config\RequiredValueException;
-	use Edde\Exception\Driver\DriverException;
-	use Edde\Exception\Driver\DriverQueryException;
+	use Edde\Config\ConfigException;
 	use Edde\Exception\Storage\DuplicateEntryException;
 	use Edde\Exception\Storage\NullValueException;
+	use Exception;
 	use GraphAware\Bolt\Configuration;
 	use GraphAware\Bolt\Exception\MessageFailureException;
 	use GraphAware\Bolt\GraphDatabase;
@@ -157,7 +154,7 @@
 		/**
 		 * @param IQueryQueue $queryQueue
 		 *
-		 * @throws \Exception
+		 * @throws Exception
 		 * @throws Throwable
 		 */
 		protected function executeQueryQueue(IQueryQueue $queryQueue) {
@@ -414,8 +411,8 @@
 		 * @param IWhere $where
 		 *
 		 * @return INativeQuery
-		 * @throws DriverQueryException
-		 * @throws \Exception
+		 *
+		 * @throws DriverException
 		 */
 		protected function fragmentWhere(IWhere $where): INativeQuery {
 			[$expression, $type] = $params = $where->getWhere();
@@ -431,7 +428,7 @@
 								$parameterId => $params[3],
 							]);
 					}
-					throw new DriverQueryException(sprintf('Unknown where operator [%s] target [%s].', get_class($where), $type));
+					throw new DriverException(sprintf('Unknown where operator [%s] target [%s].', get_class($where), $type));
 				case 'null':
 					$name = $this->delimite($params[2]);
 					if (($dot = strpos($params[2], '.')) !== false) {
@@ -471,7 +468,7 @@
 					$fragment .= ')';
 					return new NativeQuery($fragment, isset($nativeQuery) ? $nativeQuery->getParams() : []);
 				default:
-					throw new DriverQueryException(sprintf('Unknown where type [%s] for clause [%s].', $expression, get_class($where)));
+					throw new DriverException(sprintf('Unknown where type [%s] for clause [%s].', $expression, get_class($where)));
 			}
 		}
 
@@ -484,9 +481,7 @@
 		 * @inheritdoc
 		 *
 		 * @throws ReflectionException
-		 * @throws RequiredConfigException
-		 * @throws RequiredSectionException
-		 * @throws RequiredValueException
+		 * @throws ConfigException
 		 */
 		protected function handleSetup(): void {
 			parent::handleSetup();

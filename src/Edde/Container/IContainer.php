@@ -63,7 +63,7 @@
 		 *
 		 * @return IFactory
 		 *
-		 * @throws \Edde\Exception\Container\UnknownFactoryException
+		 * @throws ContainerException
 		 */
 		public function getFactory(string $dependency, string $source = null): IFactory;
 

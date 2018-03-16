@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Exception\Entity;
+	namespace Edde\Entity;
 
 	use Edde\Exception\EddeException;
 

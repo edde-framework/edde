@@ -4,7 +4,7 @@
 
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Content\IContent;
-	use Edde\Exception\Converter\UnsupportedConversionException;
+	use Edde\Converter\ConverterException;
 
 	/**
 	 * A Converter is an implementation of converter from one type to another one; the core
@@ -19,14 +19,14 @@
 		 *
 		 * @return string[]
 		 */
-		public function getSourceList(): array;
+		public function getSources(): array;
 
 		/**
 		 * return an array with supported target conversion
 		 *
 		 * @return string[]
 		 */
-		public function getTargetList(): array;
+		public function getTargets(): array;
 
 		/**
 		 * do the conversion; it could event be direct streamed conversion from one
@@ -37,7 +37,7 @@
 		 *
 		 * @return IContent
 		 *
-		 * @throws UnsupportedConversionException
+		 * @throws ConverterException
 		 */
 		public function convert(IContent $content, string $target = null): IContent;
 	}

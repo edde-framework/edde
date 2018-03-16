@@ -8,7 +8,6 @@
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Common\Converter\Convertable;
 	use Edde\Common\Converter\PassConverter;
-	use Edde\Exception\Converter\ConverterException;
 	use Edde\Object;
 
 	class ConverterManager extends Object implements IConverterManager {
@@ -21,8 +20,8 @@
 		 * @inheritdoc
 		 */
 		public function registerConverter(IConverter $converter): IConverterManager {
-			foreach ($converter->getSourceList() as $source) {
-				foreach ($converter->getTargetList() as $target) {
+			foreach ($converter->getSources() as $source) {
+				foreach ($converter->getTargets() as $target) {
 					$this->converters[$source . '|' . $target] = $converter;
 				}
 			}
@@ -61,7 +60,7 @@
 			if ($targetList === null || $mime === reset($targetList)) {
 				return new Convertable(new PassConverter(), $content, $content->getType());
 			}
-			throw new ConverterException(sprintf('Cannot convert %ssource mime [%s] to any of [%s].', $unknown ? 'unknown/unsupported ' : '', $mime, implode(', ', $targetList)), 0, $exception);
+			throw new \Edde\Converter\ConverterException(sprintf('Cannot convert %ssource mime [%s] to any of [%s].', $unknown ? 'unknown/unsupported ' : '', $mime, implode(', ', $targetList)), 0, $exception);
 		}
 
 		/**

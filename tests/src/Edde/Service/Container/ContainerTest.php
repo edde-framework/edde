@@ -9,7 +9,6 @@
 	use Edde\Common\Container\Factory\ProxyFactory;
 	use Edde\Container\ContainerException;
 	use Edde\Container\IContainer;
-	use Edde\Exception\Container\UnknownFactoryException;
 	use Edde\Exception\EddeException;
 	use Edde\Inject\Container\Container;
 	use Edde\Test\AutowireDependencyObject;
@@ -24,7 +23,7 @@
 		use Container;
 
 		public function testUnknownFactory() {
-			$this->expectException(UnknownFactoryException::class);
+			$this->expectException(ContainerException::class);
 			$this->expectExceptionMessage('Unknown factory [unknown] for dependency [source].');
 			$this->container->create('unknown', [], 'source');
 		}
@@ -89,7 +88,7 @@
 		}
 
 		/**
-		 * @throws UnknownFactoryException
+		 * @throws ContainerException
 		 */
 		public function testInstancedFactory() {
 			self::assertInstanceOf(FooObject::class, $fooObject = $this->container->create('instanced'));
@@ -105,7 +104,7 @@
 		}
 
 		/**
-		 * @throws UnknownFactoryException
+		 * @throws ContainerException
 		 */
 		public function testInterfaceDependencyFactory() {
 			$dependency = $this->container->getFactory(\Edde\Container\IContainer::class)->getReflection($this->container, IContainer::class);

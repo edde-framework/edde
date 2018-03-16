@@ -3,7 +3,7 @@
 	namespace Edde\Service\Config;
 
 	use Edde\Api\Config\IConfigLoader;
-	use Edde\Exception\Config\RequiredConfigException;
+	use Edde\Config\ConfigException;
 	use Edde\Object;
 	use stdClass;
 	use function is_readable;
@@ -42,12 +42,12 @@
 			foreach ($this->configs as [$file, $required]) {
 				if (is_readable($file) === false) {
 					if ($required) {
-						throw new RequiredConfigException(sprintf('Required config file [%s] is not available!', $file));
+						throw new ConfigException(sprintf('Required config file [%s] is not available!', $file));
 					}
 					continue;
 				} else if (($source = parse_ini_file($file, true, INI_SCANNER_TYPED)) === false) {
 					if ($required) {
-						throw new RequiredConfigException(sprintf('Required config file [%s] cannot be parsed.', $file));
+						throw new ConfigException(sprintf('Required config file [%s] cannot be parsed.', $file));
 					}
 					continue;
 				}

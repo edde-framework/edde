@@ -2,8 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Config;
 
-	use Edde\Exception\Config\RequiredConfigException;
-	use Edde\Exception\Config\RequiredSectionException;
+	use Edde\Config\ConfigException;
 
 	interface IConfigService extends IConfigurable {
 		/**
@@ -11,8 +10,7 @@
 		 *
 		 * @return ISection
 		 *
-		 * @throws RequiredSectionException
-		 * @throws RequiredConfigException
+		 * @throws ConfigException
 		 */
 		public function require(string $name): ISection;
 
@@ -21,7 +19,7 @@
 		 *
 		 * @return ISection
 		 *
-		 * @throws RequiredConfigException
+		 * @throws ConfigException
 		 */
 		public function optional(string $name): ISection;
 	}

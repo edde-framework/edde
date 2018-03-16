@@ -3,7 +3,7 @@
 	namespace Edde\Service\Config;
 
 	use Edde\Api\Config\ISection;
-	use Edde\Exception\Config\RequiredValueException;
+	use Edde\Config\ConfigException;
 	use Edde\Object;
 	use stdClass;
 
@@ -30,7 +30,7 @@
 		/** @inheritdoc */
 		public function require(string $name) {
 			if (isset($this->section->$name) === false) {
-				throw new RequiredValueException(sprintf('Required section value [%s::%s] is not available!', $this->name, $name));
+				throw new ConfigException(sprintf('Required section value [%s::%s] is not available!', $this->name, $name));
 			}
 			return $this->section->$name;
 		}

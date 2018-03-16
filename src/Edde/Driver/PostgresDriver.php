@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Driver;
 
-	use Edde\Exception\Driver\DriverQueryException;
 	use Edde\Exception\Storage\DuplicateEntryException;
 	use Edde\Exception\Storage\DuplicateTableException;
 	use Edde\Exception\Storage\NullValueException;
 	use Edde\Exception\Storage\UnknownTableException;
+	use Throwable;
 
 	class PostgresDriver extends AbstractDatabaseDriver {
 		/** @inheritdoc */
@@ -19,11 +19,7 @@
 			return '"' . str_replace('"', '""', $delimite) . '"';
 		}
 
-		/**
-		 * @inheritdoc
-		 *
-		 * @throws DriverQueryException
-		 */
+		/** @inheritdoc */
 		public function type(string $type): string {
 			switch (strtolower($type)) {
 				case 'string':
@@ -41,11 +37,11 @@
 				case 'datetime':
 					return 'TIMESTAMP(6)';
 			}
-			throw new DriverQueryException(sprintf('Unknown type [%s] in driver [%s]', $type, static::class));
+			throw new DriverException(sprintf('Unknown type [%s] in driver [%s]', $type, static::class));
 		}
 
 		/** @inheritdoc */
-		protected function exception(\Throwable $throwable): \Throwable {
+		protected function exception(Throwable $throwable): Throwable {
 			if (stripos($message = $throwable->getMessage(), 'unique') !== false) {
 				return new DuplicateEntryException($message, 0, $throwable);
 			} else if (stripos($message, 'not null') !== false) {
@@ -55,6 +51,6 @@
 			} else if (stripos($message, 'undefined table') !== false) {
 				return new UnknownTableException($message, 0, $throwable);
 			}
-			return new DriverQueryException($message, 0, $throwable);
+			return new DriverException($message, 0, $throwable);
 		}
 	}

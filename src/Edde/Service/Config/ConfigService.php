@@ -4,8 +4,7 @@
 
 	use Edde\Api\Config\IConfigService;
 	use Edde\Api\Config\ISection;
-	use Edde\Exception\Config\RequiredConfigException;
-	use Edde\Exception\Config\RequiredSectionException;
+	use Edde\Config\ConfigException;
 	use Edde\Inject\Config\ConfigLoader;
 	use Edde\Object;
 	use stdClass;
@@ -20,12 +19,7 @@
 			return $this->section($name, true);
 		}
 
-		/**
-		 * @inheritdoc
-		 *
-		 * @throws RequiredConfigException
-		 * @throws RequiredSectionException
-		 */
+		/** @inheritdoc */
 		public function optional(string $name): ISection {
 			return $this->section($name, false);
 		}
@@ -36,8 +30,7 @@
 		 *
 		 * @return ISection
 		 *
-		 * @throws RequiredSectionException
-		 * @throws RequiredConfigException
+		 * @throws ConfigException
 		 */
 		protected function section(string $name, bool $required): ISection {
 			if (isset($this->sections[$name])) {
@@ -45,7 +38,7 @@
 			}
 			$source = $this->configLoader->compile();
 			if ($required && isset($source->$name) === false) {
-				throw new RequiredSectionException(sprintf('Requested section [%s] is not available!', $name));
+				throw new ConfigException(sprintf('Requested section [%s] is not available!', $name));
 			}
 			return $this->sections[$name] = new Section($name, $source->$name ?? new stdClass());
 		}

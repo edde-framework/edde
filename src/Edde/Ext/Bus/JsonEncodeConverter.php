@@ -6,7 +6,7 @@
 	use Edde\Api\Content\IContent;
 	use Edde\Common\Converter\AbstractConverter;
 	use Edde\Content\Content;
-	use Edde\Exception\Converter\ConverterException;
+	use Edde\Converter\ConverterException;
 	use Edde\Inject\Bus\MessageBus;
 	use Edde\Inject\Converter\ConverterManager;
 	use stdClass;
@@ -26,7 +26,7 @@
 		/**
 		 * @inheritdoc
 		 *
-		 * @throws ConverterException
+		 * @throws \Edde\Converter\ConverterException
 		 */
 		public function convert(IContent $content, string $target = null): IContent {
 			$source = $this->messageBus->export($content->getContent());

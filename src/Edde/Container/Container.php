@@ -4,7 +4,6 @@
 
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Common\Container\Factory\ClassFactory;
-	use Edde\Exception\Container\UnknownFactoryException;
 	use SplStack;
 
 	/**
@@ -70,7 +69,7 @@
 			/**
 			 * no factory is able to handle given dependency name, oops
 			 */
-			throw new UnknownFactoryException(sprintf('Unknown factory [%s] for dependency [%s]%s.', $dependency, $source ?: 'unknown source', $this->stack->isEmpty() ? '' : '; dependency chain [' . implode('→', array_reverse(iterator_to_array($this->stack))) . ']'));
+			throw new ContainerException(sprintf('Unknown factory [%s] for dependency [%s]%s.', $dependency, $source ?: 'unknown source', $this->stack->isEmpty() ? '' : '; dependency chain [' . implode('→', array_reverse(iterator_to_array($this->stack))) . ']'));
 		}
 
 		/** @inheritdoc */

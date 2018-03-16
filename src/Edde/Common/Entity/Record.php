@@ -4,14 +4,14 @@
 
 	use Edde\Api\Entity\IEntity;
 	use Edde\Api\Entity\IRecord;
-	use Edde\Exception\Entity\RecordException;
+	use Edde\Entity\EntityException;
 	use Edde\Inject\Entity\EntityManager;
 	use Edde\Object;
 	use Edde\Schema\ISchema;
 
 	class Record extends Object implements IRecord {
 		use EntityManager;
-		/** @var \Edde\Schema\ISchema[] */
+		/** @var ISchema[] */
 		protected $schemas;
 		/** @var array */
 		protected $source;
@@ -19,8 +19,8 @@
 		protected $entities;
 
 		/**
-		 * @param \Edde\Schema\ISchema[] $schemas
-		 * @param array                  $source
+		 * @param ISchema[] $schemas
+		 * @param array     $source
 		 */
 		public function __construct(array $schemas, array $source) {
 			$this->schemas = $schemas;
@@ -30,7 +30,7 @@
 		/** @inheritdoc */
 		public function getSource(string $alias): array {
 			if (isset($this->source[$alias]) === false) {
-				throw new RecordException(sprintf('Requested unknown source alias [%s].', $alias));
+				throw new EntityException(sprintf('Requested unknown source alias [%s].', $alias));
 			}
 			return $this->source[$alias];
 		}
@@ -41,7 +41,7 @@
 				return $this->entities[$alias];
 			}
 			if (isset($this->schemas[$alias]) === false) {
-				throw new RecordException(sprintf('Requested unknown schema alias [%s].', $alias));
+				throw new EntityException(sprintf('Requested unknown schema alias [%s].', $alias));
 			}
 			return $this->entities[$alias] = $this->entityManager->load($this->schemas[$alias], $this->getSource($alias));
 		}

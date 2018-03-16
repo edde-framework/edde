@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Config;
 
-	use Edde\Exception\Config\RequiredValueException;
+	use Edde\Config\ConfigException;
 	use stdClass;
 
 	interface ISection {
@@ -20,7 +20,7 @@
 		 *
 		 * @return mixed
 		 *
-		 * @throws RequiredValueException
+		 * @throws ConfigException
 		 */
 		public function require(string $name);
 

@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Driver;
 
-	use Edde\Exception\Driver\DriverQueryException;
 	use Edde\Exception\Storage\DuplicateEntryException;
 	use Edde\Exception\Storage\DuplicateTableException;
 	use Edde\Exception\Storage\NullValueException;
@@ -15,11 +14,7 @@
 			return '`' . str_replace('`', '``', $delimite) . '`';
 		}
 
-		/**
-		 * @inheritdoc
-		 *
-		 * @throws DriverQueryException
-		 */
+		/** @inheritdoc */
 		public function type(string $type): string {
 			switch (strtolower($type)) {
 				case 'string':
@@ -37,7 +32,7 @@
 				case 'datetime':
 					return 'DATETIME(6)';
 			}
-			throw new DriverQueryException(sprintf('Unknown type [%s] in driver [%s]', $type, static::class));
+			throw new DriverException(sprintf('Unknown type [%s] in driver [%s]', $type, static::class));
 		}
 
 		/** @inheritdoc */
@@ -51,6 +46,6 @@
 			} else if (stripos($message, 'table or view not found') !== false) {
 				return new UnknownTableException($message, 0, $throwable);
 			}
-			return new DriverQueryException($message, 0, $throwable);
+			return new DriverException($message, 0, $throwable);
 		}
 	}

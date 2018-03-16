@@ -5,7 +5,7 @@
 	use Edde\Api\Content\IContent;
 	use Edde\Common\Converter\AbstractConverter;
 	use Edde\Content\Content;
-	use Edde\Exception\Converter\UnsupportedConversionException;
+	use Edde\Converter\ConverterException;
 
 	class JsonDecodeConverter extends AbstractConverter {
 		public function __construct() {
@@ -19,9 +19,7 @@
 			]);
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function convert(IContent $content, string $target = null): IContent {
 			switch ($target) {
 				case 'array':
@@ -32,6 +30,6 @@
 				case  null:
 					return $content;
 			}
-			throw new UnsupportedConversionException(sprintf('Conversion from [%s] to [%s] is not supported by [%s]', $content->getType(), $target, static::class));
+			throw new ConverterException(sprintf('Conversion from [%s] to [%s] is not supported by [%s]', $content->getType(), $target, static::class));
 		}
 	}

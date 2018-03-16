@@ -4,12 +4,12 @@
 
 	use Edde\Api\Driver\IDriver;
 	use Edde\Common\Container\Factory\InstanceFactory;
+	use Edde\Driver\DriverException;
 	use Edde\Driver\Neo4jDriver;
-	use Edde\Exception\Driver\DriverException;
 
 	class Neo4jStorageTest extends AbstractStorageTest {
 		/**
-		 * @throws DriverException
+		 * @throws \Edde\Driver\DriverException
 		 */
 		public function testPrepareDatabase() {
 			$this->storage->exec('MATCH (n) DETACH DELETE n');

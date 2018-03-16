@@ -4,8 +4,8 @@
 
 	use Edde\Api\Driver\IDriver;
 	use Edde\Common\Container\Factory\InstanceFactory;
+	use Edde\Driver\DriverException;
 	use Edde\Driver\PostgresDriver;
-	use Edde\Exception\Driver\DriverException;
 
 	class PostgresStorageTest extends AbstractStorageTest {
 		/**

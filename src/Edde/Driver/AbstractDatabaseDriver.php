@@ -15,15 +15,10 @@
 	use Edde\Api\Storage\Query\ICrateSchemaQuery;
 	use Edde\Api\Storage\Query\ISelectQuery;
 	use Edde\Common\Storage\Query\NativeQuery;
-	use Edde\Exception\Config\RequiredConfigException;
-	use Edde\Exception\Config\RequiredSectionException;
-	use Edde\Exception\Config\RequiredValueException;
-	use Edde\Exception\Driver\DriverException;
-	use Edde\Exception\Driver\DriverQueryException;
+	use Edde\Config\ConfigException;
 	use PDO;
 	use PDOException;
 	use PDOStatement;
-	use ReflectionException;
 	use Throwable;
 	use function implode;
 
@@ -329,7 +324,7 @@
 		 *
 		 * @return NativeQuery
 		 *
-		 * @throws DriverQueryException
+		 * @throws DriverException
 		 */
 		protected function fragmentWhere(IWhere $where) {
 			[$expression, $type] = $params = $where->getWhere();
@@ -345,7 +340,7 @@
 								$parameterId => $params[3],
 							]);
 					}
-					throw new DriverQueryException(sprintf('Unknown where operator [%s] target [%s].', get_class($where), $type));
+					throw new DriverException(sprintf('Unknown where operator [%s] target [%s].', get_class($where), $type));
 				case 'null':
 					$name = $this->delimite($params[2]);
 					if (($dot = strpos($params[2], '.')) !== false) {
@@ -359,7 +354,7 @@
 					}
 					return new NativeQuery($name . ' IS NOT NULL');
 				default:
-					throw new DriverQueryException(sprintf('Unknown where type [%s] for clause [%s].', $expression, get_class($where)));
+					throw new DriverException(sprintf('Unknown where type [%s] for clause [%s].', $expression, get_class($where)));
 			}
 		}
 
@@ -412,10 +407,7 @@
 		/**
 		 * @inheritdoc
 		 *
-		 * @throws RequiredConfigException
-		 * @throws RequiredSectionException
-		 * @throws RequiredValueException
-		 * @throws ReflectionException
+		 * @throws ConfigException
 		 */
 		public function handleSetup(): void {
 			parent::handleSetup();
@@ -436,5 +428,12 @@
 
 		abstract public function delimite(string $delimite): string;
 
+		/**
+		 * @param string $type
+		 *
+		 * @return string
+		 *
+		 * @throws DriverException
+		 */
 		abstract public function type(string $type): string;
 	}

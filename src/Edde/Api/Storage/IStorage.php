@@ -4,9 +4,6 @@
 
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Storage\Query\IQuery;
-	use Edde\Exception\Storage\DuplicateTableException;
-	use Edde\Exception\Storage\ExclusiveTransactionException;
-	use Edde\Exception\Storage\NoTransactionException;
 	use Edde\Exception\Storage\StorageException;
 
 	interface IStorage extends IConfigurable {
@@ -45,7 +42,7 @@
 		 *
 		 * @throws StorageException
 		 * @throws \Edde\Exception\Storage\DuplicateTableException
-		 * @throws \Edde\Exception\Driver\DriverException
+		 * @throws \Edde\Driver\DriverException
 		 */
 		public function execute(IQuery $query);
 
@@ -66,7 +63,7 @@
 		 *
 		 * @return mixed native driver result
 		 *
-		 * @throws \Edde\Exception\Driver\DriverException
+		 * @throws \Edde\Driver\DriverException
 		 */
 		public function fetch($query, array $params = []);
 
@@ -76,7 +73,7 @@
 		 *
 		 * @return mixed native driver result
 		 *
-		 * @throws \Edde\Exception\Driver\DriverException
+		 * @throws \Edde\Driver\DriverException
 		 */
 		public function exec($query, array $params = []);
 	}

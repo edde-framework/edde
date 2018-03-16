@@ -3,7 +3,6 @@
 	namespace Edde\Container;
 
 	use Edde\Api\Config\IConfigurator;
-	use Edde\Exception\Container\UnknownFactoryException;
 	use Edde\Object;
 
 	abstract class AbstractContainer extends Object implements IContainer {
@@ -12,9 +11,7 @@
 		/** @var IConfigurator[][] */
 		protected $configurators = [];
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function registerFactory(IFactory $factory, string $id = null): IContainer {
 			if ($id !== null) {
 				$this->factories[$id] = $factory;
@@ -24,9 +21,7 @@
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function registerFactories(array $factories): IContainer {
 			$this->factories = [];
 			foreach ($factories as $id => $factory) {
@@ -35,17 +30,13 @@
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function registerConfigurator(string $name, IConfigurator $configurator): IContainer {
 			$this->configurators[$name][] = $configurator;
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function registerConfigurators(array $configurators): IContainer {
 			$this->configurators = [];
 			foreach ($configurators as $name => $configurator) {
@@ -54,21 +45,17 @@
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function canHandle(string $dependency): bool {
 			try {
 				$this->getFactory($dependency);
 				return true;
-			} catch (UnknownFactoryException $exception) {
+			} catch (ContainerException $exception) {
 				return false;
 			}
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function create(string $name, array $parameterList = [], string $source = null) {
 			return $this->factory($this->getFactory($name, $source), $name, $parameterList, $source);
 		}

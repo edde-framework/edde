@@ -14,7 +14,7 @@
 	use Edde\Common\Url\Url;
 	use Edde\Content\InputContent;
 	use Edde\Content\PostContent;
-	use Edde\Exception\Converter\ConverterException;
+	use Edde\Converter\ConverterException;
 	use Edde\Exception\Http\EmptyBodyException;
 	use Edde\Exception\Http\NoHttpException;
 	use Edde\Exception\Url\UrlException;
@@ -66,7 +66,7 @@
 		 * @throws \Edde\Exception\Http\EmptyBodyException
 		 * @throws \Edde\Exception\Url\UrlException
 		 * @throws \Edde\Exception\Http\NoHttpException
-		 * @throws ConverterException
+		 * @throws \Edde\Converter\ConverterException
 		 */
 		public function getContent(...$targetList) {
 			if (($content = $this->getRequest()->getContent()) === null) {

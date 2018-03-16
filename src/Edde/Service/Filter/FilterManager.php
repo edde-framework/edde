@@ -4,8 +4,7 @@
 
 	use Edde\Api\Filter\IFilter;
 	use Edde\Api\Filter\IFilterManager;
-	use Edde\Exception\Filter\FilterException;
-	use Edde\Exception\Filter\UnknownFilterException;
+	use Edde\Filter\FilterException;
 	use Edde\Object;
 
 	class FilterManager extends Object implements IFilterManager {
@@ -29,7 +28,7 @@
 		/** @inheritdoc */
 		public function getFilter(string $name): IFilter {
 			if (isset($this->filters[$name]) === false) {
-				throw new UnknownFilterException(sprintf('Requested unknown filter [%s].', $name));
+				throw new FilterException(sprintf('Requested unknown filter [%s].', $name));
 			}
 			return $this->filters[$name];
 		}

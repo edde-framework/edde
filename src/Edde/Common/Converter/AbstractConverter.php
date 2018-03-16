@@ -17,14 +17,14 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getSourceList(): array {
+		public function getSources(): array {
 			return $this->sourceList;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function getTargetList(): array {
+		public function getTargets(): array {
 			return $this->targetList;
 		}
 	}

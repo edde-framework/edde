@@ -2,32 +2,26 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Container\Factory;
 
+	use Edde\Container\ContainerException;
 	use Edde\Container\IContainer;
 	use Edde\Container\IFactory;
 	use Edde\Container\IReflection;
-	use Edde\Exception\Container\UnknownFactoryException;
 	use Edde\Object;
 
 	/**
 	 * Basic implementation for all dependency factories.
 	 */
 	abstract class AbstractFactory extends Object implements IFactory {
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getFactory(IContainer $container): IFactory {
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function fetch(IContainer $container, string $name, array $parameterList) {
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function push(IContainer $container, $instance) {
 			return $instance;
 		}
@@ -39,7 +33,8 @@
 		 * @param string|null $name
 		 *
 		 * @return array
-		 * @throws UnknownFactoryException
+		 *
+		 * @throws ContainerException
 		 */
 		protected function parameters(IContainer $container, array $parameterList, IReflection $reflection, string $name = null) {
 			$grab = count($parameterList);

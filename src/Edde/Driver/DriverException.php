@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Exception\Driver;
+	namespace Edde\Driver;
 
 	use Edde\Exception\EddeException;
 

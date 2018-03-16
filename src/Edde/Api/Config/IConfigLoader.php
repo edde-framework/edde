@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Config;
 
-	use Edde\Exception\Config\RequiredConfigException;
+	use Edde\Config\ConfigException;
 	use stdClass;
 
 	interface IConfigLoader extends IConfigurable {
@@ -32,7 +32,7 @@
 		 *
 		 * @return stdClass
 		 *
-		 * @throws RequiredConfigException
+		 * @throws ConfigException
 		 */
 		public function compile(): stdClass;
 	}

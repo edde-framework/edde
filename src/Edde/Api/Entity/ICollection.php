@@ -3,8 +3,8 @@
 	namespace Edde\Api\Entity;
 
 	use Edde\Api\Storage\Query\ISelectQuery;
-	use Edde\Exception\Entity\RecordException;
-	use Edde\Exception\Entity\UnknownAliasException;
+	use Edde\Entity\EntityException;
+	use Edde\Entity\EntityNotFoundException;
 	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
 	use IteratorAggregate;
@@ -29,7 +29,8 @@
 		 * @param string $alias
 		 *
 		 * @return ISchema
-		 * @throws UnknownAliasException
+		 *
+		 * @throws EntityException
 		 */
 		public function getSchema(string $alias): ISchema;
 
@@ -57,7 +58,8 @@
 		 *
 		 * @return IEntity
 		 *
-		 * @throws RecordException
+		 * @throws EntityException
+		 * @throws EntityNotFoundException
 		 */
 		public function getEntity(string $alias): IEntity;
 
@@ -65,7 +67,8 @@
 		 * get exacly one record or throw an exception if result is empty
 		 *
 		 * @return IRecord
-		 * @throws RecordException
+		 *
+		 * @throws EntityException
 		 */
 		public function getRecord(): IRecord;
 
@@ -77,6 +80,8 @@
 		 * @param mixed  $name
 		 *
 		 * @return IEntity
+		 *
+		 * @throws EntityNotFoundException
 		 */
 		public function entity(string $alias, $name): IEntity;
 
@@ -149,7 +154,8 @@
 		 * link the given schema
 		 *
 		 * @return ICollection
-		 * @throws \Edde\Schema\SchemaException
+		 *
+		 * @throws SchemaException
 		 */
 		public function link(string $alias, string $schema): ICollection;
 
