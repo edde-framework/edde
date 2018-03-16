@@ -3,7 +3,7 @@
 	namespace Edde\Common\Xml;
 
 	use Edde\Api\Xml\Inject\XmlParser;
-	use Edde\Ext\Test\TestCase;
+	use Edde\TestCase;
 
 	require_once(__DIR__ . '/assets/assets.php');
 

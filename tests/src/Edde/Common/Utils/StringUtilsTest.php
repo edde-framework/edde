@@ -3,7 +3,7 @@
 	namespace Edde\Common\Utils;
 
 	use Edde\Api\Utils\Inject\StringUtils;
-	use Edde\Ext\Test\TestCase;
+	use Edde\TestCase;
 
 	class StringUtilsTest extends TestCase {
 		use StringUtils;

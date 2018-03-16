@@ -36,7 +36,7 @@
 		}
 
 		/** @inheritdoc */
-		public function optional(string $name, $default) {
+		public function optional(string $name, $default = null) {
 			return $this->section->$name ?? $default;
 		}
 

@@ -7,17 +7,18 @@
 	use Edde\Api\Storage\Exception\DuplicateTableException;
 	use Edde\Api\Storage\Exception\NullValueException;
 	use Edde\Api\Storage\Exception\UnknownTableException;
+	use Throwable;
 
 	class MysqlDriver extends AbstractDatabaseDriver {
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function delimite(string $delimite): string {
 			return '`' . str_replace('`', '``', $delimite) . '`';
 		}
 
 		/**
 		 * @inheritdoc
+		 *
+		 * @throws DriverQueryException
 		 */
 		public function type(string $type): string {
 			switch (strtolower($type)) {
@@ -39,10 +40,8 @@
 			throw new DriverQueryException(sprintf('Unknown type [%s] in driver [%s]', $type, static::class));
 		}
 
-		/**
-		 * @inheritdoc
-		 */
-		protected function exception(\Throwable $throwable): \Throwable {
+		/** @inheritdoc */
+		protected function exception(Throwable $throwable): Throwable {
 			if (stripos($message = $throwable->getMessage(), 'duplicate') !== false) {
 				return new DuplicateEntryException($message, 0, $throwable);
 			} else if (stripos($message, 'cannot be null') !== false || stripos($message, 'have a default value') !== false) {

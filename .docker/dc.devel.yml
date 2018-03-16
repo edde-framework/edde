@@ -4,9 +4,6 @@ services:
                 image: edde
                 container_name: edde
                 environment:
-                    - NEO4J_AUTH=neo4j/eeQFXk7kkqSm
-                    - POSTGRES_PASSWORD=PBXxSgEWY3LT
-                    - MYSQL_PASSWORD=enPUxu8SRctV
                     - XDEBUG_IP=$XDEBUG_IP
                     - PHP_IDE_CONFIG=serverName=edde
                 volumes:
@@ -51,6 +48,13 @@ services:
                 - MYSQL_PASSWORD=enPUxu8SRctV
             ports:
                 - "3306:3306"
+            networks:
+                - edde-network
+
+        adminer:
+            image: adminer:latest
+            ports:
+                - "8080:8080"
             networks:
                 - edde-network
 

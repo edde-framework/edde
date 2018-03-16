@@ -63,10 +63,21 @@
 		 * execute the given native query and return stream as a result
 		 *
 		 * @param mixed $query
-		 * @param array $parameters
+		 * @param array $params
 		 *
-		 * @return IStream
+		 * @return mixed native driver result
+		 *
 		 * @throws DriverException
 		 */
-		public function native($query, array $parameters = []);
+		public function fetch($query, array $params = []);
+
+		/**
+		 * @param mixed $query
+		 * @param array $params
+		 *
+		 * @return mixed native driver result
+		 *
+		 * @throws DriverException
+		 */
+		public function exec($query, array $params = []);
 	}

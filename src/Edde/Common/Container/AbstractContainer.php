@@ -9,33 +9,29 @@
 	use Edde\Common\Object\Object;
 
 	abstract class AbstractContainer extends Object implements IContainer {
-		/**
-		 * @var IFactory[]
-		 */
-		protected $factoryList = [];
-		/**
-		 * @var IConfigurator[][]
-		 */
-		protected $configuratorList = [];
+		/** @var IFactory[] */
+		protected $factories = [];
+		/** @var IConfigurator[][] */
+		protected $configurators = [];
 
 		/**
 		 * @inheritdoc
 		 */
 		public function registerFactory(IFactory $factory, string $id = null): IContainer {
 			if ($id !== null) {
-				$this->factoryList[$id] = $factory;
+				$this->factories[$id] = $factory;
 				return $this;
 			}
-			$this->factoryList[] = $factory;
+			$this->factories[] = $factory;
 			return $this;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function registerFactoryList(array $factoryList): IContainer {
-			$this->factoryList = [];
-			foreach ($factoryList as $id => $factory) {
+		public function registerFactories(array $factories): IContainer {
+			$this->factories = [];
+			foreach ($factories as $id => $factory) {
 				$this->registerFactory($factory, is_string($id) ? $id : null);
 			}
 			return $this;
@@ -45,16 +41,16 @@
 		 * @inheritdoc
 		 */
 		public function registerConfigurator(string $name, IConfigurator $configurator): IContainer {
-			$this->configuratorList[$name][] = $configurator;
+			$this->configurators[$name][] = $configurator;
 			return $this;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function registerConfiguratorList(array $configuratorList): IContainer {
-			$this->configuratorList = [];
-			foreach ($configuratorList as $name => $configurator) {
+		public function registerConfigurators(array $configurators): IContainer {
+			$this->configurators = [];
+			foreach ($configurators as $name => $configurator) {
 				$this->registerConfigurator($name, $configurator);
 			}
 			return $this;

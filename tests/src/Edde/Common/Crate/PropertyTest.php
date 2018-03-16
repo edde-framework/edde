@@ -1,7 +1,7 @@
 <?php
 	namespace Edde\Common\Crate;
 
-	use Edde\Ext\Test\TestCase;
+	use Edde\TestCase;
 
 	class PropertyTest extends TestCase {
 		public function testName() {

@@ -5,7 +5,7 @@
 	use Edde\Api\Validator\Exception\UnknownValidatorException;
 	use Edde\Api\Validator\Exception\ValidationException;
 	use Edde\Api\Validator\Inject\ValidatorManager;
-	use Edde\Ext\Test\TestCase;
+	use Edde\TestCase;
 
 	class ValidatorManagerTest extends TestCase {
 		use ValidatorManager;

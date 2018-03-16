@@ -5,7 +5,7 @@
 	use Edde\Api\Schema\Exception\UnknownPropertyException;
 	use Edde\Api\Schema\Exception\UnknownSchemaException;
 	use Edde\Api\Schema\Inject\SchemaManager;
-	use Edde\Ext\Test\TestCase;
+	use Edde\TestCase;
 	use function array_values;
 
 	class SchemaManagerTest extends TestCase {

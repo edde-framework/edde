@@ -21,7 +21,7 @@
 		/**
 		 * @var array
 		 */
-		protected $parameterList;
+		protected $params;
 		/**
 		 * @var mixed
 		 */
@@ -43,14 +43,14 @@
 		 *
 		 * @param string     $name
 		 * @param string     $class
-		 * @param array      $parameterList
+		 * @param array      $params
 		 * @param mixed|null $instance
 		 * @param bool       $cloneable
 		 */
-		public function __construct(string $name, string $class, array $parameterList = [], $instance = null, bool $cloneable = false) {
+		public function __construct(string $name, string $class, array $params = [], $instance = null, bool $cloneable = false) {
 			$this->name = $name;
 			$this->class = $class;
-			$this->parameterList = $parameterList;
+			$this->params = $params;
 			$this->instance = $instance;
 			$this->cloneable = $cloneable;
 		}
@@ -84,7 +84,7 @@
 		 */
 		public function factory(IContainer $container, array $parameters, IReflection $dependency, string $name = null) {
 			if ($this->instance === null) {
-				$this->instance = $container->dependency($this->instance = parent::factory($container, $this->parameterList, $dependency, $this->class), $dependency);
+				$this->instance = $container->dependency($this->instance = parent::factory($container, $this->params, $dependency, $this->class), $dependency);
 			}
 			/**
 			 * immediate clone is necessary because otherwise base class could be (surprisingly) changed

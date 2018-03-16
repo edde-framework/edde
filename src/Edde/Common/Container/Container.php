@@ -3,7 +3,6 @@
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Container\Exception\FactoryException;
 	use Edde\Api\Container\Exception\UnknownFactoryException;
 	use Edde\Api\Container\IAutowire;
 	use Edde\Api\Container\IFactory;
@@ -36,17 +35,11 @@
 	 * Little Johnny replied, "Then go fuck yourself.
 	 */
 	class Container extends AbstractContainer {
-		/**
-		 * @var SplStack
-		 */
+		/** @var SplStack */
 		protected $stack;
-		/**
-		 * @var IFactory[]
-		 */
+		/** @var IFactory[] */
 		protected $factoryMap;
-		/**
-		 * @var IReflection[]
-		 */
+		/** @var IReflection[] */
 		protected $autowires;
 
 		public function __construct() {
@@ -58,10 +51,7 @@
 			$this->autowires = [];
 		}
 
-		/**
-		 * @inheritdoc
-		 * @throws FactoryException
-		 */
+		/** @inheritdoc */
 		public function getFactory(string $dependency, string $source = null): IFactory {
 			/**
 			 * searching for dependency could be quite expensive task, so it's necessary
@@ -76,7 +66,7 @@
 			 * factories for all classes; that means container must find factory for the given
 			 * dependency name
 			 */
-			foreach ($this->factoryList as $factory) {
+			foreach ($this->factories as $factory) {
 				if ($factory->canHandle($this, $dependency)) {
 					return $this->factoryMap[$dependency] = $factory->getFactory($this);
 				}
@@ -87,9 +77,7 @@
 			throw new UnknownFactoryException(sprintf('Unknown factory [%s] for dependency [%s]%s.', $dependency, $source ?: 'unknown source', $this->stack->isEmpty() ? '' : '; dependency chain [' . implode('→', array_reverse(iterator_to_array($this->stack))) . ']'));
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function factory(IFactory $factory, string $name, array $params = [], string $source = null) {
 			try {
 				/**
@@ -167,7 +155,7 @@
 				 * IFoo; analysis could return both names for configurator)
 				 */
 				foreach ($reflection->getConfiguratorList() as $configurator) {
-					$configurators = array_merge($configurators, $this->configuratorList[$configurator] ?? []);
+					$configurators = array_merge($configurators, $this->configurators[$configurator] ?? []);
 				}
 				$instance->setConfigurators($configurators);
 				/**

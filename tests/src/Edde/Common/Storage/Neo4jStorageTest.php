@@ -3,35 +3,28 @@
 	namespace Edde\Common\Storage;
 
 	use Edde\Api\Container\Exception\ContainerException;
-	use Edde\Api\Container\Exception\FactoryException;
+	use Edde\Api\Driver\Exception\DriverException;
 	use Edde\Api\Driver\IDriver;
-	use Edde\Api\Storage\Inject\Storage;
-	use Edde\Common\Container\Factory\ClassFactory;
-	use Edde\Ext\Container\ContainerFactory;
+	use Edde\Common\Container\Factory\InstanceFactory;
 	use Edde\Ext\Driver\Neo4jDriver;
-	use function explode;
-	use function getenv;
 
 	class Neo4jStorageTest extends AbstractStorageTest {
-		use Storage;
-
+		/**
+		 * @throws DriverException
+		 */
 		public function testPrepareDatabase() {
-			$this->storage->native('MATCH (n) DETACH DELETE n');
+			$this->storage->exec('MATCH (n) DETACH DELETE n');
 			self::assertTrue(true, 'everything is ok, yapee!');
 		}
 
 		/**
 		 * @throws ContainerException
-		 * @throws FactoryException
 		 */
 		protected function setUp() {
-			ContainerFactory::inject($this, [
-				IDriver::class => ContainerFactory::instance(Neo4jDriver::class, [
-					'bolt://neo4j:7687',
-					explode('/', getenv('NEO4J_AUTH')),
-				]),
-				new ClassFactory(),
-			]);
+			parent::setUp();
+			$this->container->registerFactory(new InstanceFactory(IDriver::class, Neo4jDriver::class, [
+				'neo4j',
+			]), IDriver::class);
 		}
 
 		protected function getEntityTimeLimit(): float {

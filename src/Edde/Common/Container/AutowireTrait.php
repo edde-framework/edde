@@ -42,9 +42,9 @@
 		public function __get(string $name) {
 			if (isset($this->tLazies[$name])) {
 				/** @var $container IContainer */
-				[$container, $dependency, $parameters] = $this->tLazies[$name];
+				[$container, $dependency, $params] = $this->tLazies[$name];
 				/** @var $instance IConfigurable */
-				if (($instance = $this->{$name} = $container->create($dependency, $parameters, static::class)) instanceof IConfigurable && $instance->isSetup() === false) {
+				if (($instance = $this->{$name} = $container->create($dependency, $params, static::class)) instanceof IConfigurable && $instance->isSetup() === false) {
 					$instance->setup();
 				}
 				return $instance;

@@ -6,7 +6,7 @@
 	use Edde\Common\Http\ContentType;
 	use Edde\Common\Http\RequestHeader;
 	use Edde\Common\Url\Url;
-	use Edde\Ext\Test\TestCase;
+	use Edde\TestCase;
 
 	class HttpUtilsTest extends TestCase {
 		use HttpUtils;

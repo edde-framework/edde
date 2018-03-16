@@ -22,6 +22,9 @@
 	use Edde\Api\Storage\Query\ISelectQuery;
 	use Edde\Common\Driver\AbstractDriver;
 	use Edde\Common\Storage\Query\NativeQuery;
+	use Edde\Exception\Config\RequiredConfigException;
+	use Edde\Exception\Config\RequiredSectionException;
+	use Edde\Exception\Config\RequiredValueException;
 	use GraphAware\Bolt\Configuration;
 	use GraphAware\Bolt\Exception\MessageFailureException;
 	use GraphAware\Bolt\GraphDatabase;
@@ -29,16 +32,13 @@
 	use GraphAware\Bolt\Protocol\V1\Transaction;
 	use GraphAware\Bolt\Result\Result;
 	use GraphAware\Common\Type\MapAccessor;
+	use ReflectionException;
 	use Throwable;
 	use function array_merge;
 	use function extract;
 	use function implode;
 
 	class Neo4jDriver extends AbstractDriver {
-		/** @var string */
-		protected $url;
-		/** @var array */
-		protected $credentials;
 		/**
 		 * @var SessionInterface
 		 */
@@ -48,18 +48,8 @@
 		 */
 		protected $transaction;
 
-		/**
-		 * @param string $url
-		 */
-		public function __construct(string $url, array $credentials = null) {
-			$this->url = $url;
-			$this->credentials = $credentials;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function native($query, array $params = []) {
+		/** @inheritdoc */
+		public function fetch($query, array $params = []) {
 			try {
 				return (function (Result $result) {
 					foreach ($result->getRecords() as $record) {
@@ -84,17 +74,18 @@
 			}
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
+		public function exec($query, array $params = []) {
+			return $this->fetch($query, $params);
+		}
+
+		/** @inheritdoc */
 		public function start(): IDriver {
 			($this->transaction = $this->session->transaction())->begin();
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function commit(): IDriver {
 			try {
 				$this->transaction->commit();
@@ -105,9 +96,7 @@
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function rollback(): IDriver {
 			try {
 				$this->transaction->rollback();
@@ -152,17 +141,17 @@
 				if ($property->isPrimary()) {
 					$primaryList[] = $fragment;
 				} else if ($property->isUnique()) {
-					$this->native('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT ' . $fragment . ' IS UNIQUE');
+					$this->fetch('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT ' . $fragment . ' IS UNIQUE');
 				}
 				if ($property->isRequired()) {
-					$this->native('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT exists(' . $fragment . ')');
+					$this->fetch('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT exists(' . $fragment . ')');
 				}
 			}
 			if ($indexList) {
-				$this->native('CREATE INDEX ON :' . $delimited . '(' . implode(',', $indexList) . ')');
+				$this->fetch('CREATE INDEX ON :' . $delimited . '(' . implode(',', $indexList) . ')');
 			}
 			if ($primaryList) {
-				$this->native('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT (' . implode(', ', $primaryList) . ') IS NODE KEY');
+				$this->fetch('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT (' . implode(', ', $primaryList) . ') IS NODE KEY');
 			}
 		}
 
@@ -185,7 +174,7 @@
 				$primary = $entity->getPrimary();
 				$cypher = 'MERGE (a:' . $this->delimite($schema->getRealName()) . ' {' . $this->delimite($primary->getName()) . ': $primary})';
 				$cypher .= " SET a = \$set\n";
-				$this->native($cypher, [
+				$this->fetch($cypher, [
 					'primary' => $primary->get(),
 					'set'     => $this->schemaManager->sanitize($schema, $entity->toArray()),
 				]);
@@ -204,7 +193,7 @@
 			$entity = $deleteQuery->getEntity();
 			$primary = $entity->getPrimary();
 			$cypher = 'MATCH (n:' . $this->delimite($entity->getSchema()->getRealName()) . ' {' . $this->delimite($primary->getName()) . ': $a}) DETACH DELETE n';
-			$this->native($cypher, ['a' => $primary->get()]);
+			$this->fetch($cypher, ['a' => $primary->get()]);
 		}
 
 		/**
@@ -234,7 +223,7 @@
 			$params['a'] = $primary[0]->get();
 			$params['b'] = $primary[1]->get();
 			$cypher .= ' DELETE r';
-			$this->native($cypher, $params);
+			$this->fetch($cypher, $params);
 		}
 
 		/**
@@ -257,7 +246,7 @@
 			}
 			$params['a'] = $primary->get();
 			$cypher .= ' DELETE r';
-			$this->native($cypher, $params);
+			$this->fetch($cypher, $params);
 		}
 
 		/**
@@ -289,7 +278,7 @@
 			$cypher .= '[r:' . ($unlinkQuery->getLink()->getName()) . ']';
 			$cypher .= '->(:' . $this->delimite($link->getTo()->getRealName()) . ')';
 			$cypher .= ' DELETE r';
-			$this->native($cypher, ['a' => $primary->get()]);
+			$this->fetch($cypher, ['a' => $primary->get()]);
 		}
 
 		/**
@@ -350,7 +339,7 @@
 			}
 			$cypher .= ']';
 			$cypher .= "->(b)\n";
-			$this->native($cypher, $params);
+			$this->fetch($cypher, $params);
 		}
 
 		protected function formatAttributes(array $attributes): INativeQuery {
@@ -419,7 +408,7 @@
 				[$limit, $offset] = $selectQuery->getLimit();
 				$cypher .= ' SKIP ' . ($limit * $offset) . ' LIMIT ' . $limit;
 			}
-			return $this->native($cypher, $params);
+			return $this->fetch($cypher, $params);
 		}
 
 		/**
@@ -487,20 +476,26 @@
 			}
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function delimite(string $delimite): string {
 			return '`' . str_replace('`', '``', $delimite) . '`';
 		}
 
-		/** @inheritdoc */
+		/**
+		 * @inheritdoc
+		 *
+		 * @throws ReflectionException
+		 * @throws RequiredConfigException
+		 * @throws RequiredSectionException
+		 * @throws RequiredValueException
+		 */
 		protected function handleSetup(): void {
 			parent::handleSetup();
 			$config = null;
-			if ($this->credentials) {
-				$config = Configuration::newInstance()->withCredentials($this->credentials[0], $this->credentials[1]);
+			$section = $this->configService->require($this->config);
+			if ($user = $section->optional('user')) {
+				$config = Configuration::create()->withCredentials($user, $section->require('password'));
 			}
-			$this->session = GraphDatabase::driver($this->url, $config)->session();
+			$this->session = GraphDatabase::driver($section->require('url'), $config)->session();
 		}
 	}

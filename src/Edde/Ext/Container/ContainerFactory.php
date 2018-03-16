@@ -117,18 +117,18 @@
 		}
 
 		/**
-		 * @param array $factoryList
+		 * @param array $factories
 		 *
 		 * @return IFactory[]
 		 *
 		 * @throws FactoryException
 		 * @throws ReflectionException
 		 */
-		static public function createFactoryList(array $factoryList): array {
-			$factories = [];
-			foreach ($factoryList as $name => $factory) {
+		static public function createFactories(array $factories): array {
+			$instances = [];
+			foreach ($factories as $name => $factory) {
 				$current = null;
-				if ($factory instanceof \stdClass) {
+				if ($factory instanceof stdClass) {
 					switch ($factory->type) {
 						case 'instance':
 							$current = new InstanceFactory($name, $factory->class, $factory->params, null, $factory->cloneable);
@@ -161,9 +161,9 @@
 				if ($current === null) {
 					throw new FactoryException(sprintf('Unsupported factory definition [%s; %s].', is_string($name) ? $name : (is_object($name) ? get_class($name) : gettype($name)), is_string($factory) ? $factory : (is_object($factory) ? get_class($factory) : gettype($factory))));
 				}
-				$factories[$name] = $current;
+				$instances[$name] = $current;
 			}
-			return $factories;
+			return $instances;
 		}
 
 		/**
@@ -221,21 +221,21 @@
 		/**
 		 * pure way how to simple create a system container
 		 *
-		 * @param array    $factoryList
-		 * @param string[] $configuratorList
+		 * @param array    $factories
+		 * @param string[] $configurators
 		 *
 		 * @return IContainer
 		 * @throws ContainerException
 		 * @throws FactoryException
 		 * @throws ReflectionException
 		 */
-		static public function create(array $factoryList = [], array $configuratorList = []): IContainer {
+		static public function create(array $factories = [], array $configurators = []): IContainer {
 			/** @var $container IContainer */
 			$container = new Container();
 			/**
 			 * this trick ensures that container is properly configured when some internal dependency needs it while container is construction
 			 */
-			$containerConfigurator = $configuratorList[IContainer::class] = new ContainerConfigurator($factoryList = self::createFactoryList($factoryList), $configuratorList);
+			$containerConfigurator = $configurators[IContainer::class] = new ContainerConfigurator($factories = self::createFactories($factories), $configurators);
 			$container->addConfigurator($containerConfigurator);
 			$container->setup();
 			$container = $container->create(IContainer::class);
@@ -247,24 +247,24 @@
 		/**
 		 * create a default container with set of services from Edde; they can be simply redefined
 		 *
-		 * @param array    $factoryList
-		 * @param string[] $configuratorList
+		 * @param array    $factories
+		 * @param string[] $configurators
 		 *
 		 * @return IContainer
 		 * @throws ContainerException
 		 * @throws FactoryException
 		 * @throws ReflectionException
 		 */
-		static public function container(array $factoryList = [], array $configuratorList = []): IContainer {
-			return self::create(array_merge(self::getDefaultFactoryList(), $factoryList), array_filter(array_merge(self::getDefaultConfiguratorList(), $configuratorList)));
+		static public function container(array $factories = [], array $configurators = []): IContainer {
+			return self::create(array_merge(self::getDefaultFactories(), $factories), array_filter(array_merge(self::getDefaultConfigurators(), $configurators)));
 		}
 
 		/**
 		 * shortcut for autowiring (for example in tests, ...)
 		 *
 		 * @param mixed $instance
-		 * @param array $factoryList
-		 * @param array $configuratorList
+		 * @param array $factories
+		 * @param array $configurators
 		 *
 		 * @return IContainer
 		 *
@@ -272,15 +272,15 @@
 		 * @throws FactoryException
 		 * @throws ReflectionException
 		 */
-		static public function inject($instance, array $factoryList = [], array $configuratorList = []): IContainer {
-			$container = self::container(empty($factoryList) ? [new ClassFactory()] : $factoryList, $configuratorList);
+		static public function inject($instance, array $factories = [], array $configurators = []): IContainer {
+			$container = self::container(empty($factories) ? [new ClassFactory()] : $factories, $configurators);
 			$container->inject($instance);
 			return $container;
 		}
 
-		static public function getDefaultFactoryList(): array {
+		static public function getDefaultFactories(): array {
 			return [
-				IRootDirectory::class    => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
+				IRootDirectory::class      => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
 				IAssetsDirectory::class    => self::proxy(IRootDirectory::class, 'directory', [
 					'.assets',
 					AssetsDirectory::class,
@@ -334,49 +334,49 @@
 				IGeneratorManager::class   => GeneratorManager::class,
 				IFilterManager::class      => FilterManager::class,
 				ISanitizerManager::class   => SanitizerManager::class,
-				IValidatorManager::class => ValidatorManager::class,
+				IValidatorManager::class   => ValidatorManager::class,
 				/**
 				 * random & security support
 				 */
-				IRandomService::class    => RandomService::class,
-				IPasswordService::class  => PasswordService::class,
+				IRandomService::class      => RandomService::class,
+				IPasswordService::class    => PasswordService::class,
 				/**
 				 * storage support
 				 */
-				IEntityManager::class    => EntityManager::class,
-				IStorage::class          => Storage::class,
-				IDriver::class           => self::exception(sprintf('Please register driver to use Storage.', IDriver::class)),
+				IEntityManager::class      => EntityManager::class,
+				IStorage::class            => Storage::class,
+				IDriver::class             => self::exception(sprintf('Please register driver to use Storage.', IDriver::class)),
 				/**
 				 * an application upgrades support
 				 */
-				IUpgradeManager::class   => self::exception(sprintf('You have to provide you own implementation of [%s]; you can use [%s] to get some little help.', IUpgradeManager::class, AbstractUpgradeManager::class)),
+				IUpgradeManager::class     => self::exception(sprintf('You have to provide you own implementation of [%s]; you can use [%s] to get some little help.', IUpgradeManager::class, AbstractUpgradeManager::class)),
 				/**
 				 * Xml support
 				 */
-				IXmlExport::class        => XmlExport::class,
-				IXmlParser::class        => XmlParser::class,
+				IXmlExport::class          => XmlExport::class,
+				IXmlParser::class          => XmlParser::class,
 				/**
 				 * Message bus support; probably most important stuff of the
 				 * framework and the top killing feature :)
 				 */
-				IMessageBus::class       => MessageBus::class,
-				IMessageService::class   => MessageService::class,
-				IEventBus::class         => EventBus::class,
-				IRequestService::class   => RequestService::class,
-				IConfigService::class    => ConfigService::class,
-				IConfigLoader::class     => ConfigLoader::class,
+				IMessageBus::class         => MessageBus::class,
+				IMessageService::class     => MessageService::class,
+				IEventBus::class           => EventBus::class,
+				IRequestService::class     => RequestService::class,
+				IConfigService::class      => ConfigService::class,
+				IConfigLoader::class       => ConfigLoader::class,
 				/**
 				 * an application handles lifecycle workflow
 				 */
-				IApplication::class      => Application::class,
+				IApplication::class        => Application::class,
 				/**
 				 * magical factory for an application execution
 				 */
-				'application'            => IApplication::class . '::run',
+				'application'              => IApplication::class . '::run',
 			];
 		}
 
-		static public function getDefaultConfiguratorList(): array {
+		static public function getDefaultConfigurators(): array {
 			return [
 				IRouterService::class    => RouterServiceConfigurator::class,
 				IConverterManager::class => ConverterManagerConfigurator::class,

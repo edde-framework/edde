@@ -5,9 +5,9 @@
 	use Edde\Exception\Config\RequiredConfigException;
 	use Edde\Exception\Config\RequiredSectionException;
 	use Edde\Exception\Config\RequiredValueException;
-	use Edde\Ext\Test\TestCase;
 	use Edde\Inject\Config\ConfigLoader;
 	use Edde\Inject\Config\ConfigService;
+	use Edde\TestCase;
 
 	class ConfigServiceTest extends TestCase {
 		use ConfigService;
@@ -39,19 +39,25 @@
 
 		/**
 		 * @throws RequiredConfigException
+		 * @throws RequiredSectionException
 		 */
-		public function testCompile() {
+		public function testSection() {
+			$this->configLoader->clear();
 			$this->configLoader->require(__DIR__ . '/assets/config.ini');
-			self::assertEquals((object)[
-				'foo' => (object)[
+			self::assertEquals(
+				(object)[
 					'value'   => 'yep',
 					'another' => true,
 				],
-				'bar' => (object)[
+				$this->configService->require('foo')->toObject()
+			);
+			self::assertEquals(
+				(object)[
 					'integer' => 42,
 					'float'   => 3.14,
 				],
-			], $this->configLoader->compile());
+				$this->configService->require('bar')->toObject()
+			);
 		}
 
 		/**
@@ -69,9 +75,9 @@
 		 */
 		public function testRequiredSection() {
 			$this->expectException(RequiredSectionException::class);
-			$this->expectExceptionMessage('Requested section [moo] is not available!');
+			$this->expectExceptionMessage('Requested section [nope] is not available!');
 			$this->configLoader->require(__DIR__ . '/assets/config.ini');
-			$this->configService->require('moo');
+			$this->configService->require('nope');
 		}
 
 		/**

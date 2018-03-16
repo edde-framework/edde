@@ -18,75 +18,86 @@
 	use Edde\Api\Storage\Query\ISelectQuery;
 	use Edde\Common\Driver\AbstractDriver;
 	use Edde\Common\Storage\Query\NativeQuery;
+	use Edde\Exception\Config\RequiredConfigException;
+	use Edde\Exception\Config\RequiredSectionException;
+	use Edde\Exception\Config\RequiredValueException;
 	use PDO;
 	use PDOException;
+	use PDOStatement;
+	use ReflectionException;
 	use Throwable;
 	use function implode;
 
 	abstract class AbstractDatabaseDriver extends AbstractDriver {
-		/**
-		 * @var array
-		 */
-		protected $dsn;
-		/**
-		 * @var PDO
-		 */
+		protected $options;
+		/** @var PDO */
 		protected $pdo;
 
-		public function __construct(string $dsn, string $user = null, string $password = null) {
-			$this->dsn = array_filter([
-				$dsn,
-				$user,
-				$password,
-			]);
+		public function __construct(string $config, array $options = []) {
+			parent::__construct($config);
+			$this->options = $options;
 		}
 
 		/**
 		 * @inheritdoc
+		 *
+		 * @throws Throwable
 		 */
-		public function native($query, array $params = []) {
-			$exception = null;
+		public function fetch($query, array $params = []) {
 			try {
 				$statement = $this->pdo->prepare($query);
 				$statement->setFetchMode(PDO::FETCH_ASSOC);
 				$statement->execute($params);
 				return $statement;
 			} catch (PDOException $exception) {
-				/** @noinspection PhpUnhandledExceptionInspection */
 				throw $this->exception($exception);
 			}
 		}
 
 		/**
 		 * @inheritdoc
+		 *
+		 * @throws Throwable
 		 */
+		public function exec($query, array $params = []) {
+			try {
+				return $this->pdo->exec($query);
+			} catch (PDOException $exception) {
+				throw $this->exception($exception);
+			}
+		}
+
+		/** @inheritdoc */
 		public function start(): IDriver {
 			$this->pdo->beginTransaction();
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function commit(): IDriver {
 			$this->pdo->commit();
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function rollback(): IDriver {
 			$this->pdo->rollBack();
 			return $this;
 		}
 
+		/**
+		 * @param Throwable $throwable
+		 *
+		 * @return Throwable
+		 */
 		protected function exception(Throwable $throwable): Throwable {
 			return new DriverException('Unhandled exception: ' . $throwable->getMessage(), 0, $throwable);
 		}
 
 		/**
 		 * @param ICrateSchemaQuery $crateSchemaQuery
+		 *
+		 * @return mixed|PDOStatement
 		 *
 		 * @throws Throwable
 		 */
@@ -114,13 +125,13 @@
 			foreach ($schema->getLinks() as $link) {
 				$sql .= ",\n\tFOREIGN KEY (" . $this->delimite($link->getFrom()->getPropertyName()) . ') REFERENCES ' . $this->delimite($link->getTo()->getRealName()) . '(' . $this->delimite($link->getTo()->getPropertyName()) . ') ON DELETE CASCADE ON UPDATE CASCADE';
 			}
-			$this->native($sql . "\n)");
+			return $this->exec($sql . "\n)");
 		}
 
 		/**
 		 * @param ISelectQuery $selectQuery
 		 *
-		 * @return \PDOStatement
+		 * @return PDOStatement
 		 * @throws DriverException
 		 * @throws Throwable
 		 */
@@ -185,11 +196,13 @@
 				[$limit, $offset] = $selectQuery->getLimit();
 				$sql .= ' LIMIT ' . $limit . ' OFFSET ' . ($limit * $offset);
 			}
-			return $this->native($sql, $params);
+			return $this->fetch($sql, $params);
 		}
 
 		/**
 		 * @param IUnlinkQuery $unlinkQuery
+		 *
+		 * @return mixed|PDOStatement
 		 *
 		 * @throws Throwable
 		 */
@@ -198,11 +211,13 @@
 			$entity = $unlinkQuery->getEntity();
 			$primary = $entity->getPrimary();
 			$sql = 'UPDATE ' . $this->delimite($entity->getSchema()->getRealName()) . ' SET ' . $this->delimite($link->getFrom()->getPropertyName()) . ' = null WHERE ' . $this->delimite($primary->getName()) . ' = :a';
-			$this->native($sql, ['a' => $primary->get()]);
+			return $this->fetch($sql, ['a' => $primary->get()]);
 		}
 
 		/**
 		 * @param ILinkQuery $linkQuery
+		 *
+		 * @return mixed|PDOStatement
 		 *
 		 * @throws Throwable
 		 */
@@ -212,7 +227,7 @@
 			$primary = $entity->getPrimary();
 			$sql = 'UPDATE ' . $this->delimite($entity->getSchema()->getRealName()) . ' SET ' . $this->delimite($link->getFrom()->getPropertyName()) . ' = :b WHERE ' . $this->delimite($primary->getName()) . ' = :a';
 			$entity->set($link->getFrom()->getPropertyName(), $to = $linkQuery->getTo()->getPrimary()->get());
-			$this->native($sql, ['a' => $primary->get(), 'b' => $to]);
+			return $this->fetch($sql, ['a' => $primary->get(), 'b' => $to]);
 		}
 
 		/**
@@ -236,11 +251,13 @@
 			$sql = 'INSERT INTO ' . $this->delimite($relation->getSchema()->getRealName()) . ' (' . implode(', ', $columns) . ') VALUES (';
 			$sql .= ':' . implode(', :', $values);
 			$sql .= ')';
-			$this->native($sql, $params);
+			return $this->fetch($sql, $params);
 		}
 
 		/**
 		 * @param IDeleteQuery $deleteQuery
+		 *
+		 * @return mixed|PDOStatement
 		 *
 		 * @throws Throwable
 		 */
@@ -248,11 +265,13 @@
 			$entity = $deleteQuery->getEntity();
 			$primary = $entity->getPrimary();
 			$sql = 'DELETE FROM ' . $this->delimite($entity->getSchema()->getRealName()) . ' WHERE ' . $this->delimite($primary->getName()) . ' = :a';
-			$this->native($sql, ['a' => $primary->get()]);
+			return $this->fetch($sql, ['a' => $primary->get()]);
 		}
 
 		/**
 		 * @param IDetachQuery $detachQuery
+		 *
+		 * @return mixed|PDOStatement
 		 *
 		 * @throws DriverException
 		 * @throws Throwable
@@ -274,11 +293,13 @@
 			}
 			$params['a'] = $entity[0]->getPrimary()->get();
 			$params['b'] = $entity[1]->getPrimary()->get();
-			$this->native($sql, $params);
+			return $this->fetch($sql, $params);
 		}
 
 		/**
 		 * @param IDisconnectQuery $disconnectQuery
+		 *
+		 * @return mixed|PDOStatement
 		 *
 		 * @throws DriverException
 		 * @throws Throwable
@@ -295,7 +316,7 @@
 				$params = $query->getParams();
 			}
 			$params['a'] = $primary->get();
-			$this->native($sql, $params);
+			return $this->fetch($sql, $params);
 		}
 
 		protected function getDeleteSql(string $relation): string {
@@ -359,7 +380,7 @@
 				$table = $this->delimite($schema->getRealName());
 				$primary = $entity->getPrimary();
 				$count = ['count' => 0];
-				foreach ($this->native('SELECT COUNT(' . ($delimitedPrimary = $this->delimite($primary->getName())) . ') AS count FROM ' . $table . ' WHERE ' . $delimitedPrimary . ' = :a LIMIT 1', ['a' => $primary->get()]) as $count) {
+				foreach ($this->fetch('SELECT COUNT(' . ($delimitedPrimary = $this->delimite($primary->getName())) . ') AS count FROM ' . $table . ' WHERE ' . $delimitedPrimary . ' = :a LIMIT 1', ['a' => $primary->get()]) as $count) {
 					break;
 				}
 				$source = $this->schemaManager->sanitize($schema, $entity->toArray());
@@ -379,29 +400,35 @@
 					 */
 					$params['a'] = $primary->get();
 				}
-				$this->native($sql, $params);
+				$this->fetch($sql, $params);
 			}
 			foreach ($entityQueue->getQueries() as $query) {
 				$this->execute($query);
 			}
 		}
 
+		/**
+		 * @inheritdoc
+		 * @throws RequiredConfigException
+		 * @throws RequiredSectionException
+		 * @throws RequiredValueException
+		 * @throws ReflectionException
+		 */
 		public function handleSetup(): void {
 			parent::handleSetup();
-			try {
-				$this->pdo = new PDO(...$this->dsn);
-				$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-				$this->pdo->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
-				$this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-				$this->pdo->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_EMPTY_STRING);
-				$this->pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
-				$this->pdo->setAttribute(PDO::ATTR_TIMEOUT, 120);
-			} finally {
-				/**
-				 * prevent credentials to somehow throw up to the user
-				 */
-				$this->dsn = null;
-			}
+			$section = $this->configService->require($this->config);
+			$this->pdo = new PDO(
+				$section->require('dsn'),
+				$section->require('user'),
+				$section->optional('password'),
+				$this->options
+			);
+			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$this->pdo->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
+			$this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+			$this->pdo->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_EMPTY_STRING);
+			$this->pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
+			$this->pdo->setAttribute(PDO::ATTR_TIMEOUT, 120);
 		}
 
 		abstract public function delimite(string $delimite): string;

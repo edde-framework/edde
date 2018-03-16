@@ -32,7 +32,7 @@
 		 *
 		 * @return mixed
 		 */
-		public function optional(string $name, $default);
+		public function optional(string $name, $default = null);
 
 		/**
 		 * return section as an object

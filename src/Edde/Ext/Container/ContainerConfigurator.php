@@ -13,15 +13,15 @@
 		/**
 		 * @var IFactory[]
 		 */
-		protected $factoryList = [];
+		protected $factories = [];
 		/**
 		 * @var IConfigurator[]
 		 */
-		protected $configuratorList = [];
+		protected $configurators = [];
 
-		public function __construct(array $factoryList, array $configuratorList) {
-			$this->factoryList = $factoryList;
-			$this->configuratorList = $configuratorList;
+		public function __construct(array $factories, array $configurators) {
+			$this->factories = $factories;
+			$this->configurators = $configurators;
 		}
 
 		/**
@@ -32,13 +32,13 @@
 		 */
 		public function configure($instance) {
 			parent::configure($instance);
-			$instance->registerFactoryList($this->factoryList);
-			$configuratorList = [];
-			foreach ($this->configuratorList as $name => $configHandler) {
+			$instance->registerFactories($this->factories);
+			$configurators = [];
+			foreach ($this->configurators as $name => $configHandler) {
 				foreach (is_array($configHandler) ? $configHandler : [$configHandler] as $config) {
-					$configuratorList[$name] = is_string($config) ? $instance->create($config, [], __METHOD__) : $config;
+					$configurators[$name] = is_string($config) ? $instance->create($config, [], __METHOD__) : $config;
 				}
 			}
-			$instance->registerConfiguratorList($configuratorList);
+			$instance->registerConfigurators($configurators);
 		}
 	}

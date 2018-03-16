@@ -11,12 +11,16 @@
 	use Edde\Api\Storage\Query\IQuery;
 	use Edde\Common\Object\Object;
 	use Edde\Common\Storage\Query\NativeQuery;
+	use Edde\Inject\Config\ConfigService;
 	use ReflectionClass;
 	use ReflectionException;
 	use ReflectionMethod;
 
 	abstract class AbstractDriver extends Object implements IDriver {
+		use ConfigService;
 		use SchemaManager;
+		/** @var string */
+		protected $config;
 		/**
 		 * @var callable[]
 		 */
@@ -25,6 +29,13 @@
 		 * @var callable[]
 		 */
 		protected $fragments;
+
+		/**
+		 * @param string $config
+		 */
+		public function __construct(string $config) {
+			$this->config = $config;
+		}
 
 		/**
 		 * @inheritdoc

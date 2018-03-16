@@ -3,7 +3,7 @@
 
 	use Edde\Api\File\Exception\DirectoryException;
 	use Edde\Api\File\Exception\RealPathException;
-	use Edde\Ext\Test\TestCase;
+	use Edde\TestCase;
 
 	class DirectoryTest extends TestCase {
 		public function testExists() {

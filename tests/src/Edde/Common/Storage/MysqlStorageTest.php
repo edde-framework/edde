@@ -4,38 +4,42 @@
 
 	use Edde\Api\Container\Exception\ContainerException;
 	use Edde\Api\Container\Exception\FactoryException;
+	use Edde\Api\Driver\Exception\DriverException;
 	use Edde\Api\Driver\IDriver;
-	use Edde\Common\Container\Factory\ClassFactory;
-	use Edde\Ext\Container\ContainerFactory;
+	use Edde\Common\Container\Factory\InstanceFactory;
 	use Edde\Ext\Driver\MysqlDriver;
-	use function getenv;
+	use ReflectionException;
 
 	class MysqlStorageTest extends AbstractStorageTest {
+		/**
+		 * @throws DriverException
+		 */
 		public function testPrepareDatabase() {
-			$this->storage->native('drop database edde');
-			$this->storage->native('create database edde');
+			$this->storage->exec('DROP DATABASE `edde`');
+			$this->storage->exec('CREATE DATABASE `edde`');
+			$this->storage->exec('USE `edde`');
 			$this->assertTrue(true, 'everything looks nice even here!');
 		}
 
 		/**
 		 * @throws ContainerException
 		 * @throws FactoryException
+		 * @throws ReflectionException
 		 */
 		protected function setUp() {
 			parent::setUp();
-			ContainerFactory::inject($this, [
-				IDriver::class => ContainerFactory::instance(MysqlDriver::class, [
-					'mysql:dbname=edde;host=mysql;port=3306',
-					'edde',
-					getenv('MYSQL_PASSWORD'),
-				]),
-				new ClassFactory(),
-			]);
+			$this->container->registerFactory(new InstanceFactory(IDriver::class, MysqlDriver::class, [
+				'mysql',
+			]), IDriver::class);
 		}
 
+		/**
+		 * @throws DriverException
+		 */
 		protected function beforeBenchmark() {
-			$this->storage->native('drop database edde');
-			$this->storage->native('create database edde');
+			$this->storage->exec('DROP DATABASE `edde`');
+			$this->storage->exec('CREATE DATABASE `edde`');
+			$this->storage->exec('USE `edde`');
 		}
 
 		protected function getEntityTimeLimit(): float {

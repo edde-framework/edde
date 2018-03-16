@@ -5,8 +5,8 @@
 	use Edde\Common\Container\Container;
 	use Edde\Common\Container\Parameter;
 	use Edde\Common\Container\Reflection;
-	use Edde\Ext\Test\TestCase;
 	use Edde\Test\FooObject;
+	use Edde\TestCase;
 
 	require_once __DIR__ . '/../../assets/assets.php';
 

@@ -21,6 +21,13 @@
 		public function optional(string $config): IConfigLoader;
 
 		/**
+		 * clear all config files
+		 *
+		 * @return IConfigLoader
+		 */
+		public function clear(): IConfigLoader;
+
+		/**
 		 * compile the stuff into an object
 		 *
 		 * @return stdClass

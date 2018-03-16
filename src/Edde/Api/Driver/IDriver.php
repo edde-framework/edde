@@ -17,20 +17,34 @@
 		 * @param IQuery $query
 		 *
 		 * @return mixed
+		 *
 		 * @throws DriverException
 		 */
 		public function execute(IQuery $query);
 
 		/**
-		 * execute native query on this driver without any additional processing
+		 * execute raw query against a driver which should return some data
 		 *
 		 * @param mixed $query
 		 * @param array $params
 		 *
 		 * @return mixed
+		 *
 		 * @throws DriverException
 		 */
-		public function native($query, array $params = []);
+		public function fetch($query, array $params = []);
+
+		/**
+		 * exec raw query against a driver without returning any data (create database, table, ...)
+		 *
+		 * @param mixed $query
+		 * @param array $params
+		 *
+		 * @return mixed
+		 *
+		 * @throws DriverException
+		 */
+		public function exec($query, array $params = []);
 
 		/**
 		 * start a transaction

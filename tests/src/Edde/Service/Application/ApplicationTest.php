@@ -6,8 +6,8 @@
 	use Edde\Api\Log\Inject\LogService;
 	use Edde\Api\Router\Exception\BadRequestException;
 	use Edde\Common\Log\SimpleLog;
-	use Edde\Ext\Test\TestCase;
 	use Edde\Inject\Application\Application;
+	use Edde\TestCase;
 
 	class ApplicationTest extends TestCase {
 		use Application;

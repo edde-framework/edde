@@ -64,6 +64,16 @@
     </servers>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
+  <component name="PhpStepFilterConfiguration">
+    <skipped_functions>
+      <skipped_function name="Edde\Common\Storage\Storage-&gt;__get" />
+    </skipped_functions>
+    <option name="skippedFunctions">
+      <list>
+        <option value="Edde\Common\Storage\Storage-&gt;__get" />
+      </list>
+    </option>
+  </component>
   <component name="PhpUnit">
     <phpunit_settings>
       <PhpUnitSettings load_method="CUSTOM_LOADER" custom_loader_path="$PROJECT_DIR$/lib/autoload.php" />

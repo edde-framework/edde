@@ -11,12 +11,12 @@
 	use Edde\Common\Container\Factory\LinkFactory;
 	use Edde\Common\Container\Factory\ProxyFactory;
 	use Edde\Exception\EddeException;
-	use Edde\Ext\Test\TestCase;
 	use Edde\Test\AutowireDependencyObject;
 	use Edde\Test\BarObject;
 	use Edde\Test\ConstructorDependencyObject;
 	use Edde\Test\FooObject;
 	use Edde\Test\InjectDependencyObject;
+	use Edde\TestCase;
 
 	class ContainerTest extends TestCase {
 		use Container;

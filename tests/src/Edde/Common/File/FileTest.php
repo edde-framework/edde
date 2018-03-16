@@ -2,7 +2,7 @@
 	namespace Edde\Common\File;
 
 	use Edde\Api\File\Exception\RealPathException;
-	use Edde\Ext\Test\TestCase;
+	use Edde\TestCase;
 
 	class FileTest extends TestCase {
 		/**

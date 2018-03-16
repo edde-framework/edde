@@ -3,7 +3,7 @@
 	namespace Edde\Common\Runtime;
 
 	use Edde\Api\Runtime\Inject\Runtime;
-	use Edde\Ext\Test\TestCase;
+	use Edde\TestCase;
 
 	class RuntimeTest extends TestCase {
 		use Runtime;

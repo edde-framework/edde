@@ -17,13 +17,19 @@
 		protected $config;
 
 		/** @inheritdoc */
-		public function require(string $config, bool $required = true): IConfigLoader {
-			$this->configs[$config] = [$config, $required];
-			return $this;
+		public function require(string $config): IConfigLoader {
+			return $this->config($config, true);
 		}
 
 		/** @inheritdoc */
 		public function optional(string $config): IConfigLoader {
+			return $this->config($config, false);
+		}
+
+		/** @inheritdoc */
+		public function clear(): IConfigLoader {
+			$this->configs = [];
+			$this->config = null;
 			return $this;
 		}
 
@@ -34,15 +40,27 @@
 			}
 			$this->config = new stdClass();
 			foreach ($this->configs as [$file, $required]) {
-				if ($required && is_readable($file) === false) {
-					throw new RequiredConfigException(sprintf('Required config file [%s] is not available!', $file));
-				} else if (($source = parse_ini_file($file, true, INI_SCANNER_TYPED)) === false && $required) {
-					throw new RequiredConfigException(sprintf('Required config file [%s] cannot be parsed.', $file));
+				if (is_readable($file) === false) {
+					if ($required) {
+						throw new RequiredConfigException(sprintf('Required config file [%s] is not available!', $file));
+					}
+					continue;
+				} else if (($source = parse_ini_file($file, true, INI_SCANNER_TYPED)) === false) {
+					if ($required) {
+						throw new RequiredConfigException(sprintf('Required config file [%s] cannot be parsed.', $file));
+					}
+					continue;
 				}
 				foreach ($source as $k => $v) {
 					$this->config->$k = (object)$v;
 				}
 			}
 			return $this->config;
+		}
+
+		protected function config(string $config, bool $required): IConfigLoader {
+			$this->config = null;
+			$this->configs[$config] = [$config, $required];
+			return $this;
 		}
 	}

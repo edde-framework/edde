@@ -23,11 +23,11 @@
 		/**
 		 * shorthand for cache registration
 		 *
-		 * @param array $factoryList
+		 * @param array $factories
 		 *
 		 * @return IContainer
 		 */
-		public function registerFactoryList(array $factoryList): IContainer;
+		public function registerFactories(array $factories): IContainer;
 
 		/**
 		 * register a new config handler for the given dependency
@@ -42,11 +42,11 @@
 		/**
 		 * register list of config handlers bound to the given factories (key is factory name, value is config handler)
 		 *
-		 * @param IConfigurator[] $configuratorList
+		 * @param IConfigurator[] $configurators
 		 *
 		 * @return IContainer
 		 */
-		public function registerConfiguratorList(array $configuratorList): IContainer;
+		public function registerConfigurators(array $configurators): IContainer;
 
 		/**
 		 * do container have a factory for the given dependency? - only check if dependency is available, but
@@ -65,6 +65,7 @@
 		 * @param string $source
 		 *
 		 * @return IFactory
+		 *
 		 * @throws UnknownFactoryException
 		 */
 		public function getFactory(string $dependency, string $source = null): IFactory;

@@ -7,7 +7,7 @@
 	use Edde\Common\File\File;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Node\TreeIterator;
-	use Edde\Ext\Test\TestCase;
+	use Edde\TestCase;
 
 	class XmlExportTest extends TestCase {
 		use XmlExport;

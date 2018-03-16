@@ -3,35 +3,39 @@
 	namespace Edde\Common\Storage;
 
 	use Edde\Api\Container\Exception\ContainerException;
-	use Edde\Api\Container\Exception\FactoryException;
 	use Edde\Api\Driver\Exception\DriverException;
 	use Edde\Api\Driver\IDriver;
-	use Edde\Common\Container\Factory\ClassFactory;
-	use Edde\Ext\Container\ContainerFactory;
+	use Edde\Common\Container\Factory\InstanceFactory;
 	use Edde\Ext\Driver\PostgresDriver;
-	use function getenv;
 
 	class PostgresStorageTest extends AbstractStorageTest {
 		/**
 		 * @throws DriverException
 		 */
 		public function testPrepareDatabase() {
-			$this->storage->native('drop schema if exists test cascade');
-			$this->storage->native('create schema test authorization "edde"');
+			$this->storage->exec('DROP SCHEMA IF EXISTS "test" CASCADE');
+			$this->storage->exec('CREATE SCHEMA "test" AUTHORIZATION "edde"');
 			$this->assertTrue(true, 'everything is OK!');
 		}
 
 		/**
 		 * @throws ContainerException
-		 * @throws FactoryException
 		 * @throws DriverException
 		 */
 		protected function setUp() {
-			ContainerFactory::inject($this, [
-				IDriver::class => ContainerFactory::instance(PostgresDriver::class, ['pgsql:dbname=edde;user=edde;password=' . getenv('POSTGRES_PASSWORD') . ';host=postgres;port=5432']),
-				new ClassFactory(),
-			]);
-			$this->storage->native('set search_path to "test"');
+			parent::setUp();
+			$this->container->registerFactory(new InstanceFactory(IDriver::class, PostgresDriver::class, [
+				'postgres',
+			]), IDriver::class);
+			$this->storage->fetch('SET SEARCH_PATH TO "test"');
+		}
+
+		/**
+		 * @throws DriverException
+		 */
+		protected function beforeBenchmark() {
+			$this->storage->exec('DROP SCHEMA IF EXISTS "test" CASCADE');
+			$this->storage->exec('CREATE SCHEMA "test" AUTHORIZATION "edde"');
 		}
 
 		protected function getEntityTimeLimit(): float {

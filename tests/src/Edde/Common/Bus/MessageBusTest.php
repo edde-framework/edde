@@ -9,6 +9,7 @@
 	use Edde\Api\Bus\Inject\EventBus;
 	use Edde\Api\Bus\Inject\MessageBus;
 	use Edde\Api\Bus\Request\IResponse;
+	use Edde\Api\Container\Exception\ContainerException;
 	use Edde\Api\Converter\Exception\ConverterException;
 	use Edde\Api\Converter\Inject\ConverterManager;
 	use Edde\Api\Crypt\Inject\RandomService;
@@ -18,7 +19,7 @@
 	use Edde\Common\Bus\Event\Event;
 	use Edde\Common\Bus\Request\Request;
 	use Edde\Common\Content\Content;
-	use Edde\Ext\Test\TestCase;
+	use Edde\TestCase;
 
 	class MessageBusTest extends TestCase {
 		use EventBus;
@@ -30,6 +31,7 @@
 		/**
 		 * @throws InvalidElementException
 		 * @throws ValidationException
+		 * @throws ContainerException
 		 */
 		public function testUnknownMessageType() {
 			$response = $this->messageBus->execute(new Element('unsupported-message', 'uuid'));
@@ -39,9 +41,10 @@
 		}
 
 		/**
+		 * @throws ContainerException
 		 * @throws InvalidElementException
-		 * @throws ValidationException
 		 * @throws UnknownValidatorException
+		 * @throws ValidationException
 		 */
 		public function testEventBusInvalidEvent() {
 			$response = $this->messageBus->execute($message = new Element('event', 'uuid'));
@@ -52,6 +55,7 @@
 		}
 
 		/**
+		 * @throws ContainerException
 		 * @throws InvalidElementException
 		 * @throws ValidationException
 		 */
@@ -63,6 +67,7 @@
 		}
 
 		/**
+		 * @throws ContainerException
 		 * @throws InvalidElementException
 		 * @throws ValidationException
 		 */
@@ -87,6 +92,7 @@
 		}
 
 		/**
+		 * @throws ContainerException
 		 * @throws InvalidElementException
 		 * @throws ValidationException
 		 */

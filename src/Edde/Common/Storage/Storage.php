@@ -12,14 +12,10 @@
 
 	class Storage extends Object implements IStorage {
 		use Driver;
-		/**
-		 * @var int
-		 */
+		/** @var int */
 		protected $transaction = 0;
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function start(bool $exclusive = false): IStorage {
 			if ($this->transaction > 0) {
 				if ($exclusive === false) {
@@ -33,9 +29,7 @@
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function commit(): IStorage {
 			if ($this->transaction === 0) {
 				throw new NoTransactionException('Cannot commit a transaction - there is no one running!');
@@ -50,9 +44,7 @@
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function rollback(): IStorage {
 			if ($this->transaction === 0) {
 				throw new NoTransactionException('Cannot rollback a transaction - there is no one running!');
@@ -63,24 +55,23 @@
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function execute(IQuery $query) {
 			return $this->driver->execute($query);
 		}
 
-		/**
-		 * @inheritdoc
-		 */
-		public function native($query, array $parameters = []) {
-			return $this->driver->native($query, $parameters);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function stream(IQuery $query): IStream {
 			return new Stream($this, $query);
+		}
+
+		/** @inheritdoc */
+		public function fetch($query, array $params = []) {
+			return $this->driver->fetch($query, $params);
+		}
+
+		/** @inheritdoc */
+		public function exec($query, array $params = []) {
+			return $this->driver->exec($query, $params);
 		}
 	}
