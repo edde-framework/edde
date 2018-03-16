@@ -2,10 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Entity;
 
-	use Edde\Common\Storage\Query\SelectQuery;
 	use Edde\Inject\Container\Container;
 	use Edde\Inject\Schema\SchemaManager;
 	use Edde\Object;
+	use Edde\Query\SelectQuery;
 	use Edde\Schema\ISchema;
 	use Edde\Storage\IStream;
 	use Edde\Storage\Query\ISelectQuery;

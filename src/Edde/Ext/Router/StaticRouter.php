@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Router;
 
-	use Edde\Common\Router\AbstractRouter;
 	use Edde\Element\IRequest;
+	use Edde\Router\AbstractRouter;
 
 	/**
 	 * Static router all the times returns same request.

@@ -27,7 +27,7 @@
 		 *
 		 * @return array
 		 */
-		public function getParameterList(): array;
+		public function getParameters(): array;
 
 		/**
 		 * return mime type of this content type

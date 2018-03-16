@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Log;
 
-	use Edde\Common\Log\AbstractLog;
 	use Edde\Filter\IFilter;
+	use Edde\Log\AbstractLog;
 	use Edde\Log\ILog;
 	use Edde\Log\ILogService;
 

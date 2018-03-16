@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Storage;
 
-	use Edde\Common\Storage\Stream;
 	use Edde\Exception\Storage\ExclusiveTransactionException;
 	use Edde\Exception\Storage\NoTransactionException;
 	use Edde\Inject\Driver\Driver;
@@ -10,6 +9,7 @@
 	use Edde\Query\IQuery;
 	use Edde\Storage\IStorage;
 	use Edde\Storage\IStream;
+	use Edde\Storage\Stream;
 
 	class Storage extends Object implements \Edde\Storage\IStorage {
 		use Driver;

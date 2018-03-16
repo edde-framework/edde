@@ -19,7 +19,6 @@
 	use Edde\Bus\MessageBus;
 	use Edde\Bus\MessageService;
 	use Edde\Bus\RequestService;
-	use Edde\Common\Upgrade\AbstractUpgradeManager;
 	use Edde\Config\IConfigLoader;
 	use Edde\Config\IConfigService;
 	use Edde\Configurator\Bus\MessageBusConfigurator;
@@ -78,6 +77,7 @@
 	use Edde\Service\Xml\XmlExport;
 	use Edde\Service\Xml\XmlParser;
 	use Edde\Storage\IStorage;
+	use Edde\Upgrade\AbstractUpgradeManager;
 	use Edde\Upgrade\IUpgradeManager;
 	use Edde\Utils\IStringUtils;
 	use Edde\Validator\IValidatorManager;

@@ -2,8 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Xml;
 
-	use Edde\Common\Xml\AbstractXmlExport;
-	use Edde\Node\INode;
+	use Edde\Xml\AbstractXmlExport;
 	use Iterator;
 	use SplStack;
 

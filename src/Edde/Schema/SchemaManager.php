@@ -2,9 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
-	use Edde\Common\Schema\Link;
-	use Edde\Common\Schema\Relation;
-	use Edde\Common\Schema\Target;
 	use Edde\Exception\Validator\BatchValidationException;
 	use Edde\Exception\Validator\ValidationException;
 	use Edde\Inject\Filter\FilterManager;

@@ -40,7 +40,7 @@
 		/**
 		 * set content of the request/response
 		 *
-		 * @param \Edde\Content\IContent|null $content
+		 * @param IContent|null $content
 		 *
 		 * @return $this
 		 */

@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Query;
 
-	use Edde\Common\Storage\Query\AbstractQuery;
 	use Edde\Entity\IEntity;
 
 	class DeleteQuery extends AbstractQuery implements IDeleteQuery {

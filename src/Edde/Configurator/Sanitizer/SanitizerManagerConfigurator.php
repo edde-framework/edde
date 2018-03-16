@@ -3,12 +3,10 @@
 	namespace Edde\Configurator\Sanitizer;
 
 	use DateTime;
-	use Edde\Common\Sanitizer\BoolSanitizer;
-	use Edde\Common\Sanitizer\DateTimeSanitizer;
-	use Edde\Common\Sanitizer\FloatSanitizer;
-	use Edde\Common\Sanitizer\IntSanitizer;
 	use Edde\Config\AbstractConfigurator;
 	use Edde\Inject\Container\Container;
+	use Edde\Sanitizer\DateTimeSanitizer;
+	use Edde\Sanitizer\IntSanitizer;
 	use Edde\Sanitizer\ISanitizerManager;
 
 	class SanitizerManagerConfigurator extends AbstractConfigurator {
@@ -20,10 +18,10 @@
 		public function configure($instance) {
 			parent::configure($instance);
 			$instance->registerSanitizers([
-				'bool'          => $sanitizer = $this->container->create(BoolSanitizer::class, [], __METHOD__),
+				'bool'          => $sanitizer = $this->container->create(\Edde\Sanitizer\BoolSanitizer::class, [], __METHOD__),
 				'boolean'       => $sanitizer,
 				'int'           => $this->container->create(IntSanitizer::class, [], __METHOD__),
-				'float'         => $sanitizer = $this->container->create(FloatSanitizer::class, [], __METHOD__),
+				'float'         => $sanitizer = $this->container->create(\Edde\Sanitizer\FloatSanitizer::class, [], __METHOD__),
 				'double'        => $sanitizer,
 				DateTime::class => $sanitizer = $this->container->create(DateTimeSanitizer::class, [], __METHOD__),
 				'datetime'      => $sanitizer,

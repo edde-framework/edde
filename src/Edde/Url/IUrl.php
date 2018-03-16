@@ -94,14 +94,14 @@
 		 *
 		 * @return IUrl
 		 */
-		public function setParameterList(array $parameterList): IUrl;
+		public function setParams(array $parameterList): IUrl;
 
 		/**
-		 * @param array $parameterList
+		 * @param array $params
 		 *
 		 * @return IUrl
 		 */
-		public function addParameterList(array $parameterList): IUrl;
+		public function addParams(array $params): IUrl;
 
 		/**
 		 * update the given parameter

@@ -2,8 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
-	use Edde\Common\Schema\LinkBuilder;
-	use Edde\Common\Schema\SchemaBuilder;
 	use Edde\Inject\Utils\StringUtils;
 	use ReflectionClass;
 	use Throwable;

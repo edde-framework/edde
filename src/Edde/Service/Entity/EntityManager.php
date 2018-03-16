@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Entity;
 
-	use Edde\Common\Storage\Query\SelectQuery;
 	use Edde\Entity\Collection;
 	use Edde\Entity\Entity;
 	use Edde\Entity\IEntity;
@@ -13,6 +12,7 @@
 	use Edde\Inject\Storage\Storage;
 	use Edde\Object;
 	use Edde\Query\QueryQueue;
+	use Edde\Query\SelectQuery;
 	use Edde\Schema\ISchema;
 
 	class EntityManager extends Object implements IEntityManager {

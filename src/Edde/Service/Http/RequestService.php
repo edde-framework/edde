@@ -2,15 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Http;
 
-	use Edde\Common\Http\Cookie;
-	use Edde\Common\Http\Cookies;
-	use Edde\Common\Http\Request;
-	use Edde\Common\Url\Url;
 	use Edde\Content\InputContent;
 	use Edde\Content\PostContent;
 	use Edde\Exception\Http\EmptyBodyException;
 	use Edde\Exception\Http\NoHttpException;
 	use Edde\Exception\Url\UrlException;
+	use Edde\Http\Cookie;
+	use Edde\Http\Cookies;
 	use Edde\Http\IContentType;
 	use Edde\Http\ICookies;
 	use Edde\Http\IHeaders;
@@ -19,6 +17,7 @@
 	use Edde\Inject\Http\HttpUtils;
 	use Edde\Object;
 	use Edde\Url\IUrl;
+	use Edde\Url\Url;
 
 	class RequestService extends Object implements IRequestService {
 		use HttpUtils;
@@ -35,7 +34,7 @@
 			if ($this->request) {
 				return $this->request;
 			}
-			$this->request = new Request(
+			$this->request = new \Edde\Http\Request(
 				Url::create((isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']),
 				$this->createHeaders(),
 				$this->createCookies()

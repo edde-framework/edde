@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Xml;
 
-	use Edde\Common\Node\Node;
-	use Edde\Common\Node\TreeIterator;
 	use Edde\File\File;
 	use Edde\Inject\Xml\XmlExport;
+	use Edde\Node\Node;
 	use Edde\Node\NodeException;
+	use Edde\Node\TreeIterator;
 	use Edde\TestCase;
 
 	class XmlExportTest extends TestCase {

@@ -2,9 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Query;
 
-	use Edde\Common\Storage\Query\AbstractQuery;
-	use Edde\Common\Storage\Query\Fragment\WhereGroup;
 	use Edde\Entity\IEntity;
+	use Edde\Query\Fragment\WhereGroup;
 	use Edde\Schema\IRelation;
 	use Edde\Storage\Query\Fragment\IWhereGroup;
 

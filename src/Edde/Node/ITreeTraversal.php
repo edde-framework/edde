@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Node;
 
-	use Edde\Common\Node\SkipException;
+	use Iterator;
 
 	/**
 	 * Quite tricky interface to enable tree node traversal in linear (or semi-linear) way with
@@ -33,48 +33,48 @@
 		/**
 		 * execute common workflow of traversal (enter/node/leave) with traverse selection
 		 *
-		 * @param INode     $node
-		 * @param \Iterator $iterator
-		 * @param array     ...$parameters
+		 * @param INode    $node
+		 * @param Iterator $iterator
+		 * @param array    ...$parameters
 		 */
-		public function traverse(INode $node, \Iterator $iterator, ...$parameters);
+		public function traverse(INode $node, Iterator $iterator, ...$parameters): void;
 
 		/**
 		 * open node event (when traversal enters the node)
 		 *
-		 * @param INode     $node
-		 * @param \Iterator $iterator
-		 * @param array     ...$parameters
+		 * @param INode    $node
+		 * @param Iterator $iterator
+		 * @param array    ...$parameters
 		 *
 		 * @return mixed
 		 *
 		 * @throws SkipException
 		 */
-		public function enter(INode $node, \Iterator $iterator, ...$parameters);
+		public function enter(INode $node, Iterator $iterator, ...$parameters): void;
 
 		/**
 		 * content of node (usually main logic, another tree traversals, ...)
 		 *
-		 * @param INode     $node
-		 * @param \Iterator $iterator
-		 * @param array     ...$parameters
+		 * @param INode    $node
+		 * @param Iterator $iterator
+		 * @param array    ...$parameters
 		 *
 		 * @return mixed
 		 *
 		 * @throws SkipException
 		 */
-		public function node(INode $node, \Iterator $iterator, ...$parameters);
+		public function node(INode $node, Iterator $iterator, ...$parameters): void;
 
 		/**
 		 * close the node (executed when leaving; for example draw closing tag ;))
 		 *
-		 * @param INode     $node
-		 * @param \Iterator $iterator
-		 * @param array     ...$parameters
+		 * @param INode    $node
+		 * @param Iterator $iterator
+		 * @param array    ...$parameters
 		 *
 		 * @return mixed
 		 *
 		 * @throws SkipException
 		 */
-		public function leave(INode $node, \Iterator $iterator, ...$parameters);
+		public function leave(INode $node, Iterator $iterator, ...$parameters): void;
 	}

@@ -2,10 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Router;
 
-	use Edde\Common\Router\AbstractRouter;
 	use Edde\Element\IRequest;
 	use Edde\Inject\Container\Container;
-	use Edde\Router\IRouter;
+	use Edde\Router\AbstractRouter;
 
 	class ProxyRouter extends AbstractRouter {
 		use Container;

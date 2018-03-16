@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Driver;
 
-	use Edde\Common\Storage\Query\NativeQuery;
 	use Edde\Config\ConfigException;
 	use Edde\Crate\IProperty;
 	use Edde\Entity\IEntity;
@@ -15,6 +14,7 @@
 	use Edde\Query\IQueryQueue;
 	use Edde\Query\IRelationQuery;
 	use Edde\Query\IUnlinkQuery;
+	use Edde\Query\NativeQuery;
 	use Edde\Storage\INativeQuery;
 	use Edde\Storage\Query\Fragment\IWhere;
 	use Edde\Storage\Query\ICrateSchemaQuery;

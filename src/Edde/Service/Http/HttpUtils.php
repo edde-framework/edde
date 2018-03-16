@@ -2,12 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Http;
 
-	use Edde\Common\Http\ContentType;
-	use Edde\Common\Http\Cookie;
-	use Edde\Common\Http\Headers;
-	use Edde\Common\Http\RequestHeader;
-	use Edde\Common\Http\ResponseHeader;
-	use Edde\Common\Url\Url;
 	use Edde\Exception\Http\HttpUtilsException;
 	use Edde\Http\IContentType;
 	use Edde\Http\ICookie;
@@ -15,8 +9,10 @@
 	use Edde\Http\IHttpUtils;
 	use Edde\Http\IRequestHeader;
 	use Edde\Http\IResponseHeader;
+	use Edde\Http\RequestHeader;
 	use Edde\Inject\Utils\StringUtils;
 	use Edde\Object;
+	use Edde\Url\Url;
 
 	/**
 	 * Static set of helper functions around http protocol.
@@ -171,7 +167,7 @@
 				$value = trim(trim(substr($part, $index + 1)), '"');
 				$parameterList[$key] = $value;
 			}
-			return new ContentType($mime, $parameterList);
+			return new \Edde\Http\ContentType($mime, $parameterList);
 		}
 
 		/**
@@ -193,7 +189,7 @@
 			$misc = $cookie['misc'];
 			$cookie['expires'] = strtotime($cookie['expires'] ?? '1.1.1970');
 			unset($cookie['misc']);
-			return new Cookie($cookie['name'], $cookie['value'], $cookie['expires'], $cookie['path'] ?? '/', $cookie['domain'] ?? null, strpos($misc, 'secure') !== false, stripos($misc, 'httponly') !== false);
+			return new \Edde\Http\Cookie($cookie['name'], $cookie['value'], $cookie['expires'], $cookie['path'] ?? '/', $cookie['domain'] ?? null, strpos($misc, 'secure') !== false, stripos($misc, 'httponly') !== false);
 		}
 
 		/**
@@ -207,7 +203,7 @@
 		 * @inheritdoc
 		 */
 		public function headers(array $headerList): IHeaders {
-			$headers = new Headers();
+			$headers = new \Edde\Http\Headers();
 			if (isset($headerList[0])) {
 				try {
 					$headers->add('http-request', $this->requestHeader($headerList[0]));
@@ -258,7 +254,7 @@
 		 */
 		public function responseHeader(string $http): IResponseHeader {
 			if ($match = $this->stringUtils->match($http, '~^HTTP/(?<version>[0-9.]+)\s(?<status>\d+)(\s(?<message>.*))?$~', true)) {
-				return new ResponseHeader($match['version'], (int)$match['status'], $match['message']);
+				return new \Edde\Http\ResponseHeader($match['version'], (int)$match['status'], $match['message']);
 			}
 			throw new HttpUtilsException(sprintf('Cannot parse http response header [%s].', $http));
 		}

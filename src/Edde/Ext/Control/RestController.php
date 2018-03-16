@@ -2,10 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Control;
 
-	use Edde\Common\Http\Response;
 	use Edde\Content\JsonContent;
 	use Edde\Exception\Http\EmptyBodyException;
 	use Edde\Http\IResponse;
+	use Edde\Http\Response;
 	use Edde\Inject\Utils\StringUtils;
 	use ReflectionClass;
 	use ReflectionException;

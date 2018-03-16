@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Application;
 
-	use Edde\Common\Log\SimpleLog;
 	use Edde\Exception\Router\BadRequestException;
 	use Edde\Inject\Application\Application;
 	use Edde\Inject\Log\LogService;
 	use Edde\Log\ILogRecord;
+	use Edde\Log\SimpleLog;
 	use Edde\TestCase;
 
 	class ApplicationTest extends TestCase {

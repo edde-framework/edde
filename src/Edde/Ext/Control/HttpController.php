@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Control;
 
-	use Edde\Common\Http\Response;
 	use Edde\Content\GeneratorContent;
 	use Edde\Content\HtmlContent;
 	use Edde\Content\JsonContent;
@@ -10,6 +9,7 @@
 	use Edde\Exception\Http\EmptyBodyException;
 	use Edde\File\IFile;
 	use Edde\Http\IResponse;
+	use Edde\Http\Response;
 	use Edde\Inject\Http\RequestService;
 	use Edde\Inject\Schema\SchemaManager;
 

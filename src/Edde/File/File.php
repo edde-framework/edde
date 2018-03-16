@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\File;
 
-	use Edde\Common\Resource\Resource;
-	use Edde\Common\Url\Url;
+	use Edde\Resource\Resource;
+	use Edde\Url\Url;
 
 	/**
 	 * File class; this is just file. Simple good old classic file. Really.
@@ -11,7 +11,7 @@
 	class File extends Resource implements IFile {
 		/** @var IDirectory */
 		protected $directory;
-		/** @var resource */
+		/** @var \Edde\Resource\resource */
 		protected $handle;
 
 		/** @inheritdoc */

@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Utils;
 
-	use Edde\Common\Http\ContentType;
-	use Edde\Common\Http\RequestHeader;
-	use Edde\Common\Url\Url;
+	use Edde\Http\ContentType;
+	use Edde\Http\RequestHeader;
 	use Edde\Inject\Http\HttpUtils;
 	use Edde\TestCase;
+	use Edde\Url\Url;
 
 	class HttpUtilsTest extends TestCase {
 		use HttpUtils;
@@ -37,7 +37,7 @@
 			self::assertEquals('utf-8', $contentType->getCharset('foo'));
 			self::assertEquals([
 				'charset' => 'utf-8',
-			], $contentType->getParameterList());
+			], $contentType->getParameters());
 		}
 
 		public function testCookie() {

@@ -16,8 +16,6 @@
 	use Edde\Common\Schema\TargetSchema;
 	use Edde\Common\Schema\UserRoleSchema;
 	use Edde\Common\Schema\UserSchema;
-	use Edde\Common\Storage\Query\CreateSchemaQuery;
-	use Edde\Common\Storage\Query\SelectQuery;
 	use Edde\Driver\DriverException;
 	use Edde\Entity\EntityException;
 	use Edde\Entity\EntityNotFoundException;
@@ -31,6 +29,8 @@
 	use Edde\Inject\Entity\EntityManager;
 	use Edde\Inject\Schema\SchemaManager;
 	use Edde\Inject\Storage\Storage;
+	use Edde\Query\CreateSchemaQuery;
+	use Edde\Query\SelectQuery;
 	use Edde\Schema\SchemaException;
 	use Edde\TestCase;
 

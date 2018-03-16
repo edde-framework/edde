@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Driver;
 
-	use Edde\Common\Storage\Query\NativeQuery;
 	use Edde\Inject\Config\ConfigService;
 	use Edde\Inject\Schema\SchemaManager;
 	use Edde\Object;
 	use Edde\Query\IQuery;
+	use Edde\Query\NativeQuery;
 	use Edde\Storage\INativeQuery;
 	use Edde\Storage\Query\Fragment\IWhereGroup;
 	use Edde\Storage\Query\IFragment;

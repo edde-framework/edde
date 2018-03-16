@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	use Edde\Common\Xml\AbstractXmlHandler;
+	use Edde\Xml\AbstractXmlHandler;
 
 	class TestXmlHandler extends AbstractXmlHandler {
 		/** @var array */

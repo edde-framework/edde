@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Router;
 
-	use Edde\Common\Router\AbstractRouter;
 	use Edde\Element\IRequest;
 	use Edde\Element\Request;
 	use Edde\Exception\Http\NoHttpException;
@@ -17,7 +16,7 @@
 	 * Maybe not the best name: this router provides application request made from
 	 * CLI and from HTTP request.
 	 */
-	class RequestRouter extends AbstractRouter {
+	class RequestRouter extends \Edde\Router\AbstractRouter {
 		use Container;
 		use StringUtils;
 		use RandomService;
