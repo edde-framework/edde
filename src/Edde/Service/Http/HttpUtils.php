@@ -13,10 +13,10 @@
 	use Edde\Common\Http\Headers;
 	use Edde\Common\Http\RequestHeader;
 	use Edde\Common\Http\ResponseHeader;
-	use Edde\Common\Object\Object;
 	use Edde\Common\Url\Url;
 	use Edde\Exception\Http\HttpUtilsException;
 	use Edde\Inject\Utils\StringUtils;
+	use Edde\Object;
 
 	/**
 	 * Static set of helper functions around http protocol.

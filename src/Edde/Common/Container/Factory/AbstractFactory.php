@@ -5,8 +5,8 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Container\IReflection;
-	use Edde\Common\Object\Object;
 	use Edde\Exception\Container\UnknownFactoryException;
+	use Edde\Object;
 
 	/**
 	 * Basic implementation for all dependency factories.

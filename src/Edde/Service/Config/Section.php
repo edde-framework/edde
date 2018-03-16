@@ -3,8 +3,8 @@
 	namespace Edde\Service\Config;
 
 	use Edde\Api\Config\ISection;
-	use Edde\Common\Object\Object;
 	use Edde\Exception\Config\RequiredValueException;
+	use Edde\Object;
 	use stdClass;
 
 	class Section extends Object implements ISection {

@@ -3,7 +3,7 @@
 	namespace Edde\Common\Content;
 
 	use Edde\Api\Content\IContent;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	class Content extends Object implements IContent {
 		/** @var mixed */

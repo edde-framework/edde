@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Object;
+	namespace Edde;
 
 	use Edde\Api\Object\IObject;
 	use Edde\Common\Config\ConfigurableTrait;

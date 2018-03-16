@@ -7,7 +7,7 @@
 	use Edde\Api\Http\ICookies;
 	use Edde\Api\Http\IHeaders;
 	use Edde\Api\Http\IHttp;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	abstract class AbstractHttp extends Object implements IHttp {
 		/**

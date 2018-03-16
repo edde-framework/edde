@@ -4,8 +4,8 @@
 
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Url\IUrl;
-	use Edde\Common\Object\Object;
 	use Edde\Exception\Resource\ResourceException;
+	use Edde\Object;
 
 	/**
 	 * Abstract definition of some "resource".

@@ -13,7 +13,7 @@
 	use Edde\Common\Entity\Query\LinkQuery;
 	use Edde\Common\Entity\Query\RelationQuery;
 	use Edde\Common\Entity\Query\UnlinkQuery;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 	use Edde\Schema\ILink;
 	use Edde\Schema\IRelation;
 

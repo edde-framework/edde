@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Container;
 
-	use Edde\Api\Application\IApplication;
 	use Edde\Api\Assets\IAssetsDirectory;
 	use Edde\Api\Assets\ILogDirectory;
 	use Edde\Api\Assets\IRootDirectory;
@@ -33,6 +32,8 @@
 	use Edde\Api\Utils\IStringUtils;
 	use Edde\Api\Xml\IXmlExport;
 	use Edde\Api\Xml\IXmlParser;
+	use Edde\Application\Application;
+	use Edde\Application\IApplication;
 	use Edde\Common\Container\Factory\CallbackFactory;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Common\Container\Factory\ExceptionFactory;
@@ -40,7 +41,6 @@
 	use Edde\Common\Container\Factory\InterfaceFactory;
 	use Edde\Common\Container\Factory\LinkFactory;
 	use Edde\Common\Container\Factory\ProxyFactory;
-	use Edde\Common\Object\Object;
 	use Edde\Common\Upgrade\AbstractUpgradeManager;
 	use Edde\Configurator\Bus\MessageBusConfigurator;
 	use Edde\Configurator\Container\ContainerConfigurator;
@@ -54,9 +54,9 @@
 	use Edde\Exception\Container\ContainerException;
 	use Edde\Exception\Container\FactoryException;
 	use Edde\Exception\EddeException;
+	use Edde\Object;
 	use Edde\Schema\ISchemaManager;
 	use Edde\Schema\SchemaManager;
-	use Edde\Service\Application\Application;
 	use Edde\Service\Assets\AssetsDirectory;
 	use Edde\Service\Assets\LogDirectory;
 	use Edde\Service\Assets\TempDirectory;

@@ -7,13 +7,13 @@
 	use Edde\Api\Entity\IRecord;
 	use Edde\Api\Storage\IStream;
 	use Edde\Api\Storage\Query\ISelectQuery;
-	use Edde\Common\Object\Object;
 	use Edde\Common\Storage\Query\SelectQuery;
 	use Edde\Exception\Entity\RecordException;
 	use Edde\Exception\Entity\UnknownAliasException;
 	use Edde\Exception\Storage\EntityNotFoundException;
 	use Edde\Inject\Container\Container;
 	use Edde\Inject\Schema\SchemaManager;
+	use Edde\Object;
 	use Edde\Schema\ISchema;
 
 	class Collection extends Object implements ICollection {

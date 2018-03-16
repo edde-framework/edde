@@ -9,11 +9,11 @@
 	use Edde\Common\Entity\Collection;
 	use Edde\Common\Entity\Entity;
 	use Edde\Common\Entity\Query\QueryQueue;
-	use Edde\Common\Object\Object;
 	use Edde\Common\Storage\Query\SelectQuery;
 	use Edde\Inject\Container\Container;
 	use Edde\Inject\Schema\SchemaManager;
 	use Edde\Inject\Storage\Storage;
+	use Edde\Object;
 	use Edde\Schema\ISchema;
 
 	class EntityManager extends Object implements IEntityManager {

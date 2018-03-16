@@ -4,12 +4,11 @@
 
 	use Edde\Api\Bus\IElement;
 	use Edde\Api\Bus\IHandler;
-	use Edde\Common\Object\Object;
-	use Edde\Exception\Bus\InvalidElementException;
 	use Edde\Exception\Bus\UnhandledElementException;
 	use Edde\Exception\Validator\UnknownValidatorException;
 	use Edde\Exception\Validator\ValidationException;
 	use Edde\Inject\Validator\ValidatorManager;
+	use Edde\Object;
 
 	abstract class AbstractHandler extends Object implements IHandler {
 		use ValidatorManager;

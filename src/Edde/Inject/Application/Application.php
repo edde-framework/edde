@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Inject\Application;
 
-	use Edde\Api\Application\IApplication;
+	use Edde\Application\IApplication;
 
 	trait Application {
 		/**

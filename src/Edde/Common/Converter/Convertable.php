@@ -5,7 +5,7 @@
 	use Edde\Api\Content\IContent;
 	use Edde\Api\Converter\IConvertable;
 	use Edde\Api\Converter\IConverter;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	/**
 	 * A biologist, a chemist and a statistician are out hunting.

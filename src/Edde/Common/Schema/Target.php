@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Schema;
 
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 	use Edde\Schema\IProperty;
 	use Edde\Schema\ISchema;
 	use Edde\Schema\ITarget;

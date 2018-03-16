@@ -4,7 +4,6 @@
 
 	use Edde\Api\Upgrade\IUpgrade;
 	use Edde\Api\Upgrade\IUpgradeManager;
-	use Edde\Common\Object\Object;
 	use Edde\Exception\Upgrade\CurrentVersionException;
 	use Edde\Exception\Upgrade\InvalidVersionException;
 	use Edde\Exception\Upgrade\NoUpgradesAvailableException;
@@ -12,6 +11,7 @@
 	use Edde\Exception\Upgrade\UpgradeException;
 	use Edde\Inject\Log\LogService;
 	use Edde\Inject\Storage\Storage;
+	use Edde\Object;
 
 	abstract class AbstractUpgradeManager extends Object implements IUpgradeManager {
 		use Storage;

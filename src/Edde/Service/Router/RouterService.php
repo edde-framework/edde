@@ -5,9 +5,9 @@
 	use Edde\Api\Bus\Request\IRequest;
 	use Edde\Api\Router\IRouter;
 	use Edde\Api\Router\IRouterService;
-	use Edde\Common\Object\Object;
 	use Edde\Exception\Router\BadRequestException;
 	use Edde\Inject\Log\LogService;
+	use Edde\Object;
 
 	class RouterService extends Object implements IRouterService {
 		use LogService;

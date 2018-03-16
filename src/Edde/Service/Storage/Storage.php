@@ -5,11 +5,11 @@
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Storage\IStream;
 	use Edde\Api\Storage\Query\IQuery;
-	use Edde\Common\Object\Object;
 	use Edde\Common\Storage\Stream;
 	use Edde\Exception\Storage\ExclusiveTransactionException;
 	use Edde\Exception\Storage\NoTransactionException;
 	use Edde\Inject\Driver\Driver;
+	use Edde\Object;
 
 	class Storage extends Object implements IStorage {
 		use Driver;

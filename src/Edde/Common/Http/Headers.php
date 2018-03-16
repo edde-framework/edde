@@ -4,7 +4,7 @@
 
 	use Edde\Api\Http\IContentType;
 	use Edde\Api\Http\IHeaders;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	/**
 	 * Simple header list implementation over an array.

@@ -3,7 +3,7 @@
 	namespace Edde\Common\Converter;
 
 	use Edde\Api\Converter\IConverter;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	abstract class AbstractConverter extends Object implements IConverter {
 		protected $sourceList;

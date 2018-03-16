@@ -4,10 +4,10 @@
 
 	use Edde\Api\Config\IConfigService;
 	use Edde\Api\Config\ISection;
-	use Edde\Common\Object\Object;
 	use Edde\Exception\Config\RequiredConfigException;
 	use Edde\Exception\Config\RequiredSectionException;
 	use Edde\Inject\Config\ConfigLoader;
+	use Edde\Object;
 	use stdClass;
 
 	class ConfigService extends Object implements IConfigService {

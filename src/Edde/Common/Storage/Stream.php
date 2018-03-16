@@ -6,8 +6,8 @@
 	use Edde\Api\Storage\IStream;
 	use Edde\Api\Storage\Query\IQuery;
 	use Edde\Api\Storage\Query\ISelectQuery;
-	use Edde\Common\Object\Object;
 	use Edde\Exception\Storage\InvalidSourceException;
+	use Edde\Object;
 	use function explode;
 	use function strpos;
 

@@ -4,7 +4,7 @@
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\ITreeTraversal;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	/**
 	 * A new teacher was trying to make use of her psychology courses.

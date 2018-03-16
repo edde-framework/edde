@@ -4,9 +4,9 @@
 
 	use Edde\Api\Filter\IFilter;
 	use Edde\Api\Filter\IFilterManager;
-	use Edde\Common\Object\Object;
 	use Edde\Exception\Filter\FilterException;
 	use Edde\Exception\Filter\UnknownFilterException;
+	use Edde\Object;
 
 	class FilterManager extends Object implements IFilterManager {
 		/** @var IFilter[] */

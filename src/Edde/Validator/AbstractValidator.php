@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Validator;
 
-	use Edde\Common\Object\Object;
 	use Edde\Exception\Validator\ValidationException;
+	use Edde\Object;
 
 	abstract class AbstractValidator extends Object implements IValidator {
 		/** @inheritdoc */

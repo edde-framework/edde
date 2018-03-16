@@ -4,8 +4,8 @@
 
 	use Edde\Api\Generator\IGenerator;
 	use Edde\Api\Generator\IGeneratorManager;
-	use Edde\Common\Object\Object;
 	use Edde\Exception\Generator\UnknownGeneratorException;
+	use Edde\Object;
 
 	class GeneratorManager extends Object implements IGeneratorManager {
 		/** @var IGenerator[] */

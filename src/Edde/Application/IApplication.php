@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Application;
+	namespace Edde\Application;
 
 	use Edde\Api\Config\IConfigurable;
 

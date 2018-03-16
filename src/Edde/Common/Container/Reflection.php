@@ -4,7 +4,7 @@
 
 	use Edde\Api\Container\IParameter;
 	use Edde\Api\Container\IReflection;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	class Reflection extends Object implements IReflection {
 		protected $parameterList;

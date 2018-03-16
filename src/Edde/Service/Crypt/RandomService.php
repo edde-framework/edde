@@ -3,7 +3,7 @@
 	namespace Edde\Service\Crypt;
 
 	use Edde\Api\Crypt\IRandomService;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	class RandomService extends Object implements IRandomService {
 		/** @inheritdoc */

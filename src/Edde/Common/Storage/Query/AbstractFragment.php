@@ -3,7 +3,7 @@
 	namespace Edde\Common\Storage\Query;
 
 	use Edde\Api\Storage\Query\IFragment;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	abstract class AbstractFragment extends Object implements IFragment {
 	}

@@ -3,8 +3,8 @@
 	namespace Edde\Service\Config;
 
 	use Edde\Api\Config\IConfigLoader;
-	use Edde\Common\Object\Object;
 	use Edde\Exception\Config\RequiredConfigException;
+	use Edde\Object;
 	use stdClass;
 	use function is_readable;
 	use function parse_ini_file;

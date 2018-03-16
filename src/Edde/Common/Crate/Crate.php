@@ -4,7 +4,7 @@
 
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Crate\IProperty;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	class Crate extends Object implements ICrate {
 		/**

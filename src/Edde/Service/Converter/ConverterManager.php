@@ -8,8 +8,8 @@
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Common\Converter\Convertable;
 	use Edde\Common\Converter\PassConverter;
-	use Edde\Common\Object\Object;
 	use Edde\Exception\Converter\ConverterException;
+	use Edde\Object;
 
 	class ConverterManager extends Object implements IConverterManager {
 		/**

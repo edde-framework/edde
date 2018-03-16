@@ -3,8 +3,7 @@
 	namespace Edde\Common\Node;
 
 	use Edde\Api\Node\INode;
-	use Edde\Common\Object\Object;
-	use Edde\Exception\Node\NodeException;
+	use Edde\Object;
 	use ReflectionClass;
 	use stdClass;
 

@@ -3,8 +3,8 @@
 	namespace Edde\Common\Bus;
 
 	use Edde\Api\Bus\IElement;
-	use Edde\Common\Object\Object;
 	use Edde\Exception\Bus\ElementException;
+	use Edde\Object;
 
 	class Element extends Object implements IElement {
 		/** @var string */

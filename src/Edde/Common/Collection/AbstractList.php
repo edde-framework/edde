@@ -4,7 +4,7 @@
 
 	use ArrayIterator;
 	use Edde\Api\Collection\IList;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	/**
 	 * This list implementation is abstract because it should be not possible to use

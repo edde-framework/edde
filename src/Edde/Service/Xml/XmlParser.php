@@ -6,9 +6,9 @@
 	use Edde\Api\Xml\IXmlHandler;
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\File\File;
-	use Edde\Common\Object\Object;
 	use Edde\Exception\Xml\XmlParserException;
 	use Edde\Inject\Utils\StringUtils;
+	use Edde\Object;
 	use Iterator;
 
 	/**

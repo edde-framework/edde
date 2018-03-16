@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
-	use Edde\Common\Object\Object;
 	use Edde\Common\Schema\Link;
 	use Edde\Common\Schema\Relation;
 	use Edde\Common\Schema\Target;
@@ -12,6 +11,7 @@
 	use Edde\Inject\Generator\GeneratorManager;
 	use Edde\Inject\Sanitizer\SanitizerManager;
 	use Edde\Inject\Validator\ValidatorManager;
+	use Edde\Object;
 
 	class SchemaManager extends Object implements ISchemaManager {
 		use GeneratorManager;

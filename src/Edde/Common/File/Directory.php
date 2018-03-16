@@ -4,9 +4,9 @@
 
 	use Edde\Api\File\IDirectory;
 	use Edde\Api\File\IFile;
-	use Edde\Common\Object\Object;
 	use Edde\Exception\File\DirectoryException;
 	use Edde\Exception\File\RealPathException;
+	use Edde\Object;
 	use RecursiveDirectoryIterator;
 	use RecursiveIteratorIterator;
 	use SplFileInfo;

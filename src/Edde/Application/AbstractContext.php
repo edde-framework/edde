@@ -1,9 +1,8 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Service\Application;
+	namespace Edde\Application;
 
-	use Edde\Api\Application\IContext;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	abstract class AbstractContext extends Object implements IContext {
 		/**

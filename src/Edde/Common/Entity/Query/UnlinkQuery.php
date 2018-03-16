@@ -4,7 +4,7 @@
 
 	use Edde\Api\Entity\IEntity;
 	use Edde\Api\Entity\Query\IUnlinkQuery;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 	use Edde\Schema\ILink;
 
 	class UnlinkQuery extends Object implements IUnlinkQuery {

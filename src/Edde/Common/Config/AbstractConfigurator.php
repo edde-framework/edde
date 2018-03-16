@@ -3,7 +3,7 @@
 	namespace Edde\Common\Config;
 
 	use Edde\Api\Config\IConfigurator;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	abstract class AbstractConfigurator extends Object implements IConfigurator {
 		/**

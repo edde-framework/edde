@@ -3,7 +3,7 @@
 	namespace Edde\Common\Storage\Query;
 
 	use Edde\Api\Storage\Query\IQuery;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	abstract class AbstractQuery extends Object implements IQuery {
 	}

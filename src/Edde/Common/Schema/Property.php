@@ -3,7 +3,7 @@
 	namespace Edde\Common\Schema;
 
 	use Edde\Api\Node\INode;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	class Property extends Object implements \Edde\Schema\IProperty {
 		/** @var INode */

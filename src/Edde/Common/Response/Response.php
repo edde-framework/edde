@@ -4,7 +4,7 @@
 
 	use Edde\Api\Content\IContent;
 	use Edde\Api\Response\IResponse;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	class Response extends Object implements IResponse {
 		/**

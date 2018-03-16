@@ -2,18 +2,18 @@
 	declare(strict_types=1);
 	namespace Edde\Inject\Application;
 
-	use Edde\Api\Application\IContext;
+	use Edde\Application\IContext;
 
 	trait Context {
 		/**
-		 * @var IContext
+		 * @var \Edde\Application\IContext
 		 */
 		protected $context;
 
 		/**
-		 * @param IContext $context
+		 * @param \Edde\Application\IContext $context
 		 */
-		public function lazyContext(IContext $context) {
+		public function lazyContext(\Edde\Application\IContext $context) {
 			$this->context = $context;
 		}
 	}

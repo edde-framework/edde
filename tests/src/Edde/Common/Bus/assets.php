@@ -6,7 +6,7 @@
 	use Edde\Api\Bus\Request\IResponse;
 	use Edde\Common\Bus\Event\AbstractListener;
 	use Edde\Common\Bus\Request\Response;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	class CommonListener extends AbstractListener {
 		/** @inheritdoc */

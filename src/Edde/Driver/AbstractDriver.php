@@ -7,11 +7,11 @@
 	use Edde\Api\Storage\Query\Fragment\IWhereGroup;
 	use Edde\Api\Storage\Query\IFragment;
 	use Edde\Api\Storage\Query\IQuery;
-	use Edde\Common\Object\Object;
 	use Edde\Common\Storage\Query\NativeQuery;
 	use Edde\Exception\Driver\DriverException;
 	use Edde\Inject\Config\ConfigService;
 	use Edde\Inject\Schema\SchemaManager;
+	use Edde\Object;
 	use ReflectionClass;
 	use ReflectionException;
 	use ReflectionMethod;

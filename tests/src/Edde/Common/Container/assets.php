@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Test;
 
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	/**
 	 * just fake function

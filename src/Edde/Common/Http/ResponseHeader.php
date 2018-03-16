@@ -3,7 +3,7 @@
 	namespace Edde\Common\Http;
 
 	use Edde\Api\Http\IResponseHeader;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	class ResponseHeader extends Object implements IResponseHeader {
 		/**

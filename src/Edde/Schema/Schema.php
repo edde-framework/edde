@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	class Schema extends Object implements ISchema {
 		/** @var string */

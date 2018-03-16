@@ -3,7 +3,7 @@
 	namespace Edde\Service\Utils;
 
 	use Edde\Api\Utils\IStringUtils;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	class StringUtils extends Object implements IStringUtils {
 		const SEPARATOR_LIST = [

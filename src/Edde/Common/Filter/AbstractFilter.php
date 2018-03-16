@@ -3,7 +3,7 @@
 	namespace Edde\Common\Filter;
 
 	use Edde\Api\Filter\IFilter;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	abstract class AbstractFilter extends Object implements IFilter {
 	}

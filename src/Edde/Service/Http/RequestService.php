@@ -13,7 +13,6 @@
 	use Edde\Common\Http\Cookie;
 	use Edde\Common\Http\Cookies;
 	use Edde\Common\Http\Request;
-	use Edde\Common\Object\Object;
 	use Edde\Common\Url\Url;
 	use Edde\Exception\Converter\ConverterException;
 	use Edde\Exception\Http\EmptyBodyException;
@@ -21,6 +20,7 @@
 	use Edde\Exception\Url\UrlException;
 	use Edde\Inject\Converter\ConverterManager;
 	use Edde\Inject\Http\HttpUtils;
+	use Edde\Object;
 
 	class RequestService extends Object implements IRequestService {
 		use HttpUtils;

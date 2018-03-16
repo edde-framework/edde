@@ -3,7 +3,7 @@
 	namespace Edde\Service\Crypt;
 
 	use Edde\Api\Crypt\IPasswordService;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	class PasswordService extends Object implements IPasswordService {
 		/** @inheritdoc */

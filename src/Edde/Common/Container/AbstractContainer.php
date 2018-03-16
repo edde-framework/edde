@@ -5,8 +5,8 @@
 	use Edde\Api\Config\IConfigurator;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
-	use Edde\Common\Object\Object;
 	use Edde\Exception\Container\UnknownFactoryException;
+	use Edde\Object;
 
 	abstract class AbstractContainer extends Object implements IContainer {
 		/** @var IFactory[] */

@@ -4,8 +4,8 @@
 
 	use Edde\Api\Sanitizer\ISanitizer;
 	use Edde\Api\Sanitizer\ISanitizerManager;
-	use Edde\Common\Object\Object;
 	use Edde\Exception\Sanitizer\UnknownSanitizerException;
+	use Edde\Object;
 
 	class SanitizerManager extends Object implements ISanitizerManager {
 		/**

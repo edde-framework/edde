@@ -4,7 +4,7 @@
 
 	use ArrayIterator;
 	use Edde\Api\Node\ITree;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	/**
 	 * Pure node tree implementation; this class holds all common methods for node manipulation.

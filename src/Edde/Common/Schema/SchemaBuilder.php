@@ -4,7 +4,7 @@
 
 	use Edde\Api\Node\INode;
 	use Edde\Common\Node\Node;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 	use Edde\Schema\ILinkBuilder;
 	use Edde\Schema\IPropertyBuilder;
 	use Edde\Schema\ISchema;

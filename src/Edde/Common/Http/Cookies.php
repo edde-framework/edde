@@ -4,7 +4,7 @@
 
 	use Edde\Api\Http\ICookie;
 	use Edde\Api\Http\ICookies;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	/**
 	 * Class holding set of cookies.

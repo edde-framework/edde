@@ -3,7 +3,7 @@
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Container\IParameter;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	class Parameter extends Object implements IParameter {
 		/**

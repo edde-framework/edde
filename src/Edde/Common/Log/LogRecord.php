@@ -3,7 +3,7 @@
 	namespace Edde\Common\Log;
 
 	use Edde\Api\Log\ILogRecord;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	/**
 	 * Simple log record; holds record without any modifications.

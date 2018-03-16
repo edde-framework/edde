@@ -4,7 +4,7 @@
 
 	use Edde\Api\File\IFile;
 	use Edde\Api\Xml\IXmlExport;
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 	use Iterator;
 
 	abstract class AbstractXmlExport extends Object implements IXmlExport {

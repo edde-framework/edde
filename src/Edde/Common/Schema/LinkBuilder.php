@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Schema;
 
-	use Edde\Common\Object\Object;
+	use Edde\Object;
 
 	class LinkBuilder extends Object implements \Edde\Schema\ILinkBuilder {
 		/**
