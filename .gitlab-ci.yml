@@ -1,8 +1,5 @@
 image: docker:latest
 
-variables:
-    PROJECT: edde
-
 stages:
     - test
     - publish
