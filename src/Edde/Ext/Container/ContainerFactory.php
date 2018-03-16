@@ -2,10 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Container;
 
-	use Edde\Api\Assets\IAssetsDirectory;
-	use Edde\Api\Assets\ILogDirectory;
-	use Edde\Api\Assets\IRootDirectory;
-	use Edde\Api\Assets\ITempDirectory;
 	use Edde\Api\Bus\Event\IEventBus;
 	use Edde\Api\Bus\IMessageBus;
 	use Edde\Api\Bus\IMessageService;
@@ -34,6 +30,13 @@
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Application\Application;
 	use Edde\Application\IApplication;
+	use Edde\Assets\AssetsDirectory;
+	use Edde\Assets\IAssetsDirectory;
+	use Edde\Assets\ILogDirectory;
+	use Edde\Assets\IRootDirectory;
+	use Edde\Assets\ITempDirectory;
+	use Edde\Assets\LogDirectory;
+	use Edde\Assets\TempDirectory;
 	use Edde\Common\Container\Factory\CallbackFactory;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Common\Container\Factory\ExceptionFactory;
@@ -57,9 +60,6 @@
 	use Edde\Object;
 	use Edde\Schema\ISchemaManager;
 	use Edde\Schema\SchemaManager;
-	use Edde\Service\Assets\AssetsDirectory;
-	use Edde\Service\Assets\LogDirectory;
-	use Edde\Service\Assets\TempDirectory;
 	use Edde\Service\Bus\Event\EventBus;
 	use Edde\Service\Bus\MessageBus;
 	use Edde\Service\Bus\MessageService;

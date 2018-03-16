@@ -2,19 +2,19 @@
 	declare(strict_types=1);
 	namespace Edde\Inject\Assets;
 
-	use Edde\Api\Assets\ILogDirectory;
+	use Edde\Assets\ILogDirectory;
 
 	/**
 	 * Log directory lazy dependency.
 	 */
 	trait LogDirectory {
 		/**
-		 * @var ILogDirectory
+		 * @var \Edde\Assets\ILogDirectory
 		 */
 		protected $logDirectory;
 
 		/**
-		 * @param ILogDirectory $logDirectory
+		 * @param \Edde\Assets\ILogDirectory $logDirectory
 		 */
 		public function lazyLogDirectory(ILogDirectory $logDirectory) {
 			$this->logDirectory = $logDirectory;

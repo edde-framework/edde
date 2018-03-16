@@ -2,18 +2,18 @@
 	declare(strict_types=1);
 	namespace Edde\Inject\Assets;
 
-	use Edde\Api\Assets\IRootDirectory;
+	use Edde\Assets\IRootDirectory;
 
 	trait RootDirectory {
 		/**
-		 * @var IRootDirectory
+		 * @var \Edde\Assets\IRootDirectory
 		 */
 		protected $rootDirectory;
 
 		/**
-		 * @param IRootDirectory $rootDirectory
+		 * @param \Edde\Assets\IRootDirectory $rootDirectory
 		 */
-		public function lazyRootDirectory(IRootDirectory $rootDirectory) {
+		public function lazyRootDirectory(\Edde\Assets\IRootDirectory $rootDirectory) {
 			$this->rootDirectory = $rootDirectory;
 		}
 	}

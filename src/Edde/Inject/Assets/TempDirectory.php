@@ -2,18 +2,18 @@
 	declare(strict_types=1);
 	namespace Edde\Inject\Assets;
 
-	use Edde\Api\Assets\ITempDirectory;
+	use Edde\Assets\ITempDirectory;
 
 	trait TempDirectory {
 		/**
-		 * @var ITempDirectory
+		 * @var \Edde\Assets\ITempDirectory
 		 */
 		protected $tempDirectory;
 
 		/**
-		 * @param ITempDirectory $tempDirectory
+		 * @param \Edde\Assets\ITempDirectory $tempDirectory
 		 */
-		public function lazyTempDirectory(ITempDirectory $tempDirectory) {
+		public function lazyTempDirectory(\Edde\Assets\ITempDirectory $tempDirectory) {
 			$this->tempDirectory = $tempDirectory;
 		}
 	}

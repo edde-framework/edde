@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde;
 
-	use Edde\Api\Assets\IRootDirectory;
 	use Edde\Api\Config\IConfigLoader;
 	use Edde\Api\Container\IAutowire;
+	use Edde\Assets\IRootDirectory;
 	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Common\Container\AutowireTrait;
 	use Edde\Common\Container\Factory\ClassFactory;
