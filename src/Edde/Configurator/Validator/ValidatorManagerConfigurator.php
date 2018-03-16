@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Ext\Validator;
+	namespace Edde\Configurator\Validator;
 
 	use Edde\Api\Validator\IValidatorManager;
 	use Edde\Common\Config\AbstractConfigurator;

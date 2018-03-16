@@ -1,11 +1,12 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Ext\Router;
+	namespace Edde\Configurator\Router;
 
 	use Edde\Api\Router\IRouterService;
 	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Exception\Container\ContainerException;
 	use Edde\Exception\Container\FactoryException;
+	use Edde\Ext\Router\RequestRouter;
 	use Edde\Inject\Container\Container;
 
 	class RouterServiceConfigurator extends AbstractConfigurator {

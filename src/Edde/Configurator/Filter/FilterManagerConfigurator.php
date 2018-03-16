@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Ext\Filter;
+	namespace Edde\Configurator\Filter;
 
 	use DateTime;
 	use Edde\Api\Filter\IFilterManager;

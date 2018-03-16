@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Ext\Converter;
+	namespace Edde\Configurator\Converter;
 
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Common\Config\AbstractConfigurator;
@@ -8,6 +8,8 @@
 	use Edde\Exception\Container\FactoryException;
 	use Edde\Ext\Bus\JsonDecodeConverter as ElementJsonDecodeConverter;
 	use Edde\Ext\Bus\JsonEncodeConverter as ElementJsonEncodeConverter;
+	use Edde\Ext\Converter\JsonDecodeConverter;
+	use Edde\Ext\Converter\JsonEncodeConverter;
 	use Edde\Inject\Container\Container;
 
 	class ConverterManagerConfigurator extends AbstractConfigurator {

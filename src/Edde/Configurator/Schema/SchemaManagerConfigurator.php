@@ -1,11 +1,12 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Ext\Schema;
+	namespace Edde\Configurator\Schema;
 
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Exception\Container\ContainerException;
 	use Edde\Exception\Container\FactoryException;
+	use Edde\Ext\Schema\SchemaReflectionLoader;
 	use Edde\Inject\Container\Container;
 
 	class SchemaManagerConfigurator extends AbstractConfigurator {

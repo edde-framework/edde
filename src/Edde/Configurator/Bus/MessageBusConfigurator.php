@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Ext\Bus;
+	namespace Edde\Configurator\Bus;
 
 	use Edde\Api\Bus\Event\IEventBus;
 	use Edde\Api\Bus\IMessageBus;

@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Ext\Container;
+	namespace Edde\Configurator\Container;
 
 	use Edde\Api\Config\IConfigurator;
 	use Edde\Api\Container\IContainer;

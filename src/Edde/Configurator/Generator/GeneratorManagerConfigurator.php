@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Ext\Generator;
+	namespace Edde\Configurator\Generator;
 
 	use Edde\Api\Generator\IGeneratorManager;
 	use Edde\Common\Config\AbstractConfigurator;

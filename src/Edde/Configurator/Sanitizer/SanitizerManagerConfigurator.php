@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Ext\Sanitizer;
+	namespace Edde\Configurator\Sanitizer;
 
 	use DateTime;
 	use Edde\Api\Sanitizer\ISanitizerManager;
