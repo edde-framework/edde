@@ -13,7 +13,7 @@ test:
         - apk add -U py-pip >/dev/null 2>&1
         - pip install docker-compose >/dev/null 2>&1
         - docker build -t edde --file .docker/Dockerfile .
-        - docker-compose -f dc.test.yml up -d >/dev/null 2>&1
+        - docker-compose -f dc.test.yml up -d
         - docker exec -it edde lib/bin/phpunit
         - docker-compose -f .docker/dc.test.yml down --volumes >/dev/null 2>&1
 
