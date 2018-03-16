@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Node;
 
-	use Edde\Api\Node\NodeException;
+	use Edde\Exception\Node\NodeException;
 
 	/**
 	 * I don't know, if or why communication exceptions are evil or bad practice,

@@ -4,8 +4,8 @@
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\ITree;
-	use Edde\Api\Node\NodeException;
 	use Edde\Common\Object\Object;
+	use Edde\Exception\Node\NodeException;
 	use Iterator;
 	use RecursiveIterator;
 	use RecursiveIteratorIterator;

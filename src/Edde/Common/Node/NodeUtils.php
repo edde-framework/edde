@@ -3,8 +3,8 @@
 	namespace Edde\Common\Node;
 
 	use Edde\Api\Node\INode;
-	use Edde\Api\Node\NodeException;
 	use Edde\Common\Object\Object;
+	use Edde\Exception\Node\NodeException;
 	use ReflectionClass;
 	use stdClass;
 
@@ -17,12 +17,12 @@
 		 * @param iterable $source
 		 *
 		 * @return INode
-		 * @throws NodeException
+		 * @throws \Edde\Exception\Node\NodeException
 		 */
 		static public function node(INode $root, iterable $source): INode {
 			$callback = null;
 			if (is_array($source) === false && is_object($source) === false) {
-				throw new NodeException('Source must be array or stdClass object.');
+				throw new \Edde\Exception\Node\NodeException('Source must be array or stdClass object.');
 			}
 			/** @noinspection UnnecessaryParenthesesInspection */
 			return ($callback = function (callable $callback, INode $root, $source) {
@@ -87,13 +87,13 @@
 		 * @param string|null $class
 		 *
 		 * @return INode
-		 * @throws NodeException
+		 * @throws \Edde\Exception\Node\NodeException
 		 */
 		static public function toNode(stdClass $stdClass, INode $node = null, string $class = null): INode {
 			if (($reflectionClass = new ReflectionClass($class = $class ?: Node::class))->implementsInterface(INode::class)) {
 				throw new ClassMismatchException(sprintf('Class specified [%s] is not instance of [%s].', $class, INode::class));
 			} else if (($constructor = $reflectionClass->getConstructor()) && $constructor->getNumberOfRequiredParameters() > 0) {
-				throw new NodeException(sprintf('Node class [%s] must not require any parameters in constructor in order to be used in [%s].', $class, __METHOD__));
+				throw new \Edde\Exception\Node\NodeException(sprintf('Node class [%s] must not require any parameters in constructor in order to be used in [%s].', $class, __METHOD__));
 			}
 			$createNode = function (string $class, string $name = null): INode {
 				/** @var $node INode */
@@ -171,7 +171,7 @@
 		 * @param INode  $root
 		 * @param string $preg
 		 *
-		 * @throws NodeException
+		 * @throws \Edde\Exception\Node\NodeException
 		 */
 		static public function namespace(INode $root, string $preg) {
 			foreach (TreeIterator::recursive($root, true) as $node) {

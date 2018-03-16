@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Upgrade;
 
-	use Edde\Api\Log\Inject\LogService;
 	use Edde\Api\Storage\Inject\Storage;
 	use Edde\Api\Upgrade\Exception\CurrentVersionException;
 	use Edde\Api\Upgrade\Exception\InvalidVersionException;
@@ -12,6 +11,7 @@
 	use Edde\Api\Upgrade\IUpgrade;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Object\Object;
+	use Edde\Inject\Log\LogService;
 
 	abstract class AbstractUpgradeManager extends Object implements IUpgradeManager {
 		use Storage;

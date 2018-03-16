@@ -3,10 +3,10 @@
 	namespace Edde\Service\Application;
 
 	use Edde\Api\Log\ILogRecord;
-	use Edde\Api\Log\Inject\LogService;
-	use Edde\Api\Router\Exception\BadRequestException;
 	use Edde\Common\Log\SimpleLog;
+	use Edde\Exception\Router\BadRequestException;
 	use Edde\Inject\Application\Application;
+	use Edde\Inject\Log\LogService;
 	use Edde\TestCase;
 
 	class ApplicationTest extends TestCase {

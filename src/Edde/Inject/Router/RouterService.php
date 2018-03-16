@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Router\Inject;
+	namespace Edde\Inject\Router;
 
 	use Edde\Api\Router\IRouterService;
 

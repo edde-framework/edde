@@ -3,6 +3,7 @@
 	namespace Edde\Api\Upgrade;
 
 	use Edde\Api\Config\IConfigurable;
+	use Throwable;
 
 	interface IUpgrade extends IConfigurable {
 		/**
@@ -14,7 +15,7 @@
 		public function getVersion(): string;
 
 		/**
-		 * do some stuff before actuall upgrade is executed
+		 * do some stuff before actual upgrade is executed
 		 */
 		public function onStart(): void;
 
@@ -25,16 +26,16 @@
 		public function upgrade(): void;
 
 		/**
-		 * do stuff when an upgrade is successfull
+		 * do stuff when an upgrade is successful
 		 */
 		public function onSuccess(): void;
 
 		/**
 		 * what to do, when shit happens
 		 *
-		 * @param \Throwable $throwable
+		 * @param Throwable $throwable
 		 *
-		 * @throws \Throwable
+		 * @throws Throwable
 		 */
-		public function onFail(\Throwable $throwable): void;
+		public function onFail(Throwable $throwable): void;
 	}

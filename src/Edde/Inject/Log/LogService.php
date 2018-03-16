@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Log\Inject;
+	namespace Edde\Inject\Log;
 
 	use Edde\Api\Log\ILogService;
 

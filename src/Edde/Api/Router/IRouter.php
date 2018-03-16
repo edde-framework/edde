@@ -4,8 +4,8 @@
 
 	use Edde\Api\Bus\Request\IRequest;
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Router\Exception\BadRequestException;
-	use Edde\Api\Router\Exception\RouterException;
+	use Edde\Exception\Router\BadRequestException;
+	use Edde\Exception\Router\RouterException;
 
 	/**
 	 * Router is class responsible for handling current application
@@ -24,7 +24,7 @@
 		 *
 		 * @return IRequest
 		 *
-		 * @throws BadRequestException
+		 * @throws \Edde\Exception\Router\BadRequestException
 		 * @throws RouterException
 		 */
 		public function createRequest(): IRequest;

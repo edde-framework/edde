@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Router\Exception;
+	namespace Edde\Exception\Router;
 
 	class RouterServiceException extends RouterException {
 	}

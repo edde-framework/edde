@@ -3,11 +3,11 @@
 	namespace Edde\Common\Router;
 
 	use Edde\Api\Bus\Request\IRequest;
-	use Edde\Api\Log\Inject\LogService;
-	use Edde\Api\Router\Exception\BadRequestException;
 	use Edde\Api\Router\IRouter;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Common\Object\Object;
+	use Edde\Exception\Router\BadRequestException;
+	use Edde\Inject\Log\LogService;
 
 	class RouterService extends Object implements IRouterService {
 		use LogService;

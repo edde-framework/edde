@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Router\Exception;
+	namespace Edde\Exception\Router;
 
 	/**
 	 * Basically similar to 400 code; this exception should be thrown when

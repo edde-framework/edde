@@ -14,12 +14,13 @@
 	use Edde\Common\Content\JsonContent;
 	use Edde\Common\Content\TextContent;
 	use Edde\Common\Http\Response;
+	use Edde\Inject\Http\RequestService;
 
 	/**
 	 * Http control provides helpers for a http response style.
 	 */
 	trait HttpController {
-		use Edde\Inject\Http\RequestService;
+		use RequestService;
 		use SchemaManager;
 
 		public function __call(string $name, $arguments) {

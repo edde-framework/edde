@@ -2,10 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Resource;
 
-	use Edde\Api\Resource\Exception\ResourceException;
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\Object\Object;
+	use Edde\Exception\Resource\ResourceException;
 
 	/**
 	 * Abstract definition of some "resource".
@@ -68,7 +68,7 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws ResourceException
+		 * @throws \Edde\Exception\Resource\ResourceException
 		 */
 		public function getIterator() {
 			throw new ResourceException(sprintf('Iterator is not supported on raw [%s].', static::class));
