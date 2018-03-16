@@ -2,14 +2,14 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Upgrade;
 
-	use Edde\Api\Upgrade\Exception\CurrentVersionException;
-	use Edde\Api\Upgrade\Exception\InvalidVersionException;
-	use Edde\Api\Upgrade\Exception\NoUpgradesAvailableException;
-	use Edde\Api\Upgrade\Exception\UnknownVersionException;
-	use Edde\Api\Upgrade\Exception\UpgradeException;
 	use Edde\Api\Upgrade\IUpgrade;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Common\Object\Object;
+	use Edde\Exception\Upgrade\CurrentVersionException;
+	use Edde\Exception\Upgrade\InvalidVersionException;
+	use Edde\Exception\Upgrade\NoUpgradesAvailableException;
+	use Edde\Exception\Upgrade\UnknownVersionException;
+	use Edde\Exception\Upgrade\UpgradeException;
 	use Edde\Inject\Log\LogService;
 	use Edde\Inject\Storage\Storage;
 

@@ -5,9 +5,9 @@
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Entity\ICollection;
 	use Edde\Api\Entity\IEntity;
-	use Edde\Api\Upgrade\Exception\CurrentVersionException;
-	use Edde\Api\Upgrade\Exception\NoUpgradesAvailableException;
-	use Edde\Api\Upgrade\Exception\UnknownVersionException;
+	use Edde\Exception\Upgrade\CurrentVersionException;
+	use Edde\Exception\Upgrade\NoUpgradesAvailableException;
+	use Edde\Exception\Upgrade\UnknownVersionException;
 	use Throwable;
 
 	interface IUpgradeManager extends IConfigurable {
@@ -37,7 +37,7 @@
 		 * @return IUpgrade
 		 *
 		 * @throws CurrentVersionException if there is nothing to do
-		 * @throws NoUpgradesAvailableException if there are no upgrades at all
+		 * @throws \Edde\Exception\Upgrade\NoUpgradesAvailableException if there are no upgrades at all
 		 * @throws UnknownVersionException if requested version does not exists
 		 * @throws Throwable
 		 */
@@ -48,8 +48,8 @@
 		 *
 		 * @return IUpgrade
 		 *
-		 * @throws CurrentVersionException if there is nothing to do
-		 * @throws NoUpgradesAvailableException if there are no upgrades at all
+		 * @throws \Edde\Exception\Upgrade\CurrentVersionException if there is nothing to do
+		 * @throws \Edde\Exception\Upgrade\NoUpgradesAvailableException if there are no upgrades at all
 		 * @throws UnknownVersionException if requested version does not exists
 		 */
 		public function rollback(string $version = null): IUpgrade;
