@@ -2,82 +2,60 @@
 	declare(strict_types=1);
 	namespace Edde\Common\File;
 
-	use Edde\Api\File\IDirectory;
-	use Edde\Api\File\IFile;
 	use Edde\Common\Resource\Resource;
 	use Edde\Common\Url\Url;
-	use Edde\Exception\File\FileException;
-	use Edde\Exception\File\FileLockException;
-	use Edde\Exception\File\FileOpenException;
-	use Edde\Exception\File\FileWriteException;
+	use Edde\File\FileException;
+	use Edde\File\FileLockException;
+	use Edde\File\IDirectory;
+	use Edde\File\IFile;
 
 	/**
 	 * File class; this is just file. Simple good old classic file. Really.
 	 */
 	class File extends Resource implements IFile {
-		/**
-		 * @var IDirectory
-		 */
+		/** @var IDirectory */
 		protected $directory;
-		/**
-		 * @var resource
-		 */
+		/** @var resource */
 		protected $handle;
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function open(string $mode, bool $exclusive = false): IFile {
 			if ($this->isOpen()) {
 				if ($exclusive === false) {
 					return $this;
 				}
-				throw new FileOpenException(sprintf('Current file [%s] is already opened.', $this->getUrl()));
+				throw new FileException(sprintf('Current file [%s] is already opened.', $this->getUrl()));
 			}
 			if (($this->handle = @fopen($path = $this->getPath(), $mode)) === false) {
-				throw new FileOpenException(sprintf('Cannot open file [%s (%s)].', $path, $mode));
+				throw new FileException(sprintf('Cannot open file [%s (%s)].', $path, $mode));
 			}
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 * @throws \Edde\Exception\File\FileException
-		 */
+		/** @inheritdoc */
 		public function openForRead(bool $exclusive = false): IFile {
 			$this->open('rb+', $exclusive);
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 * @throws \Edde\Exception\File\FileException
-		 */
+		/** @inheritdoc */
 		public function openForWrite(bool $exclusive = false): IFile {
 			$this->open('wb+', $exclusive);
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 * @throws \Edde\Exception\File\FileException
-		 */
+		/** @inheritdoc */
 		public function openForAppend(bool $exclusive = false): IFile {
 			$this->open('a', $exclusive);
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function isOpen(): bool {
 			return $this->handle !== null;
 		}
 
-		/**
-		 * @inheritdoc
-		 * @throws \Edde\Exception\File\FileException
-		 */
+		/** @inheritdoc */
 		public function read(int $length = null) {
 			if (($line = ($length ? fgets($this->getHandle(), $length) : fgets($this->getHandle()))) === false) {
 				$this->close();
@@ -85,41 +63,32 @@
 			return $line;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function write($write, int $length = null): IFile {
 			if ($this->isOpen() === false) {
 				$this->openForWrite();
 			}
 			if (($count = $length ? fwrite($this->getHandle(), $write, $length) : fwrite($this->getHandle(), $write)) !== ($length = strlen($write))) {
-				throw new FileWriteException(sprintf('Failed to write into file [%s]: expected %d bytes, %d has been written.', $this->getPath(), $length, $count));
+				throw new FileException(sprintf('Failed to write into file [%s]: expected %d bytes, %d has been written.', $this->getPath(), $length, $count));
 			}
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function rewind(): IFile {
 			rewind($this->getHandle());
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getHandle() {
 			if ($this->isOpen() === false) {
-				throw new FileOpenException(sprintf('Current file [%s] is not opened or has been already closed.', $this->getPath()));
+				throw new FileException(sprintf('Current file [%s] is not opened or has been already closed.', $this->getPath()));
 			}
 			return $this->handle;
 		}
 
-		/**
-		 * @inheritdoc
-		 * @throws \Edde\Exception\File\FileException
-		 */
+		/** @inheritdoc */
 		public function close(): IFile {
 			fflush($handle = $this->getHandle());
 			fclose($handle);
@@ -127,9 +96,7 @@
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function delete(): IFile {
 			if ($this->isOpen()) {
 				$this->close();
@@ -138,26 +105,20 @@
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 * @throws FileException
-		 */
+		/** @inheritdoc */
 		public function save(string $content): IFile {
 			if ($this->isOpen()) {
-				throw new FileOpenException(sprintf('Cannot write (save) content to already opened file [%s].', $this->getPath()));
+				throw new FileException(sprintf('Cannot write (save) content to already opened file [%s].', $this->getPath()));
 			}
 			$this->getDirectory()->create();
 			file_put_contents($this->getPath(), $content);
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 * @throws \Edde\Exception\File\FileException
-		 */
+		/** @inheritdoc */
 		public function rename(string $rename): IFile {
 			if ($this->isOpen()) {
-				throw new FileOpenException(sprintf('Cannot rename already opened file [%s].', $this->getPath()));
+				throw new FileException(sprintf('Cannot rename already opened file [%s].', $this->getPath()));
 			}
 			if (@rename($src = $this->getPath(), $dst = ($this->getUrl()->getBasePath() . '/' . $rename)) === false) {
 				throw new FileException("Unable to rename file or directory [$src] to [$dst].");
@@ -165,9 +126,7 @@
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function lock(bool $exclusive = true, bool $block = true): IFile {
 			if ($this->isOpen()) {
 				throw new FileLockException(sprintf('File being lock must not be opened.'));
@@ -179,47 +138,35 @@
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function blockingLock(): IFile {
 			return $this->lock(true, true);
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function nonBlockingLock(): IFile {
 			return $this->lock(true, false);
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function unlock(): IFile {
 			fflush($handle = $this->getHandle());
 			flock($handle, LOCK_UN);
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function touch(): IFile {
 			touch($this->getPath());
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getDirectory(): IDirectory {
 			return $this->directory ?: $this->directory = new Directory(dirname($this->getPath()));
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getIterator() {
 			if ($this->isOpen() === false) {
 				$this->openForRead();

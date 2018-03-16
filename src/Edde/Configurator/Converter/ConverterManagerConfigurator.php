@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Configurator\Converter;
 
-	use Edde\Api\Converter\IConverterManager;
 	use Edde\Config\AbstractConfigurator;
+	use Edde\Converter\IConverterManager;
 	use Edde\Ext\Bus\JsonDecodeConverter as ElementJsonDecodeConverter;
 	use Edde\Ext\Bus\JsonEncodeConverter as ElementJsonEncodeConverter;
 	use Edde\Ext\Converter\JsonDecodeConverter;

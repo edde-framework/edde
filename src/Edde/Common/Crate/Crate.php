@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Crate;
 
-	use Edde\Api\Crate\ICrate;
-	use Edde\Api\Crate\IProperty;
+	use Edde\Crate\ICrate;
+	use Edde\Crate\IProperty;
 	use Edde\Object;
 
-	class Crate extends Object implements ICrate {
+	class Crate extends Object implements \Edde\Crate\ICrate {
 		/**
 		 * @var IProperty[]
 		 */
@@ -19,7 +19,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function set(string $property, $value): ICrate {
+		public function set(string $property, $value): \Edde\Crate\ICrate {
 			$this->getProperty($property)->setValue($value);
 			return $this;
 		}
@@ -61,7 +61,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function push(array $source): ICrate {
+		public function push(array $source): \Edde\Crate\ICrate {
 			foreach ($source as $k => $v) {
 				$this->getProperty($k)->setDefault($v);
 			}
@@ -71,7 +71,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function commit(): ICrate {
+		public function commit(): \Edde\Crate\ICrate {
 			foreach ($this->properties as $property) {
 				$property->commit();
 			}
@@ -82,7 +82,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function setDirty(bool $dirty = true): ICrate {
+		public function setDirty(bool $dirty = true): \Edde\Crate\ICrate {
 			$this->dirty = $dirty;
 			return $this;
 		}

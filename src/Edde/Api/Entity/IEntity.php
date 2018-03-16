@@ -2,10 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Entity;
 
-	use Edde\Api\Crate\ICrate;
-	use Edde\Api\Crate\IProperty;
 	use Edde\Api\Entity\Query\IDetachQuery;
 	use Edde\Api\Entity\Query\IDisconnectQuery;
+	use Edde\Crate\ICrate;
+	use Edde\Crate\IProperty;
 	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
 
@@ -23,7 +23,7 @@
 		/**
 		 * return primary property of this entity
 		 *
-		 * @return IProperty
+		 * @return \Edde\Crate\IProperty
 		 *
 		 * @throws SchemaException
 		 */

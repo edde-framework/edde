@@ -2,9 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Crate;
 
-	use Edde\Api\Crate\IProperty;
-
-	class Property implements IProperty {
+	class Property implements \Edde\Crate\IProperty {
 		/**
 		 * @var string
 		 */
@@ -40,7 +38,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function setDefault($value): IProperty {
+		public function setDefault($value): \Edde\Crate\IProperty {
 			$this->default = $value;
 			$this->value = null;
 			$this->dirty = false;
@@ -57,7 +55,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function setValue($value): IProperty {
+		public function setValue($value): \Edde\Crate\IProperty {
 			$this->dirty = $this->isDiff($this->default, $this->value = $value);
 			return $this;
 		}
@@ -93,7 +91,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function commit(): IProperty {
+		public function commit(): \Edde\Crate\IProperty {
 			if ($this->dirty === false) {
 				return $this;
 			}

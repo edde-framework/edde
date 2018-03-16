@@ -2,10 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Crypt;
 
-	use Edde\Api\Crypt\IPasswordService;
 	use Edde\Object;
 
-	class PasswordService extends Object implements IPasswordService {
+	class PasswordService extends Object implements \Edde\Crypt\IPasswordService {
 		/** @inheritdoc */
 		public function hash(string $password): string {
 			return password_hash($password, PASSWORD_DEFAULT);

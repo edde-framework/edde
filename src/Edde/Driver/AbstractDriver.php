@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Driver;
 
-	use Edde\Api\Driver\IDriver;
 	use Edde\Api\Storage\INativeQuery;
 	use Edde\Api\Storage\Query\Fragment\IWhereGroup;
 	use Edde\Api\Storage\Query\IFragment;

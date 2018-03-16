@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Converter;
 
-	use Edde\Api\Converter\IConverter;
+	use Edde\Converter\IConverter;
 	use Edde\Object;
 
 	abstract class AbstractConverter extends Object implements IConverter {

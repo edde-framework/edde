@@ -2,16 +2,16 @@
 	declare(strict_types=1);
 	namespace Edde\Inject\Converter;
 
-	use Edde\Api\Converter\IConverterManager;
+	use Edde\Converter\IConverterManager;
 
 	trait ConverterManager {
 		/**
-		 * @var IConverterManager
+		 * @var \Edde\Converter\IConverterManager
 		 */
 		protected $converterManager;
 
 		/**
-		 * @param IConverterManager $converterManager
+		 * @param \Edde\Converter\IConverterManager $converterManager
 		 */
 		public function lazyConverterManager(IConverterManager $converterManager) {
 			$this->converterManager = $converterManager;

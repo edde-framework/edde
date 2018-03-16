@@ -11,64 +11,48 @@
 	 * Abstract definition of some "resource".
 	 */
 	class Resource extends Object implements IResource {
-		/**
-		 * @var IUrl
-		 */
+		/** @var IUrl */
 		protected $url;
-		/**
-		 * @var string
-		 */
+		/** @var string */
 		protected $name;
 
 		public function __construct(IUrl $url) {
 			$this->url = $url;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getUrl(): IUrl {
 			return $this->url;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getPath(): string {
 			return $this->url->getPath();
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getExtension(): ?string {
 			return $this->url->getExtension();
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getName(): string {
 			return $this->name ?: $this->name = $this->url->getResourceName();
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function isAvailable(): bool {
 			return file_exists($url = $this->url->getAbsoluteUrl()) && is_readable($url);
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function get(): string {
 			return file_get_contents($this->url->getAbsoluteUrl());
 		}
 
 		/**
 		 * @inheritdoc
-		 * @throws \Edde\Exception\Resource\ResourceException
+		 * @throws ResourceException
 		 */
 		public function getIterator() {
 			throw new ResourceException(sprintf('Iterator is not supported on raw [%s].', static::class));

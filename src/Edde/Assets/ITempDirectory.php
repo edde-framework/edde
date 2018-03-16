@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Assets;
 
-	use Edde\Api\File\IDirectory;
+	use Edde\File\IDirectory;
 
 	interface ITempDirectory extends IDirectory {
 	}

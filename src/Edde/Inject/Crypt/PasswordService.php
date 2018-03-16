@@ -2,16 +2,16 @@
 	declare(strict_types=1);
 	namespace Edde\Inject\Crypt;
 
-	use Edde\Api\Crypt\IPasswordService;
+	use Edde\Crypt\IPasswordService;
 
 	trait PasswordService {
-		/** @var IPasswordService */
+		/** @var \Edde\Crypt\IPasswordService */
 		protected $passwordService;
 
 		/**
 		 * @param IPasswordService $passwordService
 		 */
-		public function lazyPasswordService(IPasswordService $passwordService): void {
+		public function lazyPasswordService(\Edde\Crypt\IPasswordService $passwordService): void {
 			$this->passwordService = $passwordService;
 		}
 	}

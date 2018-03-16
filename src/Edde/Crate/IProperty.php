@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Crate;
+	namespace Edde\Crate;
 
 	/**
 	 * Crate property.

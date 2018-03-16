@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Driver;
+	namespace Edde\Driver;
 
 	use Edde\Api\Storage\Query\IQuery;
 	use Edde\Config\IConfigurable;
@@ -17,7 +17,7 @@
 		 *
 		 * @return mixed
 		 *
-		 * @throws \Edde\Driver\DriverException
+		 * @throws DriverException
 		 */
 		public function execute(IQuery $query);
 
@@ -29,7 +29,7 @@
 		 *
 		 * @return mixed
 		 *
-		 * @throws \Edde\Driver\DriverException
+		 * @throws DriverException
 		 */
 		public function fetch($query, array $params = []);
 
@@ -41,7 +41,7 @@
 		 *
 		 * @return mixed
 		 *
-		 * @throws \Edde\Driver\DriverException
+		 * @throws DriverException
 		 */
 		public function exec($query, array $params = []);
 

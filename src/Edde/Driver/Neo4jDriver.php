@@ -2,8 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Driver;
 
-	use Edde\Api\Crate\IProperty;
-	use Edde\Api\Driver\IDriver;
 	use Edde\Api\Entity\IEntity;
 	use Edde\Api\Entity\Query\IDeleteQuery;
 	use Edde\Api\Entity\Query\IDetachQuery;
@@ -18,6 +16,7 @@
 	use Edde\Api\Storage\Query\ISelectQuery;
 	use Edde\Common\Storage\Query\NativeQuery;
 	use Edde\Config\ConfigException;
+	use Edde\Crate\IProperty;
 	use Edde\Exception\Storage\DuplicateEntryException;
 	use Edde\Exception\Storage\NullValueException;
 	use Exception;
@@ -203,7 +202,7 @@
 				$detachQuery->getEntity(),
 				$detachQuery->getTarget(),
 			];
-			/** @var $entity IProperty[] */
+			/** @var $entity \Edde\Crate\IProperty[] */
 			$primary = [
 				$entity[0]->getPrimary(),
 				$entity[1]->getPrimary(),

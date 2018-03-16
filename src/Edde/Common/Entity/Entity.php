@@ -2,13 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Entity;
 
-	use Edde\Api\Crate\IProperty;
 	use Edde\Api\Entity\ICollection;
 	use Edde\Api\Entity\IEntity;
 	use Edde\Api\Entity\IEntityQueue;
 	use Edde\Api\Entity\Query\IDetachQuery;
 	use Edde\Api\Entity\Query\IDisconnectQuery;
 	use Edde\Common\Crate\Crate;
+	use Edde\Crate\IProperty;
 	use Edde\Exception\Validator\ValidationException;
 	use Edde\Inject\Entity\EntityManager;
 	use Edde\Inject\Schema\SchemaManager;

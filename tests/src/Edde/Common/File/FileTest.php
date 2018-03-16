@@ -1,12 +1,11 @@
 <?php
 	namespace Edde\Common\File;
 
-	use Edde\Exception\File\RealPathException;
 	use Edde\TestCase;
 
 	class FileTest extends TestCase {
 		/**
-		 * @throws \Edde\Exception\File\RealPathException
+		 * @throws \Edde\File\RealPathException
 		 */
 		public function testFile() {
 			$file = File::create(__DIR__ . '/temp/file');

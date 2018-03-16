@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Crate;
+	namespace Edde\Crate;
 
 	/**
 	 * Crate is very simple implementation of object able to track it's changes and do some common stuff

@@ -2,24 +2,23 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Converter;
 
-	use Edde\Api\Converter\IConvertable;
-	use Edde\Api\Converter\IConverter;
-	use Edde\Api\Converter\IConverterManager;
 	use Edde\Common\Converter\Convertable;
 	use Edde\Common\Converter\PassConverter;
 	use Edde\Content\IContent;
+	use Edde\Converter\IConverter;
+	use Edde\Converter\IConverterManager;
 	use Edde\Object;
 
 	class ConverterManager extends Object implements IConverterManager {
 		/**
-		 * @var IConverter[]
+		 * @var \Edde\Converter\IConverter[]
 		 */
 		protected $converters = [];
 
 		/**
 		 * @inheritdoc
 		 */
-		public function registerConverter(IConverter $converter): IConverterManager {
+		public function registerConverter(\Edde\Converter\IConverter $converter): IConverterManager {
 			foreach ($converter->getSources() as $source) {
 				foreach ($converter->getTargets() as $target) {
 					$this->converters[$source . '|' . $target] = $converter;
@@ -41,7 +40,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function resolve(IContent $content, array $targetList = null): IConvertable {
+		public function resolve(IContent $content, array $targetList = null): \Edde\Converter\IConvertable {
 			$exception = null;
 			$unknown = true;
 			$mime = $content->getType();

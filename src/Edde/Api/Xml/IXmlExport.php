@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Xml;
 
-	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
 	use Edde\Config\IConfigurable;
+	use Edde\File\IFile;
 	use Iterator;
 
 	interface IXmlExport extends IConfigurable {
@@ -14,7 +14,7 @@
 		 * @param Iterator|INode[] $iterator
 		 * @param IFile            $file
 		 *
-		 * @return IFile
+		 * @return \Edde\File\IFile
 		 */
 		public function export(Iterator $iterator, IFile $file): IFile;
 

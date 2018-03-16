@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Converter;
+	namespace Edde\Converter;
 
 	use Edde\Config\IConfigurable;
 	use Edde\Content\IContent;
@@ -38,19 +38,19 @@
 		 *
 		 * @return IConvertable
 		 *
-		 * @throws \Edde\Converter\ConverterException
+		 * @throws ConverterException
 		 */
 		public function resolve(IContent $content, array $targetList = null): IConvertable;
 
 		/**
 		 * execute the conversion from source to target
 		 *
-		 * @param \Edde\Content\IContent $content
-		 * @param array|null             $targetList
+		 * @param IContent   $content
+		 * @param array|null $targetList
 		 *
-		 * @return \Edde\Content\IContent
+		 * @return IContent
 		 *
-		 * @throws \Edde\Converter\ConverterException
+		 * @throws ConverterException
 		 */
 		public function convert(IContent $content, array $targetList = null): IContent;
 	}

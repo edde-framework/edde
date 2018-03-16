@@ -1,11 +1,8 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\File;
+	namespace Edde\File;
 
 	use Edde\Api\Resource\IResource;
-	use Edde\Exception\File\FileLockException;
-	use Edde\Exception\File\FileOpenException;
-	use Edde\Exception\File\FileWriteException;
 
 	interface IFile extends IResource {
 		/**
@@ -16,7 +13,7 @@
 		 *
 		 * @return IFile
 		 *
-		 * @throws \Edde\Exception\File\FileOpenException
+		 * @throws FileException
 		 */
 		public function open(string $mode, bool $exclusive = false): IFile;
 
@@ -24,6 +21,8 @@
 		 * @param bool $exclusive
 		 *
 		 * @return IFile
+		 *
+		 * @throws FileException
 		 */
 		public function openForRead(bool $exclusive = false): IFile;
 
@@ -31,6 +30,8 @@
 		 * @param bool $exclusive
 		 *
 		 * @return IFile
+		 *
+		 * @throws FileException
 		 */
 		public function openForWrite(bool $exclusive = false): IFile;
 
@@ -38,6 +39,8 @@
 		 * @param bool $exclusive
 		 *
 		 * @return IFile
+		 *
+		 * @throws FileException
 		 */
 		public function openForAppend(bool $exclusive = false): IFile;
 
@@ -52,6 +55,8 @@
 		 * @param int $length
 		 *
 		 * @return mixed
+		 *
+		 * @throws FileException
 		 */
 		public function read(int $length = null);
 
@@ -63,14 +68,14 @@
 		 *
 		 * @return IFile
 		 *
-		 * @throws FileWriteException
+		 * @throws FileException
 		 */
 		public function write($write, int $length = null): IFile;
 
 		/**
 		 * @return IFile
 		 *
-		 * @throws FileOpenException
+		 * @throws FileException
 		 */
 		public function rewind(): IFile;
 
@@ -79,7 +84,7 @@
 		 *
 		 * @return resource
 		 *
-		 * @throws FileOpenException
+		 * @throws FileException
 		 */
 		public function getHandle();
 
@@ -88,12 +93,14 @@
 		 *
 		 * @return IFile
 		 *
-		 * @throws \Edde\Exception\File\FileOpenException
+		 * @throws FileException
 		 */
 		public function close(): IFile;
 
 		/**
 		 * @return IFile
+		 *
+		 * @throws FileException
 		 */
 		public function delete(): IFile;
 
@@ -103,6 +110,8 @@
 		 * @param string $rename
 		 *
 		 * @return IFile
+		 *
+		 * @throws FileException
 		 */
 		public function rename(string $rename): IFile;
 
@@ -112,6 +121,8 @@
 		 * @param string $content
 		 *
 		 * @return IFile
+		 *
+		 * @throws FileException
 		 */
 		public function save(string $content): IFile;
 
@@ -124,6 +135,7 @@
 		 * @return IFile
 		 *
 		 * @throws FileLockException
+		 * @throws FileException
 		 */
 		public function lock(bool $exclusive = true, bool $block = true): IFile;
 

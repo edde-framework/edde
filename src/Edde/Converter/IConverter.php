@@ -1,10 +1,9 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Converter;
+	namespace Edde\Converter;
 
 	use Edde\Config\IConfigurable;
 	use Edde\Content\IContent;
-	use Edde\Converter\ConverterException;
 
 	/**
 	 * A Converter is an implementation of converter from one type to another one; the core
@@ -32,10 +31,10 @@
 		 * do the conversion; it could event be direct streamed conversion from one
 		 * type to another being actually done when target content is iterated
 		 *
-		 * @param \Edde\Content\IContent $content
-		 * @param string|null            $target
+		 * @param IContent    $content
+		 * @param string|null $target
 		 *
-		 * @return \Edde\Content\IContent
+		 * @return IContent
 		 *
 		 * @throws ConverterException
 		 */

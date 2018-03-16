@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Storage;
 
-	use Edde\Api\Driver\IDriver;
 	use Edde\Common\Container\Factory\InstanceFactory;
 	use Edde\Driver\DriverException;
+	use Edde\Driver\IDriver;
 	use Edde\Driver\PostgresDriver;
 
 	class PostgresStorageTest extends AbstractStorageTest {

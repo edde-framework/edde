@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Crypt;
+	namespace Edde\Crypt;
 
 	use Edde\Config\IConfigurable;
 

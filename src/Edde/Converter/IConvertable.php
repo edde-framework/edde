@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Converter;
+	namespace Edde\Converter;
 
 	use Edde\Content\IContent;
 

@@ -1,8 +1,7 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\File;
+	namespace Edde\File;
 
-	use Edde\Exception\File\RealPathException;
 	use IteratorAggregate;
 
 	interface IDirectory extends IteratorAggregate {
@@ -80,11 +79,14 @@
 		 * @param int $chmod
 		 *
 		 * @return IDirectory
+		 *
+		 * @throws DirectoryException
 		 */
 		public function create(int $chmod = 0777): IDirectory;
 
 		/**
 		 * @return mixed
+		 *
 		 * @throws RealPathException
 		 */
 		public function getPermission();
@@ -94,7 +96,7 @@
 		 *
 		 * @return IDirectory
 		 *
-		 * @throws \Edde\Exception\File\RealPathException
+		 * @throws RealPathException
 		 */
 		public function purge(): IDirectory;
 

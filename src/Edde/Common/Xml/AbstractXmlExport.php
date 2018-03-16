@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Xml;
 
-	use Edde\Api\File\IFile;
 	use Edde\Api\Xml\IXmlExport;
+	use Edde\File\IFile;
 	use Edde\Object;
 	use Iterator;
 

@@ -2,11 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Common\File;
 
-	use Edde\Api\File\IDirectory;
-	use Edde\Api\File\IFile;
-	use Edde\Exception\File\DirectoryException;
-	use Edde\Exception\File\RealPathException;
+	use Edde\File\DirectoryException;
+	use Edde\File\IDirectory;
+	use Edde\File\IFile;
+	use Edde\File\RealPathException;
 	use Edde\Object;
+	use FilesystemIterator;
 	use RecursiveDirectoryIterator;
 	use RecursiveIteratorIterator;
 	use SplFileInfo;
@@ -15,9 +16,7 @@
 	 * Representation of directory on the filesystem.
 	 */
 	class Directory extends Object implements IDirectory {
-		/**
-		 * @var string
-		 */
+		/** @var string */
 		protected $directory;
 
 		/**
@@ -27,28 +26,22 @@
 			$this->directory = $directory;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getFileList() {
-			yield from (new \RecursiveDirectoryIterator($this->directory, \RecursiveDirectoryIterator::SKIP_DOTS));
+			yield from (new RecursiveDirectoryIterator($this->directory, RecursiveDirectoryIterator::SKIP_DOTS));
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getDirectoryList() {
 			/** @var $path SplFileInfo */
-			foreach (new \RecursiveDirectoryIterator($this->directory, \RecursiveDirectoryIterator::SKIP_DOTS) as $path) {
+			foreach (new RecursiveDirectoryIterator($this->directory, RecursiveDirectoryIterator::SKIP_DOTS) as $path) {
 				if ($path->isDir()) {
 					yield new self((string)$path);
 				}
 			}
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function normalize(): IDirectory {
 			$this->directory = rtrim(str_replace([
 				'\\',
@@ -60,9 +53,7 @@
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function realpath(): IDirectory {
 			$this->normalize();
 			if (($path = realpath($this->directory)) === false) {
@@ -72,46 +63,34 @@
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function save(string $file, string $content): IFile {
 			$file = $this->file($file);
 			$file->save($content);
 			return $file;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function filename(string $file): string {
 			return $this->getDirectory() . '/' . $file;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getDirectory(): string {
 			return $this->directory;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getName(): string {
 			return basename($this->directory);
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function file(string $file): IFile {
 			return File::create($this->filename($file));
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function create(int $chmod = 0777): IDirectory {
 			if (is_dir($this->directory) === false && @mkdir($this->directory, $chmod, true) && is_dir($this->directory) === false) {
 				throw new DirectoryException(sprintf('Cannot create directory [%s].', $this->directory));
@@ -129,9 +108,7 @@
 			return octdec(substr(decoct(fileperms($this->directory)), 1));
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function purge(): IDirectory {
 			$permissions = 0777;
 			$this->realpath();
@@ -143,9 +120,7 @@
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function delete(): IDirectory {
 			try {
 				$this->realpath();
@@ -158,7 +133,7 @@
 								throw new DirectoryException("Unable to delete [$path].");
 							}
 						} else if (is_dir($path)) {
-							foreach (new \FilesystemIterator($path) as $item) {
+							foreach (new FilesystemIterator($path) as $item) {
 								($realpath = $item->getRealPath()) ? (new Directory($realpath))->delete() : null;
 							}
 							if (@rmdir($path) === false) {
@@ -173,43 +148,33 @@
 				if (isset($exception)) {
 					throw $exception;
 				}
-			} catch (RealPathException $exception) {
+			} catch (RealPathException $_) {
 			}
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function exists(): bool {
 			return is_dir($this->directory);
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function directory(string $directory, string $class = null): IDirectory {
 			$class = $class ?: Directory::class;
 			return new $class($this->directory . '/' . $directory);
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function parent(): IDirectory {
 			return new Directory($this->getDirectory() . '/..');
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function files() {
 			return $this->getIterator();
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getIterator() {
 			foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->directory, RecursiveDirectoryIterator::SKIP_DOTS)) as $splFileInfo) {
 				yield File::create((string)$splFileInfo);

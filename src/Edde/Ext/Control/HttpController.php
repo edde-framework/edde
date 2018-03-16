@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Control;
 
-	use Edde\Api\File\IFile;
 	use Edde\Api\Http\IResponse;
 	use Edde\Common\Http\Response;
 	use Edde\Content\GeneratorContent;
@@ -10,6 +9,7 @@
 	use Edde\Content\JsonContent;
 	use Edde\Content\TextContent;
 	use Edde\Exception\Http\EmptyBodyException;
+	use Edde\File\IFile;
 	use Edde\Inject\Http\RequestService;
 	use Edde\Inject\Schema\SchemaManager;
 
@@ -65,8 +65,8 @@
 		/**
 		 * execute response with simple text content
 		 *
-		 * @param string|IFile $content
-		 * @param int          $code
+		 * @param string|\Edde\File\IFile $content
+		 * @param int                     $code
 		 *
 		 * @return IResponse
 		 */

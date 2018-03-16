@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Converter;
 
-	use Edde\Api\Converter\IConvertable;
-	use Edde\Api\Converter\IConverter;
 	use Edde\Content\IContent;
+	use Edde\Converter\IConvertable;
+	use Edde\Converter\IConverter;
 	use Edde\Object;
 
 	/**
@@ -15,7 +15,7 @@
 	 */
 	class Convertable extends Object implements IConvertable {
 		/**
-		 * @var IConverter
+		 * @var \Edde\Converter\IConverter
 		 */
 		protected $converter;
 		/**
@@ -32,11 +32,11 @@
 		protected $result;
 
 		/**
-		 * @param IConverter $converter
-		 * @param mixed      $content
-		 * @param string     $target
+		 * @param \Edde\Converter\IConverter $converter
+		 * @param mixed                      $content
+		 * @param string                     $target
 		 */
-		public function __construct(IConverter $converter, IContent $content, string $target = null) {
+		public function __construct(\Edde\Converter\IConverter $converter, IContent $content, string $target = null) {
 			$this->converter = $converter;
 			$this->content = $content;
 			$this->target = $target;
@@ -45,7 +45,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getConverter(): IConverter {
+		public function getConverter(): \Edde\Converter\IConverter {
 			return $this->converter;
 		}
 

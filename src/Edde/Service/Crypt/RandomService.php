@@ -2,10 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Crypt;
 
-	use Edde\Api\Crypt\IRandomService;
 	use Edde\Object;
 
-	class RandomService extends Object implements IRandomService {
+	class RandomService extends Object implements \Edde\Crypt\IRandomService {
 		/** @inheritdoc */
 		public function generate(int $length = 10, string $chars = '0-9a-z'): string {
 			$chars = str_shuffle(preg_replace_callback('#.-.#', function ($m) {

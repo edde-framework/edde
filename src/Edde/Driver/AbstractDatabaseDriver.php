@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Driver;
 
-	use Edde\Api\Driver\IDriver;
 	use Edde\Api\Entity\IEntity;
 	use Edde\Api\Entity\Query\IDeleteQuery;
 	use Edde\Api\Entity\Query\IDetachQuery;

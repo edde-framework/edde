@@ -2,10 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Log;
 
-	use Edde\Api\File\IFile;
 	use Edde\Api\Log\ILog;
 	use Edde\Api\Log\ILogRecord;
-	use Edde\Exception\File\FileWriteException;
+	use Edde\File\IFile;
 	use Edde\Inject\Assets\LogDirectory;
 
 	/**
@@ -13,13 +12,9 @@
 	 */
 	class FileLog extends AbstractLog {
 		use LogDirectory;
-		/**
-		 * @var string
-		 */
+		/** @var string */
 		protected $name;
-		/**
-		 * @var IFile
-		 */
+		/** @var IFile */
 		protected $file;
 
 		/**
@@ -42,17 +37,13 @@
 			$this->name = $name;
 		}
 
-		/**
-		 * @param ILogRecord $logRecord
-		 *
-		 * @return ILog
-		 * @throws FileWriteException
-		 */
+		/** @inheritdoc */
 		public function record(ILogRecord $logRecord): ILog {
 			$this->file->write(sprintf("[%s] %s\n", date('Y-m-d H:i:s'), $logRecord->getLog()));
 			return $this;
 		}
 
+		/** @inheritdoc */
 		protected function handleInit(): void {
 			parent::handleInit();
 			$this->logDirectory->create();

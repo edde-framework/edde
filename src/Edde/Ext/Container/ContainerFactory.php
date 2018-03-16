@@ -2,10 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Container;
 
-	use Edde\Api\Converter\IConverterManager;
-	use Edde\Api\Crypt\IPasswordService;
-	use Edde\Api\Crypt\IRandomService;
-	use Edde\Api\Driver\IDriver;
 	use Edde\Api\Entity\IEntityManager;
 	use Edde\Api\Filter\IFilterManager;
 	use Edde\Api\Generator\IGeneratorManager;
@@ -60,6 +56,10 @@
 	use Edde\Container\ContainerException;
 	use Edde\Container\IContainer;
 	use Edde\Container\IFactory;
+	use Edde\Converter\IConverterManager;
+	use Edde\Crypt\IPasswordService;
+	use Edde\Crypt\IRandomService;
+	use Edde\Driver\IDriver;
 	use Edde\Exception\EddeException;
 	use Edde\Object;
 	use Edde\Schema\ISchemaManager;
