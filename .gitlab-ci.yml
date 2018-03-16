@@ -7,7 +7,16 @@ before_script:
     - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
 
 stages:
+    - test
     - publish
+
+test:
+    stage: test
+    script:
+        - docker build -t edde --file .docker/Dockerfile .
+        - docker-compose -f .docker/dc.test.yml up -d
+        - docker exec -it edde lib/bin/phpunit
+        - docker-compose -f .docker/dc.test.yml down --volumes
 
 github sync:
     stage: publish

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/5.4/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/6.5/phpunit.xsd"
          backupGlobals="false"
          beStrictAboutCoversAnnotation="true"
          beStrictAboutOutputDuringTests="true"
@@ -8,13 +8,16 @@
          beStrictAboutTodoAnnotatedTests="true"
          bootstrap="tests/src/loader.php"
          verbose="false">
-	<testsuite>
+	<logging>
+		<log type="coverage-html" target="/.coverage" lowUpperBound="35" highLowerBound="70"/>
+		<log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
+	</logging>
+	<testsuite name="edde">
 		<directory suffix=".php">tests/src</directory>
 	</testsuite>
 	<filter>
 		<whitelist processUncoveredFilesFromWhitelist="true">
-			<directory suffix=".php">src/Edde/Common</directory>
-			<directory suffix=".php">src/Edde/Ext</directory>
+			<directory suffix=".php">src</directory>
 		</whitelist>
 	</filter>
 	<groups>

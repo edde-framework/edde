@@ -2,8 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Container\Factory;
 
+	use Edde\Inject\Application\Context;
+
 	class CascadeFactory extends AbstractDiscoveryFactory {
-		use Edde\Inject\Application\Context;
+		use Context;
 
 		/**
 		 * @inheritdoc

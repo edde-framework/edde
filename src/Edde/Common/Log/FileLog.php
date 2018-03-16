@@ -6,12 +6,13 @@
 	use Edde\Api\File\IFile;
 	use Edde\Api\Log\ILog;
 	use Edde\Api\Log\ILogRecord;
+	use Edde\Inject\Assets\LogDirectory;
 
 	/**
 	 * Default file based log.
 	 */
 	class FileLog extends AbstractLog {
-		use Edde\Inject\Assets\LogDirectory;
+		use LogDirectory;
 		/**
 		 * @var string
 		 */
