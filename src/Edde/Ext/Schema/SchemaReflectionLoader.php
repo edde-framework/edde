@@ -2,15 +2,15 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Schema;
 
-	use Edde\Api\Schema\Exception\MultiplePrimaryException;
-	use Edde\Api\Schema\Exception\SchemaException;
-	use Edde\Api\Schema\Exception\SchemaReflectionException;
 	use Edde\Api\Schema\ISchemaBuilder;
 	use Edde\Api\Schema\ISchemaLoader;
 	use Edde\Api\Utils\Inject\StringUtils;
 	use Edde\Common\Schema\AbstractSchemaLoader;
 	use Edde\Common\Schema\LinkBuilder;
 	use Edde\Common\Schema\SchemaBuilder;
+	use Edde\Exception\Schema\MultiplePrimaryException;
+	use Edde\Exception\Schema\SchemaException;
+	use Edde\Exception\Schema\SchemaReflectionException;
 	use ReflectionClass;
 
 	class SchemaReflectionLoader extends AbstractSchemaLoader implements ISchemaLoader {

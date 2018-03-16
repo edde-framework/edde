@@ -2,16 +2,14 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Entity;
 
-	use Edde\Api\Schema\Exception\InvalidRelationException;
-	use Edde\Api\Schema\Exception\NoPrimaryPropertyException;
-	use Edde\Api\Schema\Exception\RelationException;
-	use Edde\Api\Schema\Exception\SchemaException;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Api\Storage\Exception\EntityNotFoundException;
-	use Edde\Api\Storage\Exception\UnknownTableException;
 	use Edde\Api\Storage\Query\ISelectQuery;
 	use Edde\Exception\Entity\RecordException;
 	use Edde\Exception\Entity\UnknownAliasException;
+	use Edde\Exception\Schema\RelationException;
+	use Edde\Exception\Schema\SchemaException;
+	use Edde\Exception\Storage\EntityNotFoundException;
+	use Edde\Exception\Storage\UnknownTableException;
 	use IteratorAggregate;
 	use Traversable;
 
@@ -62,8 +60,8 @@
 		 *
 		 * @return IEntity
 		 *
-		 * @throws EntityNotFoundException
-		 * @throws UnknownTableException
+		 * @throws \Edde\Exception\Storage\EntityNotFoundException
+		 * @throws \Edde\Exception\Storage\UnknownTableException
 		 * @throws RecordException
 		 */
 		public function getEntity(string $alias): IEntity;
@@ -85,11 +83,11 @@
 		 *
 		 * @return IEntity
 		 *
-		 * @throws EntityNotFoundException
-		 * @throws UnknownTableException
+		 * @throws \Edde\Exception\Storage\EntityNotFoundException
+		 * @throws \Edde\Exception\Storage\UnknownTableException
 		 * @throws UnknownAliasException
 		 * @throws \Edde\Exception\Entity\RecordException
-		 * @throws NoPrimaryPropertyException
+		 * @throws \Edde\Exception\Schema\NoPrimaryPropertyException
 		 */
 		public function entity(string $alias, $name): IEntity;
 
@@ -103,7 +101,7 @@
 		 * @param array  $relation
 		 *
 		 * @return ICollection
-		 * @throws InvalidRelationException
+		 * @throws \Edde\Exception\Schema\InvalidRelationException
 		 * @throws UnknownAliasException
 		 * @throws RelationException
 		 * @throws SchemaException

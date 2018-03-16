@@ -6,21 +6,21 @@
 	use Edde\Api\Entity\IEntity;
 	use Edde\Api\Entity\IEntityManager;
 	use Edde\Api\Entity\IEntityQueue;
-	use Edde\Api\Schema\Exception\UnknownPropertyException;
-	use Edde\Api\Schema\Exception\UnknownSchemaException;
-	use Edde\Api\Schema\Inject\SchemaManager;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Api\Storage\Inject\Storage;
 	use Edde\Common\Entity\Query\QueryQueue;
 	use Edde\Common\Object\Object;
 	use Edde\Common\Storage\Query\SelectQuery;
 	use Edde\Exception\Generator\UnknownGeneratorException;
+	use Edde\Exception\Schema\UnknownPropertyException;
+	use Edde\Exception\Schema\UnknownSchemaException;
 	use Edde\Inject\Container\Container;
+	use Edde\Inject\Schema\SchemaManager;
+	use Edde\Inject\Storage\Storage;
 
 	class EntityManager extends Object implements IEntityManager {
 		use SchemaManager;
-		use Container;
 		use Storage;
+		use Container;
 		/** @var IEntity[] */
 		protected $entities = [];
 

@@ -2,12 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Storage;
 
-	use Edde\Api\Storage\Exception\ExclusiveTransactionException;
-	use Edde\Api\Storage\Exception\NoTransactionException;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Storage\IStream;
 	use Edde\Api\Storage\Query\IQuery;
 	use Edde\Common\Object\Object;
+	use Edde\Exception\Storage\ExclusiveTransactionException;
+	use Edde\Exception\Storage\NoTransactionException;
 	use Edde\Inject\Driver\Driver;
 
 	class Storage extends Object implements IStorage {

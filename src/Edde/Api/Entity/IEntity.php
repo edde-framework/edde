@@ -6,15 +6,12 @@
 	use Edde\Api\Crate\IProperty;
 	use Edde\Api\Entity\Query\IDetachQuery;
 	use Edde\Api\Entity\Query\IDisconnectQuery;
-	use Edde\Api\Schema\Exception\InvalidRelationException;
-	use Edde\Api\Schema\Exception\LinkException;
-	use Edde\Api\Schema\Exception\RelationException;
-	use Edde\Api\Schema\Exception\SchemaException;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Api\Storage\Exception\DuplicateEntryException;
 	use Edde\Api\Validator\Exception\BatchValidationException;
 	use Edde\Api\Validator\Exception\ValidationException;
 	use Edde\Exception\Entity\UnknownAliasException;
+	use Edde\Exception\Schema\SchemaException;
+	use Edde\Exception\Storage\DuplicateEntryException;
 
 	/**
 	 * An Entity is extended Crate with some additional features.
@@ -57,7 +54,7 @@
 		 * @param string $schema
 		 *
 		 * @return IEntity
-		 * @throws LinkException
+		 * @throws \Edde\Exception\Schema\LinkException
 		 */
 		public function link(string $schema): IEntity;
 
@@ -77,7 +74,7 @@
 		 * @param string|null $relation
 		 *
 		 * @return IEntity
-		 * @throws RelationException
+		 * @throws \Edde\Exception\Schema\RelationException
 		 */
 		public function attach(IEntity $entity, string $relation = null): IEntity;
 
@@ -97,7 +94,7 @@
 		 * @param string $schema
 		 *
 		 * @return IDisconnectQuery
-		 * @throws InvalidRelationException
+		 * @throws \Edde\Exception\Schema\InvalidRelationException
 		 */
 		public function disconnect(string $schema): IDisconnectQuery;
 
@@ -110,7 +107,7 @@
 		 *
 		 * @return ICollection
 		 * @throws SchemaException
-		 * @throws InvalidRelationException
+		 * @throws \Edde\Exception\Schema\InvalidRelationException
 		 * @throws UnknownAliasException
 		 */
 		public function join(string $alias, string $schema, string $relation = null): ICollection;

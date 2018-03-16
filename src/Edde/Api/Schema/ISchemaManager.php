@@ -3,14 +3,13 @@
 	namespace Edde\Api\Schema;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Schema\Exception\PropertyException;
-	use Edde\Api\Schema\Exception\UnknownPropertyException;
-	use Edde\Api\Schema\Exception\UnknownSchemaException;
 	use Edde\Api\Validator\Exception\UnknownValidatorException;
 	use Edde\Api\Validator\Exception\ValidationException;
 	use Edde\Exception\Generator\UnknownGeneratorException;
 	use Edde\Exception\Sanitizer\SanitizerException;
 	use Edde\Exception\Sanitizer\UnknownSanitizerException;
+	use Edde\Exception\Schema\PropertyException;
+	use Edde\Exception\Schema\UnknownPropertyException;
 
 	interface ISchemaManager extends IConfigurable {
 		/**
@@ -57,7 +56,7 @@
 		 *
 		 * @return ISchema
 		 *
-		 * @throws UnknownSchemaException
+		 * @throws \Edde\Exception\Schema\UnknownSchemaException
 		 * @throws UnknownPropertyException
 		 */
 		public function load(string $name): ISchema;
@@ -128,7 +127,7 @@
 		 * @param array  $source
 		 *
 		 * @throws ValidationException
-		 * @throws UnknownSchemaException
+		 * @throws \Edde\Exception\Schema\UnknownSchemaException
 		 * @throws UnknownValidatorException
 		 * @throws UnknownPropertyException
 		 */

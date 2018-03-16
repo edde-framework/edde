@@ -3,13 +3,13 @@
 	namespace Edde\Common\Schema;
 
 	use Edde\Api\Node\INode;
-	use Edde\Api\Schema\Exception\InvalidRelationException;
 	use Edde\Api\Schema\ILinkBuilder;
 	use Edde\Api\Schema\IPropertyBuilder;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaBuilder;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Object\Object;
+	use Edde\Exception\Schema\InvalidRelationException;
 
 	class SchemaBuilder extends Object implements ISchemaBuilder {
 		/** @var INode */

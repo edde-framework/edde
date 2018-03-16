@@ -3,10 +3,7 @@
 	namespace Edde\Api\Schema;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Schema\Exception\LinkException;
-	use Edde\Api\Schema\Exception\NoPrimaryPropertyException;
-	use Edde\Api\Schema\Exception\RelationException;
-	use Edde\Api\Schema\Exception\UnknownPropertyException;
+	use Edde\Exception\Schema\RelationException;
 
 	interface ISchema extends IConfigurable {
 		/**
@@ -49,7 +46,7 @@
 		 *
 		 * @return IProperty
 		 *
-		 * @throws UnknownPropertyException
+		 * @throws \Edde\Exception\Schema\UnknownPropertyException
 		 */
 		public function getProperty(string $name): IProperty;
 
@@ -72,7 +69,7 @@
 		 * when there are more primary properties)
 		 *
 		 * @return IProperty
-		 * @throws NoPrimaryPropertyException
+		 * @throws \Edde\Exception\Schema\NoPrimaryPropertyException
 		 */
 		public function getPrimary(): IProperty;
 
@@ -135,7 +132,7 @@
 		 * @param string $schema
 		 *
 		 * @return ILink
-		 * @throws LinkException
+		 * @throws \Edde\Exception\Schema\LinkException
 		 */
 		public function getLink(string $schema): ILink;
 

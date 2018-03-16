@@ -5,6 +5,7 @@
 	use Edde\Api\Bus\Request\IRequest;
 	use Edde\Api\Router\IRouter;
 	use Edde\Common\Object\Object;
+	use Edde\Exception\Http\NoHttpException;
 	use Edde\Inject\Http\RequestService;
 	use Edde\Inject\Runtime\Runtime;
 
@@ -20,7 +21,7 @@
 
 		/**
 		 * @return string[]
-		 * @throws \Edde\Exception\Http\NoHttpException
+		 * @throws NoHttpException
 		 */
 		protected function getTargets(): array {
 			return $this->isHttp() ? $this->requestService->getHeaders()->getAccepts() : [];

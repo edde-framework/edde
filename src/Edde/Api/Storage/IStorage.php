@@ -3,12 +3,11 @@
 	namespace Edde\Api\Storage;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Storage\Exception\DuplicateTableException;
-	use Edde\Api\Storage\Exception\ExclusiveTransactionException;
-	use Edde\Api\Storage\Exception\NoTransactionException;
-	use Edde\Api\Storage\Exception\StorageException;
 	use Edde\Api\Storage\Query\IQuery;
-	use Edde\Exception\Driver\DriverException;
+	use Edde\Exception\Storage\DuplicateTableException;
+	use Edde\Exception\Storage\ExclusiveTransactionException;
+	use Edde\Exception\Storage\NoTransactionException;
+	use Edde\Exception\Storage\StorageException;
 
 	interface IStorage extends IConfigurable {
 		/**
@@ -17,7 +16,7 @@
 		 * @param bool $exclusive
 		 *
 		 * @return IStorage
-		 * @throws ExclusiveTransactionException
+		 * @throws \Edde\Exception\Storage\ExclusiveTransactionException
 		 */
 		public function start(bool $exclusive = false): IStorage;
 
@@ -25,7 +24,7 @@
 		 * commit a transaction on storage
 		 *
 		 * @return IStorage
-		 * @throws NoTransactionException
+		 * @throws \Edde\Exception\Storage\NoTransactionException
 		 */
 		public function commit(): IStorage;
 
@@ -33,7 +32,7 @@
 		 * rollback a transaction on storage
 		 *
 		 * @return IStorage
-		 * @throws NoTransactionException
+		 * @throws \Edde\Exception\Storage\NoTransactionException
 		 */
 		public function rollback(): IStorage;
 
@@ -45,7 +44,7 @@
 		 * @return IStream
 		 *
 		 * @throws StorageException
-		 * @throws DuplicateTableException
+		 * @throws \Edde\Exception\Storage\DuplicateTableException
 		 * @throws \Edde\Exception\Driver\DriverException
 		 */
 		public function execute(IQuery $query);

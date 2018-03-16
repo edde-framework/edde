@@ -4,9 +4,6 @@
 
 	use Edde\Api\File\IFile;
 	use Edde\Api\Http\IResponse;
-	use Edde\Api\Schema\Exception\UnknownPropertyException;
-	use Edde\Api\Schema\Exception\UnknownSchemaException;
-	use Edde\Api\Schema\Inject\SchemaManager;
 	use Edde\Api\Validator\Exception\UnknownValidatorException;
 	use Edde\Api\Validator\Exception\ValidationException;
 	use Edde\Common\Content\GeneratorContent;
@@ -14,7 +11,11 @@
 	use Edde\Common\Content\JsonContent;
 	use Edde\Common\Content\TextContent;
 	use Edde\Common\Http\Response;
+	use Edde\Exception\Http\EmptyBodyException;
+	use Edde\Exception\Schema\UnknownPropertyException;
+	use Edde\Exception\Schema\UnknownSchemaException;
 	use Edde\Inject\Http\RequestService;
+	use Edde\Inject\Schema\SchemaManager;
 
 	/**
 	 * Http control provides helpers for a http response style.
@@ -35,7 +36,7 @@
 		 *
 		 * @param string $schema
 		 *
-		 * @throws \Edde\Exception\Http\EmptyBodyException
+		 * @throws EmptyBodyException
 		 * @throws UnknownSchemaException
 		 * @throws ValidationException
 		 * @throws UnknownPropertyException

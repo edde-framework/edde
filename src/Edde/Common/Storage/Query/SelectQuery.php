@@ -3,12 +3,12 @@
 	namespace Edde\Common\Storage\Query;
 
 	use Edde\Api\Schema\ISchema;
-	use Edde\Api\Storage\Exception\UnknownAliasException;
 	use Edde\Api\Storage\Query\Fragment\IJoin;
 	use Edde\Api\Storage\Query\Fragment\IWhereGroup;
 	use Edde\Api\Storage\Query\ISelectQuery;
 	use Edde\Common\Storage\Query\Fragment\Join;
 	use Edde\Common\Storage\Query\Fragment\WhereGroup;
+	use Edde\Exception\Storage\UnknownAliasException;
 
 	class SelectQuery extends AbstractQuery implements ISelectQuery {
 		/** @var string */

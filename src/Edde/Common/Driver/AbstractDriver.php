@@ -3,7 +3,6 @@
 	namespace Edde\Common\Driver;
 
 	use Edde\Api\Driver\IDriver;
-	use Edde\Api\Schema\Inject\SchemaManager;
 	use Edde\Api\Storage\INativeQuery;
 	use Edde\Api\Storage\Query\Fragment\IWhereGroup;
 	use Edde\Api\Storage\Query\IFragment;
@@ -12,6 +11,7 @@
 	use Edde\Common\Storage\Query\NativeQuery;
 	use Edde\Exception\Driver\DriverException;
 	use Edde\Inject\Config\ConfigService;
+	use Edde\Inject\Schema\SchemaManager;
 	use ReflectionClass;
 	use ReflectionException;
 	use ReflectionMethod;

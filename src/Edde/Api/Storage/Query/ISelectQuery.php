@@ -3,9 +3,9 @@
 	namespace Edde\Api\Storage\Query;
 
 	use Edde\Api\Schema\ISchema;
-	use Edde\Api\Storage\Exception\UnknownAliasException;
 	use Edde\Api\Storage\Query\Fragment\IJoin;
 	use Edde\Api\Storage\Query\Fragment\IWhereGroup;
+	use Edde\Exception\Storage\UnknownAliasException;
 
 	interface ISelectQuery extends IQuery {
 		/**

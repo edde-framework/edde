@@ -4,21 +4,6 @@
 
 	use DateTime;
 	use Edde\Api\Entity\IEntity;
-	use Edde\Api\Schema\Exception\InvalidRelationException;
-	use Edde\Api\Schema\Exception\NoPrimaryPropertyException;
-	use Edde\Api\Schema\Exception\RelationException;
-	use Edde\Api\Schema\Exception\SchemaException;
-	use Edde\Api\Schema\Exception\UnknownPropertyException;
-	use Edde\Api\Schema\Exception\UnknownSchemaException;
-	use Edde\Api\Schema\Inject\SchemaManager;
-	use Edde\Api\Storage\Exception\DuplicateEntryException;
-	use Edde\Api\Storage\Exception\DuplicateTableException;
-	use Edde\Api\Storage\Exception\EntityNotFoundException;
-	use Edde\Api\Storage\Exception\ExclusiveTransactionException;
-	use Edde\Api\Storage\Exception\NoTransactionException;
-	use Edde\Api\Storage\Exception\StorageException;
-	use Edde\Api\Storage\Exception\UnknownTableException;
-	use Edde\Api\Storage\Inject\Storage;
 	use Edde\Api\Validator\Exception\BatchValidationException;
 	use Edde\Api\Validator\Exception\ValidationException;
 	use Edde\Common\Schema\BarPooSchema;
@@ -36,10 +21,26 @@
 	use Edde\Common\Schema\UserSchema;
 	use Edde\Common\Storage\Query\CreateSchemaQuery;
 	use Edde\Common\Storage\Query\SelectQuery;
+	use Edde\Exception\Driver\DriverException;
 	use Edde\Exception\Entity\RecordException;
 	use Edde\Exception\Entity\UnknownAliasException;
+	use Edde\Exception\Schema\InvalidRelationException;
+	use Edde\Exception\Schema\NoPrimaryPropertyException;
+	use Edde\Exception\Schema\RelationException;
+	use Edde\Exception\Schema\SchemaException;
+	use Edde\Exception\Schema\UnknownPropertyException;
+	use Edde\Exception\Schema\UnknownSchemaException;
+	use Edde\Exception\Storage\DuplicateEntryException;
+	use Edde\Exception\Storage\DuplicateTableException;
+	use Edde\Exception\Storage\EntityNotFoundException;
+	use Edde\Exception\Storage\ExclusiveTransactionException;
+	use Edde\Exception\Storage\NoTransactionException;
+	use Edde\Exception\Storage\StorageException;
+	use Edde\Exception\Storage\UnknownTableException;
 	use Edde\Inject\Container\Container;
 	use Edde\Inject\Entity\EntityManager;
+	use Edde\Inject\Schema\SchemaManager;
+	use Edde\Inject\Storage\Storage;
 	use Edde\TestCase;
 
 	abstract class AbstractStorageTest extends TestCase {
@@ -49,7 +50,7 @@
 		use Container;
 
 		/**
-		 * @throws \Edde\Exception\Driver\DriverException
+		 * @throws DriverException
 		 * @throws DuplicateTableException
 		 * @throws StorageException
 		 * @throws UnknownPropertyException
@@ -180,7 +181,7 @@
 		}
 
 		/**
-		 * @throws \Edde\Exception\Entity\RecordException
+		 * @throws RecordException
 		 * @throws SchemaException
 		 * @throws UnknownSchemaException
 		 */
@@ -330,9 +331,9 @@
 		 * @throws BatchValidationException
 		 * @throws DuplicateEntryException
 		 * @throws InvalidRelationException
-		 * @throws \Edde\Exception\Entity\RecordException
+		 * @throws RecordException
 		 * @throws SchemaException
-		 * @throws \Edde\Exception\Entity\UnknownAliasException
+		 * @throws UnknownAliasException
 		 * @throws UnknownPropertyException
 		 * @throws UnknownSchemaException
 		 * @throws ValidationException
@@ -454,7 +455,7 @@
 		/**
 		 * @throws EntityNotFoundException
 		 * @throws InvalidRelationException
-		 * @throws \Edde\Exception\Entity\RecordException
+		 * @throws RecordException
 		 * @throws SchemaException
 		 * @throws UnknownAliasException
 		 * @throws UnknownPropertyException
@@ -492,11 +493,11 @@
 
 		/**
 		 * @throws BatchValidationException
-		 * @throws \Edde\Exception\Driver\DriverException
+		 * @throws DriverException
 		 * @throws DuplicateEntryException
 		 * @throws DuplicateTableException
 		 * @throws InvalidRelationException
-		 * @throws \Edde\Exception\Entity\RecordException
+		 * @throws RecordException
 		 * @throws SchemaException
 		 * @throws StorageException
 		 * @throws UnknownAliasException
@@ -601,7 +602,7 @@
 		 * @throws DuplicateEntryException
 		 * @throws EntityNotFoundException
 		 * @throws InvalidRelationException
-		 * @throws \Edde\Exception\Entity\RecordException
+		 * @throws RecordException
 		 * @throws SchemaException
 		 * @throws UnknownAliasException
 		 * @throws UnknownPropertyException
@@ -659,9 +660,9 @@
 		 * @throws DuplicateEntryException
 		 * @throws EntityNotFoundException
 		 * @throws InvalidRelationException
-		 * @throws \Edde\Exception\Entity\RecordException
+		 * @throws RecordException
 		 * @throws SchemaException
-		 * @throws \Edde\Exception\Entity\UnknownAliasException
+		 * @throws UnknownAliasException
 		 * @throws UnknownPropertyException
 		 * @throws UnknownSchemaException
 		 * @throws UnknownTableException
@@ -710,7 +711,7 @@
 		 * @throws InvalidRelationException
 		 * @throws RecordException
 		 * @throws SchemaException
-		 * @throws \Edde\Exception\Entity\UnknownAliasException
+		 * @throws UnknownAliasException
 		 * @throws UnknownPropertyException
 		 * @throws UnknownSchemaException
 		 * @throws UnknownTableException
@@ -756,9 +757,9 @@
 		 * @throws DuplicateEntryException
 		 * @throws EntityNotFoundException
 		 * @throws InvalidRelationException
-		 * @throws \Edde\Exception\Entity\RecordException
+		 * @throws RecordException
 		 * @throws SchemaException
-		 * @throws \Edde\Exception\Entity\UnknownAliasException
+		 * @throws UnknownAliasException
 		 * @throws UnknownPropertyException
 		 * @throws UnknownSchemaException
 		 * @throws UnknownTableException

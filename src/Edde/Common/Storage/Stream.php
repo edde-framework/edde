@@ -2,12 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Storage;
 
-	use Edde\Api\Storage\Exception\InvalidSourceException;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Storage\IStream;
 	use Edde\Api\Storage\Query\IQuery;
 	use Edde\Api\Storage\Query\ISelectQuery;
 	use Edde\Common\Object\Object;
+	use Edde\Exception\Storage\InvalidSourceException;
 	use function explode;
 	use function strpos;
 

@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Storage;
 
-	use Edde\Api\Storage\Exception\InvalidSourceException;
-	use Edde\Api\Storage\Exception\StreamException;
 	use Edde\Api\Storage\Query\ISelectQuery;
+	use Edde\Exception\Storage\InvalidSourceException;
+	use Edde\Exception\Storage\StreamException;
 	use IteratorAggregate;
 	use Traversable;
 
@@ -43,7 +43,7 @@
 		/**
 		 * @return Traversable|array
 		 * @throws InvalidSourceException
-		 * @throws StreamException
+		 * @throws \Edde\Exception\Storage\StreamException
 		 */
 		public function getIterator();
 	}

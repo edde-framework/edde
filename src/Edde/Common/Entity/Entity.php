@@ -8,18 +8,7 @@
 	use Edde\Api\Entity\IEntityQueue;
 	use Edde\Api\Entity\Query\IDetachQuery;
 	use Edde\Api\Entity\Query\IDisconnectQuery;
-	use Edde\Api\Schema\Exception\LinkException;
-	use Edde\Api\Schema\Exception\NoPrimaryPropertyException;
-	use Edde\Api\Schema\Exception\RelationException;
-	use Edde\Api\Schema\Exception\SchemaException;
-	use Edde\Api\Schema\Exception\UnknownPropertyException;
-	use Edde\Api\Schema\Exception\UnknownSchemaException;
-	use Edde\Api\Schema\Inject\SchemaManager;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Api\Storage\Exception\DuplicateEntryException;
-	use Edde\Api\Storage\Exception\EntityNotFoundException;
-	use Edde\Api\Storage\Exception\StorageException;
-	use Edde\Api\Storage\Exception\UnknownTableException;
 	use Edde\Api\Validator\Exception\BatchValidationException;
 	use Edde\Api\Validator\Exception\UnknownValidatorException;
 	use Edde\Api\Validator\Exception\ValidationException;
@@ -30,7 +19,13 @@
 	use Edde\Exception\Filter\UnknownFilterException;
 	use Edde\Exception\Sanitizer\SanitizerException;
 	use Edde\Exception\Sanitizer\UnknownSanitizerException;
+	use Edde\Exception\Schema\LinkException;
+	use Edde\Exception\Schema\NoPrimaryPropertyException;
+	use Edde\Exception\Schema\RelationException;
+	use Edde\Exception\Schema\UnknownPropertyException;
+	use Edde\Exception\Schema\UnknownSchemaException;
 	use Edde\Inject\Entity\EntityManager;
+	use Edde\Inject\Schema\SchemaManager;
 
 	class Entity extends Crate implements IEntity {
 		use EntityManager;
@@ -84,11 +79,11 @@
 		 * @inheritdoc
 		 *
 		 * @throws LinkException
-		 * @throws SchemaException
-		 * @throws UnknownPropertyException
+		 * @throws \Edde\Exception\Schema\SchemaException
+		 * @throws \Edde\Exception\Schema\UnknownPropertyException
 		 * @throws UnknownSchemaException
-		 * @throws EntityNotFoundException
-		 * @throws UnknownTableException
+		 * @throws \Edde\Exception\Storage\EntityNotFoundException
+		 * @throws \Edde\Exception\Storage\UnknownTableException
 		 * @throws RecordException
 		 */
 		public function link(string $schema): IEntity {
@@ -103,7 +98,7 @@
 		/**
 		 * @inheritdoc
 		 *
-		 * @throws LinkException
+		 * @throws \Edde\Exception\Schema\LinkException
 		 */
 		public function unlink(string $schema): IEntity {
 			$this->entityQueue->unlink($this, $this->schema->getLink($schema));
@@ -113,7 +108,7 @@
 		/**
 		 * @inheritdoc
 		 *
-		 * @throws SchemaException
+		 * @throws \Edde\Exception\Schema\SchemaException
 		 * @throws UnknownSchemaException
 		 * @throws RelationException
 		 */
@@ -153,7 +148,7 @@
 		/**
 		 * @inheritdoc
 		 *
-		 * @throws SchemaException
+		 * @throws \Edde\Exception\Schema\SchemaException
 		 * @throws UnknownSchemaException
 		 */
 		public function reverseJoin(string $alias, string $schema, string $relation = null): ICollection {
@@ -172,8 +167,8 @@
 		 * @inheritdoc
 		 *
 		 * @throws ValidationException
-		 * @throws DuplicateEntryException
-		 * @throws StorageException
+		 * @throws \Edde\Exception\Storage\DuplicateEntryException
+		 * @throws \Edde\Exception\Storage\StorageException
 		 * @throws BatchValidationException
 		 * @throws DriverException
 		 */
@@ -193,7 +188,7 @@
 		/**
 		 * @inheritdoc
 		 *
-		 * @throws UnknownPropertyException
+		 * @throws \Edde\Exception\Schema\UnknownPropertyException
 		 * @throws FilterException
 		 * @throws UnknownFilterException
 		 */

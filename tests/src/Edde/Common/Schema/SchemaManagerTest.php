@@ -1,10 +1,11 @@
 <?php
+	declare(strict_types=1);
 	namespace Edde\Common\Schema;
 
-	use Edde\Api\Schema\Exception\RelationException;
-	use Edde\Api\Schema\Exception\UnknownPropertyException;
-	use Edde\Api\Schema\Exception\UnknownSchemaException;
-	use Edde\Api\Schema\Inject\SchemaManager;
+	use Edde\Exception\Schema\RelationException;
+	use Edde\Exception\Schema\UnknownPropertyException;
+	use Edde\Exception\Schema\UnknownSchemaException;
+	use Edde\Inject\Schema\SchemaManager;
 	use Edde\TestCase;
 	use function array_values;
 

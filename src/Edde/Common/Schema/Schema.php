@@ -2,15 +2,15 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Schema;
 
-	use Edde\Api\Schema\Exception\LinkException;
-	use Edde\Api\Schema\Exception\NoPrimaryPropertyException;
-	use Edde\Api\Schema\Exception\RelationException;
-	use Edde\Api\Schema\Exception\UnknownPropertyException;
 	use Edde\Api\Schema\ILink;
 	use Edde\Api\Schema\IProperty;
 	use Edde\Api\Schema\IRelation;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Common\Object\Object;
+	use Edde\Exception\Schema\LinkException;
+	use Edde\Exception\Schema\NoPrimaryPropertyException;
+	use Edde\Exception\Schema\RelationException;
+	use Edde\Exception\Schema\UnknownPropertyException;
 
 	class Schema extends Object implements ISchema {
 		/** @var string */

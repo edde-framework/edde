@@ -12,8 +12,6 @@
 	use Edde\Api\Entity\Query\IQueryQueue;
 	use Edde\Api\Entity\Query\IRelationQuery;
 	use Edde\Api\Entity\Query\IUnlinkQuery;
-	use Edde\Api\Storage\Exception\DuplicateEntryException;
-	use Edde\Api\Storage\Exception\NullValueException;
 	use Edde\Api\Storage\INativeQuery;
 	use Edde\Api\Storage\Query\Fragment\IWhere;
 	use Edde\Api\Storage\Query\ICrateSchemaQuery;
@@ -25,6 +23,8 @@
 	use Edde\Exception\Config\RequiredValueException;
 	use Edde\Exception\Driver\DriverException;
 	use Edde\Exception\Driver\DriverQueryException;
+	use Edde\Exception\Storage\DuplicateEntryException;
+	use Edde\Exception\Storage\NullValueException;
 	use GraphAware\Bolt\Configuration;
 	use GraphAware\Bolt\Exception\MessageFailureException;
 	use GraphAware\Bolt\GraphDatabase;
