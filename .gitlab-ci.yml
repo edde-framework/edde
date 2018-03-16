@@ -5,21 +5,20 @@ variables:
 
 stages:
     - test
-    - publish
+    - release
 
 test:
     stage: test
     script:
         - apk add -U py-pip >/dev/null 2>&1
         - pip install docker-compose >/dev/null 2>&1
-        - docker-compose -f dc.test.yml up -d >/dev/null 2>&1
         - docker build -t edde --file .docker/Dockerfile .
-        - docker-compose -f .docker/dc.test.yml up -d
+        - docker-compose -f dc.test.yml up -d >/dev/null 2>&1
         - docker exec -it edde lib/bin/phpunit
-        - docker-compose -f .docker/dc.test.yml down --volumes
+        - docker-compose -f .docker/dc.test.yml down --volumes >/dev/null 2>&1
 
 github sync:
-    stage: publish
+    stage: release
     script:
         - apk add -U git >/dev/null 2>&1
         - git clone --mirror $CI_REPOSITORY_URL edde.git
