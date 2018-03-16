@@ -2,19 +2,19 @@
 	declare(strict_types=1);
 	namespace Edde\Driver;
 
-	use Edde\Api\Entity\Query\IDeleteQuery;
-	use Edde\Api\Entity\Query\IDetachQuery;
-	use Edde\Api\Entity\Query\IDisconnectQuery;
-	use Edde\Api\Entity\Query\ILinkQuery;
-	use Edde\Api\Entity\Query\IQueryQueue;
-	use Edde\Api\Entity\Query\IRelationQuery;
-	use Edde\Api\Entity\Query\IUnlinkQuery;
 	use Edde\Common\Storage\Query\NativeQuery;
 	use Edde\Config\ConfigException;
 	use Edde\Crate\IProperty;
 	use Edde\Entity\IEntity;
 	use Edde\Exception\Storage\DuplicateEntryException;
 	use Edde\Exception\Storage\NullValueException;
+	use Edde\Query\IDeleteQuery;
+	use Edde\Query\IDetachQuery;
+	use Edde\Query\IDisconnectQuery;
+	use Edde\Query\ILinkQuery;
+	use Edde\Query\IQueryQueue;
+	use Edde\Query\IRelationQuery;
+	use Edde\Query\IUnlinkQuery;
 	use Edde\Storage\INativeQuery;
 	use Edde\Storage\Query\Fragment\IWhere;
 	use Edde\Storage\Query\ICrateSchemaQuery;
@@ -34,13 +34,9 @@
 	use function implode;
 
 	class Neo4jDriver extends AbstractDriver {
-		/**
-		 * @var SessionInterface
-		 */
+		/** @var SessionInterface */
 		protected $session;
-		/**
-		 * @var Transaction
-		 */
+		/** @var Transaction */
 		protected $transaction;
 
 		/** @inheritdoc */
@@ -197,7 +193,7 @@
 		 * @throws Throwable
 		 */
 		protected function executeDetachQuery(IDetachQuery $detachQuery) {
-			/** @var $entity \Edde\Entity\IEntity[] */
+			/** @var $entity IEntity[] */
 			$entity = [
 				$detachQuery->getEntity(),
 				$detachQuery->getTarget(),
@@ -304,7 +300,7 @@
 		 */
 		protected function link(IEntity $from, IEntity $to, string $relation, array $attributes = null) {
 			$cypher = null;
-			/** @var $entity \Edde\Entity\IEntity[] */
+			/** @var $entity IEntity[] */
 			$entity = [
 				$from,
 				$to,

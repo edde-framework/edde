@@ -19,13 +19,9 @@
 		use SchemaManager;
 		/** @var string */
 		protected $config;
-		/**
-		 * @var callable[]
-		 */
+		/** @var callable[] */
 		protected $executors;
-		/**
-		 * @var callable[]
-		 */
+		/** @var callable[] */
 		protected $fragments;
 
 		/**
@@ -46,7 +42,7 @@
 		}
 
 		/**
-		 * @param \Edde\Storage\Query\IFragment $fragment
+		 * @param IFragment $fragment
 		 *
 		 * @return INativeQuery
 		 * @throws DriverException
