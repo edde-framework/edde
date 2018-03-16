@@ -3,6 +3,7 @@
 	namespace Edde\Xml;
 
 	use Edde\Config\IConfigurable;
+	use Edde\Exception\Xml\XmlParserException;
 	use Edde\Resource\IResource;
 
 	/**
@@ -16,6 +17,8 @@
 		 * @param IXmlHandler $xmlHandler
 		 *
 		 * @return IXmlParser
+		 *
+		 * @throws XmlParserException
 		 */
 		public function string(string $string, IXmlHandler $xmlHandler): IXmlParser;
 
@@ -26,6 +29,8 @@
 		 * @param IXmlHandler $xmlHandler
 		 *
 		 * @return IXmlParser
+		 *
+		 * @throws XmlParserException
 		 */
 		public function file(string $file, IXmlHandler $xmlHandler): IXmlParser;
 
@@ -36,6 +41,8 @@
 		 * @param IXmlHandler $xmlHandler
 		 *
 		 * @return IXmlParser
+		 *
+		 * @throws XmlParserException
 		 */
 		public function parse(IResource $resource, IXmlHandler $xmlHandler): IXmlParser;
 	}

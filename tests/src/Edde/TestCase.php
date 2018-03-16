@@ -7,9 +7,9 @@
 	use Edde\Config\IConfigLoader;
 	use Edde\Container\AutowireTrait;
 	use Edde\Container\ContainerException;
+	use Edde\Container\ContainerFactory;
 	use Edde\Container\Factory\ClassFactory;
 	use Edde\Container\IAutowire;
-	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Inject\Assets\RootDirectory;
 	use PHPUnit\Framework\TestCase as PhpUnitTestCase;
 	use ReflectionException;
