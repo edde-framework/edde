@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Bus\Inject;
+	namespace Edde\Inject\Bus;
 
 	use Edde\Api\Bus\Request\IRequestService;
 

@@ -4,7 +4,7 @@
 
 	use Edde\Api\Bus\IElement;
 	use Edde\Api\Bus\IMessageService;
-	use Edde\Api\Bus\Inject\MessageBus;
+	use Edde\Inject\Bus\MessageBus;
 	use Edde\Inject\Crypt\RandomService;
 
 	class MessageService extends AbstractHandler implements IMessageService {

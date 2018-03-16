@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Bus;
 
-	use Edde\Api\Bus\Exception\UnhandledElementException;
+	use Edde\Exception\Bus\UnhandledElementException;
 	use stdClass;
 
 	/**
@@ -35,7 +35,7 @@
 		 * @param IElement $element
 		 *
 		 * @return IHandler
-		 * @throws UnhandledElementException
+		 * @throws \Edde\Exception\Bus\UnhandledElementException
 		 */
 		public function getHandler(IElement $element): IHandler;
 

@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Bus;
 
-	use Edde\Api\Bus\Exception\ElementException;
+	use Edde\Exception\Bus\ElementException;
 
 	/**
 	 * Base element for all message bus related stuff.

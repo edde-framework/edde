@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Bus;
 
-	use Edde\Api\Bus\Exception\InvalidElementException;
-	use Edde\Api\Bus\Exception\UnhandledElementException;
 	use Edde\Api\Bus\IElement;
 	use Edde\Api\Bus\IHandler;
 	use Edde\Common\Object\Object;
+	use Edde\Exception\Bus\InvalidElementException;
+	use Edde\Exception\Bus\UnhandledElementException;
 	use Edde\Exception\Validator\UnknownValidatorException;
 	use Edde\Exception\Validator\ValidationException;
 	use Edde\Inject\Validator\ValidatorManager;
@@ -43,7 +43,7 @@
 		 *
 		 * @return IElement
 		 * @throws ValidationException
-		 * @throws InvalidElementException
+		 * @throws \Edde\Exception\Bus\InvalidElementException
 		 */
 		protected function onSend(IElement $element): IElement {
 			return $this->execute($element);

@@ -2,18 +2,19 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Bus;
 
-	use Edde\Api\Bus\Exception\InvalidElementException;
-	use Edde\Api\Bus\Exception\UnhandledElementException;
 	use Edde\Api\Bus\IElement;
 	use Edde\Api\Bus\IError;
-	use Edde\Api\Bus\Inject\EventBus;
-	use Edde\Api\Bus\Inject\MessageBus;
 	use Edde\Api\Bus\Request\IResponse;
 	use Edde\Common\Bus\Event\Event;
 	use Edde\Common\Bus\Request\Request;
 	use Edde\Common\Content\Content;
+	use Edde\Exception\Bus\InvalidElementException;
+	use Edde\Exception\Bus\UnhandledElementException;
 	use Edde\Exception\Container\ContainerException;
+	use Edde\Exception\Validator\UnknownValidatorException;
 	use Edde\Exception\Validator\ValidationException;
+	use Edde\Inject\Bus\EventBus;
+	use Edde\Inject\Bus\MessageBus;
 	use Edde\Inject\Converter\ConverterManager;
 	use Edde\Inject\Crypt\RandomService;
 	use Edde\Inject\Validator\ValidatorManager;
@@ -41,7 +42,7 @@
 		/**
 		 * @throws ContainerException
 		 * @throws InvalidElementException
-		 * @throws \Edde\Exception\Validator\UnknownValidatorException
+		 * @throws UnknownValidatorException
 		 * @throws ValidationException
 		 */
 		public function testEventBusInvalidEvent() {
@@ -54,7 +55,7 @@
 
 		/**
 		 * @throws ContainerException
-		 * @throws InvalidElementException
+		 * @throws \Edde\Exception\Bus\InvalidElementException
 		 * @throws ValidationException
 		 */
 		public function testEventBus() {
@@ -80,7 +81,7 @@
 		}
 
 		/**
-		 * @throws InvalidElementException
+		 * @throws \Edde\Exception\Bus\InvalidElementException
 		 * @throws ValidationException
 		 */
 		public function testInvalidRequestValidation() {

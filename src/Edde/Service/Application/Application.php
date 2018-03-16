@@ -3,9 +3,9 @@
 	namespace Edde\Service\Application;
 
 	use Edde\Api\Application\IApplication;
-	use Edde\Api\Bus\Inject\RequestService;
 	use Edde\Common\Object\Object;
 	use Edde\Exception\Application\AbortException;
+	use Edde\Inject\Bus\RequestService;
 	use Edde\Inject\Log\LogService;
 	use Edde\Inject\Router\RouterService;
 	use Throwable;

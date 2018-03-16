@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Bus;
 
-	use Edde\Api\Bus\Exception\InvalidElementException;
 	use Edde\Api\Config\IConfigurable;
+	use Edde\Exception\Bus\InvalidElementException;
 	use Edde\Exception\Container\ContainerException;
 	use Edde\Exception\Validator\ValidationException;
 

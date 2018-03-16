@@ -2,10 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Bus;
 
-	use Edde\Api\Bus\Exception\UnhandledElementException;
 	use Edde\Api\Bus\IElement;
 	use Edde\Api\Bus\IHandler;
 	use Edde\Api\Bus\IMessageBus;
+	use Edde\Exception\Bus\UnhandledElementException;
 	use Edde\Inject\Crypt\RandomService;
 	use stdClass;
 
