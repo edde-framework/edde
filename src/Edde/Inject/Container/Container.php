@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Inject\Container;
 
-	use Edde\Api\Container\IContainer;
+	use Edde\Container\IContainer;
 
 	/**
 	 * Defines lazy dependency on a system dependency container.

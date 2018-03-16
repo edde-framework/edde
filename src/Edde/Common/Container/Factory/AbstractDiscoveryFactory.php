@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Container\Factory;
 
-	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\IReflection;
+	use Edde\Container\IContainer;
+	use Edde\Container\IReflection;
 
 	/**
 	 * When there is need to search for a class in namespace hierarchy.
@@ -34,8 +34,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function factory(IContainer $container, array $parameters, IReflection $dependency, string $name = null) {
-			return parent::factory($container, $parameters, $dependency, $this->search($name));
+		public function factory(IContainer $container, array $params, IReflection $dependency, string $name = null) {
+			return parent::factory($container, $params, $dependency, $this->search($name));
 		}
 
 		protected function search(string $name) {

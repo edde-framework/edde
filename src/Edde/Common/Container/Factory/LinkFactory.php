@@ -2,10 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Container\Factory;
 
-	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\IFactory;
-	use Edde\Api\Container\IReflection;
-	use Edde\Common\Container\Reflection;
+	use Edde\Container\IContainer;
+	use Edde\Container\IFactory;
+	use Edde\Container\IReflection;
+	use Edde\Container\Reflection;
 
 	/**
 	 * Translate the given factory into another one.
@@ -73,7 +73,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function factory(IContainer $container, array $parameters, IReflection $dependency, string $name = null) {
-			return $this->instance ?: $this->instance = $this->getFactory($container)->factory($container, $parameters, $dependency, $name);
+		public function factory(IContainer $container, array $params, IReflection $dependency, string $name = null) {
+			return $this->instance ?: $this->instance = $this->getFactory($container)->factory($container, $params, $dependency, $name);
 		}
 	}

@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Container\Factory;
 
-	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\IReflection;
-	use Edde\Common\Container\Reflection;
+	use Edde\Container\IContainer;
+	use Edde\Container\IReflection;
+	use Edde\Container\Reflection;
 
 	/**
 	 * Interface to class binding factory.
@@ -63,7 +63,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function factory(IContainer $container, array $parameters, IReflection $dependency, string $name = null) {
-			return $this->instance ?: $this->instance = parent::factory($container, $parameters, $dependency, $this->class);
+		public function factory(IContainer $container, array $params, IReflection $dependency, string $name = null) {
+			return $this->instance ?: $this->instance = parent::factory($container, $params, $dependency, $this->class);
 		}
 	}

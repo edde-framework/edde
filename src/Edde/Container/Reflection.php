@@ -1,16 +1,14 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Container;
+	namespace Edde\Container;
 
-	use Edde\Api\Container\IParameter;
-	use Edde\Api\Container\IReflection;
 	use Edde\Object;
 
 	class Reflection extends Object implements IReflection {
-		protected $parameterList;
-		protected $injectList;
-		protected $lazyInjectList;
-		protected $configuratorList;
+		protected $params;
+		protected $injects;
+		protected $lazies;
+		protected $configurators;
 
 		/**
 		 * A few days after Christmas, a mother was working in the kitchen listening to her young son playing with his new electric train in the living room.
@@ -20,43 +18,35 @@
 		 * She hears the little boy continue, "For those of you just boarding, we ask you to stow all of your hand luggage under your seat. Remember, there is no smoking on the train. We hope you will have a pleasant and relaxing journey with us today."
 		 * As the mother began to smile, the child added, "For those of you who are pissed off about the TWO HOUR delay, please see the b*tch in the kitchen."
 		 *
-		 * @param IParameter[] $parameterList
-		 * @param IParameter[] $injectList
-		 * @param IParameter[] $lazyList
-		 * @param string[]     $configuratorList
+		 * @param IParameter[] $params
+		 * @param IParameter[] $injects
+		 * @param IParameter[] $lazies
+		 * @param string[]     $configurators
 		 */
-		public function __construct(array $parameterList = [], array $injectList = [], array $lazyList = [], array $configuratorList = []) {
-			$this->parameterList = $parameterList;
-			$this->injectList = $injectList;
-			$this->lazyInjectList = $lazyList;
-			$this->configuratorList = $configuratorList;
+		public function __construct(array $params = [], array $injects = [], array $lazies = [], array $configurators = []) {
+			$this->params = $params;
+			$this->injects = $injects;
+			$this->lazies = $lazies;
+			$this->configurators = $configurators;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
-		public function getParameterList(): array {
-			return $this->parameterList;
+		/** @inheritdoc */
+		public function getParams(): array {
+			return $this->params;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getInjects(): array {
-			return $this->injectList;
+			return $this->injects;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getLazies(): array {
-			return $this->lazyInjectList;
+			return $this->lazies;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
-		public function getConfiguratorList(): array {
-			return $this->configuratorList;
+		/** @inheritdoc */
+		public function getConfigurators(): array {
+			return $this->configurators;
 		}
 	}

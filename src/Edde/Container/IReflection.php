@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Container;
+	namespace Edde\Container;
 
 	/**
 	 * Container dependency reflection: holds mandatory parameters description, inject
@@ -12,7 +12,7 @@
 		 *
 		 * @return IParameter[]
 		 */
-		public function getParameterList(): array;
+		public function getParams(): array;
 
 		/**
 		 * get list of injectable parameters
@@ -33,5 +33,5 @@
 		 *
 		 * @return string[]
 		 */
-		public function getConfiguratorList(): array;
+		public function getConfigurators(): array;
 	}

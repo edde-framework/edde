@@ -3,20 +3,14 @@
 	namespace Edde\Configurator\Container;
 
 	use Edde\Api\Config\IConfigurator;
-	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\IFactory;
 	use Edde\Common\Config\AbstractConfigurator;
-	use Edde\Exception\Container\ContainerException;
-	use Edde\Exception\Container\FactoryException;
+	use Edde\Container\IContainer;
+	use Edde\Container\IFactory;
 
 	class ContainerConfigurator extends AbstractConfigurator {
-		/**
-		 * @var IFactory[]
-		 */
+		/** @var IFactory[] */
 		protected $factories = [];
-		/**
-		 * @var IConfigurator[]
-		 */
+		/** @var IConfigurator[] */
 		protected $configurators = [];
 
 		public function __construct(array $factories, array $configurators) {
@@ -26,9 +20,6 @@
 
 		/**
 		 * @param IContainer $instance
-		 *
-		 * @throws ContainerException
-		 * @throws FactoryException
 		 */
 		public function configure($instance) {
 			parent::configure($instance);

@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Container;
+	namespace Edde\Container;
 
 	/**
 	 * Factory is general way how to build a dependency with the final set of parameters/dependencies.
@@ -48,13 +48,13 @@
 
 		/**
 		 * @param IContainer  $container
-		 * @param array       $parameters
+		 * @param array       $params
 		 * @param IReflection $dependency
 		 * @param string      $name
 		 *
 		 * @return mixed
 		 */
-		public function factory(IContainer $container, array $parameters, IReflection $dependency, string $name = null);
+		public function factory(IContainer $container, array $params, IReflection $dependency, string $name = null);
 
 		/**
 		 * factory can optionally push dependency to some kind of cache (this instance should be returned on fetch())

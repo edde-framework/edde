@@ -5,9 +5,7 @@
 	use Edde\Api\Driver\IDriver;
 	use Edde\Common\Container\Factory\InstanceFactory;
 	use Edde\Driver\Neo4jDriver;
-	use Edde\Exception\Container\ContainerException;
 	use Edde\Exception\Driver\DriverException;
-	use ReflectionException;
 
 	class Neo4jStorageTest extends AbstractStorageTest {
 		/**
@@ -18,11 +16,7 @@
 			self::assertTrue(true, 'everything is ok, yapee!');
 		}
 
-		/**
-		 * @throws ContainerException
-		 * @throws \Edde\Exception\Container\FactoryException
-		 * @throws ReflectionException
-		 */
+		/** @inheritdoc */
 		protected function setUp() {
 			parent::setUp();
 			$this->container->registerFactory(new InstanceFactory(IDriver::class, Neo4jDriver::class, [

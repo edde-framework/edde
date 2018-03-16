@@ -9,8 +9,6 @@
 	use Edde\Common\Filter\DateTimeFilter;
 	use Edde\Common\Filter\FloatFilter;
 	use Edde\Common\Filter\IntFilter;
-	use Edde\Exception\Container\ContainerException;
-	use Edde\Exception\Container\FactoryException;
 	use Edde\Inject\Container\Container;
 
 	class FilterManagerConfigurator extends AbstractConfigurator {
@@ -18,9 +16,6 @@
 
 		/**
 		 * @param IFilterManager $instance
-		 *
-		 * @throws ContainerException
-		 * @throws FactoryException
 		 */
 		public function configure($instance) {
 			parent::configure($instance);

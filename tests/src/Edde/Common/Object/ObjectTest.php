@@ -3,7 +3,7 @@
 	namespace Edde\Common;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Container\IAutowire;
+	use Edde\Container\IAutowire;
 	use Edde\Exception\Object\PropertyReadException;
 	use Edde\Exception\Object\PropertyWriteException;
 	use Edde\Test\BarObject;

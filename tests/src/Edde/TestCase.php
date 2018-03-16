@@ -3,13 +3,12 @@
 	namespace Edde;
 
 	use Edde\Api\Config\IConfigLoader;
-	use Edde\Api\Container\IAutowire;
 	use Edde\Assets\IRootDirectory;
 	use Edde\Common\Config\AbstractConfigurator;
-	use Edde\Common\Container\AutowireTrait;
 	use Edde\Common\Container\Factory\ClassFactory;
-	use Edde\Exception\Container\ContainerException;
-	use Edde\Exception\Container\FactoryException;
+	use Edde\Container\AutowireTrait;
+	use Edde\Container\ContainerException;
+	use Edde\Container\IAutowire;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Inject\Assets\RootDirectory;
 	use PHPUnit\Framework\TestCase as PhpUnitTestCase;
@@ -19,8 +18,9 @@
 		use AutowireTrait;
 
 		/**
+		 * @inheritdoc
+		 *
 		 * @throws ContainerException
-		 * @throws FactoryException
 		 * @throws ReflectionException
 		 */
 		protected function setUp() {

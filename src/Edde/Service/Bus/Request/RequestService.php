@@ -6,7 +6,7 @@
 	use Edde\Api\Bus\Request\IRequestService;
 	use Edde\Common\Bus\AbstractHandler;
 	use Edde\Common\Bus\Error;
-	use Edde\Exception\Container\FactoryException;
+	use Edde\Container\ContainerException;
 	use Edde\Inject\Container\Container;
 	use Edde\Inject\Crypt\RandomService;
 	use Edde\Inject\Utils\StringUtils;
@@ -37,7 +37,7 @@
 					return $response->setReference($element->getUuid());
 				}
 				return null;
-			} catch (FactoryException $exception) {
+			} catch (ContainerException $exception) {
 				return (new Error(
 					sprintf('Cannot call requested service [%s::%s].', $element->getAttribute('service'), $element->getAttribute('method')),
 					$this->randomService->uuid()

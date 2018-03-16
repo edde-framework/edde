@@ -1,10 +1,8 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Container;
+	namespace Edde\Container;
 
 	use Edde\Api\Config\IConfigurator;
-	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\IFactory;
 	use Edde\Exception\Container\UnknownFactoryException;
 	use Edde\Object;
 

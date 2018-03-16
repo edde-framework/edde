@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Container\Factory;
 
-	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\IFactory;
-	use Edde\Api\Container\IReflection;
+	use Edde\Container\IContainer;
+	use Edde\Container\IFactory;
+	use Edde\Container\IReflection;
 	use Edde\Exception\Container\UnknownFactoryException;
 	use Edde\Object;
 
@@ -44,7 +44,7 @@
 		protected function parameters(IContainer $container, array $parameterList, IReflection $reflection, string $name = null) {
 			$grab = count($parameterList);
 			$dependencyList = [];
-			foreach ($reflection->getParameterList() as $parameter) {
+			foreach ($reflection->getParams() as $parameter) {
 				if (--$grab >= 0 || $parameter->isOptional()) {
 					continue;
 				}

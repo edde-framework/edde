@@ -8,8 +8,6 @@
 	use Edde\Api\Bus\Request\IRequestService;
 	use Edde\Api\Config\IConfigLoader;
 	use Edde\Api\Config\IConfigService;
-	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\IFactory;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\Crypt\IPasswordService;
 	use Edde\Api\Crypt\IRandomService;
@@ -54,8 +52,10 @@
 	use Edde\Configurator\Sanitizer\SanitizerManagerConfigurator;
 	use Edde\Configurator\Schema\SchemaManagerConfigurator;
 	use Edde\Configurator\Validator\ValidatorManagerConfigurator;
-	use Edde\Exception\Container\ContainerException;
-	use Edde\Exception\Container\FactoryException;
+	use Edde\Container\Container;
+	use Edde\Container\ContainerException;
+	use Edde\Container\IContainer;
+	use Edde\Container\IFactory;
 	use Edde\Exception\EddeException;
 	use Edde\Object;
 	use Edde\Schema\ISchemaManager;
@@ -66,7 +66,6 @@
 	use Edde\Service\Bus\Request\RequestService;
 	use Edde\Service\Config\ConfigLoader;
 	use Edde\Service\Config\ConfigService;
-	use Edde\Service\Container\Container;
 	use Edde\Service\Converter\ConverterManager;
 	use Edde\Service\Crypt\PasswordService;
 	use Edde\Service\Crypt\RandomService;
@@ -108,7 +107,7 @@
 
 		/**
 		 * @return IContainer
-		 * @throws ContainerException
+		 * @throws \Edde\Container\ContainerException
 		 */
 		static public function getContainer(): IContainer {
 			if (self::$instance) {
@@ -122,7 +121,7 @@
 		 *
 		 * @return IFactory[]
 		 *
-		 * @throws \Edde\Exception\Container\FactoryException
+		 * @throws ContainerException
 		 * @throws ReflectionException
 		 */
 		static public function createFactories(array $factories): array {
@@ -154,13 +153,13 @@
 					} else if (interface_exists($factory)) {
 						$current = new LinkFactory($name, $factory);
 					}
-				} else if ($factory instanceof IFactory) {
+				} else if ($factory instanceof \Edde\Container\IFactory) {
 					$current = $factory;
 				} else if (is_callable($factory)) {
 					$current = new CallbackFactory($factory, $name);
 				}
 				if ($current === null) {
-					throw new FactoryException(sprintf('Unsupported factory definition [%s; %s].', is_string($name) ? $name : (is_object($name) ? get_class($name) : gettype($name)), is_string($factory) ? $factory : (is_object($factory) ? get_class($factory) : gettype($factory))));
+					throw new ContainerException(sprintf('Unsupported factory definition [%s; %s].', is_string($name) ? $name : (is_object($name) ? get_class($name) : gettype($name)), is_string($factory) ? $factory : (is_object($factory) ? get_class($factory) : gettype($factory))));
 				}
 				$instances[$name] = $current;
 			}
@@ -226,13 +225,12 @@
 		 * @param string[] $configurators
 		 *
 		 * @return IContainer
-		 * @throws \Edde\Exception\Container\ContainerException
-		 * @throws \Edde\Exception\Container\FactoryException
+		 *
+		 * @throws ContainerException
 		 * @throws ReflectionException
 		 */
 		static public function create(array $factories = [], array $configurators = []): IContainer {
-			/** @var $container IContainer */
-			$container = new \Edde\Service\Container\Container();
+			$container = new Container();
 			/**
 			 * this trick ensures that container is properly configured when some internal dependency needs it while container is construction
 			 */
@@ -252,8 +250,8 @@
 		 * @param string[] $configurators
 		 *
 		 * @return IContainer
+		 *
 		 * @throws ContainerException
-		 * @throws \Edde\Exception\Container\FactoryException
 		 * @throws ReflectionException
 		 */
 		static public function container(array $factories = [], array $configurators = []): IContainer {
@@ -269,8 +267,7 @@
 		 *
 		 * @return IContainer
 		 *
-		 * @throws \Edde\Exception\Container\ContainerException
-		 * @throws \Edde\Exception\Container\FactoryException
+		 * @throws ContainerException
 		 * @throws ReflectionException
 		 */
 		static public function inject($instance, array $factories = [], array $configurators = []): IContainer {

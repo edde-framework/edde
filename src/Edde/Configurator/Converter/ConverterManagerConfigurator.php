@@ -4,8 +4,6 @@
 
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Common\Config\AbstractConfigurator;
-	use Edde\Exception\Container\ContainerException;
-	use Edde\Exception\Container\FactoryException;
 	use Edde\Ext\Bus\JsonDecodeConverter as ElementJsonDecodeConverter;
 	use Edde\Ext\Bus\JsonEncodeConverter as ElementJsonEncodeConverter;
 	use Edde\Ext\Converter\JsonDecodeConverter;
@@ -17,9 +15,6 @@
 
 		/**
 		 * @param IConverterManager $instance
-		 *
-		 * @throws ContainerException
-		 * @throws FactoryException
 		 */
 		public function configure($instance) {
 			parent::configure($instance);

@@ -3,8 +3,8 @@
 	namespace Edde\Api\Bus;
 
 	use Edde\Api\Config\IConfigurable;
+	use Edde\Container\ContainerException;
 	use Edde\Exception\Bus\InvalidElementException;
-	use Edde\Exception\Container\ContainerException;
 	use Edde\Exception\Validator\ValidationException;
 
 	/**

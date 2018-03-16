@@ -5,9 +5,7 @@
 	use Edde\Api\Driver\IDriver;
 	use Edde\Common\Container\Factory\InstanceFactory;
 	use Edde\Driver\MysqlDriver;
-	use Edde\Exception\Container\ContainerException;
 	use Edde\Exception\Driver\DriverException;
-	use ReflectionException;
 
 	class MysqlStorageTest extends AbstractStorageTest {
 		/**
@@ -20,11 +18,7 @@
 			$this->assertTrue(true, 'everything looks nice even here!');
 		}
 
-		/**
-		 * @throws ContainerException
-		 * @throws \Edde\Exception\Container\FactoryException
-		 * @throws ReflectionException
-		 */
+		/** @inheritdoc */
 		protected function setUp() {
 			parent::setUp();
 			$this->container->registerFactory(new InstanceFactory(IDriver::class, MysqlDriver::class, [

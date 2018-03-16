@@ -6,8 +6,6 @@
 	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Common\Generator\DateTimeGenerator;
 	use Edde\Common\Generator\UuidGenerator;
-	use Edde\Exception\Container\ContainerException;
-	use Edde\Exception\Container\FactoryException;
 	use Edde\Inject\Container\Container;
 
 	class GeneratorManagerConfigurator extends AbstractConfigurator {
@@ -15,9 +13,6 @@
 
 		/**
 		 * @param IGeneratorManager $instance
-		 *
-		 * @throws ContainerException
-		 * @throws FactoryException
 		 */
 		public function configure($instance) {
 			parent::configure($instance);

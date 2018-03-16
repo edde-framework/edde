@@ -3,10 +3,10 @@
 	namespace Edde\Common\Container\Factory;
 
 	use Closure;
-	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\IReflection;
-	use Edde\Common\Container\Parameter;
-	use Edde\Common\Container\Reflection;
+	use Edde\Container\IContainer;
+	use Edde\Container\IReflection;
+	use Edde\Container\Parameter;
+	use Edde\Container\Reflection;
 	use ReflectionFunction;
 
 	class CallbackFactory extends AbstractFactory {
@@ -56,8 +56,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function factory(IContainer $container, array $parameters, IReflection $dependency, string $name = null) {
+		public function factory(IContainer $container, array $params, IReflection $dependency, string $name = null) {
 			$callback = $this->callback;
-			return $callback(...$this->parameters($container, $parameters, $dependency));
+			return $callback(...$this->parameters($container, $params, $dependency));
 		}
 	}

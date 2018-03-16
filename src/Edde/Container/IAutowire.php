@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Container;
+	namespace Edde\Container;
 
 	/**
 	 * This is a formal interface for classes supporting autowiring. The specification

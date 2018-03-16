@@ -1,13 +1,8 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Service\Container;
+	namespace Edde\Container;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Container\IAutowire;
-	use Edde\Api\Container\IFactory;
-	use Edde\Api\Container\IParameter;
-	use Edde\Api\Container\IReflection;
-	use Edde\Common\Container\AbstractContainer;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Exception\Container\UnknownFactoryException;
 	use SplStack;
@@ -116,18 +111,18 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function dependency($instance, IReflection $reflection, bool $lazy = true) {
+		public function dependency($instance, \Edde\Container\IReflection $reflection, bool $lazy = true) {
 			if (is_object($instance) === false) {
 				return $instance;
 			}
 			/**
 			 * quite obvious autowire: do static and lazy injects, depends on lazy flag
 			 */
-			if ($instance instanceof IAutowire) {
+			if ($instance instanceof \Edde\Container\IAutowire) {
 				$class = get_class($instance);
 				$lazyList = $reflection->getLazies();
 				/** @var $instance IAutowire */
-				/** @var $parameter IParameter */
+				/** @var $parameter \Edde\Container\IParameter */
 				/**
 				 * a trick to remove duplicated code - if we are not lazy, autowire all dependencies
 				 */
@@ -155,7 +150,7 @@
 				 * dependency could have more names for configurators (for example Foo class could implements
 				 * IFoo; analysis could return both names for configurator)
 				 */
-				foreach ($reflection->getConfiguratorList() as $configurator) {
+				foreach ($reflection->getConfigurators() as $configurator) {
 					$configurators = array_merge($configurators, $this->configurators[$configurator] ?? []);
 				}
 				$instance->setConfigurators($configurators);

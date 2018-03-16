@@ -3,7 +3,7 @@
 	namespace Edde\Common\Node;
 
 	use Edde\Api\Node\IAttributes;
-	use Edde\Common\Collection\AbstractList;
+	use Edde\Collection\AbstractList;
 
 	class Attributes extends AbstractList implements IAttributes {
 		/**

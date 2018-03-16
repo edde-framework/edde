@@ -9,8 +9,6 @@
 	use Edde\Common\Sanitizer\DateTimeSanitizer;
 	use Edde\Common\Sanitizer\FloatSanitizer;
 	use Edde\Common\Sanitizer\IntSanitizer;
-	use Edde\Exception\Container\ContainerException;
-	use Edde\Exception\Container\FactoryException;
 	use Edde\Inject\Container\Container;
 
 	class SanitizerManagerConfigurator extends AbstractConfigurator {
@@ -18,9 +16,6 @@
 
 		/**
 		 * @param ISanitizerManager $instance
-		 *
-		 * @throws ContainerException
-		 * @throws FactoryException
 		 */
 		public function configure($instance) {
 			parent::configure($instance);

@@ -4,8 +4,6 @@
 
 	use Edde\Api\Router\IRouterService;
 	use Edde\Common\Config\AbstractConfigurator;
-	use Edde\Exception\Container\ContainerException;
-	use Edde\Exception\Container\FactoryException;
 	use Edde\Ext\Router\RequestRouter;
 	use Edde\Inject\Container\Container;
 
@@ -14,9 +12,6 @@
 
 		/**
 		 * @param IRouterService $instance
-		 *
-		 * @throws ContainerException
-		 * @throws FactoryException
 		 */
 		public function configure($instance) {
 			parent::configure($instance);

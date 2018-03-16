@@ -1,14 +1,13 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Collection;
+	namespace Edde\Collection;
 
 	use ArrayIterator;
-	use Edde\Api\Collection\IList;
 	use Edde\Object;
 
 	/**
 	 * This list implementation is abstract because it should be not possible to use
-	 * untyped lists accross an application.
+	 * untyped lists across an application.
 	 */
 	abstract class AbstractList extends Object implements IList {
 		/**

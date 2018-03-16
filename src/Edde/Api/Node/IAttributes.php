@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Node;
 
-	use Edde\Api\Collection\IList;
+	use Edde\Collection\IList;
 
 	interface IAttributes extends IList {
 		/**

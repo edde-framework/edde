@@ -3,8 +3,6 @@
 	namespace Edde\Configurator\Validator;
 
 	use Edde\Common\Config\AbstractConfigurator;
-	use Edde\Exception\Container\ContainerException;
-	use Edde\Exception\Container\FactoryException;
 	use Edde\Ext\Bus\Validator\EventValidator;
 	use Edde\Ext\Bus\Validator\MessageValidator;
 	use Edde\Ext\Bus\Validator\RequestValidator;
@@ -13,6 +11,7 @@
 	use Edde\Validator\DateTimeValidator;
 	use Edde\Validator\FloatValidator;
 	use Edde\Validator\IntegerValidator;
+	use Edde\Validator\IValidatorManager;
 	use Edde\Validator\RequiredValidator;
 	use Edde\Validator\ScalarValidator;
 	use Edde\Validator\StringValidator;
@@ -21,10 +20,7 @@
 		use Container;
 
 		/**
-		 * @param $instance \Edde\Validator\IValidatorManager
-		 *
-		 * @throws ContainerException
-		 * @throws FactoryException
+		 * @param IValidatorManager $instance
 		 */
 		public function configure($instance) {
 			parent::configure($instance);

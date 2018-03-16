@@ -4,7 +4,7 @@
 
 	use Edde\Api\Object\IObject;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Container\AutowireTrait;
+	use Edde\Container\AutowireTrait;
 
 	/**
 	 * While watching TV with his wife, a man tosses peanuts into the air and catches them in his mouth.

@@ -1,12 +1,9 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Container;
+	namespace Edde\Container;
 
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Config\IConfigurator;
-	use Edde\Exception\Container\ContainerException;
-	use Edde\Exception\Container\FactoryException;
-	use Edde\Exception\Container\UnknownFactoryException;
 
 	/**
 	 * Implementation of Dependency Injection Container.
@@ -78,8 +75,6 @@
 		 * @param string $source who has requested this dependency
 		 *
 		 * @return mixed
-		 * @throws FactoryException
-		 * @throws ContainerException
 		 */
 		public function create(string $name, array $parameterList = [], string $source = null);
 

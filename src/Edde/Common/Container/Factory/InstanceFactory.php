@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Container\Factory;
 
-	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\IReflection;
-	use Edde\Common\Container\Reflection;
+	use Edde\Container\IContainer;
+	use Edde\Container\IReflection;
+	use Edde\Container\Reflection;
 
 	/**
 	 * This factory will create singleton instance of the given class.
@@ -82,7 +82,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function factory(IContainer $container, array $parameters, IReflection $dependency, string $name = null) {
+		public function factory(IContainer $container, array $params, IReflection $dependency, string $name = null) {
 			if ($this->instance === null) {
 				$this->instance = $container->dependency($this->instance = parent::factory($container, $this->params, $dependency, $this->class), $dependency);
 			}

@@ -3,8 +3,8 @@
 	namespace Edde\Common\Container\Factory;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\IReflection;
+	use Edde\Container\IContainer;
+	use Edde\Container\IReflection;
 
 	/**
 	 * Proxy factory is bound to method of some other object.
@@ -64,9 +64,9 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function factory(IContainer $container, array $parameters, IReflection $dependency, string $name = null) {
+		public function factory(IContainer $container, array $params, IReflection $dependency, string $name = null) {
 			/** @var $instance IConfigurable */
-			if (($instance = $container->create($this->target, $parameters, $this->name)) instanceof IConfigurable) {
+			if (($instance = $container->create($this->target, $params, $this->name)) instanceof IConfigurable) {
 				$instance->setup();
 			}
 			return $instance->{$this->method}(...$this->parameterList);

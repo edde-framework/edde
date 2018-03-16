@@ -1,22 +1,15 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Container;
+	namespace Edde\Container;
 
-	use Edde\Api\Container\IParameter;
 	use Edde\Object;
 
 	class Parameter extends Object implements IParameter {
-		/**
-		 * @var string
-		 */
+		/** @var string */
 		protected $name;
-		/**
-		 * @var bool
-		 */
+		/** @var bool */
 		protected $optional;
-		/**
-		 * @var string
-		 */
+		/** @var string */
 		protected $class;
 
 		/**
@@ -30,23 +23,17 @@
 			$this->class = $class;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getName(): string {
 			return $this->name;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function isOptional(): bool {
 			return $this->optional;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getClass(): string {
 			return $this->class;
 		}

@@ -8,9 +8,9 @@
 	use Edde\Common\Bus\Event\Event;
 	use Edde\Common\Bus\Request\Request;
 	use Edde\Common\Content\Content;
+	use Edde\Container\ContainerException;
 	use Edde\Exception\Bus\InvalidElementException;
 	use Edde\Exception\Bus\UnhandledElementException;
-	use Edde\Exception\Container\ContainerException;
 	use Edde\Exception\Validator\UnknownValidatorException;
 	use Edde\Exception\Validator\ValidationException;
 	use Edde\Inject\Bus\EventBus;
@@ -66,7 +66,7 @@
 		}
 
 		/**
-		 * @throws \Edde\Exception\Container\ContainerException
+		 * @throws \Edde\Container\ContainerException
 		 * @throws InvalidElementException
 		 * @throws ValidationException
 		 */

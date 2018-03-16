@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Container\Factory;
 
-	use Edde\Api\Container\IContainer;
-	use Edde\Api\Container\IReflection;
+	use Edde\Container\IContainer;
+	use Edde\Container\IReflection;
 
 	/**
 	 * A young guy from Nebraska moves to Florida and goes to a big "everything under one roof" department store looking for a job.
@@ -76,7 +76,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function factory(IContainer $container, array $parameters, IReflection $dependency, string $name = null) {
+		public function factory(IContainer $container, array $params, IReflection $dependency, string $name = null) {
 			$exception = $this->exception;
 			throw new $exception($this->message);
 		}

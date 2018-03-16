@@ -7,8 +7,6 @@
 	use Edde\Api\Bus\IMessageService;
 	use Edde\Api\Bus\Request\IRequestService;
 	use Edde\Common\Config\AbstractConfigurator;
-	use Edde\Exception\Container\ContainerException;
-	use Edde\Exception\Container\FactoryException;
 	use Edde\Inject\Container\Container;
 
 	class MessageBusConfigurator extends AbstractConfigurator {
@@ -16,9 +14,6 @@
 
 		/**
 		 * @param $instance IMessageBus
-		 *
-		 * @throws ContainerException
-		 * @throws FactoryException
 		 */
 		public function configure($instance) {
 			parent::configure($instance);

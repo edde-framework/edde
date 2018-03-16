@@ -1,10 +1,8 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Container;
+	namespace Edde\Container;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Container\IContainer;
-	use Edde\Exception\Container\FactoryException;
 	use Edde\Exception\Object\PropertyReadException;
 	use Edde\Exception\Object\PropertyWriteException;
 
@@ -33,10 +31,9 @@
 		/**
 		 * @param string $name
 		 *
-		 * @return mixed
+		 * @return IConfigurable
+		 *
 		 * @throws PropertyReadException
-		 * @throws \Edde\Exception\Container\ContainerException
-		 * @throws FactoryException
 		 */
 		public function __get(string $name) {
 			if (isset($this->tLazies[$name])) {
