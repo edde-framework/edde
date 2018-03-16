@@ -4,10 +4,9 @@
 
 	use Edde\Api\Driver\IDriver;
 	use Edde\Common\Container\Factory\InstanceFactory;
+	use Edde\Driver\MysqlDriver;
 	use Edde\Exception\Container\ContainerException;
-	use Edde\Exception\Container\FactoryException;
 	use Edde\Exception\Driver\DriverException;
-	use Edde\Ext\Driver\MysqlDriver;
 	use ReflectionException;
 
 	class MysqlStorageTest extends AbstractStorageTest {

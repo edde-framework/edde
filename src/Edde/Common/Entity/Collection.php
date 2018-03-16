@@ -5,25 +5,23 @@
 	use Edde\Api\Entity\ICollection;
 	use Edde\Api\Entity\IEntity;
 	use Edde\Api\Entity\IRecord;
-	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Storage\IStream;
 	use Edde\Api\Storage\Query\ISelectQuery;
 	use Edde\Common\Object\Object;
 	use Edde\Common\Storage\Query\SelectQuery;
 	use Edde\Exception\Entity\RecordException;
 	use Edde\Exception\Entity\UnknownAliasException;
-	use Edde\Exception\Schema\RelationException;
-	use Edde\Exception\Schema\UnknownSchemaException;
 	use Edde\Exception\Storage\EntityNotFoundException;
 	use Edde\Inject\Container\Container;
 	use Edde\Inject\Schema\SchemaManager;
+	use Edde\Schema\ISchema;
 
 	class Collection extends Object implements ICollection {
 		use SchemaManager;
 		use Container;
 		/** @var IStream */
 		protected $stream;
-		/** @var ISchema[] */
+		/** @var \Edde\Schema\ISchema[] */
 		protected $schemas;
 
 		public function __construct(IStream $stream) {
@@ -102,14 +100,7 @@
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 *
-		 * @throws UnknownAliasException
-		 * @throws RelationException
-		 * @throws \Edde\Exception\Schema\UnknownPropertyException
-		 * @throws UnknownSchemaException
-		 */
+		/** @inheritdoc */
 		public function reverseJoin(string $source, string $target, string $alias, array $on = null, string $relation = null): ICollection {
 			$schema = $this->getSchema($source);
 			$relation = $schema->getRelation($target, $relation);

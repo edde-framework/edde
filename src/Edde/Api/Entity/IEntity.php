@@ -6,11 +6,8 @@
 	use Edde\Api\Crate\IProperty;
 	use Edde\Api\Entity\Query\IDetachQuery;
 	use Edde\Api\Entity\Query\IDisconnectQuery;
-	use Edde\Api\Schema\ISchema;
-	use Edde\Exception\Entity\UnknownAliasException;
-	use Edde\Exception\Schema\SchemaException;
-	use Edde\Exception\Storage\DuplicateEntryException;
-	use Edde\Exception\Validator\BatchValidationException;
+	use Edde\Schema\ISchema;
+	use Edde\Schema\SchemaException;
 
 	/**
 	 * An Entity is extended Crate with some additional features.
@@ -27,6 +24,8 @@
 		 * return primary property of this entity
 		 *
 		 * @return IProperty
+		 *
+		 * @throws SchemaException
 		 */
 		public function getPrimary(): IProperty;
 
@@ -35,6 +34,8 @@
 		 * be for example uuid, ...); shortcut for primary->get()
 		 *
 		 * @return string
+		 *
+		 * @throws SchemaException
 		 */
 		public function getHash(): string;
 
@@ -44,6 +45,8 @@
 		 * @param IEntity $entity
 		 *
 		 * @return IEntity $this
+		 *
+		 * @throws SchemaException
 		 */
 		public function linkTo(IEntity $entity): IEntity;
 
@@ -53,7 +56,8 @@
 		 * @param string $schema
 		 *
 		 * @return IEntity
-		 * @throws \Edde\Exception\Schema\LinkException
+		 *
+		 * @throws SchemaException
 		 */
 		public function link(string $schema): IEntity;
 
@@ -63,6 +67,8 @@
 		 * @param string $schema
 		 *
 		 * @return IEntity
+		 *
+		 * @throws SchemaException
 		 */
 		public function unlink(string $schema): IEntity;
 
@@ -73,7 +79,8 @@
 		 * @param string|null $relation
 		 *
 		 * @return IEntity
-		 * @throws \Edde\Exception\Schema\RelationException
+		 *
+		 * @throws SchemaException
 		 */
 		public function attach(IEntity $entity, string $relation = null): IEntity;
 
@@ -84,6 +91,8 @@
 		 * @param string|null $relation
 		 *
 		 * @return IDetachQuery
+		 *
+		 * @throws SchemaException
 		 */
 		public function detach(IEntity $entity, string $relation = null): IDetachQuery;
 
@@ -93,7 +102,8 @@
 		 * @param string $schema
 		 *
 		 * @return IDisconnectQuery
-		 * @throws \Edde\Exception\Schema\InvalidRelationException
+		 *
+		 * @throws SchemaException
 		 */
 		public function disconnect(string $schema): IDisconnectQuery;
 
@@ -105,9 +115,6 @@
 		 * @param string|null $relation if there are more relation schemas, which one should be used
 		 *
 		 * @return ICollection
-		 * @throws SchemaException
-		 * @throws \Edde\Exception\Schema\InvalidRelationException
-		 * @throws UnknownAliasException
 		 */
 		public function join(string $alias, string $schema, string $relation = null): ICollection;
 
@@ -131,9 +138,6 @@
 		 * save this entity and all related entities (entity queue in a transaction)
 		 *
 		 * @return IEntity
-		 * @throws \Edde\Exception\Validator\ValidationException
-		 * @throws BatchValidationException
-		 * @throws DuplicateEntryException
 		 */
 		public function save(): IEntity;
 
@@ -164,7 +168,6 @@
 		 * validate data of an entity
 		 *
 		 * @return IEntity
-		 * @throws \Edde\Exception\Validator\ValidationException
 		 */
 		public function validate(): IEntity;
 	}

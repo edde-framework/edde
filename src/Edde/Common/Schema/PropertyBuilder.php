@@ -3,9 +3,9 @@
 	namespace Edde\Common\Schema;
 
 	use Edde\Api\Node\INode;
-	use Edde\Api\Schema\IProperty;
-	use Edde\Api\Schema\IPropertyBuilder;
 	use Edde\Common\Object\Object;
+	use Edde\Schema\IProperty;
+	use Edde\Schema\IPropertyBuilder;
 
 	class PropertyBuilder extends Object implements IPropertyBuilder {
 		/** @var INode */
@@ -54,7 +54,7 @@
 		}
 
 		/** @inheritdoc */
-		public function filter(string $name): IPropertyBuilder {
+		public function filter(string $name): \Edde\Schema\IPropertyBuilder {
 			$this->node->setAttribute('filter', $name);
 			return $this;
 		}
@@ -72,7 +72,7 @@
 		}
 
 		/** @inheritdoc */
-		public function link(): IPropertyBuilder {
+		public function link(): \Edde\Schema\IPropertyBuilder {
 			$this->node->setAttribute('link', true);
 			return $this;
 		}

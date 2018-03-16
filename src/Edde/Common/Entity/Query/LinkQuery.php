@@ -4,7 +4,7 @@
 
 	use Edde\Api\Entity\IEntity;
 	use Edde\Api\Entity\Query\ILinkQuery;
-	use Edde\Api\Schema\ILink;
+	use Edde\Schema\ILink;
 
 	class LinkQuery extends UnlinkQuery implements ILinkQuery {
 		/**

@@ -3,10 +3,7 @@
 	namespace Edde\Api\Entity;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Schema\ISchema;
-	use Edde\Exception\Driver\DriverException;
-	use Edde\Exception\Schema\UnknownSchemaException;
-	use Edde\Exception\Storage\StorageException;
+	use Edde\Schema\ISchema;
 
 	interface IEntityManager extends IConfigurable {
 		/**
@@ -25,8 +22,6 @@
 		 * @param array  $source
 		 *
 		 * @return IEntity
-		 * @throws UnknownSchemaException
-		 * @throws \Edde\Exception\Schema\SchemaException
 		 */
 		public function create(string $schema, array $source = []): IEntity;
 
@@ -48,8 +43,6 @@
 		 * @param string $schema
 		 *
 		 * @return ICollection
-		 * @throws \Edde\Exception\Schema\UnknownSchemaException
-		 * @throws \Edde\Exception\Schema\SchemaException
 		 */
 		public function collection(string $alias, string $schema): ICollection;
 
@@ -59,9 +52,6 @@
 		 * @param IEntityQueue $entityQueue
 		 *
 		 * @return IEntityManager
-		 *
-		 * @throws \Edde\Exception\Storage\StorageException
-		 * @throws DriverException
 		 */
 		public function execute(IEntityQueue $entityQueue): IEntityManager;
 	}

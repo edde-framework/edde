@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Inject\Validator;
 
-	use Edde\Api\Validator\IValidatorManager;
+	use Edde\Validator\IValidatorManager;
 
 	trait ValidatorManager {
 		/** @var IValidatorManager */

@@ -3,8 +3,8 @@
 	namespace Edde\Ext\Bus\Validator;
 
 	use Edde\Api\Bus\IElement;
-	use Edde\Common\Validator\AbstractValidator;
 	use Edde\Exception\Validator\ValidationException;
+	use Edde\Validator\AbstractValidator;
 
 	class MessageValidator extends AbstractValidator {
 		/** @inheritdoc */

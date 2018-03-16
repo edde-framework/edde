@@ -4,15 +4,15 @@
 
 	use Edde\Api\Entity\IEntity;
 	use Edde\Api\Entity\Query\IDisconnectQuery;
-	use Edde\Api\Schema\IRelation;
 	use Edde\Api\Storage\Query\Fragment\IWhereGroup;
 	use Edde\Common\Storage\Query\AbstractQuery;
 	use Edde\Common\Storage\Query\Fragment\WhereGroup;
+	use Edde\Schema\IRelation;
 
 	class DisconnectQuery extends AbstractQuery implements IDisconnectQuery {
 		/** @var IEntity */
 		protected $entity;
-		/** @var IRelation */
+		/** @var \Edde\Schema\IRelation */
 		protected $relation;
 		/** @var IWhereGroup */
 		protected $where;

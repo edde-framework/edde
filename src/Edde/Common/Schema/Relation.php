@@ -2,12 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Schema;
 
-	use Edde\Api\Schema\ILink;
-	use Edde\Api\Schema\IRelation;
-	use Edde\Api\Schema\ISchema;
 	use Edde\Common\Object\Object;
+	use Edde\Schema\ILink;
+	use Edde\Schema\ISchema;
 
-	class Relation extends Object implements IRelation {
+	class Relation extends Object implements \Edde\Schema\IRelation {
 		/**
 		 * @var ISchema
 		 */
@@ -21,7 +20,7 @@
 		 */
 		protected $to;
 
-		public function __construct(ISchema $schema, ILink $from, ILink $to) {
+		public function __construct(\Edde\Schema\ISchema $schema, ILink $from, ILink $to) {
 			$this->schema = $schema;
 			$this->from = $from;
 			$this->to = $to;
@@ -30,7 +29,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getSchema(): ISchema {
+		public function getSchema(): \Edde\Schema\ISchema {
 			return $this->schema;
 		}
 

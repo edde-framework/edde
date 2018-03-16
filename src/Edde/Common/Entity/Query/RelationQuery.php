@@ -4,8 +4,8 @@
 
 	use Edde\Api\Entity\IEntity;
 	use Edde\Api\Entity\Query\IRelationQuery;
-	use Edde\Api\Schema\IRelation;
 	use Edde\Common\Object\Object;
+	use Edde\Schema\IRelation;
 
 	class RelationQuery extends Object implements IRelationQuery {
 		/**

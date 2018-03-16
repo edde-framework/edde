@@ -2,10 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Schema;
 
-	use Edde\Exception\Schema\RelationException;
-	use Edde\Exception\Schema\UnknownPropertyException;
-	use Edde\Exception\Schema\UnknownSchemaException;
 	use Edde\Inject\Schema\SchemaManager;
+	use Edde\Schema\IRelation;
+	use Edde\Schema\SchemaException;
 	use Edde\TestCase;
 	use function array_values;
 
@@ -13,8 +12,7 @@
 		use SchemaManager;
 
 		/**
-		 * @throws UnknownSchemaException
-		 * @throws UnknownPropertyException
+		 * @throws SchemaException
 		 */
 		public function testRelationSchema() {
 			$fooBarSchema = $this->schemaManager->load(FooBarSchema::class);
@@ -41,6 +39,7 @@
 			 * one way relation test
 			 */
 			self::assertCount(1, $relations = $fooSchema->getRelations(BarSchema::class));
+			/** @var $relation IRelation */
 			[$relation] = array_values($relations);
 			self::assertSame(FooSchema::class, ($fromLink = $relation->getFrom())->getFrom()->getName());
 			self::assertSame('uuid', $fromLink->getFrom()->getPropertyName());
@@ -66,12 +65,10 @@
 		}
 
 		/**
-		 * @throws RelationException
-		 * @throws UnknownPropertyException
-		 * @throws UnknownSchemaException
+		 * @throws SchemaException
 		 */
 		public function testGetRelationException() {
-			$this->expectException(RelationException::class);
+			$this->expectException(SchemaException::class);
 			$this->expectExceptionMessage('There are more relations from [Edde\Common\Schema\SourceSchema] to schema [Edde\Common\Schema\TargetSchema]. You have to specify a relation.');
 			$this->schemaManager->load(SourceOneTargetSchema::class);
 			$this->schemaManager->load(SourceTwoTargetSchema::class);
@@ -80,12 +77,10 @@
 		}
 
 		/**
-		 * @throws RelationException
-		 * @throws UnknownPropertyException
-		 * @throws UnknownSchemaException
+		 * @throws SchemaException
 		 */
 		public function testGetRelationUnknownException() {
-			$this->expectException(RelationException::class);
+			$this->expectException(SchemaException::class);
 			$this->expectExceptionMessage('Requested relation schema [nope] does not exists between [Edde\Common\Schema\SourceSchema] and [Edde\Common\Schema\TargetSchema].');
 			$this->schemaManager->load(SourceOneTargetSchema::class);
 			$this->schemaManager->load(SourceTwoTargetSchema::class);
@@ -94,9 +89,7 @@
 		}
 
 		/**
-		 * @throws RelationException
-		 * @throws UnknownPropertyException
-		 * @throws UnknownSchemaException
+		 * @throws SchemaException
 		 */
 		public function testGetRelation() {
 			$this->schemaManager->load(SourceOneTargetSchema::class);

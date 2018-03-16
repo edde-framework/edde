@@ -3,20 +3,21 @@
 	namespace Edde\Common\Schema;
 
 	use Edde\Api\Node\INode;
-	use Edde\Api\Schema\ILinkBuilder;
-	use Edde\Api\Schema\IPropertyBuilder;
-	use Edde\Api\Schema\ISchema;
-	use Edde\Api\Schema\ISchemaBuilder;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Object\Object;
-	use Edde\Exception\Schema\InvalidRelationException;
+	use Edde\Schema\ILinkBuilder;
+	use Edde\Schema\IPropertyBuilder;
+	use Edde\Schema\ISchema;
+	use Edde\Schema\ISchemaBuilder;
+	use Edde\Schema\Schema;
+	use Edde\Schema\SchemaException;
 
 	class SchemaBuilder extends Object implements ISchemaBuilder {
 		/** @var INode */
 		protected $node;
 		/** @var IPropertyBuilder[] */
 		protected $propertyBuilders = [];
-		/** @var ISchema */
+		/** @var \Edde\Schema\ISchema */
 		protected $schema;
 		/** @var ILinkBuilder[] */
 		protected $linkBuilders = [];
@@ -32,7 +33,7 @@
 		}
 
 		/** @inheritdoc */
-		public function relation(bool $relation): ISchemaBuilder {
+		public function relation(bool $relation): \Edde\Schema\ISchemaBuilder {
 			$this->node->setAttribute('is-relation', $relation);
 			return $this;
 		}
@@ -67,13 +68,13 @@
 		public function link(ILinkBuilder $linkBuilder): ISchemaBuilder {
 			$this->linkBuilders[] = $linkBuilder;
 			if ($this->node->getAttribute('is-relation', false) && count($this->linkBuilders) > 2) {
-				throw new InvalidRelationException(sprintf('Relation schema [%s] must have exactly two links; if you need more links, remove "relation" flag from the schema.', $this->node->getAttribute('name')));
+				throw new SchemaException(sprintf('Relation schema [%s] must have exactly two links; if you need more links, remove "relation" flag from the schema.', $this->node->getAttribute('name')));
 			}
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function getSchema(): ISchema {
+		public function getSchema(): \Edde\Schema\ISchema {
 			if ($this->schema) {
 				return $this->schema;
 			}

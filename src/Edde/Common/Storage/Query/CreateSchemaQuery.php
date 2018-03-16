@@ -2,12 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Storage\Query;
 
-	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Storage\Query\ICrateSchemaQuery;
+	use Edde\Schema\ISchema;
 
 	class CreateSchemaQuery extends AbstractQuery implements ICrateSchemaQuery {
 		/**
-		 * @var ISchema
+		 * @var \Edde\Schema\ISchema
 		 */
 		protected $schema;
 

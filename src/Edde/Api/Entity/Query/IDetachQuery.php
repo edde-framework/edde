@@ -3,9 +3,9 @@
 	namespace Edde\Api\Entity\Query;
 
 	use Edde\Api\Entity\IEntity;
-	use Edde\Api\Schema\IRelation;
 	use Edde\Api\Storage\Query\Fragment\IWhereGroup;
 	use Edde\Api\Storage\Query\IQuery;
+	use Edde\Schema\IRelation;
 
 	interface IDetachQuery extends IQuery {
 		/**

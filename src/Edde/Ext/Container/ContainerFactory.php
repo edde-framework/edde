@@ -28,11 +28,9 @@
 	use Edde\Api\Router\IRouterService;
 	use Edde\Api\Runtime\IRuntime;
 	use Edde\Api\Sanitizer\ISanitizerManager;
-	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Utils\IStringUtils;
-	use Edde\Api\Validator\IValidatorManager;
 	use Edde\Api\Xml\IXmlExport;
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\Container\Factory\CallbackFactory;
@@ -56,6 +54,8 @@
 	use Edde\Exception\Container\ContainerException;
 	use Edde\Exception\Container\FactoryException;
 	use Edde\Exception\EddeException;
+	use Edde\Schema\ISchemaManager;
+	use Edde\Schema\SchemaManager;
 	use Edde\Service\Application\Application;
 	use Edde\Service\Assets\AssetsDirectory;
 	use Edde\Service\Assets\LogDirectory;
@@ -79,12 +79,12 @@
 	use Edde\Service\Router\RouterService;
 	use Edde\Service\Runtime\Runtime;
 	use Edde\Service\Sanitizer\SanitizerManager;
-	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
 	use Edde\Service\Utils\StringUtils;
-	use Edde\Service\Validator\ValidatorManager;
 	use Edde\Service\Xml\XmlExport;
 	use Edde\Service\Xml\XmlParser;
+	use Edde\Validator\IValidatorManager;
+	use Edde\Validator\ValidatorManager;
 	use ReflectionException;
 	use ReflectionMethod;
 	use stdClass;

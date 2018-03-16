@@ -21,26 +21,18 @@
 	use Edde\Common\Storage\Query\SelectQuery;
 	use Edde\Exception\Driver\DriverException;
 	use Edde\Exception\Entity\RecordException;
-	use Edde\Exception\Entity\UnknownAliasException;
-	use Edde\Exception\Schema\InvalidRelationException;
-	use Edde\Exception\Schema\NoPrimaryPropertyException;
-	use Edde\Exception\Schema\RelationException;
-	use Edde\Exception\Schema\SchemaException;
-	use Edde\Exception\Schema\UnknownPropertyException;
-	use Edde\Exception\Schema\UnknownSchemaException;
 	use Edde\Exception\Storage\DuplicateEntryException;
 	use Edde\Exception\Storage\DuplicateTableException;
 	use Edde\Exception\Storage\EntityNotFoundException;
 	use Edde\Exception\Storage\ExclusiveTransactionException;
 	use Edde\Exception\Storage\NoTransactionException;
 	use Edde\Exception\Storage\StorageException;
-	use Edde\Exception\Storage\UnknownTableException;
 	use Edde\Exception\Validator\BatchValidationException;
-	use Edde\Exception\Validator\ValidationException;
 	use Edde\Inject\Container\Container;
 	use Edde\Inject\Entity\EntityManager;
 	use Edde\Inject\Schema\SchemaManager;
 	use Edde\Inject\Storage\Storage;
+	use Edde\Schema\SchemaException;
 	use Edde\TestCase;
 
 	abstract class AbstractStorageTest extends TestCase {
@@ -52,11 +44,9 @@
 		/**
 		 * @throws DriverException
 		 * @throws DuplicateTableException
-		 * @throws StorageException
-		 * @throws UnknownPropertyException
-		 * @throws UnknownSchemaException
 		 * @throws ExclusiveTransactionException
 		 * @throws NoTransactionException
+		 * @throws StorageException
 		 */
 		public function testCreateSchema() {
 			$this->storage->start();
@@ -82,11 +72,6 @@
 			self::assertTrue(true, 'everything is ok');
 		}
 
-		/**
-		 * @throws SchemaException
-		 * @throws UnknownSchemaException
-		 * @throws ValidationException
-		 */
 		public function testValidator() {
 			$this->expectException(BatchValidationException::class);
 			$this->expectExceptionMessage('Validation of schema [Edde\Common\Schema\SimpleSchema] failed.');
@@ -94,13 +79,6 @@
 			$entity->validate();
 		}
 
-		/**
-		 * @throws BatchValidationException
-		 * @throws DuplicateEntryException
-		 * @throws SchemaException
-		 * @throws UnknownSchemaException
-		 * @throws ValidationException
-		 */
 		public function testInsert() {
 			$entity = $this->entityManager->create(SimpleSchema::class, [
 				'name'     => 'this entity is new',
@@ -111,13 +89,6 @@
 			self::assertFalse($entity->isDirty(), 'entity is still dirty, oops!');
 		}
 
-		/**
-		 * @throws \Edde\Exception\Validator\BatchValidationException
-		 * @throws DuplicateEntryException
-		 * @throws SchemaException
-		 * @throws UnknownSchemaException
-		 * @throws ValidationException
-		 */
 		public function testInsertException() {
 			$this->expectException(BatchValidationException::class);
 			$this->expectExceptionMessage('Validation of schema [Edde\Common\Schema\FooSchema] failed.');
@@ -126,13 +97,6 @@
 			])->save();
 		}
 
-		/**
-		 * @throws BatchValidationException
-		 * @throws DuplicateEntryException
-		 * @throws SchemaException
-		 * @throws UnknownSchemaException
-		 * @throws ValidationException
-		 */
 		public function testInsertException2() {
 			$this->expectException(BatchValidationException::class);
 			$this->expectExceptionMessage('Validation of schema [Edde\Common\Schema\FooSchema] failed.');
@@ -142,13 +106,6 @@
 			])->save();
 		}
 
-		/**
-		 * @throws BatchValidationException
-		 * @throws DuplicateEntryException
-		 * @throws SchemaException
-		 * @throws UnknownSchemaException
-		 * @throws ValidationException
-		 */
 		public function testInsertUnique() {
 			$this->expectException(DuplicateEntryException::class);
 			$this->entityManager->create(FooSchema::class, [
@@ -159,13 +116,6 @@
 			])->save();
 		}
 
-		/**
-		 * @throws BatchValidationException
-		 * @throws DuplicateEntryException
-		 * @throws SchemaException
-		 * @throws UnknownSchemaException
-		 * @throws ValidationException
-		 */
 		public function testSave() {
 			$entity = $this->entityManager->create(SimpleSchema::class, [
 				'name'     => 'some name for this entity',
@@ -182,8 +132,6 @@
 
 		/**
 		 * @throws RecordException
-		 * @throws SchemaException
-		 * @throws UnknownSchemaException
 		 */
 		public function testCollection() {
 			$entities = [];
@@ -218,17 +166,6 @@
 			], $entities);
 		}
 
-		/**
-		 * @throws BatchValidationException
-		 * @throws DuplicateEntryException
-		 * @throws EntityNotFoundException
-		 * @throws RecordException
-		 * @throws SchemaException
-		 * @throws UnknownAliasException
-		 * @throws UnknownSchemaException
-		 * @throws UnknownTableException
-		 * @throws ValidationException
-		 */
 		public function testUpdate() {
 			$entity = $this->entityManager->create(SimpleSchema::class, [
 				'name'     => 'to-be-updated',
@@ -250,14 +187,8 @@
 		}
 
 		/**
-		 * @throws BatchValidationException
-		 * @throws DuplicateEntryException
-		 * @throws EntityNotFoundException
-		 * @throws UnknownSchemaException
-		 * @throws UnknownTableException
-		 * @throws ValidationException
-		 * @throws SchemaException
 		 * @throws RecordException
+		 * @throws SchemaException
 		 */
 		public function testLink() {
 			$foo = $this->entityManager->create(FooSchema::class, [
@@ -289,7 +220,6 @@
 		/**
 		 * @throws RecordException
 		 * @throws SchemaException
-		 * @throws UnknownSchemaException
 		 */
 		public function testSelectQuery() {
 			$collection = $this->entityManager->collection('f', FooSchema::class);
@@ -301,16 +231,8 @@
 		}
 
 		/**
-		 * @throws BatchValidationException
-		 * @throws DuplicateEntryException
-		 * @throws EntityNotFoundException
 		 * @throws RecordException
 		 * @throws SchemaException
-		 * @throws UnknownSchemaException
-		 * @throws UnknownTableException
-		 * @throws \Edde\Exception\Validator\ValidationException
-		 * @throws UnknownAliasException
-		 * @throws UnknownPropertyException
 		 */
 		public function testUnlink() {
 			$this->expectException(EntityNotFoundException::class);
@@ -328,15 +250,8 @@
 		}
 
 		/**
-		 * @throws BatchValidationException
-		 * @throws DuplicateEntryException
-		 * @throws InvalidRelationException
 		 * @throws RecordException
 		 * @throws SchemaException
-		 * @throws UnknownAliasException
-		 * @throws UnknownPropertyException
-		 * @throws UnknownSchemaException
-		 * @throws ValidationException
 		 */
 		public function testRelationTo() {
 			$foo = $this->entityManager->create(FooSchema::class, [
@@ -412,14 +327,8 @@
 		}
 
 		/**
-		 * @throws EntityNotFoundException
 		 * @throws RecordException
 		 * @throws SchemaException
-		 * @throws UnknownAliasException
-		 * @throws UnknownPropertyException
-		 * @throws UnknownSchemaException
-		 * @throws UnknownTableException
-		 * @throws InvalidRelationException
 		 */
 		public function testRelation() {
 			$this->schemaManager->load(FooBarSchema::class);
@@ -453,14 +362,8 @@
 		}
 
 		/**
-		 * @throws EntityNotFoundException
-		 * @throws InvalidRelationException
 		 * @throws RecordException
 		 * @throws SchemaException
-		 * @throws UnknownAliasException
-		 * @throws UnknownPropertyException
-		 * @throws UnknownSchemaException
-		 * @throws UnknownTableException
 		 */
 		public function testRelationOfRelation() {
 			$this->schemaManager->load(FooBarSchema::class);
@@ -492,18 +395,11 @@
 		}
 
 		/**
-		 * @throws \Edde\Exception\Validator\BatchValidationException
 		 * @throws DriverException
-		 * @throws DuplicateEntryException
 		 * @throws DuplicateTableException
-		 * @throws InvalidRelationException
 		 * @throws RecordException
 		 * @throws SchemaException
 		 * @throws StorageException
-		 * @throws UnknownAliasException
-		 * @throws UnknownPropertyException
-		 * @throws UnknownSchemaException
-		 * @throws ValidationException
 		 */
 		public function testRelationAttribute() {
 			$this->schemaManager->load(UserRoleSchema::class);
@@ -569,16 +465,8 @@
 		}
 
 		/**
-		 * @throws BatchValidationException
-		 * @throws DuplicateEntryException
-		 * @throws InvalidRelationException
 		 * @throws RecordException
 		 * @throws SchemaException
-		 * @throws UnknownAliasException
-		 * @throws UnknownPropertyException
-		 * @throws UnknownSchemaException
-		 * @throws \Edde\Exception\Validator\ValidationException
-		 * @throws RelationException
 		 */
 		public function testMoreRelations() {
 			$this->schemaManager->load(SourceOneTargetSchema::class);
@@ -598,18 +486,8 @@
 		}
 
 		/**
-		 * @throws BatchValidationException
-		 * @throws DuplicateEntryException
-		 * @throws EntityNotFoundException
-		 * @throws InvalidRelationException
 		 * @throws RecordException
 		 * @throws SchemaException
-		 * @throws UnknownAliasException
-		 * @throws UnknownPropertyException
-		 * @throws UnknownSchemaException
-		 * @throws UnknownTableException
-		 * @throws ValidationException
-		 * @throws NoPrimaryPropertyException
 		 */
 		public function testReverseRelation() {
 			$this->schemaManager->load(SourceOneTargetSchema::class);
@@ -632,15 +510,6 @@
 		}
 
 		/**
-		 * @throws BatchValidationException
-		 * @throws DuplicateEntryException
-		 * @throws EntityNotFoundException
-		 * @throws RecordException
-		 * @throws SchemaException
-		 * @throws UnknownAliasException
-		 * @throws UnknownSchemaException
-		 * @throws UnknownTableException
-		 * @throws ValidationException
 		 */
 		public function testDeleteEntity() {
 			$this->expectException(EntityNotFoundException::class);
@@ -656,17 +525,8 @@
 		}
 
 		/**
-		 * @throws \Edde\Exception\Validator\BatchValidationException
-		 * @throws DuplicateEntryException
-		 * @throws EntityNotFoundException
-		 * @throws InvalidRelationException
 		 * @throws RecordException
 		 * @throws SchemaException
-		 * @throws UnknownAliasException
-		 * @throws UnknownPropertyException
-		 * @throws UnknownSchemaException
-		 * @throws UnknownTableException
-		 * @throws \Edde\Exception\Validator\ValidationException
 		 */
 		public function testEntityDetach() {
 			$this->schemaManager->load(UserRoleSchema::class);
@@ -705,17 +565,8 @@
 		}
 
 		/**
-		 * @throws BatchValidationException
-		 * @throws DuplicateEntryException
-		 * @throws EntityNotFoundException
-		 * @throws InvalidRelationException
 		 * @throws RecordException
 		 * @throws SchemaException
-		 * @throws UnknownAliasException
-		 * @throws UnknownPropertyException
-		 * @throws UnknownSchemaException
-		 * @throws UnknownTableException
-		 * @throws ValidationException
 		 */
 		public function testDisconnect() {
 			$this->schemaManager->load(UserRoleSchema::class);
@@ -753,17 +604,8 @@
 		}
 
 		/**
-		 * @throws BatchValidationException
-		 * @throws DuplicateEntryException
-		 * @throws EntityNotFoundException
-		 * @throws InvalidRelationException
 		 * @throws RecordException
 		 * @throws SchemaException
-		 * @throws UnknownAliasException
-		 * @throws UnknownPropertyException
-		 * @throws UnknownSchemaException
-		 * @throws UnknownTableException
-		 * @throws \Edde\Exception\Validator\ValidationException
 		 */
 		public function testUnlinkRelation() {
 			$this->schemaManager->load(UserRoleSchema::class);

@@ -2,13 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Storage\Query;
 
-	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Storage\Query\Fragment\IJoin;
 	use Edde\Api\Storage\Query\Fragment\IWhereGroup;
 	use Edde\Api\Storage\Query\ISelectQuery;
 	use Edde\Common\Storage\Query\Fragment\Join;
 	use Edde\Common\Storage\Query\Fragment\WhereGroup;
 	use Edde\Exception\Storage\UnknownAliasException;
+	use Edde\Schema\ISchema;
 
 	class SelectQuery extends AbstractQuery implements ISelectQuery {
 		/** @var string */
@@ -22,7 +22,7 @@
 		protected $limit;
 		/** @var string */
 		protected $count;
-		/** @var ISchema[] */
+		/** @var \Edde\Schema\ISchema[] */
 		protected $schemas;
 
 		public function __construct(ISchema $schema, string $alias) {

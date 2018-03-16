@@ -4,14 +4,14 @@
 
 	use Edde\Api\Entity\IEntity;
 	use Edde\Api\Entity\IRecord;
-	use Edde\Api\Schema\ISchema;
 	use Edde\Common\Object\Object;
 	use Edde\Exception\Entity\RecordException;
 	use Edde\Inject\Entity\EntityManager;
+	use Edde\Schema\ISchema;
 
 	class Record extends Object implements IRecord {
 		use EntityManager;
-		/** @var ISchema[] */
+		/** @var \Edde\Schema\ISchema[] */
 		protected $schemas;
 		/** @var array */
 		protected $source;
@@ -19,8 +19,8 @@
 		protected $entities;
 
 		/**
-		 * @param ISchema[] $schemas
-		 * @param array     $source
+		 * @param \Edde\Schema\ISchema[] $schemas
+		 * @param array                  $source
 		 */
 		public function __construct(array $schemas, array $source) {
 			$this->schemas = $schemas;

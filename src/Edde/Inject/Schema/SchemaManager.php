@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Inject\Schema;
 
-	use Edde\Api\Schema\ISchemaManager;
+	use Edde\Schema\ISchemaManager;
 
 	trait SchemaManager {
 		/**
-		 * @var ISchemaManager
+		 * @var \Edde\Schema\ISchemaManager
 		 */
 		protected $schemaManager;
 

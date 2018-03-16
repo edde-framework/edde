@@ -8,22 +8,11 @@
 	use Edde\Api\Entity\IEntityQueue;
 	use Edde\Api\Entity\Query\IDetachQuery;
 	use Edde\Api\Entity\Query\IDisconnectQuery;
-	use Edde\Api\Schema\ISchema;
 	use Edde\Common\Crate\Crate;
-	use Edde\Exception\Driver\DriverException;
-	use Edde\Exception\Entity\RecordException;
-	use Edde\Exception\Filter\FilterException;
-	use Edde\Exception\Filter\UnknownFilterException;
-	use Edde\Exception\Sanitizer\SanitizerException;
-	use Edde\Exception\Sanitizer\UnknownSanitizerException;
-	use Edde\Exception\Schema\LinkException;
-	use Edde\Exception\Schema\NoPrimaryPropertyException;
-	use Edde\Exception\Schema\RelationException;
-	use Edde\Exception\Schema\UnknownPropertyException;
-	use Edde\Exception\Schema\UnknownSchemaException;
 	use Edde\Exception\Validator\ValidationException;
 	use Edde\Inject\Entity\EntityManager;
 	use Edde\Inject\Schema\SchemaManager;
+	use Edde\Schema\ISchema;
 
 	class Entity extends Crate implements IEntity {
 		use EntityManager;
@@ -45,45 +34,23 @@
 			return $this->schema;
 		}
 
-		/**
-		 * @inheritdoc
-		 *
-		 * @throws NoPrimaryPropertyException
-		 */
+		/** @inheritdoc */
 		public function getPrimary(): IProperty {
 			return $this->primary ?: $this->primary = $this->getProperty($this->schema->getPrimary()->getName());
 		}
 
-		/**
-		 * @inheritdoc
-		 *
-		 * @throws NoPrimaryPropertyException
-		 */
+		/** @inheritdoc */
 		public function getHash(): string {
 			return $this->getPrimary()->get();
 		}
 
-		/**
-		 * @inheritdoc
-		 *
-		 * @throws LinkException
-		 */
+		/** @inheritdoc */
 		public function linkTo(IEntity $entity): IEntity {
 			$this->entityQueue->link($this, $entity, $this->schema->getLink($entity->getSchema()->getName()));
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 *
-		 * @throws LinkException
-		 * @throws \Edde\Exception\Schema\SchemaException
-		 * @throws \Edde\Exception\Schema\UnknownPropertyException
-		 * @throws UnknownSchemaException
-		 * @throws \Edde\Exception\Storage\EntityNotFoundException
-		 * @throws \Edde\Exception\Storage\UnknownTableException
-		 * @throws RecordException
-		 */
+		/** @inheritdoc */
 		public function link(string $schema): IEntity {
 			$link = $this->schema->getLink($schema);
 			$collection = $this->entityManager->collection('c', $this->schema->getName());
@@ -93,23 +60,13 @@
 			return $collection->getEntity('l');
 		}
 
-		/**
-		 * @inheritdoc
-		 *
-		 * @throws \Edde\Exception\Schema\LinkException
-		 */
+		/** @inheritdoc */
 		public function unlink(string $schema): IEntity {
 			$this->entityQueue->unlink($this, $this->schema->getLink($schema));
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 *
-		 * @throws \Edde\Exception\Schema\SchemaException
-		 * @throws UnknownSchemaException
-		 * @throws RelationException
-		 */
+		/** @inheritdoc */
 		public function attach(IEntity $entity, string $relation = null): IEntity {
 			$relation = $this->schema->getRelation($entity->getSchema()->getName(), $relation);
 			$use = $this->entityManager->create($relation->getSchema()->getName());
@@ -117,20 +74,12 @@
 			return $use;
 		}
 
-		/**
-		 * @inheritdoc
-		 *
-		 * @throws RelationException
-		 */
+		/** @inheritdoc */
 		public function detach(IEntity $entity, string $relation = null): IDetachQuery {
 			return $this->entityQueue->detach($this, $entity, $this->schema->getRelation($entity->getSchema()->getName(), $relation));
 		}
 
-		/**
-		 * @inheritdoc
-		 *
-		 * @throws RelationException
-		 */
+		/** @inheritdoc */
 		public function disconnect(string $schema): IDisconnectQuery {
 			return $this->entityQueue->disconnect($this, $this->schema->getRelation($schema));
 		}
@@ -143,12 +92,7 @@
 			return $collection;
 		}
 
-		/**
-		 * @inheritdoc
-		 *
-		 * @throws \Edde\Exception\Schema\SchemaException
-		 * @throws UnknownSchemaException
-		 */
+		/** @inheritdoc */
 		public function reverseJoin(string $alias, string $schema, string $relation = null): ICollection {
 			$collection = $this->entityManager->collection($alias, $schema);
 			$collection->reverseJoin($alias, $this->schema->getName(), 'e', $this->toArray(), $relation);
@@ -161,15 +105,7 @@
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 *
-		 * @throws ValidationException
-		 * @throws \Edde\Exception\Storage\DuplicateEntryException
-		 * @throws \Edde\Exception\Storage\StorageException
-		 * @throws \Edde\Exception\Validator\BatchValidationException
-		 * @throws DriverException
-		 */
+		/** @inheritdoc */
 		public function save(): IEntity {
 			$this->validate();
 			foreach ($this->entityQueue as $entity) {
@@ -183,34 +119,18 @@
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 *
-		 * @throws \Edde\Exception\Schema\UnknownPropertyException
-		 * @throws FilterException
-		 * @throws UnknownFilterException
-		 */
+		/** @inheritdoc */
 		public function filter(array $source): IEntity {
 			$this->push($this->schemaManager->filter($this->schema, $source));
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 *
-		 * @throws UnknownPropertyException
-		 * @throws SanitizerException
-		 * @throws UnknownSanitizerException
-		 */
+		/** @inheritdoc */
 		public function sanitize(): array {
 			return $this->schemaManager->sanitize($this->schema, $this->toArray());
 		}
 
-		/**
-		 * @inheritdoc
-		 *
-		 * @throws \Edde\Exception\Validator\UnknownValidatorException
-		 */
+		/** @inheritdoc */
 		public function isValid(): bool {
 			try {
 				/**
@@ -224,12 +144,7 @@
 			}
 		}
 
-		/**
-		 * @inheritdoc
-		 *
-		 * @throws ValidationException
-		 * @throws \Edde\Exception\Validator\UnknownValidatorException
-		 */
+		/** @inheritdoc */
 		public function validate(): IEntity {
 			$this->schemaManager->validate($this->schema, $this->toArray());
 			return $this;

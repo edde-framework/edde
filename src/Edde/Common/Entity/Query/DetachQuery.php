@@ -4,10 +4,10 @@
 
 	use Edde\Api\Entity\IEntity;
 	use Edde\Api\Entity\Query\IDetachQuery;
-	use Edde\Api\Schema\IRelation;
 	use Edde\Api\Storage\Query\Fragment\IWhereGroup;
 	use Edde\Common\Storage\Query\AbstractQuery;
 	use Edde\Common\Storage\Query\Fragment\WhereGroup;
+	use Edde\Schema\IRelation;
 
 	class DetachQuery extends AbstractQuery implements IDetachQuery {
 		/** @var IEntity */

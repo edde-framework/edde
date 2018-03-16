@@ -4,10 +4,9 @@
 
 	use Edde\Api\Driver\IDriver;
 	use Edde\Common\Container\Factory\InstanceFactory;
+	use Edde\Driver\Neo4jDriver;
 	use Edde\Exception\Container\ContainerException;
-	use Edde\Exception\Container\FactoryException;
 	use Edde\Exception\Driver\DriverException;
-	use Edde\Ext\Driver\Neo4jDriver;
 	use ReflectionException;
 
 	class Neo4jStorageTest extends AbstractStorageTest {

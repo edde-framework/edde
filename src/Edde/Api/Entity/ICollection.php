@@ -2,14 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Entity;
 
-	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Storage\Query\ISelectQuery;
 	use Edde\Exception\Entity\RecordException;
 	use Edde\Exception\Entity\UnknownAliasException;
-	use Edde\Exception\Schema\RelationException;
-	use Edde\Exception\Schema\SchemaException;
-	use Edde\Exception\Storage\EntityNotFoundException;
-	use Edde\Exception\Storage\UnknownTableException;
+	use Edde\Schema\ISchema;
+	use Edde\Schema\SchemaException;
 	use IteratorAggregate;
 	use Traversable;
 
@@ -60,8 +57,6 @@
 		 *
 		 * @return IEntity
 		 *
-		 * @throws \Edde\Exception\Storage\EntityNotFoundException
-		 * @throws \Edde\Exception\Storage\UnknownTableException
 		 * @throws RecordException
 		 */
 		public function getEntity(string $alias): IEntity;
@@ -82,12 +77,6 @@
 		 * @param mixed  $name
 		 *
 		 * @return IEntity
-		 *
-		 * @throws \Edde\Exception\Storage\EntityNotFoundException
-		 * @throws \Edde\Exception\Storage\UnknownTableException
-		 * @throws UnknownAliasException
-		 * @throws \Edde\Exception\Entity\RecordException
-		 * @throws \Edde\Exception\Schema\NoPrimaryPropertyException
 		 */
 		public function entity(string $alias, $name): IEntity;
 
@@ -98,13 +87,9 @@
 		 * @param string $target
 		 * @param string $alias
 		 * @param array  $on
-		 * @param array  $relation
+		 * @param string $relation
 		 *
 		 * @return ICollection
-		 * @throws \Edde\Exception\Schema\InvalidRelationException
-		 * @throws UnknownAliasException
-		 * @throws RelationException
-		 * @throws SchemaException
 		 */
 		public function join(string $source, string $target, string $alias, array $on = null, string $relation = null): ICollection;
 
@@ -164,7 +149,7 @@
 		 * link the given schema
 		 *
 		 * @return ICollection
-		 * @throws SchemaException
+		 * @throws \Edde\Schema\SchemaException
 		 */
 		public function link(string $alias, string $schema): ICollection;
 

@@ -3,8 +3,8 @@
 	namespace Edde\Api\Entity\Query;
 
 	use Edde\Api\Entity\IEntity;
-	use Edde\Api\Schema\ILink;
 	use Edde\Api\Storage\Query\IQuery;
+	use Edde\Schema\ILink;
 
 	interface IUnlinkQuery extends IQuery {
 		/**
@@ -13,7 +13,7 @@
 		public function getEntity(): IEntity;
 
 		/**
-		 * @return ILink
+		 * @return \Edde\Schema\ILink
 		 */
 		public function getLink(): ILink;
 	}

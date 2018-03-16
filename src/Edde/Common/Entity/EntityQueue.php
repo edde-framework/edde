@@ -6,8 +6,6 @@
 	use Edde\Api\Entity\IEntityQueue;
 	use Edde\Api\Entity\Query\IDetachQuery;
 	use Edde\Api\Entity\Query\IDisconnectQuery;
-	use Edde\Api\Schema\ILink;
-	use Edde\Api\Schema\IRelation;
 	use Edde\Api\Storage\Query\IQuery;
 	use Edde\Common\Entity\Query\DeleteQuery;
 	use Edde\Common\Entity\Query\DetachQuery;
@@ -16,6 +14,8 @@
 	use Edde\Common\Entity\Query\RelationQuery;
 	use Edde\Common\Entity\Query\UnlinkQuery;
 	use Edde\Common\Object\Object;
+	use Edde\Schema\ILink;
+	use Edde\Schema\IRelation;
 
 	class EntityQueue extends Object implements IEntityQueue {
 		/** @var IEntity[] */

@@ -3,10 +3,9 @@
 	namespace Edde\Ext\Bus\Validator;
 
 	use Edde\Api\Bus\IElement;
-	use Edde\Common\Validator\AbstractValidator;
 	use Edde\Exception\Validator\ValidationException;
 
-	class RequestValidator extends AbstractValidator {
+	class RequestValidator extends \Edde\Validator\AbstractValidator {
 		/** @inheritdoc */
 		public function validate($value, array $options = []): void {
 			/** @var $value IElement */

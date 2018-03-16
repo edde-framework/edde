@@ -3,10 +3,9 @@
 	namespace Edde\Common\Schema;
 
 	use Edde\Api\Node\INode;
-	use Edde\Api\Schema\IProperty;
 	use Edde\Common\Object\Object;
 
-	class Property extends Object implements IProperty {
+	class Property extends Object implements \Edde\Schema\IProperty {
 		/** @var INode */
 		protected $root;
 		/** @var INode */

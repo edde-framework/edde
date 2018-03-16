@@ -4,10 +4,8 @@
 
 	use Edde\Api\Driver\IDriver;
 	use Edde\Common\Container\Factory\InstanceFactory;
-	use Edde\Exception\Container\ContainerException;
-	use Edde\Exception\Container\FactoryException;
+	use Edde\Driver\PostgresDriver;
 	use Edde\Exception\Driver\DriverException;
-	use Edde\Ext\Driver\PostgresDriver;
 	use ReflectionException;
 
 	class PostgresStorageTest extends AbstractStorageTest {

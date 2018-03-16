@@ -6,18 +6,15 @@
 	use Edde\Api\Entity\IEntity;
 	use Edde\Api\Entity\IEntityManager;
 	use Edde\Api\Entity\IEntityQueue;
-	use Edde\Api\Schema\ISchema;
 	use Edde\Common\Entity\Collection;
 	use Edde\Common\Entity\Entity;
 	use Edde\Common\Entity\Query\QueryQueue;
 	use Edde\Common\Object\Object;
 	use Edde\Common\Storage\Query\SelectQuery;
-	use Edde\Exception\Generator\UnknownGeneratorException;
-	use Edde\Exception\Schema\UnknownPropertyException;
-	use Edde\Exception\Schema\UnknownSchemaException;
 	use Edde\Inject\Container\Container;
 	use Edde\Inject\Schema\SchemaManager;
 	use Edde\Inject\Storage\Storage;
+	use Edde\Schema\ISchema;
 
 	class EntityManager extends Object implements IEntityManager {
 		use SchemaManager;
@@ -34,13 +31,7 @@
 			return clone $this->entities[$name];
 		}
 
-		/**
-		 * @inheritdoc
-		 *
-		 * @throws UnknownGeneratorException
-		 * @throws UnknownPropertyException
-		 * @throws UnknownSchemaException
-		 */
+		/** @inheritdoc */
 		public function create(string $schema, array $source = []): IEntity {
 			return $this->createEntity($schema = $this->schemaManager->load($schema))->put($this->schemaManager->generate($schema, $source));
 		}

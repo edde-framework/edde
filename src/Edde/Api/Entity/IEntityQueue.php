@@ -4,9 +4,9 @@
 
 	use Edde\Api\Entity\Query\IDetachQuery;
 	use Edde\Api\Entity\Query\IDisconnectQuery;
-	use Edde\Api\Schema\ILink;
-	use Edde\Api\Schema\IRelation;
 	use Edde\Api\Storage\Query\IQuery;
+	use Edde\Schema\ILink;
+	use Edde\Schema\IRelation;
 	use IteratorAggregate;
 
 	interface IEntityQueue extends IteratorAggregate {
@@ -43,10 +43,10 @@
 		/**
 		 * attach two entities using relation entity (m:n)
 		 *
-		 * @param IEntity   $entity   use this entity
-		 * @param IEntity   $target   join this entity
-		 * @param IEntity   $using    through this relational entity
-		 * @param IRelation $relation using thins relation
+		 * @param IEntity                $entity   use this entity
+		 * @param IEntity                $target   join this entity
+		 * @param IEntity                $using    through this relational entity
+		 * @param \Edde\Schema\IRelation $relation using thins relation
 		 *
 		 * @return IEntityQueue
 		 */
@@ -55,17 +55,17 @@
 		/**
 		 * delete all relations to the given entity
 		 *
-		 * @param IEntity   $entity
-		 * @param IEntity   $target
-		 * @param IRelation $relation
+		 * @param IEntity                $entity
+		 * @param IEntity                $target
+		 * @param \Edde\Schema\IRelation $relation
 		 *
 		 * @return IDetachQuery
 		 */
 		public function detach(IEntity $entity, IEntity $target, IRelation $relation): IDetachQuery;
 
 		/**
-		 * @param IEntity   $entity
-		 * @param IRelation $relation
+		 * @param IEntity                $entity
+		 * @param \Edde\Schema\IRelation $relation
 		 *
 		 * @return IDisconnectQuery
 		 */

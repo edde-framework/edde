@@ -10,10 +10,6 @@
 	use Edde\Common\Content\TextContent;
 	use Edde\Common\Http\Response;
 	use Edde\Exception\Http\EmptyBodyException;
-	use Edde\Exception\Schema\UnknownPropertyException;
-	use Edde\Exception\Schema\UnknownSchemaException;
-	use Edde\Exception\Validator\UnknownValidatorException;
-	use Edde\Exception\Validator\ValidationException;
 	use Edde\Inject\Http\RequestService;
 	use Edde\Inject\Schema\SchemaManager;
 
@@ -37,10 +33,6 @@
 		 * @param string $schema
 		 *
 		 * @throws EmptyBodyException
-		 * @throws UnknownSchemaException
-		 * @throws ValidationException
-		 * @throws UnknownPropertyException
-		 * @throws UnknownValidatorException
 		 */
 		protected function validate(string $schema) {
 			$this->schemaManager->check($schema, $this->requestService->getContent('array'));

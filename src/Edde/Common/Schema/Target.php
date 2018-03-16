@@ -2,31 +2,23 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Schema;
 
-	use Edde\Api\Schema\IProperty;
-	use Edde\Api\Schema\ISchema;
-	use Edde\Api\Schema\ITarget;
 	use Edde\Common\Object\Object;
+	use Edde\Schema\IProperty;
+	use Edde\Schema\ISchema;
+	use Edde\Schema\ITarget;
 
 	class Target extends Object implements ITarget {
-		/**
-		 * @var ISchema
-		 */
+		/** @var \Edde\Schema\ISchema */
 		protected $schema;
-		/**
-		 * @var IProperty
-		 */
+		/** @var \Edde\Schema\IProperty */
 		protected $property;
-		/**
-		 * @var string
-		 */
+		/** @var string */
 		protected $name;
 		protected $realName;
-		/**
-		 * @var string
-		 */
+		/** @var string */
 		protected $propertyName;
 
-		public function __construct(ISchema $schema, IProperty $property) {
+		public function __construct(\Edde\Schema\ISchema $schema, \Edde\Schema\IProperty $property) {
 			$this->schema = $schema;
 			$this->property = $property;
 			$this->name = $schema->getName();
@@ -34,37 +26,27 @@
 			$this->propertyName = $property->getName();
 		}
 
-		/**
-		 * @inheritdoc
-		 */
-		public function getSchema(): ISchema {
+		/** @inheritdoc */
+		public function getSchema(): \Edde\Schema\ISchema {
 			return $this->schema;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getName(): string {
 			return $this->name;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getRealName(): string {
 			return $this->realName;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
-		public function getProperty(): IProperty {
+		/** @inheritdoc */
+		public function getProperty(): \Edde\Schema\IProperty {
 			return $this->property;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getPropertyName(): string {
 			return $this->propertyName;
 		}
