@@ -4,9 +4,9 @@
 
 	use Edde\Api\Bus\Request\IRequest;
 	use Edde\Api\Router\IRouter;
-	use Edde\Api\Runtime\Inject\Runtime;
 	use Edde\Common\Object\Object;
 	use Edde\Inject\Http\RequestService;
+	use Edde\Inject\Runtime\Runtime;
 
 	abstract class AbstractRouter extends Object implements IRouter {
 		use RequestService;

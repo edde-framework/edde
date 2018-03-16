@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Sanitizer\Inject;
+	namespace Edde\Inject\Sanitizer;
 
 	use Edde\Api\Sanitizer\ISanitizerManager;
 

@@ -3,7 +3,7 @@
 	namespace Edde\Api\Sanitizer;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Sanitizer\Exception\UnknownSanitizerException;
+	use Edde\Exception\Sanitizer\UnknownSanitizerException;
 
 	/**
 	 * Sanitizer is responsible for filtering values going OUT of PHP, for example
@@ -35,7 +35,7 @@
 		 *
 		 * @return ISanitizer
 		 *
-		 * @throws UnknownSanitizerException
+		 * @throws \Edde\Exception\Sanitizer\UnknownSanitizerException
 		 */
 		public function getSanitizer(string $name): ISanitizer;
 

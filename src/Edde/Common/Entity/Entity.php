@@ -8,8 +8,6 @@
 	use Edde\Api\Entity\IEntityQueue;
 	use Edde\Api\Entity\Query\IDetachQuery;
 	use Edde\Api\Entity\Query\IDisconnectQuery;
-	use Edde\Api\Sanitizer\Exception\SanitizerException;
-	use Edde\Api\Sanitizer\Exception\UnknownSanitizerException;
 	use Edde\Api\Schema\Exception\LinkException;
 	use Edde\Api\Schema\Exception\NoPrimaryPropertyException;
 	use Edde\Api\Schema\Exception\RelationException;
@@ -30,6 +28,8 @@
 	use Edde\Exception\Entity\RecordException;
 	use Edde\Exception\Filter\FilterException;
 	use Edde\Exception\Filter\UnknownFilterException;
+	use Edde\Exception\Sanitizer\SanitizerException;
+	use Edde\Exception\Sanitizer\UnknownSanitizerException;
 	use Edde\Inject\Entity\EntityManager;
 
 	class Entity extends Crate implements IEntity {

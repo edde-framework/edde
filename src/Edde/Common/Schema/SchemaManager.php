@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Schema;
 
-	use Edde\Api\Sanitizer\Inject\SanitizerManager;
 	use Edde\Api\Schema\Exception\UnknownSchemaException;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaLoader;
@@ -13,6 +12,7 @@
 	use Edde\Common\Object\Object;
 	use Edde\Inject\Filter\FilterManager;
 	use Edde\Inject\Generator\GeneratorManager;
+	use Edde\Inject\Sanitizer\SanitizerManager;
 
 	class SchemaManager extends Object implements ISchemaManager {
 		use GeneratorManager;

@@ -3,14 +3,14 @@
 	namespace Edde\Api\Schema;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Sanitizer\Exception\SanitizerException;
-	use Edde\Api\Sanitizer\Exception\UnknownSanitizerException;
 	use Edde\Api\Schema\Exception\PropertyException;
 	use Edde\Api\Schema\Exception\UnknownPropertyException;
 	use Edde\Api\Schema\Exception\UnknownSchemaException;
 	use Edde\Api\Validator\Exception\UnknownValidatorException;
 	use Edde\Api\Validator\Exception\ValidationException;
 	use Edde\Exception\Generator\UnknownGeneratorException;
+	use Edde\Exception\Sanitizer\SanitizerException;
+	use Edde\Exception\Sanitizer\UnknownSanitizerException;
 
 	interface ISchemaManager extends IConfigurable {
 		/**

@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Runtime;
 
-	use Edde\Api\Runtime\Exception\MissingArgvException;
 	use Edde\Api\Runtime\IRuntime;
 	use Edde\Common\Object\Object;
+	use Edde\Exception\Runtime\MissingArgvException;
 
 	class Runtime extends Object implements IRuntime {
 		/**

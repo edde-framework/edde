@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Runtime;
 
-	use Edde\Api\Runtime\Inject\Runtime;
+	use Edde\Inject\Runtime\Runtime;
 	use Edde\TestCase;
 
 	class RuntimeTest extends TestCase {

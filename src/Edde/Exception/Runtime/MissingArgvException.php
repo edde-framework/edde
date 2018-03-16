@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Runtime\Exception;
+	namespace Edde\Exception\Runtime;
 
 	/**
 	 * Should be thrown when there is an attempt to read $argv when it's not available.

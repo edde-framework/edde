@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Runtime\Inject;
+	namespace Edde\Inject\Runtime;
 
 	use Edde\Api\Runtime\IRuntime;
 

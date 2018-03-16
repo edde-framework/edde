@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Sanitizer\Exception;
+	namespace Edde\Exception\Sanitizer;
 
 	use Edde\Exception\EddeException;
 

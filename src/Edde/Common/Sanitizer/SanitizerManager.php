@@ -2,10 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Sanitizer;
 
-	use Edde\Api\Sanitizer\Exception\UnknownSanitizerException;
 	use Edde\Api\Sanitizer\ISanitizer;
 	use Edde\Api\Sanitizer\ISanitizerManager;
 	use Edde\Common\Object\Object;
+	use Edde\Exception\Sanitizer\UnknownSanitizerException;
 
 	class SanitizerManager extends Object implements ISanitizerManager {
 		/**
