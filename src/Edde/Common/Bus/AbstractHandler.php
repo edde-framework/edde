@@ -4,7 +4,8 @@
 
 	use Edde\Api\Bus\IElement;
 	use Edde\Api\Bus\IHandler;
-	use Edde\Exception\Bus\UnhandledElementException;
+	use Edde\Bus\BusException;
+	use Edde\Container\ContainerException;
 	use Edde\Exception\Validator\UnknownValidatorException;
 	use Edde\Exception\Validator\ValidationException;
 	use Edde\Inject\Validator\ValidatorManager;
@@ -22,7 +23,7 @@
 		/** @inheritdoc */
 		public function validate(IElement $element): void {
 			if ($this->canHandle($element) === false) {
-				throw new UnhandledElementException(sprintf('Cannot handle message type [%s (%s)] message handler [%s].', $element->getType(), get_class($element), static::class));
+				throw new BusException(sprintf('Cannot handle message type [%s (%s)] message handler [%s].', $element->getType(), get_class($element), static::class));
 			}
 			$this->onValidate($element);
 		}
@@ -41,8 +42,9 @@
 		 * @param IElement $element
 		 *
 		 * @return IElement
+		 *
 		 * @throws ValidationException
-		 * @throws \Edde\Exception\Bus\InvalidElementException
+		 * @throws ContainerException
 		 */
 		protected function onSend(IElement $element): IElement {
 			return $this->execute($element);

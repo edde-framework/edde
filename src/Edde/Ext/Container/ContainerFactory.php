@@ -6,8 +6,6 @@
 	use Edde\Api\Bus\IMessageBus;
 	use Edde\Api\Bus\IMessageService;
 	use Edde\Api\Bus\Request\IRequestService;
-	use Edde\Api\Config\IConfigLoader;
-	use Edde\Api\Config\IConfigService;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\Crypt\IPasswordService;
 	use Edde\Api\Crypt\IRandomService;
@@ -43,6 +41,8 @@
 	use Edde\Common\Container\Factory\LinkFactory;
 	use Edde\Common\Container\Factory\ProxyFactory;
 	use Edde\Common\Upgrade\AbstractUpgradeManager;
+	use Edde\Config\IConfigLoader;
+	use Edde\Config\IConfigService;
 	use Edde\Configurator\Bus\MessageBusConfigurator;
 	use Edde\Configurator\Container\ContainerConfigurator;
 	use Edde\Configurator\Converter\ConverterManagerConfigurator;

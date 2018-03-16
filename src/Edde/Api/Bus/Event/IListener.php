@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Bus\Event;
 
-	use Edde\Api\Config\IConfigurable;
+	use Edde\Config\IConfigurable;
 
 	interface IListener extends IConfigurable {
 		/**

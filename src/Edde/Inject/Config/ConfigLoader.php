@@ -2,16 +2,16 @@
 	declare(strict_types=1);
 	namespace Edde\Inject\Config;
 
-	use Edde\Api\Config\IConfigLoader;
+	use Edde\Config\IConfigLoader;
 
 	trait ConfigLoader {
-		/** @var IConfigLoader */
+		/** @var \Edde\Config\IConfigLoader */
 		protected $configLoader;
 
 		/**
-		 * @param IConfigLoader $configLoader
+		 * @param \Edde\Config\IConfigLoader $configLoader
 		 */
-		public function lazyConfigLoader(IConfigLoader $configLoader): void {
+		public function lazyConfigLoader(\Edde\Config\IConfigLoader $configLoader): void {
 			$this->configLoader = $configLoader;
 		}
 	}

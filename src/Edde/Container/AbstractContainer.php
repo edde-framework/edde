@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Container;
 
-	use Edde\Api\Config\IConfigurator;
+	use Edde\Config\IConfigurator;
 	use Edde\Object;
 
 	abstract class AbstractContainer extends Object implements IContainer {

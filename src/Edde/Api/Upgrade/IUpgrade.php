@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Upgrade;
 
-	use Edde\Api\Config\IConfigurable;
+	use Edde\Config\IConfigurable;
 	use Throwable;
 
 	interface IUpgrade extends IConfigurable {

@@ -2,8 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Sanitizer;
 
-	use Edde\Api\Config\IConfigurable;
-	use Edde\Exception\Sanitizer\UnknownSanitizerException;
+	use Edde\Config\IConfigurable;
 
 	/**
 	 * Sanitizer is responsible for filtering values going OUT of PHP, for example

@@ -4,7 +4,7 @@
 
 	use Edde\Api\Generator\IGenerator;
 	use Edde\Api\Generator\IGeneratorManager;
-	use Edde\Exception\Generator\UnknownGeneratorException;
+	use Edde\Generator\GeneratorException;
 	use Edde\Object;
 
 	class GeneratorManager extends Object implements IGeneratorManager {
@@ -28,7 +28,7 @@
 		/** @inheritdoc */
 		public function getGenerator(string $name): IGenerator {
 			if (isset($this->generators[$name]) === false) {
-				throw new UnknownGeneratorException(sprintf('Requested unknown generator [%s].', $name));
+				throw new GeneratorException(sprintf('Requested unknown generator [%s].', $name));
 			}
 			return $this->generators[$name];
 		}

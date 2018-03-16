@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Validator;
 
-	use Edde\Api\Config\IConfigurable;
+	use Edde\Config\IConfigurable;
 	use Edde\Exception\Validator\UnknownValidatorException;
 	use Edde\Exception\Validator\ValidationException;
 

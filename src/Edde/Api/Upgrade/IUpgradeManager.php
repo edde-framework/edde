@@ -2,11 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Upgrade;
 
-	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Entity\ICollection;
 	use Edde\Api\Entity\IEntity;
+	use Edde\Config\IConfigurable;
 	use Edde\Exception\Upgrade\CurrentVersionException;
-	use Edde\Exception\Upgrade\NoUpgradesAvailableException;
 	use Edde\Exception\Upgrade\UnknownVersionException;
 	use Throwable;
 

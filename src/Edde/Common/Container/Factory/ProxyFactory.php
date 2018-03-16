@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Container\Factory;
 
-	use Edde\Api\Config\IConfigurable;
+	use Edde\Config\IConfigurable;
 	use Edde\Container\IContainer;
 	use Edde\Container\IReflection;
 
@@ -65,7 +65,7 @@
 		 * @inheritdoc
 		 */
 		public function factory(IContainer $container, array $params, IReflection $dependency, string $name = null) {
-			/** @var $instance IConfigurable */
+			/** @var $instance \Edde\Config\IConfigurable */
 			if (($instance = $container->create($this->target, $params, $this->name)) instanceof IConfigurable) {
 				$instance->setup();
 			}

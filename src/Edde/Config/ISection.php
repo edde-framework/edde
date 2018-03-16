@@ -1,8 +1,7 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Config;
+	namespace Edde\Config;
 
-	use Edde\Config\ConfigException;
 	use stdClass;
 
 	interface ISection {

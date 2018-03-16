@@ -2,8 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Config;
 
-	use Edde\Api\Config\IConfigurator;
-
 	trait ConfigurableTrait {
 		/**
 		 * @var IConfigurator[]

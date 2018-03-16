@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Filter;
 
-	use Edde\Api\Config\IConfigurable;
+	use Edde\Config\IConfigurable;
 	use Edde\Filter\FilterException;
 
 	/**

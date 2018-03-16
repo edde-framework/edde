@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Config;
+	namespace Edde\Config;
 
 	/**
 	 * Marker interface for classes supporting external configuration.

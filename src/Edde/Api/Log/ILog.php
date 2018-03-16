@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Log;
 
-	use Edde\Api\Config\IConfigurable;
+	use Edde\Config\IConfigurable;
 	use Throwable;
 
 	/**

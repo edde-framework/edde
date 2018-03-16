@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Http;
 
-	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Url\IUrl;
+	use Edde\Config\IConfigurable;
 	use Edde\Exception\Http\EmptyBodyException;
 
 	interface IRequestService extends IConfigurable {

@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Xml;
 
-	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Resource\IResource;
+	use Edde\Config\IConfigurable;
 
 	/**
 	 * Event based xml parser.

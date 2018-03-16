@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Generator;
 
-	use Edde\Api\Config\IConfigurable;
-	use Edde\Exception\Generator\UnknownGeneratorException;
+	use Edde\Config\IConfigurable;
+	use Edde\Generator\GeneratorException;
 
 	interface IGeneratorManager extends IConfigurable {
 		/**
@@ -30,7 +30,7 @@
 		 *
 		 * @return IGenerator
 		 *
-		 * @throws UnknownGeneratorException
+		 * @throws GeneratorException
 		 */
 		public function getGenerator(string $name): IGenerator;
 

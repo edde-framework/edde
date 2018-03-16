@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Storage;
 
-	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Storage\Query\IQuery;
+	use Edde\Config\IConfigurable;
 	use Edde\Exception\Storage\StorageException;
 
 	interface IStorage extends IConfigurable {

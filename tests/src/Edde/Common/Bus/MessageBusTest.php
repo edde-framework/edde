@@ -5,12 +5,11 @@
 	use Edde\Api\Bus\IElement;
 	use Edde\Api\Bus\IError;
 	use Edde\Api\Bus\Request\IResponse;
+	use Edde\Bus\BusException;
 	use Edde\Common\Bus\Event\Event;
 	use Edde\Common\Bus\Request\Request;
 	use Edde\Container\ContainerException;
 	use Edde\Content\Content;
-	use Edde\Exception\Bus\InvalidElementException;
-	use Edde\Exception\Bus\UnhandledElementException;
 	use Edde\Exception\Validator\UnknownValidatorException;
 	use Edde\Exception\Validator\ValidationException;
 	use Edde\Inject\Bus\EventBus;
@@ -28,20 +27,18 @@
 		use RandomService;
 
 		/**
-		 * @throws InvalidElementException
-		 * @throws ValidationException
 		 * @throws ContainerException
+		 * @throws ValidationException
 		 */
 		public function testUnknownMessageType() {
 			$response = $this->messageBus->execute(new Element('unsupported-message', 'uuid'));
 			self::assertSame('error', $response->getType());
 			self::assertSame('Cannot handle element [unsupported-message (Edde\Common\Bus\Element)] in any handler; element type is not supported.', $response->getAttribute('message'));
-			self::assertSame(UnhandledElementException::class, $response->getAttribute('class'));
+			self::assertSame(BusException::class, $response->getAttribute('class'));
 		}
 
 		/**
 		 * @throws ContainerException
-		 * @throws InvalidElementException
 		 * @throws UnknownValidatorException
 		 * @throws ValidationException
 		 */
@@ -55,7 +52,6 @@
 
 		/**
 		 * @throws ContainerException
-		 * @throws \Edde\Exception\Bus\InvalidElementException
 		 * @throws ValidationException
 		 */
 		public function testEventBus() {
@@ -66,8 +62,7 @@
 		}
 
 		/**
-		 * @throws \Edde\Container\ContainerException
-		 * @throws InvalidElementException
+		 * @throws ContainerException
 		 * @throws ValidationException
 		 */
 		public function testInvalidRequest() {
@@ -81,7 +76,6 @@
 		}
 
 		/**
-		 * @throws \Edde\Exception\Bus\InvalidElementException
 		 * @throws ValidationException
 		 */
 		public function testInvalidRequestValidation() {
@@ -92,7 +86,6 @@
 
 		/**
 		 * @throws ContainerException
-		 * @throws InvalidElementException
 		 * @throws ValidationException
 		 */
 		public function testRequest() {

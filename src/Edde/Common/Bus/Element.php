@@ -3,7 +3,7 @@
 	namespace Edde\Common\Bus;
 
 	use Edde\Api\Bus\IElement;
-	use Edde\Exception\Bus\ElementException;
+	use Edde\Bus\BusException;
 	use Edde\Object;
 
 	class Element extends Object implements IElement {
@@ -90,7 +90,7 @@
 		/** @inheritdoc */
 		public function getQueue(): string {
 			if ($this->hasQueue() === false) {
-				throw new ElementException(sprintf('Element [%s (%s)] does not have queue.', $this->getType(), static::class));
+				throw new BusException(sprintf('Element [%s (%s)] does not have queue.', $this->getType(), static::class));
 			}
 			return (string)$this->getAttribute('queue');
 		}

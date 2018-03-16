@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Http;
 
-	use Edde\Api\Config\IConfigurable;
+	use Edde\Config\IConfigurable;
 
 	/**
 	 * Formal interface for a cookie list implementation.

@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Config;
 
-	use Edde\Api\Config\ISection;
 	use Edde\Config\ConfigException;
+	use Edde\Config\ISection;
 	use Edde\Object;
 	use stdClass;
 

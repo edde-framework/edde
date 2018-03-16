@@ -2,15 +2,15 @@
 	declare(strict_types=1);
 	namespace Edde\Configurator\Container;
 
-	use Edde\Api\Config\IConfigurator;
 	use Edde\Config\AbstractConfigurator;
+	use Edde\Config\IConfigurator;
 	use Edde\Container\IContainer;
 	use Edde\Container\IFactory;
 
 	class ContainerConfigurator extends AbstractConfigurator {
 		/** @var IFactory[] */
 		protected $factories = [];
-		/** @var IConfigurator[] */
+		/** @var \Edde\Config\IConfigurator[] */
 		protected $configurators = [];
 
 		public function __construct(array $factories, array $configurators) {

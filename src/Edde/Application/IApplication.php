@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Application;
 
-	use Edde\Api\Config\IConfigurable;
+	use Edde\Config\IConfigurable;
 
 	/**
 	 * Application should connect services for user input translation to

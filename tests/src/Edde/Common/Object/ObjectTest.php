@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common;
 
-	use Edde\Api\Config\IConfigurable;
+	use Edde\Config\IConfigurable;
 	use Edde\Container\IAutowire;
 	use Edde\Exception\Object\PropertyReadException;
 	use Edde\Exception\Object\PropertyWriteException;

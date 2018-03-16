@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Driver;
 
-	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Storage\Query\IQuery;
+	use Edde\Config\IConfigurable;
 
 	/**
 	 * General driver for storage implementation; one storage could have more drivers to choose from.

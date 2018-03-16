@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Bus;
 
-	use Edde\Api\Config\IConfigurable;
+	use Edde\Bus\BusException;
+	use Edde\Config\IConfigurable;
 	use Edde\Container\ContainerException;
-	use Edde\Exception\Bus\InvalidElementException;
 	use Edde\Exception\Validator\ValidationException;
 
 	/**
@@ -25,8 +25,8 @@
 		/**
 		 * @param IElement $element
 		 *
-		 * @throws InvalidElementException
 		 * @throws ValidationException
+		 * @throws BusException
 		 */
 		public function validate(IElement $element): void;
 
@@ -37,8 +37,8 @@
 		 *
 		 * @return IElement
 		 *
-		 * @throws InvalidElementException
 		 * @throws ValidationException
+		 * @throws BusException
 		 */
 		public function send(IElement $element): IElement;
 
@@ -49,7 +49,6 @@
 		 *
 		 * @return IElement|null
 		 *
-		 * @throws InvalidElementException
 		 * @throws ValidationException
 		 * @throws ContainerException
 		 */

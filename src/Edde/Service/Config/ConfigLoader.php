@@ -2,22 +2,22 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Config;
 
-	use Edde\Api\Config\IConfigLoader;
 	use Edde\Config\ConfigException;
+	use Edde\Config\IConfigLoader;
 	use Edde\Object;
 	use stdClass;
 	use function is_readable;
 	use function parse_ini_file;
 	use const INI_SCANNER_TYPED;
 
-	class ConfigLoader extends Object implements IConfigLoader {
+	class ConfigLoader extends Object implements \Edde\Config\IConfigLoader {
 		/** @var array */
 		protected $configs = [];
 		/** @var stdClass */
 		protected $config;
 
 		/** @inheritdoc */
-		public function require(string $config): IConfigLoader {
+		public function require(string $config): \Edde\Config\IConfigLoader {
 			return $this->config($config, true);
 		}
 
@@ -27,7 +27,7 @@
 		}
 
 		/** @inheritdoc */
-		public function clear(): IConfigLoader {
+		public function clear(): \Edde\Config\IConfigLoader {
 			$this->configs = [];
 			$this->config = null;
 			return $this;
@@ -58,7 +58,7 @@
 			return $this->config;
 		}
 
-		protected function config(string $config, bool $required): IConfigLoader {
+		protected function config(string $config, bool $required): \Edde\Config\IConfigLoader {
 			$this->config = null;
 			$this->configs[$config] = [$config, $required];
 			return $this;

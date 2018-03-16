@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Xml;
 
-	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
+	use Edde\Config\IConfigurable;
 	use Iterator;
 
 	interface IXmlExport extends IConfigurable {

@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Container;
 
-	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Config\IConfigurator;
+	use Edde\Config\IConfigurable;
+	use Edde\Config\IConfigurator;
 
 	/**
 	 * Implementation of Dependency Injection Container.
@@ -29,8 +29,8 @@
 		/**
 		 * register a new config handler for the given dependency
 		 *
-		 * @param string        $name
-		 * @param IConfigurator $configurator
+		 * @param string                     $name
+		 * @param \Edde\Config\IConfigurator $configurator
 		 *
 		 * @return IContainer
 		 */

@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Container;
 
-	use Edde\Api\Config\IConfigurable;
+	use Edde\Config\IConfigurable;
 	use Edde\Exception\Object\PropertyReadException;
 	use Edde\Exception\Object\PropertyWriteException;
 
@@ -31,7 +31,7 @@
 		/**
 		 * @param string $name
 		 *
-		 * @return IConfigurable
+		 * @return \Edde\Config\IConfigurable
 		 *
 		 * @throws PropertyReadException
 		 */
@@ -39,7 +39,7 @@
 			if (isset($this->tLazies[$name])) {
 				/** @var $container IContainer */
 				[$container, $dependency, $params] = $this->tLazies[$name];
-				/** @var $instance IConfigurable */
+				/** @var $instance \Edde\Config\IConfigurable */
 				if (($instance = $this->{$name} = $container->create($dependency, $params, static::class)) instanceof IConfigurable && $instance->isSetup() === false) {
 					$instance->setup();
 				}

@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Bus;
 
-	use Edde\Exception\Bus\ElementException;
+	use Edde\Bus\BusException;
 
 	/**
 	 * Base element for all message bus related stuff.
@@ -80,7 +80,8 @@
 		 * return a queue name (if an element has one)
 		 *
 		 * @return string
-		 * @throws ElementException when an element does not have a queue
+		 *
+		 * @throws BusException when an element does not have a queue
 		 */
 		public function getQueue(): string;
 

@@ -5,10 +5,10 @@
 	use Edde\Api\Bus\IElement;
 	use Edde\Api\Bus\IHandler;
 	use Edde\Api\Bus\IMessageBus;
+	use Edde\Bus\BusException;
 	use Edde\Common\Bus\AbstractHandler;
 	use Edde\Common\Bus\Element;
 	use Edde\Common\Bus\Error;
-	use Edde\Exception\Bus\UnhandledElementException;
 	use Edde\Inject\Crypt\RandomService;
 	use stdClass;
 
@@ -43,7 +43,7 @@
 					return $this->knows[$type] = $handler;
 				}
 			}
-			throw new UnhandledElementException(sprintf('Cannot handle element [%s (%s)] in any handler; element type is not supported.', $element->getType(), get_class($element)));
+			throw new BusException(sprintf('Cannot handle element [%s (%s)] in any handler; element type is not supported.', $element->getType(), get_class($element)));
 		}
 
 		/** @inheritdoc */
