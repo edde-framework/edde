@@ -3,7 +3,7 @@
 	namespace Edde\Configurator\Router;
 
 	use Edde\Api\Router\IRouterService;
-	use Edde\Common\Config\AbstractConfigurator;
+	use Edde\Config\AbstractConfigurator;
 	use Edde\Ext\Router\RequestRouter;
 	use Edde\Inject\Container\Container;
 

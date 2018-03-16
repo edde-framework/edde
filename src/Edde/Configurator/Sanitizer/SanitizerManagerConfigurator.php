@@ -4,11 +4,11 @@
 
 	use DateTime;
 	use Edde\Api\Sanitizer\ISanitizerManager;
-	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Common\Sanitizer\BoolSanitizer;
 	use Edde\Common\Sanitizer\DateTimeSanitizer;
 	use Edde\Common\Sanitizer\FloatSanitizer;
 	use Edde\Common\Sanitizer\IntSanitizer;
+	use Edde\Config\AbstractConfigurator;
 	use Edde\Inject\Container\Container;
 
 	class SanitizerManagerConfigurator extends AbstractConfigurator {

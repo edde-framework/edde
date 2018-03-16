@@ -3,8 +3,8 @@
 	namespace Edde\Ext\Control;
 
 	use Edde\Api\Http\IResponse;
-	use Edde\Common\Content\JsonContent;
 	use Edde\Common\Http\Response;
+	use Edde\Content\JsonContent;
 	use Edde\Exception\Http\EmptyBodyException;
 	use Edde\Inject\Utils\StringUtils;
 	use ReflectionClass;

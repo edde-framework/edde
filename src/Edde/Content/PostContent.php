@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Content;
+	namespace Edde\Content;
 
 	/**
 	 * Post content represents $_POST variable; that means if there would be some converter

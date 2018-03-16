@@ -4,8 +4,8 @@
 
 	use Edde\Api\Bus\IElement;
 	use Edde\Api\Content\IContent;
-	use Edde\Common\Content\Content;
 	use Edde\Common\Converter\AbstractConverter;
+	use Edde\Content\Content;
 	use Edde\Exception\Converter\ConverterException;
 	use Edde\Inject\Bus\MessageBus;
 	use Edde\Inject\Converter\ConverterManager;

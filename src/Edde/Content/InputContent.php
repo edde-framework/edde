@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Content;
+	namespace Edde\Content;
 
 	/**
 	 * Input content represent's php input stream.
@@ -10,9 +10,7 @@
 			parent::__construct('php://input', $type);
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getContent() {
 			return file_get_contents('php://input');
 		}

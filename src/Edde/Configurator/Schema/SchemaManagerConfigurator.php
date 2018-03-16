@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Configurator\Schema;
 
-	use Edde\Common\Config\AbstractConfigurator;
+	use Edde\Config\AbstractConfigurator;
 	use Edde\Inject\Container\Container;
 	use Edde\Schema\ISchemaManager;
 	use Edde\Schema\SchemaReflectionLoader;

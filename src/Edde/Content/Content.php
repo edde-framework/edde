@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Content;
+	namespace Edde\Content;
 
 	use Edde\Api\Content\IContent;
 	use Edde\Object;

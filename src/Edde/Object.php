@@ -3,7 +3,7 @@
 	namespace Edde;
 
 	use Edde\Api\Object\IObject;
-	use Edde\Common\Config\ConfigurableTrait;
+	use Edde\Config\ConfigurableTrait;
 	use Edde\Container\AutowireTrait;
 
 	/**

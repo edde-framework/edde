@@ -3,9 +3,8 @@
 	namespace Edde\Ext\Content;
 
 	use Edde\Api\Content\IContent;
-	use Edde\Common\Content\JsonContent;
-	use Edde\Common\Content\ScalarContent;
-	use Edde\Common\Content\TextContent;
+	use Edde\Content\JsonContent;
+	use Edde\Content\TextContent;
 
 	/**
 	 * Simple trait used as a factory for content in "views" or "controllers" or
@@ -21,7 +20,7 @@
 		 * @return IContent
 		 */
 		public function contentScalar($content): IContent {
-			return new ScalarContent($content);
+			return new \Edde\Content\ScalarContent($content);
 		}
 
 		/**

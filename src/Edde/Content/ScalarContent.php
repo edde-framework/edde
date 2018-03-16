@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Content;
+	namespace Edde\Content;
 
 	class ScalarContent extends Content {
 		public function __construct($content) {

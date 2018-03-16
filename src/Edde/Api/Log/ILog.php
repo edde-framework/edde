@@ -3,6 +3,7 @@
 	namespace Edde\Api\Log;
 
 	use Edde\Api\Config\IConfigurable;
+	use Throwable;
 
 	/**
 	 * Physical log storage (destination).
@@ -12,11 +13,11 @@
 		 * shortcut for record();
 		 *
 		 * @param mixed $log
-		 * @param array $tagList
+		 * @param array $tags
 		 *
 		 * @return ILog
 		 */
-		public function log($log, array $tagList = null): ILog;
+		public function log($log, array $tags = null): ILog;
 
 		/**
 		 * @param ILogRecord $logRecord
@@ -29,49 +30,49 @@
 		 * adds informative tag
 		 *
 		 * @param string $log
-		 * @param array  $tagList
+		 * @param array  $tags
 		 *
 		 * @return ILog
 		 */
-		public function info(string $log, array $tagList = null): ILog;
+		public function info(string $log, array $tags = null): ILog;
 
 		/**
 		 * adds warning tag
 		 *
 		 * @param string $log
-		 * @param array  $tagList
+		 * @param array  $tags
 		 *
 		 * @return ILog
 		 */
-		public function warning(string $log, array $tagList = null): ILog;
+		public function warning(string $log, array $tags = null): ILog;
 
 		/**
 		 * adds error tag
 		 *
 		 * @param string $log
-		 * @param array  $tagList
+		 * @param array  $tags
 		 *
 		 * @return ILog
 		 */
-		public function error(string $log, array $tagList = null): ILog;
+		public function error(string $log, array $tags = null): ILog;
 
 		/**
 		 * adds critical tag
 		 *
 		 * @param string $log
-		 * @param array  $tagList
+		 * @param array  $tags
 		 *
 		 * @return ILog
 		 */
-		public function critical(string $log, array $tagList = null): ILog;
+		public function critical(string $log, array $tags = null): ILog;
 
 		/**
 		 * log an exception
 		 *
-		 * @param \Throwable $exception
-		 * @param array|null $tagList
+		 * @param Throwable  $exception
+		 * @param array|null $tags
 		 *
 		 * @return ILog
 		 */
-		public function exception(\Throwable $exception, array $tagList = null): ILog;
+		public function exception(Throwable $exception, array $tags = null): ILog;
 	}

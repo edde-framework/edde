@@ -4,11 +4,11 @@
 
 	use DateTime;
 	use Edde\Api\Filter\IFilterManager;
-	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Common\Filter\BoolFilter;
 	use Edde\Common\Filter\DateTimeFilter;
 	use Edde\Common\Filter\FloatFilter;
 	use Edde\Common\Filter\IntFilter;
+	use Edde\Config\AbstractConfigurator;
 	use Edde\Inject\Container\Container;
 
 	class FilterManagerConfigurator extends AbstractConfigurator {

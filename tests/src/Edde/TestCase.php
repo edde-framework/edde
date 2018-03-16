@@ -4,8 +4,8 @@
 
 	use Edde\Api\Config\IConfigLoader;
 	use Edde\Assets\IRootDirectory;
-	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Common\Container\Factory\ClassFactory;
+	use Edde\Config\AbstractConfigurator;
 	use Edde\Container\AutowireTrait;
 	use Edde\Container\ContainerException;
 	use Edde\Container\IAutowire;

@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Content;
+	namespace Edde\Content;
 
 	class HtmlContent extends Content {
 		public function __construct($content, string $type = 'text/html') {

@@ -4,11 +4,11 @@
 
 	use Edde\Api\File\IFile;
 	use Edde\Api\Http\IResponse;
-	use Edde\Common\Content\GeneratorContent;
-	use Edde\Common\Content\HtmlContent;
-	use Edde\Common\Content\JsonContent;
-	use Edde\Common\Content\TextContent;
 	use Edde\Common\Http\Response;
+	use Edde\Content\GeneratorContent;
+	use Edde\Content\HtmlContent;
+	use Edde\Content\JsonContent;
+	use Edde\Content\TextContent;
 	use Edde\Exception\Http\EmptyBodyException;
 	use Edde\Inject\Http\RequestService;
 	use Edde\Inject\Schema\SchemaManager;

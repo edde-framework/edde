@@ -3,7 +3,7 @@
 	namespace Edde\Configurator\Container;
 
 	use Edde\Api\Config\IConfigurator;
-	use Edde\Common\Config\AbstractConfigurator;
+	use Edde\Config\AbstractConfigurator;
 	use Edde\Container\IContainer;
 	use Edde\Container\IFactory;
 

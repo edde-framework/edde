@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Configurator\Validator;
 
-	use Edde\Common\Config\AbstractConfigurator;
+	use Edde\Config\AbstractConfigurator;
 	use Edde\Ext\Bus\Validator\EventValidator;
 	use Edde\Ext\Bus\Validator\MessageValidator;
 	use Edde\Ext\Bus\Validator\RequestValidator;

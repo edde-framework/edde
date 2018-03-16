@@ -3,8 +3,8 @@
 	namespace Edde\Ext\Converter;
 
 	use Edde\Api\Content\IContent;
-	use Edde\Common\Content\Content;
 	use Edde\Common\Converter\AbstractConverter;
+	use Edde\Content\Content;
 
 	class JsonEncodeConverter extends AbstractConverter {
 		public function __construct() {

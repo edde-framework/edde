@@ -8,12 +8,12 @@
 	use Edde\Api\Http\IRequest;
 	use Edde\Api\Http\IRequestService;
 	use Edde\Api\Url\IUrl;
-	use Edde\Common\Content\InputContent;
-	use Edde\Common\Content\PostContent;
 	use Edde\Common\Http\Cookie;
 	use Edde\Common\Http\Cookies;
 	use Edde\Common\Http\Request;
 	use Edde\Common\Url\Url;
+	use Edde\Content\InputContent;
+	use Edde\Content\PostContent;
 	use Edde\Exception\Converter\ConverterException;
 	use Edde\Exception\Http\EmptyBodyException;
 	use Edde\Exception\Http\NoHttpException;

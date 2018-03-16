@@ -6,7 +6,7 @@
 	use Edde\Api\Bus\IMessageBus;
 	use Edde\Api\Bus\IMessageService;
 	use Edde\Api\Bus\Request\IRequestService;
-	use Edde\Common\Config\AbstractConfigurator;
+	use Edde\Config\AbstractConfigurator;
 	use Edde\Inject\Container\Container;
 
 	class MessageBusConfigurator extends AbstractConfigurator {

@@ -7,8 +7,8 @@
 	use Edde\Api\Bus\Request\IResponse;
 	use Edde\Common\Bus\Event\Event;
 	use Edde\Common\Bus\Request\Request;
-	use Edde\Common\Content\Content;
 	use Edde\Container\ContainerException;
+	use Edde\Content\Content;
 	use Edde\Exception\Bus\InvalidElementException;
 	use Edde\Exception\Bus\UnhandledElementException;
 	use Edde\Exception\Validator\UnknownValidatorException;
