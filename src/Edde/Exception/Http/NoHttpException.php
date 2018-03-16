@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Http\Exception;
+	namespace Edde\Exception\Http;
 
 	/**
 	 * This exception should be thrown when user wants use http package (http related stuff) in

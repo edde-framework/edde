@@ -2,10 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Generator;
 
-	use Edde\Api\Generator\Exception\UnknownGeneratorException;
 	use Edde\Api\Generator\IGenerator;
 	use Edde\Api\Generator\IGeneratorManager;
 	use Edde\Common\Object\Object;
+	use Edde\Exception\Generator\UnknownGeneratorException;
 
 	class GeneratorManager extends Object implements IGeneratorManager {
 		/**

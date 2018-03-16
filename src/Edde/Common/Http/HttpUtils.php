@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Http;
 
-	use Edde\Api\Http\Exception\HttpUtilsException;
 	use Edde\Api\Http\IContentType;
 	use Edde\Api\Http\ICookie;
 	use Edde\Api\Http\IHeaders;
@@ -12,6 +11,7 @@
 	use Edde\Api\Utils\Inject\StringUtils;
 	use Edde\Common\Object\Object;
 	use Edde\Common\Url\Url;
+	use Edde\Exception\Http\HttpUtilsException;
 
 	/**
 	 * Static set of helper functions around http protocol.

@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Generator\Inject;
+	namespace Edde\Inject\Generator;
 
 	use Edde\Api\Generator\IGeneratorManager;
 

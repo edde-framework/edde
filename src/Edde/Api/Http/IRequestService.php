@@ -3,9 +3,8 @@
 	namespace Edde\Api\Http;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Http\Exception\EmptyBodyException;
-	use Edde\Api\Http\Exception\NoHttpException;
 	use Edde\Api\Url\IUrl;
+	use Edde\Exception\Http\EmptyBodyException;
 
 	interface IRequestService extends IConfigurable {
 		/**
@@ -13,7 +12,7 @@
 		 *
 		 * @return IRequest
 		 *
-		 * @throws NoHttpException
+		 * @throws \Edde\Exception\Http\NoHttpException
 		 */
 		public function getRequest(): IRequest;
 
@@ -32,7 +31,7 @@
 		 *
 		 * @return IUrl
 		 *
-		 * @throws NoHttpException
+		 * @throws \Edde\Exception\Http\NoHttpException
 		 */
 		public function getUrl(): IUrl;
 
@@ -41,7 +40,7 @@
 		 *
 		 * @return string
 		 *
-		 * @throws NoHttpException
+		 * @throws \Edde\Exception\Http\NoHttpException
 		 */
 		public function getMethod(): string;
 
@@ -50,7 +49,7 @@
 		 *
 		 * @return IHeaders
 		 *
-		 * @throws NoHttpException
+		 * @throws \Edde\Exception\Http\NoHttpException
 		 */
 		public function getHeaders(): IHeaders;
 
@@ -59,7 +58,7 @@
 		 *
 		 * @return IContentType|null
 		 *
-		 * @throws NoHttpException
+		 * @throws \Edde\Exception\Http\NoHttpException
 		 */
 		public function getContentType(): ?IContentType;
 	}

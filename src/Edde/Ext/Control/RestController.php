@@ -2,12 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Control;
 
-	use Edde\Api\Http\Exception\EmptyBodyException;
-	use Edde\Api\Http\Exception\NoHttpException;
 	use Edde\Api\Http\IResponse;
 	use Edde\Api\Utils\Inject\StringUtils;
 	use Edde\Common\Content\JsonContent;
 	use Edde\Common\Http\Response;
+	use Edde\Exception\Http\EmptyBodyException;
 	use ReflectionClass;
 	use ReflectionException;
 
@@ -62,7 +61,7 @@
 		}
 
 		/**
-		 * @throws NoHttpException
+		 * @throws \Edde\Exception\Http\NoHttpException
 		 * @throws ReflectionException
 		 */
 		public function actionOptions() {

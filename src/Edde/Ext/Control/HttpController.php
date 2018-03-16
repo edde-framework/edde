@@ -3,8 +3,6 @@
 	namespace Edde\Ext\Control;
 
 	use Edde\Api\File\IFile;
-	use Edde\Api\Http\Exception\EmptyBodyException;
-	use Edde\Api\Http\Inject\RequestService;
 	use Edde\Api\Http\IResponse;
 	use Edde\Api\Schema\Exception\UnknownPropertyException;
 	use Edde\Api\Schema\Exception\UnknownSchemaException;
@@ -21,7 +19,7 @@
 	 * Http control provides helpers for a http response style.
 	 */
 	trait HttpController {
-		use RequestService;
+		use Edde\Inject\Http\RequestService;
 		use SchemaManager;
 
 		public function __call(string $name, $arguments) {
@@ -36,7 +34,7 @@
 		 *
 		 * @param string $schema
 		 *
-		 * @throws EmptyBodyException
+		 * @throws \Edde\Exception\Http\EmptyBodyException
 		 * @throws UnknownSchemaException
 		 * @throws ValidationException
 		 * @throws UnknownPropertyException

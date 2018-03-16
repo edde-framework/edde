@@ -3,11 +3,10 @@
 	namespace Edde\Common\Router;
 
 	use Edde\Api\Bus\Request\IRequest;
-	use Edde\Api\Http\Exception\NoHttpException;
-	use Edde\Api\Http\Inject\RequestService;
 	use Edde\Api\Router\IRouter;
 	use Edde\Api\Runtime\Inject\Runtime;
 	use Edde\Common\Object\Object;
+	use Edde\Inject\Http\RequestService;
 
 	abstract class AbstractRouter extends Object implements IRouter {
 		use RequestService;
@@ -21,9 +20,9 @@
 
 		/**
 		 * @return string[]
-		 * @throws NoHttpException
+		 * @throws \Edde\Exception\Http\NoHttpException
 		 */
 		protected function getTargets(): array {
-			return $this->isHttp() ? $this->requestService->getHeaders()->getAcceptList() : [];
+			return $this->isHttp() ? $this->requestService->getHeaders()->getAccepts() : [];
 		}
 	}

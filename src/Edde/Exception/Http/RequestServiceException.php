@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Http\Exception;
+	namespace Edde\Exception\Http;
 
 	class RequestServiceException extends HttpException {
 	}

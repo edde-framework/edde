@@ -2,12 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Http;
 
-	use Edde\Api\Http\Exception\EmptyBodyException;
-	use Edde\Api\Http\Exception\NoHttpException;
 	use Edde\Api\Http\IContentType;
 	use Edde\Api\Http\ICookies;
 	use Edde\Api\Http\IHeaders;
-	use Edde\Api\Http\Inject\HttpUtils;
 	use Edde\Api\Http\IRequest;
 	use Edde\Api\Http\IRequestService;
 	use Edde\Api\Url\IUrl;
@@ -17,7 +14,10 @@
 	use Edde\Common\Object\Object;
 	use Edde\Common\Url\Url;
 	use Edde\Exception\Converter\ConverterException;
+	use Edde\Exception\Http\EmptyBodyException;
+	use Edde\Exception\Http\NoHttpException;
 	use Edde\Inject\Converter\ConverterManager;
+	use Edde\Inject\Http\HttpUtils;
 
 	class RequestService extends Object implements IRequestService {
 		use HttpUtils;
@@ -60,9 +60,9 @@
 		/**
 		 * @inheritdoc
 		 *
-		 * @throws EmptyBodyException
+		 * @throws \Edde\Exception\Http\EmptyBodyException
 		 * @throws UrlException
-		 * @throws NoHttpException
+		 * @throws \Edde\Exception\Http\NoHttpException
 		 * @throws ConverterException
 		 */
 		public function getContent(...$targetList) {
@@ -85,7 +85,7 @@
 		/**
 		 * @inheritdoc
 		 *
-		 * @throws NoHttpException
+		 * @throws \Edde\Exception\Http\NoHttpException
 		 * @throws UrlException
 		 */
 		public function getMethod(): string {
@@ -95,7 +95,7 @@
 		/**
 		 * @inheritdoc
 		 *
-		 * @throws NoHttpException
+		 * @throws \Edde\Exception\Http\NoHttpException
 		 * @throws UrlException
 		 */
 		public function getHeaders(): IHeaders {
@@ -105,7 +105,7 @@
 		/**
 		 * @inheritdoc
 		 *
-		 * @throws NoHttpException
+		 * @throws \Edde\Exception\Http\NoHttpException
 		 * @throws UrlException
 		 */
 		public function getContentType(): ?IContentType {

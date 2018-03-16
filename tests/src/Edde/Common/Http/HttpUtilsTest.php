@@ -2,10 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Utils;
 
-	use Edde\Api\Http\Inject\HttpUtils;
 	use Edde\Common\Http\ContentType;
 	use Edde\Common\Http\RequestHeader;
 	use Edde\Common\Url\Url;
+	use Edde\Inject\Http\HttpUtils;
 	use Edde\TestCase;
 
 	class HttpUtilsTest extends TestCase {

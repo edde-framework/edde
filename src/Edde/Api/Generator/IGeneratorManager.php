@@ -3,7 +3,7 @@
 	namespace Edde\Api\Generator;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Generator\Exception\UnknownGeneratorException;
+	use Edde\Exception\Generator\UnknownGeneratorException;
 
 	interface IGeneratorManager extends IConfigurable {
 		/**

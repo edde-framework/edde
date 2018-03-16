@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Generator\Exception;
+	namespace Edde\Exception\Generator;
 
 	use Edde\Exception\EddeException;
 

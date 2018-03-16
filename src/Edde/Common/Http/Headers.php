@@ -87,7 +87,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getAcceptList(): array {
+		public function getAccepts(): array {
 			return $this->get('Accept', []);
 		}
 

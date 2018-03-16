@@ -2,10 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Http;
 
+	use IteratorAggregate;
+
 	/**
 	 * Explicit interface for http header list.
 	 */
-	interface IHeaders extends \IteratorAggregate {
+	interface IHeaders extends IteratorAggregate {
 		/**
 		 * set exactly the value to the header; it replaces the original value (even if it was more
 		 * values of the same header)
@@ -78,7 +80,7 @@
 		 *
 		 * @return string[]
 		 */
-		public function getAcceptList(): array;
+		public function getAccepts(): array;
 
 		/**
 		 * return a simple array with headers; if there is more values per one headers,

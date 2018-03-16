@@ -6,7 +6,6 @@
 	use Edde\Api\Entity\IEntity;
 	use Edde\Api\Entity\IEntityManager;
 	use Edde\Api\Entity\IEntityQueue;
-	use Edde\Api\Generator\Exception\UnknownGeneratorException;
 	use Edde\Api\Schema\Exception\UnknownPropertyException;
 	use Edde\Api\Schema\Exception\UnknownSchemaException;
 	use Edde\Api\Schema\Inject\SchemaManager;
@@ -15,6 +14,7 @@
 	use Edde\Common\Entity\Query\QueryQueue;
 	use Edde\Common\Object\Object;
 	use Edde\Common\Storage\Query\SelectQuery;
+	use Edde\Exception\Generator\UnknownGeneratorException;
 	use Edde\Inject\Container\Container;
 
 	class EntityManager extends Object implements IEntityManager {

@@ -3,12 +3,12 @@
 	namespace Edde\Ext\Router;
 
 	use Edde\Api\Bus\Request\IRequest;
-	use Edde\Api\Http\Exception\NoHttpException;
 	use Edde\Api\Router\Exception\RouterException;
 	use Edde\Api\Runtime\Exception\MissingArgvException;
 	use Edde\Api\Utils\Inject\StringUtils;
 	use Edde\Common\Bus\Request\Request;
 	use Edde\Common\Router\AbstractRouter;
+	use Edde\Exception\Http\NoHttpException;
 	use Edde\Inject\Container\Container;
 	use Edde\Inject\Crypt\RandomService;
 
@@ -58,7 +58,7 @@
 
 		/**
 		 * @throws MissingArgvException
-		 * @throws NoHttpException
+		 * @throws \Edde\Exception\Http\NoHttpException
 		 * @throws RouterException
 		 */
 		protected function createCliRequest(): IRequest {
