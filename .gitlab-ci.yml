@@ -3,9 +3,6 @@ image: docker:latest
 variables:
     PROJECT: edde
 
-before_script:
-    - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
-
 stages:
     - test
     - publish
@@ -13,6 +10,9 @@ stages:
 test:
     stage: test
     script:
+        - apk add -U py-pip >/dev/null 2>&1
+        - pip install docker-compose >/dev/null 2>&1
+        - docker-compose -f dc.test.yml up -d >/dev/null 2>&1
         - docker build -t edde --file .docker/Dockerfile .
         - docker-compose -f .docker/dc.test.yml up -d
         - docker exec -it edde lib/bin/phpunit
