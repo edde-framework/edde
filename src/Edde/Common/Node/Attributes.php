@@ -2,14 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Node;
 
-	use Edde\Api\Node\IAttributes;
 	use Edde\Collection\AbstractList;
 
-	class Attributes extends AbstractList implements IAttributes {
+	class Attributes extends AbstractList implements \Edde\Node\IAttributes {
 		/**
 		 * @inheritdoc
 		 */
 		public function hasAttributes(string $name): bool {
-			return isset($this->list[$name]) && $this->list[$name] instanceof IAttributes;
+			return isset($this->list[$name]) && $this->list[$name] instanceof \Edde\Node\IAttributes;
 		}
 	}

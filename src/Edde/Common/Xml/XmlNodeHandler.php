@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Xml;
 
-	use Edde\Api\Node\INode;
 	use Edde\Common\Node\Node;
 	use Edde\Exception\Xml\XmlParserException;
+	use Edde\Node\INode;
 
 	/**
 	 * Static XML tree handler; reads whole XML input into a memory.
@@ -15,12 +15,12 @@
 		 */
 		protected $node;
 		/**
-		 * @var INode
+		 * @var \Edde\Node\INode
 		 */
 		protected $current;
 
 		/**
-		 * @param INode $node
+		 * @param \Edde\Node\INode $node
 		 */
 		public function __construct(INode $node = null) {
 			$this->current = $this->node = $node;
@@ -34,12 +34,12 @@
 			$this->node->add(new Node($docType));
 		}
 
-		public function onOpenTagEvent(string $tag, array $attributeList): void {
+		public function onOpenTagEvent(string $tag, array $attributes): void {
 			if ($this->node === null) {
-				$this->current = $this->node = new Node($tag, $attributeList, null);
+				$this->current = $this->node = new Node($tag, $attributes, null);
 				return;
 			}
-			$this->current->add($node = new Node($tag, $attributeList, null));
+			$this->current->add($node = new Node($tag, $attributes, null));
 			$this->current = $node;
 		}
 
@@ -47,19 +47,19 @@
 			$this->current = $this->current->getParent();
 		}
 
-		public function onShortTagEvent(string $tag, array $attributeList): void {
+		public function onShortTagEvent(string $tag, array $attributes): void {
 			if ($this->node === null) {
-				$this->node = new Node($tag, $attributeList, null);
+				$this->node = new Node($tag, $attributes, null);
 				return;
 			}
-			$this->current->add(new Node($tag, $attributeList, null));
+			$this->current->add(new Node($tag, $attributes, null));
 		}
 
 		public function onHeaderEvent(string $header): void {
 		}
 
 		/**
-		 * @return INode
+		 * @return \Edde\Node\INode
 		 * @throws XmlParserException
 		 */
 		public function getNode(): INode {

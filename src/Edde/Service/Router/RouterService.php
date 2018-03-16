@@ -2,24 +2,24 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Router;
 
-	use Edde\Api\Router\IRouter;
-	use Edde\Api\Router\IRouterService;
 	use Edde\Element\IRequest;
 	use Edde\Exception\Router\BadRequestException;
 	use Edde\Inject\Log\LogService;
 	use Edde\Object;
+	use Edde\Router\IRouter;
+	use Edde\Router\IRouterService;
 
-	class RouterService extends Object implements IRouterService {
+	class RouterService extends Object implements \Edde\Router\IRouterService {
 		use LogService;
 		/** @var IRouter[] */
 		protected $routers = [];
-		/** @var IRouter */
+		/** @var \Edde\Router\IRouter */
 		protected $router;
 		/** @var \Edde\Bus\Request\\Edde\Element\IRequest */
 		protected $request;
 
 		/** @inheritdoc */
-		public function registerRouter(IRouter $router): IRouterService {
+		public function registerRouter(IRouter $router): \Edde\Router\IRouterService {
 			$this->routers[] = $router;
 			return $this;
 		}
@@ -33,7 +33,7 @@
 		}
 
 		/** @inheritdoc */
-		public function getRouter(): ?IRouter {
+		public function getRouter(): ?\Edde\Router\IRouter {
 			foreach ($this->routers as $router) {
 				if ($router->setup() && $router->canHandle()) {
 					return $router;

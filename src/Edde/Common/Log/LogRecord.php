@@ -2,13 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Log;
 
-	use Edde\Api\Log\ILogRecord;
 	use Edde\Object;
 
 	/**
 	 * Simple log record; holds record without any modifications.
 	 */
-	class LogRecord extends Object implements ILogRecord {
+	class LogRecord extends Object implements \Edde\Log\ILogRecord {
 		/**
 		 * @var string
 		 */

@@ -3,7 +3,7 @@
 	namespace Edde\Container;
 
 	use Edde\Config\IConfigurable;
-	use Edde\Object\ObjectException;
+	use Edde\ObjectException;
 
 	trait AutowireTrait {
 		protected $tAutowires = [];

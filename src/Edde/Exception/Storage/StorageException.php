@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Exception\Storage;
 
-	use Edde\Exception\EddeException;
+	use Edde\EddeException;
 
 	class StorageException extends EddeException {
 	}

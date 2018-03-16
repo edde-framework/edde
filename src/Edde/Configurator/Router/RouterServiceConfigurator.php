@@ -2,16 +2,16 @@
 	declare(strict_types=1);
 	namespace Edde\Configurator\Router;
 
-	use Edde\Api\Router\IRouterService;
 	use Edde\Config\AbstractConfigurator;
 	use Edde\Ext\Router\RequestRouter;
 	use Edde\Inject\Container\Container;
+	use Edde\Router\IRouterService;
 
 	class RouterServiceConfigurator extends AbstractConfigurator {
 		use Container;
 
 		/**
-		 * @param IRouterService $instance
+		 * @param \Edde\Router\IRouterService $instance
 		 */
 		public function configure($instance) {
 			parent::configure($instance);

@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Inject\Generator;
 
-	use Edde\Api\Generator\IGeneratorManager;
+	use Edde\Generator\IGeneratorManager;
 
 	trait GeneratorManager {
 		/**
-		 * @var IGeneratorManager
+		 * @var \Edde\Generator\IGeneratorManager
 		 */
 		protected $generatorManager;
 

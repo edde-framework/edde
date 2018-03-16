@@ -3,9 +3,9 @@
 	namespace Edde\Common\Resource;
 
 	use Edde\Api\Resource\IResource;
-	use Edde\Api\Url\IUrl;
 	use Edde\Exception\Resource\ResourceException;
 	use Edde\Object;
+	use Edde\Url\IUrl;
 
 	/**
 	 * Abstract definition of some "resource".

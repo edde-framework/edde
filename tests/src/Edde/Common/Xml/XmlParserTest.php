@@ -17,7 +17,7 @@
 					'root',
 					[],
 				],
-			], $handler->getTagList());
+			], $handler->getTags());
 		}
 
 		public function testSimpleShort() {
@@ -27,7 +27,7 @@
 					'root',
 					[],
 				],
-			], $handler->getTagList());
+			], $handler->getTags());
 		}
 
 		public function testSimpleAttribute() {
@@ -41,7 +41,7 @@
 						'class' => 'Some\Strange\Characters',
 					],
 				],
-			], $handler->getTagList());
+			], $handler->getTags());
 		}
 
 		public function testSimpleShortAttribute() {
@@ -55,7 +55,7 @@
 						'class' => 'Some\Strange\Characters',
 					],
 				],
-			], $handler->getTagList());
+			], $handler->getTags());
 		}
 
 		public function testBitLessSimple() {
@@ -87,7 +87,7 @@
 					'tag-with-value',
 					[],
 				],
-			], $handler->getTagList());
+			], $handler->getTags());
 		}
 
 		public function testComment() {
@@ -101,7 +101,7 @@
 					'poo',
 					[],
 				],
-			], $handler->getTagList());
+			], $handler->getTags());
 		}
 
 		public function testSimpleMultilineAttributes() {
@@ -114,7 +114,7 @@
 						'device-class' => 'bar',
 					],
 				],
-			], $handler->getTagList());
+			], $handler->getTags());
 		}
 
 		public function testMultilineAttributes() {
@@ -131,7 +131,7 @@
 						'device-class' => 'bar',
 					],
 				],
-			], $handler->getTagList());
+			], $handler->getTags());
 		}
 
 		public function testXmlHeader() {
@@ -141,7 +141,7 @@
 					'foo',
 					[],
 				],
-			], $handler->getTagList());
+			], $handler->getTags());
 		}
 
 		public function testNewlineBetweenNodes() {
@@ -165,7 +165,7 @@
 						'boo' => 'poo',
 					],
 				],
-			], $handler->getTagList());
+			], $handler->getTags());
 		}
 
 		public function testStringParse() {
@@ -193,7 +193,7 @@
 						'boo' => 'poo',
 					],
 				],
-			], $handler->getTagList());
+			], $handler->getTags());
 		}
 //
 //			public function testParserNode() {

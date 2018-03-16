@@ -2,12 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Xml;
 
-	use Edde\Api\Xml\IXmlExport;
 	use Edde\File\IFile;
 	use Edde\Object;
 	use Iterator;
 
-	abstract class AbstractXmlExport extends Object implements IXmlExport {
+	abstract class AbstractXmlExport extends Object implements \Edde\Xml\IXmlExport {
 		/**
 		 * @inheritdoc
 		 */

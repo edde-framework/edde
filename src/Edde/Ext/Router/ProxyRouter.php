@@ -2,10 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Router;
 
-	use Edde\Api\Router\IRouter;
 	use Edde\Common\Router\AbstractRouter;
 	use Edde\Element\IRequest;
 	use Edde\Inject\Container\Container;
+	use Edde\Router\IRouter;
 
 	class ProxyRouter extends AbstractRouter {
 		use Container;
@@ -13,7 +13,7 @@
 		protected $proxy;
 		/** @var array */
 		protected $parameters = [];
-		/** @var IRouter */
+		/** @var \Edde\Router\IRouter */
 		protected $router;
 
 		public function __construct(string $proxy, array $parameters = []) {

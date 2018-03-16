@@ -5,8 +5,8 @@
 	use Edde\Api\Http\ICookies;
 	use Edde\Api\Http\IHeaders;
 	use Edde\Api\Http\IRequest;
-	use Edde\Api\Url\IUrl;
 	use Edde\Common\Url\Url;
+	use Edde\Url\IUrl;
 
 	/**
 	 * A small boy was awoken in the middle of the night by strange noises from his parents’ room, and he decided to investigate.
@@ -23,7 +23,7 @@
 	 */
 	class Request extends AbstractHttp implements IRequest {
 		/**
-		 * @var IUrl
+		 * @var \Edde\Url\IUrl
 		 */
 		protected $url;
 		/**
@@ -39,14 +39,14 @@
 		 */
 		protected $remoteHost;
 		/**
-		 * @var IUrl
+		 * @var \Edde\Url\IUrl
 		 */
 		protected $referer;
 
 		/**
-		 * @param IUrl     $url
-		 * @param IHeaders $headers
-		 * @param ICookies $cookies
+		 * @param \Edde\Url\IUrl $url
+		 * @param IHeaders       $headers
+		 * @param ICookies       $cookies
 		 */
 		public function __construct(IUrl $url, IHeaders $headers, ICookies $cookies) {
 			parent::__construct($headers, $cookies);

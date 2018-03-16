@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Node;
 
-	use Edde\Api\Node\INode;
-	use Edde\Api\Node\ITreeTraversal;
+	use Edde\Node\INode;
+	use Edde\Node\ITreeTraversal;
 	use Edde\Object;
 
 	/**
@@ -13,11 +13,11 @@
 	 * The teacher said, "Do you think you're stupid, Little Johnny?"
 	 * "No, ma'am, but I hate to see you standing there all by yourself!"
 	 */
-	abstract class AbstractTreeTraversal extends Object implements ITreeTraversal {
+	abstract class AbstractTreeTraversal extends Object implements \Edde\Node\ITreeTraversal {
 		/**
 		 * @inheritdoc
 		 */
-		public function select(INode $node, ...$parameters): ITreeTraversal {
+		public function select(INode $node, ...$parameters): \Edde\Node\ITreeTraversal {
 			return $this;
 		}
 

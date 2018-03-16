@@ -3,19 +3,11 @@
 	namespace Edde\Ext\Container;
 
 	use Edde\Api\Entity\IEntityManager;
-	use Edde\Api\Filter\IFilterManager;
-	use Edde\Api\Generator\IGeneratorManager;
 	use Edde\Api\Http\IHttpUtils;
 	use Edde\Api\Http\IRequestService as IHttpRequestService;
-	use Edde\Api\Log\ILogService;
-	use Edde\Api\Router\IRouterService;
-	use Edde\Api\Runtime\IRuntime;
-	use Edde\Api\Sanitizer\ISanitizerManager;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Upgrade\IUpgradeManager;
 	use Edde\Api\Utils\IStringUtils;
-	use Edde\Api\Xml\IXmlExport;
-	use Edde\Api\Xml\IXmlParser;
 	use Edde\Application\Application;
 	use Edde\Application\IApplication;
 	use Edde\Assets\AssetsDirectory;
@@ -60,8 +52,14 @@
 	use Edde\Crypt\IPasswordService;
 	use Edde\Crypt\IRandomService;
 	use Edde\Driver\IDriver;
-	use Edde\Exception\EddeException;
+	use Edde\EddeException;
+	use Edde\Filter\IFilterManager;
+	use Edde\Generator\IGeneratorManager;
+	use Edde\Log\ILogService;
 	use Edde\Object;
+	use Edde\Router\IRouterService;
+	use Edde\Runtime\IRuntime;
+	use Edde\Sanitizer\ISanitizerManager;
 	use Edde\Schema\ISchemaManager;
 	use Edde\Schema\SchemaManager;
 	use Edde\Service\Config\ConfigLoader;
@@ -84,6 +82,8 @@
 	use Edde\Service\Xml\XmlParser;
 	use Edde\Validator\IValidatorManager;
 	use Edde\Validator\ValidatorManager;
+	use Edde\Xml\IXmlExport;
+	use Edde\Xml\IXmlParser;
 	use ReflectionException;
 	use ReflectionMethod;
 	use stdClass;

@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Node;
 
-	use Edde\Api\Node\INode;
-	use Edde\Api\Node\ITree;
+	use Edde\Node\INode;
+	use Edde\Node\ITree;
 	use Edde\Node\NodeException;
 	use Edde\Object;
 	use Iterator;
@@ -31,7 +31,7 @@
 		 *
 		 * @param ITree $tree
 		 */
-		public function __construct(ITree $tree) {
+		public function __construct(\Edde\Node\ITree $tree) {
 			$this->tree = $tree;
 		}
 

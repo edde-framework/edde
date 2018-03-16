@@ -3,16 +3,16 @@
 	namespace Edde\Common\Node;
 
 	use ArrayIterator;
-	use Edde\Api\Node\ITree;
+	use Edde\Node\ITree;
 	use Edde\Object;
 
 	/**
 	 * Pure node tree implementation; this class holds all common methods for node manipulation.
 	 */
 	class Tree extends Object implements ITree {
-		/** @var ITree */
+		/** @var \Edde\Node\ITree */
 		protected $parent;
-		/** @var ITree[] */
+		/** @var \Edde\Node\ITree[] */
 		protected $trees = [];
 		/** @var int */
 		protected $level;
@@ -20,14 +20,14 @@
 		/**
 		 * State-of-the-art: any computer you can't afford.
 		 *
-		 * @param ITree|null $parent
+		 * @param \Edde\Node\ITree|null $parent
 		 */
-		public function __construct(ITree $parent = null) {
+		public function __construct(\Edde\Node\ITree $parent = null) {
 			$this->parent = $parent;
 		}
 
 		/** @inheritdoc */
-		public function add(ITree $tree): ITree {
+		public function add(ITree $tree): \Edde\Node\ITree {
 			if ($tree->isRoot()) {
 				$tree->setParent($this);
 			}
@@ -36,7 +36,7 @@
 		}
 
 		/** @inheritdoc */
-		public function push(ITree $tree): ITree {
+		public function push(\Edde\Node\ITree $tree): ITree {
 			$this->trees[] = $tree;
 			return $this;
 		}
@@ -57,7 +57,7 @@
 		}
 
 		/** @inheritdoc */
-		public function setParent(?ITree $tree): ITree {
+		public function setParent(?\Edde\Node\ITree $tree): \Edde\Node\ITree {
 			$this->parent = $tree;
 			$this->level = null;
 			return $this;

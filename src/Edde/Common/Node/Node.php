@@ -2,20 +2,20 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Node;
 
-	use Edde\Api\Node\IAttributes;
-	use Edde\Api\Node\INode;
+	use Edde\Node\IAttributes;
+	use Edde\Node\INode;
 
 	/**
 	 * Default full featured node implementation.
 	 */
-	class Node extends Tree implements INode {
+	class Node extends Tree implements \Edde\Node\INode {
 		/** @var string */
 		protected $name;
 		/** @var mixed */
 		protected $value;
-		/**  @var IAttributes */
+		/**  @var \Edde\Node\IAttributes */
 		protected $attributes;
-		/** @var IAttributes */
+		/** @var \Edde\Node\IAttributes */
 		protected $metas;
 		/** @var INode[] */
 		protected $names = [];
@@ -36,7 +36,7 @@
 		}
 
 		/** @inheritdoc */
-		public function setName(?string $name): INode {
+		public function setName(?string $name): \Edde\Node\INode {
 			$this->name = $name;
 			return $this;
 		}
@@ -52,7 +52,7 @@
 		}
 
 		/** @inheritdoc */
-		public function setAttribute(string $name, $value): INode {
+		public function setAttribute(string $name, $value): \Edde\Node\INode {
 			$this->attributes->set($name, $value);
 			return $this;
 		}
@@ -68,30 +68,30 @@
 		}
 
 		/** @inheritdoc */
-		public function putAttributes(array $attributes): INode {
+		public function putAttributes(array $attributes): \Edde\Node\INode {
 			$this->attributes->put($attributes);
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function mergeAttributes(array $attributes): INode {
+		public function mergeAttributes(array $attributes): \Edde\Node\INode {
 			$this->attributes->merge($attributes);
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function getMetas(): IAttributes {
+		public function getMetas(): \Edde\Node\IAttributes {
 			return $this->metas;
 		}
 
 		/** @inheritdoc */
-		public function setMeta(string $name, $value): INode {
+		public function setMeta(string $name, $value): \Edde\Node\INode {
 			$this->metas->set($name, $value);
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function putMetas(array $metaList): INode {
+		public function putMetas(array $metaList): \Edde\Node\INode {
 			$this->metas->put($metaList);
 			return $this;
 		}
@@ -113,7 +113,7 @@
 		}
 
 		/** @inheritdoc */
-		public function setValue($value): INode {
+		public function setValue($value): \Edde\Node\INode {
 			$this->value = $value;
 			return $this;
 		}
@@ -128,7 +128,7 @@
 			if (isset($this->names[$name])) {
 				return true;
 			}
-			/** @var $node INode */
+			/** @var $node \Edde\Node\INode */
 			foreach ($this->trees as $node) {
 				if ($node->getName() === $name) {
 					return (bool)($this->names[$name] = $node);
@@ -138,11 +138,11 @@
 		}
 
 		/** @inheritdoc */
-		public function getNode(string $name): INode {
+		public function getNode(string $name): \Edde\Node\INode {
 			if (isset($this->names[$name])) {
 				return $this->names[$name];
 			}
-			/** @var $node INode */
+			/** @var $node \Edde\Node\INode */
 			foreach ($this->trees as $node) {
 				if ($node->getName() === $name) {
 					return $this->names[$name] = $node;

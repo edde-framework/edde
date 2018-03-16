@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Crypt;
 
-	use Edde\Exception\EddeException;
+	use Edde\EddeException;
 
 	class CryptException extends EddeException {
 	}

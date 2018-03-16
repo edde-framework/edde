@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde;
 
-	use Edde\Api\Object\IObject;
 	use Edde\Config\ConfigurableTrait;
 	use Edde\Container\AutowireTrait;
 

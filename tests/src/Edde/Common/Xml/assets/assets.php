@@ -1,17 +1,16 @@
 <?php
+	declare(strict_types=1);
 	use Edde\Common\Xml\AbstractXmlHandler;
 
 	class TestXmlHandler extends AbstractXmlHandler {
-		/**
-		 * @var array
-		 */
-		protected $tagList = [];
+		/** @var array */
+		protected $tags = [];
 
 		/**
 		 * @return array
 		 */
-		public function getTagList() {
-			return $this->tagList;
+		public function getTags() {
+			return $this->tags;
 		}
 
 		public function onTextEvent(string $text): void {
@@ -20,20 +19,20 @@
 		public function onDocTypeEvent(string $docType): void {
 		}
 
-		public function onOpenTagEvent(string $tag, array $attributeList): void {
-			$this->tagList[] = [
+		public function onOpenTagEvent(string $tag, array $attributes): void {
+			$this->tags[] = [
 				$tag,
-				$attributeList,
+				$attributes,
 			];
 		}
 
 		public function onCloseTagEvent(string $name): void {
 		}
 
-		public function onShortTagEvent(string $tag, array $attributeList): void {
-			$this->tagList[] = [
+		public function onShortTagEvent(string $tag, array $attributes): void {
+			$this->tags[] = [
 				$tag,
-				$attributeList,
+				$attributes,
 			];
 		}
 

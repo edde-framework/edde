@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Http;
 
-	use Edde\Api\Url\IUrl;
+	use Edde\Url\IUrl;
 
 	/**
 	 * Low level implementation of HTTP request.

@@ -3,13 +3,13 @@
 	namespace Edde\Configurator\Sanitizer;
 
 	use DateTime;
-	use Edde\Api\Sanitizer\ISanitizerManager;
 	use Edde\Common\Sanitizer\BoolSanitizer;
 	use Edde\Common\Sanitizer\DateTimeSanitizer;
 	use Edde\Common\Sanitizer\FloatSanitizer;
 	use Edde\Common\Sanitizer\IntSanitizer;
 	use Edde\Config\AbstractConfigurator;
 	use Edde\Inject\Container\Container;
+	use Edde\Sanitizer\ISanitizerManager;
 
 	class SanitizerManagerConfigurator extends AbstractConfigurator {
 		use Container;

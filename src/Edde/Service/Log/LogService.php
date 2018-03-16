@@ -2,17 +2,16 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Log;
 
-	use Edde\Api\Filter\IFilter;
-	use Edde\Api\Log\ILog;
-	use Edde\Api\Log\ILogRecord;
-	use Edde\Api\Log\ILogService;
 	use Edde\Common\Log\AbstractLog;
+	use Edde\Filter\IFilter;
+	use Edde\Log\ILog;
+	use Edde\Log\ILogService;
 
 	/**
 	 * Default implementation of log service.
 	 */
 	class LogService extends AbstractLog implements ILogService {
-		/** @var IFilter[] */
+		/** @var \Edde\Filter\IFilter[] */
 		protected $contentFilters = [];
 		/** @var ILog[] */
 		protected $logs = [];
@@ -41,7 +40,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function record(ILogRecord $logRecord): ILog {
+		public function record(\Edde\Log\ILogRecord $logRecord): ILog {
 			$tags = array_unique(($tags = $logRecord->getTags()) ? $tags : [null]);
 			if (empty($this->contentFilters) !== true) {
 				$log = $logRecord->getLog();

@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Bus;
 
-	use Edde\Exception\EddeException;
+	use Edde\EddeException;
 
 	class BusException extends EddeException {
 	}

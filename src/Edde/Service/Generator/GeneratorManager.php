@@ -2,12 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Generator;
 
-	use Edde\Api\Generator\IGenerator;
-	use Edde\Api\Generator\IGeneratorManager;
 	use Edde\Generator\GeneratorException;
+	use Edde\Generator\IGenerator;
+	use Edde\Generator\IGeneratorManager;
 	use Edde\Object;
 
-	class GeneratorManager extends Object implements IGeneratorManager {
+	class GeneratorManager extends Object implements \Edde\Generator\IGeneratorManager {
 		/** @var IGenerator[] */
 		protected $generators = [];
 

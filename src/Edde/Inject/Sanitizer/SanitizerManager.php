@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Inject\Sanitizer;
 
-	use Edde\Api\Sanitizer\ISanitizerManager;
+	use Edde\Sanitizer\ISanitizerManager;
 
 	trait SanitizerManager {
 		/**
@@ -11,9 +11,9 @@
 		protected $sanitizerManager;
 
 		/**
-		 * @param ISanitizerManager $sanitizerManager
+		 * @param \Edde\Sanitizer\ISanitizerManager $sanitizerManager
 		 */
-		public function lazySanitizerManager(ISanitizerManager $sanitizerManager) {
+		public function lazySanitizerManager(\Edde\Sanitizer\ISanitizerManager $sanitizerManager) {
 			$this->sanitizerManager = $sanitizerManager;
 		}
 	}

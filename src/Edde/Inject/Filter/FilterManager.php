@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Inject\Filter;
 
-	use Edde\Api\Filter\IFilterManager;
+	use Edde\Filter\IFilterManager;
 
 	trait FilterManager {
 		/**

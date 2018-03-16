@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Node;
 
-	use Edde\Exception\EddeException;
+	use Edde\EddeException;
 
 	class NodeException extends EddeException {
 	}

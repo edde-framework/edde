@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Router;
 
-	use Edde\Api\Router\IRouter;
 	use Edde\Exception\Http\NoHttpException;
 	use Edde\Inject\Http\RequestService;
 	use Edde\Inject\Runtime\Runtime;
 	use Edde\Object;
+	use Edde\Router\IRouter;
 
 	abstract class AbstractRouter extends Object implements IRouter {
 		use RequestService;

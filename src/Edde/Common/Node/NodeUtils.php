@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Node;
 
-	use Edde\Api\Node\INode;
+	use Edde\Node\INode;
 	use Edde\Object;
 	use ReflectionClass;
 	use stdClass;
@@ -12,19 +12,19 @@
 	 */
 	class NodeUtils extends Object {
 		/**
-		 * @param INode    $root
-		 * @param iterable $source
+		 * @param \Edde\Node\INode $root
+		 * @param iterable         $source
 		 *
 		 * @return INode
 		 * @throws \Edde\Node\NodeException
 		 */
-		static public function node(INode $root, iterable $source): INode {
+		static public function node(\Edde\Node\INode $root, iterable $source): \Edde\Node\INode {
 			$callback = null;
 			if (is_array($source) === false && is_object($source) === false) {
 				throw new \Edde\Node\NodeException('Source must be array or stdClass object.');
 			}
 			/** @noinspection UnnecessaryParenthesesInspection */
-			return ($callback = function (callable $callback, INode $root, $source) {
+			return ($callback = function (callable $callback, \Edde\Node\INode $root, $source) {
 				$attributeList = $root->getAttributes();
 				/** @noinspection ForeachSourceInspection */
 				foreach ($source as $key => $value) {
@@ -81,21 +81,21 @@
 		/**
 		 * convert input of stdClass to node tree
 		 *
-		 * @param stdClass    $stdClass
-		 * @param INode       $node
-		 * @param string|null $class
+		 * @param stdClass         $stdClass
+		 * @param \Edde\Node\INode $node
+		 * @param string|null      $class
 		 *
-		 * @return INode
+		 * @return \Edde\Node\INode
 		 * @throws \Edde\Node\NodeException
 		 */
-		static public function toNode(stdClass $stdClass, INode $node = null, string $class = null): INode {
-			if (($reflectionClass = new ReflectionClass($class = $class ?: Node::class))->implementsInterface(INode::class)) {
-				throw new ClassMismatchException(sprintf('Class specified [%s] is not instance of [%s].', $class, INode::class));
+		static public function toNode(stdClass $stdClass, \Edde\Node\INode $node = null, string $class = null): \Edde\Node\INode {
+			if (($reflectionClass = new ReflectionClass($class = $class ?: Node::class))->implementsInterface(\Edde\Node\INode::class)) {
+				throw new ClassMismatchException(sprintf('Class specified [%s] is not instance of [%s].', $class, \Edde\Node\INode::class));
 			} else if (($constructor = $reflectionClass->getConstructor()) && $constructor->getNumberOfRequiredParameters() > 0) {
 				throw new \Edde\Node\NodeException(sprintf('Node class [%s] must not require any parameters in constructor in order to be used in [%s].', $class, __METHOD__));
 			}
-			$createNode = function (string $class, string $name = null): INode {
-				/** @var $node INode */
+			$createNode = function (string $class, string $name = null): \Edde\Node\INode {
+				/** @var $node \Edde\Node\INode */
 				$node = new $class();
 				$name ? $node->setName($name) : null;
 				return $node;
@@ -122,7 +122,7 @@
 				}
 				$node->setAttribute($k, $v);
 			}
-			/** @var $node INode */
+			/** @var $node \Edde\Node\INode */
 			if ($node->getName() === null && $node->count() === 1) {
 				$node = $node->getTrees()[0];
 				$node->setParent(null);
@@ -138,7 +138,7 @@
 		 *
 		 * @return stdClass
 		 */
-		static public function fromNode(INode $root): stdClass {
+		static public function fromNode(\Edde\Node\INode $root): stdClass {
 			$object = new stdClass();
 			$attributeList = $root->getAttributes();
 			if (($value = $root->getValue()) !== null) {
@@ -172,7 +172,7 @@
 		 *
 		 * @throws \Edde\Node\NodeException
 		 */
-		static public function namespace(INode $root, string $preg) {
+		static public function namespace(\Edde\Node\INode $root, string $preg) {
 			foreach (TreeIterator::recursive($root, true) as $node) {
 				$attributeList = $node->getAttributes();
 				foreach ($attributeList as $k => $value) {

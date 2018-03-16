@@ -2,18 +2,17 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Schema;
 
-	use Edde\Api\Node\INode;
 	use Edde\Common\Node\Node;
+	use Edde\Node\INode;
 	use Edde\Object;
 	use Edde\Schema\ILinkBuilder;
 	use Edde\Schema\IPropertyBuilder;
-	use Edde\Schema\ISchema;
 	use Edde\Schema\ISchemaBuilder;
 	use Edde\Schema\Schema;
 	use Edde\Schema\SchemaException;
 
 	class SchemaBuilder extends Object implements ISchemaBuilder {
-		/** @var INode */
+		/** @var \Edde\Node\INode */
 		protected $node;
 		/** @var IPropertyBuilder[] */
 		protected $propertyBuilders = [];

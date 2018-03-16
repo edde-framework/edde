@@ -2,18 +2,18 @@
 	declare(strict_types=1);
 	namespace Edde\Inject\Router;
 
-	use Edde\Api\Router\IRouterService;
+	use Edde\Router\IRouterService;
 
 	trait RouterService {
 		/**
-		 * @var IRouterService
+		 * @var \Edde\Router\IRouterService
 		 */
 		protected $routerService;
 
 		/**
-		 * @param IRouterService $routerService
+		 * @param \Edde\Router\IRouterService $routerService
 		 */
-		public function lazyRouterService(IRouterService $routerService) {
+		public function lazyRouterService(\Edde\Router\IRouterService $routerService) {
 			$this->routerService = $routerService;
 		}
 	}

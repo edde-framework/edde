@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Schema;
 
-	use Edde\Api\Node\INode;
+	use Edde\Node\INode;
 	use Edde\Object;
 	use Edde\Schema\IProperty;
 	use Edde\Schema\IPropertyBuilder;

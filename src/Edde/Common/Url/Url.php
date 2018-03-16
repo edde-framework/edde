@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Url;
 
-	use Edde\Api\Url\IUrl;
 	use Edde\Exception\Url\UrlException;
 	use Edde\Object;
+	use Edde\Url\IUrl;
 
 	class Url extends Object implements IUrl {
 		/**
@@ -120,7 +120,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function setPath(string $path): IUrl {
+		public function setPath(string $path): \Edde\Url\IUrl {
 			$this->path = $path;
 			return $this;
 		}

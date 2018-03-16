@@ -9,7 +9,7 @@
 	use Edde\Common\Container\Factory\ProxyFactory;
 	use Edde\Container\ContainerException;
 	use Edde\Container\IContainer;
-	use Edde\Exception\EddeException;
+	use Edde\EddeException;
 	use Edde\Inject\Container\Container;
 	use Edde\Test\AutowireDependencyObject;
 	use Edde\Test\BarObject;

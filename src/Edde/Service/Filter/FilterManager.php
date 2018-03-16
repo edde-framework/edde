@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Filter;
 
-	use Edde\Api\Filter\IFilter;
-	use Edde\Api\Filter\IFilterManager;
 	use Edde\Filter\FilterException;
+	use Edde\Filter\IFilter;
+	use Edde\Filter\IFilterManager;
 	use Edde\Object;
 
 	class FilterManager extends Object implements IFilterManager {
@@ -12,7 +12,7 @@
 		protected $filters = [];
 
 		/** @inheritdoc */
-		public function registerFilter(string $name, IFilter $filter): IFilterManager {
+		public function registerFilter(string $name, \Edde\Filter\IFilter $filter): IFilterManager {
 			$this->filters[$name] = $filter;
 			return $this;
 		}
@@ -26,7 +26,7 @@
 		}
 
 		/** @inheritdoc */
-		public function getFilter(string $name): IFilter {
+		public function getFilter(string $name): \Edde\Filter\IFilter {
 			if (isset($this->filters[$name]) === false) {
 				throw new FilterException(sprintf('Requested unknown filter [%s].', $name));
 			}

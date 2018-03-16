@@ -2,10 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Log;
 
-	use Edde\Api\Log\ILog;
-	use Edde\Api\Log\ILogRecord;
 	use Edde\File\IFile;
 	use Edde\Inject\Assets\LogDirectory;
+	use Edde\Log\ILog;
 
 	/**
 	 * Default file based log.
@@ -38,7 +37,7 @@
 		}
 
 		/** @inheritdoc */
-		public function record(ILogRecord $logRecord): ILog {
+		public function record(\Edde\Log\ILogRecord $logRecord): ILog {
 			$this->file->write(sprintf("[%s] %s\n", date('Y-m-d H:i:s'), $logRecord->getLog()));
 			return $this;
 		}

@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Http;
 
-	use Edde\Api\Url\IUrl;
 	use Edde\Config\IConfigurable;
 	use Edde\Exception\Http\EmptyBodyException;
+	use Edde\Url\IUrl;
 
 	interface IRequestService extends IConfigurable {
 		/**
@@ -29,7 +29,7 @@
 		/**
 		 * get current request url
 		 *
-		 * @return IUrl
+		 * @return \Edde\Url\IUrl
 		 *
 		 * @throws \Edde\Exception\Http\NoHttpException
 		 */

@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Xml;
 
-	use Edde\Api\Node\INode;
 	use Edde\Common\Xml\AbstractXmlExport;
+	use Edde\Node\INode;
 	use Iterator;
 	use SplStack;
 
@@ -14,7 +14,7 @@
 		public function node(Iterator $iterator): void {
 			$stack = new SplStack();
 			$level = -1;
-			/** @var $node INode */
+			/** @var $node \Edde\Node\INode */
 			foreach ($iterator as $node) {
 				$value = null;
 				if ($node->getLevel() < $level) {

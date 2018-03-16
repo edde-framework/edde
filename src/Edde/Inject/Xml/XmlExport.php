@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Inject\Xml;
 
-	use Edde\Api\Xml\IXmlExport;
+	use Edde\Xml\IXmlExport;
 
 	trait XmlExport {
 		/**

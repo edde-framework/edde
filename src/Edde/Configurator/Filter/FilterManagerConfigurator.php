@@ -3,19 +3,19 @@
 	namespace Edde\Configurator\Filter;
 
 	use DateTime;
-	use Edde\Api\Filter\IFilterManager;
 	use Edde\Common\Filter\BoolFilter;
 	use Edde\Common\Filter\DateTimeFilter;
 	use Edde\Common\Filter\FloatFilter;
 	use Edde\Common\Filter\IntFilter;
 	use Edde\Config\AbstractConfigurator;
+	use Edde\Filter\IFilterManager;
 	use Edde\Inject\Container\Container;
 
 	class FilterManagerConfigurator extends AbstractConfigurator {
 		use Container;
 
 		/**
-		 * @param IFilterManager $instance
+		 * @param \Edde\Filter\IFilterManager $instance
 		 */
 		public function configure($instance) {
 			parent::configure($instance);

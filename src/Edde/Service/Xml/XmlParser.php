@@ -3,18 +3,17 @@
 	namespace Edde\Service\Xml;
 
 	use Edde\Api\Resource\IResource;
-	use Edde\Api\Xml\IXmlHandler;
-	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\File\File;
 	use Edde\Exception\Xml\XmlParserException;
 	use Edde\Inject\Utils\StringUtils;
 	use Edde\Object;
+	use Edde\Xml\IXmlHandler;
 	use Iterator;
 
 	/**
 	 * Simple and fast event based xml parser.
 	 */
-	class XmlParser extends Object implements IXmlParser {
+	class XmlParser extends Object implements \Edde\Xml\IXmlParser {
 		use StringUtils;
 		const XML_TYPE_WARP = null;
 		const XML_TYPE_OPENTAG = 1;
@@ -33,7 +32,7 @@
 		 *
 		 * @throws XmlParserException
 		 */
-		public function file(string $file, IXmlHandler $xmlHandler): IXmlParser {
+		public function file(string $file, IXmlHandler $xmlHandler): \Edde\Xml\IXmlParser {
 			return $this->parse(File::create($file), $xmlHandler);
 		}
 
@@ -42,7 +41,7 @@
 		 *
 		 * @throws XmlParserException
 		 */
-		public function string(string $string, IXmlHandler $xmlHandler): IXmlParser {
+		public function string(string $string, IXmlHandler $xmlHandler): \Edde\Xml\IXmlParser {
 			return $this->iterate($this->stringUtils->createIterator($string), $xmlHandler);
 		}
 
@@ -51,7 +50,7 @@
 		 *
 		 * @throws XmlParserException
 		 */
-		public function parse(IResource $resource, IXmlHandler $xmlHandler): IXmlParser {
+		public function parse(IResource $resource, IXmlHandler $xmlHandler): \Edde\Xml\IXmlParser {
 			/**
 			 * this interesting piece of things is reading line based data from $resource and
 			 * streaming character per character to the iterator

@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Log;
 
-	use Edde\Api\Log\ILog;
+	use Edde\Log\ILog;
 	use Edde\Object;
 	use Throwable;
 

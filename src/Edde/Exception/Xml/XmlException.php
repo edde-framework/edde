@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Exception\Xml;
 
-	use Edde\Exception\EddeException;
+	use Edde\EddeException;
 
 	class XmlException extends EddeException {
 	}

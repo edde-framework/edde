@@ -4,7 +4,7 @@
 
 	use Edde\Config\IConfigurable;
 	use Edde\Container\IAutowire;
-	use Edde\Object\ObjectException;
+	use Edde\ObjectException;
 	use Edde\Test\BarObject;
 	use Edde\Test\FooBarObject;
 	use Edde\Test\FooObject;
