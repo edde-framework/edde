@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Bus\Event;
+	namespace Edde\Bus;
 
 	use Edde\Config\IConfigurable;
 

@@ -2,10 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Container;
 
-	use Edde\Api\Bus\Event\IEventBus;
-	use Edde\Api\Bus\IMessageBus;
-	use Edde\Api\Bus\IMessageService;
-	use Edde\Api\Bus\Request\IRequestService;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Api\Crypt\IPasswordService;
 	use Edde\Api\Crypt\IRandomService;
@@ -33,6 +29,14 @@
 	use Edde\Assets\ITempDirectory;
 	use Edde\Assets\LogDirectory;
 	use Edde\Assets\TempDirectory;
+	use Edde\Bus\EventBus;
+	use Edde\Bus\IEventBus;
+	use Edde\Bus\IMessageBus;
+	use Edde\Bus\IMessageService;
+	use Edde\Bus\IRequestService;
+	use Edde\Bus\MessageBus;
+	use Edde\Bus\MessageService;
+	use Edde\Bus\RequestService;
 	use Edde\Common\Container\Factory\CallbackFactory;
 	use Edde\Common\Container\Factory\ClassFactory;
 	use Edde\Common\Container\Factory\ExceptionFactory;
@@ -60,10 +64,6 @@
 	use Edde\Object;
 	use Edde\Schema\ISchemaManager;
 	use Edde\Schema\SchemaManager;
-	use Edde\Service\Bus\Event\EventBus;
-	use Edde\Service\Bus\MessageBus;
-	use Edde\Service\Bus\MessageService;
-	use Edde\Service\Bus\Request\RequestService;
 	use Edde\Service\Config\ConfigLoader;
 	use Edde\Service\Config\ConfigService;
 	use Edde\Service\Converter\ConverterManager;

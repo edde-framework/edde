@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Bus;
+	namespace Edde\Element;
 
 	/**
 	 * Formal interface for a message.

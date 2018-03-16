@@ -1,8 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Bus\Event;
-
-	use Edde\Api\Bus\IHandler;
+	namespace Edde\Bus;
 
 	interface IEventBus extends IHandler {
 		/**

@@ -1,11 +1,10 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Bus;
+	namespace Edde\Bus;
 
-	use Edde\Api\Bus\IElement;
-	use Edde\Api\Bus\IHandler;
-	use Edde\Bus\BusException;
 	use Edde\Container\ContainerException;
+	use Edde\Element\IElement;
+	use Edde\Exception\Validator\BatchValidationException;
 	use Edde\Exception\Validator\UnknownValidatorException;
 	use Edde\Exception\Validator\ValidationException;
 	use Edde\Inject\Validator\ValidatorManager;
@@ -33,15 +32,16 @@
 		 *
 		 * @throws UnknownValidatorException
 		 * @throws ValidationException
+		 * @throws BatchValidationException
 		 */
 		protected function onValidate(IElement $element): void {
 			$this->validatorManager->getValidator('message-bus:type:' . $element->getType())->validate($element);
 		}
 
 		/**
-		 * @param IElement $element
+		 * @param \Edde\Bus\\Edde\Element\IElement $element
 		 *
-		 * @return IElement
+		 * @return \Edde\Bus\\Edde\Element\IElement
 		 *
 		 * @throws ValidationException
 		 * @throws ContainerException

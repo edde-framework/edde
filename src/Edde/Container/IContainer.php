@@ -75,6 +75,8 @@
 		 * @param string $source who has requested this dependency
 		 *
 		 * @return mixed
+		 *
+		 * @throws ContainerException
 		 */
 		public function create(string $name, array $parameterList = [], string $source = null);
 

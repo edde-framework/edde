@@ -2,14 +2,14 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Bus\Validator;
 
-	use Edde\Api\Bus\IElement;
+	use Edde\Element\IElement;
 	use Edde\Exception\Validator\ValidationException;
 	use Edde\Validator\AbstractValidator;
 
 	class MessageValidator extends AbstractValidator {
 		/** @inheritdoc */
 		public function validate($value, array $options = []): void {
-			/** @var $value IElement */
+			/** @var $value \Edde\Bus\\Edde\Element\IElement */
 			if (is_object($value) === false) {
 				throw new ValidationException(
 					sprintf('Value of type [%s] is not an instance of [%s].', gettype($value), IElement::class),

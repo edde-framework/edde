@@ -2,10 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Configurator\Bus;
 
-	use Edde\Api\Bus\Event\IEventBus;
-	use Edde\Api\Bus\IMessageBus;
-	use Edde\Api\Bus\IMessageService;
-	use Edde\Api\Bus\Request\IRequestService;
+	use Edde\Bus\IEventBus;
+	use Edde\Bus\IMessageService;
+	use Edde\Bus\IRequestService;
 	use Edde\Config\AbstractConfigurator;
 	use Edde\Inject\Container\Container;
 
@@ -13,7 +12,7 @@
 		use Container;
 
 		/**
-		 * @param $instance IMessageBus
+		 * @param $instance \Edde\Bus\IMessageBus
 		 */
 		public function configure($instance) {
 			parent::configure($instance);

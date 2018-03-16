@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Content;
 
-	use Edde\Api\Content\IContent;
+	use Edde\Content\IContent;
 	use Edde\Content\JsonContent;
 	use Edde\Content\TextContent;
 
@@ -17,9 +17,9 @@
 		 *
 		 * @param mixed $content
 		 *
-		 * @return IContent
+		 * @return \Edde\Content\IContent
 		 */
-		public function contentScalar($content): IContent {
+		public function contentScalar($content): \Edde\Content\IContent {
 			return new \Edde\Content\ScalarContent($content);
 		}
 
@@ -29,9 +29,9 @@
 		 *
 		 * @param string $content
 		 *
-		 * @return IContent
+		 * @return \Edde\Content\IContent
 		 */
-		public function contentJson(string $content): IContent {
+		public function contentJson(string $content): \Edde\Content\IContent {
 			return new JsonContent($content);
 		}
 
@@ -43,9 +43,9 @@
 		 *
 		 * @param string $content
 		 *
-		 * @return IContent
+		 * @return \Edde\Content\IContent
 		 */
-		public function contentText(string $content): IContent {
+		public function contentText(string $content): \Edde\Content\IContent {
 			return new TextContent($content);
 		}
 	}

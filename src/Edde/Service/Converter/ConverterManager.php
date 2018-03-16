@@ -2,12 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Converter;
 
-	use Edde\Api\Content\IContent;
 	use Edde\Api\Converter\IConvertable;
 	use Edde\Api\Converter\IConverter;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Common\Converter\Convertable;
 	use Edde\Common\Converter\PassConverter;
+	use Edde\Content\IContent;
 	use Edde\Object;
 
 	class ConverterManager extends Object implements IConverterManager {

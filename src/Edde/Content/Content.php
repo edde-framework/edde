@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Content;
 
-	use Edde\Api\Content\IContent;
 	use Edde\Object;
 
 	class Content extends Object implements IContent {

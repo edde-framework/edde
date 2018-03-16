@@ -1,8 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Bus;
-
-	use Edde\Api\Bus\IError;
+	namespace Edde\Element;
 
 	class Error extends Element implements IError {
 		public function __construct(string $message, string $uuid, int $code = null, string $class = null) {

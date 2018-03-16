@@ -1,11 +1,8 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Bus\Request;
+	namespace Edde\Element;
 
-	use Edde\Api\Bus\Request\IResponse;
-	use Edde\Common\Bus\Element;
-
-	class Response extends Element implements IResponse {
+	class Response extends Element implements \Edde\Element\IResponse {
 		public function __construct(string $uuid, array $attributes = [], array $metas = []) {
 			parent::__construct('response', $uuid, $attributes, $metas);
 		}

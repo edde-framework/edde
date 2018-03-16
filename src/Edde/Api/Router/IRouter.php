@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Router;
 
-	use Edde\Api\Bus\Request\IRequest;
 	use Edde\Config\IConfigurable;
+	use Edde\Element\IRequest;
 	use Edde\Exception\Router\RouterException;
 
 	/**
@@ -21,7 +21,7 @@
 		/**
 		 * create an application request
 		 *
-		 * @return IRequest
+		 * @return \Edde\Element\IRequest
 		 *
 		 * @throws \Edde\Exception\Router\BadRequestException
 		 * @throws RouterException

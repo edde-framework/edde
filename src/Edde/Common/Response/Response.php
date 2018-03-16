@@ -2,13 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Response;
 
-	use Edde\Api\Content\IContent;
 	use Edde\Api\Response\IResponse;
+	use Edde\Content\IContent;
 	use Edde\Object;
 
 	class Response extends Object implements IResponse {
 		/**
-		 * @var IContent
+		 * @var \Edde\Content\IContent
 		 */
 		protected $content;
 

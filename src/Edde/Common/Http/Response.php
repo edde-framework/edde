@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Http;
 
-	use Edde\Api\Content\IContent;
 	use Edde\Api\Http\IResponse;
+	use Edde\Content\IContent;
 
 	class Response extends AbstractHttp implements IResponse {
 		/**

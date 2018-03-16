@@ -1,10 +1,10 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Bus;
+	namespace Edde\Bus;
 
-	use Edde\Bus\BusException;
 	use Edde\Config\IConfigurable;
 	use Edde\Container\ContainerException;
+	use Edde\Element\IElement;
 	use Edde\Exception\Validator\ValidationException;
 
 	/**

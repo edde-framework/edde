@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Router;
 
-	use Edde\Api\Bus\Request\IRequest;
 	use Edde\Api\Router\IRouter;
 	use Edde\Exception\Http\NoHttpException;
 	use Edde\Inject\Http\RequestService;
@@ -12,7 +11,7 @@
 	abstract class AbstractRouter extends Object implements IRouter {
 		use RequestService;
 		use Runtime;
-		/** @var IRequest */
+		/** @var \Edde\Element\IRequest */
 		protected $request;
 
 		protected function isHttp(): bool {

@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Converter;
 
-	use Edde\Api\Content\IContent;
+	use Edde\Content\IContent;
 
 	interface IConvertable {
 		/**
@@ -15,7 +15,7 @@
 		/**
 		 * return subject content
 		 *
-		 * @return IContent
+		 * @return \Edde\Content\IContent
 		 */
 		public function getContent(): IContent;
 
@@ -29,7 +29,7 @@
 		/**
 		 * try to convert an input
 		 *
-		 * @return IContent
+		 * @return \Edde\Content\IContent
 		 */
 		public function convert(): IContent;
 	}

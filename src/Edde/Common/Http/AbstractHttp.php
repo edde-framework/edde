@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Http;
 
-	use Edde\Api\Content\IContent;
 	use Edde\Api\Http\IContentType;
 	use Edde\Api\Http\ICookies;
 	use Edde\Api\Http\IHeaders;
 	use Edde\Api\Http\IHttp;
+	use Edde\Content\IContent;
 	use Edde\Object;
 
 	abstract class AbstractHttp extends Object implements IHttp {
@@ -19,7 +19,7 @@
 		 */
 		protected $cookies;
 		/**
-		 * @var IContent|null
+		 * @var \Edde\Content\IContent|null
 		 */
 		protected $content;
 

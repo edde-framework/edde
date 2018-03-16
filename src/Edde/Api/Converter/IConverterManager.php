@@ -2,9 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Converter;
 
-	use Edde\Api\Content\IContent;
 	use Edde\Config\IConfigurable;
-	use Edde\Converter\ConverterException;
+	use Edde\Content\IContent;
 
 	/**
 	 * Implementation of general conversion mechanism which is useful
@@ -46,10 +45,10 @@
 		/**
 		 * execute the conversion from source to target
 		 *
-		 * @param IContent   $content
-		 * @param array|null $targetList
+		 * @param \Edde\Content\IContent $content
+		 * @param array|null             $targetList
 		 *
-		 * @return IContent
+		 * @return \Edde\Content\IContent
 		 *
 		 * @throws \Edde\Converter\ConverterException
 		 */

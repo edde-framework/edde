@@ -1,12 +1,10 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Service\Bus\Request;
+	namespace Edde\Bus;
 
-	use Edde\Api\Bus\IElement;
-	use Edde\Api\Bus\Request\IRequestService;
-	use Edde\Common\Bus\AbstractHandler;
-	use Edde\Common\Bus\Error;
 	use Edde\Container\ContainerException;
+	use Edde\Element\Error;
+	use Edde\Element\IElement;
 	use Edde\Inject\Container\Container;
 	use Edde\Inject\Crypt\RandomService;
 	use Edde\Inject\Utils\StringUtils;

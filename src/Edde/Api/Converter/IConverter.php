@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Converter;
 
-	use Edde\Api\Content\IContent;
 	use Edde\Config\IConfigurable;
+	use Edde\Content\IContent;
 	use Edde\Converter\ConverterException;
 
 	/**
@@ -32,10 +32,10 @@
 		 * do the conversion; it could event be direct streamed conversion from one
 		 * type to another being actually done when target content is iterated
 		 *
-		 * @param IContent    $content
-		 * @param string|null $target
+		 * @param \Edde\Content\IContent $content
+		 * @param string|null            $target
 		 *
-		 * @return IContent
+		 * @return \Edde\Content\IContent
 		 *
 		 * @throws ConverterException
 		 */

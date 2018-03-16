@@ -1,9 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Bus\Request;
-
-	use Edde\Api\Bus\Request\IRequest;
-	use Edde\Common\Bus\Element;
+	namespace Edde\Element;
 
 	class Request extends Element implements IRequest {
 		public function __construct(string $service, string $method, string $uuid, array $parameters = []) {

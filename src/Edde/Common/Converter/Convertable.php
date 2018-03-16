@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Converter;
 
-	use Edde\Api\Content\IContent;
 	use Edde\Api\Converter\IConvertable;
 	use Edde\Api\Converter\IConverter;
+	use Edde\Content\IContent;
 	use Edde\Object;
 
 	/**
@@ -27,7 +27,7 @@
 		 */
 		protected $target;
 		/**
-		 * @var IContent
+		 * @var \Edde\Content\IContent
 		 */
 		protected $result;
 

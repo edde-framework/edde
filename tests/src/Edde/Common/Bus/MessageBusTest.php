@@ -2,14 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Bus;
 
-	use Edde\Api\Bus\IElement;
-	use Edde\Api\Bus\IError;
-	use Edde\Api\Bus\Request\IResponse;
 	use Edde\Bus\BusException;
-	use Edde\Common\Bus\Event\Event;
-	use Edde\Common\Bus\Request\Request;
 	use Edde\Container\ContainerException;
 	use Edde\Content\Content;
+	use Edde\Element\Element;
+	use Edde\Element\Event;
+	use Edde\Element\IResponse;
+	use Edde\Element\Request;
 	use Edde\Exception\Validator\UnknownValidatorException;
 	use Edde\Exception\Validator\ValidationException;
 	use Edde\Inject\Bus\EventBus;
@@ -33,7 +32,7 @@
 		public function testUnknownMessageType() {
 			$response = $this->messageBus->execute(new Element('unsupported-message', 'uuid'));
 			self::assertSame('error', $response->getType());
-			self::assertSame('Cannot handle element [unsupported-message (Edde\Common\Bus\Element)] in any handler; element type is not supported.', $response->getAttribute('message'));
+			self::assertSame('Cannot handle element [unsupported-message (Edde\Element\Element)] in any handler; element type is not supported.', $response->getAttribute('message'));
 			self::assertSame(BusException::class, $response->getAttribute('class'));
 		}
 
@@ -46,7 +45,7 @@
 			$response = $this->messageBus->execute($message = new Element('event', 'uuid'));
 			self::assertFalse($this->validatorManager->getValidator('message-bus:type:event')->isValid($message), 'an event message should NOT be valid!');
 			self::assertSame('error', $response->getType());
-			self::assertSame('An event message [Edde\Common\Bus\Element] has missing "event" attribute!', $response->getAttribute('message'));
+			self::assertSame('An event message [Edde\Element\Element] has missing "event" attribute!', $response->getAttribute('message'));
 			self::assertSame(ValidationException::class, $response->getAttribute('class'));
 		}
 
@@ -67,9 +66,9 @@
 		 */
 		public function testInvalidRequest() {
 			$response = $this->messageBus->execute(new Element('request', 'uuid'));
-			self::assertInstanceOf(IError::class, $response);
+			self::assertInstanceOf(\Edde\Element\IError::class, $response);
 			self::assertSame([
-				'message' => 'A request message [Edde\Common\Bus\Element] has missing "service" attribute!',
+				'message' => 'A request message [Edde\Element\Element] has missing "service" attribute!',
 				'code'    => 0,
 				'class'   => ValidationException::class,
 			], $response->getAttributes());
@@ -80,7 +79,7 @@
 		 */
 		public function testInvalidRequestValidation() {
 			$this->expectException(ValidationException::class);
-			$this->expectExceptionMessage('A request message [Edde\Common\Bus\Element] has missing "service" attribute!');
+			$this->expectExceptionMessage('A request message [Edde\Element\Element] has missing "service" attribute!');
 			$this->messageBus->validate(new Element('request', 'uuid'));
 		}
 
@@ -113,11 +112,11 @@
 				'method'     => 'bar-method',
 				'parameters' => (object)['do' => true, 'something' => 3.14],
 			]);
-			$json = $this->converterManager->convert(new Content($request, IElement::class), ['application/json']);
-			$content = $this->converterManager->convert($json, [IElement::class]);
-			/** @var $element IElement */
-			self::assertInstanceOf(IElement::class, $element = $content->getContent());
-			self::assertSame(IElement::class, $content->getType());
+			$json = $this->converterManager->convert(new Content($request, \Edde\Element\IElement::class), ['application/json']);
+			$content = $this->converterManager->convert($json, [\Edde\Element\IElement::class]);
+			/** @var $element \Edde\Bus\\Edde\Element\IElement */
+			self::assertInstanceOf(\Edde\Element\IElement::class, $element = $content->getContent());
+			self::assertSame(\Edde\Element\IElement::class, $content->getType());
 			self::assertEquals($attributes, $element->getAttributes());
 		}
 	}

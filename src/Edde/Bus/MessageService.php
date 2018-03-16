@@ -1,11 +1,9 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Service\Bus;
+	namespace Edde\Bus;
 
-	use Edde\Api\Bus\IElement;
-	use Edde\Api\Bus\IMessageService;
-	use Edde\Common\Bus\AbstractHandler;
-	use Edde\Common\Bus\Message;
+	use Edde\Element\IElement;
+	use Edde\Element\Message;
 	use Edde\Inject\Bus\MessageBus;
 	use Edde\Inject\Crypt\RandomService;
 

@@ -1,8 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Bus\Request;
-
-	use Edde\Api\Bus\IElement;
+	namespace Edde\Element;
 
 	interface IResponse extends IElement {
 	}

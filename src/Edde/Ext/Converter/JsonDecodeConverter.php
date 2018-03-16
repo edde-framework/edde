@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Converter;
 
-	use Edde\Api\Content\IContent;
 	use Edde\Common\Converter\AbstractConverter;
 	use Edde\Content\Content;
+	use Edde\Content\IContent;
 	use Edde\Converter\ConverterException;
 
 	class JsonDecodeConverter extends AbstractConverter {

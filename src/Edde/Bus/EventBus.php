@@ -1,12 +1,9 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Service\Bus\Event;
+	namespace Edde\Bus;
 
-	use Edde\Api\Bus\Event\IEventBus;
-	use Edde\Api\Bus\Event\IListener;
-	use Edde\Api\Bus\IElement;
-	use Edde\Common\Bus\AbstractHandler;
-	use Edde\Common\Bus\Element;
+	use Edde\Element\Element;
+	use Edde\Element\IElement;
 	use Edde\Inject\Crypt\RandomService;
 
 	class EventBus extends AbstractHandler implements IEventBus {

@@ -2,10 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Bus;
 
-	use Edde\Api\Bus\IElement;
-	use Edde\Api\Bus\Request\IResponse;
-	use Edde\Common\Bus\Event\AbstractListener;
-	use Edde\Common\Bus\Request\Response;
+	use Edde\Bus\AbstractListener;
+	use Edde\Element\IElement;
+	use Edde\Element\IResponse;
+	use Edde\Element\Response;
 	use Edde\Object;
 
 	class CommonListener extends AbstractListener {
@@ -15,11 +15,11 @@
 			yield 'bar' => [$this, 'eventBar'];
 		}
 
-		public function eventFoo(IElement $event, IElement $response) {
+		public function eventFoo(\Edde\Element\IElement $event, \Edde\Element\IElement $response) {
 			$response->setAttribute('foo-was-here', true);
 		}
 
-		public function eventBar(IElement $event, IElement $response) {
+		public function eventBar(IElement $event, \Edde\Element\IElement $response) {
 			$response->setAttribute('bar-was-here', true);
 		}
 	}

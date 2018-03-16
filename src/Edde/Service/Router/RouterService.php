@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Router;
 
-	use Edde\Api\Bus\Request\IRequest;
 	use Edde\Api\Router\IRouter;
 	use Edde\Api\Router\IRouterService;
+	use Edde\Element\IRequest;
 	use Edde\Exception\Router\BadRequestException;
 	use Edde\Inject\Log\LogService;
 	use Edde\Object;
@@ -15,7 +15,7 @@
 		protected $routers = [];
 		/** @var IRouter */
 		protected $router;
-		/** @var IRequest */
+		/** @var \Edde\Bus\Request\\Edde\Element\IRequest */
 		protected $request;
 
 		/** @inheritdoc */

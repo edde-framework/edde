@@ -1,14 +1,9 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Service\Bus;
+	namespace Edde\Bus;
 
-	use Edde\Api\Bus\IElement;
-	use Edde\Api\Bus\IHandler;
-	use Edde\Api\Bus\IMessageBus;
-	use Edde\Bus\BusException;
-	use Edde\Common\Bus\AbstractHandler;
-	use Edde\Common\Bus\Element;
-	use Edde\Common\Bus\Error;
+	use Edde\Element\Error;
+	use Edde\Element\IElement;
 	use Edde\Inject\Crypt\RandomService;
 	use stdClass;
 
@@ -47,7 +42,7 @@
 		}
 
 		/** @inheritdoc */
-		public function export(IElement $export): stdClass {
+		public function export(\Edde\Element\IElement $export): stdClass {
 			$object = [
 				'type'       => $export->getType(),
 				'uuid'       => $export->getUuid(),
@@ -70,7 +65,7 @@
 
 		/** @inheritdoc */
 		public function import(stdClass $import): IElement {
-			$element = new Element(
+			$element = new \Edde\Element\Element(
 				$import->type ?? 'unknown',
 				$import->uuid ?? '',
 				isset($import->attributes) ? (array)$import->attributes : [],
@@ -96,17 +91,17 @@
 		}
 
 		/** @inheritdoc */
-		public function canHandle(IElement $element): bool {
+		public function canHandle(\Edde\Element\IElement $element): bool {
 			return $this->getHandler($element)->canHandle($element);
 		}
 
 		/** @inheritdoc */
-		public function send(IElement $element): IElement {
+		public function send(\Edde\Element\IElement $element): \Edde\Element\IElement {
 			return $this->getHandler($element)->send($element);
 		}
 
 		/** @inheritdoc */
-		public function execute(IElement $element): ?IElement {
+		public function execute(IElement $element): ?\Edde\Element\IElement {
 			try {
 				return $this->getHandler($element)->execute($element);
 			} catch (\Exception $exception) {

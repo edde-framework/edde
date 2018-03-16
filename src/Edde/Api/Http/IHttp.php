@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Http;
 
-	use Edde\Api\Content\IContent;
+	use Edde\Content\IContent;
 
 	/**
 	 * "Abstract" interface holding common stuff between request and response.
@@ -40,7 +40,7 @@
 		/**
 		 * set content of the request/response
 		 *
-		 * @param IContent|null $content
+		 * @param \Edde\Content\IContent|null $content
 		 *
 		 * @return $this
 		 */

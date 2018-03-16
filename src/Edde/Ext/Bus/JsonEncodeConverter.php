@@ -2,11 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Bus;
 
-	use Edde\Api\Bus\IElement;
-	use Edde\Api\Content\IContent;
 	use Edde\Common\Converter\AbstractConverter;
 	use Edde\Content\Content;
-	use Edde\Converter\ConverterException;
+	use Edde\Content\IContent;
 	use Edde\Inject\Bus\MessageBus;
 	use Edde\Inject\Converter\ConverterManager;
 	use stdClass;
@@ -17,7 +15,7 @@
 
 		public function __construct() {
 			parent::__construct([
-				IElement::class,
+				\Edde\Element\IElement::class,
 			], [
 				'application/json',
 			]);

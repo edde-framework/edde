@@ -1,8 +1,7 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Common\Bus;
+	namespace Edde\Element;
 
-	use Edde\Api\Bus\IElement;
 	use Edde\Bus\BusException;
 	use Edde\Object;
 
