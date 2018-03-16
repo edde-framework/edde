@@ -2,6 +2,7 @@ version: '2'
 services:
         edde:
                 image: edde
+                container_name: $CI_COMMIT_REF_NAME
                 environment:
                     - XDEBUG_IP=$XDEBUG_IP
                     - PHP_IDE_CONFIG=serverName=edde
