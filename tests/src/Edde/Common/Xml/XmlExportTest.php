@@ -5,8 +5,8 @@
 	use Edde\Common\File\File;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Node\TreeIterator;
-	use Edde\Exception\Node\NodeException;
 	use Edde\Inject\Xml\XmlExport;
+	use Edde\Node\NodeException;
 	use Edde\TestCase;
 
 	class XmlExportTest extends TestCase {
@@ -34,7 +34,7 @@
 		}
 
 		/**
-		 * @throws NodeException
+		 * @throws \Edde\Node\NodeException
 		 */
 		public function testSimpleAttributeEscape() {
 			$this->xmlExport->export(TreeIterator::recursive(new Node('root', [
@@ -46,7 +46,7 @@
 		}
 
 		/**
-		 * @throws NodeException
+		 * @throws \Edde\Node\NodeException
 		 */
 		public function testSmallNode() {
 			$node = new Node('root', [

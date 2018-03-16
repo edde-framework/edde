@@ -4,8 +4,7 @@
 
 	use Edde\Config\IConfigurable;
 	use Edde\Container\IAutowire;
-	use Edde\Exception\Object\PropertyReadException;
-	use Edde\Exception\Object\PropertyWriteException;
+	use Edde\Object\ObjectException;
 	use Edde\Test\BarObject;
 	use Edde\Test\FooBarObject;
 	use Edde\Test\FooObject;
@@ -31,14 +30,14 @@
 		}
 
 		public function testWriteException() {
-			$this->expectException(PropertyWriteException::class);
+			$this->expectException(ObjectException::class);
 			$this->expectExceptionMessage('Writing to the undefined/private/protected property [Edde\Test\FooObject::$undefined].');
 			/** @noinspection PhpUndefinedFieldInspection */
 			$this->fooObject->undefined = true;
 		}
 
 		public function testReadException() {
-			$this->expectException(PropertyReadException::class);
+			$this->expectException(ObjectException::class);
 			$this->expectExceptionMessage('Reading from the undefined/private/protected property [Edde\Test\FooObject::$undefined].');
 			/** @noinspection PhpUndefinedFieldInspection */
 			$this->fooObject->undefined;

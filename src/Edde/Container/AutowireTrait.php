@@ -3,8 +3,7 @@
 	namespace Edde\Container;
 
 	use Edde\Config\IConfigurable;
-	use Edde\Exception\Object\PropertyReadException;
-	use Edde\Exception\Object\PropertyWriteException;
+	use Edde\Object\ObjectException;
 
 	trait AutowireTrait {
 		protected $tAutowires = [];
@@ -31,21 +30,22 @@
 		/**
 		 * @param string $name
 		 *
-		 * @return \Edde\Config\IConfigurable
+		 * @return IConfigurable
 		 *
-		 * @throws PropertyReadException
+		 * @throws ContainerException
+		 * @throws ObjectException
 		 */
 		public function __get(string $name) {
 			if (isset($this->tLazies[$name])) {
 				/** @var $container IContainer */
 				[$container, $dependency, $params] = $this->tLazies[$name];
-				/** @var $instance \Edde\Config\IConfigurable */
+				/** @var $instance IConfigurable */
 				if (($instance = $this->{$name} = $container->create($dependency, $params, static::class)) instanceof IConfigurable && $instance->isSetup() === false) {
 					$instance->setup();
 				}
 				return $instance;
 			}
-			throw new PropertyReadException(sprintf('Reading from the undefined/private/protected property [%s::$%s].', static::class, $name));
+			throw new ObjectException(sprintf('Reading from the undefined/private/protected property [%s::$%s].', static::class, $name));
 		}
 
 		/**
@@ -53,13 +53,14 @@
 		 * @param mixed  $value
 		 *
 		 * @return $this
-		 * @throws PropertyWriteException
+		 *
+		 * @throws ObjectException
 		 */
 		public function __set(string $name, $value) {
 			if (isset($this->tLazies[$name])) {
 				$this->{$name} = $value;
 				return $this;
 			}
-			throw new PropertyWriteException(sprintf('Writing to the undefined/private/protected property [%s::$%s].', static::class, $name));
+			throw new ObjectException(sprintf('Writing to the undefined/private/protected property [%s::$%s].', static::class, $name));
 		}
 	}

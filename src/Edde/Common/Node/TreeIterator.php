@@ -4,7 +4,7 @@
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\ITree;
-	use Edde\Exception\Node\NodeException;
+	use Edde\Node\NodeException;
 	use Edde\Object;
 	use Iterator;
 	use RecursiveIterator;
@@ -90,7 +90,7 @@
 		 * @param bool  $isRoot
 		 *
 		 * @return RecursiveIteratorIterator|INode[]
-		 * @throws NodeException
+		 * @throws \Edde\Node\NodeException
 		 */
 		static public function recursive(ITree $tree, bool $isRoot = false): RecursiveIteratorIterator {
 			if ($isRoot === true) {
