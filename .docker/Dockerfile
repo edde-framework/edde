@@ -28,7 +28,7 @@ COPY composer.lock .
 COPY loader.php .
 COPY phpunit.xml .
 COPY src .
-COPY test .
+COPY tests .
 
 RUN composer install --prefer-dist --no-progress
 
