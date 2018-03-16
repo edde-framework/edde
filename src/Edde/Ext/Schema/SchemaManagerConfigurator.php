@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Schema;
 
-	use Edde\Api\Container\Exception\ContainerException;
-	use Edde\Api\Container\Exception\FactoryException;
-	use Edde\Api\Container\Inject\Container;
 	use Edde\Api\Schema\ISchemaManager;
 	use Edde\Common\Config\AbstractConfigurator;
+	use Edde\Exception\Container\ContainerException;
+	use Edde\Exception\Container\FactoryException;
+	use Edde\Inject\Container\Container;
 
 	class SchemaManagerConfigurator extends AbstractConfigurator {
 		use Container;

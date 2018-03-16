@@ -4,8 +4,8 @@
 
 	use Edde\Api\Bus\Exception\InvalidElementException;
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Container\Exception\ContainerException;
 	use Edde\Api\Validator\Exception\ValidationException;
+	use Edde\Exception\Container\ContainerException;
 
 	/**
 	 * Element handler is able to handle individual type of an element (event, request, ...).

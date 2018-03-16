@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Storage;
 
-	use Edde\Api\Container\Exception\ContainerException;
-	use Edde\Api\Container\Exception\FactoryException;
 	use Edde\Api\Driver\Exception\DriverException;
 	use Edde\Api\Driver\IDriver;
 	use Edde\Common\Container\Factory\InstanceFactory;
+	use Edde\Exception\Container\ContainerException;
+	use Edde\Exception\Container\FactoryException;
 	use Edde\Ext\Driver\MysqlDriver;
 	use ReflectionException;
 
@@ -23,7 +23,7 @@
 
 		/**
 		 * @throws ContainerException
-		 * @throws FactoryException
+		 * @throws \Edde\Exception\Container\FactoryException
 		 * @throws ReflectionException
 		 */
 		protected function setUp() {

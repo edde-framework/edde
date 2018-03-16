@@ -3,11 +3,11 @@
 	namespace Edde\Ext\Container;
 
 	use Edde\Api\Config\IConfigurator;
-	use Edde\Api\Container\Exception\ContainerException;
-	use Edde\Api\Container\Exception\FactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
 	use Edde\Common\Config\AbstractConfigurator;
+	use Edde\Exception\Container\ContainerException;
+	use Edde\Exception\Container\FactoryException;
 
 	class ContainerConfigurator extends AbstractConfigurator {
 		/**

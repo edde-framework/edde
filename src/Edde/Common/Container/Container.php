@@ -3,12 +3,12 @@
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Container\Exception\UnknownFactoryException;
 	use Edde\Api\Container\IAutowire;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Container\IParameter;
 	use Edde\Api\Container\IReflection;
 	use Edde\Common\Container\Factory\ClassFactory;
+	use Edde\Exception\Container\UnknownFactoryException;
 	use SplStack;
 
 	/**

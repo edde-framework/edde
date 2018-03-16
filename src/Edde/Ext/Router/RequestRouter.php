@@ -3,13 +3,14 @@
 	namespace Edde\Ext\Router;
 
 	use Edde\Api\Bus\Request\IRequest;
-	use Edde\Api\Container\Inject\Container;
 	use Edde\Api\Crypt\Inject\RandomService;
 	use Edde\Api\Http\Exception\NoHttpException;
 	use Edde\Api\Router\Exception\RouterException;
+	use Edde\Api\Runtime\Exception\MissingArgvException;
 	use Edde\Api\Utils\Inject\StringUtils;
 	use Edde\Common\Bus\Request\Request;
 	use Edde\Common\Router\AbstractRouter;
+	use Edde\Inject\Container\Container;
 
 	/**
 	 * Maybe not the best name: this router provides application request made from
@@ -31,12 +32,21 @@
 			}
 		}
 
-		/** @inheritdoc */
+		/**
+		 * @inheritdoc
+		 *
+		 * @throws NoHttpException
+		 * @throws RouterException
+		 * @throws MissingArgvException
+		 */
 		public function createRequest(): IRequest {
 			return $this->request ?: $this->request = ($this->isHttp() ? $this->createHttpRequest() : $this->createCliRequest());
 		}
 
-		/** @inheritdoc */
+		/**
+		 * @throws NoHttpException
+		 * @throws RouterException
+		 */
 		protected function createHttpRequest(): IRequest {
 			if ($match = $this->stringUtils->match($path = ($requestUrl = $this->requestService->getUrl())->getPath(false), self::PREG_REST, true, true)) {
 				return $this->factory($match['class'], strtolower($this->requestService->getMethod()), 'Rest', $requestUrl->getParameterList());
@@ -46,7 +56,11 @@
 			throw new RouterException('Cannot handle current HTTP request.');
 		}
 
-		/** @inheritdoc */
+		/**
+		 * @throws MissingArgvException
+		 * @throws NoHttpException
+		 * @throws RouterException
+		 */
 		protected function createCliRequest(): IRequest {
 			$parameters = $this->runtime->getArguments();
 			/**
@@ -68,6 +82,7 @@
 		 * @param array  $parameters
 		 *
 		 * @return IRequest
+		 *
 		 * @throws NoHttpException
 		 */
 		protected function factory(string $class, string $method, string $type, array $parameters): IRequest {

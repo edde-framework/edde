@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Entity;
 
-	use Edde\Api\Container\Inject\Container;
 	use Edde\Api\Entity\Exception\RecordException;
 	use Edde\Api\Entity\Exception\UnknownAliasException;
 	use Edde\Api\Entity\ICollection;
@@ -18,6 +17,7 @@
 	use Edde\Api\Storage\Query\ISelectQuery;
 	use Edde\Common\Object\Object;
 	use Edde\Common\Storage\Query\SelectQuery;
+	use Edde\Inject\Container\Container;
 
 	class Collection extends Object implements ICollection {
 		use SchemaManager;

@@ -8,4 +8,4 @@ while ! timeout bash -c "echo > /dev/tcp/mysql/3306"; do sleep 6; done
 echo "Waiting for PostgreSQL"
 while ! timeout bash -c "echo > /dev/tcp/postgres/5432"; do sleep 6; done
 
-lib/bin/phpunit
+lib/bin/phpunit --coverage-text

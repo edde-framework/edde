@@ -13,8 +13,6 @@
 	use Edde\Api\Bus\Request\IRequestService;
 	use Edde\Api\Config\IConfigLoader;
 	use Edde\Api\Config\IConfigService;
-	use Edde\Api\Container\Exception\ContainerException;
-	use Edde\Api\Container\Exception\FactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
 	use Edde\Api\Converter\IConverterManager;
@@ -69,6 +67,8 @@
 	use Edde\Common\Validator\ValidatorManager;
 	use Edde\Common\Xml\XmlExport;
 	use Edde\Common\Xml\XmlParser;
+	use Edde\Exception\Container\ContainerException;
+	use Edde\Exception\Container\FactoryException;
 	use Edde\Exception\EddeException;
 	use Edde\Ext\Bus\MessageBusConfigurator;
 	use Edde\Ext\Converter\ConverterManagerConfigurator;
@@ -121,7 +121,7 @@
 		 *
 		 * @return IFactory[]
 		 *
-		 * @throws FactoryException
+		 * @throws \Edde\Exception\Container\FactoryException
 		 * @throws ReflectionException
 		 */
 		static public function createFactories(array $factories): array {
@@ -225,8 +225,8 @@
 		 * @param string[] $configurators
 		 *
 		 * @return IContainer
-		 * @throws ContainerException
-		 * @throws FactoryException
+		 * @throws \Edde\Exception\Container\ContainerException
+		 * @throws \Edde\Exception\Container\FactoryException
 		 * @throws ReflectionException
 		 */
 		static public function create(array $factories = [], array $configurators = []): IContainer {
@@ -252,7 +252,7 @@
 		 *
 		 * @return IContainer
 		 * @throws ContainerException
-		 * @throws FactoryException
+		 * @throws \Edde\Exception\Container\FactoryException
 		 * @throws ReflectionException
 		 */
 		static public function container(array $factories = [], array $configurators = []): IContainer {
@@ -268,8 +268,8 @@
 		 *
 		 * @return IContainer
 		 *
-		 * @throws ContainerException
-		 * @throws FactoryException
+		 * @throws \Edde\Exception\Container\ContainerException
+		 * @throws \Edde\Exception\Container\FactoryException
 		 * @throws ReflectionException
 		 */
 		static public function inject($instance, array $factories = [], array $configurators = []): IContainer {

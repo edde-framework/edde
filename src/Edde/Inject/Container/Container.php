@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Container\Inject;
+	namespace Edde\Inject\Container;
 
 	use Edde\Api\Container\IContainer;
 

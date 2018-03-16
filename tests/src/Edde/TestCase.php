@@ -4,12 +4,12 @@
 
 	use Edde\Api\Assets\IRootDirectory;
 	use Edde\Api\Config\IConfigLoader;
-	use Edde\Api\Container\Exception\ContainerException;
-	use Edde\Api\Container\Exception\FactoryException;
 	use Edde\Api\Container\IAutowire;
 	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Common\Container\AutowireTrait;
 	use Edde\Common\Container\Factory\ClassFactory;
+	use Edde\Exception\Container\ContainerException;
+	use Edde\Exception\Container\FactoryException;
 	use Edde\Ext\Container\ContainerFactory;
 	use Edde\Inject\Assets\RootDirectory;
 	use PHPUnit\Framework\TestCase as PhpUnitTestCase;

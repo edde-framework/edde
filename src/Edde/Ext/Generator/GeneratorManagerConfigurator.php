@@ -2,13 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Generator;
 
-	use Edde\Api\Container\Exception\ContainerException;
-	use Edde\Api\Container\Exception\FactoryException;
-	use Edde\Api\Container\Inject\Container;
 	use Edde\Api\Generator\IGeneratorManager;
 	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Common\Generator\DateTimeGenerator;
 	use Edde\Common\Generator\UuidGenerator;
+	use Edde\Exception\Container\ContainerException;
+	use Edde\Exception\Container\FactoryException;
+	use Edde\Inject\Container\Container;
 
 	class GeneratorManagerConfigurator extends AbstractConfigurator {
 		use Container;

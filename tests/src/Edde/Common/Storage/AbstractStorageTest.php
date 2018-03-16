@@ -3,7 +3,6 @@
 	namespace Edde\Common\Storage;
 
 	use DateTime;
-	use Edde\Api\Container\Inject\Container;
 	use Edde\Api\Driver\Exception\DriverException;
 	use Edde\Api\Entity\Exception\RecordException;
 	use Edde\Api\Entity\Exception\UnknownAliasException;
@@ -41,6 +40,7 @@
 	use Edde\Common\Schema\UserSchema;
 	use Edde\Common\Storage\Query\CreateSchemaQuery;
 	use Edde\Common\Storage\Query\SelectQuery;
+	use Edde\Inject\Container\Container;
 	use Edde\TestCase;
 
 	abstract class AbstractStorageTest extends TestCase {

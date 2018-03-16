@@ -9,7 +9,6 @@
 	use Edde\Api\Bus\Inject\EventBus;
 	use Edde\Api\Bus\Inject\MessageBus;
 	use Edde\Api\Bus\Request\IResponse;
-	use Edde\Api\Container\Exception\ContainerException;
 	use Edde\Api\Converter\Exception\ConverterException;
 	use Edde\Api\Converter\Inject\ConverterManager;
 	use Edde\Api\Crypt\Inject\RandomService;
@@ -19,6 +18,7 @@
 	use Edde\Common\Bus\Event\Event;
 	use Edde\Common\Bus\Request\Request;
 	use Edde\Common\Content\Content;
+	use Edde\Exception\Container\ContainerException;
 	use Edde\TestCase;
 
 	class MessageBusTest extends TestCase {
@@ -67,7 +67,7 @@
 		}
 
 		/**
-		 * @throws ContainerException
+		 * @throws \Edde\Exception\Container\ContainerException
 		 * @throws InvalidElementException
 		 * @throws ValidationException
 		 */

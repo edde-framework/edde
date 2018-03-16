@@ -2,13 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Converter;
 
-	use Edde\Api\Container\Exception\ContainerException;
-	use Edde\Api\Container\Exception\FactoryException;
-	use Edde\Api\Container\Inject\Container;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Common\Config\AbstractConfigurator;
+	use Edde\Exception\Container\ContainerException;
+	use Edde\Exception\Container\FactoryException;
 	use Edde\Ext\Bus\JsonDecodeConverter as ElementJsonDecodeConverter;
 	use Edde\Ext\Bus\JsonEncodeConverter as ElementJsonEncodeConverter;
+	use Edde\Inject\Container\Container;
 
 	class ConverterManagerConfigurator extends AbstractConfigurator {
 		use Container;

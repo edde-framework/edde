@@ -3,10 +3,10 @@
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Config\IConfigurator;
-	use Edde\Api\Container\Exception\UnknownFactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IFactory;
 	use Edde\Common\Object\Object;
+	use Edde\Exception\Container\UnknownFactoryException;
 
 	abstract class AbstractContainer extends Object implements IContainer {
 		/** @var IFactory[] */

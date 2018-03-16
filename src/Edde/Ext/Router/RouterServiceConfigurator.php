@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Router;
 
-	use Edde\Api\Container\Exception\ContainerException;
-	use Edde\Api\Container\Exception\FactoryException;
-	use Edde\Api\Container\Inject\Container;
 	use Edde\Api\Router\IRouterService;
 	use Edde\Common\Config\AbstractConfigurator;
+	use Edde\Exception\Container\ContainerException;
+	use Edde\Exception\Container\FactoryException;
+	use Edde\Inject\Container\Container;
 
 	class RouterServiceConfigurator extends AbstractConfigurator {
 		use Container;

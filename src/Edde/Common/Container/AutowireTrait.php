@@ -3,11 +3,11 @@
 	namespace Edde\Common\Container;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Container\Exception\ContainerException;
-	use Edde\Api\Container\Exception\FactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Common\Object\Exception\PropertyReadException;
 	use Edde\Common\Object\Exception\PropertyWriteException;
+	use Edde\Exception\Container\ContainerException;
+	use Edde\Exception\Container\FactoryException;
 
 	trait AutowireTrait {
 		protected $tAutowires = [];
@@ -36,7 +36,7 @@
 		 *
 		 * @return mixed
 		 * @throws PropertyReadException
-		 * @throws ContainerException
+		 * @throws \Edde\Exception\Container\ContainerException
 		 * @throws FactoryException
 		 */
 		public function __get(string $name) {

@@ -3,9 +3,11 @@
 	namespace Edde\Ext\Router;
 
 	use Edde\Api\Bus\Request\IRequest;
-	use Edde\Api\Container\Inject\Container;
 	use Edde\Api\Router\IRouter;
 	use Edde\Common\Router\AbstractRouter;
+	use Edde\Exception\Container\ContainerException;
+	use Edde\Exception\Container\FactoryException;
+	use Edde\Inject\Container\Container;
 
 	class ProxyRouter extends AbstractRouter {
 		use Container;
@@ -31,7 +33,12 @@
 			return $this->request ?: $this->request = $this->router->createRequest();
 		}
 
-		/** @inheritdoc */
+		/**
+		 * @inheritdoc
+		 *
+		 * @throws ContainerException
+		 * @throws FactoryException
+		 */
 		protected function handleSetup(): void {
 			parent::handleSetup();
 			$this->router = $this->container->create($this->proxy, $this->parameters, __METHOD__);

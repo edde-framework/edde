@@ -6,10 +6,6 @@
          beStrictAboutTodoAnnotatedTests="true"
          bootstrap="tests/src/loader.php"
 >
-	<logging>
-		<log type="coverage-html" target="/edde/.coverage"/>
-		<log type="coverage-text" target="php://stdout"/>
-	</logging>
 	<testsuite name="edde">
 		<directory suffix=".php">tests/src</directory>
 	</testsuite>

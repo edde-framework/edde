@@ -4,9 +4,9 @@
 
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Config\IConfigurator;
-	use Edde\Api\Container\Exception\ContainerException;
-	use Edde\Api\Container\Exception\FactoryException;
-	use Edde\Api\Container\Exception\UnknownFactoryException;
+	use Edde\Exception\Container\ContainerException;
+	use Edde\Exception\Container\FactoryException;
+	use Edde\Exception\Container\UnknownFactoryException;
 
 	/**
 	 * Implementation of Dependency Injection Container.
@@ -66,7 +66,7 @@
 		 *
 		 * @return IFactory
 		 *
-		 * @throws UnknownFactoryException
+		 * @throws \Edde\Exception\Container\UnknownFactoryException
 		 */
 		public function getFactory(string $dependency, string $source = null): IFactory;
 
