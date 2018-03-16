@@ -8,7 +8,6 @@
 	use Edde\Api\Http\IRequest;
 	use Edde\Api\Http\IRequestService;
 	use Edde\Api\Url\IUrl;
-	use Edde\Api\Url\UrlException;
 	use Edde\Common\Content\InputContent;
 	use Edde\Common\Content\PostContent;
 	use Edde\Common\Object\Object;
@@ -16,6 +15,7 @@
 	use Edde\Exception\Converter\ConverterException;
 	use Edde\Exception\Http\EmptyBodyException;
 	use Edde\Exception\Http\NoHttpException;
+	use Edde\Exception\Url\UrlException;
 	use Edde\Inject\Converter\ConverterManager;
 	use Edde\Inject\Http\HttpUtils;
 
@@ -61,7 +61,7 @@
 		 * @inheritdoc
 		 *
 		 * @throws \Edde\Exception\Http\EmptyBodyException
-		 * @throws UrlException
+		 * @throws \Edde\Exception\Url\UrlException
 		 * @throws \Edde\Exception\Http\NoHttpException
 		 * @throws ConverterException
 		 */
@@ -76,7 +76,7 @@
 		 * @inheritdoc
 		 *
 		 * @throws NoHttpException
-		 * @throws UrlException
+		 * @throws \Edde\Exception\Url\UrlException
 		 */
 		public function getUrl(): IUrl {
 			return $this->getRequest()->getUrl();
@@ -86,7 +86,7 @@
 		 * @inheritdoc
 		 *
 		 * @throws \Edde\Exception\Http\NoHttpException
-		 * @throws UrlException
+		 * @throws \Edde\Exception\Url\UrlException
 		 */
 		public function getMethod(): string {
 			return $this->getRequest()->getMethod();
@@ -96,7 +96,7 @@
 		 * @inheritdoc
 		 *
 		 * @throws \Edde\Exception\Http\NoHttpException
-		 * @throws UrlException
+		 * @throws \Edde\Exception\Url\UrlException
 		 */
 		public function getHeaders(): IHeaders {
 			return $this->getRequest()->getHeaders();

@@ -8,10 +8,10 @@
 	use Edde\Api\Http\IHttpUtils;
 	use Edde\Api\Http\IRequestHeader;
 	use Edde\Api\Http\IResponseHeader;
-	use Edde\Api\Utils\Inject\StringUtils;
 	use Edde\Common\Object\Object;
 	use Edde\Common\Url\Url;
 	use Edde\Exception\Http\HttpUtilsException;
+	use Edde\Inject\Utils\StringUtils;
 
 	/**
 	 * Static set of helper functions around http protocol.

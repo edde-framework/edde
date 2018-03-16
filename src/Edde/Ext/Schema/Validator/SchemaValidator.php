@@ -3,11 +3,10 @@
 	namespace Edde\Ext\Schema\Validator;
 
 	use Edde\Api\Schema\IProperty;
-	use Edde\Api\Validator\Exception\UnknownValidatorException;
-	use Edde\Api\Validator\Exception\ValidationException;
 	use Edde\Common\Validator\AbstractValidator;
 	use Edde\Exception\Schema\UnknownPropertyException;
 	use Edde\Exception\Schema\UnknownSchemaException;
+	use Edde\Exception\Validator\ValidationException;
 	use Edde\Inject\Schema\SchemaManager;
 
 	class SchemaValidator extends AbstractValidator {
@@ -16,7 +15,7 @@
 		/**
 		 * @inheritdoc
 		 *
-		 * @throws UnknownValidatorException
+		 * @throws \Edde\Exception\Validator\UnknownValidatorException
 		 * @throws ValidationException
 		 * @throws UnknownPropertyException
 		 * @throws UnknownSchemaException

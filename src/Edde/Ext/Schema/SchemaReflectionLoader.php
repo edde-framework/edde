@@ -4,13 +4,13 @@
 
 	use Edde\Api\Schema\ISchemaBuilder;
 	use Edde\Api\Schema\ISchemaLoader;
-	use Edde\Api\Utils\Inject\StringUtils;
 	use Edde\Common\Schema\AbstractSchemaLoader;
 	use Edde\Common\Schema\LinkBuilder;
 	use Edde\Common\Schema\SchemaBuilder;
 	use Edde\Exception\Schema\MultiplePrimaryException;
 	use Edde\Exception\Schema\SchemaException;
 	use Edde\Exception\Schema\SchemaReflectionException;
+	use Edde\Inject\Utils\StringUtils;
 	use ReflectionClass;
 
 	class SchemaReflectionLoader extends AbstractSchemaLoader implements ISchemaLoader {

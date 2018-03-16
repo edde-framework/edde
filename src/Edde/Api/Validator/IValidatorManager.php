@@ -3,8 +3,8 @@
 	namespace Edde\Api\Validator;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Validator\Exception\UnknownValidatorException;
-	use Edde\Api\Validator\Exception\ValidationException;
+	use Edde\Exception\Validator\UnknownValidatorException;
+	use Edde\Exception\Validator\ValidationException;
 
 	interface IValidatorManager extends IConfigurable {
 		/**
@@ -48,7 +48,7 @@
 		 * @param array $source
 		 *
 		 * @return IValidatorManager
-		 * @throws ValidationException
+		 * @throws \Edde\Exception\Validator\ValidationException
 		 */
 		public function validate(array $source): IValidatorManager;
 

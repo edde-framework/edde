@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Control;
 
-	use Edde\Api\Utils\Inject\StringUtils;
 	use Edde\Exception\Application\AbortException;
+	use Edde\Inject\Utils\StringUtils;
 
 	/**
 	 * Control used for a command line content rendering.

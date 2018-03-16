@@ -3,13 +3,13 @@
 	namespace Edde\Api\Schema;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Validator\Exception\UnknownValidatorException;
-	use Edde\Api\Validator\Exception\ValidationException;
 	use Edde\Exception\Generator\UnknownGeneratorException;
 	use Edde\Exception\Sanitizer\SanitizerException;
 	use Edde\Exception\Sanitizer\UnknownSanitizerException;
 	use Edde\Exception\Schema\PropertyException;
 	use Edde\Exception\Schema\UnknownPropertyException;
+	use Edde\Exception\Validator\UnknownValidatorException;
+	use Edde\Exception\Validator\ValidationException;
 
 	interface ISchemaManager extends IConfigurable {
 		/**
@@ -116,7 +116,7 @@
 		 * @param array   $source
 		 *
 		 * @throws ValidationException
-		 * @throws UnknownValidatorException
+		 * @throws \Edde\Exception\Validator\UnknownValidatorException
 		 */
 		public function validate(ISchema $schema, array $source): void;
 
@@ -128,7 +128,7 @@
 		 *
 		 * @throws ValidationException
 		 * @throws \Edde\Exception\Schema\UnknownSchemaException
-		 * @throws UnknownValidatorException
+		 * @throws \Edde\Exception\Validator\UnknownValidatorException
 		 * @throws UnknownPropertyException
 		 */
 		public function check(string $schema, array $source): void;

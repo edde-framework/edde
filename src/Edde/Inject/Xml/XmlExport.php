@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Xml\Inject;
+	namespace Edde\Inject\Xml;
 
 	use Edde\Api\Xml\IXmlExport;
 

@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Xml;
 
-	use Edde\Api\Xml\Inject\XmlParser;
+	use Edde\Inject\Xml\XmlParser;
 	use Edde\TestCase;
 
 	require_once(__DIR__ . '/assets/assets.php');

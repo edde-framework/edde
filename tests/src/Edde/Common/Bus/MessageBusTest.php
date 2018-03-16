@@ -9,16 +9,14 @@
 	use Edde\Api\Bus\Inject\EventBus;
 	use Edde\Api\Bus\Inject\MessageBus;
 	use Edde\Api\Bus\Request\IResponse;
-	use Edde\Api\Validator\Exception\UnknownValidatorException;
-	use Edde\Api\Validator\Exception\ValidationException;
-	use Edde\Api\Validator\Inject\ValidatorManager;
 	use Edde\Common\Bus\Event\Event;
 	use Edde\Common\Bus\Request\Request;
 	use Edde\Common\Content\Content;
 	use Edde\Exception\Container\ContainerException;
-	use Edde\Exception\Converter\ConverterException;
+	use Edde\Exception\Validator\ValidationException;
 	use Edde\Inject\Converter\ConverterManager;
 	use Edde\Inject\Crypt\RandomService;
+	use Edde\Inject\Validator\ValidatorManager;
 	use Edde\TestCase;
 
 	class MessageBusTest extends TestCase {
@@ -43,7 +41,7 @@
 		/**
 		 * @throws ContainerException
 		 * @throws InvalidElementException
-		 * @throws UnknownValidatorException
+		 * @throws \Edde\Exception\Validator\UnknownValidatorException
 		 * @throws ValidationException
 		 */
 		public function testEventBusInvalidEvent() {

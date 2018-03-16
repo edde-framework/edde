@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Utils;
 
-	use Edde\Api\Utils\Inject\StringUtils;
+	use Edde\Inject\Utils\StringUtils;
 	use Edde\TestCase;
 
 	class StringUtilsTest extends TestCase {

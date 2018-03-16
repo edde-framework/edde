@@ -4,8 +4,6 @@
 
 	use Edde\Api\File\IFile;
 	use Edde\Api\Http\IResponse;
-	use Edde\Api\Validator\Exception\UnknownValidatorException;
-	use Edde\Api\Validator\Exception\ValidationException;
 	use Edde\Common\Content\GeneratorContent;
 	use Edde\Common\Content\HtmlContent;
 	use Edde\Common\Content\JsonContent;
@@ -14,6 +12,8 @@
 	use Edde\Exception\Http\EmptyBodyException;
 	use Edde\Exception\Schema\UnknownPropertyException;
 	use Edde\Exception\Schema\UnknownSchemaException;
+	use Edde\Exception\Validator\UnknownValidatorException;
+	use Edde\Exception\Validator\ValidationException;
 	use Edde\Inject\Http\RequestService;
 	use Edde\Inject\Schema\SchemaManager;
 

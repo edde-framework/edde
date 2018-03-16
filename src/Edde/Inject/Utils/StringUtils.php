@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Utils\Inject;
+	namespace Edde\Inject\Utils;
 
 	use Edde\Api\Utils\IStringUtils;
 

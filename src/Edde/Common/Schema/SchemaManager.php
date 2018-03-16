@@ -5,14 +5,14 @@
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\ISchemaLoader;
 	use Edde\Api\Schema\ISchemaManager;
-	use Edde\Api\Validator\Exception\BatchValidationException;
-	use Edde\Api\Validator\Exception\ValidationException;
-	use Edde\Api\Validator\Inject\ValidatorManager;
 	use Edde\Common\Object\Object;
 	use Edde\Exception\Schema\UnknownSchemaException;
+	use Edde\Exception\Validator\BatchValidationException;
+	use Edde\Exception\Validator\ValidationException;
 	use Edde\Inject\Filter\FilterManager;
 	use Edde\Inject\Generator\GeneratorManager;
 	use Edde\Inject\Sanitizer\SanitizerManager;
+	use Edde\Inject\Validator\ValidatorManager;
 
 	class SchemaManager extends Object implements ISchemaManager {
 		use GeneratorManager;

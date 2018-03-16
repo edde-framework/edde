@@ -4,8 +4,6 @@
 
 	use DateTime;
 	use Edde\Api\Entity\IEntity;
-	use Edde\Api\Validator\Exception\BatchValidationException;
-	use Edde\Api\Validator\Exception\ValidationException;
 	use Edde\Common\Schema\BarPooSchema;
 	use Edde\Common\Schema\BarSchema;
 	use Edde\Common\Schema\FooBarSchema;
@@ -37,6 +35,8 @@
 	use Edde\Exception\Storage\NoTransactionException;
 	use Edde\Exception\Storage\StorageException;
 	use Edde\Exception\Storage\UnknownTableException;
+	use Edde\Exception\Validator\BatchValidationException;
+	use Edde\Exception\Validator\ValidationException;
 	use Edde\Inject\Container\Container;
 	use Edde\Inject\Entity\EntityManager;
 	use Edde\Inject\Schema\SchemaManager;
@@ -112,7 +112,7 @@
 		}
 
 		/**
-		 * @throws BatchValidationException
+		 * @throws \Edde\Exception\Validator\BatchValidationException
 		 * @throws DuplicateEntryException
 		 * @throws SchemaException
 		 * @throws UnknownSchemaException
@@ -308,7 +308,7 @@
 		 * @throws SchemaException
 		 * @throws UnknownSchemaException
 		 * @throws UnknownTableException
-		 * @throws ValidationException
+		 * @throws \Edde\Exception\Validator\ValidationException
 		 * @throws UnknownAliasException
 		 * @throws UnknownPropertyException
 		 */
@@ -492,7 +492,7 @@
 		}
 
 		/**
-		 * @throws BatchValidationException
+		 * @throws \Edde\Exception\Validator\BatchValidationException
 		 * @throws DriverException
 		 * @throws DuplicateEntryException
 		 * @throws DuplicateTableException
@@ -577,7 +577,7 @@
 		 * @throws UnknownAliasException
 		 * @throws UnknownPropertyException
 		 * @throws UnknownSchemaException
-		 * @throws ValidationException
+		 * @throws \Edde\Exception\Validator\ValidationException
 		 * @throws RelationException
 		 */
 		public function testMoreRelations() {
@@ -656,7 +656,7 @@
 		}
 
 		/**
-		 * @throws BatchValidationException
+		 * @throws \Edde\Exception\Validator\BatchValidationException
 		 * @throws DuplicateEntryException
 		 * @throws EntityNotFoundException
 		 * @throws InvalidRelationException
@@ -666,7 +666,7 @@
 		 * @throws UnknownPropertyException
 		 * @throws UnknownSchemaException
 		 * @throws UnknownTableException
-		 * @throws ValidationException
+		 * @throws \Edde\Exception\Validator\ValidationException
 		 */
 		public function testEntityDetach() {
 			$this->schemaManager->load(UserRoleSchema::class);
@@ -763,7 +763,7 @@
 		 * @throws UnknownPropertyException
 		 * @throws UnknownSchemaException
 		 * @throws UnknownTableException
-		 * @throws ValidationException
+		 * @throws \Edde\Exception\Validator\ValidationException
 		 */
 		public function testUnlinkRelation() {
 			$this->schemaManager->load(UserRoleSchema::class);

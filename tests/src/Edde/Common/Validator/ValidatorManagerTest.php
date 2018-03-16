@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Validator;
 
-	use Edde\Api\Validator\Exception\UnknownValidatorException;
-	use Edde\Api\Validator\Exception\ValidationException;
-	use Edde\Api\Validator\Inject\ValidatorManager;
+	use Edde\Exception\Validator\UnknownValidatorException;
+	use Edde\Exception\Validator\ValidationException;
+	use Edde\Inject\Validator\ValidatorManager;
 	use Edde\TestCase;
 
 	class ValidatorManagerTest extends TestCase {

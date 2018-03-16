@@ -3,8 +3,8 @@
 	namespace Edde\Common\Xml;
 
 	use Edde\Api\Node\INode;
-	use Edde\Api\Xml\Exception\XmlParserException;
 	use Edde\Common\Node\Node;
+	use Edde\Exception\Xml\XmlParserException;
 
 	/**
 	 * Static XML tree handler; reads whole XML input into a memory.

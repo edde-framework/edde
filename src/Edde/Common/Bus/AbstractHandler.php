@@ -6,10 +6,10 @@
 	use Edde\Api\Bus\Exception\UnhandledElementException;
 	use Edde\Api\Bus\IElement;
 	use Edde\Api\Bus\IHandler;
-	use Edde\Api\Validator\Exception\UnknownValidatorException;
-	use Edde\Api\Validator\Exception\ValidationException;
-	use Edde\Api\Validator\Inject\ValidatorManager;
 	use Edde\Common\Object\Object;
+	use Edde\Exception\Validator\UnknownValidatorException;
+	use Edde\Exception\Validator\ValidationException;
+	use Edde\Inject\Validator\ValidatorManager;
 
 	abstract class AbstractHandler extends Object implements IHandler {
 		use ValidatorManager;

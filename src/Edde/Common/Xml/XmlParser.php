@@ -3,12 +3,13 @@
 	namespace Edde\Common\Xml;
 
 	use Edde\Api\Resource\IResource;
-	use Edde\Api\Utils\Inject\StringUtils;
-	use Edde\Api\Xml\Exception\XmlParserException;
 	use Edde\Api\Xml\IXmlHandler;
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Common\File\File;
 	use Edde\Common\Object\Object;
+	use Edde\Exception\Xml\XmlParserException;
+	use Edde\Inject\Utils\StringUtils;
+	use Iterator;
 
 	/**
 	 * Simple and fast event based xml parser.
@@ -29,6 +30,8 @@
 
 		/**
 		 * @inheritdoc
+		 *
+		 * @throws XmlParserException
 		 */
 		public function file(string $file, IXmlHandler $xmlHandler): IXmlParser {
 			return $this->parse(File::create($file), $xmlHandler);
@@ -36,6 +39,8 @@
 
 		/**
 		 * @inheritdoc
+		 *
+		 * @throws XmlParserException
 		 */
 		public function string(string $string, IXmlHandler $xmlHandler): IXmlParser {
 			return $this->iterate($this->stringUtils->createIterator($string), $xmlHandler);
@@ -43,6 +48,7 @@
 
 		/**
 		 * @inheritdoc
+		 *
 		 * @throws XmlParserException
 		 */
 		public function parse(IResource $resource, IXmlHandler $xmlHandler): IXmlParser {
@@ -59,13 +65,14 @@
 		}
 
 		/**
-		 * @param \Iterator   $iterator
+		 * @param Iterator    $iterator
 		 * @param IXmlHandler $xmlHandler
 		 *
 		 * @return $this
+		 *
 		 * @throws XmlParserException
 		 */
-		protected function iterate(\Iterator $iterator, IXmlHandler $xmlHandler) {
+		protected function iterate(Iterator $iterator, IXmlHandler $xmlHandler) {
 			$value = '';
 			$iterator->rewind();
 			while ($iterator->valid()) {
@@ -89,12 +96,12 @@
 		}
 
 		/**
-		 * @param \Iterator   $iterator
+		 * @param Iterator    $iterator
 		 * @param IXmlHandler $xmlHandler
 		 *
 		 * @throws XmlParserException
 		 */
-		protected function parseTag(\Iterator $iterator, IXmlHandler $xmlHandler) {
+		protected function parseTag(Iterator $iterator, IXmlHandler $xmlHandler) {
 			$last = null;
 			$name = '';
 			$attributeList = [];
@@ -175,11 +182,11 @@
 		}
 
 		/**
-		 * @param \Iterator $iterator
+		 * @param Iterator $iterator
 		 *
 		 * @throws XmlParserException
 		 */
-		protected function parseComment(\Iterator $iterator) {
+		protected function parseComment(Iterator $iterator) {
 			$type = self::XML_TYPE_COMMENT;
 			$close = false;
 			while ($iterator->valid()) {
@@ -209,12 +216,12 @@
 		}
 
 		/**
-		 * @param \Iterator $iterator
+		 * @param Iterator $iterator
 		 *
 		 * @return array
 		 * @throws XmlParserException
 		 */
-		protected function parseAttributes(\Iterator $iterator) {
+		protected function parseAttributes(Iterator $iterator) {
 			$attributeList = [];
 			while ($iterator->valid()) {
 				switch ($char = $iterator->current()) {
@@ -236,12 +243,12 @@
 		}
 
 		/**
-		 * @param \Iterator $iterator
+		 * @param Iterator $iterator
 		 *
 		 * @return array
 		 * @throws XmlParserException
 		 */
-		protected function parseAttribute(\Iterator $iterator) {
+		protected function parseAttribute(Iterator $iterator) {
 			$name = null;
 			$open = false;
 			$quote = null;

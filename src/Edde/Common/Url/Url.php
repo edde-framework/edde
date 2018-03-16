@@ -3,8 +3,8 @@
 	namespace Edde\Common\Url;
 
 	use Edde\Api\Url\IUrl;
-	use Edde\Api\Url\UrlException;
 	use Edde\Common\Object\Object;
+	use Edde\Exception\Url\UrlException;
 
 	class Url extends Object implements IUrl {
 		/**

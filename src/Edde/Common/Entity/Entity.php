@@ -9,9 +9,6 @@
 	use Edde\Api\Entity\Query\IDetachQuery;
 	use Edde\Api\Entity\Query\IDisconnectQuery;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Api\Validator\Exception\BatchValidationException;
-	use Edde\Api\Validator\Exception\UnknownValidatorException;
-	use Edde\Api\Validator\Exception\ValidationException;
 	use Edde\Common\Crate\Crate;
 	use Edde\Exception\Driver\DriverException;
 	use Edde\Exception\Entity\RecordException;
@@ -24,6 +21,7 @@
 	use Edde\Exception\Schema\RelationException;
 	use Edde\Exception\Schema\UnknownPropertyException;
 	use Edde\Exception\Schema\UnknownSchemaException;
+	use Edde\Exception\Validator\ValidationException;
 	use Edde\Inject\Entity\EntityManager;
 	use Edde\Inject\Schema\SchemaManager;
 
@@ -169,7 +167,7 @@
 		 * @throws ValidationException
 		 * @throws \Edde\Exception\Storage\DuplicateEntryException
 		 * @throws \Edde\Exception\Storage\StorageException
-		 * @throws BatchValidationException
+		 * @throws \Edde\Exception\Validator\BatchValidationException
 		 * @throws DriverException
 		 */
 		public function save(): IEntity {
@@ -211,7 +209,7 @@
 		/**
 		 * @inheritdoc
 		 *
-		 * @throws UnknownValidatorException
+		 * @throws \Edde\Exception\Validator\UnknownValidatorException
 		 */
 		public function isValid(): bool {
 			try {
@@ -230,7 +228,7 @@
 		 * @inheritdoc
 		 *
 		 * @throws ValidationException
-		 * @throws UnknownValidatorException
+		 * @throws \Edde\Exception\Validator\UnknownValidatorException
 		 */
 		public function validate(): IEntity {
 			$this->schemaManager->validate($this->schema, $this->toArray());

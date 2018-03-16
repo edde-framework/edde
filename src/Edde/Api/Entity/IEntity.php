@@ -7,11 +7,10 @@
 	use Edde\Api\Entity\Query\IDetachQuery;
 	use Edde\Api\Entity\Query\IDisconnectQuery;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Api\Validator\Exception\BatchValidationException;
-	use Edde\Api\Validator\Exception\ValidationException;
 	use Edde\Exception\Entity\UnknownAliasException;
 	use Edde\Exception\Schema\SchemaException;
 	use Edde\Exception\Storage\DuplicateEntryException;
+	use Edde\Exception\Validator\BatchValidationException;
 
 	/**
 	 * An Entity is extended Crate with some additional features.
@@ -132,7 +131,7 @@
 		 * save this entity and all related entities (entity queue in a transaction)
 		 *
 		 * @return IEntity
-		 * @throws ValidationException
+		 * @throws \Edde\Exception\Validator\ValidationException
 		 * @throws BatchValidationException
 		 * @throws DuplicateEntryException
 		 */
@@ -165,7 +164,7 @@
 		 * validate data of an entity
 		 *
 		 * @return IEntity
-		 * @throws ValidationException
+		 * @throws \Edde\Exception\Validator\ValidationException
 		 */
 		public function validate(): IEntity;
 	}

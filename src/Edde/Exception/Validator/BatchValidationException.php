@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Validator\Exception;
+	namespace Edde\Exception\Validator;
 
 	class BatchValidationException extends ValidationException {
 		protected $validations;

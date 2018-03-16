@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Validator;
 
-	use Edde\Api\Validator\Exception\ValidationException;
+	use Edde\Exception\Validator\ValidationException;
 
 	class RequiredValidator extends AbstractValidator {
 		/** @inheritdoc */

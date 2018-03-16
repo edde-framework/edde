@@ -2,9 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Validator;
 
-	use Edde\Api\Validator\Exception\BatchValidationException;
-	use Edde\Api\Validator\Exception\UnknownValidatorException;
-	use Edde\Api\Validator\Exception\ValidationException;
+	use Edde\Exception\Validator\UnknownValidatorException;
 
 	interface IValidator {
 		/**
@@ -25,8 +23,8 @@
 		 * @param array $options
 		 *
 		 * @return mixed
-		 * @throws ValidationException
-		 * @throws BatchValidationException
+		 * @throws \Edde\Exception\Validator\ValidationException
+		 * @throws \Edde\Exception\Validator\BatchValidationException
 		 * @throws UnknownValidatorException
 		 */
 		public function validate($value, array $options = []): void;

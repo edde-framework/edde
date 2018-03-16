@@ -2,10 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Validator;
 
-	use Edde\Api\Validator\Exception\UnknownValidatorException;
 	use Edde\Api\Validator\IValidator;
 	use Edde\Api\Validator\IValidatorManager;
 	use Edde\Common\Object\Object;
+	use Edde\Exception\Validator\UnknownValidatorException;
 
 	class ValidatorManager extends Object implements IValidatorManager {
 		/** @var IValidator[] */
