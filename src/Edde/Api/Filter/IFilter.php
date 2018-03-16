@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Filter;
 
-	use Edde\Api\Filter\Exception\FilterException;
+	use Edde\Exception\Filter\FilterException;
 
 	interface IFilter {
 		/**

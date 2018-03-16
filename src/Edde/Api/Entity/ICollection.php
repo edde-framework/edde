@@ -2,8 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Entity;
 
-	use Edde\Api\Entity\Exception\RecordException;
-	use Edde\Api\Entity\Exception\UnknownAliasException;
 	use Edde\Api\Schema\Exception\InvalidRelationException;
 	use Edde\Api\Schema\Exception\NoPrimaryPropertyException;
 	use Edde\Api\Schema\Exception\RelationException;
@@ -12,6 +10,8 @@
 	use Edde\Api\Storage\Exception\EntityNotFoundException;
 	use Edde\Api\Storage\Exception\UnknownTableException;
 	use Edde\Api\Storage\Query\ISelectQuery;
+	use Edde\Exception\Entity\RecordException;
+	use Edde\Exception\Entity\UnknownAliasException;
 	use IteratorAggregate;
 	use Traversable;
 
@@ -88,7 +88,7 @@
 		 * @throws EntityNotFoundException
 		 * @throws UnknownTableException
 		 * @throws UnknownAliasException
-		 * @throws RecordException
+		 * @throws \Edde\Exception\Entity\RecordException
 		 * @throws NoPrimaryPropertyException
 		 */
 		public function entity(string $alias, $name): IEntity;

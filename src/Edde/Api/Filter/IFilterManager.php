@@ -3,7 +3,7 @@
 	namespace Edde\Api\Filter;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Filter\Exception\UnknownFilterException;
+	use Edde\Exception\Filter\UnknownFilterException;
 
 	/**
 	 * Filter manager should take care about values coming to PHP side (for example from

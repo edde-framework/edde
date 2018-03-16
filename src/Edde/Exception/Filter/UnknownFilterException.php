@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Filter\Exception;
+	namespace Edde\Exception\Filter;
 
 	class UnknownFilterException extends FilterManagerException {
 	}

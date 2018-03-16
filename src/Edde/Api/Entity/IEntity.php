@@ -4,7 +4,6 @@
 
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Crate\IProperty;
-	use Edde\Api\Entity\Exception\UnknownAliasException;
 	use Edde\Api\Entity\Query\IDetachQuery;
 	use Edde\Api\Entity\Query\IDisconnectQuery;
 	use Edde\Api\Schema\Exception\InvalidRelationException;
@@ -15,6 +14,7 @@
 	use Edde\Api\Storage\Exception\DuplicateEntryException;
 	use Edde\Api\Validator\Exception\BatchValidationException;
 	use Edde\Api\Validator\Exception\ValidationException;
+	use Edde\Exception\Entity\UnknownAliasException;
 
 	/**
 	 * An Entity is extended Crate with some additional features.

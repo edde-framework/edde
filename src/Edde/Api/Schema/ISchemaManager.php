@@ -3,8 +3,6 @@
 	namespace Edde\Api\Schema;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Filter\Exception\FilterException;
-	use Edde\Api\Filter\Exception\UnknownFilterException;
 	use Edde\Api\Generator\Exception\UnknownGeneratorException;
 	use Edde\Api\Sanitizer\Exception\SanitizerException;
 	use Edde\Api\Sanitizer\Exception\UnknownSanitizerException;
@@ -13,6 +11,8 @@
 	use Edde\Api\Schema\Exception\UnknownSchemaException;
 	use Edde\Api\Validator\Exception\UnknownValidatorException;
 	use Edde\Api\Validator\Exception\ValidationException;
+	use Edde\Exception\Filter\FilterException;
+	use Edde\Exception\Filter\UnknownFilterException;
 
 	interface ISchemaManager extends IConfigurable {
 		/**
@@ -83,8 +83,8 @@
 		 *
 		 * @return array
 		 * @throws UnknownPropertyException
-		 * @throws UnknownFilterException
-		 * @throws FilterException
+		 * @throws \Edde\Exception\Filter\UnknownFilterException
+		 * @throws \Edde\Exception\Filter\FilterException
 		 */
 		public function filter(ISchema $schema, array $source): array;
 

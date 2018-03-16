@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Entity\Inject;
+	namespace Edde\Inject\Entity;
 
 	use Edde\Api\Entity\IEntityManager;
 

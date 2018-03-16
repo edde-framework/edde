@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Entity;
 
-	use Edde\Api\Entity\Exception\RecordException;
+	use Edde\Exception\Entity\RecordException;
 
 	/**
 	 * Record is a row got from storage containing multpile entities
@@ -15,7 +15,7 @@
 		 * @param string $alias
 		 *
 		 * @return array
-		 * @throws RecordException
+		 * @throws \Edde\Exception\Entity\RecordException
 		 */
 		public function getSource(string $alias): array;
 
@@ -25,7 +25,7 @@
 		 * @param string $alias
 		 *
 		 * @return IEntity
-		 * @throws RecordException
+		 * @throws \Edde\Exception\Entity\RecordException
 		 */
 		public function getEntity(string $alias): IEntity;
 	}

@@ -2,10 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Filter;
 
-	use Edde\Api\Filter\Exception\UnknownFilterException;
 	use Edde\Api\Filter\IFilter;
 	use Edde\Api\Filter\IFilterManager;
 	use Edde\Common\Object\Object;
+	use Edde\Exception\Filter\UnknownFilterException;
 
 	class FilterManager extends Object implements IFilterManager {
 		/**

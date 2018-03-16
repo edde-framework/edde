@@ -2,12 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Entity;
 
-	use Edde\Api\Entity\Exception\RecordException;
 	use Edde\Api\Entity\IEntity;
-	use Edde\Api\Entity\Inject\EntityManager;
 	use Edde\Api\Entity\IRecord;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Common\Object\Object;
+	use Edde\Exception\Entity\RecordException;
+	use Edde\Inject\Entity\EntityManager;
 
 	class Record extends Object implements IRecord {
 		use EntityManager;
