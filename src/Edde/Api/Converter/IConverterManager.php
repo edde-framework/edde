@@ -4,7 +4,7 @@
 
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Content\IContent;
-	use Edde\Api\Converter\Exception\ConverterException;
+	use Edde\Exception\Converter\ConverterException;
 
 	/**
 	 * Implementation of general conversion mechanism which is useful
@@ -51,7 +51,7 @@
 		 *
 		 * @return IContent
 		 *
-		 * @throws ConverterException
+		 * @throws \Edde\Exception\Converter\ConverterException
 		 */
 		public function convert(IContent $content, array $targetList = null): IContent;
 	}

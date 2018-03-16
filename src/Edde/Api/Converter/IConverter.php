@@ -4,7 +4,7 @@
 
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Content\IContent;
-	use Edde\Api\Converter\Exception\UnsupportedConversionException;
+	use Edde\Exception\Converter\UnsupportedConversionException;
 
 	/**
 	 * A Converter is an implementation of converter from one type to another one; the core

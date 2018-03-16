@@ -9,8 +9,6 @@
 	use Edde\Api\Bus\Inject\EventBus;
 	use Edde\Api\Bus\Inject\MessageBus;
 	use Edde\Api\Bus\Request\IResponse;
-	use Edde\Api\Converter\Exception\ConverterException;
-	use Edde\Api\Converter\Inject\ConverterManager;
 	use Edde\Api\Crypt\Inject\RandomService;
 	use Edde\Api\Validator\Exception\UnknownValidatorException;
 	use Edde\Api\Validator\Exception\ValidationException;
@@ -19,6 +17,8 @@
 	use Edde\Common\Bus\Request\Request;
 	use Edde\Common\Content\Content;
 	use Edde\Exception\Container\ContainerException;
+	use Edde\Exception\Converter\ConverterException;
+	use Edde\Inject\Converter\ConverterManager;
 	use Edde\TestCase;
 
 	class MessageBusTest extends TestCase {
@@ -113,7 +113,7 @@
 		}
 
 		/**
-		 * @throws ConverterException
+		 * @throws \Edde\Exception\Converter\ConverterException
 		 */
 		public function testMessageImport() {
 			$request = new Element('request', 'uuid', $attributes = [

@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Http;
 
-	use Edde\Api\Converter\Inject\ConverterManager;
 	use Edde\Api\Http\Exception\EmptyBodyException;
+	use Edde\Api\Http\Exception\NoHttpException;
 	use Edde\Api\Http\IContentType;
 	use Edde\Api\Http\ICookies;
 	use Edde\Api\Http\IHeaders;
@@ -11,10 +11,13 @@
 	use Edde\Api\Http\IRequest;
 	use Edde\Api\Http\IRequestService;
 	use Edde\Api\Url\IUrl;
+	use Edde\Api\Url\UrlException;
 	use Edde\Common\Content\InputContent;
 	use Edde\Common\Content\PostContent;
 	use Edde\Common\Object\Object;
 	use Edde\Common\Url\Url;
+	use Edde\Exception\Converter\ConverterException;
+	use Edde\Inject\Converter\ConverterManager;
 
 	class RequestService extends Object implements IRequestService {
 		use HttpUtils;
@@ -22,7 +25,11 @@
 		/** @var IRequest */
 		protected $request;
 
-		/** @inheritdoc */
+		/**
+		 * @inheritdoc
+		 *
+		 * @throws UrlException
+		 */
 		public function getRequest(): IRequest {
 			if ($this->request) {
 				return $this->request;
@@ -50,7 +57,14 @@
 			return $this->request;
 		}
 
-		/** @inheritdoc */
+		/**
+		 * @inheritdoc
+		 *
+		 * @throws EmptyBodyException
+		 * @throws UrlException
+		 * @throws NoHttpException
+		 * @throws ConverterException
+		 */
 		public function getContent(...$targetList) {
 			if (($content = $this->getRequest()->getContent()) === null) {
 				throw new EmptyBodyException('Current request has no content.');
@@ -58,22 +72,42 @@
 			return $this->converterManager->convert($content, $targetList)->getContent();
 		}
 
-		/** @inheritdoc */
+		/**
+		 * @inheritdoc
+		 *
+		 * @throws NoHttpException
+		 * @throws UrlException
+		 */
 		public function getUrl(): IUrl {
 			return $this->getRequest()->getUrl();
 		}
 
-		/** @inheritdoc */
+		/**
+		 * @inheritdoc
+		 *
+		 * @throws NoHttpException
+		 * @throws UrlException
+		 */
 		public function getMethod(): string {
 			return $this->getRequest()->getMethod();
 		}
 
-		/** @inheritdoc */
+		/**
+		 * @inheritdoc
+		 *
+		 * @throws NoHttpException
+		 * @throws UrlException
+		 */
 		public function getHeaders(): IHeaders {
 			return $this->getRequest()->getHeaders();
 		}
 
-		/** @inheritdoc */
+		/**
+		 * @inheritdoc
+		 *
+		 * @throws NoHttpException
+		 * @throws UrlException
+		 */
 		public function getContentType(): ?IContentType {
 			return $this->getHeaders()->getContentType();
 		}

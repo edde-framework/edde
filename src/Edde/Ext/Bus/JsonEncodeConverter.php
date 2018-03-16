@@ -5,9 +5,11 @@
 	use Edde\Api\Bus\IElement;
 	use Edde\Api\Bus\Inject\MessageBus;
 	use Edde\Api\Content\IContent;
-	use Edde\Api\Converter\Inject\ConverterManager;
 	use Edde\Common\Content\Content;
 	use Edde\Common\Converter\AbstractConverter;
+	use Edde\Exception\Converter\ConverterException;
+	use Edde\Inject\Converter\ConverterManager;
+	use stdClass;
 
 	class JsonEncodeConverter extends AbstractConverter {
 		use ConverterManager;
@@ -21,9 +23,13 @@
 			]);
 		}
 
-		/** @inheritdoc */
+		/**
+		 * @inheritdoc
+		 *
+		 * @throws ConverterException
+		 */
 		public function convert(IContent $content, string $target = null): IContent {
 			$source = $this->messageBus->export($content->getContent());
-			return $this->converterManager->convert(new Content($source, \stdClass::class), ['application/json']);
+			return $this->converterManager->convert(new Content($source, stdClass::class), ['application/json']);
 		}
 	}

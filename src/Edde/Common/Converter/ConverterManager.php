@@ -3,11 +3,11 @@
 	namespace Edde\Common\Converter;
 
 	use Edde\Api\Content\IContent;
-	use Edde\Api\Converter\Exception\ConverterException;
 	use Edde\Api\Converter\IConvertable;
 	use Edde\Api\Converter\IConverter;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Common\Object\Object;
+	use Edde\Exception\Converter\ConverterException;
 
 	class ConverterManager extends Object implements IConverterManager {
 		/**

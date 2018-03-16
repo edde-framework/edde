@@ -3,9 +3,9 @@
 	namespace Edde\Ext\Converter;
 
 	use Edde\Api\Content\IContent;
-	use Edde\Api\Converter\Exception\UnsupportedConversionException;
 	use Edde\Common\Content\Content;
 	use Edde\Common\Converter\AbstractConverter;
+	use Edde\Exception\Converter\UnsupportedConversionException;
 
 	class JsonDecodeConverter extends AbstractConverter {
 		public function __construct() {

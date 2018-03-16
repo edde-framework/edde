@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Converter\Inject;
+	namespace Edde\Inject\Converter;
 
 	use Edde\Api\Converter\IConverterManager;
 

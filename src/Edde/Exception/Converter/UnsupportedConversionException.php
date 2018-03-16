@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Converter\Exception;
+	namespace Edde\Exception\Converter;
 
 	class UnsupportedConversionException extends ConverterException {
 	}
