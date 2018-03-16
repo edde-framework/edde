@@ -9,6 +9,7 @@
 	use Edde\Exception\Converter\ConverterException;
 	use Edde\Inject\Bus\MessageBus;
 	use Edde\Inject\Converter\ConverterManager;
+	use stdClass;
 
 	class JsonDecodeConverter extends AbstractConverter {
 		use ConverterManager;
@@ -29,7 +30,7 @@
 		 * @throws ConverterException
 		 */
 		public function convert(IContent $content, string $target = null): IContent {
-			$source = $this->converterManager->convert($content, [\stdClass::class]);
+			$source = $this->converterManager->convert($content, [stdClass::class]);
 			return new Content($this->messageBus->import($source->getContent()), IElement::class);
 		}
 	}
