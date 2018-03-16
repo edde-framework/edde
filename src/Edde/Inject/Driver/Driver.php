@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Driver\Inject;
+	namespace Edde\Inject\Driver;
 
 	use Edde\Api\Driver\IDriver;
 

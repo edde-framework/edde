@@ -3,7 +3,6 @@
 	namespace Edde\Ext\Router;
 
 	use Edde\Api\Bus\Request\IRequest;
-	use Edde\Api\Crypt\Inject\RandomService;
 	use Edde\Api\Http\Exception\NoHttpException;
 	use Edde\Api\Router\Exception\RouterException;
 	use Edde\Api\Runtime\Exception\MissingArgvException;
@@ -11,6 +10,7 @@
 	use Edde\Common\Bus\Request\Request;
 	use Edde\Common\Router\AbstractRouter;
 	use Edde\Inject\Container\Container;
+	use Edde\Inject\Crypt\RandomService;
 
 	/**
 	 * Maybe not the best name: this router provides application request made from

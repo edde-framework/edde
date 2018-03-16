@@ -3,8 +3,6 @@
 	namespace Edde\Ext\Driver;
 
 	use Edde\Api\Crate\IProperty;
-	use Edde\Api\Driver\Exception\DriverException;
-	use Edde\Api\Driver\Exception\DriverQueryException;
 	use Edde\Api\Driver\IDriver;
 	use Edde\Api\Entity\IEntity;
 	use Edde\Api\Entity\Query\IDeleteQuery;
@@ -25,6 +23,8 @@
 	use Edde\Exception\Config\RequiredConfigException;
 	use Edde\Exception\Config\RequiredSectionException;
 	use Edde\Exception\Config\RequiredValueException;
+	use Edde\Exception\Driver\DriverException;
+	use Edde\Exception\Driver\DriverQueryException;
 	use GraphAware\Bolt\Configuration;
 	use GraphAware\Bolt\Exception\MessageFailureException;
 	use GraphAware\Bolt\GraphDatabase;

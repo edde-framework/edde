@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Crypt\Exception;
+	namespace Edde\Exception\Crypt;
 
 	use Edde\Exception\EddeException;
 

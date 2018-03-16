@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Crypt\Inject;
+	namespace Edde\Inject\Crypt;
 
 	use Edde\Api\Crypt\IPasswordService;
 
@@ -11,7 +11,7 @@
 		/**
 		 * @param IPasswordService $passwordService
 		 */
-		public function injectPasswordService(IPasswordService $passwordService): void {
+		public function lazyPasswordService(IPasswordService $passwordService): void {
 			$this->passwordService = $passwordService;
 		}
 	}

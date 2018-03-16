@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Common\File;
 
-	use Edde\Api\File\Exception\DirectoryException;
-	use Edde\Api\File\Exception\RealPathException;
 	use Edde\Api\File\IDirectory;
 	use Edde\Api\File\IFile;
 	use Edde\Common\Object\Object;
+	use Edde\Exception\File\DirectoryException;
+	use Edde\Exception\File\RealPathException;
 	use RecursiveDirectoryIterator;
 	use RecursiveIteratorIterator;
 	use SplFileInfo;

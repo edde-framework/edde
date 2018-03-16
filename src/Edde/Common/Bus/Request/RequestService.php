@@ -4,12 +4,12 @@
 
 	use Edde\Api\Bus\IElement;
 	use Edde\Api\Bus\Request\IRequestService;
-	use Edde\Api\Crypt\Inject\RandomService;
 	use Edde\Api\Utils\Inject\StringUtils;
 	use Edde\Common\Bus\AbstractHandler;
 	use Edde\Common\Bus\Error;
 	use Edde\Exception\Container\FactoryException;
 	use Edde\Inject\Container\Container;
+	use Edde\Inject\Crypt\RandomService;
 
 	class RequestService extends AbstractHandler implements IRequestService {
 		use Container;

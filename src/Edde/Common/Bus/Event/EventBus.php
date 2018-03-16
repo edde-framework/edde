@@ -5,9 +5,9 @@
 	use Edde\Api\Bus\Event\IEventBus;
 	use Edde\Api\Bus\Event\IListener;
 	use Edde\Api\Bus\IElement;
-	use Edde\Api\Crypt\Inject\RandomService;
 	use Edde\Common\Bus\AbstractHandler;
 	use Edde\Common\Bus\Element;
+	use Edde\Inject\Crypt\RandomService;
 
 	class EventBus extends AbstractHandler implements IEventBus {
 		use RandomService;

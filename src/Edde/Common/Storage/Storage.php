@@ -2,13 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Storage;
 
-	use Edde\Api\Driver\Inject\Driver;
 	use Edde\Api\Storage\Exception\ExclusiveTransactionException;
 	use Edde\Api\Storage\Exception\NoTransactionException;
 	use Edde\Api\Storage\IStorage;
 	use Edde\Api\Storage\IStream;
 	use Edde\Api\Storage\Query\IQuery;
 	use Edde\Common\Object\Object;
+	use Edde\Inject\Driver\Driver;
 
 	class Storage extends Object implements IStorage {
 		use Driver;

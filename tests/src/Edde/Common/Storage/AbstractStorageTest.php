@@ -3,7 +3,6 @@
 	namespace Edde\Common\Storage;
 
 	use DateTime;
-	use Edde\Api\Driver\Exception\DriverException;
 	use Edde\Api\Entity\Exception\RecordException;
 	use Edde\Api\Entity\Exception\UnknownAliasException;
 	use Edde\Api\Entity\IEntity;
@@ -50,7 +49,7 @@
 		use Container;
 
 		/**
-		 * @throws DriverException
+		 * @throws \Edde\Exception\Driver\DriverException
 		 * @throws DuplicateTableException
 		 * @throws StorageException
 		 * @throws UnknownPropertyException
@@ -493,7 +492,7 @@
 
 		/**
 		 * @throws BatchValidationException
-		 * @throws DriverException
+		 * @throws \Edde\Exception\Driver\DriverException
 		 * @throws DuplicateEntryException
 		 * @throws DuplicateTableException
 		 * @throws InvalidRelationException

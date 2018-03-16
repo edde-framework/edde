@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Crypt\Inject;
+	namespace Edde\Inject\Crypt;
 
 	use Edde\Api\Crypt\IRandomService;
 

@@ -2,10 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Api\File;
 
-	use Edde\Api\File\Exception\FileLockException;
-	use Edde\Api\File\Exception\FileOpenException;
-	use Edde\Api\File\Exception\FileWriteException;
 	use Edde\Api\Resource\IResource;
+	use Edde\Exception\File\FileLockException;
+	use Edde\Exception\File\FileOpenException;
+	use Edde\Exception\File\FileWriteException;
 
 	interface IFile extends IResource {
 		/**
@@ -16,7 +16,7 @@
 		 *
 		 * @return IFile
 		 *
-		 * @throws FileOpenException
+		 * @throws \Edde\Exception\File\FileOpenException
 		 */
 		public function open(string $mode, bool $exclusive = false): IFile;
 
@@ -88,7 +88,7 @@
 		 *
 		 * @return IFile
 		 *
-		 * @throws FileOpenException
+		 * @throws \Edde\Exception\File\FileOpenException
 		 */
 		public function close(): IFile;
 

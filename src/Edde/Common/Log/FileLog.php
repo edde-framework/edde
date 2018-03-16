@@ -2,10 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Log;
 
-	use Edde\Api\File\Exception\FileWriteException;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Log\ILog;
 	use Edde\Api\Log\ILogRecord;
+	use Edde\Exception\File\FileWriteException;
 	use Edde\Inject\Assets\LogDirectory;
 
 	/**

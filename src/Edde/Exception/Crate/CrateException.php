@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Crate\Exception;
+	namespace Edde\Exception\Crate;
 
 	use Edde\Exception\EddeException;
 

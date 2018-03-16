@@ -3,8 +3,8 @@
 	namespace Edde\Api\Driver;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Driver\Exception\DriverException;
 	use Edde\Api\Storage\Query\IQuery;
+	use Edde\Exception\Driver\DriverException;
 
 	/**
 	 * General driver for storage implementation; one storage could have more drivers to choose from.
@@ -18,7 +18,7 @@
 		 *
 		 * @return mixed
 		 *
-		 * @throws DriverException
+		 * @throws \Edde\Exception\Driver\DriverException
 		 */
 		public function execute(IQuery $query);
 
@@ -30,7 +30,7 @@
 		 *
 		 * @return mixed
 		 *
-		 * @throws DriverException
+		 * @throws \Edde\Exception\Driver\DriverException
 		 */
 		public function fetch($query, array $params = []);
 
@@ -42,7 +42,7 @@
 		 *
 		 * @return mixed
 		 *
-		 * @throws DriverException
+		 * @throws \Edde\Exception\Driver\DriverException
 		 */
 		public function exec($query, array $params = []);
 

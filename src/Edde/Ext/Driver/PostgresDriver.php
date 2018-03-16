@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Driver;
 
-	use Edde\Api\Driver\Exception\DriverQueryException;
 	use Edde\Api\Storage\Exception\DuplicateEntryException;
 	use Edde\Api\Storage\Exception\DuplicateTableException;
 	use Edde\Api\Storage\Exception\NullValueException;
 	use Edde\Api\Storage\Exception\UnknownTableException;
+	use Edde\Exception\Driver\DriverQueryException;
 
 	class PostgresDriver extends AbstractDatabaseDriver {
 		/** @inheritdoc */

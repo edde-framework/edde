@@ -3,11 +3,11 @@
 	namespace Edde\Api\Entity;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Driver\Exception\DriverException;
 	use Edde\Api\Schema\Exception\SchemaException;
 	use Edde\Api\Schema\Exception\UnknownSchemaException;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Storage\Exception\StorageException;
+	use Edde\Exception\Driver\DriverException;
 
 	interface IEntityManager extends IConfigurable {
 		/**

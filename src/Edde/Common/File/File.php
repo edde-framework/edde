@@ -2,14 +2,14 @@
 	declare(strict_types=1);
 	namespace Edde\Common\File;
 
-	use Edde\Api\File\Exception\FileException;
-	use Edde\Api\File\Exception\FileLockException;
-	use Edde\Api\File\Exception\FileOpenException;
-	use Edde\Api\File\Exception\FileWriteException;
 	use Edde\Api\File\IDirectory;
 	use Edde\Api\File\IFile;
 	use Edde\Common\Resource\Resource;
 	use Edde\Common\Url\Url;
+	use Edde\Exception\File\FileException;
+	use Edde\Exception\File\FileLockException;
+	use Edde\Exception\File\FileOpenException;
+	use Edde\Exception\File\FileWriteException;
 
 	/**
 	 * File class; this is just file. Simple good old classic file. Really.
@@ -42,7 +42,7 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws FileException
+		 * @throws \Edde\Exception\File\FileException
 		 */
 		public function openForRead(bool $exclusive = false): IFile {
 			$this->open('rb+', $exclusive);
@@ -51,7 +51,7 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws FileException
+		 * @throws \Edde\Exception\File\FileException
 		 */
 		public function openForWrite(bool $exclusive = false): IFile {
 			$this->open('wb+', $exclusive);
@@ -60,7 +60,7 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws FileException
+		 * @throws \Edde\Exception\File\FileException
 		 */
 		public function openForAppend(bool $exclusive = false): IFile {
 			$this->open('a', $exclusive);
@@ -76,7 +76,7 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws FileException
+		 * @throws \Edde\Exception\File\FileException
 		 */
 		public function read(int $length = null) {
 			if (($line = ($length ? fgets($this->getHandle(), $length) : fgets($this->getHandle()))) === false) {
@@ -118,7 +118,7 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws FileException
+		 * @throws \Edde\Exception\File\FileException
 		 */
 		public function close(): IFile {
 			fflush($handle = $this->getHandle());
@@ -153,7 +153,7 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws FileException
+		 * @throws \Edde\Exception\File\FileException
 		 */
 		public function rename(string $rename): IFile {
 			if ($this->isOpen()) {

@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\File;
 
-	use Edde\Api\File\Exception\RealPathException;
+	use Edde\Exception\File\RealPathException;
 	use IteratorAggregate;
 
 	interface IDirectory extends IteratorAggregate {
@@ -94,7 +94,7 @@
 		 *
 		 * @return IDirectory
 		 *
-		 * @throws RealPathException
+		 * @throws \Edde\Exception\File\RealPathException
 		 */
 		public function purge(): IDirectory;
 

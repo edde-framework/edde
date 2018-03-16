@@ -2,8 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Ext\Driver;
 
-	use Edde\Api\Driver\Exception\DriverException;
-	use Edde\Api\Driver\Exception\DriverQueryException;
 	use Edde\Api\Driver\IDriver;
 	use Edde\Api\Entity\IEntity;
 	use Edde\Api\Entity\Query\IDeleteQuery;
@@ -21,6 +19,8 @@
 	use Edde\Exception\Config\RequiredConfigException;
 	use Edde\Exception\Config\RequiredSectionException;
 	use Edde\Exception\Config\RequiredValueException;
+	use Edde\Exception\Driver\DriverException;
+	use Edde\Exception\Driver\DriverQueryException;
 	use PDO;
 	use PDOException;
 	use PDOStatement;
@@ -132,7 +132,7 @@
 		 * @param ISelectQuery $selectQuery
 		 *
 		 * @return PDOStatement
-		 * @throws DriverException
+		 * @throws \Edde\Exception\Driver\DriverException
 		 * @throws Throwable
 		 */
 		protected function executeSelectQuery(ISelectQuery $selectQuery) {
@@ -301,7 +301,7 @@
 		 *
 		 * @return mixed|PDOStatement
 		 *
-		 * @throws DriverException
+		 * @throws \Edde\Exception\Driver\DriverException
 		 * @throws Throwable
 		 */
 		protected function executeDisconnectQuery(IDisconnectQuery $disconnectQuery) {
@@ -327,7 +327,7 @@
 		 * @param IWhere $where
 		 *
 		 * @return NativeQuery
-		 * @throws DriverQueryException
+		 * @throws \Edde\Exception\Driver\DriverQueryException
 		 */
 		protected function fragmentWhere(IWhere $where) {
 			[$expression, $type] = $params = $where->getWhere();
@@ -364,7 +364,7 @@
 		/**
 		 * @param IQueryQueue $queryQueue
 		 *
-		 * @throws DriverException
+		 * @throws \Edde\Exception\Driver\DriverException
 		 * @throws Throwable
 		 */
 		protected function executeQueryQueue(IQueryQueue $queryQueue) {

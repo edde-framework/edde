@@ -1,8 +1,8 @@
 <?php
 	namespace Edde\Common\File;
 
-	use Edde\Api\File\Exception\DirectoryException;
-	use Edde\Api\File\Exception\RealPathException;
+	use Edde\Exception\File\DirectoryException;
+	use Edde\Exception\File\RealPathException;
 	use Edde\TestCase;
 
 	class DirectoryTest extends TestCase {
@@ -12,8 +12,8 @@
 		}
 
 		/**
-		 * @throws DirectoryException
-		 * @throws RealPathException
+		 * @throws \Edde\Exception\File\DirectoryException
+		 * @throws \Edde\Exception\File\RealPathException
 		 */
 		public function testCreate() {
 			$directory = new Directory(__DIR__ . '/some/directory/here');

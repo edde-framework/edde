@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Api\Driver\Exception;
+	namespace Edde\Exception\Driver;
 
 	class DriverQueryException extends DriverException {
 	}

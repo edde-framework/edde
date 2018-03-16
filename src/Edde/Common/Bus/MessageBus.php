@@ -6,7 +6,7 @@
 	use Edde\Api\Bus\IElement;
 	use Edde\Api\Bus\IHandler;
 	use Edde\Api\Bus\IMessageBus;
-	use Edde\Api\Crypt\Inject\RandomService;
+	use Edde\Inject\Crypt\RandomService;
 	use stdClass;
 
 	class MessageBus extends AbstractHandler implements IMessageBus {
