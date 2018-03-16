@@ -7,7 +7,7 @@
          bootstrap="tests/src/loader.php"
 >
 	<logging>
-		<log type="coverage-html" target="/.coverage"/>
+		<log type="coverage-html" target=".coverage"/>
 		<log type="coverage-text" target="php://stdout"/>
 	</logging>
 	<testsuite name="edde">
