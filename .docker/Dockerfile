@@ -28,8 +28,11 @@ COPY composer.json .
 COPY composer.lock .
 COPY loader.php .
 COPY phpunit.xml .
+COPY test.sh .
 ADD src src
 ADD tests tests
+
+RUN chmod +x test.sh
 
 RUN composer install --prefer-dist --no-progress
 

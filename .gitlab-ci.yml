@@ -11,7 +11,7 @@ test:
         - pip install docker-compose >/dev/null 2>&1
         - docker build -t $CI_COMMIT_REF_NAME --file .docker/Dockerfile .
         - docker-compose -f .docker/dc.test.yml up -d >/dev/null 2>&1
-        - docker exec $CI_COMMIT_REF_NAME lib/bin/phpunit
+        - docker exec $CI_COMMIT_REF_NAME test.sh
         - docker-compose -f .docker/dc.test.yml down --volumes >/dev/null 2>&1
 
 github sync:
