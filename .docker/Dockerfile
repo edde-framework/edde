@@ -23,6 +23,13 @@ COPY .docker/php-fpm.conf /etc/php7/php-fpm.d/zz-www.conf
 COPY .docker/start.sh /edde/.docker/start.sh
 RUN chmod +x /edde/.docker/start.sh
 
+COPY composer.json .
+COPY composer.lock .
+COPY loader.php .
+COPY phpunit.xml .
+COPY src .
+COPY test .
+
 RUN composer install --prefer-dist --no-progress
 
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && ln -sf /dev/stderr /var/log/nginx/error.log
