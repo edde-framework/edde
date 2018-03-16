@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Runtime\Exception;
 
-	use Edde\Api\EddeException;
+	use Edde\Exception\EddeException;
 
 	/**
 	 * Root exception for Runtime package; this exception should NOT be used

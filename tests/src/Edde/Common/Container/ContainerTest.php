@@ -5,12 +5,12 @@
 	use Edde\Api\Container\Exception\UnknownFactoryException;
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\Inject\Container;
-	use Edde\Api\EddeException;
 	use Edde\Common\Container\Factory\CallbackFactory;
 	use Edde\Common\Container\Factory\ExceptionFactory;
 	use Edde\Common\Container\Factory\InstanceFactory;
 	use Edde\Common\Container\Factory\LinkFactory;
 	use Edde\Common\Container\Factory\ProxyFactory;
+	use Edde\Exception\EddeException;
 	use Edde\Ext\Test\TestCase;
 	use Edde\Test\AutowireDependencyObject;
 	use Edde\Test\BarObject;

@@ -12,6 +12,8 @@
 	use Edde\Api\Bus\IMessageBus;
 	use Edde\Api\Bus\IMessageService;
 	use Edde\Api\Bus\Request\IRequestService;
+	use Edde\Api\Config\IConfigLoader;
+	use Edde\Api\Config\IConfigService;
 	use Edde\Api\Container\Exception\ContainerException;
 	use Edde\Api\Container\Exception\FactoryException;
 	use Edde\Api\Container\IContainer;
@@ -20,7 +22,6 @@
 	use Edde\Api\Crypt\IPasswordService;
 	use Edde\Api\Crypt\IRandomService;
 	use Edde\Api\Driver\IDriver;
-	use Edde\Api\EddeException;
 	use Edde\Api\Entity\IEntityManager;
 	use Edde\Api\Filter\IFilterManager;
 	use Edde\Api\Generator\IGeneratorManager;
@@ -72,6 +73,7 @@
 	use Edde\Common\Validator\ValidatorManager;
 	use Edde\Common\Xml\XmlExport;
 	use Edde\Common\Xml\XmlParser;
+	use Edde\Exception\EddeException;
 	use Edde\Ext\Bus\MessageBusConfigurator;
 	use Edde\Ext\Converter\ConverterManagerConfigurator;
 	use Edde\Ext\Filter\FilterManagerConfigurator;
@@ -80,6 +82,8 @@
 	use Edde\Ext\Sanitizer\SanitizerManagerConfigurator;
 	use Edde\Ext\Schema\SchemaManagerConfigurator;
 	use Edde\Ext\Validator\ValidatorManagerConfigurator;
+	use Edde\Service\Config\ConfigLoader;
+	use Edde\Service\Config\ConfigService;
 	use ReflectionMethod;
 
 	/**
@@ -337,28 +341,30 @@
 				/**
 				 * an application upgrades support
 				 */
-				IUpgradeManager::class     => self::exception(sprintf('You have to provide you own implementation of [%s]; you can use [%s] to get some little help.', IUpgradeManager::class, AbstractUpgradeManager::class)),
+				IUpgradeManager::class => self::exception(sprintf('You have to provide you own implementation of [%s]; you can use [%s] to get some little help.', IUpgradeManager::class, AbstractUpgradeManager::class)),
 				/**
 				 * Xml support
 				 */
-				IXmlExport::class          => XmlExport::class,
-				IXmlParser::class          => XmlParser::class,
+				IXmlExport::class      => XmlExport::class,
+				IXmlParser::class      => XmlParser::class,
 				/**
 				 * Message bus support; probably most important stuff of the
 				 * framework and the top killing feature :)
 				 */
-				IMessageBus::class         => MessageBus::class,
-				IMessageService::class     => MessageService::class,
-				IEventBus::class           => EventBus::class,
-				IRequestService::class     => RequestService::class,
+				IMessageBus::class     => MessageBus::class,
+				IMessageService::class => MessageService::class,
+				IEventBus::class       => EventBus::class,
+				IRequestService::class => RequestService::class,
+				IConfigService::class  => ConfigService::class,
+				IConfigLoader::class   => ConfigLoader::class,
 				/**
 				 * an application handles lifecycle workflow
 				 */
-				IApplication::class        => Application::class,
+				IApplication::class    => Application::class,
 				/**
 				 * magical factory for an application execution
 				 */
-				'application'              => IApplication::class . '::run',
+				'application'          => IApplication::class . '::run',
 			];
 		}
 

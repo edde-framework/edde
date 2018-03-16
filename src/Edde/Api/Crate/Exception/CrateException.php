@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Crate\Exception;
 
-	use Edde\Api\EddeException;
+	use Edde\Exception\EddeException;
 
 	class CrateException extends EddeException {
 	}

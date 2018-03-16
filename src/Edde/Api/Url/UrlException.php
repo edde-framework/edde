@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Api\Url;
 
-	use Edde\Api\EddeException;
+	use Edde\Exception\EddeException;
 
 	class UrlException extends EddeException {
 	}
