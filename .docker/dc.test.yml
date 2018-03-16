@@ -13,7 +13,7 @@ services:
                     - postgres
                     - mysql
                 volumes:
-                    - .coverage:/edde/.coverage
+                    - ../.coverage:/edde/.coverage
 
         neo4j:
                 image: neo4j:3.3-enterprise
