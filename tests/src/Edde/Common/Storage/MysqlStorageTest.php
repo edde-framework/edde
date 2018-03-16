@@ -32,21 +32,4 @@
 				'mysql',
 			]), IDriver::class);
 		}
-
-		/**
-		 * @throws DriverException
-		 */
-		protected function beforeBenchmark() {
-			$this->storage->exec('DROP DATABASE `edde`');
-			$this->storage->exec('CREATE DATABASE `edde`');
-			$this->storage->exec('USE `edde`');
-		}
-
-		protected function getEntityTimeLimit(): float {
-			return 45;
-		}
-
-		protected function getBenchmarkLimit(): int {
-			return 500;
-		}
 	}

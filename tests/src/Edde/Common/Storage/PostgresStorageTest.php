@@ -3,10 +3,12 @@
 	namespace Edde\Common\Storage;
 
 	use Edde\Api\Container\Exception\ContainerException;
+	use Edde\Api\Container\Exception\FactoryException;
 	use Edde\Api\Driver\Exception\DriverException;
 	use Edde\Api\Driver\IDriver;
 	use Edde\Common\Container\Factory\InstanceFactory;
 	use Edde\Ext\Driver\PostgresDriver;
+	use ReflectionException;
 
 	class PostgresStorageTest extends AbstractStorageTest {
 		/**
@@ -21,6 +23,8 @@
 		/**
 		 * @throws ContainerException
 		 * @throws DriverException
+		 * @throws FactoryException
+		 * @throws ReflectionException
 		 */
 		protected function setUp() {
 			parent::setUp();
@@ -28,21 +32,5 @@
 				'postgres',
 			]), IDriver::class);
 			$this->storage->fetch('SET SEARCH_PATH TO "test"');
-		}
-
-		/**
-		 * @throws DriverException
-		 */
-		protected function beforeBenchmark() {
-			$this->storage->exec('DROP SCHEMA IF EXISTS "test" CASCADE');
-			$this->storage->exec('CREATE SCHEMA "test" AUTHORIZATION "edde"');
-		}
-
-		protected function getEntityTimeLimit(): float {
-			return 40;
-		}
-
-		protected function getBenchmarkLimit(): int {
-			return 500;
 		}
 	}
