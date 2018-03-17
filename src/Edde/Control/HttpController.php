@@ -102,6 +102,15 @@
 		}
 
 		/**
+		 * return empty created response
+		 *
+		 * @return IResponse
+		 */
+		public function created(): IResponse {
+			return $this->response(new Response(new Content('', 'text/plain')), IResponse::R200_OK_CREATED);
+		}
+
+		/**
 		 * @param callable $generator
 		 * @param string   $type
 		 * @param int      $code
