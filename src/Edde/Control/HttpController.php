@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Control;
 
+	use Edde\Content\Content;
 	use Edde\Content\GeneratorContent;
 	use Edde\Content\HtmlContent;
 	use Edde\Content\JsonContent;
@@ -12,6 +13,9 @@
 	use Edde\Http\Response;
 	use Edde\Inject\Http\RequestService;
 	use Edde\Inject\Schema\SchemaManager;
+	use Edde\Schema\SchemaException;
+	use Edde\Schema\SchemaValidationException;
+	use Edde\Validator\ValidatorException;
 
 	/**
 	 * Http control provides helpers for a http response style.
@@ -44,6 +48,9 @@
 		 * @param string $schema
 		 *
 		 * @throws EmptyBodyException
+		 * @throws SchemaException
+		 * @throws SchemaValidationException
+		 * @throws ValidatorException
 		 */
 		protected function validate(string $schema) {
 			$this->schemaManager->check($schema, $this->requestService->getContent('array'));
@@ -76,13 +83,22 @@
 		/**
 		 * execute response with simple text content
 		 *
-		 * @param string|\Edde\File\IFile $content
-		 * @param int                     $code
+		 * @param string|IFile $content
+		 * @param int          $code
 		 *
 		 * @return IResponse
 		 */
 		public function text($content, int $code = IResponse::R200_OK): IResponse {
 			return $this->response(new Response(new TextContent($content)), $code);
+		}
+
+		/**
+		 * return no-content response
+		 *
+		 * @return IResponse
+		 */
+		public function noContent(): IResponse {
+			return $this->response(new Response(new Content('', 'text/plain')), IResponse::R200_NO_CONTENT);
 		}
 
 		/**
