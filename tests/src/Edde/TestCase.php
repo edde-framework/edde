@@ -10,11 +10,13 @@
 	use Edde\Container\Factory\ClassFactory;
 	use Edde\Container\IAutowire;
 	use Edde\Inject\Assets\RootDirectory;
+	use Edde\Inject\Container\Container;
 	use PHPUnit\Framework\TestCase as PhpUnitTestCase;
 	use ReflectionException;
 
 	abstract class TestCase extends PhpUnitTestCase implements IAutowire {
 		use Autowire;
+		use Container;
 
 		/**
 		 * @inheritdoc
