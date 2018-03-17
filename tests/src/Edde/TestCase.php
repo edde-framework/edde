@@ -5,7 +5,6 @@
 	use Edde\Assets\IRootDirectory;
 	use Edde\Config\AbstractConfigurator;
 	use Edde\Config\IConfigLoader;
-	use Edde\Container\AutowireTrait;
 	use Edde\Container\ContainerException;
 	use Edde\Container\ContainerFactory;
 	use Edde\Container\Factory\ClassFactory;
@@ -15,7 +14,7 @@
 	use ReflectionException;
 
 	abstract class TestCase extends PhpUnitTestCase implements IAutowire {
-		use AutowireTrait;
+		use Autowire;
 
 		/**
 		 * @inheritdoc

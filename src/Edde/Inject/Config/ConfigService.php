@@ -9,7 +9,7 @@
 		protected $configService;
 
 		/**
-		 * @param \Edde\Config\IConfigService $configService
+		 * @param IConfigService $configService
 		 */
 		public function lazyConfigService(IConfigService $configService): void {
 			$this->configService = $configService;

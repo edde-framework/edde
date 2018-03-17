@@ -6,14 +6,14 @@
 
 	trait RootDirectory {
 		/**
-		 * @var \Edde\Assets\IRootDirectory
+		 * @var IRootDirectory
 		 */
 		protected $rootDirectory;
 
 		/**
-		 * @param \Edde\Assets\IRootDirectory $rootDirectory
+		 * @param IRootDirectory $rootDirectory
 		 */
-		public function lazyRootDirectory(\Edde\Assets\IRootDirectory $rootDirectory) {
+		public function lazyRootDirectory(IRootDirectory $rootDirectory) {
 			$this->rootDirectory = $rootDirectory;
 		}
 	}

@@ -9,14 +9,14 @@
 	 */
 	trait XmlParser {
 		/**
-		 * @var \Edde\Xml\IXmlParser
+		 * @var IXmlParser
 		 */
 		protected $xmlParser;
 
 		/**
-		 * @param \Edde\Xml\IXmlParser $xmlParser
+		 * @param IXmlParser $xmlParser
 		 */
-		public function lazyXmlParser(\Edde\Xml\IXmlParser $xmlParser) {
+		public function lazyXmlParser(IXmlParser $xmlParser) {
 			$this->xmlParser = $xmlParser;
 		}
 	}

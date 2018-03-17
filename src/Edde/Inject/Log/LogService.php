@@ -8,13 +8,13 @@
 	 * Lazy log service dependency.
 	 */
 	trait LogService {
-		/** @var \Edde\Log\ILogService */
+		/** @var ILogService */
 		protected $logService;
 
 		/**
-		 * @param \Edde\Log\ILogService $logService
+		 * @param ILogService $logService
 		 */
-		public function lazyLogService(\Edde\Log\ILogService $logService) {
+		public function lazyLogService(ILogService $logService) {
 			$this->logService = $logService;
 		}
 	}

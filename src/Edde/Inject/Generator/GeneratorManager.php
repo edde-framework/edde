@@ -6,7 +6,7 @@
 
 	trait GeneratorManager {
 		/**
-		 * @var \Edde\Generator\IGeneratorManager
+		 * @var IGeneratorManager
 		 */
 		protected $generatorManager;
 

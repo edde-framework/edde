@@ -39,6 +39,10 @@
 		/** @var Transaction */
 		protected $transaction;
 
+		public function __construct(string $config = 'neo4j') {
+			parent::__construct($config);
+		}
+
 		/** @inheritdoc */
 		public function fetch($query, array $params = []) {
 			try {

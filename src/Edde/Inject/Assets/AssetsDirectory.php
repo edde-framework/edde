@@ -6,14 +6,14 @@
 
 	trait AssetsDirectory {
 		/**
-		 * @var \Edde\Assets\IAssetsDirectory
+		 * @var IAssetsDirectory
 		 */
 		protected $assetsDirectory;
 
 		/**
-		 * @param \Edde\Assets\IAssetsDirectory $assetsDirectory
+		 * @param IAssetsDirectory $assetsDirectory
 		 */
-		public function lazyAssetsDirectory(\Edde\Assets\IAssetsDirectory $assetsDirectory) {
+		public function lazyAssetsDirectory(IAssetsDirectory $assetsDirectory) {
 			$this->assetsDirectory = $assetsDirectory;
 		}
 	}

@@ -6,14 +6,14 @@
 
 	trait TempDirectory {
 		/**
-		 * @var \Edde\Assets\ITempDirectory
+		 * @var ITempDirectory
 		 */
 		protected $tempDirectory;
 
 		/**
-		 * @param \Edde\Assets\ITempDirectory $tempDirectory
+		 * @param ITempDirectory $tempDirectory
 		 */
-		public function lazyTempDirectory(\Edde\Assets\ITempDirectory $tempDirectory) {
+		public function lazyTempDirectory(ITempDirectory $tempDirectory) {
 			$this->tempDirectory = $tempDirectory;
 		}
 	}

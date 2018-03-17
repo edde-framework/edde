@@ -5,13 +5,13 @@
 	use Edde\Config\IConfigLoader;
 
 	trait ConfigLoader {
-		/** @var \Edde\Config\IConfigLoader */
+		/** @var IConfigLoader */
 		protected $configLoader;
 
 		/**
-		 * @param \Edde\Config\IConfigLoader $configLoader
+		 * @param IConfigLoader $configLoader
 		 */
-		public function lazyConfigLoader(\Edde\Config\IConfigLoader $configLoader): void {
+		public function lazyConfigLoader(IConfigLoader $configLoader): void {
 			$this->configLoader = $configLoader;
 		}
 	}

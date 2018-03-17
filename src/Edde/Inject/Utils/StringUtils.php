@@ -6,14 +6,14 @@
 
 	trait StringUtils {
 		/**
-		 * @var \Edde\Utils\IStringUtils
+		 * @var IStringUtils
 		 */
 		protected $stringUtils;
 
 		/**
 		 * @param IStringUtils $stringUtils
 		 */
-		public function lazyStringUtils(\Edde\Utils\IStringUtils $stringUtils) {
+		public function lazyStringUtils(IStringUtils $stringUtils) {
 			$this->stringUtils = $stringUtils;
 		}
 	}

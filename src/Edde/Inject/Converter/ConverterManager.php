@@ -6,12 +6,12 @@
 
 	trait ConverterManager {
 		/**
-		 * @var \Edde\Converter\IConverterManager
+		 * @var IConverterManager
 		 */
 		protected $converterManager;
 
 		/**
-		 * @param \Edde\Converter\IConverterManager $converterManager
+		 * @param IConverterManager $converterManager
 		 */
 		public function lazyConverterManager(IConverterManager $converterManager) {
 			$this->converterManager = $converterManager;

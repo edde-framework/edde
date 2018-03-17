@@ -6,14 +6,14 @@
 
 	trait RouterService {
 		/**
-		 * @var \Edde\Router\IRouterService
+		 * @var IRouterService
 		 */
 		protected $routerService;
 
 		/**
-		 * @param \Edde\Router\IRouterService $routerService
+		 * @param IRouterService $routerService
 		 */
-		public function lazyRouterService(\Edde\Router\IRouterService $routerService) {
+		public function lazyRouterService(IRouterService $routerService) {
 			$this->routerService = $routerService;
 		}
 	}

@@ -11,7 +11,7 @@
 		protected $storage;
 
 		/**
-		 * @param \Edde\Storage\IStorage $storage
+		 * @param IStorage $storage
 		 */
 		public function lazyStorage(IStorage $storage) {
 			$this->storage = $storage;

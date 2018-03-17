@@ -11,9 +11,9 @@
 		protected $sanitizerManager;
 
 		/**
-		 * @param \Edde\Sanitizer\ISanitizerManager $sanitizerManager
+		 * @param ISanitizerManager $sanitizerManager
 		 */
-		public function lazySanitizerManager(\Edde\Sanitizer\ISanitizerManager $sanitizerManager) {
+		public function lazySanitizerManager(ISanitizerManager $sanitizerManager) {
 			$this->sanitizerManager = $sanitizerManager;
 		}
 	}

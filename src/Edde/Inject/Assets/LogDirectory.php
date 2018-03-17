@@ -9,12 +9,12 @@
 	 */
 	trait LogDirectory {
 		/**
-		 * @var \Edde\Assets\ILogDirectory
+		 * @var ILogDirectory
 		 */
 		protected $logDirectory;
 
 		/**
-		 * @param \Edde\Assets\ILogDirectory $logDirectory
+		 * @param ILogDirectory $logDirectory
 		 */
 		public function lazyLogDirectory(ILogDirectory $logDirectory) {
 			$this->logDirectory = $logDirectory;

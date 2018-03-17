@@ -2,26 +2,24 @@
 	declare(strict_types=1);
 	namespace Edde\Application;
 
+	use Edde\Inject\Crypt\RandomService;
 	use Edde\Object;
 
 	abstract class AbstractContext extends Object implements IContext {
-		/**
-		 * @return string
-		 */
+		use RandomService;
+		protected $uuid;
+
+		/** @inheritdoc */
 		public function getId(): string {
 			return static::class;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getUuid(): string {
-			return sha1($this->getId());
+			return $this->uuid ?: $this->uuid = $this->randomService->uuid($this->getId());
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function cascade(string $delimiter, string $name = null): array {
 			return [];
 		}

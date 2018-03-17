@@ -9,9 +9,9 @@
 		protected $messageBus;
 
 		/**
-		 * @param \Edde\Bus\IMessageBus $messageBus
+		 * @param IMessageBus $messageBus
 		 */
-		public function lazyMessageBus(\Edde\Bus\IMessageBus $messageBus) {
+		public function lazyMessageBus(IMessageBus $messageBus) {
 			$this->messageBus = $messageBus;
 		}
 	}

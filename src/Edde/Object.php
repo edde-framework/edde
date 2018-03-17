@@ -2,9 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde;
 
-	use Edde\Config\ConfigurableTrait;
-	use Edde\Container\AutowireTrait;
-
 	/**
 	 * While watching TV with his wife, a man tosses peanuts into the air and catches them in his mouth.
 	 * Just as he throws another peanut into the air, the front door opens, causing him to turn his head.
@@ -17,8 +14,8 @@
 	 * The father says, "From the smell of his fingers, I'd say our son-in-law."
 	 */
 	class Object implements IObject {
-		use ConfigurableTrait;
-		use AutowireTrait;
+		use Configurable;
+		use Autowire;
 
 		/**
 		 * because PHP has some cool shit things like it cannot call

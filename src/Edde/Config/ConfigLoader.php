@@ -43,7 +43,7 @@
 						throw new ConfigException(sprintf('Required config file [%s] is not available!', $file));
 					}
 					continue;
-				} else if (($source = parse_ini_file($file, true, INI_SCANNER_TYPED)) === false) {
+				} else if (($source = @parse_ini_file($file, true, INI_SCANNER_TYPED)) === false) {
 					if ($required) {
 						throw new ConfigException(sprintf('Required config file [%s] cannot be parsed.', $file));
 					}

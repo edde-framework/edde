@@ -9,7 +9,7 @@
 		protected $requestService;
 
 		/**
-		 * @param \Edde\Bus\Request\IRequestService $requestService
+		 * @param IRequestService $requestService
 		 */
 		public function lazyRequestService(IRequestService $requestService): void {
 			$this->requestService = $requestService;

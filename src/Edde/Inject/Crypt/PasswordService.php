@@ -5,13 +5,13 @@
 	use Edde\Crypt\IPasswordService;
 
 	trait PasswordService {
-		/** @var \Edde\Crypt\IPasswordService */
+		/** @var IPasswordService */
 		protected $passwordService;
 
 		/**
 		 * @param IPasswordService $passwordService
 		 */
-		public function lazyPasswordService(\Edde\Crypt\IPasswordService $passwordService): void {
+		public function lazyPasswordService(IPasswordService $passwordService): void {
 			$this->passwordService = $passwordService;
 		}
 	}

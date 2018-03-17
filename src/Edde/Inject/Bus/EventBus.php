@@ -5,11 +5,11 @@
 	use Edde\Bus\IEventBus;
 
 	trait EventBus {
-		/** @var \Edde\Bus\Event\IEventBus */
+		/** @var IEventBus */
 		protected $eventBus;
 
 		/**
-		 * @param \Edde\Bus\IEventBus $eventBus
+		 * @param IEventBus $eventBus
 		 */
 		public function lazyEventBus(IEventBus $eventBus): void {
 			$this->eventBus = $eventBus;

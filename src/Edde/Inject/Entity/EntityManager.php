@@ -13,7 +13,7 @@
 		/**
 		 * @param IEntityManager $entityManager
 		 */
-		public function lazyEntityManager(\Edde\Entity\IEntityManager $entityManager) {
+		public function lazyEntityManager(IEntityManager $entityManager) {
 			$this->entityManager = $entityManager;
 		}
 	}

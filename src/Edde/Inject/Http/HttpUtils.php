@@ -2,16 +2,18 @@
 	declare(strict_types=1);
 	namespace Edde\Inject\Http;
 
+	use Edde\Http\IHttpUtils;
+
 	trait HttpUtils {
 		/**
-		 * @var \Edde\Http\IHttpUtils
+		 * @var IHttpUtils
 		 */
 		protected $httpUtils;
 
 		/**
-		 * @param \Edde\Http\IHttpUtils $httpUtils
+		 * @param IHttpUtils $httpUtils
 		 */
-		public function lazyHttpUtils(\Edde\Http\IHttpUtils $httpUtils) {
+		public function lazyHttpUtils(IHttpUtils $httpUtils) {
 			$this->httpUtils = $httpUtils;
 		}
 	}

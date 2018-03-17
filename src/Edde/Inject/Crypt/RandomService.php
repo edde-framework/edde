@@ -6,14 +6,14 @@
 
 	trait RandomService {
 		/**
-		 * @var \Edde\Crypt\IRandomService
+		 * @var IRandomService
 		 */
 		protected $randomService;
 
 		/**
-		 * @param \Edde\Crypt\IRandomService $randomService
+		 * @param IRandomService $randomService
 		 */
-		public function lazyRandomService(\Edde\Crypt\IRandomService $randomService) {
+		public function lazyRandomService(IRandomService $randomService) {
 			$this->randomService = $randomService;
 		}
 	}

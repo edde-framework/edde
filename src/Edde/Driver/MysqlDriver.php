@@ -9,6 +9,10 @@
 	use Throwable;
 
 	class MysqlDriver extends AbstractDatabaseDriver {
+		public function __construct(string $config = 'mysql', array $options = []) {
+			parent::__construct($config, $options);
+		}
+
 		/** @inheritdoc */
 		public function delimite(string $delimite): string {
 			return '`' . str_replace('`', '``', $delimite) . '`';

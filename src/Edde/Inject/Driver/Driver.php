@@ -6,14 +6,14 @@
 
 	trait Driver {
 		/**
-		 * @var \Edde\Driver\IDriver
+		 * @var IDriver
 		 */
 		protected $driver;
 
 		/**
 		 * @param IDriver $driver
 		 */
-		public function lazyDriver(\Edde\Driver\IDriver $driver) {
+		public function lazyDriver(IDriver $driver) {
 			$this->driver = $driver;
 		}
 	}

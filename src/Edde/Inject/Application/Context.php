@@ -6,14 +6,14 @@
 
 	trait Context {
 		/**
-		 * @var \Edde\Application\IContext
+		 * @var IContext
 		 */
 		protected $context;
 
 		/**
-		 * @param \Edde\Application\IContext $context
+		 * @param IContext $context
 		 */
-		public function lazyContext(\Edde\Application\IContext $context) {
+		public function lazyContext(IContext $context) {
 			$this->context = $context;
 		}
 	}

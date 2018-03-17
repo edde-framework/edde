@@ -9,6 +9,10 @@
 	use Throwable;
 
 	class PostgresDriver extends AbstractDatabaseDriver {
+		public function __construct(string $config = 'postgres', array $options = []) {
+			parent::__construct($config, $options);
+		}
+
 		/** @inheritdoc */
 		protected function getDeleteSql(string $relation): string {
 			return 'DELETE FROM ' . $this->delimite($relation) . ' AS r WHERE ';

@@ -6,7 +6,7 @@
 
 	trait SchemaManager {
 		/**
-		 * @var \Edde\Schema\ISchemaManager
+		 * @var ISchemaManager
 		 */
 		protected $schemaManager;
 
