@@ -3,7 +3,7 @@
 	namespace Edde\Content;
 
 	class TextContent extends Content {
-		public function __construct($content) {
-			parent::__construct($content, 'text/plain');
+		public function __construct($content, string $type = 'text/plain') {
+			parent::__construct($content, $type);
 		}
 	}
