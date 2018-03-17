@@ -1,8 +1,8 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Exception\Validator;
+	namespace Edde\Schema;
 
-	class BatchValidationException extends ValidationException {
+	class SchemaValidationException extends SchemaException {
 		protected $validations;
 
 		public function __construct(string $message = "", array $validations = []) {

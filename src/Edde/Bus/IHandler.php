@@ -5,7 +5,7 @@
 	use Edde\Config\IConfigurable;
 	use Edde\Container\ContainerException;
 	use Edde\Element\IElement;
-	use Edde\Exception\Validator\ValidationException;
+	use Edde\Validator\ValidationException;
 
 	/**
 	 * Element handler is able to handle individual type of an element (event, request, ...).
@@ -37,7 +37,7 @@
 		 *
 		 * @return IElement
 		 *
-		 * @throws ValidationException
+		 * @throws \Edde\Validator\ValidationException
 		 * @throws BusException
 		 */
 		public function send(IElement $element): IElement;
@@ -49,7 +49,7 @@
 		 *
 		 * @return IElement|null
 		 *
-		 * @throws ValidationException
+		 * @throws \Edde\Validator\ValidationException
 		 * @throws ContainerException
 		 */
 		public function execute(IElement $element): ?IElement;

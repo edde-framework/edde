@@ -2,8 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Validator;
 
-	use Edde\Exception\Validator\ValidationException;
-
 	class DateTimeValidator extends AbstractValidator {
 		/** @inheritdoc */
 		public function validate($value, array $options = []): void {

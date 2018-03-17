@@ -13,14 +13,14 @@
 	use Edde\Element\IError;
 	use Edde\Element\IResponse;
 	use Edde\Element\Request;
-	use Edde\Exception\Validator\UnknownValidatorException;
-	use Edde\Exception\Validator\ValidationException;
 	use Edde\Inject\Bus\EventBus;
 	use Edde\Inject\Bus\MessageBus;
 	use Edde\Inject\Converter\ConverterManager;
 	use Edde\Inject\Crypt\RandomService;
 	use Edde\Inject\Validator\ValidatorManager;
 	use Edde\TestCase;
+	use Edde\Validator\ValidationException;
+	use Edde\Validator\ValidatorException;
 
 	class MessageBusTest extends TestCase {
 		use EventBus;
@@ -31,7 +31,7 @@
 
 		/**
 		 * @throws ContainerException
-		 * @throws ValidationException
+		 * @throws \Edde\Validator\ValidationException
 		 */
 		public function testUnknownMessageType() {
 			$response = $this->messageBus->execute(new Element('unsupported-message', 'uuid'));
@@ -42,8 +42,8 @@
 
 		/**
 		 * @throws ContainerException
-		 * @throws UnknownValidatorException
 		 * @throws ValidationException
+		 * @throws ValidatorException
 		 */
 		public function testEventBusInvalidEvent() {
 			$response = $this->messageBus->execute($message = new Element('event', 'uuid'));

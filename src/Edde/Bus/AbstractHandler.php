@@ -4,11 +4,9 @@
 
 	use Edde\Container\ContainerException;
 	use Edde\Element\IElement;
-	use Edde\Exception\Validator\BatchValidationException;
-	use Edde\Exception\Validator\UnknownValidatorException;
-	use Edde\Exception\Validator\ValidationException;
 	use Edde\Inject\Validator\ValidatorManager;
 	use Edde\Object;
+	use Edde\Validator\ValidationException;
 
 	abstract class AbstractHandler extends Object implements IHandler {
 		use ValidatorManager;
@@ -29,19 +27,15 @@
 
 		/**
 		 * @param IElement $element
-		 *
-		 * @throws UnknownValidatorException
-		 * @throws ValidationException
-		 * @throws BatchValidationException
 		 */
 		protected function onValidate(IElement $element): void {
 			$this->validatorManager->getValidator('message-bus:type:' . $element->getType())->validate($element);
 		}
 
 		/**
-		 * @param \Edde\Bus\\Edde\Element\IElement $element
+		 * @param IElement $element
 		 *
-		 * @return \Edde\Bus\\Edde\Element\IElement
+		 * @return IElement
 		 *
 		 * @throws ValidationException
 		 * @throws ContainerException

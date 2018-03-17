@@ -2,13 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
-	use Edde\Exception\Validator\BatchValidationException;
-	use Edde\Exception\Validator\ValidationException;
 	use Edde\Inject\Filter\FilterManager;
 	use Edde\Inject\Generator\GeneratorManager;
 	use Edde\Inject\Sanitizer\SanitizerManager;
 	use Edde\Inject\Validator\ValidatorManager;
 	use Edde\Object;
+	use Edde\Validator\ValidationException;
+	use Edde\Validator\ValidatorException;
 
 	class SchemaManager extends Object implements ISchemaManager {
 		use GeneratorManager;
@@ -118,7 +118,7 @@
 			try {
 				$this->validate($schema, $source);
 				return true;
-			} catch (ValidationException $exception) {
+			} catch (ValidatorException | SchemaValidationException $exception) {
 				return false;
 			}
 		}
@@ -146,7 +146,7 @@
 					if ($validator = $property->getValidator()) {
 						$this->validatorManager->getValidator($validator)->validate($value, $options);
 					}
-				} catch (BatchValidationException $exception) {
+				} catch (SchemaValidationException $exception) {
 					$exceptions[$name] = [
 						'value'       => $value,
 						'message'     => $exception->getMessage(),
@@ -160,7 +160,7 @@
 				}
 			}
 			if (empty($exceptions) === false) {
-				throw new BatchValidationException(
+				throw new SchemaValidationException(
 					sprintf('Validation of schema [%s] failed.', $schema->getName()),
 					$exceptions
 				);

@@ -3,8 +3,6 @@
 	namespace Edde\Validator;
 
 	use Edde\Config\IConfigurable;
-	use Edde\Exception\Validator\UnknownValidatorException;
-	use Edde\Exception\Validator\ValidationException;
 
 	interface IValidatorManager extends IConfigurable {
 		/**
@@ -38,7 +36,7 @@
 		 *
 		 * @return IValidator
 		 *
-		 * @throws UnknownValidatorException
+		 * @throws ValidatorException
 		 */
 		public function getValidator(string $name): IValidator;
 
@@ -63,8 +61,8 @@
 		 *
 		 * @return IValidatorManager
 		 *
-		 * @throws UnknownValidatorException
 		 * @throws ValidationException
+		 * @throws ValidatorException
 		 */
 		public function check(string $validator, $value, array $options = []): IValidatorManager;
 	}

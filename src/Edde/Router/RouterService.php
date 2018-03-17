@@ -3,7 +3,6 @@
 	namespace Edde\Router;
 
 	use Edde\Element\IRequest;
-	use Edde\Exception\Router\BadRequestException;
 	use Edde\Inject\Log\LogService;
 	use Edde\Object;
 
@@ -59,7 +58,7 @@
 				return $this->request;
 			}
 			if ($this->router === null && ($this->router = $this->getRouter()) === null) {
-				throw new BadRequestException('Cannot handle current request.');
+				throw new RouterException('Cannot handle current request.');
 			}
 			return $this->request = $this->router->createRequest();
 		}

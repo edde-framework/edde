@@ -3,13 +3,13 @@
 	namespace Edde\Application;
 
 	use Edde\Config\AbstractConfigurator;
-	use Edde\Exception\Router\BadRequestException;
 	use Edde\Inject\Application\Application;
 	use Edde\Inject\Container\Container;
 	use Edde\Inject\Log\LogService;
 	use Edde\Log\ILogRecord;
 	use Edde\Log\SimpleLog;
 	use Edde\Router\IRouterService;
+	use Edde\Router\RouterException;
 	use Edde\TestCase;
 
 	class ApplicationTest extends TestCase {
@@ -17,7 +17,7 @@
 		use LogService;
 
 		public function testRunException() {
-			$this->expectException(BadRequestException::class);
+			$this->expectException(RouterException::class);
 			$this->expectExceptionMessage('Cannot handle current request.');
 			$this->logService->registerLog($log = new SimpleLog(), ['exception']);
 			$this->application->run();

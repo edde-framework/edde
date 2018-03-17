@@ -2,8 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Validator;
 
-	use Edde\Exception\Validator\UnknownValidatorException;
-	use Edde\Exception\Validator\ValidationException;
 	use Edde\Inject\Validator\ValidatorManager;
 	use Edde\TestCase;
 
@@ -11,18 +9,18 @@
 		use ValidatorManager;
 
 		/**
-		 * @throws UnknownValidatorException
 		 * @throws ValidationException
+		 * @throws ValidatorException
 		 */
 		public function testUnknownValidator() {
-			$this->expectException(UnknownValidatorException::class);
+			$this->expectException(ValidatorException::class);
 			$this->expectExceptionMessage('Requested unknown validator [boom].');
 			$this->validatorManager->check('boom', 'boom');
 		}
 
 		/**
-		 * @throws UnknownValidatorException
 		 * @throws ValidationException
+		 * @throws ValidatorException
 		 */
 		public function testBooleanValidatorFail() {
 			$this->expectException(ValidationException::class);
@@ -31,15 +29,15 @@
 		}
 
 		/**
-		 * @throws UnknownValidatorException
+		 * @throws ValidatorException
 		 */
 		public function testBooleanValidator() {
 			self::assertTrue($this->validatorManager->getValidator('type:bool')->isValid(true));
 		}
 
 		/**
-		 * @throws UnknownValidatorException
 		 * @throws ValidationException
+		 * @throws ValidatorException
 		 */
 		public function testStringValidator() {
 			$this->expectException(ValidationException::class);
@@ -48,7 +46,7 @@
 		}
 
 		/**
-		 * @throws UnknownValidatorException
+		 * @throws ValidatorException
 		 */
 		public function testFloatValidator() {
 			self::assertTrue($this->validatorManager->getValidator('type:double')->isValid(3.14));
@@ -56,7 +54,7 @@
 		}
 
 		/**
-		 * @throws UnknownValidatorException
+		 * @throws ValidatorException
 		 */
 		public function testIntValidator() {
 			self::assertTrue($this->validatorManager->getValidator('type:int')->isValid(314));
@@ -64,7 +62,7 @@
 		}
 
 		/**
-		 * @throws UnknownValidatorException
+		 * @throws ValidatorException
 		 */
 		public function testEmailValidator() {
 			self::assertTrue($this->validatorManager->getValidator('email')->isValid('a@b.c'));

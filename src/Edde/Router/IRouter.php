@@ -4,8 +4,6 @@
 
 	use Edde\Config\IConfigurable;
 	use Edde\Element\IRequest;
-	use Edde\Exception\Router\BadRequestException;
-	use Edde\Exception\Router\RouterException;
 
 	/**
 	 * Router is class responsible for handling current application
@@ -24,7 +22,6 @@
 		 *
 		 * @return IRequest
 		 *
-		 * @throws BadRequestException
 		 * @throws RouterException
 		 */
 		public function createRequest(): IRequest;

@@ -3,6 +3,7 @@
 	namespace Edde\Schema;
 
 	use Edde\Config\IConfigurable;
+	use Edde\Validator\ValidatorException;
 
 	interface ISchemaManager extends IConfigurable {
 		/**
@@ -101,6 +102,9 @@
 		 *
 		 * @param ISchema $schema
 		 * @param array   $source
+		 *
+		 * @throws SchemaValidationException
+		 * @throws ValidatorException
 		 */
 		public function validate(ISchema $schema, array $source): void;
 
@@ -109,6 +113,10 @@
 		 *
 		 * @param string $schema
 		 * @param array  $source
+		 *
+		 * @throws SchemaException
+		 * @throws SchemaValidationException
+		 * @throws ValidatorException
 		 */
 		public function check(string $schema, array $source): void;
 	}

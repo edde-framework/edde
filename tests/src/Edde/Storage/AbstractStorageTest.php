@@ -24,7 +24,6 @@
 	use Edde\Exception\Storage\ExclusiveTransactionException;
 	use Edde\Exception\Storage\NoTransactionException;
 	use Edde\Exception\Storage\StorageException;
-	use Edde\Exception\Validator\BatchValidationException;
 	use Edde\Inject\Container\Container;
 	use Edde\Inject\Entity\EntityManager;
 	use Edde\Inject\Schema\SchemaManager;
@@ -32,6 +31,7 @@
 	use Edde\Query\CreateSchemaQuery;
 	use Edde\Query\SelectQuery;
 	use Edde\Schema\SchemaException;
+	use Edde\Schema\SchemaValidationException;
 	use Edde\TestCase;
 
 	abstract class AbstractStorageTest extends TestCase {
@@ -73,7 +73,7 @@
 		}
 
 		public function testValidator() {
-			$this->expectException(BatchValidationException::class);
+			$this->expectException(SchemaValidationException::class);
 			$this->expectExceptionMessage('Validation of schema [Edde\Common\Schema\SimpleSchema] failed.');
 			$entity = $this->entityManager->create(SimpleSchema::class, ['name' => true]);
 			$entity->validate();
@@ -90,7 +90,7 @@
 		}
 
 		public function testInsertException() {
-			$this->expectException(BatchValidationException::class);
+			$this->expectException(SchemaValidationException::class);
 			$this->expectExceptionMessage('Validation of schema [Edde\Common\Schema\FooSchema] failed.');
 			$this->entityManager->create(FooSchema::class, [
 				'label' => 'kaboom',
@@ -98,7 +98,7 @@
 		}
 
 		public function testInsertException2() {
-			$this->expectException(BatchValidationException::class);
+			$this->expectException(SchemaValidationException::class);
 			$this->expectExceptionMessage('Validation of schema [Edde\Common\Schema\FooSchema] failed.');
 			$this->entityManager->create(FooSchema::class, [
 				'name'  => null,

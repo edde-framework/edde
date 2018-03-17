@@ -5,7 +5,6 @@
 	use Edde\Element\IRequest;
 	use Edde\Element\Request;
 	use Edde\Exception\Http\NoHttpException;
-	use Edde\Exception\Router\RouterException;
 	use Edde\Exception\Runtime\MissingArgvException;
 	use Edde\Inject\Container\Container;
 	use Edde\Inject\Crypt\RandomService;

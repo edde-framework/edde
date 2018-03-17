@@ -3,8 +3,8 @@
 	namespace Edde\Validator\Bus;
 
 	use Edde\Element\IElement;
-	use Edde\Exception\Validator\ValidationException;
 	use Edde\Validator\AbstractValidator;
+	use Edde\Validator\ValidationException;
 
 	class EventValidator extends AbstractValidator {
 		/** @inheritdoc */

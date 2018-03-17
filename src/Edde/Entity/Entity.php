@@ -4,12 +4,12 @@
 
 	use Edde\Crate\Crate;
 	use Edde\Crate\IProperty;
-	use Edde\Exception\Validator\ValidationException;
 	use Edde\Inject\Entity\EntityManager;
 	use Edde\Inject\Schema\SchemaManager;
 	use Edde\Query\IDetachQuery;
 	use Edde\Query\IDisconnectQuery;
 	use Edde\Schema\ISchema;
+	use Edde\Validator\ValidationException;
 
 	class Entity extends Crate implements IEntity {
 		use EntityManager;

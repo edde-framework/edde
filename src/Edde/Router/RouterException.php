@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Exception\Router;
+	namespace Edde\Router;
 
 	use Edde\EddeException;
 

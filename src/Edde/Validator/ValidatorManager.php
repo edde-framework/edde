@@ -2,9 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Validator;
 
-	use Edde\Exception\Validator\BatchValidationException;
-	use Edde\Exception\Validator\UnknownValidatorException;
-	use Edde\Exception\Validator\ValidationException;
 	use Edde\Object;
 
 	class ValidatorManager extends Object implements IValidatorManager {
@@ -33,18 +30,12 @@
 		/** @inheritdoc */
 		public function getValidator(string $name): IValidator {
 			if (isset($this->validators[$name]) === false) {
-				throw new UnknownValidatorException(sprintf('Requested unknown validator [%s].', $name));
+				throw new ValidatorException(sprintf('Requested unknown validator [%s].', $name));
 			}
 			return $this->validators[$name];
 		}
 
-		/**
-		 * @inheritdoc
-		 *
-		 * @throws UnknownValidatorException
-		 * @throws BatchValidationException
-		 * @throws ValidationException
-		 */
+		/** @inheritdoc */
 		public function validate(array $source): IValidatorManager {
 			foreach ($source as $k => $v) {
 				if (isset($this->validators[$k])) {
