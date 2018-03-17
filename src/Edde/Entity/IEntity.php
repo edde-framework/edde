@@ -4,6 +4,7 @@
 
 	use Edde\Crate\ICrate;
 	use Edde\Crate\IProperty;
+	use Edde\Driver\DuplicateEntryException;
 	use Edde\Query\IDetachQuery;
 	use Edde\Query\IDisconnectQuery;
 	use Edde\Schema\ISchema;
@@ -138,6 +139,8 @@
 		 * save this entity and all related entities (entity queue in a transaction)
 		 *
 		 * @return IEntity
+		 *
+		 * @throws DuplicateEntryException
 		 */
 		public function save(): IEntity;
 
