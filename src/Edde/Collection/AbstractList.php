@@ -10,9 +10,7 @@
 	 * untyped lists across an application.
 	 */
 	abstract class AbstractList extends Object implements IList {
-		/**
-		 * @var array
-		 */
+		/** @var array */
 		protected $list = [];
 
 		/**
@@ -24,40 +22,30 @@
 			$this->list = $list;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function isEmpty(): bool {
 			return empty($this->list);
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function put(array $array): IList {
 			$this->list = $array;
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function merge(array $array): IList {
 			$this->list = array_merge($this->list, $array);
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function set(string $name, $value): IList {
 			$this->list[$name] = $value;
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function add(string $name, $value, $key = null): IList {
 			if ($key) {
 				$this->list[$name][$key] = $value;
@@ -67,9 +55,7 @@
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function get(string $name, $default = null) {
 			if ($this->has($name) === false) {
 				return is_callable($default) ? call_user_func($default) : $default;
@@ -77,16 +63,12 @@
 			return $this->list[$name];
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function has(string $name): bool {
 			return isset($this->list[$name]) || array_key_exists($name, $this->list);
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function array(): array {
 			$array = [];
 			foreach ($this->list as $k => $v) {
@@ -95,25 +77,19 @@
 			return $array;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function remove(string $name): IList {
 			unset($this->list[$name]);
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function clear(): IList {
 			$this->list = [];
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getIterator() {
 			return new ArrayIterator($this->list);
 		}
