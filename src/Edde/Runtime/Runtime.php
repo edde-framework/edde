@@ -22,7 +22,7 @@
 				throw new RuntimeException("Variable \$GLOBALS['argv'] is not available!");
 			}
 			$argv = $GLOBALS['argv'];
-			$argumentList = [];
+			$arguments = [];
 			/**
 			 * credit for this method goes here:
 			 * https://github.com/pwfisher/CommandLine.php/blob/master/CommandLine.php
@@ -38,36 +38,36 @@
 							$value = $argv[$i + 1];
 							$i++;
 						} else {
-							$value = $argumentList[$key] ?? true;
+							$value = $arguments[$key] ?? true;
 						}
-						$argumentList[$key] = $value;
+						$arguments[$key] = $value;
 					} else {
 						$key = substr($arg, 2, $eqPos - 2);
 						$value = substr($arg, $eqPos + 1);
-						$argumentList[$key] = $value;
+						$arguments[$key] = $value;
 					}
 				} else if ($arg[0] === '-') {
 					if ($arg[2] === '=') {
 						$key = $arg[1];
 						$value = substr($arg, 3);
-						$argumentList[$key] = $value;
+						$arguments[$key] = $value;
 					} else {
 						$chars = str_split(substr($arg, 1));
 						foreach ($chars as $char) {
 							$key = $char;
-							$value = $argumentList[$key] ?? true;
-							$argumentList[$key] = $value;
+							$value = $arguments[$key] ?? true;
+							$arguments[$key] = $value;
 						}
 						if ($i + 1 < $j && $argv[$i + 1][0] !== '-') {
-							$argumentList[$key] = $argv[$i + 1];
+							$arguments[$key] = $argv[$i + 1];
 							$i++;
 						}
 					}
 				} else {
 					$value = $arg;
-					$argumentList[] = $value;
+					$arguments[] = $value;
 				}
 			}
-			return $this->args = $argumentList;
+			return $this->args = $arguments;
 		}
 	}
