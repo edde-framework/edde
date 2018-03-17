@@ -4,7 +4,6 @@
 
 	use Edde\Content\IContent;
 	use Edde\Object;
-	use Edde\Service\Converter\PassConverter;
 
 	class ConverterManager extends Object implements IConverterManager {
 		/** @var IConverter[] */

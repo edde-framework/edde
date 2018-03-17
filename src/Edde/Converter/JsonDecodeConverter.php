@@ -1,12 +1,11 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Ext\Converter;
+	namespace Edde\Converter;
 
 	use Edde\Content\Content;
 	use Edde\Content\IContent;
-	use Edde\Converter\ConverterException;
 
-	class JsonDecodeConverter extends \Edde\Converter\AbstractConverter {
+	class JsonDecodeConverter extends AbstractConverter {
 		public function __construct() {
 			parent::__construct([
 				'application/json',

@@ -4,10 +4,9 @@
 
 	use Edde\Config\AbstractConfigurator;
 	use Edde\Converter\IConverterManager;
-	use Edde\Ext\Bus\JsonDecodeConverter as ElementJsonDecodeConverter;
-	use Edde\Ext\Bus\JsonEncodeConverter as ElementJsonEncodeConverter;
-	use Edde\Ext\Converter\JsonDecodeConverter;
-	use Edde\Ext\Converter\JsonEncodeConverter;
+	use Edde\Converter\JsonEncodeConverter;
+	use Edde\Element\Converter\JsonDecodeConverter as ElementJsonDecodeConverter;
+	use Edde\Element\Converter\JsonEncodeConverter as ElementJsonEncodeConverter;
 	use Edde\Inject\Container\Container;
 
 	class ConverterManagerConfigurator extends AbstractConfigurator {
@@ -18,7 +17,7 @@
 		 */
 		public function configure($instance) {
 			parent::configure($instance);
-			$instance->registerConverter($this->container->create(JsonDecodeConverter::class, [], __METHOD__));
+			$instance->registerConverter($this->container->create(\Edde\Converter\JsonDecodeConverter::class, [], __METHOD__));
 			$instance->registerConverter($this->container->create(JsonEncodeConverter::class, [], __METHOD__));
 			$instance->registerConverter($this->container->create(ElementJsonDecodeConverter::class, [], __METHOD__));
 			$instance->registerConverter($this->container->create(ElementJsonEncodeConverter::class, [], __METHOD__));

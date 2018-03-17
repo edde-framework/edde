@@ -3,9 +3,6 @@
 	namespace Edde\Configurator\Validator;
 
 	use Edde\Config\AbstractConfigurator;
-	use Edde\Ext\Bus\Validator\EventValidator;
-	use Edde\Ext\Bus\Validator\MessageValidator;
-	use Edde\Ext\Bus\Validator\RequestValidator;
 	use Edde\Inject\Container\Container;
 	use Edde\Validator\BoolValidator;
 	use Edde\Validator\DateTimeValidator;
@@ -38,9 +35,9 @@
 				'required'                 => new RequiredValidator(),
 				'email'                    => new \Edde\Validator\EmailValidator(),
 				'schema'                   => $this->container->create(\Edde\Validator\SchemaValidator::class, [], __METHOD__),
-				'message-bus:type:message' => new MessageValidator(),
-				'message-bus:type:event'   => new EventValidator(),
-				'message-bus:type:request' => new RequestValidator(),
+				'message-bus:type:message' => new \Edde\Validator\Bus\MessageValidator(),
+				'message-bus:type:event'   => new \Edde\Validator\Bus\EventValidator(),
+				'message-bus:type:request' => new \Edde\Validator\Bus\RequestValidator(),
 			]);
 		}
 	}

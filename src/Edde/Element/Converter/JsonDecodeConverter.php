@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Ext\Bus;
+	namespace Edde\Element\Converter;
 
 	use Edde\Content\Content;
 	use Edde\Content\IContent;
@@ -31,6 +31,6 @@
 		 */
 		public function convert(IContent $content, string $target = null): IContent {
 			$source = $this->converterManager->convert($content, [stdClass::class]);
-			return new Content($this->messageBus->import($source->getContent()), \Edde\Element\IElement::class);
+			return new Content($this->messageBus->import($source->getContent()), IElement::class);
 		}
 	}

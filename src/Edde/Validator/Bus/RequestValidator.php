@@ -1,14 +1,15 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Ext\Bus\Validator;
+	namespace Edde\Validator\Bus;
 
 	use Edde\Element\IElement;
 	use Edde\Exception\Validator\ValidationException;
+	use Edde\Validator\AbstractValidator;
 
-	class RequestValidator extends \Edde\Validator\AbstractValidator {
+	class RequestValidator extends AbstractValidator {
 		/** @inheritdoc */
 		public function validate($value, array $options = []): void {
-			/** @var $value \Edde\Element\IElement */
+			/** @var $value IElement */
 			if (is_object($value) === false) {
 				throw new ValidationException(
 					sprintf('Value of type [%s] is not an instance of [%s].', gettype($value), IElement::class),

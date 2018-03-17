@@ -1,10 +1,11 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Ext\Bus;
+	namespace Edde\Element\Converter;
 
 	use Edde\Content\Content;
 	use Edde\Content\IContent;
 	use Edde\Converter\AbstractConverter;
+	use Edde\Element\IElement;
 	use Edde\Inject\Bus\MessageBus;
 	use Edde\Inject\Converter\ConverterManager;
 	use stdClass;
@@ -15,7 +16,7 @@
 
 		public function __construct() {
 			parent::__construct([
-				\Edde\Element\IElement::class,
+				IElement::class,
 			], [
 				'application/json',
 			]);

@@ -1,17 +1,17 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Ext\Converter;
+	namespace Edde\Converter;
 
 	use Edde\Content\Content;
 	use Edde\Content\IContent;
-	use Edde\Converter\AbstractConverter;
+	use stdClass;
 
 	class JsonEncodeConverter extends AbstractConverter {
 		public function __construct() {
 			parent::__construct([
 				'array',
 				'object',
-				\stdClass::class,
+				stdClass::class,
 			], [
 				'application/json',
 			]);
