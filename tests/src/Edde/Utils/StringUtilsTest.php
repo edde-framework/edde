@@ -33,4 +33,13 @@
 			self::assertEquals('foo-bar', $this->stringUtils->recamel('FooBar'));
 			self::assertEquals('bar#prd', $this->stringUtils->recamel('FooBarPrd', '#', 1));
 		}
+
+		public function testExtract() {
+			self::assertEquals('StringUtilsTest', $this->stringUtils->extract(self::class));
+			self::assertEquals('Utils', $this->stringUtils->extract(self::class, '\\', -2));
+		}
+
+		public function testNormalize() {
+			self::assertEquals("Bl\na", $this->stringUtils->normalize("Bl\ra"));
+		}
 	}
