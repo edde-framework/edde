@@ -97,7 +97,7 @@
 		 *
 		 * @return IResponse
 		 */
-		public function noContent(): IResponse {
+		public function sendNoContent(): IResponse {
 			return $this->response(new Response(new Content('', 'text/plain')), IResponse::R200_NO_CONTENT);
 		}
 
@@ -106,7 +106,7 @@
 		 *
 		 * @return IResponse
 		 */
-		public function created(): IResponse {
+		public function sendCreated(): IResponse {
 			return $this->response(new Response(new Content('', 'text/plain')), IResponse::R200_OK_CREATED);
 		}
 
