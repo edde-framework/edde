@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Xml;
 
-	use Edde\Exception\Xml\XmlParserException;
 	use Edde\File\File;
 	use Edde\Inject\Utils\StringUtils;
 	use Edde\Object;
@@ -56,7 +55,7 @@
 		 *
 		 * @return $this
 		 *
-		 * @throws XmlParserException
+		 * @throws XmlException
 		 */
 		protected function iterate(Iterator $iterator, IXmlHandler $xmlHandler) {
 			$value = '';
@@ -85,7 +84,7 @@
 		 * @param Iterator    $iterator
 		 * @param IXmlHandler $xmlHandler
 		 *
-		 * @throws XmlParserException
+		 * @throws XmlException
 		 */
 		protected function parseTag(Iterator $iterator, IXmlHandler $xmlHandler) {
 			$last = null;
@@ -100,7 +99,7 @@
 						break;
 					case '!':
 						if ($last !== '<') {
-							throw new XmlParserException(sprintf('Unexpected token [%s] while reading open tag.', $char));
+							throw new XmlException(sprintf('Unexpected token [%s] while reading open tag.', $char));
 						}
 						$type = self::XML_TYPE_DOCTYPE;
 						$name .= $char;
@@ -111,7 +110,7 @@
 							break;
 						}
 						if ($last !== '<') {
-							throw new XmlParserException(sprintf('Unexpected token [%s] while reading open tag.', $char));
+							throw new XmlException(sprintf('Unexpected token [%s] while reading open tag.', $char));
 						}
 						$type = self::XML_TYPE_HEADER;
 						break;
@@ -170,7 +169,7 @@
 		/**
 		 * @param Iterator $iterator
 		 *
-		 * @throws XmlParserException
+		 * @throws XmlException
 		 */
 		protected function parseComment(Iterator $iterator) {
 			$type = self::XML_TYPE_COMMENT;
@@ -198,14 +197,14 @@
 				}
 				$iterator->next();
 			}
-			throw new XmlParserException('Parser ended during digging through comment. The God will kill one cute kitten now!');
+			throw new XmlException('Parser ended during digging through comment. The God will kill one cute kitten now!');
 		}
 
 		/**
 		 * @param Iterator $iterator
 		 *
 		 * @return array
-		 * @throws XmlParserException
+		 * @throws XmlException
 		 */
 		protected function parseAttributes(Iterator $iterator) {
 			$attributeList = [];
@@ -225,14 +224,14 @@
 				}
 				$iterator->next();
 			}
-			throw new XmlParserException('Parser ended when eating attribute list. Something is not so good here!');
+			throw new XmlException('Parser ended when eating attribute list. Something is not so good here!');
 		}
 
 		/**
 		 * @param Iterator $iterator
 		 *
 		 * @return array
-		 * @throws XmlParserException
+		 * @throws XmlException
 		 */
 		protected function parseAttribute(Iterator $iterator) {
 			$name = null;
@@ -279,6 +278,6 @@
 				}
 				$iterator->next();
 			}
-			throw new XmlParserException('Parser when parsing an attribute. That is quite strange!');
+			throw new XmlException('Parser when parsing an attribute. That is quite strange!');
 		}
 	}

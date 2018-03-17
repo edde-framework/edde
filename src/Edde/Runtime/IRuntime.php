@@ -2,8 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Runtime;
 
-	use Edde\Exception\Runtime\MissingArgvException;
-
 	interface IRuntime {
 		/***
 		 * @return bool
@@ -15,7 +13,7 @@
 		 *
 		 * @return array
 		 *
-		 * @throws MissingArgvException
+		 * @throws RuntimeException
 		 */
 		public function getArguments(): array;
 	}

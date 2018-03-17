@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Runtime;
 
-	use Edde\Exception\Runtime\MissingArgvException;
 	use Edde\Object;
 
 	class Runtime extends Object implements IRuntime {
@@ -20,7 +19,7 @@
 				return $this->args;
 			}
 			if (isset($GLOBALS['argv']) === false) {
-				throw new MissingArgvException("Variable \$GLOBALS['argv'] is not available!");
+				throw new RuntimeException("Variable \$GLOBALS['argv'] is not available!");
 			}
 			$argv = $GLOBALS['argv'];
 			$argumentList = [];

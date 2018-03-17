@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Sanitizer;
 
-	use Edde\Exception\Sanitizer\UnknownSanitizerException;
 	use Edde\Object;
 
 	class SanitizerManager extends Object implements ISanitizerManager {
@@ -26,7 +25,7 @@
 		/** @inheritdoc */
 		public function getSanitizer(string $name): ISanitizer {
 			if (isset($this->sanitizers[$name]) === false) {
-				throw new UnknownSanitizerException(sprintf('Requested unknown sanitizer [%s].', $name));
+				throw new SanitizerException(sprintf('Requested unknown sanitizer [%s].', $name));
 			}
 			return $this->sanitizers[$name];
 		}

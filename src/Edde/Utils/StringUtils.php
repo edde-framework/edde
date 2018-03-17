@@ -15,66 +15,48 @@
 			' ',
 		];
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function lower(string $string): string {
 			return mb_strtolower($string, 'UTF-8');
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function substring(string $string, int $start, int $length = null): string {
 			return mb_substr($string, $start, $length, 'UTF-8');
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function firstLower(string $string): string {
 			return $this->lower($this->substring($string, 0, 1)) . $this->substring($string, 1);
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function capitalize(string $string): string {
 			return mb_convert_case($string, MB_CASE_TITLE, 'UTF-8');
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function toCamelHump($input): string {
 			return $this->firstLower($this->toCamelCase($input));
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function toCamelCase($input): string {
-			return str_replace('~', null, mb_convert_case(str_replace(self::SEPARATOR_LIST, '~', mb_strtolower(implode('~', is_array($input) ? $input : preg_split('~(?=[A-Z])~', $input, -1, PREG_SPLIT_NO_EMPTY)))), MB_CASE_TITLE, 'UTF-8'));
+			return (string)str_replace('~', null, mb_convert_case(str_replace(self::SEPARATOR_LIST, '~', mb_strtolower(implode('~', is_array($input) ? $input : preg_split('~(?=[A-Z])~', $input, -1, PREG_SPLIT_NO_EMPTY)))), MB_CASE_TITLE, 'UTF-8'));
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function fromCamelCase(string $string, int $index = null): array {
 			$camel = preg_split('~(?=[A-Z])~', $string, -1, PREG_SPLIT_NO_EMPTY);
 			return $index !== null ? array_slice($camel, $index) : $camel;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function recamel(string $string, string $glue = '-', int $index = 0): string {
 			return mb_strtolower(implode($glue, $this->fromCamelCase($string, $index)));
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function match(string $string, string $pattern, bool $named = false, bool $trim = false): ?array {
 			$match = null;
 			if (($match = preg_match($pattern, $string, $match) ? $match : null) === null) {
@@ -93,6 +75,7 @@
 			return $match;
 		}
 
+		/** @inheritdoc */
 		public function matchAll(string $string, string $pattern, bool $named = false, $trim = false): array {
 			$match = null;
 			if (($match = preg_match_all($pattern, $string, $match) ? $match : null) === null) {
@@ -112,17 +95,13 @@
 			return $match;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function extract(string $source, string $separator = '\\', int $index = -1): string {
 			$sourceList = explode($separator, $source);
 			return isset($sourceList[$index = ($index < 0 ? count($sourceList) + $index : $index)]) ? (string)$sourceList[$index] : '';
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function normalize(string $string): string {
 			$string = $this->normalizeNewLines($string);
 			$string = preg_replace('~[\x00-\x08\x0B-\x1F\x7F-\x9F]+~u', '', $string);
@@ -131,9 +110,7 @@
 			return $string;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function normalizeNewLines(string $string): string {
 			return (string)str_replace([
 				"\r\n",
@@ -141,9 +118,7 @@
 			], "\n", $string);
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function createIterator(string $string): \Generator {
 			$length = mb_strlen($string = $this->normalizeNewLines($string));
 			while ($length) {

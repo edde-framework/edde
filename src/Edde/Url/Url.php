@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Url;
 
-	use Edde\Exception\Url\UrlException;
 	use Edde\Object;
 
 	class Url extends Object implements IUrl {

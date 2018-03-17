@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Xml;
 
-	use Edde\Exception\Xml\XmlParserException;
 	use Edde\Inject\Xml\XmlParser;
 	use Edde\TestCase;
 	use TestXmlHandler;
@@ -13,7 +12,7 @@
 		use XmlParser;
 
 		/**
-		 * @throws XmlParserException
+		 * @throws XmlException
 		 */
 		public function testSimple() {
 			$this->xmlParser->file(__DIR__ . '/assets/simple.xml', $handler = new TestXmlHandler());
@@ -26,7 +25,7 @@
 		}
 
 		/**
-		 * @throws XmlParserException
+		 * @throws XmlException
 		 */
 		public function testSimpleShort() {
 			$this->xmlParser->file(__DIR__ . '/assets/simple-short.xml', $handler = new TestXmlHandler());
@@ -39,7 +38,7 @@
 		}
 
 		/**
-		 * @throws XmlParserException
+		 * @throws XmlException
 		 */
 		public function testSimpleAttribute() {
 			$this->xmlParser->file(__DIR__ . '/assets/simple-attribute.xml', $handler = new TestXmlHandler());
@@ -56,7 +55,7 @@
 		}
 
 		/**
-		 * @throws XmlParserException
+		 * @throws XmlException
 		 */
 		public function testSimpleShortAttribute() {
 			$this->xmlParser->file(__DIR__ . '/assets/simple-short-attribute.xml', $handler = new TestXmlHandler());
@@ -73,7 +72,7 @@
 		}
 
 		/**
-		 * @throws XmlParserException
+		 * @throws XmlException
 		 */
 		public function testBitLessSimple() {
 			$this->xmlParser->file(__DIR__ . '/assets/a-bit-less-simple.xml', $handler = new TestXmlHandler());
@@ -108,7 +107,7 @@
 		}
 
 		/**
-		 * @throws XmlParserException
+		 * @throws XmlException
 		 */
 		public function testComment() {
 			$this->xmlParser->file(__DIR__ . '/assets/comment-test.xml', $handler = new TestXmlHandler());
@@ -125,7 +124,7 @@
 		}
 
 		/**
-		 * @throws XmlParserException
+		 * @throws XmlException
 		 */
 		public function testSimpleMultilineAttributes() {
 			$this->xmlParser->file(__DIR__ . '/assets/simple-multiline-attributes.xml', $handler = new TestXmlHandler());
@@ -141,7 +140,7 @@
 		}
 
 		/**
-		 * @throws XmlParserException
+		 * @throws XmlException
 		 */
 		public function testMultilineAttributes() {
 			$this->xmlParser->file(__DIR__ . '/assets/multiline-attributes.xml', $handler = new TestXmlHandler());
@@ -161,7 +160,7 @@
 		}
 
 		/**
-		 * @throws XmlParserException
+		 * @throws XmlException
 		 */
 		public function testXmlHeader() {
 			$this->xmlParser->file(__DIR__ . '/assets/xml-with-header.xml', $handler = new TestXmlHandler());
@@ -174,7 +173,7 @@
 		}
 
 		/**
-		 * @throws XmlParserException
+		 * @throws XmlException
 		 */
 		public function testNewlineBetweenNodes() {
 			$this->xmlParser->file(__DIR__ . '/assets/newline-between-nodes.xml', $handler = new TestXmlHandler());
@@ -201,7 +200,7 @@
 		}
 
 		/**
-		 * @throws XmlParserException
+		 * @throws XmlException
 		 */
 		public function testStringParse() {
 			$this->xmlParser->string('<r>

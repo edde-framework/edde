@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Xml;
 
-	use Edde\Exception\Xml\XmlParserException;
 	use Edde\Node\INode;
 	use Edde\Node\Node;
 
@@ -63,11 +62,11 @@
 		/**
 		 * @return INode
 		 *
-		 * @throws XmlParserException
+		 * @throws XmlException
 		 */
 		public function getNode(): INode {
 			if ($this->node === null) {
-				throw new XmlParserException('Nothing has been parsed. One cute kitten will be killed because of you!');
+				throw new XmlException('Nothing has been parsed. One cute kitten will be killed because of you!');
 			}
 			return $this->node;
 		}

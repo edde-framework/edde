@@ -5,10 +5,10 @@
 	use Edde\Element\IRequest;
 	use Edde\Element\Request;
 	use Edde\Exception\Http\NoHttpException;
-	use Edde\Exception\Runtime\MissingArgvException;
 	use Edde\Inject\Container\Container;
 	use Edde\Inject\Crypt\RandomService;
 	use Edde\Inject\Utils\StringUtils;
+	use Edde\Runtime\RuntimeException;
 	use Throwable;
 
 	/**
@@ -31,13 +31,7 @@
 			}
 		}
 
-		/**
-		 * @inheritdoc
-		 *
-		 * @throws NoHttpException
-		 * @throws RouterException
-		 * @throws MissingArgvException
-		 */
+		/** @inheritdoc */
 		public function createRequest(): IRequest {
 			return $this->request ?: $this->request = ($this->isHttp() ? $this->createHttpRequest() : $this->createCliRequest());
 		}
@@ -56,9 +50,11 @@
 		}
 
 		/**
-		 * @throws MissingArgvException
+		 * @return IRequest
+		 *
 		 * @throws NoHttpException
 		 * @throws RouterException
+		 * @throws RuntimeException
 		 */
 		protected function createCliRequest(): IRequest {
 			$parameters = $this->runtime->getArguments();
