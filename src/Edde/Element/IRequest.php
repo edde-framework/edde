@@ -22,5 +22,5 @@
 		 *
 		 * @return array
 		 */
-		public function getParameters(): array;
+		public function getParams(): array;
 	}

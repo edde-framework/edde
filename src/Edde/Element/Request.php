@@ -3,11 +3,11 @@
 	namespace Edde\Element;
 
 	class Request extends Element implements IRequest {
-		public function __construct(string $service, string $method, string $uuid, array $parameters = []) {
+		public function __construct(string $service, string $method, string $uuid, array $params = []) {
 			parent::__construct('request', $uuid, [
-				'service'    => $service,
-				'method'     => $method,
-				'parameters' => $parameters,
+				'service' => $service,
+				'method'  => $method,
+				'params'  => $params,
 			]);
 		}
 
@@ -22,7 +22,7 @@
 		}
 
 		/** @inheritdoc */
-		public function getParameters(): array {
-			return $this->getAttribute('parameters', []);
+		public function getParams(): array {
+			return $this->getAttribute('params', []);
 		}
 	}
