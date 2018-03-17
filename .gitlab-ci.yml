@@ -18,7 +18,7 @@ test:
 github sync:
     stage: publish
     variables:
-        - GIT_STRATEGY: none
+        GIT_STRATEGY: none
     script:
         - apk add -U git >/dev/null 2>&1
         - git clone --mirror $CI_REPOSITORY_URL edde.git
