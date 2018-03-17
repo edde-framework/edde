@@ -33,6 +33,7 @@
 		 * @return IUpgrade
 		 *
 		 * @throws UpgradeException
+		 * @throws CurrentVersionException
 		 */
 		public function upgrade(string $version = null): IUpgrade;
 

@@ -5,6 +5,7 @@
 	use Edde\Inject\Log\LogService;
 	use Edde\Inject\Storage\Storage;
 	use Edde\Object;
+	use Throwable;
 
 	abstract class AbstractUpgradeManager extends Object implements IUpgradeManager {
 		use Storage;
@@ -63,13 +64,13 @@
 						if ($upgrade->getVersion() === $version) {
 							break;
 						}
-					} catch (\Throwable $throwable) {
+					} catch (Throwable $throwable) {
 						$upgrade->onFail($throwable);
 					}
 				}
 				$this->onUpgradeEnd($upgrade);
 				return $upgrade;
-			} catch (\Throwable $throwable) {
+			} catch (Throwable $throwable) {
 				$this->onUpgradeFailed($throwable, $last);
 				throw $throwable;
 			}
@@ -84,7 +85,7 @@
 		protected function onUpgradeEnd(IUpgrade $upgrade): void {
 		}
 
-		protected function onUpgradeFailed(\Throwable $throwable, IUpgrade $upgrade = null): void {
+		protected function onUpgradeFailed(Throwable $throwable, IUpgrade $upgrade = null): void {
 			$this->logService->exception($throwable);
 		}
 	}
