@@ -4,6 +4,7 @@
 
 	use Edde\Content\IContent;
 	use Edde\Object;
+	use Exception;
 
 	class ConverterManager extends Object implements IConverterManager {
 		/** @var IConverter[] */
@@ -28,11 +29,11 @@
 		}
 
 		/** @inheritdoc */
-		public function resolve(IContent $content, array $targetList = null): IConvertable {
+		public function resolve(IContent $content, array $targets = null): IConvertable {
 			$exception = null;
 			$unknown = true;
 			$mime = $content->getType();
-			foreach ($targetList ?? [] as $target) {
+			foreach ($targets ?? [] as $target) {
 				if ($mime === $target) {
 					return new Convertable(new PassConverter(), $content, $mime);
 				}
@@ -40,18 +41,18 @@
 					$unknown = false;
 					try {
 						return new Convertable($this->converters[$id], $content, $target);
-					} catch (\Exception $exception) {
+					} catch (Exception $_) {
 					}
 				}
 			}
-			if ($targetList === null || $mime === reset($targetList)) {
+			if ($targets === null || $mime === reset($targets)) {
 				return new Convertable(new PassConverter(), $content, $content->getType());
 			}
-			throw new ConverterException(sprintf('Cannot convert %ssource mime [%s] to any of [%s].', $unknown ? 'unknown/unsupported ' : '', $mime, implode(', ', $targetList)), 0, $exception);
+			throw new ConverterException(sprintf('Cannot convert %ssource mime [%s] to any of [%s].', $unknown ? 'unknown/unsupported ' : '', $mime, implode(', ', $targets)), 0, $exception);
 		}
 
 		/** @inheritdoc */
-		public function convert(IContent $content, array $targetList = null): IContent {
-			return $this->resolve($content, $targetList)->convert();
+		public function convert(IContent $content, array $targets = null): IContent {
+			return $this->resolve($content, $targets)->convert();
 		}
 	}

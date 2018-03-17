@@ -34,23 +34,23 @@
 		 * choose convertable for the given content and target list
 		 *
 		 * @param IContent $content
-		 * @param array    $targetList
+		 * @param array    $targets
 		 *
 		 * @return IConvertable
 		 *
 		 * @throws ConverterException
 		 */
-		public function resolve(IContent $content, array $targetList = null): IConvertable;
+		public function resolve(IContent $content, array $targets = null): IConvertable;
 
 		/**
 		 * execute the conversion from source to target
 		 *
 		 * @param IContent   $content
-		 * @param array|null $targetList
+		 * @param array|null $targets
 		 *
 		 * @return IContent
 		 *
 		 * @throws ConverterException
 		 */
-		public function convert(IContent $content, array $targetList = null): IContent;
+		public function convert(IContent $content, array $targets = null): IContent;
 	}
