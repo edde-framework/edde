@@ -2,10 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Control;
 
-	use Edde\Application\AbortException;
 	use Edde\Inject\Utils\StringUtils;
 	use ReflectionClass;
-	use Throwable;
+	use ReflectionException;
 
 	/**
 	 * Control used for a command line content rendering.
@@ -14,31 +13,29 @@
 		use StringUtils;
 
 		/**
-		 * just "nicer" way, how to send an abort exception
-		 *
-		 * @param string         $message
-		 * @param int            $code
-		 * @param Throwable|null $throwable
-		 *
-		 * @throws AbortException
-		 */
-		public function abort(string $message, int $code = -1, Throwable $throwable = null) {
-			throw new AbortException($message, $code, $throwable);
-		}
-
-		/**
 		 * @help show all available commands for a cli application
+		 *
+		 * @throws ReflectionException
 		 */
 		public function actionHelp() {
 			$this->help();
 		}
 
+		/**
+		 * @param string $name
+		 * @param array  $arguments
+		 *
+		 * @throws ReflectionException
+		 */
 		public function __call(string $name, array $arguments) {
 			printf("Called unknown method on [%s::%s]\n", $this->stringUtils->extract(static::class), strtolower(str_replace('action', '', $name)));
 			$this->help();
 			printf("Please check your commandline arguments\n");
 		}
 
+		/**
+		 * @throws ReflectionException
+		 */
 		protected function help() {
 			printf("Available methods on %s:\n", $this->stringUtils->extract(static::class));
 			$reflectionClass = new ReflectionClass($this);
