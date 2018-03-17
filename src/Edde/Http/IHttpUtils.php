@@ -76,6 +76,8 @@
 		 * @param string $http
 		 *
 		 * @return IRequestHeader
+		 *
+		 * @throws HttpException
 		 */
 		public function requestHeader(string $http): IRequestHeader;
 
@@ -85,6 +87,8 @@
 		 * @param string $http
 		 *
 		 * @return IResponseHeader
+		 *
+		 * @throws HttpException
 		 */
 		public function responseHeader(string $http): IResponseHeader;
 	}

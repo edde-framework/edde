@@ -4,7 +4,6 @@
 
 	use Edde\Element\IRequest;
 	use Edde\Element\Request;
-	use Edde\Exception\Http\NoHttpException;
 	use Edde\Inject\Container\Container;
 	use Edde\Inject\Crypt\RandomService;
 	use Edde\Inject\Utils\StringUtils;
@@ -37,7 +36,6 @@
 		}
 
 		/**
-		 * @throws NoHttpException
 		 * @throws RouterException
 		 */
 		protected function createHttpRequest(): IRequest {
@@ -52,7 +50,6 @@
 		/**
 		 * @return IRequest
 		 *
-		 * @throws NoHttpException
 		 * @throws RouterException
 		 * @throws RuntimeException
 		 */
@@ -77,8 +74,6 @@
 		 * @param array  $parameters
 		 *
 		 * @return IRequest
-		 *
-		 * @throws NoHttpException
 		 */
 		protected function factory(string $class, string $method, string $type, array $parameters): IRequest {
 			$class = explode('\\', str_replace([

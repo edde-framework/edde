@@ -17,13 +17,11 @@
 	use Edde\Common\Schema\UserRoleSchema;
 	use Edde\Common\Schema\UserSchema;
 	use Edde\Driver\DriverException;
+	use Edde\Driver\DuplicateEntryException;
+	use Edde\Driver\DuplicateTableException;
 	use Edde\Entity\EntityException;
 	use Edde\Entity\EntityNotFoundException;
-	use Edde\Exception\Storage\DuplicateEntryException;
-	use Edde\Exception\Storage\DuplicateTableException;
-	use Edde\Exception\Storage\ExclusiveTransactionException;
-	use Edde\Exception\Storage\NoTransactionException;
-	use Edde\Exception\Storage\StorageException;
+	use Edde\Entity\IEntity;
 	use Edde\Inject\Container\Container;
 	use Edde\Inject\Entity\EntityManager;
 	use Edde\Inject\Schema\SchemaManager;
@@ -43,10 +41,9 @@
 		/**
 		 * @throws DriverException
 		 * @throws DuplicateTableException
-		 * @throws ExclusiveTransactionException
-		 * @throws NoTransactionException
 		 * @throws SchemaException
 		 * @throws StorageException
+		 * @throws TransactionException
 		 */
 		public function testCreateSchema() {
 			$this->storage->start();
@@ -166,6 +163,9 @@
 			], $entities);
 		}
 
+		/**
+		 * @throws EntityNotFoundException
+		 */
 		public function testUpdate() {
 			$entity = $this->entityManager->create(SimpleSchema::class, [
 				'name'     => 'to-be-updated',
@@ -299,7 +299,7 @@
 				'bar The Second',
 				'bar The Third',
 			];
-			/** @var $foo \Edde\Entity\IEntity */
+			/** @var $foo IEntity */
 			foreach ($foo->join('b', BarSchema::class) as $record) {
 				$foo = $record->getEntity('e');
 				$bar = $record->getEntity('b');

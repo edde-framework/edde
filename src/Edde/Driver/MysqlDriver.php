@@ -2,10 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Driver;
 
-	use Edde\Exception\Storage\DuplicateEntryException;
-	use Edde\Exception\Storage\DuplicateTableException;
-	use Edde\Exception\Storage\NullValueException;
-	use Edde\Exception\Storage\UnknownTableException;
 	use Throwable;
 
 	class MysqlDriver extends AbstractDatabaseDriver {
@@ -44,7 +40,7 @@
 			if (stripos($message = $throwable->getMessage(), 'duplicate') !== false) {
 				return new DuplicateEntryException($message, 0, $throwable);
 			} else if (stripos($message, 'cannot be null') !== false || stripos($message, 'have a default value') !== false) {
-				return new NullValueException($message, 0, $throwable);
+				return new RequiredValueException($message, 0, $throwable);
 			} else if (stripos($message, 'table or view already exists') !== false) {
 				return new DuplicateTableException($message, 0, $throwable);
 			} else if (stripos($message, 'table or view not found') !== false) {

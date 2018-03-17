@@ -5,8 +5,6 @@
 	use Edde\Config\ConfigException;
 	use Edde\Crate\IProperty;
 	use Edde\Entity\IEntity;
-	use Edde\Exception\Storage\DuplicateEntryException;
-	use Edde\Exception\Storage\NullValueException;
 	use Edde\Query\IDeleteQuery;
 	use Edde\Query\IDetachQuery;
 	use Edde\Query\IDisconnectQuery;
@@ -113,7 +111,7 @@
 			if (stripos($message = $throwable->getMessage(), 'already exists with label') !== false) {
 				return new DuplicateEntryException($message, 0, $throwable);
 			} else if (stripos($message, 'must have the property') !== false) {
-				return new NullValueException($message, 0, $throwable);
+				return new RequiredValueException($message, 0, $throwable);
 			}
 			return new DriverException($message, 0, $throwable);
 		}

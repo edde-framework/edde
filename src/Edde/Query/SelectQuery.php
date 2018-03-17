@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Query;
 
-	use Edde\Exception\Storage\UnknownAliasException;
 	use Edde\Query\Fragment\Join;
 	use Edde\Query\Fragment\WhereGroup;
 	use Edde\Schema\ISchema;
@@ -136,7 +135,7 @@
 		/** @inheritdoc */
 		public function getSchema(string $alias = null): ISchema {
 			if (isset($this->schemas[$alias]) === false) {
-				throw new UnknownAliasException(sprintf('Requested unknown alias [%s] in query.', $alias));
+				throw new QueryException(sprintf('Requested unknown alias [%s] in query.', $alias));
 			}
 			return $this->schemas[$alias];
 		}

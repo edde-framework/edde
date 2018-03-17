@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
-	use Edde\Exception\Storage\InvalidSourceException;
 	use Edde\Storage\Query\ISelectQuery;
 	use IteratorAggregate;
 	use Traversable;
@@ -35,14 +34,14 @@
 		 * @param array $source
 		 *
 		 * @return array
-		 * @throws InvalidSourceException
+		 * @throws StreamException
 		 */
 		public function emit(array $source): array;
 
 		/**
 		 * @return Traversable|array
-		 * @throws InvalidSourceException
-		 * @throws \Edde\Exception\Storage\StreamException
+		 *
+		 * @throws StreamException
 		 */
 		public function getIterator();
 	}

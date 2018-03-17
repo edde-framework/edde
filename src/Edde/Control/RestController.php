@@ -49,7 +49,6 @@
 		}
 
 		/**
-		 * @throws \Edde\Exception\Http\NoHttpException
 		 * @throws ReflectionException
 		 */
 		public function actionOptions() {

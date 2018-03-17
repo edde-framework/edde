@@ -3,7 +3,8 @@
 	namespace Edde\Storage;
 
 	use Edde\Config\IConfigurable;
-	use Edde\Exception\Storage\StorageException;
+	use Edde\Driver\DriverException;
+	use Edde\Driver\DuplicateTableException;
 	use Edde\Query\IQuery;
 
 	interface IStorage extends IConfigurable {
@@ -13,7 +14,8 @@
 		 * @param bool $exclusive
 		 *
 		 * @return IStorage
-		 * @throws \Edde\Exception\Storage\ExclusiveTransactionException
+		 *
+		 * @throws TransactionException
 		 */
 		public function start(bool $exclusive = false): IStorage;
 
@@ -21,7 +23,8 @@
 		 * commit a transaction on storage
 		 *
 		 * @return IStorage
-		 * @throws \Edde\Exception\Storage\NoTransactionException
+		 *
+		 * @throws TransactionException
 		 */
 		public function commit(): IStorage;
 
@@ -29,20 +32,22 @@
 		 * rollback a transaction on storage
 		 *
 		 * @return IStorage
-		 * @throws \Edde\Exception\Storage\NoTransactionException
+		 *
+		 * @throws TransactionException
 		 */
 		public function rollback(): IStorage;
 
 		/**
 		 * execute the given query; query will be translated into native query
 		 *
-		 * @param \Edde\Query\IQuery $query
+		 * @param IQuery $query
 		 *
 		 * @return IStream
 		 *
 		 * @throws StorageException
-		 * @throws \Edde\Exception\Storage\DuplicateTableException
-		 * @throws \Edde\Driver\DriverException
+		 *
+		 * @throws DuplicateTableException
+		 * @throws DriverException
 		 */
 		public function execute(IQuery $query);
 
@@ -63,7 +68,7 @@
 		 *
 		 * @return mixed native driver result
 		 *
-		 * @throws \Edde\Driver\DriverException
+		 * @throws DriverException
 		 */
 		public function fetch($query, array $params = []);
 
@@ -73,7 +78,7 @@
 		 *
 		 * @return mixed native driver result
 		 *
-		 * @throws \Edde\Driver\DriverException
+		 * @throws DriverException
 		 */
 		public function exec($query, array $params = []);
 	}

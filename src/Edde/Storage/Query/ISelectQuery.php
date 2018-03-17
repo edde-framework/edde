@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Storage\Query;
 
-	use Edde\Exception\Storage\UnknownAliasException;
 	use Edde\Query\IQuery;
+	use Edde\Query\QueryException;
 	use Edde\Schema\ISchema;
 	use Edde\Storage\Query\Fragment\IWhereGroup;
 
@@ -144,7 +144,8 @@
 		 * @param string $alias
 		 *
 		 * @return ISchema
-		 * @throws UnknownAliasException
+		 *
+		 * @throws QueryException
 		 */
 		public function getSchema(string $alias = null): ISchema;
 	}

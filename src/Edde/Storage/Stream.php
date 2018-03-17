@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
-	use Edde\Exception\Storage\InvalidSourceException;
 	use Edde\Object;
 	use Edde\Query\IQuery;
 	use Edde\Storage\Query\ISelectQuery;
@@ -36,7 +35,7 @@
 			$item = [];
 			foreach ($source as $k => $v) {
 				if (strpos($k, '.') === false) {
-					throw new InvalidSourceException(sprintf('Stream get an item without dot notation; cannot resolve alias to schema.'));
+					throw new StreamException(sprintf('Stream get an item without dot notation; cannot resolve alias to schema.'));
 				}
 				[$alias, $property] = explode('.', $k, 2);
 				$item[$alias][$property] = $v;

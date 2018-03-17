@@ -4,7 +4,6 @@
 
 	use Edde\Content\InputContent;
 	use Edde\Content\PostContent;
-	use Edde\Exception\Http\EmptyBodyException;
 	use Edde\Inject\Converter\ConverterManager;
 	use Edde\Inject\Http\HttpUtils;
 	use Edde\Object;
@@ -22,7 +21,7 @@
 			if ($this->request) {
 				return $this->request;
 			}
-			$this->request = new \Edde\Http\Request(
+			$this->request = new Request(
 				Url::create((isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']),
 				$this->createHeaders(),
 				$this->createCookies()
@@ -64,7 +63,7 @@
 		}
 
 		/** @inheritdoc */
-		public function getHeaders(): \Edde\Http\IHeaders {
+		public function getHeaders(): IHeaders {
 			return $this->getRequest()->getHeaders();
 		}
 

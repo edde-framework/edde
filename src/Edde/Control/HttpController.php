@@ -6,8 +6,8 @@
 	use Edde\Content\HtmlContent;
 	use Edde\Content\JsonContent;
 	use Edde\Content\TextContent;
-	use Edde\Exception\Http\EmptyBodyException;
 	use Edde\File\IFile;
+	use Edde\Http\EmptyBodyException;
 	use Edde\Http\IResponse;
 	use Edde\Http\Response;
 	use Edde\Inject\Http\RequestService;

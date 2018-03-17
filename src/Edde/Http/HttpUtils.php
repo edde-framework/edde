@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Http;
 
-	use Edde\Exception\Http\HttpUtilsException;
 	use Edde\Inject\Utils\StringUtils;
 	use Edde\Object;
 	use Edde\Url\Url;
@@ -13,9 +12,7 @@
 	class HttpUtils extends Object implements IHttpUtils {
 		use StringUtils;
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function accept(string $accept = null): array {
 			if ($accept === null) {
 				return ['*/*'];
@@ -64,9 +61,7 @@
 			return $acceptList;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function language(string $language = null, string $default = 'en'): array {
 			if ($language === null) {
 				return [$default];
@@ -94,9 +89,7 @@
 			return $languageList;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function charset(string $charset = null, $default = 'utf-8'): array {
 			if ($charset === null) {
 				return [$default];
@@ -124,9 +117,7 @@
 			return $charsetList;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function contentType(string $contentType): IContentType {
 			/**
 			 * this is fuckin' trick how to parse mime using native php's csv parser
@@ -160,12 +151,10 @@
 				$value = trim(trim(substr($part, $index + 1)), '"');
 				$parameterList[$key] = $value;
 			}
-			return new \Edde\Http\ContentType($mime, $parameterList);
+			return new ContentType($mime, $parameterList);
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function cookie(string $cookie): ICookie {
 			$cookie = $this->stringUtils->match($cookie, '~(?<name>[^\s()<>@,;:\"/\\[\\]?={}]+)=(?<value>[^=;\s]+)\s*(?<misc>.*)?~', true);
 			if (isset($cookie['misc'])) {
@@ -182,28 +171,24 @@
 			$misc = $cookie['misc'];
 			$cookie['expires'] = strtotime($cookie['expires'] ?? '1.1.1970');
 			unset($cookie['misc']);
-			return new \Edde\Http\Cookie($cookie['name'], $cookie['value'], $cookie['expires'], $cookie['path'] ?? '/', $cookie['domain'] ?? null, strpos($misc, 'secure') !== false, stripos($misc, 'httponly') !== false);
+			return new Cookie($cookie['name'], $cookie['value'], $cookie['expires'], $cookie['path'] ?? '/', $cookie['domain'] ?? null, strpos($misc, 'secure') !== false, stripos($misc, 'httponly') !== false);
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function parseHeaders(string $headers): IHeaders {
 			return $this->headers(explode("\r\n", $headers));
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function headers(array $headerList): IHeaders {
-			$headers = new \Edde\Http\Headers();
+			$headers = new Headers();
 			if (isset($headerList[0])) {
 				try {
 					$headers->add('http-request', $this->requestHeader($headerList[0]));
-				} catch (HttpUtilsException $e) {
+				} catch (HttpException $e) {
 					try {
 						$headers->add('http-response', $this->responseHeader($headerList[0]));
-					} catch (HttpUtilsException $e) {
+					} catch (HttpException $e) {
 					}
 				}
 			}
@@ -232,23 +217,19 @@
 			return $headers;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function requestHeader(string $http): IRequestHeader {
 			if ($match = $this->stringUtils->match($http, '~(?<method>[A-Z]+)\s+(?<path>.*?)\s+HTTP/(?<version>[0-9.]+)~', true)) {
 				return new RequestHeader($match['method'], $match['path'], $match['version']);
 			}
-			throw new HttpUtilsException(sprintf('Cannot parse http request header [%s].', $http));
+			throw new HttpException(sprintf('Cannot parse http request header [%s].', $http));
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function responseHeader(string $http): IResponseHeader {
 			if ($match = $this->stringUtils->match($http, '~^HTTP/(?<version>[0-9.]+)\s(?<status>\d+)(\s(?<message>.*))?$~', true)) {
-				return new \Edde\Http\ResponseHeader($match['version'], (int)$match['status'], $match['message']);
+				return new ResponseHeader($match['version'], (int)$match['status'], $match['message']);
 			}
-			throw new HttpUtilsException(sprintf('Cannot parse http response header [%s].', $http));
+			throw new HttpException(sprintf('Cannot parse http response header [%s].', $http));
 		}
 	}

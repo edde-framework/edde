@@ -2,8 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
-	use Edde\Exception\Storage\ExclusiveTransactionException;
-	use Edde\Exception\Storage\NoTransactionException;
 	use Edde\Inject\Driver\Driver;
 	use Edde\Object;
 	use Edde\Query\IQuery;
@@ -20,7 +18,7 @@
 					$this->transaction++;
 					return $this;
 				}
-				throw new ExclusiveTransactionException('Cannot start an exclusive transaction; there is already another one running.');
+				throw new TransactionException('Cannot start an exclusive transaction; there is already another one running.');
 			}
 			$this->driver->start();
 			$this->transaction++;
@@ -30,7 +28,7 @@
 		/** @inheritdoc */
 		public function commit(): IStorage {
 			if ($this->transaction === 0) {
-				throw new NoTransactionException('Cannot commit a transaction - there is no one running!');
+				throw new TransactionException('Cannot commit a transaction - there is no one running!');
 			} else if ($this->transaction === 1) {
 				$this->driver->commit();
 			}
@@ -45,7 +43,7 @@
 		/** @inheritdoc */
 		public function rollback(): IStorage {
 			if ($this->transaction === 0) {
-				throw new NoTransactionException('Cannot rollback a transaction - there is no one running!');
+				throw new TransactionException('Cannot rollback a transaction - there is no one running!');
 			} else if ($this->transaction === 1) {
 				$this->driver->rollback();
 			}
