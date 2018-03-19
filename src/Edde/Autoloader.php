@@ -12,7 +12,7 @@
 		protected $namespace;
 		/** @var string */
 		protected $path;
-		/** @var string */
+		/** @var string|null */
 		protected $root;
 
 		/**
@@ -20,7 +20,7 @@
 		 * @param string $path
 		 * @param string $root
 		 */
-		public function __construct(string $namespace, string $path, string $root) {
+		public function __construct(string $namespace, string $path, string $root = null) {
 			$this->namespace = $namespace;
 			$this->path = $path;
 			$this->root = $root;
