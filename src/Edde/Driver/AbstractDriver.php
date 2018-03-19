@@ -31,9 +31,7 @@
 			$this->config = $config;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function execute(IQuery $query) {
 			if (isset($this->executors[$name = ('execute' . ($class = substr($class = get_class($query), strrpos($class, '\\') + 1)))]) === false) {
 				throw new DriverException(sprintf('Unknown query type [%s] for driver [%s]: an [%s] executor is not implemented.', $class, static::class, $name));
@@ -75,6 +73,8 @@
 		}
 
 		/**
+		 * @inheritdoc
+		 *
 		 * @throws ReflectionException
 		 */
 		protected function handleSetup(): void {

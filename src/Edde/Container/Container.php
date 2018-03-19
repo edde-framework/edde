@@ -97,9 +97,7 @@
 			}
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function inject($instance, bool $force = false) {
 			/**
 			 * expensive trick to inject dependencies to an object; class factory is responsible to analyze the dependency, container is than responsible to do the rest of job
@@ -107,25 +105,23 @@
 			return is_object($instance) ? $this->dependency($instance, $this->autowires[$class = get_class($instance)] ?? $this->autowires[$class] = (new ClassFactory())->getReflection($this, $class), $force !== true) : $instance;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
-		public function dependency($instance, \Edde\Container\IReflection $reflection, bool $lazy = true) {
+		/** @inheritdoc */
+		public function dependency($instance, IReflection $reflection, bool $lazy = true) {
 			if (is_object($instance) === false) {
 				return $instance;
 			}
 			/**
 			 * quite obvious autowire: do static and lazy injects, depends on lazy flag
 			 */
-			if ($instance instanceof \Edde\Container\IAutowire) {
+			if ($instance instanceof IAutowire) {
 				$class = get_class($instance);
-				$lazyList = $reflection->getLazies();
+				$lazies = $reflection->getLazies();
 				/** @var $instance IAutowire */
-				/** @var $parameter \Edde\Container\IParameter */
+				/** @var $parameter IParameter */
 				/**
 				 * a trick to remove duplicated code - if we are not lazy, autowire all dependencies
 				 */
-				foreach (array_merge($reflection->getInjects(), $lazy ? [] : $lazyList) as $parameter) {
+				foreach (array_merge($reflection->getInjects(), $lazy ? [] : $lazies) as $parameter) {
 					/**
 					 * it's important to keep all parameters there to keep track of dependency chain in case of an exception
 					 */
@@ -134,7 +130,7 @@
 				/**
 				 * do lazy autowiring if the $lazy flag is not false
 				 */
-				foreach ($lazy ? $lazyList : [] as $parameter) {
+				foreach ($lazy ? $lazies : [] as $parameter) {
 					$instance->lazy($parameter->getName(), $this, $parameter->getClass());
 				}
 			}
