@@ -34,18 +34,18 @@
 				throw new UrlException(sprintf('Malformed URL [%s].', $url));
 			}
 			if (isset($parsed['query'])) {
-				parse_str($parsed['query'], $parsed['parameter-list']);
+				parse_str($parsed['query'], $parsed['params']);
 			}
 			static $copy = [
-				'scheme'         => 'setScheme',
-				'user'           => 'setUser',
-				'pass'           => 'setPassword',
-				'host'           => 'setHost',
-				'port'           => 'setPort',
-				'path'           => 'setPath',
-				'query'          => 'setQuery',
-				'parameter-list' => 'setParameterList',
-				'fragment'       => 'setFragment',
+				'scheme'   => 'setScheme',
+				'user'     => 'setUser',
+				'pass'     => 'setPassword',
+				'host'     => 'setHost',
+				'port'     => 'setPort',
+				'path'     => 'setPath',
+				'query'    => 'setQuery',
+				'params'   => 'setParams',
+				'fragment' => 'setFragment',
 			];
 			foreach ($copy as $item => $func) {
 				if (isset($parsed[$item])) {
@@ -89,7 +89,7 @@
 		}
 
 		/** @inheritdoc */
-		public function setPath(string $path): \Edde\Url\IUrl {
+		public function setPath(string $path): IUrl {
 			$this->path = $path;
 			return $this;
 		}
