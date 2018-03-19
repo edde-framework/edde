@@ -125,14 +125,14 @@
 			if (($schema = $crateSchemaQuery->getSchema())->isRelation()) {
 				return;
 			}
-			$primaryList = null;
-			$indexList = null;
+			$primaries = null;
+			$indexes = null;
 			$delimited = $this->delimite($schema->getRealName());
 			foreach ($schema->getProperties() as $property) {
 				$name = $property->getName();
 				$fragment = 'n.' . $this->delimite($name);
 				if ($property->isPrimary()) {
-					$primaryList[] = $fragment;
+					$primaries[] = $fragment;
 				} else if ($property->isUnique()) {
 					$this->fetch('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT ' . $fragment . ' IS UNIQUE');
 				}
@@ -140,11 +140,11 @@
 					$this->fetch('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT exists(' . $fragment . ')');
 				}
 			}
-			if ($indexList) {
-				$this->fetch('CREATE INDEX ON :' . $delimited . '(' . implode(',', $indexList) . ')');
+			if ($indexes) {
+				$this->fetch('CREATE INDEX ON :' . $delimited . '(' . implode(',', $indexes) . ')');
 			}
-			if ($primaryList) {
-				$this->fetch('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT (' . implode(', ', $primaryList) . ') IS NODE KEY');
+			if ($primaries) {
+				$this->fetch('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT (' . implode(', ', $primaries) . ') IS NODE KEY');
 			}
 		}
 
@@ -200,7 +200,7 @@
 				$detachQuery->getEntity(),
 				$detachQuery->getTarget(),
 			];
-			/** @var $entity \Edde\Crate\IProperty[] */
+			/** @var $entity IProperty[] */
 			$primary = [
 				$entity[0]->getPrimary(),
 				$entity[1]->getPrimary(),
@@ -347,9 +347,10 @@
 		}
 
 		/**
-		 * @param \Edde\Storage\Query\ISelectQuery $selectQuery
+		 * @param ISelectQuery $selectQuery
 		 *
 		 * @return mixed
+		 *
 		 * @throws Throwable
 		 */
 		protected function executeSelectQuery(ISelectQuery $selectQuery) {
@@ -405,9 +406,9 @@
 		}
 
 		/**
-		 * @param \Edde\Storage\Query\Fragment\IWhere $where
+		 * @param IWhere $where
 		 *
-		 * @return \Edde\Storage\INativeQuery
+		 * @return INativeQuery
 		 *
 		 * @throws DriverException
 		 */
