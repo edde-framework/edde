@@ -11,7 +11,7 @@
 	class File extends Resource implements IFile {
 		/** @var IDirectory */
 		protected $directory;
-		/** @var \Edde\Resource\resource */
+		/** @var resource */
 		protected $handle;
 
 		/** @inheritdoc */

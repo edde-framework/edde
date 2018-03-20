@@ -23,12 +23,12 @@
 		}
 
 		/** @inheritdoc */
-		public function getFileList() {
+		public function getFiles() {
 			yield from (new RecursiveDirectoryIterator($this->directory, RecursiveDirectoryIterator::SKIP_DOTS));
 		}
 
 		/** @inheritdoc */
-		public function getDirectoryList() {
+		public function getDirectories() {
 			/** @var $path SplFileInfo */
 			foreach (new RecursiveDirectoryIterator($this->directory, RecursiveDirectoryIterator::SKIP_DOTS) as $path) {
 				if ($path->isDir()) {
@@ -95,9 +95,7 @@
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getPermission() {
 			$this->realpath();
 			clearstatcache(true, $this->directory);
@@ -123,6 +121,7 @@
 				$path = $this->directory;
 				for ($i = 0; $i < 3; $i++) {
 					try {
+						unset($exception);
 						if (is_file($path) || is_link($path)) {
 							$func = DIRECTORY_SEPARATOR === '\\' && is_dir($path) ? 'rmdir' : 'unlink';
 							if (@$func($path) === false) {

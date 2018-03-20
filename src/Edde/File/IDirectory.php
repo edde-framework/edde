@@ -24,12 +24,12 @@
 		 *
 		 * @return string[]
 		 */
-		public function getFileList();
+		public function getFiles();
 
 		/**
 		 * @return IDirectory[]
 		 */
-		public function getDirectoryList();
+		public function getDirectories();
 
 		/**
 		 * normalize directory path
@@ -42,6 +42,8 @@
 		 * execute realpath on directory to check if everything is correct (directory must exists)
 		 *
 		 * @return IDirectory
+		 *
+		 * @throws RealPathException
 		 */
 		public function realpath(): IDirectory;
 
@@ -52,6 +54,8 @@
 		 * @param string $content
 		 *
 		 * @return IFile
+		 *
+		 * @throws FileException
 		 */
 		public function save(string $file, string $content): IFile;
 
@@ -81,6 +85,7 @@
 		 * @return IDirectory
 		 *
 		 * @throws DirectoryException
+		 * @throws RealPathException
 		 */
 		public function create(int $chmod = 0777): IDirectory;
 
