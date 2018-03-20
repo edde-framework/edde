@@ -38,6 +38,15 @@
 		public function rollback(): IStorage;
 
 		/**
+		 * execute the callback in a transaction and return it's result
+		 *
+		 * @param callable $callback
+		 *
+		 * @return mixed
+		 */
+		public function transaction(callable $callback);
+
+		/**
 		 * execute the given query; query will be translated into native query
 		 *
 		 * @param IQuery $query

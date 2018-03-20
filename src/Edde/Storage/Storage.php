@@ -5,6 +5,7 @@
 	use Edde\Inject\Driver\Driver;
 	use Edde\Object;
 	use Edde\Query\IQuery;
+	use Throwable;
 
 	class Storage extends Object implements IStorage {
 		use Driver;
@@ -49,6 +50,19 @@
 			}
 			$this->transaction--;
 			return $this;
+		}
+
+		/** @inheritdoc */
+		public function transaction(callable $callback) {
+			$this->start();
+			try {
+				$result = $callback();
+				$this->commit();
+				return $result;
+			} catch (Throwable $exception) {
+				$this->rollback();
+				throw $exception;
+			}
 		}
 
 		/** @inheritdoc */
