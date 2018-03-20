@@ -33,6 +33,7 @@ COPY test.sh .
 ADD src src
 ADD tests tests
 
+RUN chmod 600 -R /etc/ssh
 RUN chmod +x test.sh
 
 RUN composer install --prefer-dist --no-progress
