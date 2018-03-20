@@ -25,7 +25,7 @@
 			}
 			/** @noinspection UnnecessaryParenthesesInspection */
 			return ($callback = function (callable $callback, INode $root, $source) {
-				$attributeList = $root->getAttributes();
+				$attributes = $root->getAttributes();
 				/** @noinspection ForeachSourceInspection */
 				foreach ($source as $key => $value) {
 					switch ($key) {
@@ -36,10 +36,10 @@
 							$root->setValue($value);
 							continue 2;
 						case 'attributes':
-							$attributeList->put((array)$value);
+							$attributes->put($value);
 							continue 2;
 						case 'metas':
-							$root->getMetas()->put((array)$value);
+							$root->getMetas()->put($value);
 							continue 2;
 						case 'nodes':
 							/** @noinspection ForeachSourceInspection */
@@ -72,7 +72,7 @@
 						}
 						continue;
 					}
-					$attributeList->set($key, $value);
+					$attributes->set($key, $value);
 				}
 				return $root;
 			})($callback, $root, $source);
@@ -146,11 +146,11 @@
 				$object->{'::value'} = $value;
 			}
 			if ($attributeList->isEmpty() === false) {
-				$object = (object)array_merge((array)$object, $attributeList->array());
+				$object = (object)array_merge((array)$object, $attributeList->toObject());
 			}
 			$metaList = $root->getMetas();
 			if ($metaList->isEmpty() === false) {
-				$object->{'::meta'} = $metaList->array();
+				$object->{'::meta'} = $metaList->toObject();
 			}
 			if ($value = $root->getValue()) {
 				$object->value = $value;

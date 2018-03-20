@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Node;
 
-	use Edde\Collection\IList;
+	use Edde\Collection\IHashMap;
 
-	interface IAttributes extends IList {
+	interface IAttributes extends IHashMap {
 		/**
 		 * @param string $name
 		 *

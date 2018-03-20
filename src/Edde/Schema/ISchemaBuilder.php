@@ -2,7 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
-	interface ISchemaBuilder {
+	use Edde\Collection\IHashMap;
+
+	interface ISchemaBuilder extends IHashMap {
 		/**
 		 * set alias to this schema; later in queries name or alias could be used
 		 *

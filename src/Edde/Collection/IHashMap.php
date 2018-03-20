@@ -3,11 +3,12 @@
 	namespace Edde\Collection;
 
 	use IteratorAggregate;
+	use stdClass;
 
 	/**
 	 * Simple list interface for array type checking (for a little bit more complex types than arrays).
 	 */
-	interface IList extends IteratorAggregate {
+	interface IHashMap extends IteratorAggregate {
 		/**
 		 * is the list empty?
 		 *
@@ -16,39 +17,26 @@
 		public function isEmpty(): bool;
 
 		/**
-		 * @param array $array
+		 * @param stdClass $object
 		 *
-		 * @return IList
+		 * @return IHashMap
 		 */
-		public function put(array $array): IList;
+		public function put(stdClass $object): IHashMap;
 
 		/**
-		 * merge the given array
+		 * @param stdClass $object
 		 *
-		 * @param array $array
-		 *
-		 * @return IList
+		 * @return IHashMap
 		 */
-		public function merge(array $array): IList;
+		public function merge(stdClass $object): IHashMap;
 
 		/**
 		 * @param string $name
 		 * @param mixed  $value
 		 *
-		 * @return IList
+		 * @return IHashMap
 		 */
-		public function set(string $name, $value): IList;
-
-		/**
-		 * add a value as an array value
-		 *
-		 * @param string     $name
-		 * @param mixed      $value
-		 * @param mixed|null $key
-		 *
-		 * @return IList
-		 */
-		public function add(string $name, $value, $key = null): IList;
+		public function set(string $name, $value): IHashMap;
 
 		/**
 		 * return true if the given name is set (present) even with null value
@@ -63,24 +51,24 @@
 		 * @param string               $name
 		 * @param string|callable|null $default
 		 *
-		 * @return mixed|IList
+		 * @return mixed|null|IHashMap
 		 */
 		public function get(string $name, $default = null);
 
 		/**
-		 * @return array
+		 * @return stdClass
 		 */
-		public function array(): array;
+		public function toObject(): stdClass;
 
 		/**
 		 * @param string $name
 		 *
-		 * @return IList
+		 * @return IHashMap
 		 */
-		public function remove(string $name): IList;
+		public function remove(string $name): IHashMap;
 
 		/**
-		 * @return IList
+		 * @return IHashMap
 		 */
-		public function clear(): IList;
+		public function clear(): IHashMap;
 	}

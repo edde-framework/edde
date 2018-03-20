@@ -2,74 +2,75 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
+	use Edde\Collection\IHashMap;
 	use Edde\Node\INode;
 	use Edde\Object;
 
 	class Property extends Object implements IProperty {
-		/** @var INode */
+		/** @var IHashMap */
 		protected $root;
-		/** @var INode */
-		protected $node;
+		/** @var IHashMap */
+		protected $hashMap;
 		/** @var INode */
 		protected $link;
 
-		public function __construct(INode $root, INode $node) {
+		public function __construct(IHashMap $root, IHashMap $hashMap) {
 			$this->root = $root;
-			$this->node = $node;
+			$this->hashMap = $hashMap;
 		}
 
 		/** @inheritdoc */
 		public function getName(): string {
-			return $this->node->getAttribute('name');
+			return (string)$this->hashMap->get('name');
 		}
 
 		/** @inheritdoc */
 		public function getType(): string {
-			return $this->node->getAttribute('type', 'string');
+			return (string)$this->hashMap->get('type', 'string');
 		}
 
 		/** @inheritdoc */
 		public function isPrimary(): bool {
-			return (bool)$this->node->getAttribute('primary', false);
+			return (bool)$this->hashMap->get('primary', false);
 		}
 
 		/** @inheritdoc */
 		public function isUnique(): bool {
-			return (bool)$this->node->getAttribute('unique', false);
+			return (bool)$this->hashMap->get('unique', false);
 		}
 
 		/** @inheritdoc */
 		public function isRequired(): bool {
-			return (bool)$this->node->getAttribute('required', false);
+			return (bool)$this->hashMap->get('required', false);
 		}
 
 		/** @inheritdoc */
 		public function isLink(): bool {
-			return (bool)$this->node->getAttribute('link', false);
+			return (bool)$this->hashMap->get('link', false);
 		}
 
 		/** @inheritdoc */
 		public function getGenerator(): ?string {
-			return $this->node->getAttribute('generator');
+			return $this->hashMap->get('generator');
 		}
 
 		/** @inheritdoc */
 		public function getFilter(): ?string {
-			return $this->node->getAttribute('filter');
+			return $this->hashMap->get('filter');
 		}
 
 		/** @inheritdoc */
 		public function getSanitizer(): ?string {
-			return $this->node->getAttribute('sanitizer');
+			return $this->hashMap->get('sanitizer');
 		}
 
 		/** @inheritdoc */
 		public function getValidator(): ?string {
-			return $this->node->getAttribute('validator');
+			return $this->hashMap->get('validator');
 		}
 
 		/** @inheritdoc */
 		public function getDefault() {
-			return $this->node->getAttribute('default');
+			return $this->hashMap->get('default');
 		}
 	}

@@ -83,14 +83,14 @@
 
 		/** @inheritdoc
 		 */
-		public function join(string $alias, string $schema, string $relation = null): \Edde\Entity\ICollection {
+		public function join(string $alias, string $schema, string $relation = null): ICollection {
 			$collection = $this->entityManager->collection('e', $this->schema->getName());
 			$collection->join('e', $schema, $alias, $this->toArray(), $relation);
 			return $collection;
 		}
 
 		/** @inheritdoc */
-		public function reverseJoin(string $alias, string $schema, string $relation = null): \Edde\Entity\ICollection {
+		public function reverseJoin(string $alias, string $schema, string $relation = null): ICollection {
 			$collection = $this->entityManager->collection($alias, $schema);
 			$collection->reverseJoin($alias, $this->schema->getName(), 'e', $this->toArray(), $relation);
 			return $collection;
