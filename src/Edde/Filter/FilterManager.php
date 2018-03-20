@@ -9,7 +9,7 @@
 		protected $filters = [];
 
 		/** @inheritdoc */
-		public function registerFilter(string $name, \Edde\Filter\IFilter $filter): IFilterManager {
+		public function registerFilter(string $name, IFilter $filter): IFilterManager {
 			$this->filters[$name] = $filter;
 			return $this;
 		}
@@ -23,7 +23,7 @@
 		}
 
 		/** @inheritdoc */
-		public function getFilter(string $name): \Edde\Filter\IFilter {
+		public function getFilter(string $name): IFilter {
 			if (isset($this->filters[$name]) === false) {
 				throw new FilterException(sprintf('Requested unknown filter [%s].', $name));
 			}
