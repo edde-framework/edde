@@ -164,6 +164,7 @@
 		}
 
 		/**
+		 * @throws DuplicateEntryException
 		 * @throws EntityNotFoundException
 		 */
 		public function testUpdate() {
@@ -187,6 +188,7 @@
 		}
 
 		/**
+		 * @throws DuplicateEntryException
 		 * @throws EntityException
 		 * @throws EntityNotFoundException
 		 * @throws SchemaException
@@ -232,6 +234,7 @@
 		}
 
 		/**
+		 * @throws DuplicateEntryException
 		 * @throws EntityException
 		 * @throws EntityNotFoundException
 		 * @throws SchemaException
@@ -252,8 +255,9 @@
 		}
 
 		/**
-		 * @throws SchemaException
+		 * @throws DuplicateEntryException
 		 * @throws EntityException
+		 * @throws SchemaException
 		 */
 		public function testRelationTo() {
 			$foo = $this->entityManager->create(FooSchema::class, [
@@ -469,8 +473,9 @@
 		}
 
 		/**
-		 * @throws SchemaException
+		 * @throws DuplicateEntryException
 		 * @throws EntityException
+		 * @throws SchemaException
 		 */
 		public function testMoreRelations() {
 			$this->schemaManager->load(SourceOneTargetSchema::class);
@@ -490,6 +495,7 @@
 		}
 
 		/**
+		 * @throws DuplicateEntryException
 		 * @throws EntityException
 		 * @throws EntityNotFoundException
 		 * @throws SchemaException
@@ -515,6 +521,7 @@
 		}
 
 		/**
+		 * @throws DuplicateEntryException
 		 * @throws EntityNotFoundException
 		 */
 		public function testDeleteEntity() {
@@ -531,6 +538,7 @@
 		}
 
 		/**
+		 * @throws DuplicateEntryException
 		 * @throws EntityException
 		 * @throws EntityNotFoundException
 		 * @throws SchemaException
@@ -572,6 +580,7 @@
 		}
 
 		/**
+		 * @throws DuplicateEntryException
 		 * @throws EntityException
 		 * @throws EntityNotFoundException
 		 * @throws SchemaException
@@ -612,6 +621,7 @@
 		}
 
 		/**
+		 * @throws DuplicateEntryException
 		 * @throws EntityException
 		 * @throws EntityNotFoundException
 		 * @throws SchemaException
