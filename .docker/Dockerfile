@@ -24,6 +24,7 @@ COPY .docker/php-fpm.conf /etc/php7/php-fpm.d/zz-www.conf
 COPY .docker/start.sh /edde/.docker/start.sh
 RUN chmod +x /edde/.docker/start.sh
 
+COPY .docker/ssh/* /etc/ssh/
 COPY composer.json .
 COPY composer.lock .
 COPY loader.php .
