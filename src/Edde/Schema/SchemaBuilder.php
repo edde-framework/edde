@@ -2,12 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
-	use Edde\Collection\HashMap;
-	use Edde\Collection\IHashMap;
+	use Edde\Object;
+	use stdClass;
 
-	class SchemaBuilder extends HashMap implements ISchemaBuilder {
-		/** @var IHashMap[] */
-		protected $properties = [];
+	class SchemaBuilder extends Object implements ISchemaBuilder {
+		/** @var stdClass */
+		protected $source;
 		/** @var IPropertyBuilder[] */
 		protected $propertyBuilders = [];
 		/** @var ISchema */
@@ -16,24 +16,24 @@
 		protected $linkBuilders = [];
 
 		public function __construct(string $name) {
-			parent::__construct((object)['name' => $name]);
+			$this->source = (object)['name' => $name];
 		}
 
 		/** @inheritdoc */
 		public function alias(string $alias): ISchemaBuilder {
-			$this->set('alias', $alias);
+			$this->source->alias = $alias;
 			return $this;
 		}
 
 		/** @inheritdoc */
 		public function relation(bool $relation): ISchemaBuilder {
-			$this->set('is-relation', $relation);
+			$this->source->isRelation = $relation;
 			return $this;
 		}
 
 		/** @inheritdoc */
 		public function property(string $name): IPropertyBuilder {
-			return $this->propertyBuilders[$name] = new PropertyBuilder($this, $name);
+			return $this->propertyBuilders[$name] = new PropertyBuilder($name);
 		}
 
 		/** @inheritdoc */
@@ -59,8 +59,8 @@
 		/** @inheritdoc */
 		public function link(ILinkBuilder $linkBuilder): ISchemaBuilder {
 			$this->linkBuilders[] = $linkBuilder;
-			if ($this->get('is-relation', false) && count($this->linkBuilders) > 2) {
-				throw new SchemaException(sprintf('Relation schema [%s] must have exactly two links; if you need more links, remove "relation" flag from the schema.', $this->get('name')));
+			if (($this->source->isRelation ?? false) && count($this->linkBuilders) > 2) {
+				throw new SchemaException(sprintf('Relation schema [%s] must have exactly two links; if you need more links, remove "relation" flag from the schema.', $this->source->name));
 			}
 			return $this;
 		}
@@ -75,10 +75,10 @@
 				$properties[$name] = $propertyBuilder->getProperty();
 			}
 			return $this->schema = new Schema(
-				(string)$this->get('name'),
+				$this->source->name,
 				$properties,
-				(bool)$this->get('is-relation', false),
-				$this->get('alias')
+				$this->source->isRelation ?? false,
+				$this->source->alias ?? null
 			);
 		}
 

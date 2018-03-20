@@ -8,14 +8,11 @@
 
 	class Property extends Object implements IProperty {
 		/** @var IHashMap */
-		protected $root;
-		/** @var IHashMap */
 		protected $hashMap;
 		/** @var INode */
 		protected $link;
 
-		public function __construct(IHashMap $root, IHashMap $hashMap) {
-			$this->root = $root;
+		public function __construct(IHashMap $hashMap) {
 			$this->hashMap = $hashMap;
 		}
 

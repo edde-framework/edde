@@ -3,7 +3,6 @@
 	namespace Edde\Schema;
 
 	use Edde\Collection\HashMap;
-	use Edde\Collection\IHashMap;
 	use Edde\Node\INode;
 
 	class PropertyBuilder extends HashMap implements IPropertyBuilder {
@@ -12,9 +11,8 @@
 		/** @var IProperty */
 		protected $property;
 
-		public function __construct(IHashMap $root, string $name) {
+		public function __construct(string $name) {
 			parent::__construct((object)['name' => $name]);
-			$this->root = $root;
 		}
 
 		/** @inheritdoc */
@@ -82,6 +80,6 @@
 
 		/** @inheritdoc */
 		public function getProperty(): IProperty {
-			return $this->property ?: $this->property = new Property($this->root, $this);
+			return $this->property ?: $this->property = new Property($this);
 		}
 	}
