@@ -10,6 +10,13 @@
             </list>
           </settings>
         </remote-mappings>
+        <remote-mappings server-id="php@24e550ee-60c1-4aa1-a4a7-b059cc3d8574">
+          <settings>
+            <list>
+              <mapping local-root="$PROJECT_DIR$" remote-root="/edde" />
+            </list>
+          </settings>
+        </remote-mappings>
       </list>
     </list>
   </component>

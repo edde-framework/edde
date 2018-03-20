@@ -29,5 +29,11 @@
 		"roave/security-advisories": "dev-master",
 		"graphaware/neo4j-bolt": "dev-master",
 		"phpunit/phpunit": "^6.5.0"
+	},
+	"archive": {
+		"exclude": [
+			"*",
+			"!/src"
+		]
 	}
 }
