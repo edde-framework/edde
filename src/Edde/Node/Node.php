@@ -2,8 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Node;
 
-	use stdClass;
-
 	/**
 	 * Default full featured node implementation.
 	 */
@@ -23,10 +21,10 @@
 		 * FORTRAN is not a language. It's a way of turning a multi-million dollar mainframe into a $50 programmable scientific calculator.
 		 *
 		 * @param string     $name
-		 * @param stdClass   $attributes
+		 * @param array      $attributes
 		 * @param mixed|null $value
 		 */
-		public function __construct(string $name = null, stdClass $attributes = null, $value = null) {
+		public function __construct(string $name = null, array $attributes = null, $value = null) {
 			parent::__construct();
 			$this->name = $name;
 			$this->value = $value;

@@ -25,7 +25,7 @@
 		 * @throws NodeException
 		 */
 		public function testSimpleAttribute() {
-			$this->xmlExportService->export(TreeIterator::recursive(new Node('root', (object)[
+			$this->xmlExportService->export(TreeIterator::recursive(new Node('root', [
 				'foo' => 'bar',
 				'bar' => 'foo',
 			], null), true), $file = File::create(__DIR__ . '/temp/export.xml'));
@@ -37,7 +37,7 @@
 		 * @throws NodeException
 		 */
 		public function testSimpleAttributeEscape() {
-			$this->xmlExportService->export(TreeIterator::recursive(new Node('root', (object)[
+			$this->xmlExportService->export(TreeIterator::recursive(new Node('root', [
 				'foo' => 'bar',
 				'bar' => 'fo"o',
 			], null), true), $file = File::create(__DIR__ . '/temp/export.xml'));
@@ -49,13 +49,13 @@
 		 * @throws NodeException
 		 */
 		public function testSmallNode() {
-			$node = new Node('root', (object)[
+			$node = new Node('root', [
 				'foo' => 'bar',
 				'bar' => 'fo"o',
 			]);
 			$node->add(new Node('foo'));
 			$node->add($bar = new Node('bar', null, 'this-will-be-ignored'));
-			$bar->add(new Node('node-inside-node', (object)['moo' => 'hello']));
+			$bar->add(new Node('node-inside-node', ['moo' => 'hello']));
 			$bar->add($hidden = new Node('node-inside-node'));
 			$hidden->add(new Node('a-little-secret-here', null, 'whoaaaaa'));
 			$bar->add(new Node('node-inside-node-node'));
