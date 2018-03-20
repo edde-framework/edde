@@ -11,13 +11,9 @@
 	 * Iterator over nodes support with helper classes for recursive iterator, ...
 	 */
 	class TreeIterator extends Object implements RecursiveIterator {
-		/**
-		 * @var ITree
-		 */
+		/** @var ITree */
 		protected $tree;
-		/**
-		 * @var Iterator
-		 */
+		/** @var Iterator */
 		protected $iterator;
 
 		/**
@@ -73,8 +69,6 @@
 		 * @param bool  $isRoot
 		 *
 		 * @return RecursiveIteratorIterator|INode[]
-		 *
-		 * @throws NodeException
 		 */
 		static public function recursive(ITree $tree, bool $isRoot = false): RecursiveIteratorIterator {
 			if ($isRoot === true) {
