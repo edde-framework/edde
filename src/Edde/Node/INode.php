@@ -53,20 +53,6 @@
 		public function setAttribute(string $name, $value): INode;
 
 		/**
-		 * @param array $attributes
-		 *
-		 * @return INode
-		 */
-		public function putAttributes(array $attributes): INode;
-
-		/**
-		 * @param array $attributes
-		 *
-		 * @return INode
-		 */
-		public function mergeAttributes(array $attributes): INode;
-
-		/**
 		 * is the given attribute name present?
 		 *
 		 * @param string $name
@@ -99,20 +85,6 @@
 		 * @return INode
 		 */
 		public function setMeta(string $name, $value): INode;
-
-		/**
-		 * @param array $metaList
-		 *
-		 * @return INode
-		 */
-		public function putMetas(array $metaList): INode;
-
-		/**
-		 * @param array $metas
-		 *
-		 * @return INode
-		 */
-		public function mergeMetas(array $metas): INode;
 
 		/**
 		 * @param string $name

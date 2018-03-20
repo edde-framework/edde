@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Node;
 
-	use ArrayIterator;
 	use Edde\Object;
 
 	/**
@@ -98,7 +97,7 @@
 
 		/** @inheritdoc */
 		public function getIterator() {
-			return new ArrayIterator($this->trees);
+			yield from $this->trees;
 		}
 
 		/** @inheritdoc */

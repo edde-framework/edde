@@ -67,18 +67,6 @@
 		}
 
 		/** @inheritdoc */
-		public function putAttributes(array $attributes): INode {
-			$this->attributes->put((object)$attributes);
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function mergeAttributes(array $attributes): INode {
-			$this->attributes->merge((object)$attributes);
-			return $this;
-		}
-
-		/** @inheritdoc */
 		public function getMetas(): IAttributes {
 			return $this->metas;
 		}
@@ -86,18 +74,6 @@
 		/** @inheritdoc */
 		public function setMeta(string $name, $value): INode {
 			$this->metas->set($name, $value);
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function putMetas(array $metaList): INode {
-			$this->metas->put((object)$metaList);
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function mergeMetas(array $metas): INode {
-			$this->metas->merge((object)$metas);
 			return $this;
 		}
 

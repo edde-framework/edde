@@ -110,7 +110,7 @@
 					$node->setValue($v);
 					continue;
 				} else if ($k === '::meta') {
-					$node->putMetas((array)$v);
+					$node->getMetas()->put($v);
 					continue;
 				} else if ($v instanceof stdClass) {
 					$node->add(self::toNode($v, $createNode($class, $k), $class));
