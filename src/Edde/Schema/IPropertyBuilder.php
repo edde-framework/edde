@@ -42,38 +42,38 @@
 		/**
 		 * name of value generator for this property (if value is null)
 		 *
-		 * @param string $name
+		 * @param string $generator
 		 *
 		 * @return IPropertyBuilder
 		 */
-		public function generator(string $name): IPropertyBuilder;
+		public function generator(string $generator): IPropertyBuilder;
 
 		/**
 		 * set the name of filter responsible for value filtering of this property
 		 *
-		 * @param string $name
+		 * @param string $filter
 		 *
 		 * @return IPropertyBuilder
 		 */
-		public function filter(string $name): IPropertyBuilder;
+		public function filter(string $filter): IPropertyBuilder;
 
 		/**
 		 * set a sanitizer for this property
 		 *
-		 * @param string $name
+		 * @param string $sanitizer
 		 *
 		 * @return IPropertyBuilder
 		 */
-		public function sanitizer(string $name): IPropertyBuilder;
+		public function sanitizer(string $sanitizer): IPropertyBuilder;
 
 		/**
 		 * set a validator for this property
 		 *
-		 * @param string $name
+		 * @param string $validator
 		 *
 		 * @return IPropertyBuilder
 		 */
-		public function validator(string $name): IPropertyBuilder;
+		public function validator(string $validator): IPropertyBuilder;
 
 		/**
 		 * mark property as a link (just a flag)

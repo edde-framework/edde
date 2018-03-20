@@ -86,6 +86,9 @@
 			self::assertFalse($entity->isDirty(), 'entity is still dirty, oops!');
 		}
 
+		/**
+		 * @throws DuplicateEntryException
+		 */
 		public function testInsertException() {
 			$this->expectException(SchemaValidationException::class);
 			$this->expectExceptionMessage('Validation of schema [Edde\Common\Schema\FooSchema] failed.');
@@ -94,6 +97,9 @@
 			])->save();
 		}
 
+		/**
+		 * @throws DuplicateEntryException
+		 */
 		public function testInsertException2() {
 			$this->expectException(SchemaValidationException::class);
 			$this->expectExceptionMessage('Validation of schema [Edde\Common\Schema\FooSchema] failed.');
@@ -103,6 +109,9 @@
 			])->save();
 		}
 
+		/**
+		 * @throws DuplicateEntryException
+		 */
 		public function testInsertUnique() {
 			$this->expectException(DuplicateEntryException::class);
 			$this->entityManager->create(FooSchema::class, [
@@ -113,6 +122,9 @@
 			])->save();
 		}
 
+		/**
+		 * @throws DuplicateEntryException
+		 */
 		public function testSave() {
 			$entity = $this->entityManager->create(SimpleSchema::class, [
 				'name'     => 'some name for this entity',

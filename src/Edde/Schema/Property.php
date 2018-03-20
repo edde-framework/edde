@@ -2,72 +2,72 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
-	use Edde\Collection\IHashMap;
 	use Edde\Node\INode;
 	use Edde\Object;
+	use stdClass;
 
 	class Property extends Object implements IProperty {
-		/** @var IHashMap */
-		protected $hashMap;
+		/** @var stdClass */
+		protected $source;
 		/** @var INode */
 		protected $link;
 
-		public function __construct(IHashMap $hashMap) {
-			$this->hashMap = $hashMap;
+		public function __construct(stdClass $source) {
+			$this->source = $source;
 		}
 
 		/** @inheritdoc */
 		public function getName(): string {
-			return (string)$this->hashMap->get('name');
+			return (string)$this->source->name;
 		}
 
 		/** @inheritdoc */
 		public function getType(): string {
-			return (string)$this->hashMap->get('type', 'string');
+			return (string)($this->source->type ?? 'string');
 		}
 
 		/** @inheritdoc */
 		public function isPrimary(): bool {
-			return (bool)$this->hashMap->get('primary', false);
+			return (bool)($this->source->primary ?? false);
 		}
 
 		/** @inheritdoc */
 		public function isUnique(): bool {
-			return (bool)$this->hashMap->get('unique', false);
+			return (bool)($this->source->unique ?? false);
 		}
 
 		/** @inheritdoc */
 		public function isRequired(): bool {
-			return (bool)$this->hashMap->get('required', false);
+			return (bool)($this->source->required ?? false);
 		}
 
 		/** @inheritdoc */
 		public function isLink(): bool {
-			return (bool)$this->hashMap->get('link', false);
+			return (bool)($this->source->link ?? false);
 		}
 
 		/** @inheritdoc */
 		public function getGenerator(): ?string {
-			return $this->hashMap->get('generator');
+			return isset($this->source->generator) ? (string)$this->source->generator : null;
 		}
 
 		/** @inheritdoc */
 		public function getFilter(): ?string {
-			return $this->hashMap->get('filter');
+			return isset($this->source->filter) ? (string)$this->source->filter : null;
 		}
 
 		/** @inheritdoc */
 		public function getSanitizer(): ?string {
-			return $this->hashMap->get('sanitizer');
+			return isset($this->source->sanitizer) ? (string)$this->source->sanitizer : null;
 		}
 
 		/** @inheritdoc */
 		public function getValidator(): ?string {
-			return $this->hashMap->get('validator');
+			return isset($this->source->validator) ? (string)$this->source->validator : null;
 		}
 
 		/** @inheritdoc */
 		public function getDefault() {
-			return $this->hashMap->get('default');
+			return isset($this->source->default) ? $this->source->default : null;
 		}
 	}
