@@ -68,13 +68,13 @@
 
 		/** @inheritdoc */
 		public function putAttributes(array $attributes): INode {
-			$this->attributes->put($attributes);
+			$this->attributes->put((object)$attributes);
 			return $this;
 		}
 
 		/** @inheritdoc */
 		public function mergeAttributes(array $attributes): INode {
-			$this->attributes->merge($attributes);
+			$this->attributes->merge((object)$attributes);
 			return $this;
 		}
 
@@ -91,13 +91,13 @@
 
 		/** @inheritdoc */
 		public function putMetas(array $metaList): INode {
-			$this->metas->put($metaList);
+			$this->metas->put((object)$metaList);
 			return $this;
 		}
 
 		/** @inheritdoc */
 		public function mergeMetas(array $metas): INode {
-			$this->metas->merge($metas);
+			$this->metas->merge((object)$metas);
 			return $this;
 		}
 

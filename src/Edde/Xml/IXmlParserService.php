@@ -8,18 +8,18 @@
 	/**
 	 * Event based xml parser.
 	 */
-	interface IXmlParser extends IConfigurable {
+	interface IXmlParserService extends IConfigurable {
 		/**
 		 * parse the given string
 		 *
 		 * @param string      $string
 		 * @param IXmlHandler $xmlHandler
 		 *
-		 * @return IXmlParser
+		 * @return IXmlParserService
 		 *
 		 * @throws XmlException
 		 */
-		public function string(string $string, IXmlHandler $xmlHandler): IXmlParser;
+		public function string(string $string, IXmlHandler $xmlHandler): IXmlParserService;
 
 		/**
 		 * shorthand for usage with files
@@ -27,11 +27,11 @@
 		 * @param string      $file
 		 * @param IXmlHandler $xmlHandler
 		 *
-		 * @return IXmlParser
+		 * @return IXmlParserService
 		 *
 		 * @throws XmlException
 		 */
-		public function file(string $file, IXmlHandler $xmlHandler): IXmlParser;
+		public function file(string $file, IXmlHandler $xmlHandler): IXmlParserService;
 
 		/**
 		 * parse the input stream and emit events to the given xml handler
@@ -39,9 +39,9 @@
 		 * @param IResource   $resource
 		 * @param IXmlHandler $xmlHandler
 		 *
-		 * @return IXmlParser
+		 * @return IXmlParserService
 		 *
 		 * @throws XmlException
 		 */
-		public function parse(IResource $resource, IXmlHandler $xmlHandler): IXmlParser;
+		public function parse(IResource $resource, IXmlHandler $xmlHandler): IXmlParserService;
 	}

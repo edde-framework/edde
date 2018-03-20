@@ -2,20 +2,20 @@
 	declare(strict_types=1);
 	namespace Edde\Xml;
 
-	use Edde\Inject\Xml\XmlParser;
+	use Edde\Inject\Xml\XmlParserService;
 	use Edde\TestCase;
 	use TestXmlHandler;
 
 	require_once(__DIR__ . '/assets/assets.php');
 
 	class XmlParserTest extends TestCase {
-		use XmlParser;
+		use XmlParserService;
 
 		/**
 		 * @throws XmlException
 		 */
 		public function testSimple() {
-			$this->xmlParser->file(__DIR__ . '/assets/simple.xml', $handler = new TestXmlHandler());
+			$this->xmlParserService->file(__DIR__ . '/assets/simple.xml', $handler = new TestXmlHandler());
 			self::assertEquals([
 				[
 					'root',
@@ -28,7 +28,7 @@
 		 * @throws XmlException
 		 */
 		public function testSimpleShort() {
-			$this->xmlParser->file(__DIR__ . '/assets/simple-short.xml', $handler = new TestXmlHandler());
+			$this->xmlParserService->file(__DIR__ . '/assets/simple-short.xml', $handler = new TestXmlHandler());
 			self::assertEquals([
 				[
 					'root',
@@ -41,7 +41,7 @@
 		 * @throws XmlException
 		 */
 		public function testSimpleAttribute() {
-			$this->xmlParser->file(__DIR__ . '/assets/simple-attribute.xml', $handler = new TestXmlHandler());
+			$this->xmlParserService->file(__DIR__ . '/assets/simple-attribute.xml', $handler = new TestXmlHandler());
 			self::assertEquals([
 				[
 					'root',
@@ -58,7 +58,7 @@
 		 * @throws XmlException
 		 */
 		public function testSimpleShortAttribute() {
-			$this->xmlParser->file(__DIR__ . '/assets/simple-short-attribute.xml', $handler = new TestXmlHandler());
+			$this->xmlParserService->file(__DIR__ . '/assets/simple-short-attribute.xml', $handler = new TestXmlHandler());
 			self::assertEquals([
 				[
 					'root',
@@ -75,7 +75,7 @@
 		 * @throws XmlException
 		 */
 		public function testBitLessSimple() {
-			$this->xmlParser->file(__DIR__ . '/assets/a-bit-less-simple.xml', $handler = new TestXmlHandler());
+			$this->xmlParserService->file(__DIR__ . '/assets/a-bit-less-simple.xml', $handler = new TestXmlHandler());
 			self::assertEquals([
 				[
 					'root',
@@ -110,7 +110,7 @@
 		 * @throws XmlException
 		 */
 		public function testComment() {
-			$this->xmlParser->file(__DIR__ . '/assets/comment-test.xml', $handler = new TestXmlHandler());
+			$this->xmlParserService->file(__DIR__ . '/assets/comment-test.xml', $handler = new TestXmlHandler());
 			self::assertEquals([
 				[
 					'node',
@@ -127,7 +127,7 @@
 		 * @throws XmlException
 		 */
 		public function testSimpleMultilineAttributes() {
-			$this->xmlParser->file(__DIR__ . '/assets/simple-multiline-attributes.xml', $handler = new TestXmlHandler());
+			$this->xmlParserService->file(__DIR__ . '/assets/simple-multiline-attributes.xml', $handler = new TestXmlHandler());
 			self::assertEquals([
 				[
 					'f',
@@ -143,7 +143,7 @@
 		 * @throws XmlException
 		 */
 		public function testMultilineAttributes() {
-			$this->xmlParser->file(__DIR__ . '/assets/multiline-attributes.xml', $handler = new TestXmlHandler());
+			$this->xmlParserService->file(__DIR__ . '/assets/multiline-attributes.xml', $handler = new TestXmlHandler());
 			self::assertEquals([
 				[
 					'root',
@@ -163,7 +163,7 @@
 		 * @throws XmlException
 		 */
 		public function testXmlHeader() {
-			$this->xmlParser->file(__DIR__ . '/assets/xml-with-header.xml', $handler = new TestXmlHandler());
+			$this->xmlParserService->file(__DIR__ . '/assets/xml-with-header.xml', $handler = new TestXmlHandler());
 			self::assertEquals([
 				[
 					'foo',
@@ -176,7 +176,7 @@
 		 * @throws XmlException
 		 */
 		public function testNewlineBetweenNodes() {
-			$this->xmlParser->file(__DIR__ . '/assets/newline-between-nodes.xml', $handler = new TestXmlHandler());
+			$this->xmlParserService->file(__DIR__ . '/assets/newline-between-nodes.xml', $handler = new TestXmlHandler());
 			self::assertEquals([
 				[
 					'r',
@@ -203,7 +203,7 @@
 		 * @throws XmlException
 		 */
 		public function testStringParse() {
-			$this->xmlParser->string('<r>
+			$this->xmlParserService->string('<r>
 	<node attr="ibute" another-attribute="foo"/>
 	<another-node foo="bar" boo="poo"/>
 </r>

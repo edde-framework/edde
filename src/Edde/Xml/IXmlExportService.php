@@ -7,7 +7,7 @@
 	use Edde\Node\INode;
 	use Iterator;
 
-	interface IXmlExport extends IConfigurable {
+	interface IXmlExportService extends IConfigurable {
 		/**
 		 * export the given node to the xml file
 		 *

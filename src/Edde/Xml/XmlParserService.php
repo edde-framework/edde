@@ -11,32 +11,32 @@
 	/**
 	 * Simple and fast event based xml parser.
 	 */
-	class XmlParser extends Object implements IXmlParser {
+	class XmlParserService extends Object implements IXmlParserService {
 		use StringUtils;
-		const XML_TYPE_WARP = null;
-		const XML_TYPE_OPENTAG = 1;
-		const XML_TYPE_CLOSETAG = 2;
-		const XML_TYPE_SHORTTAG = 4;
-		const XML_TYPE_DOCTYPE = 8;
-		const XML_TYPE_CDATA = 16;
-		const XML_TYPE_COMMENT = 32;
-		const XML_TYPE_OPEN_COMMENT = 64;
-		const XML_TYPE_CLOSE_COMMENT = 128;
-		const XML_TYPE_HEADER = 256;
-		const XML_TYPE_CLOSE_HEADER = 512;
+		protected const XML_TYPE_WARP = null;
+		protected const XML_TYPE_OPENTAG = 1;
+		protected const XML_TYPE_CLOSETAG = 2;
+		protected const XML_TYPE_SHORTTAG = 4;
+		protected const XML_TYPE_DOCTYPE = 8;
+		protected const XML_TYPE_CDATA = 16;
+		protected const XML_TYPE_COMMENT = 32;
+		protected const XML_TYPE_OPEN_COMMENT = 64;
+		protected const XML_TYPE_CLOSE_COMMENT = 128;
+		protected const XML_TYPE_HEADER = 256;
+		protected const XML_TYPE_CLOSE_HEADER = 512;
 
 		/** @inheritdoc */
-		public function file(string $file, IXmlHandler $xmlHandler): IXmlParser {
+		public function file(string $file, IXmlHandler $xmlHandler): IXmlParserService {
 			return $this->parse(File::create($file), $xmlHandler);
 		}
 
 		/** @inheritdoc */
-		public function string(string $string, IXmlHandler $xmlHandler): IXmlParser {
+		public function string(string $string, IXmlHandler $xmlHandler): IXmlParserService {
 			return $this->iterate($this->stringUtils->createIterator($string), $xmlHandler);
 		}
 
 		/** @inheritdoc */
-		public function parse(IResource $resource, IXmlHandler $xmlHandler): IXmlParser {
+		public function parse(IResource $resource, IXmlHandler $xmlHandler): IXmlParserService {
 			/**
 			 * this interesting piece of things is reading line based data from $resource and
 			 * streaming character per character to the iterator

@@ -76,10 +76,10 @@
 	use Edde\Utils\StringUtils;
 	use Edde\Validator\IValidatorManager;
 	use Edde\Validator\ValidatorManager;
-	use Edde\Xml\IXmlExport;
-	use Edde\Xml\IXmlParser;
-	use Edde\Xml\XmlExport;
-	use Edde\Xml\XmlParser;
+	use Edde\Xml\IXmlExportService;
+	use Edde\Xml\IXmlParserService;
+	use Edde\Xml\XmlExportService;
+	use Edde\Xml\XmlParserService;
 	use ReflectionException;
 	use ReflectionMethod;
 	use stdClass;
@@ -321,52 +321,52 @@
 				/**
 				 * schema support
 				 */
-				ISchemaManager::class      => SchemaManager::class,
+				ISchemaManager::class    => SchemaManager::class,
 				/**
 				 * generator (related to schema) support
 				 */
-				IGeneratorManager::class   => GeneratorManager::class,
-				IFilterManager::class      => FilterManager::class,
-				ISanitizerManager::class   => SanitizerManager::class,
-				IValidatorManager::class   => ValidatorManager::class,
+				IGeneratorManager::class => GeneratorManager::class,
+				IFilterManager::class    => FilterManager::class,
+				ISanitizerManager::class => SanitizerManager::class,
+				IValidatorManager::class => ValidatorManager::class,
 				/**
 				 * random & security support
 				 */
-				IRandomService::class      => RandomService::class,
-				IPasswordService::class    => PasswordService::class,
+				IRandomService::class    => RandomService::class,
+				IPasswordService::class  => PasswordService::class,
 				/**
 				 * storage support
 				 */
-				IEntityManager::class      => EntityManager::class,
-				IStorage::class            => Storage::class,
-				IDriver::class             => self::exception(sprintf('Please register driver to use Storage.', IDriver::class)),
+				IEntityManager::class    => EntityManager::class,
+				IStorage::class          => Storage::class,
+				IDriver::class           => self::exception(sprintf('Please register driver to use Storage.', IDriver::class)),
 				/**
 				 * an application upgrades support
 				 */
-				IUpgradeManager::class     => self::exception(sprintf('You have to provide you own implementation of [%s]; you can use [%s] to get some little help.', IUpgradeManager::class, AbstractUpgradeManager::class)),
+				IUpgradeManager::class   => self::exception(sprintf('You have to provide you own implementation of [%s]; you can use [%s] to get some little help.', IUpgradeManager::class, AbstractUpgradeManager::class)),
 				/**
 				 * Xml support
 				 */
-				IXmlExport::class          => XmlExport::class,
-				IXmlParser::class          => XmlParser::class,
+				IXmlExportService::class => XmlExportService::class,
+				IXmlParserService::class => XmlParserService::class,
 				/**
 				 * Message bus support; probably most important stuff of the
 				 * framework and the top killing feature :)
 				 */
-				IMessageBus::class         => MessageBus::class,
-				IMessageService::class     => MessageService::class,
-				IEventBus::class           => EventBus::class,
-				IRequestService::class     => RequestService::class,
-				IConfigService::class      => ConfigService::class,
-				IConfigLoader::class       => ConfigLoader::class,
+				IMessageBus::class       => MessageBus::class,
+				IMessageService::class   => MessageService::class,
+				IEventBus::class         => EventBus::class,
+				IRequestService::class   => RequestService::class,
+				IConfigService::class    => ConfigService::class,
+				IConfigLoader::class     => ConfigLoader::class,
 				/**
 				 * an application handles lifecycle workflow
 				 */
-				IApplication::class        => Application::class,
+				IApplication::class      => Application::class,
 				/**
 				 * magical factory for an application execution
 				 */
-				'application'              => IApplication::class . '::run',
+				'application'            => IApplication::class . '::run',
 			];
 		}
 

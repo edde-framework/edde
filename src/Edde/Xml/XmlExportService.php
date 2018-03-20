@@ -2,17 +2,18 @@
 	declare(strict_types=1);
 	namespace Edde\Xml;
 
+	use Edde\File\IFile;
+	use Edde\Node\INode;
+	use Edde\Object;
 	use Iterator;
 	use SplStack;
 
-	class XmlExport extends AbstractXmlExport {
-		/**
-		 * @inheritdoc
-		 */
+	class XmlExportService extends Object implements IXmlExportService {
+		/** @inheritdoc */
 		public function node(Iterator $iterator): void {
 			$stack = new SplStack();
 			$level = -1;
-			/** @var $node \Edde\Node\INode */
+			/** @var $node INode */
 			foreach ($iterator as $node) {
 				$value = null;
 				if ($node->getLevel() < $level) {
@@ -46,5 +47,20 @@
 			while ($stack->isEmpty() === false) {
 				echo $stack->pop();
 			}
+		}
+
+		/** @inheritdoc */
+		public function export(Iterator $iterator, IFile $file): IFile {
+			$file->openForWrite();
+			$file->write($this->string($iterator));
+			$file->close();
+			return $file;
+		}
+
+		/** @inheritdoc */
+		public function string(Iterator $iterator): string {
+			ob_start();
+			$this->node($iterator);
+			return ob_get_clean();
 		}
 	}
