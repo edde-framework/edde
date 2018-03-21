@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Generator;
 
-	use Edde\Inject\Crypt\RandomService;
+	use Edde\Service\Crypt\RandomService;
 
 	class UuidGenerator extends AbstractGenerator {
 		use RandomService;

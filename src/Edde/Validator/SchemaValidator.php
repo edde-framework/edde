@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Validator;
 
-	use Edde\Inject\Schema\SchemaManager;
 	use Edde\Schema\IProperty;
+	use Edde\Service\Schema\SchemaManager;
 
 	class SchemaValidator extends AbstractValidator {
 		use SchemaManager;

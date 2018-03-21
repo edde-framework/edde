@@ -4,10 +4,10 @@
 
 	use Edde\Element\IRequest;
 	use Edde\Element\Request;
-	use Edde\Inject\Container\Container;
-	use Edde\Inject\Crypt\RandomService;
-	use Edde\Inject\Utils\StringUtils;
 	use Edde\Runtime\RuntimeException;
+	use Edde\Service\Container\Container;
+	use Edde\Service\Crypt\RandomService;
+	use Edde\Service\Utils\StringUtils;
 	use Throwable;
 
 	/**

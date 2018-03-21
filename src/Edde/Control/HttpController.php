@@ -11,10 +11,10 @@
 	use Edde\Http\EmptyBodyException;
 	use Edde\Http\IResponse;
 	use Edde\Http\Response;
-	use Edde\Inject\Http\RequestService;
-	use Edde\Inject\Schema\SchemaManager;
 	use Edde\Schema\SchemaException;
 	use Edde\Schema\SchemaValidationException;
+	use Edde\Service\Http\RequestService;
+	use Edde\Service\Schema\SchemaManager;
 	use Edde\Validator\ValidatorException;
 
 	/**

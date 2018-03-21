@@ -3,9 +3,9 @@
 	namespace Edde\Router;
 
 	use Edde\Element\IRequest;
-	use Edde\Inject\Http\RequestService;
-	use Edde\Inject\Runtime\Runtime;
 	use Edde\Object;
+	use Edde\Service\Http\RequestService;
+	use Edde\Service\Runtime\Runtime;
 
 	abstract class AbstractRouter extends Object implements IRouter {
 		use RequestService;

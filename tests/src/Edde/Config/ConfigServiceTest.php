@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Config;
 
-	use Edde\Inject\Config\ConfigLoader;
-	use Edde\Inject\Config\ConfigService;
+	use Edde\Service\Config\ConfigLoader;
+	use Edde\Service\Config\ConfigService;
 	use Edde\TestCase;
 
 	class ConfigServiceTest extends TestCase {

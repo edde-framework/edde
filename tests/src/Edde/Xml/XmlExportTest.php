@@ -3,10 +3,10 @@
 	namespace Edde\Xml;
 
 	use Edde\File\File;
-	use Edde\Inject\Xml\XmlExportService;
 	use Edde\Node\Node;
 	use Edde\Node\NodeException;
 	use Edde\Node\TreeIterator;
+	use Edde\Service\Xml\XmlExportService;
 	use Edde\TestCase;
 
 	class XmlExportTest extends TestCase {

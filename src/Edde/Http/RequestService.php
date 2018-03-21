@@ -4,9 +4,9 @@
 
 	use Edde\Content\InputContent;
 	use Edde\Content\PostContent;
-	use Edde\Inject\Converter\ConverterManager;
-	use Edde\Inject\Http\HttpUtils;
 	use Edde\Object;
+	use Edde\Service\Converter\ConverterManager;
+	use Edde\Service\Http\HttpUtils;
 	use Edde\Url\IUrl;
 	use Edde\Url\Url;
 

@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Connection;
 
-	use Edde\Inject\Config\ConfigService;
-	use Edde\Inject\Schema\SchemaManager;
 	use Edde\Object;
 	use Edde\Query\IQuery;
 	use Edde\Query\NativeQuery;
+	use Edde\Service\Config\ConfigService;
+	use Edde\Service\Schema\SchemaManager;
 	use Edde\Storage\INativeQuery;
 	use Edde\Storage\Query\Fragment\IWhereGroup;
 	use Edde\Storage\Query\IFragment;

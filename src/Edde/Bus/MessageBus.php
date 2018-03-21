@@ -4,7 +4,7 @@
 
 	use Edde\Element\Error;
 	use Edde\Element\IElement;
-	use Edde\Inject\Crypt\RandomService;
+	use Edde\Service\Crypt\RandomService;
 	use stdClass;
 
 	class MessageBus extends AbstractHandler implements IMessageBus {

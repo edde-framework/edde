@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
-	use Edde\Inject\Utils\StringUtils;
+	use Edde\Service\Utils\StringUtils;
 	use ReflectionClass;
 	use Throwable;
 

@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
-	use Edde\Inject\Connection\Connection;
 	use Edde\Object;
 	use Edde\Query\IQuery;
+	use Edde\Service\Connection\Connection;
 	use Throwable;
 
 	class Storage extends Object implements IStorage {

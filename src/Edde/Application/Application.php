@@ -3,10 +3,10 @@
 	namespace Edde\Application;
 
 	use Edde\Http\IResponse;
-	use Edde\Inject\Bus\RequestService;
-	use Edde\Inject\Log\LogService;
-	use Edde\Inject\Router\RouterService;
 	use Edde\Object;
+	use Edde\Service\Bus\RequestService;
+	use Edde\Service\Log\LogService;
+	use Edde\Service\Router\RouterService;
 	use Throwable;
 	use function http_response_code;
 

@@ -3,7 +3,7 @@
 	namespace Edde\Configurator\Validator;
 
 	use Edde\Config\AbstractConfigurator;
-	use Edde\Inject\Container\Container;
+	use Edde\Service\Container\Container;
 	use Edde\Validator\BoolValidator;
 	use Edde\Validator\DateTimeValidator;
 	use Edde\Validator\FloatValidator;

@@ -6,8 +6,8 @@
 	use Edde\Content\IContent;
 	use Edde\Converter\AbstractConverter;
 	use Edde\Element\IElement;
-	use Edde\Inject\Bus\MessageBus;
-	use Edde\Inject\Converter\ConverterManager;
+	use Edde\Service\Bus\MessageBus;
+	use Edde\Service\Converter\ConverterManager;
 	use stdClass;
 
 	class JsonEncodeConverter extends AbstractConverter {

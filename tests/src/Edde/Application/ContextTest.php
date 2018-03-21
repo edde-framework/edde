@@ -3,7 +3,7 @@
 	namespace Edde\Application;
 
 	use Edde\Container\Factory\InstanceFactory;
-	use Edde\Inject\Application\Context;
+	use Edde\Service\Application\Context;
 	use Edde\TestCase;
 
 	class ContextTest extends TestCase {

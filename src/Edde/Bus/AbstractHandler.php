@@ -4,8 +4,8 @@
 
 	use Edde\Container\ContainerException;
 	use Edde\Element\IElement;
-	use Edde\Inject\Validator\ValidatorManager;
 	use Edde\Object;
+	use Edde\Service\Validator\ValidatorManager;
 	use Edde\Validator\ValidationException;
 
 	abstract class AbstractHandler extends Object implements IHandler {

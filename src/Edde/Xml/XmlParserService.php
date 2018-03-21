@@ -3,9 +3,9 @@
 	namespace Edde\Xml;
 
 	use Edde\File\File;
-	use Edde\Inject\Utils\StringUtils;
 	use Edde\Object;
 	use Edde\Resource\IResource;
+	use Edde\Service\Utils\StringUtils;
 	use Iterator;
 
 	/**

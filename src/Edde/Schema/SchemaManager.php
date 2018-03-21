@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
-	use Edde\Inject\Filter\FilterManager;
-	use Edde\Inject\Generator\GeneratorManager;
-	use Edde\Inject\Sanitizer\SanitizerManager;
-	use Edde\Inject\Validator\ValidatorManager;
 	use Edde\Object;
+	use Edde\Service\Filter\FilterManager;
+	use Edde\Service\Generator\GeneratorManager;
+	use Edde\Service\Sanitizer\SanitizerManager;
+	use Edde\Service\Validator\ValidatorManager;
 	use Edde\Validator\ValidationException;
 	use Edde\Validator\ValidatorException;
 

@@ -7,7 +7,7 @@
 	use Edde\Converter\JsonEncodeConverter;
 	use Edde\Element\Converter\JsonDecodeConverter as ElementJsonDecodeConverter;
 	use Edde\Element\Converter\JsonEncodeConverter as ElementJsonEncodeConverter;
-	use Edde\Inject\Container\Container;
+	use Edde\Service\Container\Container;
 
 	class ConverterManagerConfigurator extends AbstractConfigurator {
 		use Container;

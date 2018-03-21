@@ -9,8 +9,8 @@
 	use Edde\Container\ContainerFactory;
 	use Edde\Container\Factory\ClassFactory;
 	use Edde\Container\IAutowire;
-	use Edde\Inject\Assets\RootDirectory;
-	use Edde\Inject\Container\Container;
+	use Edde\Service\Assets\RootDirectory;
+	use Edde\Service\Container\Container;
 	use PHPUnit\Framework\TestCase as PhpUnitTestCase;
 	use ReflectionException;
 

@@ -5,7 +5,7 @@
 	use Edde\Content\JsonContent;
 	use Edde\Http\IResponse;
 	use Edde\Http\Response;
-	use Edde\Inject\Utils\StringUtils;
+	use Edde\Service\Utils\StringUtils;
 	use ReflectionClass;
 	use ReflectionException;
 

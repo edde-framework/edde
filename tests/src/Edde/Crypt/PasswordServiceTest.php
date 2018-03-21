@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Crypt;
 
-	use Edde\Inject\Crypt\PasswordService;
+	use Edde\Service\Crypt\PasswordService;
 	use Edde\TestCase;
 
 	class PasswordServiceTest extends TestCase {

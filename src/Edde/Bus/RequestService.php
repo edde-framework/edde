@@ -5,9 +5,9 @@
 	use Edde\Container\ContainerException;
 	use Edde\Element\Error;
 	use Edde\Element\IElement;
-	use Edde\Inject\Container\Container;
-	use Edde\Inject\Crypt\RandomService;
-	use Edde\Inject\Utils\StringUtils;
+	use Edde\Service\Container\Container;
+	use Edde\Service\Crypt\RandomService;
+	use Edde\Service\Utils\StringUtils;
 
 	class RequestService extends AbstractHandler implements IRequestService {
 		use Container;

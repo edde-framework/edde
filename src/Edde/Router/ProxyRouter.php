@@ -3,7 +3,7 @@
 	namespace Edde\Router;
 
 	use Edde\Element\IRequest;
-	use Edde\Inject\Container\Container;
+	use Edde\Service\Container\Container;
 
 	class ProxyRouter extends AbstractRouter {
 		use Container;

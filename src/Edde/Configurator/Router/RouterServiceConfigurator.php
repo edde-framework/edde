@@ -3,8 +3,8 @@
 	namespace Edde\Configurator\Router;
 
 	use Edde\Config\AbstractConfigurator;
-	use Edde\Inject\Container\Container;
 	use Edde\Router\RequestRouter;
+	use Edde\Service\Container\Container;
 
 	class RouterServiceConfigurator extends AbstractConfigurator {
 		use Container;

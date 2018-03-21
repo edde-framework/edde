@@ -3,7 +3,7 @@
 	namespace Edde\Log;
 
 	use Edde\File\IFile;
-	use Edde\Inject\Assets\LogDirectory;
+	use Edde\Service\Assets\LogDirectory;
 
 	/**
 	 * Default file based log.

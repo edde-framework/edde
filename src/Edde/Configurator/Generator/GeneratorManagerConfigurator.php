@@ -7,7 +7,7 @@
 	use Edde\Generator\DateTimeGenerator;
 	use Edde\Generator\IGeneratorManager;
 	use Edde\Generator\UuidGenerator;
-	use Edde\Inject\Container\Container;
+	use Edde\Service\Container\Container;
 
 	class GeneratorManagerConfigurator extends AbstractConfigurator {
 		use Container;

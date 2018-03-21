@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Container\Factory;
 
-	use Edde\Inject\Application\Context;
+	use Edde\Service\Application\Context;
 
 	class CascadeFactory extends AbstractDiscoveryFactory {
 		use Context;

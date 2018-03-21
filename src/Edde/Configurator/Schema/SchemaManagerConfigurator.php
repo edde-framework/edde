@@ -3,9 +3,9 @@
 	namespace Edde\Configurator\Schema;
 
 	use Edde\Config\AbstractConfigurator;
-	use Edde\Inject\Container\Container;
 	use Edde\Schema\ISchemaManager;
 	use Edde\Schema\SchemaReflectionLoader;
+	use Edde\Service\Container\Container;
 
 	class SchemaManagerConfigurator extends AbstractConfigurator {
 		use Container;

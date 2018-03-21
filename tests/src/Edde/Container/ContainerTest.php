@@ -8,7 +8,7 @@
 	use Edde\Container\Factory\LinkFactory;
 	use Edde\Container\Factory\ProxyFactory;
 	use Edde\EddeException;
-	use Edde\Inject\Container\Container;
+	use Edde\Service\Container\Container;
 	use Edde\Test\AutowireDependencyObject;
 	use Edde\Test\BarObject;
 	use Edde\Test\ConstructorDependencyObject;

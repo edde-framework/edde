@@ -11,7 +11,7 @@
 	use Edde\Filter\IFilterManager;
 	use Edde\Filter\IntFilter;
 	use Edde\Filter\JsonFilter;
-	use Edde\Inject\Container\Container;
+	use Edde\Service\Container\Container;
 
 	class FilterManagerConfigurator extends AbstractConfigurator {
 		use Container;

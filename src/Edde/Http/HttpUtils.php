@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Http;
 
-	use Edde\Inject\Utils\StringUtils;
 	use Edde\Object;
+	use Edde\Service\Utils\StringUtils;
 	use Edde\Url\Url;
 
 	/**

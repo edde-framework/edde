@@ -5,13 +5,13 @@
 	use DateTime;
 	use Edde\Config\AbstractConfigurator;
 	use Edde\Container\ContainerException;
-	use Edde\Inject\Container\Container;
 	use Edde\Sanitizer\BoolSanitizer;
 	use Edde\Sanitizer\DateTimeSanitizer;
 	use Edde\Sanitizer\FloatSanitizer;
 	use Edde\Sanitizer\IntSanitizer;
 	use Edde\Sanitizer\ISanitizerManager;
 	use Edde\Sanitizer\JsonSanitizer;
+	use Edde\Service\Container\Container;
 
 	class SanitizerManagerConfigurator extends AbstractConfigurator {
 		use Container;

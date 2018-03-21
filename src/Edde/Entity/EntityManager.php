@@ -4,13 +4,13 @@
 
 	use Edde\Collection\Collection;
 	use Edde\Collection\ICollection;
-	use Edde\Inject\Container\Container;
-	use Edde\Inject\Schema\SchemaManager;
-	use Edde\Inject\Storage\Storage;
 	use Edde\Object;
 	use Edde\Query\QueryQueue;
 	use Edde\Query\SelectQuery;
 	use Edde\Schema\ISchema;
+	use Edde\Service\Container\Container;
+	use Edde\Service\Schema\SchemaManager;
+	use Edde\Service\Storage\Storage;
 
 	class EntityManager extends Object implements IEntityManager {
 		use SchemaManager;

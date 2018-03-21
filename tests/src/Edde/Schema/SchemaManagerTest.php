@@ -9,7 +9,7 @@
 	use Edde\Common\Schema\SourceSchema;
 	use Edde\Common\Schema\SourceTwoTargetSchema;
 	use Edde\Common\Schema\TargetSchema;
-	use Edde\Inject\Schema\SchemaManager;
+	use Edde\Service\Schema\SchemaManager;
 	use Edde\TestCase;
 	use function array_values;
 

@@ -3,13 +3,13 @@
 	namespace Edde\Application;
 
 	use Edde\Config\AbstractConfigurator;
-	use Edde\Inject\Application\Application;
-	use Edde\Inject\Container\Container;
-	use Edde\Inject\Log\LogService;
 	use Edde\Log\ILogRecord;
 	use Edde\Log\SimpleLog;
 	use Edde\Router\IRouterService;
 	use Edde\Router\RouterException;
+	use Edde\Service\Application\Application;
+	use Edde\Service\Container\Container;
+	use Edde\Service\Log\LogService;
 	use Edde\TestCase;
 
 	class ApplicationTest extends TestCase {

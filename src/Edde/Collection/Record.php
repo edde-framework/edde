@@ -4,9 +4,9 @@
 
 	use Edde\Entity\EntityException;
 	use Edde\Entity\IEntity;
-	use Edde\Inject\Entity\EntityManager;
 	use Edde\Object;
 	use Edde\Schema\ISchema;
+	use Edde\Service\Entity\EntityManager;
 
 	class Record extends Object implements IRecord {
 		use EntityManager;

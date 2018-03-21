@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Validator;
 
-	use Edde\Inject\Validator\ValidatorManager;
+	use Edde\Service\Validator\ValidatorManager;
 	use Edde\TestCase;
 
 	class ValidatorManagerTest extends TestCase {

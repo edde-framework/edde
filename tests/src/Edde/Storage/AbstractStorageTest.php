@@ -22,14 +22,14 @@
 	use Edde\Entity\EntityException;
 	use Edde\Entity\EntityNotFoundException;
 	use Edde\Entity\IEntity;
-	use Edde\Inject\Container\Container;
-	use Edde\Inject\Entity\EntityManager;
-	use Edde\Inject\Schema\SchemaManager;
-	use Edde\Inject\Storage\Storage;
 	use Edde\Query\CreateSchemaQuery;
 	use Edde\Query\SelectQuery;
 	use Edde\Schema\SchemaException;
 	use Edde\Schema\SchemaValidationException;
+	use Edde\Service\Container\Container;
+	use Edde\Service\Entity\EntityManager;
+	use Edde\Service\Schema\SchemaManager;
+	use Edde\Service\Storage\Storage;
 	use Edde\TestCase;
 
 	abstract class AbstractStorageTest extends TestCase {

@@ -4,8 +4,8 @@
 
 	use Edde\Element\IElement;
 	use Edde\Element\Message;
-	use Edde\Inject\Bus\MessageBus;
-	use Edde\Inject\Crypt\RandomService;
+	use Edde\Service\Bus\MessageBus;
+	use Edde\Service\Crypt\RandomService;
 
 	class MessageService extends AbstractHandler implements IMessageService {
 		use RandomService;

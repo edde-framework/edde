@@ -13,11 +13,11 @@
 	use Edde\Element\IError;
 	use Edde\Element\IResponse;
 	use Edde\Element\Request;
-	use Edde\Inject\Bus\EventBus;
-	use Edde\Inject\Bus\MessageBus;
-	use Edde\Inject\Converter\ConverterManager;
-	use Edde\Inject\Crypt\RandomService;
-	use Edde\Inject\Validator\ValidatorManager;
+	use Edde\Service\Bus\EventBus;
+	use Edde\Service\Bus\MessageBus;
+	use Edde\Service\Converter\ConverterManager;
+	use Edde\Service\Crypt\RandomService;
+	use Edde\Service\Validator\ValidatorManager;
 	use Edde\TestCase;
 	use Edde\Validator\ValidationException;
 	use Edde\Validator\ValidatorException;

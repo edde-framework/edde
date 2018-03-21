@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Control;
 
-	use Edde\Inject\Utils\StringUtils;
+	use Edde\Service\Utils\StringUtils;
 	use ReflectionClass;
 	use ReflectionException;
 

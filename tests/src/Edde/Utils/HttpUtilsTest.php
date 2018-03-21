@@ -4,7 +4,7 @@
 
 	use Edde\Http\ContentType;
 	use Edde\Http\RequestHeader;
-	use Edde\Inject\Http\HttpUtils;
+	use Edde\Service\Http\HttpUtils;
 	use Edde\TestCase;
 	use Edde\Url\Url;
 

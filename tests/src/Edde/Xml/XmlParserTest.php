@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Xml;
 
-	use Edde\Inject\Xml\XmlParserService;
+	use Edde\Service\Xml\XmlParserService;
 	use Edde\TestCase;
 	use TestXmlHandler;
 

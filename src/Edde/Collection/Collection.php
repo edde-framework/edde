@@ -4,11 +4,11 @@
 
 	use Edde\Entity\EntityNotFoundException;
 	use Edde\Entity\IEntity;
-	use Edde\Inject\Container\Container;
-	use Edde\Inject\Schema\SchemaManager;
 	use Edde\Object;
 	use Edde\Query\SelectQuery;
 	use Edde\Schema\ISchema;
+	use Edde\Service\Container\Container;
+	use Edde\Service\Schema\SchemaManager;
 	use Edde\Storage\IStream;
 	use Edde\Storage\Query\ISelectQuery;
 

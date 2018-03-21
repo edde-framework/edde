@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Application;
 
-	use Edde\Inject\Crypt\RandomService;
 	use Edde\Object;
+	use Edde\Service\Crypt\RandomService;
 
 	abstract class AbstractContext extends Object implements IContext {
 		use RandomService;

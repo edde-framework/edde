@@ -4,7 +4,7 @@
 
 	use Edde\Element\Element;
 	use Edde\Element\IElement;
-	use Edde\Inject\Crypt\RandomService;
+	use Edde\Service\Crypt\RandomService;
 
 	class EventBus extends AbstractHandler implements IEventBus {
 		use RandomService;

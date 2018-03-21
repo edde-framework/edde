@@ -3,8 +3,8 @@
 	namespace Edde\Router;
 
 	use Edde\Element\IRequest;
-	use Edde\Inject\Log\LogService;
 	use Edde\Object;
+	use Edde\Service\Log\LogService;
 
 	class RouterService extends Object implements IRouterService {
 		use LogService;
