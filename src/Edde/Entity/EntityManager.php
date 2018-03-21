@@ -33,6 +33,11 @@
 		}
 
 		/** @inheritdoc */
+		public function save(string $schema, array $source): IEntity {
+			return $this->create($schema, $source)->save();
+		}
+
+		/** @inheritdoc */
 		public function load(ISchema $schema, array $source): IEntity {
 			$entity = $this->createEntity($schema);
 			$entity->filter($source);

@@ -27,6 +27,16 @@
 		public function create(string $schema, array $source = []): IEntity;
 
 		/**
+		 * shorthand for put & save
+		 *
+		 * @param string $schema
+		 * @param array  $source
+		 *
+		 * @return IEntity
+		 */
+		public function save(string $schema, array $source): IEntity;
+
+		/**
 		 * when this method is used, entity would be marked as "existing"; that
 		 * means on save there will be update action instead of insert
 		 *

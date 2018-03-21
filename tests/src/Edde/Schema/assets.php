@@ -2,16 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Schema;
 
-	/**
-	 * Because there is a reflection loader, we can use php native
-	 * features, that's fuckin' cool!
-	 */
-	interface UuidSchema {
-		/**
-		 * define property guid which is primary (parameter name matters)
-		 */
-		public function uuid($primary): string;
-	}
+	use Edde\Schema\UuidSchema;
 
 	/**
 	 * This is the core of this genius idea: use native PHP features!
