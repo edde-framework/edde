@@ -2,14 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Schema;
 
+	use Edde\Schema\RelationSchema;
 	use Edde\Schema\UuidSchema;
-
-	/**
-	 * This is the core of this genius idea: use native PHP features!
-	 */
-	interface RelationSchema extends UuidSchema {
-		const relation = true;
-	}
 
 	/**
 	 * Define a Foo schema extended from guid...
