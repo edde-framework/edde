@@ -27,3 +27,4 @@ github sync:
     only:
         - master
         - tags
+        - v*
