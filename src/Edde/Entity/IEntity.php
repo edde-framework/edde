@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Entity;
 
+	use Edde\Collection\ICollection;
 	use Edde\Crate\ICrate;
 	use Edde\Crate\IProperty;
 	use Edde\Driver\DuplicateEntryException;

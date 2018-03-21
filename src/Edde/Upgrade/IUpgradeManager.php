@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Upgrade;
 
+	use Edde\Collection\ICollection;
 	use Edde\Config\IConfigurable;
-	use Edde\Entity\ICollection;
 	use Edde\Entity\IEntity;
 
 	interface IUpgradeManager extends IConfigurable {

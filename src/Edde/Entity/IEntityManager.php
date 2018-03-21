@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Entity;
 
+	use Edde\Collection\ICollection;
 	use Edde\Config\IConfigurable;
 	use Edde\Schema\ISchema;
 

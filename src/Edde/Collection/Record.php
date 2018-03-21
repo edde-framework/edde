@@ -1,7 +1,9 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Entity;
+	namespace Edde\Collection;
 
+	use Edde\Entity\EntityException;
+	use Edde\Entity\IEntity;
 	use Edde\Inject\Entity\EntityManager;
 	use Edde\Object;
 	use Edde\Schema\ISchema;

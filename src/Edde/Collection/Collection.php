@@ -1,7 +1,9 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Entity;
+	namespace Edde\Collection;
 
+	use Edde\Entity\EntityNotFoundException;
+	use Edde\Entity\IEntity;
 	use Edde\Inject\Container\Container;
 	use Edde\Inject\Schema\SchemaManager;
 	use Edde\Object;
@@ -32,7 +34,7 @@
 		/** @inheritdoc */
 		public function getSchema(string $alias): ISchema {
 			if (isset($this->schemas[$alias]) === false) {
-				throw new EntityException(sprintf('Requested schema for unknown alias [%s].', $alias));
+				throw new CollectionException(sprintf('Requested schema for unknown alias [%s].', $alias));
 			}
 			return $this->schemas[$alias];
 		}
@@ -49,8 +51,8 @@
 		}
 
 		/** @inheritdoc */
-		public function getEntity(string $alias): \Edde\Entity\IEntity {
-			/** @var $record \Edde\Entity\IRecord */
+		public function getEntity(string $alias): IEntity {
+			/** @var $record IRecord */
 			foreach ($this as $record) {
 				return $record->getEntity($alias);
 			}
@@ -58,15 +60,15 @@
 		}
 
 		/** @inheritdoc */
-		public function getRecord(): \Edde\Entity\IRecord {
+		public function getRecord(): IRecord {
 			foreach ($this as $record) {
 				return $record;
 			}
-			throw new EntityException('Cannot load any Record for Collection.');
+			throw new CollectionException('Cannot load any Record for Collection.');
 		}
 
 		/** @inheritdoc */
-		public function entity(string $alias, $name): \Edde\Entity\IEntity {
+		public function entity(string $alias, $name): IEntity {
 			$schema = $this->getSchema($alias);
 			$this->stream->query($query = new SelectQuery($schema, $alias));
 			$where = $query->getWhere();
@@ -80,7 +82,7 @@
 		}
 
 		/** @inheritdoc */
-		public function join(string $source, string $target, string $alias, array $on = null, string $relation = null): \Edde\Entity\ICollection {
+		public function join(string $source, string $target, string $alias, array $on = null, string $relation = null): ICollection {
 			$schema = $this->getSchema($source);
 			$relation = $schema->getRelation($target, $relation);
 			$query = $this->stream->getQuery();
@@ -132,13 +134,13 @@
 		}
 
 		/** @inheritdoc */
-		public function limit(int $limit, int $page): \Edde\Entity\ICollection {
+		public function limit(int $limit, int $page): ICollection {
 			$this->stream->getQuery()->limit($limit, $page);
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function link(string $alias, string $schema): \Edde\Entity\ICollection {
+		public function link(string $alias, string $schema): ICollection {
 			$this->getQuery()->link($alias, $schema);
 			$this->schema($alias, $this->schemaManager->load($schema));
 			return $this;

@@ -1,7 +1,10 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Entity;
+	namespace Edde\Collection;
 
+	use Edde\Entity\EntityException;
+	use Edde\Entity\EntityNotFoundException;
+	use Edde\Entity\IEntity;
 	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
 	use Edde\Storage\Query\ISelectQuery;
@@ -28,7 +31,7 @@
 		 *
 		 * @return ISchema
 		 *
-		 * @throws EntityException
+		 * @throws CollectionException
 		 */
 		public function getSchema(string $alias): ISchema;
 
@@ -66,7 +69,7 @@
 		 *
 		 * @return IRecord
 		 *
-		 * @throws EntityException
+		 * @throws CollectionException
 		 */
 		public function getRecord(): IRecord;
 
@@ -150,6 +153,9 @@
 
 		/**
 		 * link the given schema
+		 *
+		 * @param string $alias
+		 * @param string $schema
 		 *
 		 * @return ICollection
 		 *

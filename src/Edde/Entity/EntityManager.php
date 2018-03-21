@@ -2,6 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Entity;
 
+	use Edde\Collection\Collection;
+	use Edde\Collection\ICollection;
 	use Edde\Inject\Container\Container;
 	use Edde\Inject\Schema\SchemaManager;
 	use Edde\Inject\Storage\Storage;

@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Entity;
 
+	use Edde\Collection\ICollection;
 	use Edde\Crate\Crate;
 	use Edde\Crate\IProperty;
 	use Edde\Inject\Entity\EntityManager;
