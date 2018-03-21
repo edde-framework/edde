@@ -5,6 +5,7 @@
 	use Edde\Service\Utils\StringUtils;
 	use ReflectionClass;
 	use Throwable;
+	use function str_replace;
 
 	class SchemaReflectionLoader extends AbstractSchemaLoader implements ISchemaLoader {
 		use StringUtils;
@@ -36,6 +37,9 @@
 				foreach ($reflectionClass->getConstants() as $name => $value) {
 					switch ($name) {
 						case 'alias':
+							if ($value === true) {
+								$value = str_replace('-schema', '', $this->stringUtils->recamel($this->stringUtils->extract($schema), '-'));
+							}
 							$schemaBuilder->alias($value);
 							break;
 						case 'relation':
