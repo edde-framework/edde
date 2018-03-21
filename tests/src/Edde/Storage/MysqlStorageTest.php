@@ -2,14 +2,14 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
+	use Edde\Connection\ConnectionException;
+	use Edde\Connection\IConnection;
+	use Edde\Connection\MysqlConnection;
 	use Edde\Container\Factory\InstanceFactory;
-	use Edde\Driver\DriverException;
-	use Edde\Driver\IDriver;
-	use Edde\Driver\MysqlDriver;
 
 	class MysqlStorageTest extends AbstractStorageTest {
 		/**
-		 * @throws DriverException
+		 * @throws ConnectionException
 		 */
 		public function testPrepareDatabase() {
 			$this->storage->exec('DROP DATABASE `edde`');
@@ -21,6 +21,6 @@
 		/** @inheritdoc */
 		protected function setUp() {
 			parent::setUp();
-			$this->container->registerFactory(new InstanceFactory(IDriver::class, MysqlDriver::class), IDriver::class);
+			$this->container->registerFactory(new InstanceFactory(IConnection::class, MysqlConnection::class), IConnection::class);
 		}
 	}

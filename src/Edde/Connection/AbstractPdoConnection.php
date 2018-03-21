@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Driver;
+	namespace Edde\Connection;
 
 	use Edde\Config\ConfigException;
 	use Edde\Entity\IEntity;
@@ -21,7 +21,7 @@
 	use Throwable;
 	use function implode;
 
-	abstract class AbstractDatabaseDriver extends AbstractDriver {
+	abstract class AbstractPdoConnection extends AbstractConnection {
 		protected $options;
 		/** @var PDO */
 		protected $pdo;
@@ -61,19 +61,19 @@
 		}
 
 		/** @inheritdoc */
-		public function start(): IDriver {
+		public function start(): IConnection {
 			$this->pdo->beginTransaction();
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function commit(): IDriver {
+		public function commit(): IConnection {
 			$this->pdo->commit();
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function rollback(): IDriver {
+		public function rollback(): IConnection {
 			$this->pdo->rollBack();
 			return $this;
 		}
@@ -84,7 +84,7 @@
 		 * @return Throwable
 		 */
 		protected function exception(Throwable $throwable): Throwable {
-			return new DriverException('Unhandled exception: ' . $throwable->getMessage(), 0, $throwable);
+			return new ConnectionException('Unhandled exception: ' . $throwable->getMessage(), 0, $throwable);
 		}
 
 		/**
@@ -125,7 +125,7 @@
 		 * @param ISelectQuery $selectQuery
 		 *
 		 * @return PDOStatement
-		 * @throws DriverException
+		 * @throws ConnectionException
 		 * @throws Throwable
 		 */
 		protected function executeSelectQuery(ISelectQuery $selectQuery) {
@@ -268,7 +268,7 @@
 		 *
 		 * @return mixed|PDOStatement
 		 *
-		 * @throws DriverException
+		 * @throws ConnectionException
 		 * @throws Throwable
 		 */
 		protected function executeDetachQuery(IDetachQuery $detachQuery) {
@@ -296,7 +296,7 @@
 		 *
 		 * @return mixed|PDOStatement
 		 *
-		 * @throws DriverException
+		 * @throws ConnectionException
 		 * @throws Throwable
 		 */
 		protected function executeDisconnectQuery(IDisconnectQuery $disconnectQuery) {
@@ -323,7 +323,7 @@
 		 *
 		 * @return NativeQuery
 		 *
-		 * @throws DriverException
+		 * @throws ConnectionException
 		 */
 		protected function fragmentWhere(IWhere $where) {
 			[$expression, $type] = $params = $where->getWhere();
@@ -339,7 +339,7 @@
 								$parameterId => $params[3],
 							]);
 					}
-					throw new DriverException(sprintf('Unknown where operator [%s] target [%s].', get_class($where), $type));
+					throw new ConnectionException(sprintf('Unknown where operator [%s] target [%s].', get_class($where), $type));
 				case 'null':
 					$name = $this->delimite($params[2]);
 					if (($dot = strpos($params[2], '.')) !== false) {
@@ -353,14 +353,14 @@
 					}
 					return new NativeQuery($name . ' IS NOT NULL');
 				default:
-					throw new DriverException(sprintf('Unknown where type [%s] for clause [%s].', $expression, get_class($where)));
+					throw new ConnectionException(sprintf('Unknown where type [%s] for clause [%s].', $expression, get_class($where)));
 			}
 		}
 
 		/**
 		 * @param IQueryQueue $queryQueue
 		 *
-		 * @throws DriverException
+		 * @throws ConnectionException
 		 * @throws Throwable
 		 */
 		protected function executeQueryQueue(IQueryQueue $queryQueue) {
@@ -432,7 +432,7 @@
 		 *
 		 * @return string
 		 *
-		 * @throws DriverException
+		 * @throws ConnectionException
 		 */
 		abstract public function type(string $type): string;
 	}

@@ -3,9 +3,9 @@
 	namespace Edde\Entity;
 
 	use Edde\Collection\ICollection;
+	use Edde\Connection\DuplicateEntryException;
 	use Edde\Crate\ICrate;
 	use Edde\Crate\IProperty;
-	use Edde\Driver\DuplicateEntryException;
 	use Edde\Query\IDetachQuery;
 	use Edde\Query\IDisconnectQuery;
 	use Edde\Schema\ISchema;

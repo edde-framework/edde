@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Driver;
+	namespace Edde\Connection;
 
 	use Edde\Config\IConfigurable;
 	use Edde\Query\IQuery;
@@ -8,16 +8,16 @@
 	/**
 	 * General driver for storage implementation; one storage could have more drivers to choose from.
 	 */
-	interface IDriver extends IConfigurable {
+	interface IConnection extends IConfigurable {
 		/**
 		 * execute the given query and return native driver's result; this method does quite heavy
 		 * job with translating input query into native query for this driver
 		 *
-		 * @param \Edde\Query\IQuery $query
+		 * @param IQuery $query
 		 *
 		 * @return mixed
 		 *
-		 * @throws DriverException
+		 * @throws ConnectionException
 		 */
 		public function execute(IQuery $query);
 
@@ -29,7 +29,7 @@
 		 *
 		 * @return mixed
 		 *
-		 * @throws DriverException
+		 * @throws ConnectionException
 		 */
 		public function fetch($query, array $params = []);
 
@@ -41,28 +41,28 @@
 		 *
 		 * @return mixed
 		 *
-		 * @throws DriverException
+		 * @throws ConnectionException
 		 */
 		public function exec($query, array $params = []);
 
 		/**
 		 * start a transaction
 		 *
-		 * @return IDriver
+		 * @return IConnection
 		 */
-		public function start(): IDriver;
+		public function start(): IConnection;
 
 		/**
 		 * commit a transaction
 		 *
-		 * @return IDriver
+		 * @return IConnection
 		 */
-		public function commit(): IDriver;
+		public function commit(): IConnection;
 
 		/**
 		 * rollback a transaction
 		 *
-		 * @return IDriver
+		 * @return IConnection
 		 */
-		public function rollback(): IDriver;
+		public function rollback(): IConnection;
 	}

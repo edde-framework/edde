@@ -1,10 +1,10 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Driver;
+	namespace Edde\Connection;
 
 	use Throwable;
 
-	class PostgresDriver extends AbstractDatabaseDriver {
+	class PostgresConnection extends AbstractPdoConnection {
 		public function __construct(string $config = 'postgres', array $options = []) {
 			parent::__construct($config, $options);
 		}
@@ -37,7 +37,7 @@
 				case 'datetime':
 					return 'TIMESTAMP(6)';
 			}
-			throw new DriverException(sprintf('Unknown type [%s] in driver [%s]', $type, static::class));
+			throw new ConnectionException(sprintf('Unknown type [%s] in driver [%s]', $type, static::class));
 		}
 
 		/** @inheritdoc */
@@ -51,6 +51,6 @@
 			} else if (stripos($message, 'undefined table') !== false) {
 				return new UnknownTableException($message, 0, $throwable);
 			}
-			return new DriverException($message, 0, $throwable);
+			return new ConnectionException($message, 0, $throwable);
 		}
 	}

@@ -1,10 +1,10 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Driver;
+	namespace Edde\Connection;
 
 	use Throwable;
 
-	class MysqlDriver extends AbstractDatabaseDriver {
+	class MysqlConnection extends AbstractPdoConnection {
 		public function __construct(string $config = 'mysql', array $options = []) {
 			parent::__construct($config, $options);
 		}
@@ -32,7 +32,7 @@
 				case 'datetime':
 					return 'DATETIME(6)';
 			}
-			throw new DriverException(sprintf('Unknown type [%s] in driver [%s]', $type, static::class));
+			throw new ConnectionException(sprintf('Unknown type [%s] in driver [%s]', $type, static::class));
 		}
 
 		/** @inheritdoc */
@@ -46,6 +46,6 @@
 			} else if (stripos($message, 'table or view not found') !== false) {
 				return new UnknownTableException($message, 0, $throwable);
 			}
-			return new DriverException($message, 0, $throwable);
+			return new ConnectionException($message, 0, $throwable);
 		}
 	}

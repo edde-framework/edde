@@ -16,9 +16,9 @@
 	use Edde\Common\Schema\TargetSchema;
 	use Edde\Common\Schema\UserRoleSchema;
 	use Edde\Common\Schema\UserSchema;
-	use Edde\Driver\DriverException;
-	use Edde\Driver\DuplicateEntryException;
-	use Edde\Driver\DuplicateTableException;
+	use Edde\Connection\ConnectionException;
+	use Edde\Connection\DuplicateEntryException;
+	use Edde\Connection\DuplicateTableException;
 	use Edde\Entity\EntityException;
 	use Edde\Entity\EntityNotFoundException;
 	use Edde\Entity\IEntity;
@@ -39,7 +39,7 @@
 		use Container;
 
 		/**
-		 * @throws DriverException
+		 * @throws ConnectionException
 		 * @throws DuplicateTableException
 		 * @throws SchemaException
 		 * @throws StorageException
@@ -415,7 +415,7 @@
 		}
 
 		/**
-		 * @throws DriverException
+		 * @throws ConnectionException
 		 * @throws DuplicateTableException
 		 * @throws SchemaException
 		 * @throws StorageException

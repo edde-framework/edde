@@ -32,6 +32,7 @@
 	use Edde\Configurator\Sanitizer\SanitizerManagerConfigurator;
 	use Edde\Configurator\Schema\SchemaManagerConfigurator;
 	use Edde\Configurator\Validator\ValidatorManagerConfigurator;
+	use Edde\Connection\IConnection;
 	use Edde\Container\Factory\CallbackFactory;
 	use Edde\Container\Factory\ClassFactory;
 	use Edde\Container\Factory\ExceptionFactory;
@@ -45,7 +46,6 @@
 	use Edde\Crypt\IRandomService;
 	use Edde\Crypt\PasswordService;
 	use Edde\Crypt\RandomService;
-	use Edde\Driver\IDriver;
 	use Edde\EddeException;
 	use Edde\Entity\EntityManager;
 	use Edde\Entity\IEntityManager;
@@ -339,7 +339,7 @@
 				 */
 				IEntityManager::class    => EntityManager::class,
 				IStorage::class          => Storage::class,
-				IDriver::class           => self::exception(sprintf('Please register driver to use Storage.', IDriver::class)),
+				IConnection::class       => self::exception(sprintf('Please register driver to use Storage.', IConnection::class)),
 				/**
 				 * an application upgrades support
 				 */

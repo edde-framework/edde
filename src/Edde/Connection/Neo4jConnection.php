@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Driver;
+	namespace Edde\Connection;
 
 	use Edde\Config\ConfigException;
 	use Edde\Crate\IProperty;
@@ -31,7 +31,7 @@
 	use function extract;
 	use function implode;
 
-	class Neo4jDriver extends AbstractDriver {
+	class Neo4jConnection extends AbstractConnection {
 		/** @var SessionInterface */
 		protected $session;
 		/** @var Transaction */
@@ -73,13 +73,13 @@
 		}
 
 		/** @inheritdoc */
-		public function start(): IDriver {
+		public function start(): IConnection {
 			($this->transaction = $this->session->transaction())->begin();
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function commit(): IDriver {
+		public function commit(): IConnection {
 			try {
 				$this->transaction->commit();
 				$this->transaction = null;
@@ -90,7 +90,7 @@
 		}
 
 		/** @inheritdoc */
-		public function rollback(): IDriver {
+		public function rollback(): IConnection {
 			try {
 				$this->transaction->rollback();
 			} catch (MessageFailureException $exception) {
@@ -113,7 +113,7 @@
 			} else if (stripos($message, 'must have the property') !== false) {
 				return new RequiredValueException($message, 0, $throwable);
 			}
-			return new DriverException($message, 0, $throwable);
+			return new ConnectionException($message, 0, $throwable);
 		}
 
 		/**
@@ -222,7 +222,7 @@
 		/**
 		 * @param IDisconnectQuery $disconnectQuery
 		 *
-		 * @throws DriverException
+		 * @throws ConnectionException
 		 * @throws Throwable
 		 */
 		protected function executeDisconnectQuery(IDisconnectQuery $disconnectQuery) {
@@ -410,7 +410,7 @@
 		 *
 		 * @return INativeQuery
 		 *
-		 * @throws DriverException
+		 * @throws ConnectionException
 		 */
 		protected function fragmentWhere(IWhere $where): INativeQuery {
 			[$expression, $type] = $params = $where->getWhere();
@@ -426,7 +426,7 @@
 								$parameterId => $params[3],
 							]);
 					}
-					throw new DriverException(sprintf('Unknown where operator [%s] target [%s].', get_class($where), $type));
+					throw new ConnectionException(sprintf('Unknown where operator [%s] target [%s].', get_class($where), $type));
 				case 'null':
 					$name = $this->delimite($params[2]);
 					if (($dot = strpos($params[2], '.')) !== false) {
@@ -466,7 +466,7 @@
 					$fragment .= ')';
 					return new NativeQuery($fragment, isset($nativeQuery) ? $nativeQuery->getParams() : []);
 				default:
-					throw new DriverException(sprintf('Unknown where type [%s] for clause [%s].', $expression, get_class($where)));
+					throw new ConnectionException(sprintf('Unknown where type [%s] for clause [%s].', $expression, get_class($where)));
 			}
 		}
 
