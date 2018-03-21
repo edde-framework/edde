@@ -33,6 +33,7 @@
 	use Edde\Configurator\Schema\SchemaManagerConfigurator;
 	use Edde\Configurator\Validator\ValidatorManagerConfigurator;
 	use Edde\Connection\IConnection;
+	use Edde\Connection\MysqlConnection;
 	use Edde\Container\Factory\CallbackFactory;
 	use Edde\Container\Factory\ClassFactory;
 	use Edde\Container\Factory\ExceptionFactory;
@@ -70,8 +71,8 @@
 	use Edde\Schema\SchemaManager;
 	use Edde\Storage\IStorage;
 	use Edde\Storage\Storage;
-	use Edde\Upgrade\AbstractUpgradeManager;
 	use Edde\Upgrade\IUpgradeManager;
+	use Edde\Upgrade\UpgradeManager;
 	use Edde\Utils\IStringUtils;
 	use Edde\Utils\StringUtils;
 	use Edde\Validator\IValidatorManager;
@@ -321,52 +322,52 @@
 				/**
 				 * schema support
 				 */
-				ISchemaManager::class    => SchemaManager::class,
+				ISchemaManager::class      => SchemaManager::class,
 				/**
 				 * generator (related to schema) support
 				 */
-				IGeneratorManager::class => GeneratorManager::class,
-				IFilterManager::class    => FilterManager::class,
-				ISanitizerManager::class => SanitizerManager::class,
-				IValidatorManager::class => ValidatorManager::class,
+				IGeneratorManager::class   => GeneratorManager::class,
+				IFilterManager::class      => FilterManager::class,
+				ISanitizerManager::class   => SanitizerManager::class,
+				IValidatorManager::class   => ValidatorManager::class,
 				/**
 				 * random & security support
 				 */
-				IRandomService::class    => RandomService::class,
-				IPasswordService::class  => PasswordService::class,
+				IRandomService::class      => RandomService::class,
+				IPasswordService::class    => PasswordService::class,
 				/**
 				 * storage support
 				 */
-				IEntityManager::class    => EntityManager::class,
-				IStorage::class          => Storage::class,
-				IConnection::class       => self::exception(sprintf('Please register driver to use Storage.', IConnection::class)),
+				IEntityManager::class      => EntityManager::class,
+				IStorage::class            => Storage::class,
+				IConnection::class         => MysqlConnection::class,
 				/**
 				 * an application upgrades support
 				 */
-				IUpgradeManager::class   => self::exception(sprintf('You have to provide you own implementation of [%s]; you can use [%s] to get some little help.', IUpgradeManager::class, AbstractUpgradeManager::class)),
+				IUpgradeManager::class     => UpgradeManager::class,
 				/**
 				 * Xml support
 				 */
-				IXmlExportService::class => XmlExportService::class,
-				IXmlParserService::class => XmlParserService::class,
+				IXmlExportService::class   => XmlExportService::class,
+				IXmlParserService::class   => XmlParserService::class,
 				/**
 				 * Message bus support; probably most important stuff of the
 				 * framework and the top killing feature :)
 				 */
-				IMessageBus::class       => MessageBus::class,
-				IMessageService::class   => MessageService::class,
-				IEventBus::class         => EventBus::class,
-				IRequestService::class   => RequestService::class,
-				IConfigService::class    => ConfigService::class,
-				IConfigLoader::class     => ConfigLoader::class,
+				IMessageBus::class         => MessageBus::class,
+				IMessageService::class     => MessageService::class,
+				IEventBus::class           => EventBus::class,
+				IRequestService::class     => RequestService::class,
+				IConfigService::class      => ConfigService::class,
+				IConfigLoader::class       => ConfigLoader::class,
 				/**
 				 * an application handles lifecycle workflow
 				 */
-				IApplication::class      => Application::class,
+				IApplication::class        => Application::class,
 				/**
 				 * magical factory for an application execution
 				 */
-				'application'            => IApplication::class . '::run',
+				'application'              => IApplication::class . '::run',
 			];
 		}
 

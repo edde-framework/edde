@@ -50,5 +50,5 @@
 		 *
 		 * @return ICollection|IEntity[]
 		 */
-		public function getCurrentList(): ICollection;
+		public function getCurrentCollection(): ICollection;
 	}
