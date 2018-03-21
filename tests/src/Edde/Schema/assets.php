@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Common\Schema;
 
+	use Edde\Schema\AliasSchema;
 	use Edde\Schema\RelationSchema;
 	use Edde\Schema\UuidSchema;
 
@@ -52,9 +53,7 @@
 	 * This schema has exactly two links, thus this will be pure
 	 * relation (m:n) schema.
 	 */
-	interface FooBarSchema extends RelationSchema {
-		const alias = 'foo-bar';
-
+	interface FooBarSchema extends RelationSchema, AliasSchema {
 		/**
 		 * make property foo as a reference to FooSchema's property $uuid
 		 */
@@ -66,9 +65,7 @@
 		public function bar(BarSchema $uuid): string;
 	}
 
-	interface BarPooSchema extends RelationSchema {
-		const alias = 'bar-poo';
-
+	interface BarPooSchema extends RelationSchema, AliasSchema {
 		public function bar(BarSchema $uuid): string;
 
 		public function poo(PooSchema $uuid): string;
@@ -106,9 +103,7 @@
 		public function label(): ?string;
 	}
 
-	interface UserRoleSchema extends RelationSchema {
-		const alias = 'user-role';
-
+	interface UserRoleSchema extends RelationSchema, AliasSchema {
 		public function user(UserSchema $uuid): string;
 
 		public function role(RoleSchema $uuid): string;
@@ -130,9 +125,7 @@
 		public function target(TargetSchema $uuid): string;
 	}
 
-	interface SourceTwoTargetSchema extends RelationSchema {
-		const alias = 'source-two-target';
-
+	interface SourceTwoTargetSchema extends RelationSchema, AliasSchema {
 		public function source(SourceSchema $uuid): string;
 
 		public function target(TargetSchema $uuid): string;
