@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
+	use DateTime;
 	use Edde\Service\Utils\StringUtils;
 	use ReflectionClass;
 	use Throwable;
@@ -102,7 +103,7 @@
 						case 'int':
 						case 'bool':
 						case 'datetime':
-						case \DateTime::class:
+						case DateTime::class:
 							$propertyBuilder->filter($propertyType);
 							$propertyBuilder->sanitizer($propertyType);
 							break;
