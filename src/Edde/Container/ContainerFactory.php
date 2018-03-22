@@ -104,7 +104,7 @@
 
 		/**
 		 * @return IContainer
-		 * @throws \Edde\Container\ContainerException
+		 * @throws ContainerException
 		 */
 		static public function getContainer(): IContainer {
 			if (self::$instance) {
@@ -227,12 +227,11 @@
 		 * @throws ReflectionException
 		 */
 		static public function create(array $factories = [], array $configurators = []): IContainer {
-			$container = new Container();
 			/**
 			 * this trick ensures that container is properly configured when some internal dependency needs it while container is construction
 			 */
 			$containerConfigurator = $configurators[IContainer::class] = new ContainerConfigurator($factories = self::createFactories($factories), $configurators);
-			$container->addConfigurator($containerConfigurator);
+			($container = new Container())->addConfigurator($containerConfigurator);
 			$container->setup();
 			$container = $container->create(IContainer::class);
 			$container->addConfigurator($containerConfigurator);
