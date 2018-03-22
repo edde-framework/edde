@@ -42,6 +42,8 @@
 		 * is returned, application is in "zero state", thus nothing nowhere
 		 *
 		 * @return string|null
+		 *
+		 * @throws UpgradeException
 		 */
 		public function getVersion(): ?string;
 

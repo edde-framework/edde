@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Collection;
 
+	use Edde\Connection\UnknownTableException;
 	use Edde\Entity\EntityException;
 	use Edde\Entity\EntityNotFoundException;
 	use Edde\Entity\IEntity;
@@ -61,6 +62,7 @@
 		 *
 		 * @throws EntityException
 		 * @throws EntityNotFoundException
+		 * @throws UnknownTableException
 		 */
 		public function getEntity(string $alias): IEntity;
 

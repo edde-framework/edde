@@ -8,6 +8,7 @@
 	use Edde\Query\CreateSchemaQuery;
 	use Edde\Service\Entity\EntityManager;
 	use Edde\Service\Schema\SchemaManager;
+	use Throwable;
 
 	class UpgradeManager extends AbstractUpgradeManager {
 		use EntityManager;
@@ -16,12 +17,16 @@
 		/** @inheritdoc */
 		public function getVersion(): ?string {
 			try {
-				return $this->getCurrentCollection()->getEntity('u')->get('version');
-			} catch (UnknownTableException $exception) {
-				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(UpgradeSchema::class)));
-				return null;
-			} catch (EntityNotFoundException $exception) {
-				return null;
+				try {
+					return $this->getCurrentCollection()->getEntity('u')->get('version');
+				} catch (UnknownTableException $exception) {
+					$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load(UpgradeSchema::class)));
+					return null;
+				} catch (EntityNotFoundException $exception) {
+					return null;
+				}
+			} catch (Throwable $exception) {
+				throw new UpgradeException(sprintf('Cannot retrieve current version: %s', $exception->getMessage()), 0, $exception);
 			}
 		}
 
