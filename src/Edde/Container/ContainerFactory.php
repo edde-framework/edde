@@ -2,6 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Container;
 
+	use Edde\Access\AccessService;
+	use Edde\Access\IAccessService;
 	use Edde\Application\Application;
 	use Edde\Application\IApplication;
 	use Edde\Assets\AssetsDirectory;
@@ -344,6 +346,12 @@
 				 * an application upgrades support
 				 */
 				IUpgradeManager::class     => UpgradeManager::class,
+				/**
+				 * access (permission) subsystem
+				 *
+				 * - access is kind of alias for Authorization
+				 */
+				IAccessService::class      => AccessService::class,
 				/**
 				 * Xml support
 				 */
