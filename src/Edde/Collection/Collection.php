@@ -51,7 +51,10 @@
 		public function save(string $alias, stdClass $source): IEntity {
 			try {
 				$entity = $this->entityManager->entity($this->getSchema($alias));
-				$entity->put();
+				$schema = $entity->getSchema();
+				$entity->put($source = $this->schemaManager->generate($schema, $source));
+				$this->schemaManager->validate($schema, $source);
+				$entity->commit();
 				return $entity;
 			} catch (CollectionException $exception) {
 				throw $exception;

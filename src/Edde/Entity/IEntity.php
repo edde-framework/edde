@@ -13,5 +13,5 @@
 		 *
 		 * @return IEntity
 		 */
-		public function save(): IEntity;
+		public function commit(): ICrate;
 	}

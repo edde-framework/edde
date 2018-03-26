@@ -60,7 +60,7 @@
 				'optional' => 'foo-bar',
 			]);
 			self::assertNotEmpty($entity->get('uuid'));
-			$entity->save();
+			$entity->commit();
 			self::assertFalse($entity->isDirty(), 'entity is still dirty, oops!');
 		}
 
@@ -72,7 +72,7 @@
 			$this->expectExceptionMessage('Validation of schema [Edde\Common\Schema\FooSchema] failed.');
 			$this->entityManager->entity(FooSchema::class, [
 				'label' => 'kaboom',
-			])->save();
+			])->commit();
 		}
 
 		/**
@@ -84,7 +84,7 @@
 			$this->entityManager->entity(FooSchema::class, [
 				'name'  => null,
 				'label' => 'kaboom',
-			])->save();
+			])->commit();
 		}
 
 		/**
@@ -94,10 +94,10 @@
 			$this->expectException(DuplicateEntryException::class);
 			$this->entityManager->entity(FooSchema::class, [
 				'name' => 'unique',
-			])->save();
+			])->commit();
 			$this->entityManager->entity(FooSchema::class, [
 				'name' => 'unique',
-			])->save();
+			])->commit();
 		}
 
 		/**
@@ -107,12 +107,12 @@
 			$entity = $this->entityManager->entity(SimpleSchema::class, [
 				'name'     => 'some name for this entity',
 				'optional' => 'this string is optional, but I wanna fill it!',
-			])->save();
+			])->commit();
 			self::assertNotEmpty($entity->get('uuid'));
 			$entity = $this->entityManager->entity(SimpleSchema::class, [
 				'name'     => 'another name',
 				'optional' => null,
-			])->save();
+			])->commit();
 			self::assertNotEmpty($entity->get('uuid'));
 			self::assertFalse($entity->isDirty(), 'Entity is still dirty!');
 		}
@@ -163,10 +163,10 @@
 				'value'    => 3.14,
 				'date'     => new DateTime('24.12.2020 12:24:13'),
 				'question' => false,
-			])->save();
+			])->commit();
 			$entity->set('optional', null);
 			$expect = $entity->toArray();
-			$entity->save();
+			$entity->commit();
 			$entity = $this->entityManager->collection('c', SimpleSchema::class)->entity('c', $entity->get('uuid'));
 			self::assertFalse($entity->isDirty(), 'entity should NOT be dirty right after load!');
 			self::assertEquals($expect, $array = $entity->toArray());
@@ -195,7 +195,7 @@
 			$foo->linkTo($poo);
 			$foo->linkTo($anotherPoo);
 			$foo->linkTo($poo);
-			$foo->save();
+			$foo->commit();
 			$source = null;
 			$collection = $this->entityManager->collection('p', PooSchema::class);
 			$collection->query($query = new SelectQuery($this->schemaManager->load(FooSchema::class), 'f'));
@@ -277,8 +277,8 @@
 			$bar2->attach($poo2);
 			$bar2->attach($poo3);
 			$foo2->attach($bar3);
-			$foo->save();
-			$foo2->save();
+			$foo->commit();
+			$foo2->commit();
 			$barList = [];
 			$expected = [
 				'bar The Second',
@@ -401,7 +401,7 @@
 			$user->attach($root)->set('enabled', false);
 			$user->attach($root)->set('enabled', true);
 			$user->attach($guest)->set('enabled', false);
-			$user->save();
+			$user->commit();
 			$expect = [
 				'root',
 			];
@@ -458,7 +458,7 @@
 			$source->set('name', 'source-yapee');
 			$target->set('name', 'yapee');
 			$source->attach($target, SourceTwoTargetSchema::class);
-			$source->save();
+			$source->commit();
 			$current = [];
 			foreach ($source->join('t', TargetSchema::class, SourceTwoTargetSchema::class) as $record) {
 				$current[] = $record->getEntity('t')->get('name');
@@ -474,7 +474,7 @@
 		public function testReverseRelation() {
 			$this->schemaManager->load(SourceOneTargetSchema::class);
 			$this->schemaManager->load(SourceTwoTargetSchema::class);
-			$target = $this->entityManager->entity(TargetSchema::class, ['name' => 'boo'])->save();
+			$target = $this->entityManager->entity(TargetSchema::class, ['name' => 'boo'])->commit();
 			$source = $this->entityManager->collection('s', SourceSchema::class)->entity('s', 'source-yapee');
 			$source->attach($target, SourceTwoTargetSchema::class);
 			$source->save();
@@ -521,7 +521,7 @@
 			$guest = $this->entityManager->collection('r', RoleSchema::alias)->entity('r', 'guest');
 			$user->attach($root);
 			$user->attach($guest);
-			$user->save();
+			$user->commit();
 			$roles = ['guest', 'root'];
 			$current = [];
 			foreach ($user->join('r', RoleSchema::class) as $record) {
@@ -535,7 +535,7 @@
 			$roles = ['guest'];
 			$current = [];
 			$user->detach($root);
-			$user->save();
+			$user->commit();
 			foreach ($user->join('r', RoleSchema::class) as $record) {
 				$entity = $record->getEntity('r');
 				self::assertSame(RoleSchema::class, $entity->getSchema()->getName());
@@ -563,7 +563,7 @@
 			$user->attach($root);
 			$user->attach($root);
 			$user->attach($guest);
-			$user->save();
+			$user->commit();
 			$roles = ['guest', 'root', 'root', 'root'];
 			$current = [];
 			foreach ($user->join('r', RoleSchema::class) as $record) {
@@ -576,7 +576,7 @@
 			self::assertSame($roles, $current);
 			$current = [];
 			$user->disconnect(RoleSchema::class);
-			$user->save();
+			$user->commit();
 			foreach ($user->join('r', RoleSchema::class) as $record) {
 				$entity = $record->getEntity('r');
 				self::assertSame(RoleSchema::class, $entity->getSchema()->getName());
@@ -601,7 +601,7 @@
 			$user->attach($root)->set('enabled', false);
 			$user->attach($root)->set('enabled', true);
 			$user->attach($guest)->set('enabled', false);
-			$user->save();
+			$user->commit();
 			$roles = ['guest', 'root', 'root'];
 			$current = [];
 			foreach ($user->join('r', RoleSchema::class) as $record) {
@@ -613,7 +613,7 @@
 			sort($current);
 			self::assertSame($roles, $current);
 			$user->detach($root)->where('r.enabled', '=', 1);
-			$user->save();
+			$user->commit();
 			$current = [];
 			foreach ($user->join('r', RoleSchema::class)->where('e\r.enabled', '=', 1) as $record) {
 				$entity = $record->getEntity('r');

@@ -5,8 +5,4 @@
 	use Edde\Crate\Crate;
 
 	class Entity extends Crate implements IEntity {
-		/** @inheritdoc */
-		public function save(): IEntity {
-			return $this;
-		}
 	}
