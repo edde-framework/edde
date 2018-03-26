@@ -55,7 +55,7 @@
 		}
 
 		public function testInsert() {
-			$entity = $this->entityManager->create(SimpleSchema::class, [
+			$entity = $this->entityManager->entity(SimpleSchema::class, [
 				'name'     => 'this entity is new',
 				'optional' => 'foo-bar',
 			]);
@@ -70,7 +70,7 @@
 		public function testInsertException() {
 			$this->expectException(SchemaValidationException::class);
 			$this->expectExceptionMessage('Validation of schema [Edde\Common\Schema\FooSchema] failed.');
-			$this->entityManager->create(FooSchema::class, [
+			$this->entityManager->entity(FooSchema::class, [
 				'label' => 'kaboom',
 			])->save();
 		}
@@ -81,7 +81,7 @@
 		public function testInsertException2() {
 			$this->expectException(SchemaValidationException::class);
 			$this->expectExceptionMessage('Validation of schema [Edde\Common\Schema\FooSchema] failed.');
-			$this->entityManager->create(FooSchema::class, [
+			$this->entityManager->entity(FooSchema::class, [
 				'name'  => null,
 				'label' => 'kaboom',
 			])->save();
@@ -92,10 +92,10 @@
 		 */
 		public function testInsertUnique() {
 			$this->expectException(DuplicateEntryException::class);
-			$this->entityManager->create(FooSchema::class, [
+			$this->entityManager->entity(FooSchema::class, [
 				'name' => 'unique',
 			])->save();
-			$this->entityManager->create(FooSchema::class, [
+			$this->entityManager->entity(FooSchema::class, [
 				'name' => 'unique',
 			])->save();
 		}
@@ -104,12 +104,12 @@
 		 * @throws DuplicateEntryException
 		 */
 		public function testSave() {
-			$entity = $this->entityManager->create(SimpleSchema::class, [
+			$entity = $this->entityManager->entity(SimpleSchema::class, [
 				'name'     => 'some name for this entity',
 				'optional' => 'this string is optional, but I wanna fill it!',
 			])->save();
 			self::assertNotEmpty($entity->get('uuid'));
-			$entity = $this->entityManager->create(SimpleSchema::class, [
+			$entity = $this->entityManager->entity(SimpleSchema::class, [
 				'name'     => 'another name',
 				'optional' => null,
 			])->save();
@@ -157,7 +157,7 @@
 		 * @throws DuplicateEntryException
 		 */
 		public function testUpdate() {
-			$entity = $this->entityManager->create(SimpleSchema::class, [
+			$entity = $this->entityManager->entity(SimpleSchema::class, [
 				'name'     => 'to-be-updated',
 				'optional' => 'this is a new nice and updated string',
 				'value'    => 3.14,
@@ -181,15 +181,15 @@
 		 * @throws SchemaException
 		 */
 		public function testLink() {
-			$foo = $this->entityManager->create(FooSchema::class, [
+			$foo = $this->entityManager->entity(FooSchema::class, [
 				'name'  => 'foo with poo',
 				'label' => 'I wanna have a label on this one',
 			]);
-			$poo = $this->entityManager->create(PooSchema::class, [
+			$poo = $this->entityManager->entity(PooSchema::class, [
 				'name'  => 'the name of this epic Poo!',
 				'label' => 'smells like Hell',
 			]);
-			$anotherPoo = $this->entityManager->create(PooSchema::class, [
+			$anotherPoo = $this->entityManager->entity(PooSchema::class, [
 				'name' => 'this is another poo!',
 			]);
 			$foo->linkTo($poo);
@@ -241,31 +241,31 @@
 		 * @throws SchemaException
 		 */
 		public function testRelationTo() {
-			$foo = $this->entityManager->create(FooSchema::class, [
+			$foo = $this->entityManager->entity(FooSchema::class, [
 				'name' => 'foo The First',
 			]);
-			$foo2 = $this->entityManager->create(FooSchema::class, [
+			$foo2 = $this->entityManager->entity(FooSchema::class, [
 				'name' => 'foo The Second',
 			]);
-			$bar = $this->entityManager->create(BarSchema::class, [
+			$bar = $this->entityManager->entity(BarSchema::class, [
 				'name' => 'bar The Second',
 			]);
-			$bar2 = $this->entityManager->create(BarSchema::class, [
+			$bar2 = $this->entityManager->entity(BarSchema::class, [
 				'name' => 'bar The Third',
 			]);
-			$bar3 = $this->entityManager->create(BarSchema::class, [
+			$bar3 = $this->entityManager->entity(BarSchema::class, [
 				'name' => 'Bar for The Foo',
 			]);
-			$this->entityManager->create(BarSchema::class, [
+			$this->entityManager->entity(BarSchema::class, [
 				'name' => 'Another, very secret bar!',
 			]);
-			$poo = $this->entityManager->create(PooSchema::class, [
+			$poo = $this->entityManager->entity(PooSchema::class, [
 				'name' => 'Da Poo The First One!',
 			]);
-			$poo2 = $this->entityManager->create(PooSchema::class, [
+			$poo2 = $this->entityManager->entity(PooSchema::class, [
 				'name' => 'Da Poo The Bigger One!',
 			]);
-			$poo3 = $this->entityManager->create(PooSchema::class, [
+			$poo3 = $this->entityManager->entity(PooSchema::class, [
 				'name' => 'Da Poo The Hard One!',
 			]);
 			$this->schemaManager->load(FooBarSchema::class);
@@ -385,16 +385,16 @@
 		 */
 		public function testRelationAttribute() {
 			$this->schemaManager->load(UserRoleSchema::class);
-			$user = $this->entityManager->create(UserSchema::class, [
+			$user = $this->entityManager->entity(UserSchema::class, [
 				'name'    => 'Me, The Best User Ever!',
 				'email'   => 'me@there.here',
 				'created' => new DateTime(),
 			]);
-			$root = $this->entityManager->create(RoleSchema::class, [
+			$root = $this->entityManager->entity(RoleSchema::class, [
 				'name'  => 'root',
 				'label' => 'he can do everything!',
 			]);
-			$guest = $this->entityManager->create(RoleSchema::class, [
+			$guest = $this->entityManager->entity(RoleSchema::class, [
 				'name'  => 'guest',
 				'label' => 'this one can do almost nothing!',
 			]);
@@ -453,8 +453,8 @@
 		public function testMoreRelations() {
 			$this->schemaManager->load(SourceOneTargetSchema::class);
 			$this->schemaManager->load(SourceTwoTargetSchema::class);
-			$source = $this->entityManager->create(SourceSchema::class);
-			$target = $this->entityManager->create(TargetSchema::class);
+			$source = $this->entityManager->entity(SourceSchema::class);
+			$target = $this->entityManager->entity(TargetSchema::class);
 			$source->set('name', 'source-yapee');
 			$target->set('name', 'yapee');
 			$source->attach($target, SourceTwoTargetSchema::class);
@@ -474,7 +474,7 @@
 		public function testReverseRelation() {
 			$this->schemaManager->load(SourceOneTargetSchema::class);
 			$this->schemaManager->load(SourceTwoTargetSchema::class);
-			$target = $this->entityManager->create(TargetSchema::class, ['name' => 'boo'])->save();
+			$target = $this->entityManager->entity(TargetSchema::class, ['name' => 'boo'])->save();
 			$source = $this->entityManager->collection('s', SourceSchema::class)->entity('s', 'source-yapee');
 			$source->attach($target, SourceTwoTargetSchema::class);
 			$source->save();
@@ -512,7 +512,7 @@
 		 */
 		public function testEntityDetach() {
 			$this->schemaManager->load(UserRoleSchema::class);
-			$user = $this->entityManager->create(UserSchema::class, [
+			$user = $this->entityManager->entity(UserSchema::class, [
 				'name'    => 'foo-user',
 				'email'   => 'foo@user.com',
 				'created' => new DateTime(),
@@ -552,7 +552,7 @@
 		 */
 		public function testDisconnect() {
 			$this->schemaManager->load(UserRoleSchema::class);
-			$user = $this->entityManager->create(UserSchema::class, [
+			$user = $this->entityManager->entity(UserSchema::class, [
 				'name'    => 'mrdka',
 				'email'   => 'mrdka@mrdka.mrdka',
 				'created' => new DateTime(),
@@ -591,7 +591,7 @@
 		 */
 		public function testUnlinkRelation() {
 			$this->schemaManager->load(UserRoleSchema::class);
-			$user = $this->entityManager->create(UserSchema::class, [
+			$user = $this->entityManager->entity(UserSchema::class, [
 				'name'    => 'root-user',
 				'email'   => 'root@user.com',
 				'created' => new DateTime(),

@@ -50,7 +50,9 @@
 		/** @inheritdoc */
 		public function save(string $alias, stdClass $source): IEntity {
 			try {
-				return $this->entityManager->save($this->getSchema($alias), $source);
+				$entity = $this->entityManager->entity($this->getSchema($alias));
+				$entity->put();
+				return $entity;
 			} catch (CollectionException $exception) {
 				throw $exception;
 			} catch (Throwable $exception) {

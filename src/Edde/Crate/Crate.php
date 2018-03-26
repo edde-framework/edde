@@ -3,13 +3,23 @@
 	namespace Edde\Crate;
 
 	use Edde\Object;
+	use Edde\Schema\ISchema;
 	use stdClass;
 
 	class Crate extends Object implements ICrate {
+		/** @var ISchema */
+		protected $schema;
 		/** @var IProperty[] */
 		protected $properties = [];
 		/** @var bool */
 		protected $dirty = null;
+
+		/**
+		 * @param ISchema $schema
+		 */
+		public function __construct(ISchema $schema) {
+			$this->schema = $schema;
+		}
 
 		/** @inheritdoc */
 		public function set(string $property, $value): ICrate {

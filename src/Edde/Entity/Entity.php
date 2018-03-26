@@ -9,14 +9,8 @@
 	use stdClass;
 
 	class Entity extends Crate implements IEntity {
-		/** @var ISchema */
-		protected $schema;
 		/** @var IProperty */
 		protected $primary = null;
-
-		public function __construct(ISchema $schema) {
-			$this->schema = $schema;
-		}
 
 		/** @inheritdoc */
 		public function getSchema(): ISchema {

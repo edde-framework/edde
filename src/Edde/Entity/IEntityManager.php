@@ -3,7 +3,6 @@
 	namespace Edde\Entity;
 
 	use Edde\Config\IConfigurable;
-	use stdClass;
 
 	interface IEntityManager extends IConfigurable {
 		/**
@@ -15,17 +14,5 @@
 		 *
 		 * @throws EntityException
 		 */
-		public function create(string $schema): IEntity;
-
-		/**
-		 * shorthand for put & save
-		 *
-		 * @param string   $schema
-		 * @param stdClass $source
-		 *
-		 * @return IEntity
-		 *
-		 * @throws EntityException
-		 */
-		public function save(string $schema, stdClass $source): IEntity;
+		public function entity(string $schema): IEntity;
 	}

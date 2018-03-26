@@ -3,6 +3,7 @@
 	namespace Edde\Configurator\Schema;
 
 	use Edde\Config\AbstractConfigurator;
+	use Edde\Container\ContainerException;
 	use Edde\Schema\ISchemaManager;
 	use Edde\Schema\SchemaReflectionLoader;
 	use Edde\Service\Container\Container;
@@ -12,6 +13,8 @@
 
 		/**
 		 * @param ISchemaManager $instance
+		 *
+		 * @throws ContainerException
 		 */
 		public function configure($instance) {
 			parent::configure($instance);
