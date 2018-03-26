@@ -2,17 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Crate;
 
+	use Edde\Schema\IAttribute;
+
 	/**
 	 * Crate property.
 	 */
 	interface IProperty {
-		/**
-		 * get the name of a property
-		 *
-		 * @return string
-		 */
-		public function getName(): string;
-
 		/**
 		 * set this value as default
 		 *
@@ -76,4 +71,9 @@
 		 * @return IProperty
 		 */
 		public function commit(): IProperty;
+
+		/**
+		 * @return IAttribute
+		 */
+		public function getAttribute(): IAttribute;
 	}

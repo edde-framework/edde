@@ -67,7 +67,7 @@
 			}
 			$this->schemas[$name] = $schema = $schemaBuilder->getSchema();
 			foreach ($schemaBuilder->getLinkBuilders() as $linkBuilder) {
-				$schema->link(new Link($name = $linkBuilder->getName(), $from = new Target($schema, $schema->getProperty($linkBuilder->getSourceProperty())), $to = new Target($target = $this->load($linkBuilder->getTargetSchema()), $target->getProperty($linkBuilder->getTargetProperty()))));
+				$schema->link(new Link($name = $linkBuilder->getName(), $from = new Target($schema, $schema->getAttribute($linkBuilder->getSourceProperty())), $to = new Target($target = $this->load($linkBuilder->getTargetSchema()), $target->getAttribute($linkBuilder->getTargetProperty()))));
 				$target->linkTo(new Link($name, $from, $to));
 			}
 			if ($schema->isRelation()) {
@@ -84,7 +84,7 @@
 		/** @inheritdoc */
 		public function generate(ISchema $schema, stdClass $source): stdClass {
 			$result = clone $source;
-			foreach ($schema->getProperties() as $property) {
+			foreach ($schema->getAttributes() as $property) {
 				if (isset($source[$name = $property->getName()]) === false && ($generator = $property->getGenerator())) {
 					$result->$name = $this->generatorManager->getGenerator($generator)->generate();
 				}
@@ -96,7 +96,7 @@
 		public function filter(ISchema $schema, stdClass $source): stdClass {
 			$result = clone $source;
 			foreach ($source as $k => $v) {
-				if ($filter = $schema->getProperty($k)->getFilter()) {
+				if ($filter = $schema->getAttribute($k)->getFilter()) {
 					$result[$k] = $this->filterManager->getFilter($filter)->filter($v);
 				}
 			}
@@ -107,7 +107,7 @@
 		public function sanitize(ISchema $schema, stdClass $source): stdClass {
 			$result = $source;
 			foreach ($source as $k => $v) {
-				if ($sanitizer = $schema->getProperty($k)->getSanitizer()) {
+				if ($sanitizer = $schema->getAttribute($k)->getSanitizer()) {
 					$result[$k] = $this->sanitizerManager->getSanitizer($sanitizer)->sanitize($v);
 				}
 			}
@@ -127,7 +127,7 @@
 		/** @inheritdoc */
 		public function validate(ISchema $schema, stdClass $source): void {
 			$exceptions = [];
-			foreach ($schema->getProperties() as $name => $property) {
+			foreach ($schema->getAttributes() as $name => $property) {
 				try {
 					if ($property->isLink()) {
 						continue;

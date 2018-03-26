@@ -2,9 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Crate;
 
+	use Edde\Schema\IAttribute;
+
 	class Property implements IProperty {
-		/** @var string */
-		protected $name;
+		/** @var IAttribute */
+		protected $attribute;
 		/**  @var mixed */
 		protected $default;
 		/** @var mixed */
@@ -12,15 +14,10 @@
 		protected $dirty = false;
 
 		/**
-		 * @param string $name
+		 * @param IAttribute $attribute
 		 */
-		public function __construct(string $name) {
-			$this->name = $name;
-		}
-
-		/** @inheritdoc */
-		public function getName(): string {
-			return $this->name;
+		public function __construct(IAttribute $attribute) {
+			$this->attribute = $attribute;
 		}
 
 		/** @inheritdoc */
@@ -71,6 +68,11 @@
 			$this->value = null;
 			$this->dirty = false;
 			return $this;
+		}
+
+		/** @inheritdoc */
+		public function getAttribute(): IAttribute {
+			return $this->attribute;
 		}
 
 		/**

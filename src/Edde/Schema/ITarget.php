@@ -30,9 +30,9 @@
 		/**
 		 * get target property
 		 *
-		 * @return IProperty
+		 * @return IAttribute
 		 */
-		public function getProperty(): IProperty;
+		public function getProperty(): IAttribute;
 
 		/**
 		 * shortcut for a... property name!

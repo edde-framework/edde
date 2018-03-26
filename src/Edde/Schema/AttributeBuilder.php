@@ -3,31 +3,33 @@
 	namespace Edde\Schema;
 
 	use Edde\Object;
+	use stdClass;
 
-	class PropertyBuilder extends Object implements IPropertyBuilder {
+	class AttributeBuilder extends Object implements IAttributeBuilder {
+		/** @var stdClass */
 		protected $source;
-		/** @var IProperty */
-		protected $property;
+		/** @var IAttribute */
+		protected $attribute;
 
 		public function __construct(string $name) {
 			$this->source = (object)['name' => $name];
 		}
 
 		/** @inheritdoc */
-		public function type(string $type): IPropertyBuilder {
+		public function type(string $type): IAttributeBuilder {
 			$this->source->type = $type;
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function unique(bool $unique = true): IPropertyBuilder {
+		public function unique(bool $unique = true): IAttributeBuilder {
 			$this->source->unique = $unique;
 			$this->required($unique);
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function primary(bool $primary = true): IPropertyBuilder {
+		public function primary(bool $primary = true): IAttributeBuilder {
 			$this->source->primary = $primary;
 			$this->required($primary);
 			$this->unique($primary);
@@ -35,49 +37,49 @@
 		}
 
 		/** @inheritdoc */
-		public function required(bool $required = true): IPropertyBuilder {
+		public function required(bool $required = true): IAttributeBuilder {
 			$this->source->required = $required;
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function generator(string $generator): IPropertyBuilder {
+		public function generator(string $generator): IAttributeBuilder {
 			$this->source->generator = $generator;
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function filter(string $filter): IPropertyBuilder {
+		public function filter(string $filter): IAttributeBuilder {
 			$this->source->filter = $filter;
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function sanitizer(string $sanitizer): IPropertyBuilder {
+		public function sanitizer(string $sanitizer): IAttributeBuilder {
 			$this->source->sanitizer = $sanitizer;
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function validator(string $validator): IPropertyBuilder {
+		public function validator(string $validator): IAttributeBuilder {
 			$this->source->validator = $validator;
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function link(): IPropertyBuilder {
+		public function link(): IAttributeBuilder {
 			$this->source->link = true;
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function default($default): IPropertyBuilder {
+		public function default($default): IAttributeBuilder {
 			$this->source->default = $default;
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function getProperty(): IProperty {
-			return $this->property ?: $this->property = new Property($this->source);
+		public function getAttribute(): IAttribute {
+			return $this->attribute ?: $this->attribute = new Attribute($this->source);
 		}
 	}

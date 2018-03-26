@@ -2,16 +2,20 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
-	interface IProperty {
+	/**
+	 * An attribute is "property" of schema which is basically
+	 * definition of a "real" property describing it's metadata.
+	 */
+	interface IAttribute {
 		/**
-		 * get name of this property
+		 * get attribute name
 		 *
 		 * @return string
 		 */
 		public function getName(): string;
 
 		/**
-		 * get type of property
+		 * get type of an attribute
 		 *
 		 * @return string
 		 */
@@ -42,12 +46,14 @@
 		public function isLink(): bool;
 
 		/**
+		 * return generator name for this attribute
+		 *
 		 * @return string
 		 */
 		public function getGenerator(): ?string;
 
 		/**
-		 * get property filter
+		 * return filter name for this attribute
 		 *
 		 * @return null|string
 		 */

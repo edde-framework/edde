@@ -43,40 +43,40 @@
 		/**
 		 * @param string $name
 		 *
-		 * @return IProperty
+		 * @return IAttribute
 		 *
 		 * @throws SchemaException
 		 */
-		public function getProperty(string $name): IProperty;
+		public function getAttribute(string $name): IAttribute;
 
 		/**
-		 * return list of properties of this schema
+		 * return list of attributes of this schema
 		 *
-		 * @return IProperty[]
+		 * @return IAttribute[]
 		 */
-		public function getProperties(): array;
+		public function getAttributes(): array;
 
 		/**
-		 * has schema a primary property?
+		 * has schema primary attribute?
 		 *
 		 * @return bool
 		 */
 		public function hasPrimary(): bool;
 
 		/**
-		 * return a primary property of this schema (should throw an exception
+		 * return a primary attribute of this schema (should throw an exception
 		 * when there are more primary properties)
 		 *
-		 * @return IProperty
+		 * @return IAttribute
 		 *
 		 * @throws SchemaException
 		 */
-		public function getPrimary(): IProperty;
+		public function getPrimary(): IAttribute;
 
 		/**
 		 * return list of unique properties
 		 *
-		 * @return IProperty[]
+		 * @return IAttribute[]
 		 */
 		public function getUniques(): array;
 
@@ -97,7 +97,7 @@
 		 *
 		 * @return ILink[]
 		 */
-		public function getLinkToList(string $schema = null): array;
+		public function getLinksTo(string $schema = null): array;
 
 		/**
 		 * link $schema to $this schema; the relation is from "me" to "him"

@@ -6,7 +6,7 @@
 	use Edde\Object;
 	use stdClass;
 
-	class Property extends Object implements IProperty {
+	class Attribute extends Object implements IAttribute {
 		/** @var stdClass */
 		protected $source;
 		/** @var INode */

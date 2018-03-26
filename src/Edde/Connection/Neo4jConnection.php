@@ -83,7 +83,7 @@
 				$primaries = null;
 				$indexes = null;
 				$delimited = $this->delimite($schema->getRealName());
-				foreach ($schema->getProperties() as $property) {
+				foreach ($schema->getAttributes() as $property) {
 					$schema = $property->getName();
 					$fragment = 'n.' . $this->delimite($schema);
 					if ($property->isPrimary()) {

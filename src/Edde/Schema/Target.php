@@ -7,7 +7,7 @@
 	class Target extends Object implements ITarget {
 		/** @var ISchema */
 		protected $schema;
-		/** @var IProperty */
+		/** @var IAttribute */
 		protected $property;
 		/** @var string */
 		protected $name;
@@ -16,7 +16,7 @@
 		/** @var string */
 		protected $propertyName;
 
-		public function __construct(ISchema $schema, IProperty $property) {
+		public function __construct(ISchema $schema, IAttribute $property) {
 			$this->schema = $schema;
 			$this->property = $property;
 			$this->name = $schema->getName();
@@ -40,7 +40,7 @@
 		}
 
 		/** @inheritdoc */
-		public function getProperty(): IProperty {
+		public function getProperty(): IAttribute {
 			return $this->property;
 		}
 

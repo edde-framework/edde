@@ -2,15 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Crate;
 
+	use Edde\Schema\Attribute;
 	use Edde\TestCase;
 
 	class PropertyTest extends TestCase {
-		public function testName() {
-			self::assertSame('Strange Name of The Property', (new Property('Strange Name of The Property'))->getName());
-		}
-
 		public function testGetValue() {
-			$property = new Property('foo');
+			$property = new Property(new Attribute((object)[]));
 			$property->setDefault('default');
 			$property->setValue('value');
 			self::assertSame('value', $property->getValue());
@@ -19,12 +16,12 @@
 		}
 
 		public function testDefaultValue() {
-			$property = new Property('foo');
+			$property = new Property(new Attribute((object)[]));
 			self::assertSame('bar', $property->get('bar'));
 		}
 
 		public function testIsNotDirty() {
-			$property = new Property('foo');
+			$property = new Property(new Attribute((object)[]));
 			$property->setDefault('bar');
 			self::assertFalse($property->isDirty(), 'property should NOT be dirty with just default value!');
 			$property->setValue('bar');
@@ -32,7 +29,7 @@
 		}
 
 		public function testIsDirty() {
-			$property = new Property('foo');
+			$property = new Property(new Attribute((object)[]));
 			$property->setValue('bar');
 			self::assertTrue($property->isDirty(), 'property should BE dirty with set value!');
 			self::assertSame('bar', $property->getValue());
@@ -40,14 +37,14 @@
 		}
 
 		public function testIsDirtyWithFalse() {
-			$property = new Property('foo');
+			$property = new Property(new Attribute((object)[]));
 			$property->setValue(false);
 			self::assertTrue($property->isDirty(), 'property should be dirty!');
 			self::assertFalse($property->get(), 'value of property should be boolean false!');
 		}
 
 		public function testCommit() {
-			$property = new Property('foo');
+			$property = new Property(new Attribute((object)[]));
 			$property->setValue('bar');
 			self::assertSame('bar', $property->get());
 			self::assertTrue($property->isDirty());
@@ -58,7 +55,7 @@
 		}
 
 		public function testIsEmpty() {
-			$property = new Property('foo');
+			$property = new Property(new Attribute((object)[]));
 			self::assertTrue($property->isEmpty(), 'property is NOT empty by default');
 			$property->setDefault('value');
 			self::assertFalse($property->isEmpty(), 'property has a default value, but it is still empty!');

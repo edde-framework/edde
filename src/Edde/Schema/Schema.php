@@ -11,11 +11,11 @@
 		protected $relation;
 		/** @var string|null */
 		protected $alias;
-		/** @var IProperty[] */
-		protected $properties = [];
-		/** @var IProperty */
+		/** @var IAttribute[] */
+		protected $attributes = [];
+		/** @var IAttribute */
 		protected $primary;
-		/** @var IProperty[] */
+		/** @var IAttribute[] */
 		protected $uniques = null;
 		/** @var ILink[][] */
 		protected $linkToList = [];
@@ -24,9 +24,9 @@
 		/** @var IRelation[][] */
 		protected $relations = [];
 
-		public function __construct(string $name, array $properties, bool $relation, string $alias = null) {
+		public function __construct(string $name, array $attributes, bool $relation, string $alias = null) {
 			$this->name = $name;
-			$this->properties = $properties;
+			$this->attributes = $attributes;
 			$this->relation = $relation;
 			$this->alias = $alias;
 		}
@@ -57,16 +57,16 @@
 		}
 
 		/** @inheritdoc */
-		public function getProperty(string $name): IProperty {
-			if (isset($this->properties[$name]) === false) {
-				throw new SchemaException(sprintf('Requested unknown property [%s] on schema [%s].', $name, $this->getName()));
+		public function getAttribute(string $name): IAttribute {
+			if (isset($this->attributes[$name]) === false) {
+				throw new SchemaException(sprintf('Requested unknown attribute [%s::%s].', $this->getName(), $name));
 			}
-			return $this->properties[$name];
+			return $this->attributes[$name];
 		}
 
 		/** @inheritdoc */
-		public function getProperties(): array {
-			return $this->properties;
+		public function getAttributes(): array {
+			return $this->attributes;
 		}
 
 		/** @inheritdoc */
@@ -80,16 +80,16 @@
 		}
 
 		/** @inheritdoc */
-		public function getPrimary(): IProperty {
+		public function getPrimary(): IAttribute {
 			if ($this->primary) {
 				return $this->primary;
 			}
-			foreach ($this->properties as $property) {
-				if ($property->isPrimary()) {
-					return $this->primary = $property;
+			foreach ($this->attributes as $attribute) {
+				if ($attribute->isPrimary()) {
+					return $this->primary = $attribute;
 				}
 			}
-			throw new SchemaException(sprintf('Schema [%s] has no primary properties.', $this->getName()));
+			throw new SchemaException(sprintf('Schema [%s] has no primary attribute.', $this->getName()));
 		}
 
 		/** @inheritdoc */
@@ -98,9 +98,9 @@
 				return $this->uniques;
 			}
 			$this->uniques = [];
-			foreach ($this->properties as $name => $property) {
-				if ($property->isUnique() && $property->isPrimary() === false) {
-					$this->uniques[$name] = $property;
+			foreach ($this->attributes as $name => $attribute) {
+				if ($attribute->isUnique() && $attribute->isPrimary() === false) {
+					$this->uniques[$name] = $attribute;
 				}
 			}
 			return $this->uniques;
@@ -113,7 +113,7 @@
 		}
 
 		/** @inheritdoc */
-		public function getLinkToList(string $schema = null): array {
+		public function getLinksTo(string $schema = null): array {
 			return $this->linkToList[$schema] ?? [];
 		}
 

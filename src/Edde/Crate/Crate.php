@@ -11,14 +11,24 @@
 		protected $schema;
 		/** @var IProperty[] */
 		protected $properties = [];
-		/** @var bool */
-		protected $dirty = null;
+		/** @var IProperty */
+		protected $primary = null;
 
 		/**
 		 * @param ISchema $schema
 		 */
 		public function __construct(ISchema $schema) {
 			$this->schema = $schema;
+		}
+
+		/** @inheritdoc */
+		public function getSchema(): ISchema {
+			return $this->schema;
+		}
+
+		/** @inheritdoc */
+		public function getPrimary(): IProperty {
+			return $this->primary ?: $this->primary = $this->getProperty($this->schema->getPrimary()->getName());
 		}
 
 		/** @inheritdoc */
@@ -40,7 +50,7 @@
 		/** @inheritdoc */
 		public function getProperty(string $name): IProperty {
 			if (isset($this->properties[$name]) === false) {
-				$this->properties[$name] = new Property($name);
+				$this->properties[$name] = new Property($this->schema->getAttribute($name));
 			}
 			return $this->properties[$name];
 		}
@@ -48,6 +58,7 @@
 		/** @inheritdoc */
 		public function put(stdClass $source): ICrate {
 			$this->properties = [];
+			$this->primary = null;
 			foreach ($source as $k => $v) {
 				$this->getProperty($k)->setValue($v);
 			}
@@ -67,21 +78,11 @@
 			foreach ($this->properties as $property) {
 				$property->commit();
 			}
-			$this->dirty = null;
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function setDirty(bool $dirty = true): ICrate {
-			$this->dirty = $dirty;
 			return $this;
 		}
 
 		/** @inheritdoc */
 		public function isDirty(): bool {
-			if ($this->dirty !== null) {
-				return $this->dirty;
-			}
 			foreach ($this->properties as $property) {
 				if ($property->isDirty()) {
 					return true;
@@ -92,13 +93,13 @@
 
 		/** @inheritdoc */
 		public function getDirtyProperties(): array {
-			$dirtyList = [];
+			$dirties = [];
 			foreach ($this->properties as $name => $property) {
 				if ($property->isDirty()) {
-					$dirtyList[$name] = $property;
+					$dirties[$name] = $property;
 				}
 			}
-			return $dirtyList;
+			return $dirties;
 		}
 
 		/** @inheritdoc */

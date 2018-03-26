@@ -8,7 +8,7 @@
 	class SchemaBuilder extends Object implements ISchemaBuilder {
 		/** @var stdClass */
 		protected $source;
-		/** @var IPropertyBuilder[] */
+		/** @var IAttributeBuilder[] */
 		protected $propertyBuilders = [];
 		/** @var ISchema */
 		protected $schema;
@@ -32,27 +32,27 @@
 		}
 
 		/** @inheritdoc */
-		public function property(string $name): IPropertyBuilder {
-			return $this->propertyBuilders[$name] = new PropertyBuilder($name);
+		public function property(string $name): IAttributeBuilder {
+			return $this->propertyBuilders[$name] = new AttributeBuilder($name);
 		}
 
 		/** @inheritdoc */
-		public function primary(string $name): IPropertyBuilder {
+		public function primary(string $name): IAttributeBuilder {
 			return $this->property($name)->primary();
 		}
 
 		/** @inheritdoc */
-		public function string(string $name): IPropertyBuilder {
+		public function string(string $name): IAttributeBuilder {
 			return $this->property($name)->type('string');
 		}
 
 		/** @inheritdoc */
-		public function text(string $name): IPropertyBuilder {
+		public function text(string $name): IAttributeBuilder {
 			return $this->property($name)->type('text');
 		}
 
 		/** @inheritdoc */
-		public function integer(string $name): IPropertyBuilder {
+		public function integer(string $name): IAttributeBuilder {
 			return $this->property($name)->type('int');
 		}
 
@@ -72,7 +72,7 @@
 			}
 			$properties = [];
 			foreach ($this->propertyBuilders as $name => $propertyBuilder) {
-				$properties[$name] = $propertyBuilder->getProperty();
+				$properties[$name] = $propertyBuilder->getAttribute();
 			}
 			return $this->schema = new Schema(
 				$this->source->name,

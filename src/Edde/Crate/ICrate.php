@@ -2,6 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Crate;
 
+	use Edde\Schema\ISchema;
+	use Edde\Schema\SchemaException;
 	use stdClass;
 
 	/**
@@ -9,6 +11,11 @@
 	 * usually ORM objects do, but in abstract way. Crate with a Schema is an Entity.
 	 */
 	interface ICrate {
+		/**
+		 * @return ISchema
+		 */
+		public function getSchema(): ISchema;
+
 		/**
 		 * when setting a property to crate, value should be compatible type to keep
 		 * everything working properly; that's scalar types, DateTime and few others
@@ -40,11 +47,22 @@
 		public function hasProperty(string $name): bool;
 
 		/**
+		 * return primary property of this entity
+		 *
+		 * @return IProperty
+		 *
+		 * @throws SchemaException
+		 */
+		public function getPrimary(): IProperty;
+
+		/**
 		 * return or create property with the given name
 		 *
 		 * @param string $name
 		 *
 		 * @return IProperty
+		 *
+		 * @throws SchemaException
 		 */
 		public function getProperty(string $name): IProperty;
 
@@ -55,6 +73,8 @@
 		 * @param stdClass $source
 		 *
 		 * @return $this
+		 *
+		 * @throws SchemaException
 		 */
 		public function put(stdClass $source): ICrate;
 
@@ -65,6 +85,8 @@
 		 * @param stdClass $source
 		 *
 		 * @return $this
+		 *
+		 * @throws SchemaException
 		 */
 		public function push(stdClass $source): ICrate;
 
@@ -74,15 +96,6 @@
 		 * @return ICrate
 		 */
 		public function commit(): ICrate;
-
-		/**
-		 * explicitly change dirty flag
-		 *
-		 * @param bool $dirty
-		 *
-		 * @return ICrate
-		 */
-		public function setDirty(bool $dirty = true): ICrate;
 
 		/**
 		 * is state of a crate changed (any property is changed?)?

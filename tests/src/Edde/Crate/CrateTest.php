@@ -13,7 +13,10 @@
 		/**
 		 * @throws SchemaException
 		 */
-		public function testCrate() {
+		public function testPropertyException() {
+			$this->expectException(SchemaException::class);
+			$this->expectExceptionMessage('kjfkldsfkldjf');
 			$crate = new Crate($this->schemaManager->load(FooSchema::class));
+			$crate->set('unknown', false);
 		}
 	}

@@ -69,7 +69,7 @@
 				$sql = 'CREATE TABLE ' . $this->delimite($table = $schema->getRealName()) . " (\n\t";
 				$columns = [];
 				$primaries = [];
-				foreach ($schema->getProperties() as $property) {
+				foreach ($schema->getAttributes() as $property) {
 					$column = ($fragment = $this->delimite($property->getName())) . ' ' . $this->type($property->getType());
 					if ($property->isPrimary()) {
 						$primaries[] = $fragment;
@@ -158,7 +158,7 @@
 				if (empty($name)) {
 					continue;
 				}
-				foreach ($sourceSchema->getProperties() as $property) {
+				foreach ($sourceSchema->getAttributes() as $property) {
 					$columns[] = $this->delimite($name) . '.' . $this->delimite($property->getName()) . ' AS ' . $this->delimite($name . '.' . $property->getName());
 				}
 			}
