@@ -18,6 +18,7 @@
 	use Edde\Service\Entity\EntityManager;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\TestCase;
+	use Edde\Validator\ValidatorException;
 	use FooBarSchema;
 	use FooSchema;
 	use SimpleSchema;
@@ -38,6 +39,7 @@
 				FooSchema::class,
 				BarSchema::class,
 				FooBarSchema::class,
+				SimpleSchema::class,
 			]);
 			$collection->create();
 			self::assertTrue(true, 'everything is ok');
@@ -45,27 +47,34 @@
 
 		/**
 		 * @throws CollectionException
+		 * @throws SchemaValidationException
+		 * @throws ValidatorException
 		 */
 		public function testValidator() {
 			$this->expectException(SchemaValidationException::class);
-			$this->expectExceptionMessage('Validation of schema [Edde\Common\Schema\SimpleSchema] failed.');
+			$this->expectExceptionMessage('Validation of schema [SimpleSchema] failed.');
 			$collection = $this->collectionManager->collection();
 			$collection->use(SimpleSchema::class, 'simple');
 			$collection->save('simple', (object)['name' => true]);
 		}
 
+		/**
+		 * @throws CollectionException
+		 * @throws SchemaValidationException
+		 * @throws ValidatorException
+		 */
 		public function testInsert() {
-			$entity = $this->entityManager->entity(SimpleSchema::class, [
-				'name'     => 'this entity is new',
-				'optional' => 'foo-bar',
+			$collection = $this->collectionManager->collection();
+			$collection->use(SimpleSchema::class);
+			$entity = $collection->save(SimpleSchema::class, (object)[
+				'name' => 'this entity is new',
 			]);
+			self::assertFalse($entity->isDirty());
 			self::assertNotEmpty($entity->get('uuid'));
-			$entity->commit();
-			self::assertFalse($entity->isDirty(), 'entity is still dirty, oops!');
 		}
 
 		/**
-		 * @throws DuplicateEntryException
+		 * @throws EntityException
 		 */
 		public function testInsertException() {
 			$this->expectException(SchemaValidationException::class);
@@ -76,7 +85,7 @@
 		}
 
 		/**
-		 * @throws DuplicateEntryException
+		 * @throws EntityException
 		 */
 		public function testInsertException2() {
 			$this->expectException(SchemaValidationException::class);
@@ -88,7 +97,7 @@
 		}
 
 		/**
-		 * @throws DuplicateEntryException
+		 * @throws EntityException
 		 */
 		public function testInsertUnique() {
 			$this->expectException(DuplicateEntryException::class);
@@ -101,7 +110,7 @@
 		}
 
 		/**
-		 * @throws DuplicateEntryException
+		 * @throws EntityException
 		 */
 		public function testSave() {
 			$entity = $this->entityManager->entity(SimpleSchema::class, [
@@ -118,7 +127,6 @@
 		}
 
 		/**
-		 * @throws EntityException
 		 */
 		public function testCollection() {
 			$entities = [];
@@ -154,7 +162,7 @@
 		}
 
 		/**
-		 * @throws DuplicateEntryException
+		 * @throws EntityException
 		 */
 		public function testUpdate() {
 			$entity = $this->entityManager->entity(SimpleSchema::class, [
@@ -177,7 +185,7 @@
 		}
 
 		/**
-		 * @throws DuplicateEntryException
+		 * @throws EntityException
 		 * @throws SchemaException
 		 */
 		public function testLink() {
@@ -237,7 +245,7 @@
 		}
 
 		/**
-		 * @throws DuplicateEntryException
+		 * @throws EntityException
 		 * @throws SchemaException
 		 */
 		public function testRelationTo() {
@@ -380,7 +388,7 @@
 		}
 
 		/**
-		 * @throws DuplicateEntryException
+		 * @throws EntityException
 		 * @throws SchemaException
 		 */
 		public function testRelationAttribute() {
@@ -447,7 +455,7 @@
 		}
 
 		/**
-		 * @throws DuplicateEntryException
+		 * @throws EntityException
 		 * @throws SchemaException
 		 */
 		public function testMoreRelations() {
@@ -468,7 +476,7 @@
 		}
 
 		/**
-		 * @throws DuplicateEntryException
+		 * @throws EntityException
 		 * @throws SchemaException
 		 */
 		public function testReverseRelation() {
@@ -507,7 +515,7 @@
 		}
 
 		/**
-		 * @throws DuplicateEntryException
+		 * @throws EntityException
 		 * @throws SchemaException
 		 */
 		public function testEntityDetach() {
@@ -547,7 +555,7 @@
 		}
 
 		/**
-		 * @throws DuplicateEntryException
+		 * @throws EntityException
 		 * @throws SchemaException
 		 */
 		public function testDisconnect() {
@@ -586,7 +594,7 @@
 		}
 
 		/**
-		 * @throws DuplicateEntryException
+		 * @throws EntityException
 		 * @throws SchemaException
 		 */
 		public function testUnlinkRelation() {

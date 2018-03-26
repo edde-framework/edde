@@ -3,6 +3,8 @@
 	namespace Edde\Collection;
 
 	use Edde\Entity\IEntity;
+	use Edde\Schema\SchemaValidationException;
+	use Edde\Validator\ValidatorException;
 	use IteratorAggregate;
 	use stdClass;
 	use Traversable;
@@ -49,6 +51,8 @@
 		 * @return IEntity return newly create entity
 		 *
 		 * @throws CollectionException
+		 * @throws ValidatorException
+		 * @throws SchemaValidationException
 		 */
 		public function save(string $alias, stdClass $source): IEntity;
 

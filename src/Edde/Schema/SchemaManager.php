@@ -85,7 +85,7 @@
 		public function generate(ISchema $schema, stdClass $source): stdClass {
 			$result = clone $source;
 			foreach ($schema->getAttributes() as $property) {
-				if (isset($source[$name = $property->getName()]) === false && ($generator = $property->getGenerator())) {
+				if (isset($source->{$name = $property->getName()}) === false && ($generator = $property->getGenerator())) {
 					$result->$name = $this->generatorManager->getGenerator($generator)->generate();
 				}
 			}
@@ -97,7 +97,7 @@
 			$result = clone $source;
 			foreach ($source as $k => $v) {
 				if ($filter = $schema->getAttribute($k)->getFilter()) {
-					$result[$k] = $this->filterManager->getFilter($filter)->filter($v);
+					$result->$k = $this->filterManager->getFilter($filter)->filter($v);
 				}
 			}
 			return $result;
@@ -108,7 +108,7 @@
 			$result = $source;
 			foreach ($source as $k => $v) {
 				if ($sanitizer = $schema->getAttribute($k)->getSanitizer()) {
-					$result[$k] = $this->sanitizerManager->getSanitizer($sanitizer)->sanitize($v);
+					$result->$k = $this->sanitizerManager->getSanitizer($sanitizer)->sanitize($v);
 				}
 			}
 			return $result;
@@ -137,7 +137,7 @@
 						'schema'   => $schema,
 						'property' => $property,
 					];
-					$value = $source[$name] ?? null;
+					$value = $source->$name ?? null;
 					if ($property->isRequired()) {
 						$this->validatorManager->check('required', $value, $options);
 					}

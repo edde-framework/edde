@@ -19,6 +19,7 @@
 	use PDO;
 	use PDOException;
 	use PDOStatement;
+	use stdClass;
 	use Throwable;
 	use function implode;
 
@@ -56,6 +57,9 @@
 		 */
 		public function exec($query, array $params = []) {
 			try {
+				if (empty($params) === false) {
+					throw new ConnectionException(sprintf('%s does not support params.', __METHOD__));
+				}
 				return $this->pdo->exec($query);
 			} catch (PDOException $exception) {
 				throw $this->exception($exception);
@@ -93,6 +97,31 @@
 			} catch (Throwable $exception) {
 				throw new ConnectionException(sprintf('Cannot create schema [%s]: %s', $name, $exception->getMessage()), 0, $exception);
 			}
+		}
+
+		/** @inheritdoc */
+		public function save(stdClass $source, string $name): IConnection {
+			try {
+				$schema = $this->schemaManager->load($name);
+				$table = $this->delimite($schema->getRealName());
+				$source = $this->schemaManager->sanitize($schema, $source);
+				$columns = [];
+				$params = [];
+				foreach ($source as $k => $v) {
+					$columns[] = $delimited = $this->delimite($k);
+					$params[$paramId = sha1($k)] = $v;
+				}
+				$sql = 'INSERT INTO ' . $table . ' (' . implode(', ', $columns) . ') VALUES (:' . implode(', :', array_keys($params)) . ')';
+				$this->fetch($sql, $params);
+				return $this;
+			} catch (Throwable $exception) {
+				throw new ConnectionException(sprintf('Cannot create new object in schema [%s]: %s', $name), 0, $exception);
+			}
+		}
+
+		/** @inheritdoc */
+		public function update(stdClass $source, string $schema): IConnection {
+			return $this;
 		}
 
 		/** @inheritdoc */

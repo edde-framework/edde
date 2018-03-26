@@ -4,10 +4,12 @@
 
 	use Edde\Entity\IEntity;
 	use Edde\Object;
+	use Edde\Schema\SchemaValidationException;
 	use Edde\Service\Connection\Connection;
 	use Edde\Service\Entity\EntityManager;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Transaction\Transaction;
+	use Edde\Validator\ValidatorException;
 	use stdClass;
 	use Throwable;
 
@@ -50,13 +52,15 @@
 		/** @inheritdoc */
 		public function save(string $alias, stdClass $source): IEntity {
 			try {
-				$entity = $this->entityManager->entity($this->getSchema($alias));
-				$schema = $entity->getSchema();
-				$entity->put($source = $this->schemaManager->generate($schema, $source));
+				$name = $this->getSchema($alias);
+				$schema = $this->schemaManager->load($name);
+				$source = $this->schemaManager->generate($schema, $source);
 				$this->schemaManager->validate($schema, $source);
-				$entity->commit();
+				$this->connection->save($source, $name);
+				$entity = $this->entityManager->entity($name);
+				$entity->push($source);
 				return $entity;
-			} catch (CollectionException $exception) {
+			} catch (CollectionException | ValidatorException | SchemaValidationException $exception) {
 				throw $exception;
 			} catch (Throwable $exception) {
 				throw new CollectionException(sprintf('Cannot save item to an alias [%s]: %s', $alias, $exception->getMessage()), 0, $exception);

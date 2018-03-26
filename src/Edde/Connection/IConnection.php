@@ -4,6 +4,7 @@
 
 	use Edde\Query\IQuery;
 	use Edde\Transaction\ITransaction;
+	use stdClass;
 
 	/**
 	 * General driver for storage implementation; one storage could have more drivers to choose from.
@@ -22,7 +23,7 @@
 		public function execute(IQuery $query);
 
 		/**
-		 * execute raw query against a driver which should return some data
+		 * execute raw query which should return some data
 		 *
 		 * @param mixed $query
 		 * @param array $params
@@ -34,7 +35,7 @@
 		public function fetch($query, array $params = []);
 
 		/**
-		 * exec raw query against a driver without returning any data (create database, table, ...)
+		 * exec raw query without returning any data (create database, table, ...)
 		 *
 		 * @param mixed $query
 		 * @param array $params
@@ -55,4 +56,26 @@
 		 * @throws ConnectionException
 		 */
 		public function create(string $name): IConnection;
+
+		/**
+		 * optimized insert
+		 *
+		 * @param stdClass $source
+		 * @param string   $name schema name
+		 *
+		 * @return IConnection
+		 *
+		 * @throws ConnectionException
+		 */
+		public function save(stdClass $source, string $name): IConnection;
+
+		/**
+		 * optimized update (by primary key)
+		 *
+		 * @param stdClass $source
+		 * @param string   $schema
+		 *
+		 * @return IConnection
+		 */
+		public function update(stdClass $source, string $schema): IConnection;
 	}

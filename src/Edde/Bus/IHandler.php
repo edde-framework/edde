@@ -37,7 +37,7 @@
 		 *
 		 * @return IElement
 		 *
-		 * @throws \Edde\Validator\ValidationException
+		 * @throws ValidationException
 		 * @throws BusException
 		 */
 		public function send(IElement $element): IElement;
@@ -49,7 +49,7 @@
 		 *
 		 * @return IElement|null
 		 *
-		 * @throws \Edde\Validator\ValidationException
+		 * @throws ValidationException
 		 * @throws ContainerException
 		 */
 		public function execute(IElement $element): ?IElement;

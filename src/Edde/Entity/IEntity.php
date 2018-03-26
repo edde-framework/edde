@@ -8,10 +8,4 @@
 	 * An Entity is extended Crate with some additional features.
 	 */
 	interface IEntity extends ICrate {
-		/**
-		 * persist changes marked in this entity (update, delete, ...)
-		 *
-		 * @return IEntity
-		 */
-		public function commit(): ICrate;
 	}

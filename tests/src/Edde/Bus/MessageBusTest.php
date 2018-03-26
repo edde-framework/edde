@@ -31,7 +31,7 @@
 
 		/**
 		 * @throws ContainerException
-		 * @throws \Edde\Validator\ValidationException
+		 * @throws ValidationException
 		 */
 		public function testUnknownMessageType() {
 			$response = $this->messageBus->execute(new Element('unsupported-message', 'uuid'));
