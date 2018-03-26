@@ -2,7 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Collection;
 
+	use Edde\Entity\IEntity;
 	use IteratorAggregate;
+	use stdClass;
 	use Traversable;
 
 	/**
@@ -15,7 +17,7 @@
 		 *
 		 * @return ICollection
 		 */
-		public function use(string $schema, string $alias): ICollection;
+		public function use(string $schema, string $alias = null): ICollection;
 
 		/**
 		 * [$alias => $schema]
@@ -37,6 +39,29 @@
 		 * @throws CollectionException
 		 */
 		public function create(): ICollection;
+
+		/**
+		 * save the given source in a collection; alias makes use of a schema internally
+		 *
+		 * @param string   $alias
+		 * @param stdClass $source
+		 *
+		 * @return IEntity return newly create entity
+		 *
+		 * @throws CollectionException
+		 */
+		public function save(string $alias, stdClass $source): IEntity;
+
+		/**
+		 * return schema for the given alias
+		 *
+		 * @param string $alias
+		 *
+		 * @return string
+		 *
+		 * @throws CollectionException
+		 */
+		public function getSchema(string $alias): string;
 
 		/**
 		 * @return Traversable|IRecord[]

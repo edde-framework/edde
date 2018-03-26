@@ -2,57 +2,37 @@
 	declare(strict_types=1);
 	namespace Edde\Entity;
 
-	use Edde\Collection\Collection;
-	use Edde\Collection\ICollection;
 	use Edde\Object;
-	use Edde\Query\QueryQueue;
-	use Edde\Query\SelectQuery;
-	use Edde\Schema\ISchema;
 	use Edde\Service\Container\Container;
 	use Edde\Service\Schema\SchemaManager;
+	use stdClass;
+	use Throwable;
 
 	class EntityManager extends Object implements IEntityManager {
 		use SchemaManager;
 		use Container;
-		/** @var IEntity[] */
-		protected $entities = [];
 
 		/** @inheritdoc */
-		public function createEntity(ISchema $schema): IEntity {
-			if (isset($this->entities[$name = $schema->getName()]) === false) {
-				$this->entities[$name] = $this->container->inject(new Entity($schema));
+		public function create(string $schema): IEntity {
+			try {
+				return $this->container->inject(new Entity($this->schemaManager->load($schema)));
+			} catch (Throwable $exception) {
+				throw new EntityException(sprintf('Cannot create requested entity [%s].', $schema), 0, $exception);
 			}
-			return clone $this->entities[$name];
 		}
 
 		/** @inheritdoc */
-		public function create(string $schema, array $source = []): IEntity {
-			return $this->createEntity($schema = $this->schemaManager->load($schema))->put($this->schemaManager->generate($schema, $source));
-		}
-
-		/** @inheritdoc */
-		public function save(string $schema, array $source): IEntity {
-			return $this->create($schema, $source)->save();
-		}
-
-		/** @inheritdoc */
-		public function load(ISchema $schema, array $source): IEntity {
-			$entity = $this->createEntity($schema);
-			$entity->filter($source);
-			return $entity;
-		}
-
-		/** @inheritdoc */
-		public function collection(string $alias, string $schema): ICollection {
-			$this->container->inject($collection = new Collection($this->storage->stream(new SelectQuery($schema = $this->schemaManager->load($schema), $alias))));
-			$collection->schema($alias, $schema);
-			return $collection;
-		}
-
-		/** @inheritdoc */
-		public function execute(IEntityQueue $entityQueue): IEntityManager {
-			$this->storage->execute(new QueryQueue($entityQueue));
-			$entityQueue->commit();
-			return $this;
+		public function save(string $schema, stdClass $source): IEntity {
+			try {
+				$entity = $this->create($schema);
+				$entity->put($this->schemaManager->generate($entity->getSchema(), $source));
+				$source = $this->schemaManager->generate($schema, $source);
+				$this->schemaManager->validate($schema, $source);
+				$this->connection->save($source, $schema);
+				$entity->save();
+				return $entity;
+			} catch (Throwable $exception) {
+				throw new EntityException(sprintf('Cannot insert item into schema [%s]: %s', $schema, $exception->getMessage()), 0, $exception);
+			}
 		}
 	}

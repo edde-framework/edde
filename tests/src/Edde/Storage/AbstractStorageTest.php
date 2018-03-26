@@ -2,19 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
+	use BarSchema;
 	use DateTime;
-	use Edde\Collection\Collection;
 	use Edde\Collection\CollectionException;
-	use Edde\Common\Schema\BarPooSchema;
-	use Edde\Common\Schema\BarSchema;
-	use Edde\Common\Schema\FooBarSchema;
-	use Edde\Common\Schema\FooSchema;
-	use Edde\Common\Schema\PooSchema;
-	use Edde\Common\Schema\SimpleSchema;
-	use Edde\Common\Schema\SourceOneTargetSchema;
-	use Edde\Common\Schema\SourceSchema;
-	use Edde\Common\Schema\SourceTwoTargetSchema;
-	use Edde\Common\Schema\TargetSchema;
 	use Edde\Connection\DuplicateEntryException;
 	use Edde\Entity\EntityException;
 	use Edde\Entity\EntityNotFoundException;
@@ -22,44 +12,46 @@
 	use Edde\Query\SelectQuery;
 	use Edde\Schema\SchemaException;
 	use Edde\Schema\SchemaValidationException;
+	use Edde\Service\Collection\CollectionManager;
 	use Edde\Service\Connection\Connection;
 	use Edde\Service\Container\Container;
 	use Edde\Service\Entity\EntityManager;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\TestCase;
+	use FooBarSchema;
+	use FooSchema;
+	use SimpleSchema;
 
 	abstract class AbstractStorageTest extends TestCase {
 		use EntityManager;
 		use SchemaManager;
 		use Container;
 		use Connection;
+		use CollectionManager;
 
 		/**
 		 * @throws CollectionException
 		 */
 		public function testCreateSchema() {
-			$collection = new Collection();
+			$collection = $this->collectionManager->collection();
 			$collection->uses([
-				SimpleSchema::class,
-				PooSchema::class,
 				FooSchema::class,
 				BarSchema::class,
 				FooBarSchema::class,
-				BarPooSchema::class,
-				SourceSchema::class,
-				TargetSchema::class,
-				SourceOneTargetSchema::class,
-				SourceTwoTargetSchema::class,
 			]);
 			$collection->create();
 			self::assertTrue(true, 'everything is ok');
 		}
 
+		/**
+		 * @throws CollectionException
+		 */
 		public function testValidator() {
 			$this->expectException(SchemaValidationException::class);
 			$this->expectExceptionMessage('Validation of schema [Edde\Common\Schema\SimpleSchema] failed.');
-			$entity = $this->entityManager->create(SimpleSchema::class, ['name' => true]);
-			$entity->validate();
+			$collection = $this->collectionManager->collection();
+			$collection->use(SimpleSchema::class, 'simple');
+			$collection->save('simple', (object)['name' => true]);
 		}
 
 		public function testInsert() {

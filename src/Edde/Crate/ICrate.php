@@ -2,6 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Crate;
 
+	use stdClass;
+
 	/**
 	 * Crate is very simple implementation of object able to track it's changes and do some common stuff
 	 * usually ORM objects do, but in abstract way. Crate with a Schema is an Entity.
@@ -47,23 +49,24 @@
 		public function getProperty(string $name): IProperty;
 
 		/**
-		 * update the crate with the given data; the crate will be dirty after
+		 * update the crate with the given data; the crate could be dirty after; put should
+		 * drop current properties and create new ones
 		 *
-		 * @param array $source
+		 * @param stdClass $source
 		 *
 		 * @return $this
 		 */
-		public function put(array $source): ICrate;
+		public function put(stdClass $source): ICrate;
 
 		/**
 		 * push given data to the crate without making it dirty (if it was already dirty,
 		 * it could be "cleaned")
 		 *
-		 * @param array $source
+		 * @param stdClass $source
 		 *
 		 * @return $this
 		 */
-		public function push(array $source): ICrate;
+		public function push(stdClass $source): ICrate;
 
 		/**
 		 * set all values for properties as "default", thus making crate not dirty
@@ -105,7 +108,7 @@
 		/**
 		 * return crate as an array
 		 *
-		 * @return array
+		 * @return stdClass
 		 */
-		public function toArray(): array;
+		public function toObject(): stdClass;
 	}

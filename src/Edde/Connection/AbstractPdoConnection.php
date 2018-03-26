@@ -70,9 +70,9 @@
 				$columns = [];
 				$primaries = [];
 				foreach ($schema->getProperties() as $property) {
-					$column = ($schema = $this->delimite($property->getName())) . ' ' . $this->type($property->getType());
+					$column = ($fragment = $this->delimite($property->getName())) . ' ' . $this->type($property->getType());
 					if ($property->isPrimary()) {
-						$primaries[] = $schema;
+						$primaries[] = $fragment;
 					} else if ($property->isUnique()) {
 						$column .= ' UNIQUE';
 					}

@@ -21,6 +21,8 @@
 	use Edde\Bus\MessageBus;
 	use Edde\Bus\MessageService;
 	use Edde\Bus\RequestService;
+	use Edde\Collection\CollectionManager;
+	use Edde\Collection\ICollectionManager;
 	use Edde\Config\ConfigLoader;
 	use Edde\Config\ConfigService;
 	use Edde\Config\IConfigLoader;
@@ -326,36 +328,37 @@
 				/**
 				 * generator (related to schema) support
 				 */
-				IGeneratorManager::class => GeneratorManager::class,
-				IFilterManager::class    => FilterManager::class,
-				ISanitizerManager::class => SanitizerManager::class,
-				IValidatorManager::class => ValidatorManager::class,
+				IGeneratorManager::class   => GeneratorManager::class,
+				IFilterManager::class      => FilterManager::class,
+				ISanitizerManager::class   => SanitizerManager::class,
+				IValidatorManager::class   => ValidatorManager::class,
 				/**
 				 * random & security support
 				 */
-				IRandomService::class    => RandomService::class,
-				IPasswordService::class  => PasswordService::class,
+				IRandomService::class      => RandomService::class,
+				IPasswordService::class    => PasswordService::class,
 				/**
 				 * storage support
 				 */
-				IEntityManager::class    => EntityManager::class,
-				IConnection::class       => MysqlConnection::class,
-				ITransaction::class      => IConnection::class,
+				IEntityManager::class      => EntityManager::class,
+				IConnection::class         => MysqlConnection::class,
+				ITransaction::class        => IConnection::class,
+				ICollectionManager::class  => CollectionManager::class,
 				/**
 				 * an application upgrades support
 				 */
-				IUpgradeManager::class   => UpgradeManager::class,
+				IUpgradeManager::class     => UpgradeManager::class,
 				/**
 				 * access (permission) subsystem
 				 *
 				 * - access is kind of alias for Authorization
 				 */
-				IAccessService::class    => AccessService::class,
+				IAccessService::class      => AccessService::class,
 				/**
 				 * Xml support
 				 */
-				IXmlExportService::class => XmlExportService::class,
-				IXmlParserService::class => XmlParserService::class,
+				IXmlExportService::class   => XmlExportService::class,
+				IXmlParserService::class   => XmlParserService::class,
 				/**
 				 * Message bus support; probably most important stuff of the
 				 * framework and the top killing feature :)

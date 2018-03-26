@@ -71,14 +71,14 @@
 		 * create the dependency by it's identifier (name)
 		 *
 		 * @param string $name
-		 * @param array  $parameterList
+		 * @param array  $params
 		 * @param string $source who has requested this dependency
 		 *
 		 * @return mixed
 		 *
 		 * @throws ContainerException
 		 */
-		public function create(string $name, array $parameterList = [], string $source = null);
+		public function create(string $name, array $params = [], string $source = null);
 
 		/**
 		 * general method for dependency creation (so call and create should call this one)

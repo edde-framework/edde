@@ -9,6 +9,7 @@
 	use Edde\Service\Validator\ValidatorManager;
 	use Edde\Validator\ValidationException;
 	use Edde\Validator\ValidatorException;
+	use stdClass;
 
 	class SchemaManager extends Object implements ISchemaManager {
 		use GeneratorManager;
@@ -81,19 +82,19 @@
 		}
 
 		/** @inheritdoc */
-		public function generate(ISchema $schema, array $source): array {
-			$result = $source;
+		public function generate(ISchema $schema, stdClass $source): stdClass {
+			$result = clone $source;
 			foreach ($schema->getProperties() as $property) {
 				if (isset($source[$name = $property->getName()]) === false && ($generator = $property->getGenerator())) {
-					$result[$name] = $this->generatorManager->getGenerator($generator)->generate();
+					$result->$name = $this->generatorManager->getGenerator($generator)->generate();
 				}
 			}
 			return $result;
 		}
 
 		/** @inheritdoc */
-		public function filter(ISchema $schema, array $source): array {
-			$result = $source;
+		public function filter(ISchema $schema, stdClass $source): stdClass {
+			$result = clone $source;
 			foreach ($source as $k => $v) {
 				if ($filter = $schema->getProperty($k)->getFilter()) {
 					$result[$k] = $this->filterManager->getFilter($filter)->filter($v);
@@ -103,7 +104,7 @@
 		}
 
 		/** @inheritdoc */
-		public function sanitize(ISchema $schema, array $source): array {
+		public function sanitize(ISchema $schema, stdClass $source): stdClass {
 			$result = $source;
 			foreach ($source as $k => $v) {
 				if ($sanitizer = $schema->getProperty($k)->getSanitizer()) {
@@ -114,7 +115,7 @@
 		}
 
 		/** @inheritdoc */
-		public function isValid(ISchema $schema, array $source): bool {
+		public function isValid(ISchema $schema, stdClass $source): bool {
 			try {
 				$this->validate($schema, $source);
 				return true;
@@ -124,7 +125,7 @@
 		}
 
 		/** @inheritdoc */
-		public function validate(ISchema $schema, array $source): void {
+		public function validate(ISchema $schema, stdClass $source): void {
 			$exceptions = [];
 			foreach ($schema->getProperties() as $name => $property) {
 				try {
@@ -168,7 +169,7 @@
 		}
 
 		/** @inheritdoc */
-		public function check(string $schema, array $source): void {
+		public function check(string $schema, stdClass $source): void {
 			$this->validate($this->load($schema), $source);
 		}
 	}

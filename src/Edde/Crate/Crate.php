@@ -3,6 +3,7 @@
 	namespace Edde\Crate;
 
 	use Edde\Object;
+	use stdClass;
 
 	class Crate extends Object implements ICrate {
 		/** @var IProperty[] */
@@ -35,7 +36,8 @@
 		}
 
 		/** @inheritdoc */
-		public function put(array $source): ICrate {
+		public function put(stdClass $source): ICrate {
+			$this->properties = [];
 			foreach ($source as $k => $v) {
 				$this->getProperty($k)->setValue($v);
 			}
@@ -43,7 +45,7 @@
 		}
 
 		/** @inheritdoc */
-		public function push(array $source): ICrate {
+		public function push(stdClass $source): ICrate {
 			foreach ($source as $k => $v) {
 				$this->getProperty($k)->setDefault($v);
 			}
@@ -100,18 +102,11 @@
 		}
 
 		/** @inheritdoc */
-		public function toArray(): array {
-			$source = [];
+		public function toObject(): stdClass {
+			$object = new stdClass();
 			foreach ($this->properties as $name => $property) {
-				$source[$name] = $property->get();
+				$object->$name = $property->get();
 			}
-			return $source;
-		}
-
-		/** @inheritdoc */
-		public function __clone() {
-			parent::__clone();
-			$this->properties = [];
-			$this->dirty = null;
+			return $object;
 		}
 	}
