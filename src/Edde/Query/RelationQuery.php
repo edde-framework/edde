@@ -6,7 +6,7 @@
 	use Edde\Object;
 	use Edde\Schema\IRelation;
 
-	class RelationQuery extends Object implements IRelationQuery {
+	class RelationQuery extends Object {
 		/** @var IEntity */
 		protected $entity;
 		/** @var IEntity */

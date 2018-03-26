@@ -4,17 +4,18 @@
 
 	use Edde\Config\ConfigException;
 	use Edde\Entity\IEntity;
+	use Edde\Query\CreateSchemaQuery;
+	use Edde\Query\DeleteQuery;
+	use Edde\Query\DetachQuery;
 	use Edde\Query\Fragment\IWhere;
-	use Edde\Query\ICrateSchemaQuery;
-	use Edde\Query\IDeleteQuery;
-	use Edde\Query\IDetachQuery;
 	use Edde\Query\IDisconnectQuery;
-	use Edde\Query\ILinkQuery;
-	use Edde\Query\IQueryQueue;
-	use Edde\Query\IRelationQuery;
 	use Edde\Query\ISelectQuery;
-	use Edde\Query\IUnlinkQuery;
+	use Edde\Query\LinkQuery;
 	use Edde\Query\NativeQuery;
+	use Edde\Query\QueryQueue;
+	use Edde\Query\RelationQuery;
+	use Edde\Query\UnlinkQuery;
+	use Edde\Schema\SchemaException;
 	use PDO;
 	use PDOException;
 	use PDOStatement;
@@ -84,15 +85,8 @@
 			return new ConnectionException('Unhandled exception: ' . $throwable->getMessage(), 0, $throwable);
 		}
 
-		/**
-		 * @param ICrateSchemaQuery $crateSchemaQuery
-		 *
-		 * @return mixed|PDOStatement
-		 *
-		 * @throws Throwable
-		 */
-		protected function executeCreateSchemaQuery(ICrateSchemaQuery $crateSchemaQuery) {
-			$schema = $crateSchemaQuery->getSchema();
+		protected function executeCreateSchemaQuery(CreateSchemaQuery $createSchemaQuery) {
+			$schema = $createSchemaQuery->getSchema();
 			$sql = 'CREATE TABLE ' . $this->delimite($table = $schema->getRealName()) . " (\n\t";
 			$columns = [];
 			$primaries = [];
@@ -190,13 +184,13 @@
 		}
 
 		/**
-		 * @param IUnlinkQuery $unlinkQuery
+		 * @param UnlinkQuery $unlinkQuery
 		 *
 		 * @return mixed|PDOStatement
 		 *
 		 * @throws Throwable
 		 */
-		protected function executeUnlinkQuery(IUnlinkQuery $unlinkQuery) {
+		protected function executeUnlinkQuery(UnlinkQuery $unlinkQuery) {
 			$link = $unlinkQuery->getLink();
 			$entity = $unlinkQuery->getEntity();
 			$primary = $entity->getPrimary();
@@ -205,13 +199,15 @@
 		}
 
 		/**
-		 * @param ILinkQuery $linkQuery
+		 * @param LinkQuery $linkQuery
 		 *
 		 * @return mixed|PDOStatement
 		 *
+		 * @throws ConnectionException
+		 * @throws SchemaException
 		 * @throws Throwable
 		 */
-		protected function executeLinkQuery(ILinkQuery $linkQuery) {
+		protected function executeLinkQuery(LinkQuery $linkQuery) {
 			$link = $linkQuery->getLink();
 			$entity = $linkQuery->getEntity();
 			$primary = $entity->getPrimary();
@@ -221,13 +217,14 @@
 		}
 
 		/**
-		 * @param IRelationQuery $relationQuery
+		 * @param RelationQuery $relationQuery
 		 *
 		 * @return mixed|PDOStatement
 		 *
+		 * @throws ConnectionException
 		 * @throws Throwable
 		 */
-		protected function executeRelationQuery(IRelationQuery $relationQuery) {
+		protected function executeRelationQuery(RelationQuery $relationQuery) {
 			$using = $relationQuery->getUsing();
 			$relation = $relationQuery->getRelation();
 			$columns = [];
@@ -247,13 +244,13 @@
 		}
 
 		/**
-		 * @param IDeleteQuery $deleteQuery
+		 * @param DeleteQuery $deleteQuery
 		 *
 		 * @return mixed|PDOStatement
 		 *
 		 * @throws Throwable
 		 */
-		protected function executeDeleteQuery(IDeleteQuery $deleteQuery) {
+		protected function executeDeleteQuery(DeleteQuery $deleteQuery) {
 			$entity = $deleteQuery->getEntity();
 			$primary = $entity->getPrimary();
 			$sql = 'DELETE FROM ' . $this->delimite($entity->getSchema()->getRealName()) . ' WHERE ' . $this->delimite($primary->getName()) . ' = :a';
@@ -261,14 +258,15 @@
 		}
 
 		/**
-		 * @param IDetachQuery $detachQuery
+		 * @param DetachQuery $detachQuery
 		 *
 		 * @return mixed|PDOStatement
 		 *
 		 * @throws ConnectionException
 		 * @throws Throwable
+		 * @throws SchemaException
 		 */
-		protected function executeDetachQuery(IDetachQuery $detachQuery) {
+		protected function executeDetachQuery(DetachQuery $detachQuery) {
 			$relation = $detachQuery->getRelation();
 			$sql = $this->getDeleteSql($relation->getSchema()->getRealName());
 			$sql .= '(r.' . $this->delimite($relation->getFrom()->getTo()->getPropertyName()) . ' = :a AND ';
@@ -355,12 +353,13 @@
 		}
 
 		/**
-		 * @param IQueryQueue $queryQueue
+		 * @param QueryQueue $queryQueue
 		 *
 		 * @throws ConnectionException
+		 * @throws SchemaException
 		 * @throws Throwable
 		 */
-		protected function executeQueryQueue(IQueryQueue $queryQueue) {
+		protected function executeQueryQueue(QueryQueue $queryQueue) {
 			$entityQueue = $queryQueue->getEntityQueue();
 			if ($entityQueue->isEmpty()) {
 				return;

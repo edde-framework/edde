@@ -4,7 +4,7 @@
 
 	use Edde\Entity\IEntityQueue;
 
-	class QueryQueue extends AbstractQuery implements IQueryQueue {
+	class QueryQueue extends AbstractQuery {
 		/** @var IEntityQueue */
 		protected $entityQueue;
 

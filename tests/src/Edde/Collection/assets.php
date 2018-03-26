@@ -4,3 +4,6 @@
 
 	interface FooSchema extends UuidSchema {
 	}
+
+	interface BarSchema extends UuidSchema {
+	}

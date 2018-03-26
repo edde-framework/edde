@@ -4,7 +4,7 @@
 
 	use Edde\Entity\IEntity;
 
-	class DeleteQuery extends AbstractQuery implements IDeleteQuery {
+	class DeleteQuery extends AbstractQuery {
 		/** @var IEntity */
 		protected $entity;
 

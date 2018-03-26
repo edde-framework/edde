@@ -5,18 +5,19 @@
 	use Edde\Config\ConfigException;
 	use Edde\Crate\IProperty;
 	use Edde\Entity\IEntity;
+	use Edde\Query\CreateSchemaQuery;
+	use Edde\Query\DeleteQuery;
+	use Edde\Query\DetachQuery;
+	use Edde\Query\DisconnectQuery;
 	use Edde\Query\Fragment\IWhere;
-	use Edde\Query\ICrateSchemaQuery;
-	use Edde\Query\IDeleteQuery;
-	use Edde\Query\IDetachQuery;
-	use Edde\Query\IDisconnectQuery;
-	use Edde\Query\ILinkQuery;
 	use Edde\Query\INativeQuery;
-	use Edde\Query\IQueryQueue;
-	use Edde\Query\IRelationQuery;
 	use Edde\Query\ISelectQuery;
-	use Edde\Query\IUnlinkQuery;
+	use Edde\Query\LinkQuery;
 	use Edde\Query\NativeQuery;
+	use Edde\Query\QueryQueue;
+	use Edde\Query\RelationQuery;
+	use Edde\Query\UnlinkQuery;
+	use Edde\Schema\SchemaException;
 	use Exception;
 	use GraphAware\Bolt\Configuration;
 	use GraphAware\Bolt\Exception\MessageFailureException;
@@ -113,13 +114,8 @@
 			return new ConnectionException($message, 0, $throwable);
 		}
 
-		/**
-		 * @param ICrateSchemaQuery $crateSchemaQuery
-		 *
-		 * @throws Throwable
-		 */
-		protected function executeCreateSchemaQuery(ICrateSchemaQuery $crateSchemaQuery) {
-			if (($schema = $crateSchemaQuery->getSchema())->isRelation()) {
+		protected function executeCreateSchemaQuery(CreateSchemaQuery $createSchemaQuery) {
+			if (($schema = $createSchemaQuery->getSchema())->isRelation()) {
 				return;
 			}
 			$primaries = null;
@@ -146,12 +142,12 @@
 		}
 
 		/**
-		 * @param IQueryQueue $queryQueue
+		 * @param QueryQueue $queryQueue
 		 *
 		 * @throws Exception
 		 * @throws Throwable
 		 */
-		protected function executeQueryQueue(IQueryQueue $queryQueue) {
+		protected function executeQueryQueue(QueryQueue $queryQueue) {
 			$entityQueue = $queryQueue->getEntityQueue();
 			if ($entityQueue->isEmpty()) {
 				return;
@@ -175,11 +171,11 @@
 		}
 
 		/**
-		 * @param IDeleteQuery $deleteQuery
+		 * @param DeleteQuery $deleteQuery
 		 *
 		 * @throws Throwable
 		 */
-		protected function executeDeleteQuery(IDeleteQuery $deleteQuery) {
+		protected function executeDeleteQuery(DeleteQuery $deleteQuery) {
 			$entity = $deleteQuery->getEntity();
 			$primary = $entity->getPrimary();
 			$cypher = 'MATCH (n:' . $this->delimite($entity->getSchema()->getRealName()) . ' {' . $this->delimite($primary->getName()) . ': $a}) DETACH DELETE n';
@@ -187,11 +183,12 @@
 		}
 
 		/**
-		 * @param IDetachQuery $detachQuery
+		 * @param DetachQuery $detachQuery
 		 *
-		 * @throws Throwable
+		 * @throws ConnectionException
+		 * @throws SchemaException
 		 */
-		protected function executeDetachQuery(IDetachQuery $detachQuery) {
+		protected function executeDetachQuery(DetachQuery $detachQuery) {
 			/** @var $entity IEntity[] */
 			$entity = [
 				$detachQuery->getEntity(),
@@ -217,12 +214,12 @@
 		}
 
 		/**
-		 * @param IDisconnectQuery $disconnectQuery
+		 * @param DisconnectQuery $disconnectQuery
 		 *
 		 * @throws ConnectionException
-		 * @throws Throwable
+		 * @throws SchemaException
 		 */
-		protected function executeDisconnectQuery(IDisconnectQuery $disconnectQuery) {
+		protected function executeDisconnectQuery(DisconnectQuery $disconnectQuery) {
 			$entity = $disconnectQuery->getEntity();
 			$relation = $disconnectQuery->getRelation();
 			$primary = $entity->getPrimary();
@@ -240,11 +237,11 @@
 		}
 
 		/**
-		 * @param ILinkQuery $linkQuery
+		 * @param LinkQuery $linkQuery
 		 *
 		 * @throws Throwable
 		 */
-		protected function executeLinkQuery(ILinkQuery $linkQuery) {
+		protected function executeLinkQuery(LinkQuery $linkQuery) {
 			$link = $linkQuery->getLink();
 			$entity = $linkQuery->getEntity();
 			$entity->set($link->getFrom()->getPropertyName(), $linkQuery->getTo()->getPrimary()->get());
@@ -257,11 +254,11 @@
 		}
 
 		/**
-		 * @param IUnlinkQuery $unlinkQuery
+		 * @param UnlinkQuery $unlinkQuery
 		 *
 		 * @throws Throwable
 		 */
-		protected function executeUnlinkQuery(IUnlinkQuery $unlinkQuery) {
+		protected function executeUnlinkQuery(UnlinkQuery $unlinkQuery) {
 			$link = $unlinkQuery->getLink();
 			$primary = $unlinkQuery->getEntity()->getPrimary();
 			$cypher = 'MATCH (:' . $this->delimite($link->getFrom()->getRealName()) . " {" . $this->delimite($primary->getName()) . ': $a})-';
@@ -272,11 +269,11 @@
 		}
 
 		/**
-		 * @param IRelationQuery $relationQuery
+		 * @param RelationQuery $relationQuery
 		 *
 		 * @throws Throwable
 		 */
-		protected function executeRelationQuery(IRelationQuery $relationQuery) {
+		protected function executeRelationQuery(RelationQuery $relationQuery) {
 			$using = $relationQuery->getUsing();
 			$relation = $relationQuery->getRelation();
 			$using->set($relation->getFrom()->getTo()->getPropertyName(), $relationQuery->getEntity()->get($relation->getFrom()->getFrom()->getPropertyName()));
@@ -344,7 +341,7 @@
 		}
 
 		/**
-		 * @param \Edde\Query\ISelectQuery $selectQuery
+		 * @param ISelectQuery $selectQuery
 		 *
 		 * @return mixed
 		 *

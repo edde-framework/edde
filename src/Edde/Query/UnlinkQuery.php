@@ -6,7 +6,7 @@
 	use Edde\Object;
 	use Edde\Schema\ILink;
 
-	class UnlinkQuery extends Object implements IUnlinkQuery {
+	class UnlinkQuery extends Object {
 		/** @var IEntity */
 		protected $entity;
 		/** @var ILink */

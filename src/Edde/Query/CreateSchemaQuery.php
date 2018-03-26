@@ -2,18 +2,16 @@
 	declare(strict_types=1);
 	namespace Edde\Query;
 
-	use Edde\Schema\ISchema;
-
-	class CreateSchemaQuery extends AbstractQuery implements ICrateSchemaQuery {
-		/** @var ISchema */
+	class CreateSchemaQuery extends AbstractQuery {
+		/** @var string */
 		protected $schema;
 
-		public function __construct(ISchema $schema) {
+		public function __construct(string $schema) {
 			$this->schema = $schema;
 		}
 
 		/** @inheritdoc */
-		public function getSchema(): ISchema {
+		public function getSchema(): string {
 			return $this->schema;
 		}
 	}

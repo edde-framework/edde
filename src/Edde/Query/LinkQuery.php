@@ -5,7 +5,7 @@
 	use Edde\Entity\IEntity;
 	use Edde\Schema\ILink;
 
-	class LinkQuery extends UnlinkQuery implements ILinkQuery {
+	class LinkQuery extends UnlinkQuery {
 		/** @var IEntity */
 		protected $to;
 
