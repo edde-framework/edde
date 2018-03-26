@@ -61,21 +61,18 @@
 		}
 
 		/** @inheritdoc */
-		public function start(): IConnection {
+		public function onStart(): void {
 			$this->pdo->beginTransaction();
-			return $this;
 		}
 
 		/** @inheritdoc */
-		public function commit(): IConnection {
+		public function onCommit(): void {
 			$this->pdo->commit();
-			return $this;
 		}
 
 		/** @inheritdoc */
-		public function rollback(): IConnection {
+		public function onRollback(): void {
 			$this->pdo->rollBack();
-			return $this;
 		}
 
 		/**

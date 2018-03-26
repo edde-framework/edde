@@ -71,6 +71,7 @@
 	use Edde\Sanitizer\SanitizerManager;
 	use Edde\Schema\ISchemaManager;
 	use Edde\Schema\SchemaManager;
+	use Edde\Transaction\ITransaction;
 	use Edde\Upgrade\IUpgradeManager;
 	use Edde\Upgrade\UpgradeManager;
 	use Edde\Utils\IStringUtils;
@@ -325,35 +326,36 @@
 				/**
 				 * generator (related to schema) support
 				 */
-				IGeneratorManager::class   => GeneratorManager::class,
-				IFilterManager::class      => FilterManager::class,
-				ISanitizerManager::class   => SanitizerManager::class,
-				IValidatorManager::class   => ValidatorManager::class,
+				IGeneratorManager::class => GeneratorManager::class,
+				IFilterManager::class    => FilterManager::class,
+				ISanitizerManager::class => SanitizerManager::class,
+				IValidatorManager::class => ValidatorManager::class,
 				/**
 				 * random & security support
 				 */
-				IRandomService::class      => RandomService::class,
-				IPasswordService::class    => PasswordService::class,
+				IRandomService::class    => RandomService::class,
+				IPasswordService::class  => PasswordService::class,
 				/**
 				 * storage support
 				 */
-				IEntityManager::class      => EntityManager::class,
-				IConnection::class         => MysqlConnection::class,
+				IEntityManager::class    => EntityManager::class,
+				IConnection::class       => MysqlConnection::class,
+				ITransaction::class      => IConnection::class,
 				/**
 				 * an application upgrades support
 				 */
-				IUpgradeManager::class     => UpgradeManager::class,
+				IUpgradeManager::class   => UpgradeManager::class,
 				/**
 				 * access (permission) subsystem
 				 *
 				 * - access is kind of alias for Authorization
 				 */
-				IAccessService::class      => AccessService::class,
+				IAccessService::class    => AccessService::class,
 				/**
 				 * Xml support
 				 */
-				IXmlExportService::class   => XmlExportService::class,
-				IXmlParserService::class   => XmlParserService::class,
+				IXmlExportService::class => XmlExportService::class,
+				IXmlParserService::class => XmlParserService::class,
 				/**
 				 * Message bus support; probably most important stuff of the
 				 * framework and the top killing feature :)

@@ -85,32 +85,6 @@
 		public function question(): ?bool;
 	}
 
-	interface UserSchema extends UuidSchema {
-		const alias = 'user';
-
-		public function name($unique): string;
-
-		public function email($unique): string;
-
-		public function created(): \DateTime;
-	}
-
-	interface RoleSchema extends UuidSchema {
-		const alias = 'role';
-
-		public function name($unique): string;
-
-		public function label(): ?string;
-	}
-
-	interface UserRoleSchema extends RelationSchema, AliasSchema {
-		public function user(UserSchema $uuid): string;
-
-		public function role(RoleSchema $uuid): string;
-
-		public function enabled($default = true): bool;
-	}
-
 	interface SourceSchema extends UuidSchema {
 		public function name($unique): string;
 	}

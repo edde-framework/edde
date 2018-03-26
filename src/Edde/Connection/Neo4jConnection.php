@@ -73,24 +73,22 @@
 		}
 
 		/** @inheritdoc */
-		public function start(): IConnection {
+		public function onStart(): void {
 			($this->transaction = $this->session->transaction())->begin();
-			return $this;
 		}
 
 		/** @inheritdoc */
-		public function commit(): IConnection {
+		public function onCommit(): void {
 			try {
 				$this->transaction->commit();
 				$this->transaction = null;
 			} catch (Throwable $throwable) {
 				$this->exception($throwable);
 			}
-			return $this;
 		}
 
 		/** @inheritdoc */
-		public function rollback(): IConnection {
+		public function onRollback(): void {
 			try {
 				$this->transaction->rollback();
 			} catch (MessageFailureException $exception) {
@@ -104,7 +102,6 @@
 				}
 			}
 			$this->transaction = null;
-			return $this;
 		}
 
 		protected function exception(Throwable $throwable): Throwable {
