@@ -115,8 +115,8 @@
 		/** @inheritdoc */
 		public function toObject(): stdClass {
 			$object = new stdClass();
-			foreach ($this->properties as $name => $property) {
-				$object->$name = $property->get();
+			foreach ($this->schema->getAttributes() as $k => $property) {
+				$object->$k = $this->get($k, $property->getDefault());
 			}
 			return $object;
 		}

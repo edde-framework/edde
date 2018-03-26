@@ -15,7 +15,7 @@
 		 */
 		public function testPropertyException() {
 			$this->expectException(SchemaException::class);
-			$this->expectExceptionMessage('kjfkldsfkldjf');
+			$this->expectExceptionMessage('Requested unknown attribute [FooSchema::unknown].');
 			$crate = new Crate($this->schemaManager->load(FooSchema::class));
 			$crate->set('unknown', false);
 		}

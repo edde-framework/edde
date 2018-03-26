@@ -122,6 +122,8 @@
 		 * return crate as an array
 		 *
 		 * @return stdClass
+		 *
+		 * @throws SchemaException
 		 */
 		public function toObject(): stdClass;
 	}
