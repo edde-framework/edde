@@ -2,18 +2,18 @@
 	declare(strict_types=1);
 	namespace Edde\Query;
 
-	use Edde\Entity\IEntityQueue;
+	use Edde\Entity\EntityQueue;
 
 	class QueryQueue extends AbstractQuery {
-		/** @var IEntityQueue */
+		/** @var EntityQueue */
 		protected $entityQueue;
 
-		public function __construct(IEntityQueue $entityQueue) {
+		public function __construct(EntityQueue $entityQueue) {
 			$this->entityQueue = $entityQueue;
 		}
 
 		/** @inheritdoc */
-		public function getEntityQueue(): IEntityQueue {
+		public function getEntityQueue(): EntityQueue {
 			return $this->entityQueue;
 		}
 	}

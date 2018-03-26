@@ -12,9 +12,9 @@
 		 * @throws ConnectionException
 		 */
 		public function testPrepareDatabase() {
-			$this->storage->exec('DROP DATABASE `edde`');
-			$this->storage->exec('CREATE DATABASE `edde`');
-			$this->storage->exec('USE `edde`');
+			$this->connection->exec('DROP DATABASE `edde`');
+			$this->connection->exec('CREATE DATABASE `edde`');
+			$this->connection->exec('USE `edde`');
 			$this->assertTrue(true, 'everything looks nice even here!');
 		}
 

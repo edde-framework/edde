@@ -21,6 +21,14 @@
 		}
 
 		/** @inheritdoc */
+		public function uses(array $schemas): ICollection {
+			foreach ($schemas as $alias => $schema) {
+				$this->use($schema, (string)$alias);
+			}
+			return $this;
+		}
+
+		/** @inheritdoc */
 		public function create(): ICollection {
 			try {
 				$this->transaction->transaction(function () {

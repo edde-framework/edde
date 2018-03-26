@@ -3,68 +3,55 @@
 	namespace Edde\Storage;
 
 	use DateTime;
+	use Edde\Collection\Collection;
+	use Edde\Collection\CollectionException;
 	use Edde\Common\Schema\BarPooSchema;
 	use Edde\Common\Schema\BarSchema;
 	use Edde\Common\Schema\FooBarSchema;
 	use Edde\Common\Schema\FooSchema;
 	use Edde\Common\Schema\PooSchema;
-	use Edde\Common\Schema\RoleSchema;
 	use Edde\Common\Schema\SimpleSchema;
 	use Edde\Common\Schema\SourceOneTargetSchema;
 	use Edde\Common\Schema\SourceSchema;
 	use Edde\Common\Schema\SourceTwoTargetSchema;
 	use Edde\Common\Schema\TargetSchema;
-	use Edde\Common\Schema\UserRoleSchema;
-	use Edde\Common\Schema\UserSchema;
-	use Edde\Connection\ConnectionException;
 	use Edde\Connection\DuplicateEntryException;
-	use Edde\Connection\DuplicateTableException;
 	use Edde\Entity\EntityException;
 	use Edde\Entity\EntityNotFoundException;
 	use Edde\Entity\IEntity;
-	use Edde\Query\CreateSchemaQuery;
 	use Edde\Query\SelectQuery;
 	use Edde\Schema\SchemaException;
 	use Edde\Schema\SchemaValidationException;
+	use Edde\Service\Connection\Connection;
 	use Edde\Service\Container\Container;
 	use Edde\Service\Entity\EntityManager;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\TestCase;
-	use Edde\Transaction\TransactionException;
 
 	abstract class AbstractStorageTest extends TestCase {
 		use EntityManager;
 		use SchemaManager;
 		use Container;
+		use Connection;
 
 		/**
-		 * @throws ConnectionException
-		 * @throws DuplicateTableException
-		 * @throws SchemaException
-		 * @throws StorageException
-		 * @throws TransactionException
+		 * @throws CollectionException
 		 */
 		public function testCreateSchema() {
-			$this->storage->start();
-			$schemas = [
+			$collection = new Collection();
+			$collection->uses([
 				SimpleSchema::class,
 				PooSchema::class,
 				FooSchema::class,
 				BarSchema::class,
 				FooBarSchema::class,
 				BarPooSchema::class,
-				UserSchema::class,
-				RoleSchema::class,
-				UserRoleSchema::class,
 				SourceSchema::class,
 				TargetSchema::class,
 				SourceOneTargetSchema::class,
 				SourceTwoTargetSchema::class,
-			];
-			foreach ($schemas as $name) {
-				$this->storage->execute(new CreateSchemaQuery($this->schemaManager->load($name)));
-			}
-			$this->storage->commit();
+			]);
+			$collection->create();
 			self::assertTrue(true, 'everything is ok');
 		}
 
@@ -176,7 +163,6 @@
 
 		/**
 		 * @throws DuplicateEntryException
-		 * @throws EntityNotFoundException
 		 */
 		public function testUpdate() {
 			$entity = $this->entityManager->create(SimpleSchema::class, [
@@ -200,8 +186,6 @@
 
 		/**
 		 * @throws DuplicateEntryException
-		 * @throws EntityException
-		 * @throws EntityNotFoundException
 		 * @throws SchemaException
 		 */
 		public function testLink() {
@@ -232,8 +216,6 @@
 		}
 
 		/**
-		 * @throws SchemaException
-		 * @throws EntityException
 		 */
 		public function testSelectQuery() {
 			$collection = $this->entityManager->collection('f', FooSchema::class);
@@ -245,9 +227,6 @@
 		}
 
 		/**
-		 * @throws DuplicateEntryException
-		 * @throws EntityException
-		 * @throws EntityNotFoundException
 		 * @throws SchemaException
 		 */
 		public function testUnlink() {
@@ -267,7 +246,6 @@
 
 		/**
 		 * @throws DuplicateEntryException
-		 * @throws EntityException
 		 * @throws SchemaException
 		 */
 		public function testRelationTo() {
@@ -344,8 +322,6 @@
 		}
 
 		/**
-		 * @throws EntityException
-		 * @throws EntityNotFoundException
 		 * @throws SchemaException
 		 */
 		public function testRelation() {
@@ -380,8 +356,6 @@
 		}
 
 		/**
-		 * @throws EntityException
-		 * @throws EntityNotFoundException
 		 * @throws SchemaException
 		 */
 		public function testRelationOfRelation() {
@@ -414,11 +388,8 @@
 		}
 
 		/**
-		 * @throws ConnectionException
-		 * @throws DuplicateTableException
+		 * @throws DuplicateEntryException
 		 * @throws SchemaException
-		 * @throws StorageException
-		 * @throws EntityException
 		 */
 		public function testRelationAttribute() {
 			$this->schemaManager->load(UserRoleSchema::class);
@@ -485,7 +456,6 @@
 
 		/**
 		 * @throws DuplicateEntryException
-		 * @throws EntityException
 		 * @throws SchemaException
 		 */
 		public function testMoreRelations() {
@@ -507,8 +477,6 @@
 
 		/**
 		 * @throws DuplicateEntryException
-		 * @throws EntityException
-		 * @throws EntityNotFoundException
 		 * @throws SchemaException
 		 */
 		public function testReverseRelation() {
@@ -532,8 +500,6 @@
 		}
 
 		/**
-		 * @throws DuplicateEntryException
-		 * @throws EntityNotFoundException
 		 */
 		public function testDeleteEntity() {
 			$this->expectException(EntityNotFoundException::class);
@@ -550,8 +516,6 @@
 
 		/**
 		 * @throws DuplicateEntryException
-		 * @throws EntityException
-		 * @throws EntityNotFoundException
 		 * @throws SchemaException
 		 */
 		public function testEntityDetach() {
@@ -592,8 +556,6 @@
 
 		/**
 		 * @throws DuplicateEntryException
-		 * @throws EntityException
-		 * @throws EntityNotFoundException
 		 * @throws SchemaException
 		 */
 		public function testDisconnect() {
@@ -633,8 +595,6 @@
 
 		/**
 		 * @throws DuplicateEntryException
-		 * @throws EntityException
-		 * @throws EntityNotFoundException
 		 * @throws SchemaException
 		 */
 		public function testUnlinkRelation() {

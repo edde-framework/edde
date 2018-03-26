@@ -5,7 +5,6 @@
 	use Edde\Config\ConfigException;
 	use Edde\Crate\IProperty;
 	use Edde\Entity\IEntity;
-	use Edde\Query\CreateSchemaQuery;
 	use Edde\Query\DeleteQuery;
 	use Edde\Query\DetachQuery;
 	use Edde\Query\DisconnectQuery;
@@ -18,6 +17,7 @@
 	use Edde\Query\RelationQuery;
 	use Edde\Query\UnlinkQuery;
 	use Edde\Schema\SchemaException;
+	use Edde\Service\Schema\SchemaManager;
 	use Exception;
 	use GraphAware\Bolt\Configuration;
 	use GraphAware\Bolt\Exception\MessageFailureException;
@@ -33,6 +33,7 @@
 	use function implode;
 
 	class Neo4jConnection extends AbstractConnection {
+		use SchemaManager;
 		/** @var SessionInterface */
 		protected $session;
 		/** @var Transaction */
@@ -74,6 +75,39 @@
 		}
 
 		/** @inheritdoc */
+		public function create(string $name): IConnection {
+			try {
+				if (($schema = $this->schemaManager->load($name))->isRelation()) {
+					return $this;
+				}
+				$primaries = null;
+				$indexes = null;
+				$delimited = $this->delimite($schema->getRealName());
+				foreach ($schema->getProperties() as $property) {
+					$schema = $property->getName();
+					$fragment = 'n.' . $this->delimite($schema);
+					if ($property->isPrimary()) {
+						$primaries[] = $fragment;
+					} else if ($property->isUnique()) {
+						$this->fetch('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT ' . $fragment . ' IS UNIQUE');
+					}
+					if ($property->isRequired()) {
+						$this->fetch('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT exists(' . $fragment . ')');
+					}
+				}
+				if ($indexes) {
+					$this->fetch('CREATE INDEX ON :' . $delimited . '(' . implode(',', $indexes) . ')');
+				}
+				if ($primaries) {
+					$this->fetch('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT (' . implode(', ', $primaries) . ') IS NODE KEY');
+				}
+				return $this;
+			} catch (Throwable $exception) {
+				throw new ConnectionException(sprintf('Cannot create schema definition [%s]: %s', $name, $exception->getMessage()), 0, $exception);
+			}
+		}
+
+		/** @inheritdoc */
 		public function onStart(): void {
 			($this->transaction = $this->session->transaction())->begin();
 		}
@@ -112,33 +146,6 @@
 				return new RequiredValueException($message, 0, $throwable);
 			}
 			return new ConnectionException($message, 0, $throwable);
-		}
-
-		protected function executeCreateSchemaQuery(CreateSchemaQuery $createSchemaQuery) {
-			if (($schema = $createSchemaQuery->getSchema())->isRelation()) {
-				return;
-			}
-			$primaries = null;
-			$indexes = null;
-			$delimited = $this->delimite($schema->getRealName());
-			foreach ($schema->getProperties() as $property) {
-				$name = $property->getName();
-				$fragment = 'n.' . $this->delimite($name);
-				if ($property->isPrimary()) {
-					$primaries[] = $fragment;
-				} else if ($property->isUnique()) {
-					$this->fetch('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT ' . $fragment . ' IS UNIQUE');
-				}
-				if ($property->isRequired()) {
-					$this->fetch('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT exists(' . $fragment . ')');
-				}
-			}
-			if ($indexes) {
-				$this->fetch('CREATE INDEX ON :' . $delimited . '(' . implode(',', $indexes) . ')');
-			}
-			if ($primaries) {
-				$this->fetch('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT (' . implode(', ', $primaries) . ') IS NODE KEY');
-			}
 		}
 
 		/**

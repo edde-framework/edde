@@ -12,7 +12,7 @@
 		 * @throws ConnectionException
 		 */
 		public function testPrepareDatabase() {
-			$this->storage->exec('MATCH (n) DETACH DELETE n');
+			$this->connection->exec('MATCH (n) DETACH DELETE n');
 			self::assertTrue(true, 'everything is ok, yapee!');
 		}
 

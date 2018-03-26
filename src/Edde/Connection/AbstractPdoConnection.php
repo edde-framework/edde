@@ -4,7 +4,6 @@
 
 	use Edde\Config\ConfigException;
 	use Edde\Entity\IEntity;
-	use Edde\Query\CreateSchemaQuery;
 	use Edde\Query\DeleteQuery;
 	use Edde\Query\DetachQuery;
 	use Edde\Query\Fragment\IWhere;
@@ -16,6 +15,7 @@
 	use Edde\Query\RelationQuery;
 	use Edde\Query\UnlinkQuery;
 	use Edde\Schema\SchemaException;
+	use Edde\Service\Schema\SchemaManager;
 	use PDO;
 	use PDOException;
 	use PDOStatement;
@@ -23,6 +23,7 @@
 	use function implode;
 
 	abstract class AbstractPdoConnection extends AbstractConnection {
+		use SchemaManager;
 		protected $options;
 		/** @var PDO */
 		protected $pdo;
@@ -62,6 +63,39 @@
 		}
 
 		/** @inheritdoc */
+		public function create(string $name): IConnection {
+			try {
+				$schema = $this->schemaManager->load($name);
+				$sql = 'CREATE TABLE ' . $this->delimite($table = $schema->getRealName()) . " (\n\t";
+				$columns = [];
+				$primaries = [];
+				foreach ($schema->getProperties() as $property) {
+					$column = ($schema = $this->delimite($property->getName())) . ' ' . $this->type($property->getType());
+					if ($property->isPrimary()) {
+						$primaries[] = $schema;
+					} else if ($property->isUnique()) {
+						$column .= ' UNIQUE';
+					}
+					if ($property->isRequired()) {
+						$column .= ' NOT NULL';
+					}
+					$columns[] = $column;
+				}
+				if (empty($primaries) === false) {
+					$columns[] = "CONSTRAINT " . $this->delimite(sha1($table . '_primary_' . $primary = implode(', ', $primaries))) . ' PRIMARY KEY (' . $primary . ')';
+				}
+				$sql .= implode(",\n\t", $columns);
+				foreach ($schema->getLinks() as $link) {
+					$sql .= ",\n\tFOREIGN KEY (" . $this->delimite($link->getFrom()->getPropertyName()) . ') REFERENCES ' . $this->delimite($link->getTo()->getRealName()) . '(' . $this->delimite($link->getTo()->getPropertyName()) . ') ON DELETE CASCADE ON UPDATE CASCADE';
+				}
+				$this->exec($sql . "\n)");
+				return $this;
+			} catch (Throwable $exception) {
+				throw new ConnectionException(sprintf('Cannot create schema [%s]: %s', $name, $exception->getMessage()), 0, $exception);
+			}
+		}
+
+		/** @inheritdoc */
 		public function onStart(): void {
 			$this->pdo->beginTransaction();
 		}
@@ -83,33 +117,6 @@
 		 */
 		protected function exception(Throwable $throwable): Throwable {
 			return new ConnectionException('Unhandled exception: ' . $throwable->getMessage(), 0, $throwable);
-		}
-
-		protected function executeCreateSchemaQuery(CreateSchemaQuery $createSchemaQuery) {
-			$schema = $createSchemaQuery->getSchema();
-			$sql = 'CREATE TABLE ' . $this->delimite($table = $schema->getRealName()) . " (\n\t";
-			$columns = [];
-			$primaries = [];
-			foreach ($schema->getProperties() as $property) {
-				$column = ($name = $this->delimite($property->getName())) . ' ' . $this->type($property->getType());
-				if ($property->isPrimary()) {
-					$primaries[] = $name;
-				} else if ($property->isUnique()) {
-					$column .= ' UNIQUE';
-				}
-				if ($property->isRequired()) {
-					$column .= ' NOT NULL';
-				}
-				$columns[] = $column;
-			}
-			if (empty($primaries) === false) {
-				$columns[] = "CONSTRAINT " . $this->delimite(sha1($table . '_primary_' . $primary = implode(', ', $primaries))) . ' PRIMARY KEY (' . $primary . ')';
-			}
-			$sql .= implode(",\n\t", $columns);
-			foreach ($schema->getLinks() as $link) {
-				$sql .= ",\n\tFOREIGN KEY (" . $this->delimite($link->getFrom()->getPropertyName()) . ') REFERENCES ' . $this->delimite($link->getTo()->getRealName()) . '(' . $this->delimite($link->getTo()->getPropertyName()) . ') ON DELETE CASCADE ON UPDATE CASCADE';
-			}
-			return $this->exec($sql . "\n)");
 		}
 
 		/**

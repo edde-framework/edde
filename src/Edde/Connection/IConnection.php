@@ -44,4 +44,15 @@
 		 * @throws ConnectionException
 		 */
 		public function exec($query, array $params = []);
+
+		/**
+		 * create new schema
+		 *
+		 * @param string $name
+		 *
+		 * @return IConnection
+		 *
+		 * @throws ConnectionException
+		 */
+		public function create(string $name): IConnection;
 	}

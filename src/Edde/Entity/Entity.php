@@ -14,7 +14,7 @@
 		use SchemaManager;
 		/** @var ISchema */
 		protected $schema;
-		/** @var IEntityQueue */
+		/** @var EntityQueue */
 		protected $entityQueue;
 		/** @var IProperty */
 		protected $primary = null;
