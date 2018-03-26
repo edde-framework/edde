@@ -161,16 +161,12 @@
 		}
 
 		/** @inheritdoc */
-		public function getRelation(string $schema, string $relation = null): IRelation {
+		public function getRelation(string $schema, string $relation): IRelation {
 			if (($count = count($relations = $this->getRelations($schema))) === 0) {
 				throw new SchemaException(sprintf('There are no relations from [%s] to schema [%s].', $this->getName(), $schema));
-			} else if ($count !== 1 && $relation === null) {
-				throw new SchemaException(sprintf('There are more relations from [%s] to schema [%s]. You have to specify a relation.', $this->getName(), $schema));
-			} else if ($count > 1 && $relation && isset($relations[$relation]) === false) {
+			} else if (isset($relations[$relation]) === false) {
 				throw new SchemaException(sprintf('Requested relation schema [%s] does not exists between [%s] and [%s].', $relation, $this->getName(), $schema));
-			} else if ($count > 1 && $relation) {
-				return $relations[$relation];
 			}
-			return reset($relations);
+			return $relations[$relation];
 		}
 	}

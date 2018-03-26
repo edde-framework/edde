@@ -2,15 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
-	use Edde\Common\Schema\BarSchema;
-	use Edde\Common\Schema\FooBarSchema;
-	use Edde\Common\Schema\FooSchema;
-	use Edde\Common\Schema\SourceOneTargetSchema;
-	use Edde\Common\Schema\SourceSchema;
-	use Edde\Common\Schema\SourceTwoTargetSchema;
-	use Edde\Common\Schema\TargetSchema;
+	use BarSchema;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\TestCase;
+	use FooBarSchema;
+	use FooSchema;
 	use function array_values;
 
 	class SchemaManagerTest extends TestCase {
@@ -72,35 +68,24 @@
 		/**
 		 * @throws SchemaException
 		 */
-		public function testGetRelationException() {
-			$this->expectException(SchemaException::class);
-			$this->expectExceptionMessage('There are more relations from [Edde\Common\Schema\SourceSchema] to schema [Edde\Common\Schema\TargetSchema]. You have to specify a relation.');
-			$this->schemaManager->load(SourceOneTargetSchema::class);
-			$this->schemaManager->load(SourceTwoTargetSchema::class);
-			$sourceSchema = $this->schemaManager->load(SourceSchema::class);
-			$sourceSchema->getRelation(TargetSchema::class);
-		}
-
-		/**
-		 * @throws SchemaException
-		 */
 		public function testGetRelationUnknownException() {
 			$this->expectException(SchemaException::class);
-			$this->expectExceptionMessage('Requested relation schema [nope] does not exists between [Edde\Common\Schema\SourceSchema] and [Edde\Common\Schema\TargetSchema].');
-			$this->schemaManager->load(SourceOneTargetSchema::class);
-			$this->schemaManager->load(SourceTwoTargetSchema::class);
-			$sourceSchema = $this->schemaManager->load(SourceSchema::class);
-			$sourceSchema->getRelation(TargetSchema::class, 'nope');
+			$this->expectExceptionMessage('Requested relation schema [nope] does not exists between [FooSchema] and [BarSchema].');
+			$this->schemaManager->load(FooSchema::class);
+			$this->schemaManager->load(BarSchema::class);
+			$this->schemaManager->load(FooBarSchema::class);
+			$sourceSchema = $this->schemaManager->load(FooSchema::class);
+			$sourceSchema->getRelation(BarSchema::class, 'nope');
 		}
 
 		/**
 		 * @throws SchemaException
 		 */
 		public function testGetRelation() {
-			$this->schemaManager->load(SourceOneTargetSchema::class);
-			$this->schemaManager->load(SourceTwoTargetSchema::class);
-			$sourceSchema = $this->schemaManager->load(SourceSchema::class);
-			$relation = $sourceSchema->getRelation(TargetSchema::class, SourceTwoTargetSchema::class);
-			self::assertSame(SourceTwoTargetSchema::class, $relation->getSchema()->getName());
+			$this->schemaManager->load(BarSchema::class);
+			$this->schemaManager->load(FooBarSchema::class);
+			$sourceSchema = $this->schemaManager->load(FooSchema::class);
+			$relation = $sourceSchema->getRelation(BarSchema::class, FooBarSchema::class);
+			self::assertSame(FooBarSchema::class, $relation->getSchema()->getName());
 		}
 	}

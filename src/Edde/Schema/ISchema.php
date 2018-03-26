@@ -168,11 +168,11 @@
 		 * shorthand to get a relation; if there are more relations, exception should be thrown
 		 *
 		 * @param string      $schema
-		 * @param string|null $relation optional relation name if there are more relations between targets
+		 * @param string|null $relation
 		 *
 		 * @return IRelation
 		 *
 		 * @throws SchemaException
 		 */
-		public function getRelation(string $schema, string $relation = null): IRelation;
+		public function getRelation(string $schema, string $relation): IRelation;
 	}
