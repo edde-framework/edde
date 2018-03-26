@@ -10,11 +10,9 @@
 	use Edde\Schema\ISchema;
 	use Edde\Service\Container\Container;
 	use Edde\Service\Schema\SchemaManager;
-	use Edde\Service\Storage\Storage;
 
 	class EntityManager extends Object implements IEntityManager {
 		use SchemaManager;
-		use Storage;
 		use Container;
 		/** @var IEntity[] */
 		protected $entities = [];

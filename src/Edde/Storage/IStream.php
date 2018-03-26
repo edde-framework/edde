@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
-	use Edde\Storage\Query\ISelectQuery;
+	use Edde\Query\ISelectQuery;
 	use IteratorAggregate;
 	use Traversable;
 

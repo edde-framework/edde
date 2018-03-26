@@ -4,11 +4,9 @@
 
 	use Edde\Object;
 	use Edde\Service\Log\LogService;
-	use Edde\Service\Storage\Storage;
 	use Throwable;
 
 	abstract class AbstractUpgradeManager extends Object implements IUpgradeManager {
-		use Storage;
 		use LogService;
 		/** @var IUpgrade[] */
 		protected $upgrades = [];

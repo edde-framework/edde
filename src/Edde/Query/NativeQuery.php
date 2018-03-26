@@ -2,8 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Query;
 
-	use Edde\Storage\INativeQuery;
-
 	class NativeQuery extends AbstractQuery implements INativeQuery {
 		/** @var string */
 		protected $query;
@@ -23,5 +21,10 @@
 		/** @inheritdoc */
 		public function getParams(): array {
 			return $this->params;
+		}
+
+		/** @inheritdoc */
+		public function toString(): string {
+			return $this->getQuery();
 		}
 	}

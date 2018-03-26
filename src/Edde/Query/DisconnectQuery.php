@@ -3,9 +3,9 @@
 	namespace Edde\Query;
 
 	use Edde\Entity\IEntity;
+	use Edde\Query\Fragment\IWhereGroup;
 	use Edde\Query\Fragment\WhereGroup;
 	use Edde\Schema\IRelation;
-	use Edde\Storage\Query\Fragment\IWhereGroup;
 
 	class DisconnectQuery extends AbstractQuery implements IDisconnectQuery {
 		/** @var IEntity */

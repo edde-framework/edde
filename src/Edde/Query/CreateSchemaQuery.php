@@ -3,7 +3,6 @@
 	namespace Edde\Query;
 
 	use Edde\Schema\ISchema;
-	use Edde\Storage\Query\ICrateSchemaQuery;
 
 	class CreateSchemaQuery extends AbstractQuery implements ICrateSchemaQuery {
 		/** @var ISchema */

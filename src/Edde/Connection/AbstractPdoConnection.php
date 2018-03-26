@@ -4,17 +4,17 @@
 
 	use Edde\Config\ConfigException;
 	use Edde\Entity\IEntity;
+	use Edde\Query\Fragment\IWhere;
+	use Edde\Query\ICrateSchemaQuery;
 	use Edde\Query\IDeleteQuery;
 	use Edde\Query\IDetachQuery;
 	use Edde\Query\IDisconnectQuery;
 	use Edde\Query\ILinkQuery;
 	use Edde\Query\IQueryQueue;
 	use Edde\Query\IRelationQuery;
+	use Edde\Query\ISelectQuery;
 	use Edde\Query\IUnlinkQuery;
 	use Edde\Query\NativeQuery;
-	use Edde\Storage\Query\Fragment\IWhere;
-	use Edde\Storage\Query\ICrateSchemaQuery;
-	use Edde\Storage\Query\ISelectQuery;
 	use PDO;
 	use PDOException;
 	use PDOStatement;
@@ -319,7 +319,7 @@
 		}
 
 		/**
-		 * @param IWhere $where
+		 * @param \Edde\Query\Fragment\IWhere $where
 		 *
 		 * @return NativeQuery
 		 *

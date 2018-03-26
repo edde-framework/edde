@@ -2,168 +2,22 @@
 	declare(strict_types=1);
 	namespace Edde\Collection;
 
-	use Edde\Entity\EntityNotFoundException;
-	use Edde\Entity\IEntity;
+	use Edde\Connection\IConnection;
 	use Edde\Object;
-	use Edde\Query\SelectQuery;
-	use Edde\Schema\ISchema;
-	use Edde\Service\Container\Container;
-	use Edde\Service\Schema\SchemaManager;
-	use Edde\Storage\IStream;
-	use Edde\Storage\Query\ISelectQuery;
 
 	class Collection extends Object implements ICollection {
-		use SchemaManager;
-		use Container;
-		/** @var IStream */
-		protected $stream;
-		/** @var ISchema[] */
-		protected $schemas;
+		/** @var IConnection */
+		protected $connection;
 
-		public function __construct(IStream $stream) {
-			$this->stream = $stream;
-		}
-
-		/** @inheritdoc */
-		public function schema(string $alias, ISchema $schema): ICollection {
-			$this->schemas[$alias] = $schema;
-			$this->stream->getQuery()->alias($alias, $schema);
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function getSchema(string $alias): ISchema {
-			if (isset($this->schemas[$alias]) === false) {
-				throw new CollectionException(sprintf('Requested schema for unknown alias [%s].', $alias));
-			}
-			return $this->schemas[$alias];
-		}
-
-		/** @inheritdoc */
-		public function query(ISelectQuery $query): ICollection {
-			$this->stream->query($query);
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function getQuery(): ISelectQuery {
-			return $this->stream->getQuery();
-		}
-
-		/** @inheritdoc */
-		public function getEntity(string $alias): IEntity {
-			/** @var $record IRecord */
-			foreach ($this as $record) {
-				return $record->getEntity($alias);
-			}
-			throw new EntityNotFoundException('Cannot load any Entity for Collection.');
-		}
-
-		/** @inheritdoc */
-		public function getRecord(): IRecord {
-			foreach ($this as $record) {
-				return $record;
-			}
-			throw new CollectionException('Cannot load any Record for Collection.');
-		}
-
-		/** @inheritdoc */
-		public function entity(string $alias, $name): IEntity {
-			$schema = $this->getSchema($alias);
-			$this->stream->query($query = new SelectQuery($schema, $alias));
-			$where = $query->getWhere();
-			if ($schema->hasPrimary()) {
-				$where->or()->expression($alias . '.' . $schema->getPrimary()->getName(), '=', $name);
-			}
-			foreach ($schema->getUniques() as $property) {
-				$where->or()->expression($alias . '.' . $property->getName(), '=', $name);
-			}
-			return $this->getEntity($alias);
-		}
-
-		/** @inheritdoc */
-		public function join(string $source, string $target, string $alias, array $on = null, string $relation = null): ICollection {
-			$schema = $this->getSchema($source);
-			$relation = $schema->getRelation($target, $relation);
-			$query = $this->stream->getQuery();
-			$query->join($alias, $target, $relation->getSchema()->getName());
-			if ($on) {
-				$propertyName = $relation->getTo()->getTo()->getPropertyName();
-				$query->where($source . '.' . $propertyName, '=', $on[$propertyName]);
-			}
-			$this->schema($source . '\r', $relation->getSchema());
-			$this->schema($alias, $this->schemaManager->load($target));
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function reverseJoin(string $source, string $target, string $alias, array $on = null, string $relation = null): ICollection {
-			$schema = $this->getSchema($source);
-			$relation = $schema->getRelation($target, $relation);
-			$query = $this->stream->getQuery();
-			$query->join($alias, $target, $relation->getSchema()->getName());
-			if ($on) {
-				$propertyName = $relation->getTo()->getTo()->getPropertyName();
-				$query->where($alias . '.' . $propertyName, '=', $on[$propertyName]);
-			}
-			$this->schema($source . '\r', $relation->getSchema());
-			$this->schema($alias, $this->schemaManager->load($target));
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function where(string $name, string $expression, $value = null): ICollection {
-			$this->stream->getQuery()->where($name, $expression, $value);
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function order(string $name, bool $asc = true): ICollection {
-			$this->stream->getQuery()->order($name, $asc);
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function orderAsc(string $name): ICollection {
-			return $this->order($name);
-		}
-
-		/** @inheritdoc */
-		public function orderDesc(string $name): ICollection {
-			return $this->order($name, false);
-		}
-
-		/** @inheritdoc */
-		public function limit(int $limit, int $page): ICollection {
-			$this->stream->getQuery()->limit($limit, $page);
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function link(string $alias, string $schema): ICollection {
-			$this->getQuery()->link($alias, $schema);
-			$this->schema($alias, $this->schemaManager->load($schema));
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function count(string $alias): int {
-			$query = $this->stream->getQuery();
-			$query->count($alias ?: $query->getAlias());
-			$count = 0;
-			foreach ($this->stream as $count) {
-				$count = $count[$alias];
-				$count = (int)(is_int($count) ? $count : (isset($count['count']) ? $count['count'] : 0));
-				break;
-			}
-			$query->count(null);
-			return $count;
+		/**
+		 * @param IConnection $connection
+		 */
+		public function __construct(IConnection $connection) {
+			$this->connection = $connection;
 		}
 
 		/** @inheritdoc */
 		public function getIterator() {
-			foreach ($this->stream as $source) {
-				yield $this->container->inject(new Record($this->schemas, $source));
-			}
+			throw new \Exception('not implemented yet');
 		}
 	}

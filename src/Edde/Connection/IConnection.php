@@ -4,6 +4,7 @@
 
 	use Edde\Config\IConfigurable;
 	use Edde\Query\IQuery;
+	use Throwable;
 
 	/**
 	 * General driver for storage implementation; one storage could have more drivers to choose from.
@@ -56,6 +57,8 @@
 		 * commit a transaction
 		 *
 		 * @return IConnection
+		 *
+		 * @throws ConnectionException
 		 */
 		public function commit(): IConnection;
 
@@ -65,4 +68,15 @@
 		 * @return IConnection
 		 */
 		public function rollback(): IConnection;
+
+		/**
+		 * run a transaction and return result of callback
+		 *
+		 * @param callable $callback
+		 *
+		 * @return mixed
+		 *
+		 * @throws Throwable
+		 */
+		public function transaction(callable $callback);
 	}

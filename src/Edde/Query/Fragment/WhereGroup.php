@@ -3,8 +3,6 @@
 	namespace Edde\Query\Fragment;
 
 	use Edde\Query\AbstractFragment;
-	use Edde\Storage\Query\Fragment\IWhere;
-	use Edde\Storage\Query\Fragment\IWhereGroup;
 
 	class WhereGroup extends AbstractFragment implements IWhereGroup {
 		/** @var IWhere[] */

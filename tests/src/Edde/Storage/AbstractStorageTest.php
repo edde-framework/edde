@@ -19,6 +19,7 @@
 	use Edde\Connection\ConnectionException;
 	use Edde\Connection\DuplicateEntryException;
 	use Edde\Connection\DuplicateTableException;
+	use Edde\Connection\TransactionException;
 	use Edde\Entity\EntityException;
 	use Edde\Entity\EntityNotFoundException;
 	use Edde\Entity\IEntity;
@@ -29,13 +30,11 @@
 	use Edde\Service\Container\Container;
 	use Edde\Service\Entity\EntityManager;
 	use Edde\Service\Schema\SchemaManager;
-	use Edde\Service\Storage\Storage;
 	use Edde\TestCase;
 
 	abstract class AbstractStorageTest extends TestCase {
 		use EntityManager;
 		use SchemaManager;
-		use Storage;
 		use Container;
 
 		/**

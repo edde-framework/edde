@@ -1,11 +1,9 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Storage\Query;
+	namespace Edde\Query;
 
-	use Edde\Query\IQuery;
-	use Edde\Query\QueryException;
+	use Edde\Query\Fragment\IWhereGroup;
 	use Edde\Schema\ISchema;
-	use Edde\Storage\Query\Fragment\IWhereGroup;
 
 	interface ISelectQuery extends IQuery {
 		/**
@@ -28,7 +26,7 @@
 		public function join(string $alias, string $schema, string $relation = null): ISelectQuery;
 
 		/**
-		 * @return \Edde\Storage\Query\Fragment\IJoin[]
+		 * @return \Edde\Query\Fragment\IJoin[]
 		 */
 		public function getJoins(): array;
 

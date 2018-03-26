@@ -71,8 +71,6 @@
 	use Edde\Sanitizer\SanitizerManager;
 	use Edde\Schema\ISchemaManager;
 	use Edde\Schema\SchemaManager;
-	use Edde\Storage\IStorage;
-	use Edde\Storage\Storage;
 	use Edde\Upgrade\IUpgradeManager;
 	use Edde\Upgrade\UpgradeManager;
 	use Edde\Utils\IStringUtils;
@@ -340,7 +338,6 @@
 				 * storage support
 				 */
 				IEntityManager::class      => EntityManager::class,
-				IStorage::class            => Storage::class,
 				IConnection::class         => MysqlConnection::class,
 				/**
 				 * an application upgrades support

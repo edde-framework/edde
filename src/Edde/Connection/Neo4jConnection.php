@@ -5,18 +5,18 @@
 	use Edde\Config\ConfigException;
 	use Edde\Crate\IProperty;
 	use Edde\Entity\IEntity;
+	use Edde\Query\Fragment\IWhere;
+	use Edde\Query\ICrateSchemaQuery;
 	use Edde\Query\IDeleteQuery;
 	use Edde\Query\IDetachQuery;
 	use Edde\Query\IDisconnectQuery;
 	use Edde\Query\ILinkQuery;
+	use Edde\Query\INativeQuery;
 	use Edde\Query\IQueryQueue;
 	use Edde\Query\IRelationQuery;
+	use Edde\Query\ISelectQuery;
 	use Edde\Query\IUnlinkQuery;
 	use Edde\Query\NativeQuery;
-	use Edde\Storage\INativeQuery;
-	use Edde\Storage\Query\Fragment\IWhere;
-	use Edde\Storage\Query\ICrateSchemaQuery;
-	use Edde\Storage\Query\ISelectQuery;
 	use Exception;
 	use GraphAware\Bolt\Configuration;
 	use GraphAware\Bolt\Exception\MessageFailureException;
@@ -347,7 +347,7 @@
 		}
 
 		/**
-		 * @param ISelectQuery $selectQuery
+		 * @param \Edde\Query\ISelectQuery $selectQuery
 		 *
 		 * @return mixed
 		 *
@@ -406,7 +406,7 @@
 		}
 
 		/**
-		 * @param IWhere $where
+		 * @param \Edde\Query\Fragment\IWhere $where
 		 *
 		 * @return INativeQuery
 		 *

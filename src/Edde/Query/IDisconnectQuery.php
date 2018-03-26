@@ -3,8 +3,8 @@
 	namespace Edde\Query;
 
 	use Edde\Entity\IEntity;
+	use Edde\Query\Fragment\IWhereGroup;
 	use Edde\Schema\IRelation;
-	use Edde\Storage\Query\Fragment\IWhereGroup;
 
 	interface IDisconnectQuery extends IQuery {
 		/**
@@ -35,7 +35,7 @@
 		public function hasWhere(): bool;
 
 		/**
-		 * @return \Edde\Storage\Query\Fragment\IWhereGroup
+		 * @return \Edde\Query\Fragment\IWhereGroup
 		 */
 		public function getWhere(): IWhereGroup;
 	}

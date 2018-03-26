@@ -1,8 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Storage;
-
-	use Edde\Query\IQuery;
+	namespace Edde\Query;
 
 	interface INativeQuery extends IQuery {
 		/**
@@ -14,4 +12,9 @@
 		 * @return array
 		 */
 		public function getParams(): array;
+
+		/**
+		 * @return string
+		 */
+		public function toString(): string;
 	}

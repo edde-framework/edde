@@ -1,8 +1,8 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Storage\Query\Fragment;
+	namespace Edde\Query\Fragment;
 
-	use Edde\Storage\Query\IFragment;
+	use Edde\Query\IFragment;
 
 	interface IWhere extends IFragment {
 		/**

@@ -3,7 +3,6 @@
 	namespace Edde\Query\Fragment;
 
 	use Edde\Query\AbstractFragment;
-	use Edde\Storage\Query\Fragment\IJoin;
 
 	class Join extends AbstractFragment implements IJoin {
 		/** @var string */

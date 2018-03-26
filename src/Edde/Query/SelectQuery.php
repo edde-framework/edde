@@ -2,17 +2,16 @@
 	declare(strict_types=1);
 	namespace Edde\Query;
 
+	use Edde\Query\Fragment\IJoin;
+	use Edde\Query\Fragment\IWhereGroup;
 	use Edde\Query\Fragment\Join;
 	use Edde\Query\Fragment\WhereGroup;
 	use Edde\Schema\ISchema;
-	use Edde\Storage\Query\Fragment\IJoin;
-	use Edde\Storage\Query\Fragment\IWhereGroup;
-	use Edde\Storage\Query\ISelectQuery;
 
 	class SelectQuery extends AbstractQuery implements ISelectQuery {
 		/** @var string */
 		protected $alias;
-		/** @var IJoin[] */
+		/** @var \Edde\Query\Fragment\IJoin[] */
 		protected $joins = [];
 		/** @var IWhereGroup */
 		protected $where;

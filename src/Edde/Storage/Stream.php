@@ -2,20 +2,21 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
+	use Edde\Connection\IConnection;
 	use Edde\Object;
 	use Edde\Query\IQuery;
-	use Edde\Storage\Query\ISelectQuery;
+	use Edde\Query\ISelectQuery;
 	use function explode;
 	use function strpos;
 
 	class Stream extends Object implements IStream {
-		/** @var IStorage */
-		protected $storage;
-		/** @var ISelectQuery */
+		/** @var IConnection */
+		protected $connection;
+		/** @var \Edde\Query\ISelectQuery */
 		protected $query;
 
-		public function __construct(IStorage $storage, IQuery $query) {
-			$this->storage = $storage;
+		public function __construct(IConnection $connection, IQuery $query) {
+			$this->connection = $connection;
 			$this->query = $query;
 		}
 
@@ -45,7 +46,7 @@
 
 		/** @inheritdoc */
 		public function getIterator() {
-			foreach ($this->storage->execute($this->query) as $array) {
+			foreach ($this->connection->execute($this->query) as $array) {
 				yield $this->emit($array);
 			}
 		}
