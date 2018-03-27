@@ -7,9 +7,11 @@
 	use Edde\Collection\CollectionException;
 	use Edde\Connection\ConnectionException;
 	use Edde\Connection\DuplicateEntryException;
+	use Edde\Container\ContainerException;
 	use Edde\Entity\EntityException;
 	use Edde\Entity\EntityNotFoundException;
 	use Edde\Entity\IEntity;
+	use Edde\Generator\GeneratorException;
 	use Edde\Query\SelectQuery;
 	use Edde\Schema\SchemaException;
 	use Edde\Schema\SchemaValidationException;
@@ -53,6 +55,8 @@
 		 * @throws ConnectionException
 		 * @throws EntityException
 		 * @throws SchemaException
+		 * @throws ContainerException
+		 * @throws GeneratorException
 		 */
 		public function testValidator() {
 			$this->expectException(SchemaValidationException::class);
@@ -67,6 +71,8 @@
 		 * @throws ConnectionException
 		 * @throws EntityException
 		 * @throws SchemaException
+		 * @throws ContainerException
+		 * @throws GeneratorException
 		 */
 		public function testInsert() {
 			$collection = $this->collectionManager->collection();
@@ -83,10 +89,12 @@
 		 * @throws ConnectionException
 		 * @throws EntityException
 		 * @throws SchemaException
+		 * @throws ContainerException
+		 * @throws GeneratorException
 		 */
 		public function testInsertException2() {
 			$this->expectException(SchemaValidationException::class);
-			$this->expectExceptionMessage('Validation of schema [Edde\Common\Schema\FooSchema] failed.');
+			$this->expectExceptionMessage('Validation of schema [SimpleSchema] failed.');
 			$collection = $this->collectionManager->collection();
 			$collection->use(SimpleSchema::class);
 			$collection->insert(SimpleSchema::class, (object)[
@@ -99,6 +107,8 @@
 		 * @throws ConnectionException
 		 * @throws EntityException
 		 * @throws SchemaException
+		 * @throws ContainerException
+		 * @throws GeneratorException
 		 */
 		public function testInsertUnique() {
 			$this->expectException(DuplicateEntryException::class);
@@ -117,6 +127,8 @@
 		 * @throws ConnectionException
 		 * @throws EntityException
 		 * @throws SchemaException
+		 * @throws ContainerException
+		 * @throws GeneratorException
 		 */
 		public function testSave() {
 			$collection = $this->collectionManager->collection();
@@ -176,7 +188,8 @@
 		}
 
 		/**
-		 * @throws EntityException
+		 * @throws SchemaException
+		 * @throws ContainerException
 		 */
 		public function testUpdate() {
 			$entity = $this->entityManager->entity(SimpleSchema::class, [
@@ -199,8 +212,8 @@
 		}
 
 		/**
-		 * @throws EntityException
 		 * @throws SchemaException
+		 * @throws ContainerException
 		 */
 		public function testLink() {
 			$foo = $this->entityManager->entity(FooSchema::class, [
@@ -259,8 +272,8 @@
 		}
 
 		/**
-		 * @throws EntityException
 		 * @throws SchemaException
+		 * @throws ContainerException
 		 */
 		public function testRelationTo() {
 			$foo = $this->entityManager->entity(FooSchema::class, [
@@ -402,8 +415,8 @@
 		}
 
 		/**
-		 * @throws EntityException
 		 * @throws SchemaException
+		 * @throws ContainerException
 		 */
 		public function testRelationAttribute() {
 			$this->schemaManager->load(UserRoleSchema::class);
@@ -469,8 +482,8 @@
 		}
 
 		/**
-		 * @throws EntityException
 		 * @throws SchemaException
+		 * @throws ContainerException
 		 */
 		public function testMoreRelations() {
 			$this->schemaManager->load(SourceOneTargetSchema::class);
@@ -490,8 +503,8 @@
 		}
 
 		/**
-		 * @throws EntityException
 		 * @throws SchemaException
+		 * @throws ContainerException
 		 */
 		public function testReverseRelation() {
 			$this->schemaManager->load(SourceOneTargetSchema::class);
@@ -529,8 +542,8 @@
 		}
 
 		/**
-		 * @throws EntityException
 		 * @throws SchemaException
+		 * @throws ContainerException
 		 */
 		public function testEntityDetach() {
 			$this->schemaManager->load(UserRoleSchema::class);
@@ -569,8 +582,8 @@
 		}
 
 		/**
-		 * @throws EntityException
 		 * @throws SchemaException
+		 * @throws ContainerException
 		 */
 		public function testDisconnect() {
 			$this->schemaManager->load(UserRoleSchema::class);
@@ -608,8 +621,8 @@
 		}
 
 		/**
-		 * @throws EntityException
 		 * @throws SchemaException
+		 * @throws ContainerException
 		 */
 		public function testUnlinkRelation() {
 			$this->schemaManager->load(UserRoleSchema::class);
