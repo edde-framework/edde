@@ -39,9 +39,6 @@
 			if (isset($this->entities[$alias])) {
 				return $this->entities[$alias];
 			}
-			if (isset($this->schemas[$alias]) === false) {
-				throw new EntityException(sprintf('Requested unknown schema alias [%s].', $alias));
-			}
 			return $this->entities[$alias] = $this->entityManager->load($this->schemas[$alias], $this->getSource($alias));
 		}
 	}

@@ -5,6 +5,7 @@
 	use BarSchema;
 	use DateTime;
 	use Edde\Collection\CollectionException;
+	use Edde\Connection\ConnectionException;
 	use Edde\Connection\DuplicateEntryException;
 	use Edde\Entity\EntityException;
 	use Edde\Entity\EntityNotFoundException;
@@ -49,6 +50,7 @@
 		 * @throws CollectionException
 		 * @throws SchemaValidationException
 		 * @throws ValidatorException
+		 * @throws ConnectionException
 		 */
 		public function testValidator() {
 			$this->expectException(SchemaValidationException::class);
@@ -62,6 +64,7 @@
 		 * @throws CollectionException
 		 * @throws SchemaValidationException
 		 * @throws ValidatorException
+		 * @throws ConnectionException
 		 */
 		public function testInsert() {
 			$collection = $this->collectionManager->collection();
@@ -74,65 +77,74 @@
 		}
 
 		/**
-		 * @throws EntityException
-		 */
-		public function testInsertException() {
-			$this->expectException(SchemaValidationException::class);
-			$this->expectExceptionMessage('Validation of schema [Edde\Common\Schema\FooSchema] failed.');
-			$this->entityManager->entity(FooSchema::class, [
-				'label' => 'kaboom',
-			])->commit();
-		}
-
-		/**
-		 * @throws EntityException
+		 * @throws CollectionException
+		 * @throws SchemaValidationException
+		 * @throws ValidatorException
+		 * @throws ConnectionException
 		 */
 		public function testInsertException2() {
 			$this->expectException(SchemaValidationException::class);
 			$this->expectExceptionMessage('Validation of schema [Edde\Common\Schema\FooSchema] failed.');
-			$this->entityManager->entity(FooSchema::class, [
-				'name'  => null,
-				'label' => 'kaboom',
-			])->commit();
+			$collection = $this->collectionManager->collection();
+			$collection->use(SimpleSchema::class);
+			$collection->save(SimpleSchema::class, (object)[
+				'name' => null,
+			]);
 		}
 
 		/**
-		 * @throws EntityException
+		 * @throws CollectionException
+		 * @throws SchemaValidationException
+		 * @throws ValidatorException
+		 * @throws ConnectionException
 		 */
 		public function testInsertUnique() {
 			$this->expectException(DuplicateEntryException::class);
-			$this->entityManager->entity(FooSchema::class, [
+			$collection = $this->collectionManager->collection();
+			$collection->use(SimpleSchema::class);
+			$collection->save(SimpleSchema::class, (object)[
 				'name' => 'unique',
-			])->commit();
-			$this->entityManager->entity(FooSchema::class, [
+			]);
+			$collection->save(SimpleSchema::class, (object)[
 				'name' => 'unique',
-			])->commit();
+			]);
 		}
 
 		/**
-		 * @throws EntityException
+		 * @throws CollectionException
+		 * @throws ConnectionException
+		 * @throws SchemaValidationException
+		 * @throws ValidatorException
 		 */
 		public function testSave() {
-			$entity = $this->entityManager->entity(SimpleSchema::class, [
+			$collection = $this->collectionManager->collection();
+			$collection->use(SimpleSchema::class);
+			$entity = $collection->save(SimpleSchema::class, (object)[
 				'name'     => 'some name for this entity',
 				'optional' => 'this string is optional, but I wanna fill it!',
-			])->commit();
+			]);
 			self::assertNotEmpty($entity->get('uuid'));
-			$entity = $this->entityManager->entity(SimpleSchema::class, [
+			self::assertFalse($entity->isDirty());
+			$entity = $collection->save(SimpleSchema::class, (object)[
 				'name'     => 'another name',
 				'optional' => null,
-			])->commit();
+			]);
 			self::assertNotEmpty($entity->get('uuid'));
 			self::assertFalse($entity->isDirty(), 'Entity is still dirty!');
 		}
 
 		/**
+		 * @throws CollectionException
+		 * @throws EntityException
+		 * @throws SchemaException
 		 */
 		public function testCollection() {
+			$collection = $this->collectionManager->collection();
+			$collection->use(SimpleSchema::class);
 			$entities = [];
-			foreach ($this->entityManager->collection('c', SimpleSchema::class) as $record) {
-				$entity = $record->getEntity('c')->toArray();
-				unset($entity['uuid']);
+			foreach ($collection as $record) {
+				$entity = $record->getEntity(SimpleSchema::class)->toObject();
+				unset($entity->uuid);
 				$entities[] = $entity;
 			}
 			sort($entities);

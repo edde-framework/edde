@@ -6,6 +6,8 @@
 
 	interface SimpleSchema extends UuidSchema, AliasSchema {
 		public function name($unique): string;
+
+		public function optional(): ?string;
 	}
 
 	interface FooSchema extends UuidSchema {

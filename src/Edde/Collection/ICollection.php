@@ -2,7 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Collection;
 
+	use Edde\Connection\ConnectionException;
 	use Edde\Entity\IEntity;
+	use Edde\Schema\ISchema;
+	use Edde\Schema\SchemaException;
 	use Edde\Schema\SchemaValidationException;
 	use Edde\Validator\ValidatorException;
 	use IteratorAggregate;
@@ -18,6 +21,8 @@
 		 * @param string $alias
 		 *
 		 * @return ICollection
+		 *
+		 * @throws SchemaException
 		 */
 		public function use(string $schema, string $alias = null): ICollection;
 
@@ -27,6 +32,8 @@
 		 * @param array $schemas
 		 *
 		 * @return ICollection
+		 *
+		 * @throws SchemaException
 		 */
 		public function uses(array $schemas): ICollection;
 
@@ -53,6 +60,7 @@
 		 * @throws CollectionException
 		 * @throws ValidatorException
 		 * @throws SchemaValidationException
+		 * @throws ConnectionException
 		 */
 		public function save(string $alias, stdClass $source): IEntity;
 
@@ -61,11 +69,11 @@
 		 *
 		 * @param string $alias
 		 *
-		 * @return string
+		 * @return ISchema
 		 *
 		 * @throws CollectionException
 		 */
-		public function getSchema(string $alias): string;
+		public function getSchema(string $alias): ISchema;
 
 		/**
 		 * @return Traversable|IRecord[]

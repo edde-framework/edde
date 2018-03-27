@@ -16,6 +16,7 @@
 	use Edde\Query\QueryQueue;
 	use Edde\Query\RelationQuery;
 	use Edde\Query\UnlinkQuery;
+	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Schema\SchemaManager;
 	use Exception;
@@ -27,6 +28,7 @@
 	use GraphAware\Bolt\Result\Result;
 	use GraphAware\Common\Type\MapAccessor;
 	use ReflectionException;
+	use stdClass;
 	use Throwable;
 	use function array_merge;
 	use function extract;
@@ -75,9 +77,9 @@
 		}
 
 		/** @inheritdoc */
-		public function create(string $name): IConnection {
+		public function create(ISchema $schema): IConnection {
 			try {
-				if (($schema = $this->schemaManager->load($name))->isRelation()) {
+				if ($schema->isRelation()) {
 					return $this;
 				}
 				$primaries = null;
@@ -103,8 +105,20 @@
 				}
 				return $this;
 			} catch (Throwable $exception) {
-				throw new ConnectionException(sprintf('Cannot create schema definition [%s]: %s', $name, $exception->getMessage()), 0, $exception);
+				throw $this->exception($exception);
 			}
+		}
+
+		/** @inheritdoc */
+		public function save(stdClass $source, ISchema $schema): IConnection {
+			throw new Exception('not implemented yet');
+			return $this;
+		}
+
+		/** @inheritdoc */
+		public function update(stdClass $source, ISchema $schema): IConnection {
+			throw new Exception('not implemented yet');
+			return $this;
 		}
 
 		/** @inheritdoc */

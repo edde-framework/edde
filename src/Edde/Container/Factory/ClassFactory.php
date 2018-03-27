@@ -31,9 +31,9 @@
 			$configurators = [];
 			$reflectionClass = new ReflectionClass($dependency);
 			foreach ($reflectionClass->getMethods() as $reflectionMethod) {
-				$injects = array_merge($injects, $this->getParameterList($parameterReflectionClass = $reflectionMethod->getDeclaringClass(), $reflectionMethod, 'inject'));
+				$injects = array_merge($injects, $this->getParams($parameterReflectionClass = $reflectionMethod->getDeclaringClass(), $reflectionMethod, 'inject'));
 				if ($parameterReflectionClass->implementsInterface(IAutowire::class)) {
-					$lazies = array_merge($lazies, $this->getParameterList($parameterReflectionClass, $reflectionMethod, 'lazy'));
+					$lazies = array_merge($lazies, $this->getParams($parameterReflectionClass, $reflectionMethod, 'lazy'));
 				}
 			}
 			$params = [];
@@ -69,8 +69,8 @@
 		 *
 		 * @throws ContainerException
 		 */
-		protected function getParameterList(ReflectionClass $reflectionClass, ReflectionMethod $reflectionMethod, string $method) {
-			$parameterList = [];
+		protected function getParams(ReflectionClass $reflectionClass, ReflectionMethod $reflectionMethod, string $method) {
+			$params = [];
 			if (strlen($name = $reflectionMethod->getName()) > strlen($method) && strpos($name, $method, 0) === 0) {
 				if ($reflectionMethod->isPublic() === false) {
 					throw new ContainerException(sprintf('Method [%s::%s()] must be public.', $reflectionClass->getName(), $reflectionMethod->getName()));
@@ -83,9 +83,9 @@
 					}
 					$reflectionProperty = $reflectionClass->getProperty($name);
 					$reflectionProperty->setAccessible(true);
-					$parameterList[] = new Parameter($reflectionProperty->getName(), false, $class->getName());
+					$params[] = new Parameter($reflectionProperty->getName(), false, $class->getName());
 				}
 			}
-			return $parameterList;
+			return $params;
 		}
 	}

@@ -2,10 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Collection;
 
+	use Edde\Connection\ConnectionException;
 	use Edde\Entity\IEntity;
 	use Edde\Object;
+	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaValidationException;
 	use Edde\Service\Connection\Connection;
+	use Edde\Service\Container\Container;
 	use Edde\Service\Entity\EntityManager;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Transaction\Transaction;
@@ -14,16 +17,17 @@
 	use Throwable;
 
 	class Collection extends Object implements ICollection {
+		use Container;
 		use Transaction;
 		use Connection;
 		use SchemaManager;
 		use EntityManager;
-		/** @var string[] */
+		/** @var ISchema[] */
 		protected $uses = [];
 
 		/** @inheritdoc */
 		public function use(string $schema, string $alias = null): ICollection {
-			$this->uses[$alias ?: $schema] = $schema;
+			$this->uses[$alias ?: $schema] = $this->schemaManager->load($schema);
 			return $this;
 		}
 
@@ -52,15 +56,14 @@
 		/** @inheritdoc */
 		public function save(string $alias, stdClass $source): IEntity {
 			try {
-				$name = $this->getSchema($alias);
-				$schema = $this->schemaManager->load($name);
+				$schema = $this->getSchema($alias);
 				$source = $this->schemaManager->generate($schema, $source);
 				$this->schemaManager->validate($schema, $source);
-				$this->connection->save($source, $name);
-				$entity = $this->entityManager->entity($name);
+				$this->connection->save($source, $schema);
+				$entity = $this->entityManager->entity($schema);
 				$entity->push($source);
 				return $entity;
-			} catch (CollectionException | ValidatorException | SchemaValidationException $exception) {
+			} catch (CollectionException | ConnectionException | ValidatorException | SchemaValidationException $exception) {
 				throw $exception;
 			} catch (Throwable $exception) {
 				throw new CollectionException(sprintf('Cannot save item to an alias [%s]: %s', $alias, $exception->getMessage()), 0, $exception);
@@ -68,7 +71,7 @@
 		}
 
 		/** @inheritdoc */
-		public function getSchema(string $alias): string {
+		public function getSchema(string $alias): ISchema {
 			if (isset($this->uses[$alias]) === false) {
 				throw new CollectionException(sprintf('Requested alias [%s] is not available in the collection.', $alias));
 			}
@@ -77,6 +80,11 @@
 
 		/** @inheritdoc */
 		public function getIterator() {
-			throw new \Exception('not implemented yet');
+			foreach ($this->connection->collection($this) as $source) {
+//				$this->container->create(Record::class, [
+//					$this->uses,
+//					$source,
+//				], __METHOD__);
+			}
 		}
 	}

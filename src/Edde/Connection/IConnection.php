@@ -3,6 +3,7 @@
 	namespace Edde\Connection;
 
 	use Edde\Query\IQuery;
+	use Edde\Schema\ISchema;
 	use Edde\Transaction\ITransaction;
 	use stdClass;
 
@@ -49,33 +50,33 @@
 		/**
 		 * create new schema
 		 *
-		 * @param string $name
+		 * @param ISchema $schema
 		 *
 		 * @return IConnection
 		 *
 		 * @throws ConnectionException
 		 */
-		public function create(string $name): IConnection;
+		public function create(ISchema $schema): IConnection;
 
 		/**
 		 * optimized insert
 		 *
 		 * @param stdClass $source
-		 * @param string   $name schema name
+		 * @param ISchema  $schema
 		 *
 		 * @return IConnection
 		 *
 		 * @throws ConnectionException
 		 */
-		public function save(stdClass $source, string $name): IConnection;
+		public function save(stdClass $source, ISchema $schema): IConnection;
 
 		/**
 		 * optimized update (by primary key)
 		 *
 		 * @param stdClass $source
-		 * @param string   $schema
+		 * @param ISchema  $schema
 		 *
 		 * @return IConnection
 		 */
-		public function update(stdClass $source, string $schema): IConnection;
+		public function update(stdClass $source, ISchema $schema): IConnection;
 	}

@@ -14,6 +14,7 @@
 	use Edde\Query\QueryQueue;
 	use Edde\Query\RelationQuery;
 	use Edde\Query\UnlinkQuery;
+	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Schema\SchemaManager;
 	use PDO;
@@ -67,9 +68,8 @@
 		}
 
 		/** @inheritdoc */
-		public function create(string $name): IConnection {
+		public function create(ISchema $schema): IConnection {
 			try {
-				$schema = $this->schemaManager->load($name);
 				$sql = 'CREATE TABLE ' . $this->delimite($table = $schema->getRealName()) . " (\n\t";
 				$columns = [];
 				$primaries = [];
@@ -95,14 +95,13 @@
 				$this->exec($sql . "\n)");
 				return $this;
 			} catch (Throwable $exception) {
-				throw new ConnectionException(sprintf('Cannot create schema [%s]: %s', $name, $exception->getMessage()), 0, $exception);
+				throw $this->exception($exception);
 			}
 		}
 
 		/** @inheritdoc */
-		public function save(stdClass $source, string $name): IConnection {
+		public function save(stdClass $source, ISchema $schema): IConnection {
 			try {
-				$schema = $this->schemaManager->load($name);
 				$table = $this->delimite($schema->getRealName());
 				$source = $this->schemaManager->sanitize($schema, $source);
 				$columns = [];
@@ -115,12 +114,12 @@
 				$this->fetch($sql, $params);
 				return $this;
 			} catch (Throwable $exception) {
-				throw new ConnectionException(sprintf('Cannot create new object in schema [%s]: %s', $name), 0, $exception);
+				throw $this->exception($exception);
 			}
 		}
 
 		/** @inheritdoc */
-		public function update(stdClass $source, string $schema): IConnection {
+		public function update(stdClass $source, ISchema $schema): IConnection {
 			return $this;
 		}
 
