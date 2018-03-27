@@ -51,6 +51,6 @@
 			} else if (stripos($message, 'undefined table') !== false) {
 				return new UnknownTableException($message, 0, $throwable);
 			}
-			return new ConnectionException($message, 0, $throwable);
+			return $throwable;
 		}
 	}

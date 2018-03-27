@@ -19,7 +19,7 @@
 	use Edde\Service\Entity\EntityManager;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\TestCase;
-	use Edde\Validator\ValidatorException;
+	use Edde\Transaction\TransactionException;
 	use FooBarSchema;
 	use FooSchema;
 	use SimpleSchema;
@@ -33,6 +33,8 @@
 
 		/**
 		 * @throws CollectionException
+		 * @throws SchemaException
+		 * @throws TransactionException
 		 */
 		public function testCreateSchema() {
 			$collection = $this->collectionManager->collection();
@@ -48,28 +50,28 @@
 
 		/**
 		 * @throws CollectionException
-		 * @throws SchemaValidationException
-		 * @throws ValidatorException
 		 * @throws ConnectionException
+		 * @throws EntityException
+		 * @throws SchemaException
 		 */
 		public function testValidator() {
 			$this->expectException(SchemaValidationException::class);
 			$this->expectExceptionMessage('Validation of schema [SimpleSchema] failed.');
 			$collection = $this->collectionManager->collection();
 			$collection->use(SimpleSchema::class, 'simple');
-			$collection->save('simple', (object)['name' => true]);
+			$collection->insert('simple', (object)['name' => true]);
 		}
 
 		/**
 		 * @throws CollectionException
-		 * @throws SchemaValidationException
-		 * @throws ValidatorException
 		 * @throws ConnectionException
+		 * @throws EntityException
+		 * @throws SchemaException
 		 */
 		public function testInsert() {
 			$collection = $this->collectionManager->collection();
 			$collection->use(SimpleSchema::class);
-			$entity = $collection->save(SimpleSchema::class, (object)[
+			$entity = $collection->insert(SimpleSchema::class, (object)[
 				'name' => 'this entity is new',
 			]);
 			self::assertFalse($entity->isDirty());
@@ -78,34 +80,34 @@
 
 		/**
 		 * @throws CollectionException
-		 * @throws SchemaValidationException
-		 * @throws ValidatorException
 		 * @throws ConnectionException
+		 * @throws EntityException
+		 * @throws SchemaException
 		 */
 		public function testInsertException2() {
 			$this->expectException(SchemaValidationException::class);
 			$this->expectExceptionMessage('Validation of schema [Edde\Common\Schema\FooSchema] failed.');
 			$collection = $this->collectionManager->collection();
 			$collection->use(SimpleSchema::class);
-			$collection->save(SimpleSchema::class, (object)[
+			$collection->insert(SimpleSchema::class, (object)[
 				'name' => null,
 			]);
 		}
 
 		/**
 		 * @throws CollectionException
-		 * @throws SchemaValidationException
-		 * @throws ValidatorException
 		 * @throws ConnectionException
+		 * @throws EntityException
+		 * @throws SchemaException
 		 */
 		public function testInsertUnique() {
 			$this->expectException(DuplicateEntryException::class);
 			$collection = $this->collectionManager->collection();
 			$collection->use(SimpleSchema::class);
-			$collection->save(SimpleSchema::class, (object)[
+			$collection->insert(SimpleSchema::class, (object)[
 				'name' => 'unique',
 			]);
-			$collection->save(SimpleSchema::class, (object)[
+			$collection->insert(SimpleSchema::class, (object)[
 				'name' => 'unique',
 			]);
 		}
@@ -113,19 +115,19 @@
 		/**
 		 * @throws CollectionException
 		 * @throws ConnectionException
-		 * @throws SchemaValidationException
-		 * @throws ValidatorException
+		 * @throws EntityException
+		 * @throws SchemaException
 		 */
 		public function testSave() {
 			$collection = $this->collectionManager->collection();
 			$collection->use(SimpleSchema::class);
-			$entity = $collection->save(SimpleSchema::class, (object)[
+			$entity = $collection->insert(SimpleSchema::class, (object)[
 				'name'     => 'some name for this entity',
 				'optional' => 'this string is optional, but I wanna fill it!',
 			]);
 			self::assertNotEmpty($entity->get('uuid'));
 			self::assertFalse($entity->isDirty());
-			$entity = $collection->save(SimpleSchema::class, (object)[
+			$entity = $collection->insert(SimpleSchema::class, (object)[
 				'name'     => 'another name',
 				'optional' => null,
 			]);

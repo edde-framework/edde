@@ -3,11 +3,13 @@
 	namespace Edde\Collection;
 
 	use Edde\Connection\ConnectionException;
+	use Edde\Container\ContainerException;
+	use Edde\Entity\EntityException;
 	use Edde\Entity\IEntity;
+	use Edde\Generator\GeneratorException;
 	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
-	use Edde\Schema\SchemaValidationException;
-	use Edde\Validator\ValidatorException;
+	use Edde\Transaction\TransactionException;
 	use IteratorAggregate;
 	use stdClass;
 	use Traversable;
@@ -45,12 +47,12 @@
 		 *
 		 * @return ICollection
 		 *
-		 * @throws CollectionException
+		 * @throws TransactionException
 		 */
 		public function create(): ICollection;
 
 		/**
-		 * save the given source in a collection; alias makes use of a schema internally
+		 * insert a new item into a schema represented by the given alias
 		 *
 		 * @param string   $alias
 		 * @param stdClass $source
@@ -58,11 +60,13 @@
 		 * @return IEntity return newly create entity
 		 *
 		 * @throws CollectionException
-		 * @throws ValidatorException
-		 * @throws SchemaValidationException
 		 * @throws ConnectionException
+		 * @throws EntityException
+		 * @throws SchemaException
+		 * @throws GeneratorException
+		 * @throws ContainerException
 		 */
-		public function save(string $alias, stdClass $source): IEntity;
+		public function insert(string $alias, stdClass $source): IEntity;
 
 		/**
 		 * return schema for the given alias

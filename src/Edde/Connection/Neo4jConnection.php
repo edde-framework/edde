@@ -110,7 +110,8 @@
 		}
 
 		/** @inheritdoc */
-		public function save(stdClass $source, ISchema $schema): IConnection {
+		public function insert(stdClass $source, ISchema $schema): IConnection {
+			$this->schemaManager->validate($schema, $source);
 			throw new Exception('not implemented yet');
 			return $this;
 		}
@@ -159,7 +160,7 @@
 			} else if (stripos($message, 'must have the property') !== false) {
 				return new RequiredValueException($message, 0, $throwable);
 			}
-			return new ConnectionException($message, 0, $throwable);
+			return $throwable;
 		}
 
 		/**

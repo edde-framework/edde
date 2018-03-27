@@ -68,7 +68,7 @@
 		 *
 		 * @throws ConnectionException
 		 */
-		public function save(stdClass $source, ISchema $schema): IConnection;
+		public function insert(stdClass $source, ISchema $schema): IConnection;
 
 		/**
 		 * optimized update (by primary key)

@@ -5,17 +5,18 @@
 	use Edde\Object;
 	use Edde\Schema\ISchema;
 	use Edde\Service\Container\Container;
-	use Throwable;
+	use stdClass;
 
 	class EntityManager extends Object implements IEntityManager {
 		use Container;
 
 		/** @inheritdoc */
-		public function entity(ISchema $schema): IEntity {
-			try {
-				return $this->container->inject(new Entity($schema));
-			} catch (Throwable $exception) {
-				throw new EntityException(sprintf('Cannot create requested entity [%s]: %s', $schema->getName(), $exception->getMessage()), 0, $exception);
+		public function entity(ISchema $schema, stdClass $default = null): IEntity {
+			/** @var $entity IEntity */
+			$entity = $this->container->create(Entity::class, [$schema], __METHOD__);
+			if ($default) {
+				$entity->push($default);
 			}
+			return $entity;
 		}
 	}

@@ -100,8 +100,9 @@
 		}
 
 		/** @inheritdoc */
-		public function save(stdClass $source, ISchema $schema): IConnection {
+		public function insert(stdClass $source, ISchema $schema): IConnection {
 			try {
+				$this->schemaManager->validate($schema, $source);
 				$table = $this->delimite($schema->getRealName());
 				$source = $this->schemaManager->sanitize($schema, $source);
 				$columns = [];
@@ -144,7 +145,7 @@
 		 * @return Throwable
 		 */
 		protected function exception(Throwable $throwable): Throwable {
-			return new ConnectionException('Unhandled exception: ' . $throwable->getMessage(), 0, $throwable);
+			return $throwable;
 		}
 
 		/**

@@ -46,6 +46,6 @@
 			} else if (stripos($message, 'table or view not found') !== false) {
 				return new UnknownTableException($message, 0, $throwable);
 			}
-			return new ConnectionException($message, 0, $throwable);
+			return $throwable;
 		}
 	}
