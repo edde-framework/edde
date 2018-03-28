@@ -8,6 +8,11 @@
 		public function name($unique): string;
 
 		public function optional(): ?string;
+
+		public function mandatory($default = 'this is a default!'): ?string;
+	}
+
+	interface VoidSchema extends UuidSchema {
 	}
 
 	interface FooSchema extends UuidSchema {

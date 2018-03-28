@@ -102,9 +102,15 @@
 		}
 
 		/** @inheritdoc */
-		public function insert(stdClass $source, ISchema $schema): IStorage {
+		public function insert(stdClass $source, string $name): stdClass {
 			try {
-				$this->schemaManager->validate($schema, $source);
+				$this->schemaManager->validate(
+					$schema = $this->schemaManager->load($name),
+					$generated = clone ($source = $this->schemaManager->generate(
+						$schema,
+						$source
+					))
+				);
 				$table = $this->delimite($schema->getRealName());
 				$source = $this->schemaManager->sanitize($schema, $source);
 				$columns = [];
@@ -115,7 +121,7 @@
 				}
 				$sql = 'INSERT INTO ' . $table . ' (' . implode(', ', $columns) . ') VALUES (:' . implode(', :', array_keys($params)) . ')';
 				$this->fetch($sql, $params);
-				return $this;
+				return $generated;
 			} catch (Throwable $exception) {
 				throw $this->exception($exception);
 			}

@@ -64,13 +64,13 @@
 		 * optimized insert
 		 *
 		 * @param stdClass $source
-		 * @param ISchema  $schema
+		 * @param string   $name
 		 *
-		 * @return IStorage
+		 * @return stdClass return data inserted into a storage (including defaults)
 		 *
 		 * @throws StorageException
 		 */
-		public function insert(stdClass $source, ISchema $schema): IStorage;
+		public function insert(stdClass $source, string $name): stdClass;
 
 		/**
 		 * optimized update (by primary key)

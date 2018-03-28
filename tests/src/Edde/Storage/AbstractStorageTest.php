@@ -9,7 +9,6 @@
 	use Edde\Entity\EntityException;
 	use Edde\Entity\EntityNotFoundException;
 	use Edde\Entity\IEntity;
-	use Edde\Generator\GeneratorException;
 	use Edde\Query\SelectQuery;
 	use Edde\Schema\SchemaException;
 	use Edde\Schema\SchemaValidationException;
@@ -23,6 +22,8 @@
 	use FooBarSchema;
 	use FooSchema;
 	use SimpleSchema;
+	use VoidSchema;
+	use function property_exists;
 
 	abstract class AbstractStorageTest extends TestCase {
 		use EntityManager;
@@ -49,100 +50,74 @@
 		}
 
 		/**
-		 * @throws CollectionException
 		 * @throws StorageException
-		 * @throws EntityException
-		 * @throws SchemaException
-		 * @throws ContainerException
-		 * @throws GeneratorException
+		 */
+		public function testInsertNoTable() {
+			self::expectException(UnknownTableException::class);
+			self::expectExceptionMessage('SQLSTATE[42S02]: Base table or view not found: 1146 Table \'edde.VoidSchema\' doesn\'t exist');
+			$this->storage->insert((object)[], VoidSchema::class);
+		}
+
+		/**
+		 * @throws StorageException
 		 */
 		public function testValidator() {
 			$this->expectException(SchemaValidationException::class);
 			$this->expectExceptionMessage('Validation of schema [SimpleSchema] failed.');
-			$collection = $this->collectionManager->collection();
-			$collection->use(SimpleSchema::class, 'simple');
-			$collection->insert('simple', (object)['name' => true]);
+			$this->storage->insert((object)['name' => true], SimpleSchema::class);
 		}
 
 		/**
-		 * @throws CollectionException
 		 * @throws StorageException
-		 * @throws EntityException
-		 * @throws SchemaException
-		 * @throws ContainerException
-		 * @throws GeneratorException
 		 */
 		public function testInsert() {
-			$collection = $this->collectionManager->collection();
-			$collection->use(SimpleSchema::class);
-			$entity = $collection->insert(SimpleSchema::class, (object)[
+			$source = $this->storage->insert((object)[
 				'name' => 'this entity is new',
-			]);
-			self::assertFalse($entity->isDirty());
-			self::assertNotEmpty($entity->get('uuid'));
+			], SimpleSchema::class);
+			self::assertTrue(property_exists($source, 'uuid'));
+			self::assertNotEmpty($source->uuid);
 		}
 
 		/**
-		 * @throws CollectionException
 		 * @throws StorageException
-		 * @throws EntityException
-		 * @throws SchemaException
-		 * @throws ContainerException
-		 * @throws GeneratorException
 		 */
 		public function testInsertException2() {
 			$this->expectException(SchemaValidationException::class);
 			$this->expectExceptionMessage('Validation of schema [SimpleSchema] failed.');
-			$collection = $this->collectionManager->collection();
-			$collection->use(SimpleSchema::class);
-			$collection->insert(SimpleSchema::class, (object)[
+			$this->storage->insert((object)[
 				'name' => null,
-			]);
+			], SimpleSchema::class);
 		}
 
 		/**
-		 * @throws CollectionException
 		 * @throws StorageException
-		 * @throws EntityException
-		 * @throws SchemaException
-		 * @throws ContainerException
-		 * @throws GeneratorException
 		 */
 		public function testInsertUnique() {
 			$this->expectException(DuplicateEntryException::class);
-			$collection = $this->collectionManager->collection();
-			$collection->use(SimpleSchema::class);
-			$collection->insert(SimpleSchema::class, (object)[
+			$this->storage->insert((object)[
 				'name' => 'unique',
-			]);
-			$collection->insert(SimpleSchema::class, (object)[
+			], SimpleSchema::class);
+			$this->storage->insert((object)[
 				'name' => 'unique',
-			]);
+			], SimpleSchema::class);
 		}
 
 		/**
-		 * @throws CollectionException
 		 * @throws StorageException
-		 * @throws EntityException
-		 * @throws SchemaException
-		 * @throws ContainerException
-		 * @throws GeneratorException
 		 */
 		public function testSave() {
-			$collection = $this->collectionManager->collection();
-			$collection->use(SimpleSchema::class);
-			$entity = $collection->insert(SimpleSchema::class, (object)[
+			$object = $this->storage->insert((object)[
 				'name'     => 'some name for this entity',
 				'optional' => 'this string is optional, but I wanna fill it!',
-			]);
-			self::assertNotEmpty($entity->get('uuid'));
-			self::assertFalse($entity->isDirty());
-			$entity = $collection->insert(SimpleSchema::class, (object)[
+			], SimpleSchema::class);
+			self::assertTrue(property_exists($object, 'uuid'));
+			self::assertNotEmpty($object->uuid);
+			$object = $this->storage->insert((object)[
 				'name'     => 'another name',
 				'optional' => null,
-			]);
-			self::assertNotEmpty($entity->get('uuid'));
-			self::assertFalse($entity->isDirty(), 'Entity is still dirty!');
+			], SimpleSchema::class);
+			self::assertTrue(property_exists($object, 'uuid'));
+			self::assertNotEmpty($object->uuid);
 		}
 
 		/**
