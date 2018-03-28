@@ -2,13 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Collection;
 
-	use Edde\Connection\ConnectionException;
 	use Edde\Container\ContainerException;
 	use Edde\Entity\EntityException;
 	use Edde\Entity\IEntity;
 	use Edde\Generator\GeneratorException;
 	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
+	use Edde\Storage\StorageException;
 	use Edde\Transaction\TransactionException;
 	use IteratorAggregate;
 	use stdClass;
@@ -60,7 +60,7 @@
 		 * @return IEntity return newly create entity
 		 *
 		 * @throws CollectionException
-		 * @throws ConnectionException
+		 * @throws StorageException
 		 * @throws EntityException
 		 * @throws SchemaException
 		 * @throws GeneratorException

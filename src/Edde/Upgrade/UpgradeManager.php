@@ -3,15 +3,15 @@
 	namespace Edde\Upgrade;
 
 	use Edde\Collection\ICollection;
-	use Edde\Connection\UnknownTableException;
 	use Edde\Entity\EntityNotFoundException;
-	use Edde\Service\Connection\Connection;
 	use Edde\Service\Entity\EntityManager;
+	use Edde\Service\Storage\Storage;
+	use Edde\Storage\UnknownTableException;
 	use Throwable;
 
 	class UpgradeManager extends AbstractUpgradeManager {
 		use EntityManager;
-		use Connection;
+		use Storage;
 
 		/** @inheritdoc */
 		public function getVersion(): ?string {
@@ -19,7 +19,7 @@
 				try {
 					return $this->getCurrentCollection()->getEntity('u')->get('version');
 				} catch (UnknownTableException $exception) {
-					$this->connection->create(UpgradeSchema::class);
+					$this->storage->create(UpgradeSchema::class);
 					return null;
 				} catch (EntityNotFoundException $exception) {
 					return null;

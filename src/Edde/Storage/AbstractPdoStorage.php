@@ -1,7 +1,8 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Connection;
+	namespace Edde\Storage;
 
+	use Edde\Collection\ICollection;
 	use Edde\Config\ConfigException;
 	use Edde\Entity\IEntity;
 	use Edde\Query\DeleteQuery;
@@ -17,6 +18,7 @@
 	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Schema\SchemaManager;
+	use Iterator;
 	use PDO;
 	use PDOException;
 	use PDOStatement;
@@ -24,7 +26,7 @@
 	use Throwable;
 	use function implode;
 
-	abstract class AbstractPdoConnection extends AbstractConnection {
+	abstract class AbstractPdoStorage extends AbstractStorage {
 		use SchemaManager;
 		protected $options;
 		/** @var PDO */
@@ -59,7 +61,7 @@
 		public function exec($query, array $params = []) {
 			try {
 				if (empty($params) === false) {
-					throw new ConnectionException(sprintf('%s does not support params.', __METHOD__));
+					throw new StorageException(sprintf('%s does not support params.', __METHOD__));
 				}
 				return $this->pdo->exec($query);
 			} catch (PDOException $exception) {
@@ -68,7 +70,7 @@
 		}
 
 		/** @inheritdoc */
-		public function create(ISchema $schema): IConnection {
+		public function create(ISchema $schema): IStorage {
 			try {
 				$sql = 'CREATE TABLE ' . $this->delimite($table = $schema->getRealName()) . " (\n\t";
 				$columns = [];
@@ -100,7 +102,7 @@
 		}
 
 		/** @inheritdoc */
-		public function insert(stdClass $source, ISchema $schema): IConnection {
+		public function insert(stdClass $source, ISchema $schema): IStorage {
 			try {
 				$this->schemaManager->validate($schema, $source);
 				$table = $this->delimite($schema->getRealName());
@@ -120,8 +122,12 @@
 		}
 
 		/** @inheritdoc */
-		public function update(stdClass $source, ISchema $schema): IConnection {
+		public function update(stdClass $source, ISchema $schema): IStorage {
 			return $this;
+		}
+
+		/** @inheritdoc */
+		public function collection(ICollection $collection): Iterator {
 		}
 
 		/** @inheritdoc */
@@ -152,7 +158,7 @@
 		 * @param ISelectQuery $selectQuery
 		 *
 		 * @return PDOStatement
-		 * @throws ConnectionException
+		 * @throws StorageException
 		 * @throws Throwable
 		 */
 		protected function executeSelectQuery(ISelectQuery $selectQuery) {
@@ -239,7 +245,7 @@
 		 *
 		 * @return mixed|PDOStatement
 		 *
-		 * @throws ConnectionException
+		 * @throws StorageException
 		 * @throws SchemaException
 		 * @throws Throwable
 		 */
@@ -257,7 +263,7 @@
 		 *
 		 * @return mixed|PDOStatement
 		 *
-		 * @throws ConnectionException
+		 * @throws StorageException
 		 * @throws Throwable
 		 */
 		protected function executeRelationQuery(RelationQuery $relationQuery) {
@@ -298,7 +304,7 @@
 		 *
 		 * @return mixed|PDOStatement
 		 *
-		 * @throws ConnectionException
+		 * @throws StorageException
 		 * @throws Throwable
 		 * @throws SchemaException
 		 */
@@ -327,7 +333,7 @@
 		 *
 		 * @return mixed|PDOStatement
 		 *
-		 * @throws ConnectionException
+		 * @throws StorageException
 		 * @throws Throwable
 		 */
 		protected function executeDisconnectQuery(IDisconnectQuery $disconnectQuery) {
@@ -354,7 +360,7 @@
 		 *
 		 * @return NativeQuery
 		 *
-		 * @throws ConnectionException
+		 * @throws StorageException
 		 */
 		protected function fragmentWhere(IWhere $where) {
 			[$expression, $type] = $params = $where->getWhere();
@@ -370,7 +376,7 @@
 								$parameterId => $params[3],
 							]);
 					}
-					throw new ConnectionException(sprintf('Unknown where operator [%s] target [%s].', get_class($where), $type));
+					throw new StorageException(sprintf('Unknown where operator [%s] target [%s].', get_class($where), $type));
 				case 'null':
 					$name = $this->delimite($params[2]);
 					if (($dot = strpos($params[2], '.')) !== false) {
@@ -384,14 +390,14 @@
 					}
 					return new NativeQuery($name . ' IS NOT NULL');
 				default:
-					throw new ConnectionException(sprintf('Unknown where type [%s] for clause [%s].', $expression, get_class($where)));
+					throw new StorageException(sprintf('Unknown where type [%s] for clause [%s].', $expression, get_class($where)));
 			}
 		}
 
 		/**
 		 * @param QueryQueue $queryQueue
 		 *
-		 * @throws ConnectionException
+		 * @throws StorageException
 		 * @throws SchemaException
 		 * @throws Throwable
 		 */
@@ -464,7 +470,7 @@
 		 *
 		 * @return string
 		 *
-		 * @throws ConnectionException
+		 * @throws StorageException
 		 */
 		abstract public function type(string $type): string;
 	}

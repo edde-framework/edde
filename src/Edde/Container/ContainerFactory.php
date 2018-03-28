@@ -36,8 +36,6 @@
 	use Edde\Configurator\Sanitizer\SanitizerManagerConfigurator;
 	use Edde\Configurator\Schema\SchemaManagerConfigurator;
 	use Edde\Configurator\Validator\ValidatorManagerConfigurator;
-	use Edde\Connection\IConnection;
-	use Edde\Connection\MysqlConnection;
 	use Edde\Container\Factory\CallbackFactory;
 	use Edde\Container\Factory\ClassFactory;
 	use Edde\Container\Factory\ExceptionFactory;
@@ -73,6 +71,8 @@
 	use Edde\Sanitizer\SanitizerManager;
 	use Edde\Schema\ISchemaManager;
 	use Edde\Schema\SchemaManager;
+	use Edde\Storage\IStorage;
+	use Edde\Storage\MysqlStorage;
 	use Edde\Transaction\ITransaction;
 	use Edde\Upgrade\IUpgradeManager;
 	use Edde\Upgrade\UpgradeManager;
@@ -153,7 +153,7 @@
 					} else if (interface_exists($factory)) {
 						$current = new LinkFactory($name, $factory);
 					}
-				} else if ($factory instanceof \Edde\Container\IFactory) {
+				} else if ($factory instanceof IFactory) {
 					$current = $factory;
 				} else if (is_callable($factory)) {
 					$current = new CallbackFactory($factory, $name);
@@ -328,37 +328,37 @@
 				/**
 				 * generator (related to schema) support
 				 */
-				IGeneratorManager::class   => GeneratorManager::class,
-				IFilterManager::class      => FilterManager::class,
-				ISanitizerManager::class   => SanitizerManager::class,
-				IValidatorManager::class   => ValidatorManager::class,
+				IGeneratorManager::class  => GeneratorManager::class,
+				IFilterManager::class     => FilterManager::class,
+				ISanitizerManager::class  => SanitizerManager::class,
+				IValidatorManager::class  => ValidatorManager::class,
 				/**
 				 * random & security support
 				 */
-				IRandomService::class      => RandomService::class,
-				IPasswordService::class    => PasswordService::class,
+				IRandomService::class     => RandomService::class,
+				IPasswordService::class   => PasswordService::class,
 				/**
 				 * storage support
 				 */
-				IEntityManager::class      => EntityManager::class,
-				IConnection::class         => MysqlConnection::class,
-				ITransaction::class        => IConnection::class,
-				ICollectionManager::class  => CollectionManager::class,
+				IEntityManager::class     => EntityManager::class,
+				IStorage::class           => MysqlStorage::class,
+				ITransaction::class       => IStorage::class,
+				ICollectionManager::class => CollectionManager::class,
 				/**
 				 * an application upgrades support
 				 */
-				IUpgradeManager::class     => UpgradeManager::class,
+				IUpgradeManager::class    => UpgradeManager::class,
 				/**
 				 * access (permission) subsystem
 				 *
 				 * - access is kind of alias for Authorization
 				 */
-				IAccessService::class      => AccessService::class,
+				IAccessService::class     => AccessService::class,
 				/**
 				 * Xml support
 				 */
-				IXmlExportService::class   => XmlExportService::class,
-				IXmlParserService::class   => XmlParserService::class,
+				IXmlExportService::class  => XmlExportService::class,
+				IXmlParserService::class  => XmlParserService::class,
 				/**
 				 * Message bus support; probably most important stuff of the
 				 * framework and the top killing feature :)

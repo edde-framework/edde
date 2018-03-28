@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Connection;
+	namespace Edde\Storage;
 
 	use Edde\Query\Fragment\IWhereGroup;
 	use Edde\Query\IFragment;
@@ -14,7 +14,7 @@
 	use ReflectionException;
 	use ReflectionMethod;
 
-	abstract class AbstractConnection extends AbstractTransaction implements IConnection {
+	abstract class AbstractStorage extends AbstractTransaction implements IStorage {
 		use ConfigService;
 		use SchemaManager;
 		/** @var string */
@@ -34,7 +34,7 @@
 		/** @inheritdoc */
 		public function execute(IQuery $query) {
 			if (isset($this->executors[$name = ('execute' . ($class = substr($class = get_class($query), strrpos($class, '\\') + 1)))]) === false) {
-				throw new ConnectionException(sprintf('Unknown query type [%s] for driver [%s]: an [%s] executor is not implemented.', $class, static::class, $name));
+				throw new StorageException(sprintf('Unknown query type [%s] for driver [%s]: an [%s] executor is not implemented.', $class, static::class, $name));
 			}
 			return $this->executors[$name]($query);
 		}
@@ -43,11 +43,11 @@
 		 * @param IFragment $fragment
 		 *
 		 * @return INativeQuery
-		 * @throws ConnectionException
+		 * @throws StorageException
 		 */
 		protected function fragment(IFragment $fragment): INativeQuery {
 			if (isset($this->fragments[$name = ('fragment' . ($class = substr($class = get_class($fragment), strrpos($class, '\\') + 1)))]) === false) {
-				throw new ConnectionException(sprintf('Unknown fragment type [%s] for driver [%s]: a [%s] fragment is not implemented.', $class, static::class, $name));
+				throw new StorageException(sprintf('Unknown fragment type [%s] for driver [%s]: a [%s] fragment is not implemented.', $class, static::class, $name));
 			}
 			return $this->fragments[$name]($fragment);
 		}
@@ -56,7 +56,7 @@
 		 * @param IWhereGroup $whereGroup
 		 *
 		 * @return INativeQuery
-		 * @throws ConnectionException
+		 * @throws StorageException
 		 */
 		protected function fragmentWhereGroup(IWhereGroup $whereGroup): INativeQuery {
 			$group = null;

@@ -5,8 +5,6 @@
 	use BarSchema;
 	use DateTime;
 	use Edde\Collection\CollectionException;
-	use Edde\Connection\ConnectionException;
-	use Edde\Connection\DuplicateEntryException;
 	use Edde\Container\ContainerException;
 	use Edde\Entity\EntityException;
 	use Edde\Entity\EntityNotFoundException;
@@ -16,10 +14,10 @@
 	use Edde\Schema\SchemaException;
 	use Edde\Schema\SchemaValidationException;
 	use Edde\Service\Collection\CollectionManager;
-	use Edde\Service\Connection\Connection;
 	use Edde\Service\Container\Container;
 	use Edde\Service\Entity\EntityManager;
 	use Edde\Service\Schema\SchemaManager;
+	use Edde\Service\Storage\Storage;
 	use Edde\TestCase;
 	use Edde\Transaction\TransactionException;
 	use FooBarSchema;
@@ -30,7 +28,7 @@
 		use EntityManager;
 		use SchemaManager;
 		use Container;
-		use Connection;
+		use Storage;
 		use CollectionManager;
 
 		/**
@@ -52,7 +50,7 @@
 
 		/**
 		 * @throws CollectionException
-		 * @throws ConnectionException
+		 * @throws StorageException
 		 * @throws EntityException
 		 * @throws SchemaException
 		 * @throws ContainerException
@@ -68,7 +66,7 @@
 
 		/**
 		 * @throws CollectionException
-		 * @throws ConnectionException
+		 * @throws StorageException
 		 * @throws EntityException
 		 * @throws SchemaException
 		 * @throws ContainerException
@@ -86,7 +84,7 @@
 
 		/**
 		 * @throws CollectionException
-		 * @throws ConnectionException
+		 * @throws StorageException
 		 * @throws EntityException
 		 * @throws SchemaException
 		 * @throws ContainerException
@@ -104,7 +102,7 @@
 
 		/**
 		 * @throws CollectionException
-		 * @throws ConnectionException
+		 * @throws StorageException
 		 * @throws EntityException
 		 * @throws SchemaException
 		 * @throws ContainerException
@@ -124,7 +122,7 @@
 
 		/**
 		 * @throws CollectionException
-		 * @throws ConnectionException
+		 * @throws StorageException
 		 * @throws EntityException
 		 * @throws SchemaException
 		 * @throws ContainerException

@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Connection;
+	namespace Edde\Storage;
 
 	use Edde\Config\ConfigException;
 	use Edde\Crate\IProperty;
@@ -34,7 +34,7 @@
 	use function extract;
 	use function implode;
 
-	class Neo4jConnection extends AbstractConnection {
+	class Neo4jStorage extends AbstractStorage {
 		use SchemaManager;
 		/** @var SessionInterface */
 		protected $session;
@@ -77,7 +77,7 @@
 		}
 
 		/** @inheritdoc */
-		public function create(ISchema $schema): IConnection {
+		public function create(ISchema $schema): IStorage {
 			try {
 				if ($schema->isRelation()) {
 					return $this;
@@ -110,14 +110,14 @@
 		}
 
 		/** @inheritdoc */
-		public function insert(stdClass $source, ISchema $schema): IConnection {
+		public function insert(stdClass $source, ISchema $schema): IStorage {
 			$this->schemaManager->validate($schema, $source);
 			throw new Exception('not implemented yet');
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function update(stdClass $source, ISchema $schema): IConnection {
+		public function update(stdClass $source, ISchema $schema): IStorage {
 			throw new Exception('not implemented yet');
 			return $this;
 		}
@@ -207,7 +207,7 @@
 		/**
 		 * @param DetachQuery $detachQuery
 		 *
-		 * @throws ConnectionException
+		 * @throws StorageException
 		 * @throws SchemaException
 		 */
 		protected function executeDetachQuery(DetachQuery $detachQuery) {
@@ -238,7 +238,7 @@
 		/**
 		 * @param DisconnectQuery $disconnectQuery
 		 *
-		 * @throws ConnectionException
+		 * @throws StorageException
 		 * @throws SchemaException
 		 */
 		protected function executeDisconnectQuery(DisconnectQuery $disconnectQuery) {
@@ -426,7 +426,7 @@
 		 *
 		 * @return INativeQuery
 		 *
-		 * @throws ConnectionException
+		 * @throws StorageException
 		 */
 		protected function fragmentWhere(IWhere $where): INativeQuery {
 			[$expression, $type] = $params = $where->getWhere();
@@ -442,7 +442,7 @@
 								$parameterId => $params[3],
 							]);
 					}
-					throw new ConnectionException(sprintf('Unknown where operator [%s] target [%s].', get_class($where), $type));
+					throw new StorageException(sprintf('Unknown where operator [%s] target [%s].', get_class($where), $type));
 				case 'null':
 					$name = $this->delimite($params[2]);
 					if (($dot = strpos($params[2], '.')) !== false) {
@@ -482,7 +482,7 @@
 					$fragment .= ')';
 					return new NativeQuery($fragment, isset($nativeQuery) ? $nativeQuery->getParams() : []);
 				default:
-					throw new ConnectionException(sprintf('Unknown where type [%s] for clause [%s].', $expression, get_class($where)));
+					throw new StorageException(sprintf('Unknown where type [%s] for clause [%s].', $expression, get_class($where)));
 			}
 		}
 

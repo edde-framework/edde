@@ -3,28 +3,28 @@
 	namespace Edde\Upgrade;
 
 	use Edde\Object;
-	use Edde\Service\Connection\Connection;
 	use Edde\Service\Log\LogService;
+	use Edde\Service\Storage\Storage;
 	use Throwable;
 
 	abstract class AbstractUpgrade extends Object implements IUpgrade {
-		use Connection;
+		use Storage;
 		use LogService;
 
 		/** @inheritdoc */
 		public function onStart(): void {
-			$this->connection->start();
+			$this->storage->start();
 		}
 
 		/** @inheritdoc */
 		public function onSuccess(): void {
-			$this->connection->commit();
+			$this->storage->commit();
 		}
 
 		/** @inheritdoc */
 		public function onFail(Throwable $throwable): void {
 			$this->logService->exception($throwable);
-			$this->connection->rollback();
+			$this->storage->rollback();
 			throw $throwable;
 		}
 	}
