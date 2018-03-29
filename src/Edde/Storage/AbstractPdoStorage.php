@@ -5,23 +5,11 @@
 	use Edde\Collection\ICollection;
 	use Edde\Config\ConfigException;
 	use Edde\Entity\IEntity;
-	use Edde\Query\DeleteQuery;
-	use Edde\Query\DetachQuery;
-	use Edde\Query\Fragment\IWhere;
-	use Edde\Query\IDisconnectQuery;
-	use Edde\Query\ISelectQuery;
-	use Edde\Query\LinkQuery;
-	use Edde\Query\NativeQuery;
-	use Edde\Query\QueryQueue;
-	use Edde\Query\RelationQuery;
-	use Edde\Query\UnlinkQuery;
 	use Edde\Schema\ISchema;
-	use Edde\Schema\SchemaException;
 	use Edde\Service\Schema\SchemaManager;
 	use Iterator;
 	use PDO;
 	use PDOException;
-	use PDOStatement;
 	use stdClass;
 	use Throwable;
 	use function implode;
@@ -160,14 +148,7 @@
 			return $throwable;
 		}
 
-		/**
-		 * @param ISelectQuery $selectQuery
-		 *
-		 * @return PDOStatement
-		 * @throws StorageException
-		 * @throws Throwable
-		 */
-		protected function executeSelectQuery(ISelectQuery $selectQuery) {
+		protected function executeSelectQuery(SelectQuery $selectQuery) {
 			$alias = $this->delimite($selectQuery->getAlias());
 			$current = $selectQuery->getAlias();
 			$params = [];
@@ -231,13 +212,6 @@
 			return $this->fetch($sql, $params);
 		}
 
-		/**
-		 * @param UnlinkQuery $unlinkQuery
-		 *
-		 * @return mixed|PDOStatement
-		 *
-		 * @throws Throwable
-		 */
 		protected function executeUnlinkQuery(UnlinkQuery $unlinkQuery) {
 			$link = $unlinkQuery->getLink();
 			$entity = $unlinkQuery->getEntity();
@@ -246,15 +220,6 @@
 			return $this->fetch($sql, ['a' => $primary->get()]);
 		}
 
-		/**
-		 * @param LinkQuery $linkQuery
-		 *
-		 * @return mixed|PDOStatement
-		 *
-		 * @throws StorageException
-		 * @throws SchemaException
-		 * @throws Throwable
-		 */
 		protected function executeLinkQuery(LinkQuery $linkQuery) {
 			$link = $linkQuery->getLink();
 			$entity = $linkQuery->getEntity();
@@ -264,14 +229,6 @@
 			return $this->fetch($sql, ['a' => $primary->get(), 'b' => $to]);
 		}
 
-		/**
-		 * @param RelationQuery $relationQuery
-		 *
-		 * @return mixed|PDOStatement
-		 *
-		 * @throws StorageException
-		 * @throws Throwable
-		 */
 		protected function executeRelationQuery(RelationQuery $relationQuery) {
 			$using = $relationQuery->getUsing();
 			$relation = $relationQuery->getRelation();
@@ -291,13 +248,6 @@
 			return $this->fetch($sql, $params);
 		}
 
-		/**
-		 * @param DeleteQuery $deleteQuery
-		 *
-		 * @return mixed|PDOStatement
-		 *
-		 * @throws Throwable
-		 */
 		protected function executeDeleteQuery(DeleteQuery $deleteQuery) {
 			$entity = $deleteQuery->getEntity();
 			$primary = $entity->getPrimary();
@@ -305,15 +255,6 @@
 			return $this->fetch($sql, ['a' => $primary->get()]);
 		}
 
-		/**
-		 * @param DetachQuery $detachQuery
-		 *
-		 * @return mixed|PDOStatement
-		 *
-		 * @throws StorageException
-		 * @throws Throwable
-		 * @throws SchemaException
-		 */
 		protected function executeDetachQuery(DetachQuery $detachQuery) {
 			$relation = $detachQuery->getRelation();
 			$sql = $this->getDeleteSql($relation->getSchema()->getRealName());
@@ -334,15 +275,7 @@
 			return $this->fetch($sql, $params);
 		}
 
-		/**
-		 * @param IDisconnectQuery $disconnectQuery
-		 *
-		 * @return mixed|PDOStatement
-		 *
-		 * @throws StorageException
-		 * @throws Throwable
-		 */
-		protected function executeDisconnectQuery(IDisconnectQuery $disconnectQuery) {
+		protected function executeDisconnectQuery(DisconnectQuery $disconnectQuery) {
 			$relation = $disconnectQuery->getRelation();
 			$sql = $this->getDeleteSql($relation->getSchema()->getRealName());
 			$sql .= '(r.' . $this->delimite($relation->getFrom()->getTo()->getPropertyName()) . ' = :a)';
@@ -361,13 +294,6 @@
 			return 'DELETE r FROM ' . $this->delimite($relation) . ' AS r WHERE ';
 		}
 
-		/**
-		 * @param \Edde\Query\Fragment\IWhere $where
-		 *
-		 * @return NativeQuery
-		 *
-		 * @throws StorageException
-		 */
 		protected function fragmentWhere(IWhere $where) {
 			[$expression, $type] = $params = $where->getWhere();
 			switch ($expression) {
@@ -400,13 +326,6 @@
 			}
 		}
 
-		/**
-		 * @param QueryQueue $queryQueue
-		 *
-		 * @throws StorageException
-		 * @throws SchemaException
-		 * @throws Throwable
-		 */
 		protected function executeQueryQueue(QueryQueue $queryQueue) {
 			$entityQueue = $queryQueue->getEntityQueue();
 			if ($entityQueue->isEmpty()) {

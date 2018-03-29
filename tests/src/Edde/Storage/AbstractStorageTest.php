@@ -126,6 +126,8 @@
 		 * @throws SchemaException
 		 */
 		public function testCollection() {
+			$this->storage->query();
+
 			$collection = $this->collectionManager->collection();
 			$collection->use(SimpleSchema::class);
 			$entities = [];
