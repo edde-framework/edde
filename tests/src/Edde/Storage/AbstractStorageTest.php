@@ -215,17 +215,6 @@
 		}
 
 		/**
-		 */
-		public function testSelectQuery() {
-			$collection = $this->entityManager->collection('f', FooSchema::class);
-			$collection->link('p', PooSchema::class);
-			$collection->order('p.name');
-			$record = $collection->getRecord();
-			self::assertSame('the name of this epic Poo!', $record->getEntity('p')->get('name'));
-			self::assertSame('foo with poo', $record->getEntity('f')->get('name'));
-		}
-
-		/**
 		 * @throws SchemaException
 		 */
 		public function testUnlink() {

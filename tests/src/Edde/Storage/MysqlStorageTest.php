@@ -4,7 +4,7 @@
 
 	use BarSchema;
 	use Edde\Container\Factory\InstanceFactory;
-	use Edde\Query\Query;
+	use Edde\Query\SelectQuery;
 	use FooBarSchema;
 	use FooSchema;
 
@@ -19,15 +19,16 @@
 			$this->assertTrue(true, 'everything looks nice even here!');
 		}
 
-		public function testSimpleQuery() {
-			$query = new Query();
-			$query->uses([
+		public function testSelectQuery() {
+			$selectQuery = new SelectQuery();
+			$selectQuery->uses([
 				'foo'     => FooSchema::class,
 				'bar'     => BarSchema::class,
 				'foo-bar' => FooBarSchema::class,
 			]);
-			$query->return(['foo', 'bar']);
-			$object = $this->storage->toNative($query);
+			$selectQuery->join('foo', 'bar', 'foo-bar');
+			$selectQuery->returns(['foo', 'bar']);
+			$native = $this->storage->toNative($selectQuery);
 		}
 
 		/** @inheritdoc */

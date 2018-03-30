@@ -6,7 +6,7 @@
 	use Edde\Config\ConfigException;
 	use Edde\Entity\IEntity;
 	use Edde\Query\INative;
-	use Edde\Query\IQuery;
+	use Edde\Query\ISelectQuery;
 	use Edde\Schema\ISchema;
 	use Edde\Service\Schema\SchemaManager;
 	use Iterator;
@@ -59,8 +59,7 @@
 			}
 		}
 
-		/** @inheritdoc */
-		public function toNative(IQuery $query): INative {
+		protected function nativeSelect(ISelectQuery $selectQuery): INative {
 		}
 
 		/** @inheritdoc */
@@ -379,11 +378,10 @@
 		 */
 		public function handleSetup(): void {
 			parent::handleSetup();
-			$section = $this->configService->require($this->config);
 			$this->pdo = new PDO(
-				$section->require('dsn'),
-				$section->require('user'),
-				$section->optional('password'),
+				$this->section->require('dsn'),
+				$this->section->require('user'),
+				$this->section->optional('password'),
 				$this->options
 			);
 			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

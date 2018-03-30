@@ -4,25 +4,71 @@
 	use Edde\Schema\RelationSchema;
 	use Edde\Schema\UuidSchema;
 
-	interface SimpleSchema extends UuidSchema, AliasSchema {
+	interface PrivilegeSchema extends UuidSchema, AliasSchema {
+		public function name($unique): string;
+	}
+
+	interface PermissionSchema extends UuidSchema, AliasSchema {
+		public function name($unique): string;
+	}
+
+	interface PrivilegePermissionSchema extends RelationSchema, AliasSchema {
+		public function privilege(): PrivilegeSchema;
+
+		public function permission(): PermissionSchema;
+	}
+
+	interface UserSchema extends UuidSchema, AliasSchema {
 		public function name($unique): string;
 
-		public function optional(): ?string;
+		public function email($unique): string;
 
-		public function mandatory($default = 'this is a default!'): ?string;
+		public function password(): string;
+
+		public function nick(): ?string;
+
+		public function created($generator = 'stamp'): DateTime;
+	}
+
+	interface ProjectSchema extends UuidSchema {
+		public function name(): string;
+
+		public function owner(): UserSchema;
+
+		public function duration(): IntervalSchema;
+	}
+
+	interface IssueSchema extends UuidSchema, AliasSchema {
+		public function name(): string;
+
+		public function due(): ?DateTime;
+
+		public function weight($default = 1.0): float;
+
+		public function reporter(): UserSchema;
+
+		public function project(): ProjectSchema;
+	}
+
+	interface ProjectMemberSchema extends RelationSchema, AliasSchema {
+		public function user(): UserSchema;
+
+		public function project(): ProjectSchema;
+	}
+
+	interface IssueAssigneeSchema extends RelationSchema {
+		public function issue(): IssueSchema;
+
+		public function user(): UserSchema;
+
+		public function created($generator = 'stamp'): DateTime;
+	}
+
+	interface IntervalSchema extends UuidSchema {
+		public function start(): ?DateTime;
+
+		public function end(): ?DateTime;
 	}
 
 	interface VoidSchema extends UuidSchema {
-	}
-
-	interface FooSchema extends UuidSchema {
-	}
-
-	interface BarSchema extends UuidSchema {
-	}
-
-	interface FooBarSchema extends RelationSchema, AliasSchema {
-		public function foo(FooSchema $uuid): string;
-
-		public function bar(BarSchema $uuid): string;
 	}

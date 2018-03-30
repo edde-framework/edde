@@ -28,7 +28,6 @@
 	use GraphAware\Bolt\Protocol\V1\Transaction;
 	use GraphAware\Bolt\Result\Result;
 	use GraphAware\Common\Type\MapAccessor;
-	use ReflectionException;
 	use stdClass;
 	use Throwable;
 	use function array_merge;
@@ -240,7 +239,6 @@
 		 * @param DisconnectQuery $disconnectQuery
 		 *
 		 * @throws StorageException
-		 * @throws SchemaException
 		 */
 		protected function executeDisconnectQuery(DisconnectQuery $disconnectQuery) {
 			$entity = $disconnectQuery->getEntity();
@@ -368,9 +366,8 @@
 		 *
 		 * @return mixed
 		 *
-		 * @throws SchemaException
-		 * @throws StorageException
 		 * @throws QueryException
+		 * @throws StorageException
 		 */
 		protected function executeSelectQuery(SelectQuery $selectQuery) {
 			$cypher = 'MATCH ';
@@ -497,16 +494,14 @@
 		/**
 		 * @inheritdoc
 		 *
-		 * @throws ReflectionException
 		 * @throws ConfigException
 		 */
 		protected function handleSetup(): void {
 			parent::handleSetup();
 			$config = null;
-			$section = $this->configService->require($this->config);
-			if ($user = $section->optional('user')) {
-				$config = Configuration::create()->withCredentials($user, $section->require('password'));
+			if ($user = $this->section->optional('user')) {
+				$config = Configuration::create()->withCredentials($user, $this->section->require('password'));
 			}
-			$this->session = GraphDatabase::driver($section->require('url'), $config)->session();
+			$this->session = GraphDatabase::driver($this->section->require('url'), $config)->session();
 		}
 	}
