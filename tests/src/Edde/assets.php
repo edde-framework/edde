@@ -4,18 +4,15 @@
 	use Edde\Schema\RelationSchema;
 	use Edde\Schema\UuidSchema;
 
-	interface PrivilegeSchema extends UuidSchema, AliasSchema {
-		public function name($unique): string;
-	}
-
 	interface PermissionSchema extends UuidSchema, AliasSchema {
 		public function name($unique): string;
 	}
 
-	interface PrivilegePermissionSchema extends RelationSchema, AliasSchema {
-		public function privilege(): PrivilegeSchema;
+	interface RoleSchema extends UuidSchema, AliasSchema {
+		public function name($unique): string;
+	}
 
-		public function permission(): PermissionSchema;
+	interface AccessSchema extends UuidSchema, AliasSchema {
 	}
 
 	interface UserSchema extends UuidSchema, AliasSchema {
@@ -28,6 +25,48 @@
 		public function nick(): ?string;
 
 		public function created($generator = 'stamp'): DateTime;
+	}
+
+	interface PermissionRoleSchema extends RelationSchema {
+		public function permission(): PermissionSchema;
+
+		public function role(): RoleSchema;
+	}
+
+	interface PermissionUserSchema extends RelationSchema, AliasSchema {
+		public function permission(): PermissionSchema;
+
+		public function user(): UserSchema;
+	}
+
+	interface UserRoleSchema extends RelationSchema {
+		public function user(): UserSchema;
+
+		public function role(): RoleSchema;
+	}
+
+	interface UserPermissionSchema extends RelationSchema {
+		public function user(): UserSchema;
+
+		public function permission(): PermissionSchema;
+	}
+
+	interface UserAccessSchema extends RelationSchema {
+		public function user(): UserSchema;
+
+		public function access(): AccessSchema;
+	}
+
+	interface AccessRoleSchema extends RelationSchema, AliasSchema {
+		public function access(): AccessSchema;
+
+		public function role(): RoleSchema;
+	}
+
+	interface AccessPermissionSchema extends RelationSchema {
+		public function access(): AccessSchema;
+
+		public function permission(): PermissionSchema;
 	}
 
 	interface ProjectSchema extends UuidSchema {
@@ -51,9 +90,9 @@
 	}
 
 	interface ProjectMemberSchema extends RelationSchema, AliasSchema {
-		public function user(): UserSchema;
-
 		public function project(): ProjectSchema;
+
+		public function user(): UserSchema;
 	}
 
 	interface IssueAssigneeSchema extends RelationSchema {
@@ -62,6 +101,12 @@
 		public function user(): UserSchema;
 
 		public function created($generator = 'stamp'): DateTime;
+	}
+
+	interface AccessProjectSchema extends RelationSchema {
+		public function access(): AccessSchema;
+
+		public function project(): ProjectSchema;
 	}
 
 	interface IntervalSchema extends UuidSchema {
