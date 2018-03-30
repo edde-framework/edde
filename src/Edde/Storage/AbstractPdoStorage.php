@@ -5,6 +5,8 @@
 	use Edde\Collection\ICollection;
 	use Edde\Config\ConfigException;
 	use Edde\Entity\IEntity;
+	use Edde\Query\INative;
+	use Edde\Query\IQuery;
 	use Edde\Schema\ISchema;
 	use Edde\Service\Schema\SchemaManager;
 	use Iterator;
@@ -55,6 +57,10 @@
 			} catch (PDOException $exception) {
 				throw $this->exception($exception);
 			}
+		}
+
+		/** @inheritdoc */
+		public function toNative(IQuery $query): INative {
 		}
 
 		/** @inheritdoc */

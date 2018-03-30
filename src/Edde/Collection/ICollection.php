@@ -6,7 +6,6 @@
 	use Edde\Entity\EntityException;
 	use Edde\Entity\IEntity;
 	use Edde\Generator\GeneratorException;
-	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
 	use Edde\Storage\StorageException;
 	use Edde\Transaction\TransactionException;
@@ -18,27 +17,6 @@
 	 * A collection is read-only result of some (usually selection) query.
 	 */
 	interface ICollection extends IteratorAggregate {
-		/**
-		 * @param string $schema
-		 * @param string $alias
-		 *
-		 * @return ICollection
-		 *
-		 * @throws SchemaException
-		 */
-		public function use(string $schema, string $alias = null): ICollection;
-
-		/**
-		 * [$alias => $schema]
-		 *
-		 * @param array $schemas
-		 *
-		 * @return ICollection
-		 *
-		 * @throws SchemaException
-		 */
-		public function uses(array $schemas): ICollection;
-
 		/**
 		 * create all schemas in this collection (simply, CREATE TABLE ...)
 		 *
@@ -67,17 +45,6 @@
 		 * @throws ContainerException
 		 */
 		public function insert(string $alias, stdClass $source): IEntity;
-
-		/**
-		 * return schema for the given alias
-		 *
-		 * @param string $alias
-		 *
-		 * @return ISchema
-		 *
-		 * @throws CollectionException
-		 */
-		public function getSchema(string $alias): ISchema;
 
 		/**
 		 * @return Traversable|IRecord[]

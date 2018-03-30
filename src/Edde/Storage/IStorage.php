@@ -3,6 +3,7 @@
 	namespace Edde\Storage;
 
 	use Edde\Collection\ICollection;
+	use Edde\Query\INative;
 	use Edde\Query\IQuery;
 	use Edde\Schema\ISchema;
 	use Edde\Transaction\ITransaction;
@@ -13,18 +14,6 @@
 	 * Low-level storage implementation with all supported query types explicitly typed.
 	 */
 	interface IStorage extends ITransaction {
-		/**
-		 * execute the given query and return native driver's result; this method does quite heavy
-		 * job with translating input query into native query for this driver
-		 *
-		 * @param IQuery $query
-		 *
-		 * @return mixed
-		 *
-		 * @throws StorageException
-		 */
-		public function execute(IQuery $query);
-
 		/**
 		 * execute raw query which should return some data
 		 *
@@ -48,6 +37,15 @@
 		 * @throws StorageException
 		 */
 		public function exec($query, array $params = []);
+
+		/**
+		 * generate native query
+		 *
+		 * @param IQuery $query
+		 *
+		 * @return INative
+		 */
+		public function toNative(IQuery $query): INative;
 
 		/**
 		 * create new schema

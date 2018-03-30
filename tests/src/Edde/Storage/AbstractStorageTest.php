@@ -18,7 +18,6 @@
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
 	use Edde\TestCase;
-	use Edde\Transaction\TransactionException;
 	use FooBarSchema;
 	use FooSchema;
 	use SimpleSchema;
@@ -33,19 +32,19 @@
 		use CollectionManager;
 
 		/**
-		 * @throws CollectionException
 		 * @throws SchemaException
-		 * @throws TransactionException
+		 * @throws StorageException
 		 */
 		public function testCreateSchema() {
-			$collection = $this->collectionManager->collection();
-			$collection->uses([
+			$schemas = [
 				FooSchema::class,
 				BarSchema::class,
 				FooBarSchema::class,
 				SimpleSchema::class,
-			]);
-			$collection->create();
+			];
+			foreach ($schemas as $schema) {
+				$this->storage->create($this->schemaManager->load($schema));
+			}
 			self::assertTrue(true, 'everything is ok');
 		}
 
@@ -126,8 +125,6 @@
 		 * @throws SchemaException
 		 */
 		public function testCollection() {
-			$this->storage->query();
-
 			$collection = $this->collectionManager->collection();
 			$collection->use(SimpleSchema::class);
 			$entities = [];

@@ -4,7 +4,6 @@
 
 	use Edde\Entity\IEntity;
 	use Edde\Object;
-	use Edde\Schema\ISchema;
 	use Edde\Service\Container\Container;
 	use Edde\Service\Entity\EntityManager;
 	use Edde\Service\Schema\SchemaManager;
@@ -18,22 +17,6 @@
 		use Storage;
 		use SchemaManager;
 		use EntityManager;
-		/** @var ISchema[] */
-		protected $uses = [];
-
-		/** @inheritdoc */
-		public function use(string $schema, string $alias = null): ICollection {
-			$this->uses[$alias ?: $schema] = $this->schemaManager->load($schema);
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function uses(array $schemas): ICollection {
-			foreach ($schemas as $alias => $schema) {
-				$this->use($schema, (string)$alias);
-			}
-			return $this;
-		}
 
 		/** @inheritdoc */
 		public function create(): ICollection {
@@ -55,14 +38,6 @@
 				$schema
 			);
 			return $this->entityManager->entity($schema, $source);
-		}
-
-		/** @inheritdoc */
-		public function getSchema(string $alias): ISchema {
-			if (isset($this->uses[$alias]) === false) {
-				throw new CollectionException(sprintf('Requested alias [%s] is not available in the collection.', $alias));
-			}
-			return $this->uses[$alias];
 		}
 
 		/** @inheritdoc */
