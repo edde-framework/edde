@@ -69,8 +69,10 @@
 	use Edde\Runtime\Runtime;
 	use Edde\Sanitizer\ISanitizerManager;
 	use Edde\Sanitizer\SanitizerManager;
+	use Edde\Schema\ISchemaLoader;
 	use Edde\Schema\ISchemaManager;
 	use Edde\Schema\SchemaManager;
+	use Edde\Schema\SchemaReflectionLoader;
 	use Edde\Storage\IStorage;
 	use Edde\Storage\MysqlStorage;
 	use Edde\Transaction\ITransaction;
@@ -325,40 +327,41 @@
 				 * schema support
 				 */
 				ISchemaManager::class      => SchemaManager::class,
+				ISchemaLoader::class       => SchemaReflectionLoader::class,
 				/**
 				 * generator (related to schema) support
 				 */
-				IGeneratorManager::class  => GeneratorManager::class,
-				IFilterManager::class     => FilterManager::class,
-				ISanitizerManager::class  => SanitizerManager::class,
-				IValidatorManager::class  => ValidatorManager::class,
+				IGeneratorManager::class   => GeneratorManager::class,
+				IFilterManager::class      => FilterManager::class,
+				ISanitizerManager::class   => SanitizerManager::class,
+				IValidatorManager::class   => ValidatorManager::class,
 				/**
 				 * random & security support
 				 */
-				IRandomService::class     => RandomService::class,
-				IPasswordService::class   => PasswordService::class,
+				IRandomService::class      => RandomService::class,
+				IPasswordService::class    => PasswordService::class,
 				/**
 				 * storage support
 				 */
-				IEntityManager::class     => EntityManager::class,
-				IStorage::class           => MysqlStorage::class,
-				ITransaction::class       => IStorage::class,
-				ICollectionManager::class => CollectionManager::class,
+				IEntityManager::class      => EntityManager::class,
+				IStorage::class            => MysqlStorage::class,
+				ITransaction::class        => IStorage::class,
+				ICollectionManager::class  => CollectionManager::class,
 				/**
 				 * an application upgrades support
 				 */
-				IUpgradeManager::class    => UpgradeManager::class,
+				IUpgradeManager::class     => UpgradeManager::class,
 				/**
 				 * access (permission) subsystem
 				 *
 				 * - access is kind of alias for Authorization
 				 */
-				IAccessService::class     => AccessService::class,
+				IAccessService::class      => AccessService::class,
 				/**
 				 * Xml support
 				 */
-				IXmlExportService::class  => XmlExportService::class,
-				IXmlParserService::class  => XmlParserService::class,
+				IXmlExportService::class   => XmlExportService::class,
+				IXmlParserService::class   => XmlParserService::class,
 				/**
 				 * Message bus support; probably most important stuff of the
 				 * framework and the top killing feature :)

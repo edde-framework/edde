@@ -3,38 +3,13 @@
 	namespace Edde\Schema;
 
 	use Edde\Config\IConfigurable;
+	use Edde\Filter\FilterException;
 	use Edde\Generator\GeneratorException;
+	use Edde\Sanitizer\SanitizerException;
 	use Edde\Validator\ValidatorException;
 	use stdClass;
 
 	interface ISchemaManager extends IConfigurable {
-		/**
-		 * register given schema loader (could be more of them)
-		 *
-		 * @param ISchemaLoader $schemaLoader
-		 *
-		 * @return ISchemaManager
-		 */
-		public function registerSchemaLoader(ISchemaLoader $schemaLoader): ISchemaManager;
-
-		/**
-		 * register the given schema
-		 *
-		 * @param ISchema $schema
-		 *
-		 * @return ISchemaManager
-		 */
-		public function registerSchema(ISchema $schema): ISchemaManager;
-
-		/**
-		 * register list of schemas at once
-		 *
-		 * @param ISchema[] $schemas
-		 *
-		 * @return ISchemaManager
-		 */
-		public function registerSchemas(array $schemas): ISchemaManager;
-
 		/**
 		 * try to load the given schema and return true/false if it exists
 		 *
@@ -76,6 +51,7 @@
 		 * @return stdClass
 		 *
 		 * @throws SchemaException
+		 * @throws FilterException
 		 */
 		public function filter(ISchema $schema, stdClass $source): stdClass;
 
@@ -88,6 +64,7 @@
 		 * @return stdClass
 		 *
 		 * @throws SchemaException
+		 * @throws SanitizerException
 		 */
 		public function sanitize(ISchema $schema, stdClass $source): stdClass;
 

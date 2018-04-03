@@ -15,7 +15,7 @@
 		protected $schemaBuilders = [];
 
 		/** @inheritdoc */
-		public function getSchemaBuilder(string $schema): ISchemaBuilder {
+		public function load(string $schema): ISchemaBuilder {
 			try {
 				if (isset($this->schemaBuilders[$schema])) {
 					return $this->schemaBuilders[$schema];

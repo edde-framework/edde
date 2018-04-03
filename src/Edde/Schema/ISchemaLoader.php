@@ -4,13 +4,13 @@
 
 	interface ISchemaLoader {
 		/**
-		 * try to load schema with the given name; return null of not available
+		 * try to load schema with the given name
 		 *
 		 * @param string $schema
 		 *
-		 * @return ISchemaBuilder|null
+		 * @return ISchemaBuilder
 		 *
 		 * @throws SchemaException
 		 */
-		public function getSchemaBuilder(string $schema): ?ISchemaBuilder;
+		public function load(string $schema): ISchemaBuilder;
 	}

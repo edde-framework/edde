@@ -6,40 +6,20 @@
 	use Edde\Service\Filter\FilterManager;
 	use Edde\Service\Generator\GeneratorManager;
 	use Edde\Service\Sanitizer\SanitizerManager;
+	use Edde\Service\Schema\SchemaLoader;
 	use Edde\Service\Validator\ValidatorManager;
 	use Edde\Validator\ValidationException;
 	use Edde\Validator\ValidatorException;
 	use stdClass;
 
 	class SchemaManager extends Obj3ct implements ISchemaManager {
+		use SchemaLoader;
 		use GeneratorManager;
 		use FilterManager;
 		use SanitizerManager;
 		use ValidatorManager;
-		/** @var ISchemaLoader[] */
-		protected $schemaLoaders = [];
 		/** @var ISchema[] */
 		protected $schemas = [];
-
-		/** @inheritdoc */
-		public function registerSchemaLoader(ISchemaLoader $schemaLoader): ISchemaManager {
-			$this->schemaLoaders[] = $schemaLoader;
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function registerSchema(ISchema $schema): ISchemaManager {
-			$this->schemas[$schema->getName()] = $schema;
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function registerSchemas(array $schemas): ISchemaManager {
-			foreach ($schemas as $schema) {
-				$this->registerSchema($schema);
-			}
-			return $this;
-		}
 
 		/** @inheritdoc */
 		public function hasSchema(string $schema): bool {
@@ -56,15 +36,7 @@
 			if (isset($this->schemas[$name])) {
 				return $this->schemas[$name];
 			}
-			$schemaBuilder = null;
-			foreach ($this->schemaLoaders as $schemaLoader) {
-				if ($schemaBuilder = $schemaLoader->getSchemaBuilder($name)) {
-					break;
-				}
-			}
-			if ($schemaBuilder === null) {
-				throw new SchemaException(sprintf('Requested unknown schema [%s].', $name));
-			}
+			$schemaBuilder = $this->schemaLoader->load($name);
 			$this->schemas[$name] = $schema = $schemaBuilder->getSchema();
 			foreach ($schemaBuilder->getLinkBuilders() as $linkBuilder) {
 				$schema->link(new Link($name = $linkBuilder->getName(), $from = new Target($schema, $schema->getAttribute($linkBuilder->getSourceProperty())), $to = new Target($target = $this->load($linkBuilder->getTargetSchema()), $target->getAttribute($linkBuilder->getTargetProperty()))));
