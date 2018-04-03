@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Http;
 
-	use Edde\Object;
+	use Edde\Obj3ct;
 
-	class ResponseHeader extends Object implements IResponseHeader {
+	class ResponseHeader extends Obj3ct implements IResponseHeader {
 		/** @var array */
 		protected $header;
 

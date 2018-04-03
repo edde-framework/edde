@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Upgrade;
 
-	use Edde\Object;
+	use Edde\Obj3ct;
 	use Edde\Service\Log\LogService;
 	use Throwable;
 
-	abstract class AbstractUpgradeManager extends Object implements IUpgradeManager {
+	abstract class AbstractUpgradeManager extends Obj3ct implements IUpgradeManager {
 		use LogService;
 		/** @var IUpgrade[] */
 		protected $upgrades = [];

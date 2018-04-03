@@ -62,7 +62,7 @@
 	use Edde\Http\RequestService as HttpRequestService;
 	use Edde\Log\ILogService;
 	use Edde\Log\LogService;
-	use Edde\Object;
+	use Edde\Obj3ct;
 	use Edde\Router\IRouterService;
 	use Edde\Router\RouterService;
 	use Edde\Runtime\IRuntime;
@@ -97,7 +97,7 @@
 	 * “Why aren’t we going anywhere?” asked the girl.
 	 * “Well, I should have mentioned this before, but I’m actually a taxi driver, and the fare back to town is $25…”
 	 */
-	class ContainerFactory extends Object {
+	class ContainerFactory extends Obj3ct {
 		/**
 		 * for the integration purposes
 		 *

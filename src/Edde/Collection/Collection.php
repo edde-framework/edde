@@ -3,7 +3,7 @@
 	namespace Edde\Collection;
 
 	use Edde\Entity\IEntity;
-	use Edde\Object;
+	use Edde\Obj3ct;
 	use Edde\Service\Container\Container;
 	use Edde\Service\Entity\EntityManager;
 	use Edde\Service\Schema\SchemaManager;
@@ -11,7 +11,7 @@
 	use Edde\Service\Transaction\Transaction;
 	use stdClass;
 
-	class Collection extends Object implements ICollection {
+	class Collection extends Obj3ct implements ICollection {
 		use Container;
 		use Transaction;
 		use Storage;

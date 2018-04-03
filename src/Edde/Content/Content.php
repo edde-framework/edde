@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Content;
 
-	use Edde\Object;
+	use Edde\Obj3ct;
 
-	class Content extends Object implements IContent {
+	class Content extends Obj3ct implements IContent {
 		/** @var mixed */
 		protected $content;
 		/** @var string */

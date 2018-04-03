@@ -2,10 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
-	use Edde\Object;
+	use Edde\Obj3ct;
 	use stdClass;
 
-	class SchemaBuilder extends Object implements ISchemaBuilder {
+	class SchemaBuilder extends Obj3ct implements ISchemaBuilder {
 		/** @var stdClass */
 		protected $source;
 		/** @var IAttributeBuilder[] */

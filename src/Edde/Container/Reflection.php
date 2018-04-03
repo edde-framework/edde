@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Container;
 
-	use Edde\Object;
+	use Edde\Obj3ct;
 
-	class Reflection extends Object implements IReflection {
+	class Reflection extends Obj3ct implements IReflection {
 		protected $params;
 		protected $injects;
 		protected $lazies;

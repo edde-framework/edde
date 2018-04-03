@@ -2,13 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Log;
 
-	use Edde\Object;
+	use Edde\Obj3ct;
 	use Throwable;
 
 	/**
 	 * Common stuff for loggers.
 	 */
-	abstract class AbstractLog extends Object implements ILog {
+	abstract class AbstractLog extends Obj3ct implements ILog {
 		/** @inheritdoc */
 		public function info(string $log, array $tags = null): ILog {
 			$tags[] = __FUNCTION__;

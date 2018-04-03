@@ -18,9 +18,6 @@
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
 	use Edde\TestCase;
-	use FooBarSchema;
-	use FooSchema;
-	use SimpleSchema;
 	use VoidSchema;
 	use function property_exists;
 
@@ -37,10 +34,6 @@
 		 */
 		public function testCreateSchema() {
 			$schemas = [
-				FooSchema::class,
-				BarSchema::class,
-				FooBarSchema::class,
-				SimpleSchema::class,
 			];
 			foreach ($schemas as $schema) {
 				$this->storage->create($this->schemaManager->load($schema));

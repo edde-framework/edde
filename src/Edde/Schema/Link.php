@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
-	use Edde\Object;
+	use Edde\Obj3ct;
 
-	class Link extends Object implements ILink {
+	class Link extends Obj3ct implements ILink {
 		/** @var string */
 		protected $name;
 		/** @var ITarget */

@@ -3,10 +3,10 @@
 	namespace Edde\Router;
 
 	use Edde\Element\IRequest;
-	use Edde\Object;
+	use Edde\Obj3ct;
 	use Edde\Service\Log\LogService;
 
-	class RouterService extends Object implements IRouterService {
+	class RouterService extends Obj3ct implements IRouterService {
 		use LogService;
 		/** @var IRouter[] */
 		protected $routers = [];

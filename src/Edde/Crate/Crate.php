@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Crate;
 
-	use Edde\Object;
+	use Edde\Obj3ct;
 	use Edde\Schema\ISchema;
 	use stdClass;
 
-	class Crate extends Object implements ICrate {
+	class Crate extends Obj3ct implements ICrate {
 		/** @var ISchema */
 		protected $schema;
 		/** @var IProperty[] */

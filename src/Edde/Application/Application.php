@@ -3,14 +3,14 @@
 	namespace Edde\Application;
 
 	use Edde\Http\IResponse;
-	use Edde\Object;
+	use Edde\Obj3ct;
 	use Edde\Service\Bus\RequestService;
 	use Edde\Service\Log\LogService;
 	use Edde\Service\Router\RouterService;
 	use Throwable;
 	use function http_response_code;
 
-	class Application extends Object implements IApplication {
+	class Application extends Obj3ct implements IApplication {
 		use RequestService;
 		use RouterService;
 		use LogService;

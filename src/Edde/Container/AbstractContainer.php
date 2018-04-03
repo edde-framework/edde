@@ -3,9 +3,9 @@
 	namespace Edde\Container;
 
 	use Edde\Config\IConfigurator;
-	use Edde\Object;
+	use Edde\Obj3ct;
 
-	abstract class AbstractContainer extends Object implements IContainer {
+	abstract class AbstractContainer extends Obj3ct implements IContainer {
 		/** @var IFactory[] */
 		protected $factories = [];
 		/** @var IConfigurator[][] */

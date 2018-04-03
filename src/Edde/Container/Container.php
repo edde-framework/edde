@@ -7,8 +7,6 @@
 	use SplStack;
 
 	/**
-	 * Default implementation of a dependency container.
-	 *
 	 * One day, Little Johnny saw his grandpa smoking his cigarettes. Little Johnny asked,
 	 * "Grandpa, can I smoke some of your cigarettes?" His grandpa replied,
 	 * "Can your penis reach your asshole?"
@@ -38,9 +36,6 @@
 		protected $autowires;
 
 		public function __construct() {
-			/**
-			 * stack to track list of dependencies
-			 */
 			$this->stack = new SplStack();
 			$this->factoryMap = [];
 			$this->autowires = [];

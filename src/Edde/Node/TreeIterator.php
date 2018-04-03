@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Node;
 
-	use Edde\Object;
+	use Edde\Obj3ct;
 	use Iterator;
 	use RecursiveIterator;
 	use RecursiveIteratorIterator;
@@ -10,7 +10,7 @@
 	/**
 	 * Iterator over nodes support with helper classes for recursive iterator, ...
 	 */
-	class TreeIterator extends Object implements RecursiveIterator {
+	class TreeIterator extends Obj3ct implements RecursiveIterator {
 		/** @var ITree */
 		protected $tree;
 		/** @var Iterator */

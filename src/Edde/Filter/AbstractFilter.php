@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Filter;
 
-	use Edde\Object;
+	use Edde\Obj3ct;
 
-	abstract class AbstractFilter extends Object implements IFilter {
+	abstract class AbstractFilter extends Obj3ct implements IFilter {
 	}

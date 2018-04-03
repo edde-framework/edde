@@ -3,7 +3,7 @@
 	namespace Edde\Xml;
 
 	use Edde\File\File;
-	use Edde\Object;
+	use Edde\Obj3ct;
 	use Edde\Resource\IResource;
 	use Edde\Service\Utils\StringUtils;
 	use Iterator;
@@ -11,7 +11,7 @@
 	/**
 	 * Simple and fast event based xml parser.
 	 */
-	class XmlParserService extends Object implements IXmlParserService {
+	class XmlParserService extends Obj3ct implements IXmlParserService {
 		use StringUtils;
 		protected const XML_TYPE_WARP = null;
 		protected const XML_TYPE_OPENTAG = 1;

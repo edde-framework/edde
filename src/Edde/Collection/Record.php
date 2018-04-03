@@ -4,11 +4,11 @@
 
 	use Edde\Entity\EntityException;
 	use Edde\Entity\IEntity;
-	use Edde\Object;
+	use Edde\Obj3ct;
 	use Edde\Schema\ISchema;
 	use Edde\Service\Entity\EntityManager;
 
-	class Record extends Object implements IRecord {
+	class Record extends Obj3ct implements IRecord {
 		use EntityManager;
 		/** @var ISchema[] */
 		protected $schemas;

@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Query;
 
-	use Edde\Object;
+	use Edde\Obj3ct;
 
-	abstract class AbstractQuery extends Object implements IQuery {
+	abstract class AbstractQuery extends Obj3ct implements IQuery {
 		/** @var string */
 		protected $type;
 

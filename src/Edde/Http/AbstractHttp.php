@@ -3,9 +3,9 @@
 	namespace Edde\Http;
 
 	use Edde\Content\IContent;
-	use Edde\Object;
+	use Edde\Obj3ct;
 
-	abstract class AbstractHttp extends Object implements IHttp {
+	abstract class AbstractHttp extends Obj3ct implements IHttp {
 		/** @var IHeaders */
 		protected $headers;
 		/** @var ICookies */

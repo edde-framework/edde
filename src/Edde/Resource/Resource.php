@@ -2,13 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Resource;
 
-	use Edde\Object;
+	use Edde\Obj3ct;
 	use Edde\Url\IUrl;
 
 	/**
 	 * Abstract definition of some "resource".
 	 */
-	class Resource extends Object implements IResource {
+	class Resource extends Obj3ct implements IResource {
 		/** @var IUrl */
 		protected $url;
 		/** @var string */

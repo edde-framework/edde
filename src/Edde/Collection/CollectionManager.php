@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Collection;
 
-	use Edde\Object;
+	use Edde\Obj3ct;
 	use Edde\Service\Container\Container;
 	use Throwable;
 
-	class CollectionManager extends Object implements ICollectionManager {
+	class CollectionManager extends Obj3ct implements ICollectionManager {
 		use Container;
 
 		/** @inheritdoc */

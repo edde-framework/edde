@@ -4,11 +4,11 @@
 
 	use Edde\Container\ContainerException;
 	use Edde\Element\IElement;
-	use Edde\Object;
+	use Edde\Obj3ct;
 	use Edde\Service\Validator\ValidatorManager;
 	use Edde\Validator\ValidationException;
 
-	abstract class AbstractHandler extends Object implements IHandler {
+	abstract class AbstractHandler extends Obj3ct implements IHandler {
 		use ValidatorManager;
 
 		/** @inheritdoc */

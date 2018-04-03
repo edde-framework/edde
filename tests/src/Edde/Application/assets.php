@@ -5,7 +5,7 @@
 	use Edde\Element\IRequest;
 	use Edde\Element\Request;
 	use Edde\Element\Response;
-	use Edde\Object;
+	use Edde\Obj3ct;
 	use Edde\Router\AbstractRouter;
 	use function array_merge;
 
@@ -18,7 +18,7 @@
 		}
 	}
 
-	class TestService extends Object {
+	class TestService extends Obj3ct {
 		public function noResponse() {
 		}
 

@@ -6,7 +6,7 @@
 	use Edde\Element\IElement;
 	use Edde\Element\IResponse;
 	use Edde\Element\Response;
-	use Edde\Object;
+	use Edde\Obj3ct;
 
 	class CommonListener extends AbstractListener {
 		/** @inheritdoc */
@@ -24,7 +24,7 @@
 		}
 	}
 
-	class SomeService extends Object {
+	class SomeService extends Obj3ct {
 		public function requestedMethod(): IResponse {
 			$response = new Response('foo');
 			$response->setAttribute('yaay', true);

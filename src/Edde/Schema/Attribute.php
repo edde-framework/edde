@@ -3,10 +3,10 @@
 	namespace Edde\Schema;
 
 	use Edde\Node\INode;
-	use Edde\Object;
+	use Edde\Obj3ct;
 	use stdClass;
 
-	class Attribute extends Object implements IAttribute {
+	class Attribute extends Obj3ct implements IAttribute {
 		/** @var stdClass */
 		protected $source;
 		/** @var INode */

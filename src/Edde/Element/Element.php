@@ -3,9 +3,9 @@
 	namespace Edde\Element;
 
 	use Edde\Bus\BusException;
-	use Edde\Object;
+	use Edde\Obj3ct;
 
-	class Element extends Object implements IElement {
+	class Element extends Obj3ct implements IElement {
 		/** @var string */
 		protected $type;
 		/** @var string */

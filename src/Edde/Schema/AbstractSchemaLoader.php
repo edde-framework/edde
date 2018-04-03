@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
-	use Edde\Object;
+	use Edde\Obj3ct;
 
-	abstract class AbstractSchemaLoader extends Object implements ISchemaLoader {
+	abstract class AbstractSchemaLoader extends Obj3ct implements ISchemaLoader {
 	}

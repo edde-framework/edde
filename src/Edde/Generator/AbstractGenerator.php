@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Generator;
 
-	use Edde\Object;
+	use Edde\Obj3ct;
 
-	abstract class AbstractGenerator extends Object implements IGenerator {
+	abstract class AbstractGenerator extends Obj3ct implements IGenerator {
 	}

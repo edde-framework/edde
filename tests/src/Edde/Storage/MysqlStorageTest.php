@@ -2,11 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
-	use BarSchema;
 	use Edde\Container\Factory\InstanceFactory;
 	use Edde\Query\SelectQuery;
-	use FooBarSchema;
-	use FooSchema;
 
 	class MysqlStorageTest extends AbstractStorageTest {
 		/**
@@ -22,9 +19,6 @@
 		public function testSelectQuery() {
 			$selectQuery = new SelectQuery();
 			$selectQuery->uses([
-				'foo'     => FooSchema::class,
-				'bar'     => BarSchema::class,
-				'foo-bar' => FooBarSchema::class,
 			]);
 			$selectQuery->join('foo', 'bar', 'foo-bar');
 			$selectQuery->returns(['foo', 'bar']);

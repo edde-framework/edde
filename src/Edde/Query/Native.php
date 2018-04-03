@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Query;
 
-	use Edde\Object;
+	use Edde\Obj3ct;
 
-	class Native extends Object implements INative {
+	class Native extends Obj3ct implements INative {
 		protected $query;
 		protected $params;
 

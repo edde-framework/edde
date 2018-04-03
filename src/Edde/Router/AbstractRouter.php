@@ -3,11 +3,11 @@
 	namespace Edde\Router;
 
 	use Edde\Element\IRequest;
-	use Edde\Object;
+	use Edde\Obj3ct;
 	use Edde\Service\Http\RequestService;
 	use Edde\Service\Runtime\Runtime;
 
-	abstract class AbstractRouter extends Object implements IRouter {
+	abstract class AbstractRouter extends Obj3ct implements IRouter {
 		use RequestService;
 		use Runtime;
 		/** @var IRequest */

@@ -16,7 +16,7 @@
 	 * After the daughter takes her date to the kitchen for something to eat, the mother turns to the father and says, "Isn't he smart? I wonder what he plans to be."
 	 * The father says, "From the smell of his fingers, I'd say our son-in-law."
 	 */
-	class Object implements IAutowire, IConfigurable {
+	class Obj3ct implements IAutowire, IConfigurable {
 		use Configurable;
 		use Autowire;
 

@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Url;
 
-	use Edde\Object;
+	use Edde\Obj3ct;
 
-	class Url extends Object implements IUrl {
+	class Url extends Obj3ct implements IUrl {
 		/** @var string */
 		protected $scheme = '';
 		/** @var string */

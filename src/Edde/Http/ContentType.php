@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Http;
 
-	use Edde\Object;
+	use Edde\Obj3ct;
 
-	class ContentType extends Object implements IContentType {
+	class ContentType extends Obj3ct implements IContentType {
 		/** @var string */
 		protected $mime;
 		/** @var string[] */

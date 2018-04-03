@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
-	use Edde\Object;
+	use Edde\Obj3ct;
 
-	class LinkBuilder extends Object implements ILinkBuilder {
+	class LinkBuilder extends Obj3ct implements ILinkBuilder {
 		/** @var string */
 		protected $name;
 		/** @var string */

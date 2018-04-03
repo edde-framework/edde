@@ -4,11 +4,11 @@
 
 	use Edde\File\IFile;
 	use Edde\Node\INode;
-	use Edde\Object;
+	use Edde\Obj3ct;
 	use Iterator;
 	use SplStack;
 
-	class XmlExportService extends Object implements IXmlExportService {
+	class XmlExportService extends Obj3ct implements IXmlExportService {
 		/** @inheritdoc */
 		public function node(Iterator $iterator): void {
 			$stack = new SplStack();

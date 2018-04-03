@@ -3,10 +3,10 @@
 	namespace Edde\Converter;
 
 	use Edde\Content\IContent;
-	use Edde\Object;
+	use Edde\Obj3ct;
 	use Exception;
 
-	class ConverterManager extends Object implements IConverterManager {
+	class ConverterManager extends Obj3ct implements IConverterManager {
 		/** @var IConverter[] */
 		protected $converters = [];
 

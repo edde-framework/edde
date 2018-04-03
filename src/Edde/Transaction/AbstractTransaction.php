@@ -2,10 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Transaction;
 
-	use Edde\Object;
+	use Edde\Obj3ct;
 	use Throwable;
 
-	abstract class AbstractTransaction extends Object implements ITransaction {
+	abstract class AbstractTransaction extends Obj3ct implements ITransaction {
 		/** @var int */
 		protected $transaction = 0;
 

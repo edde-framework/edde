@@ -37,7 +37,7 @@
 		 * @return IConfigurable
 		 *
 		 * @throws ContainerException
-		 * @throws ObjectException
+		 * @throws Obj3ctException
 		 */
 		public function __get(string $name) {
 			if (isset($this->tLazies[$name])) {
@@ -49,7 +49,7 @@
 				}
 				return $instance;
 			}
-			throw new ObjectException(sprintf('Reading from the undefined/private/protected property [%s::$%s].', static::class, $name));
+			throw new Obj3ctException(sprintf('Reading from the undefined/private/protected property [%s::$%s].', static::class, $name));
 		}
 
 		/**
@@ -58,13 +58,13 @@
 		 *
 		 * @return $this
 		 *
-		 * @throws ObjectException
+		 * @throws Obj3ctException
 		 */
 		public function __set(string $name, $value) {
 			if (isset($this->tLazies[$name])) {
 				$this->{$name} = $value;
 				return $this;
 			}
-			throw new ObjectException(sprintf('Writing to the undefined/private/protected property [%s::$%s].', static::class, $name));
+			throw new Obj3ctException(sprintf('Writing to the undefined/private/protected property [%s::$%s].', static::class, $name));
 		}
 	}

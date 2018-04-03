@@ -4,13 +4,13 @@
 
 	use Edde\Content\InputContent;
 	use Edde\Content\PostContent;
-	use Edde\Object;
+	use Edde\Obj3ct;
 	use Edde\Service\Converter\ConverterManager;
 	use Edde\Service\Http\HttpUtils;
 	use Edde\Url\IUrl;
 	use Edde\Url\Url;
 
-	class RequestService extends Object implements IRequestService {
+	class RequestService extends Obj3ct implements IRequestService {
 		use HttpUtils;
 		use ConverterManager;
 		/** @var IRequest */

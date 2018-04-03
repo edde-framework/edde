@@ -2,10 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Application;
 
-	use Edde\Object;
+	use Edde\Obj3ct;
 	use Edde\Service\Crypt\RandomService;
 
-	abstract class AbstractContext extends Object implements IContext {
+	abstract class AbstractContext extends Obj3ct implements IContext {
 		use RandomService;
 		protected $uuid;
 

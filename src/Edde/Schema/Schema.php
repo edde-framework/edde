@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
-	use Edde\Object;
+	use Edde\Obj3ct;
 
-	class Schema extends Object implements ISchema {
+	class Schema extends Obj3ct implements ISchema {
 		/** @var string */
 		protected $name;
 		/** @var bool */
