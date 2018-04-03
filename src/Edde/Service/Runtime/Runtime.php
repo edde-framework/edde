@@ -5,18 +5,16 @@
 	use Edde\Runtime\IRuntime;
 
 	/**
-	 * LAzy runtime dependency.
+	 * Lazy runtime dependency.
 	 */
 	trait Runtime {
-		/**
-		 * @var IRuntime
-		 */
+		/** @var IRuntime */
 		protected $runtime;
 
 		/**
 		 * @param IRuntime $runtime
 		 */
-		public function lazyRuntime(IRuntime $runtime) {
+		public function injectRuntime(IRuntime $runtime) {
 			$this->runtime = $runtime;
 		}
 	}

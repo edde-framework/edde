@@ -5,15 +5,13 @@
 	use Edde\Crypt\IRandomService;
 
 	trait RandomService {
-		/**
-		 * @var IRandomService
-		 */
+		/** @var IRandomService */
 		protected $randomService;
 
 		/**
 		 * @param IRandomService $randomService
 		 */
-		public function lazyRandomService(IRandomService $randomService) {
+		public function injectRandomService(IRandomService $randomService) {
 			$this->randomService = $randomService;
 		}
 	}

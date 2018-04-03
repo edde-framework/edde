@@ -5,15 +5,13 @@
 	use Edde\Generator\IGeneratorManager;
 
 	trait GeneratorManager {
-		/**
-		 * @var IGeneratorManager
-		 */
+		/** @var IGeneratorManager */
 		protected $generatorManager;
 
 		/**
 		 * @param IGeneratorManager $generatorManager
 		 */
-		public function lazyGeneratorManager(IGeneratorManager $generatorManager) {
+		public function injectGeneratorManager(IGeneratorManager $generatorManager) {
 			$this->generatorManager = $generatorManager;
 		}
 	}

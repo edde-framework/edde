@@ -5,15 +5,13 @@
 	use Edde\Converter\IConverterManager;
 
 	trait ConverterManager {
-		/**
-		 * @var IConverterManager
-		 */
+		/** @var IConverterManager */
 		protected $converterManager;
 
 		/**
 		 * @param IConverterManager $converterManager
 		 */
-		public function lazyConverterManager(IConverterManager $converterManager) {
+		public function injectConverterManager(IConverterManager $converterManager) {
 			$this->converterManager = $converterManager;
 		}
 	}

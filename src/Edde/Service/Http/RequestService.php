@@ -5,15 +5,13 @@
 	use Edde\Http\IRequestService;
 
 	trait RequestService {
-		/**
-		 * @var IRequestService
-		 */
+		/** @var IRequestService */
 		protected $requestService;
 
 		/**
 		 * @param IRequestService $requestService
 		 */
-		public function lazyRequestService(IRequestService $requestService) {
+		public function injectRequestService(IRequestService $requestService) {
 			$this->requestService = $requestService;
 		}
 	}

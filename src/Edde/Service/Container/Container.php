@@ -8,15 +8,13 @@
 	 * Defines lazy dependency on a system dependency container.
 	 */
 	trait Container {
-		/**
-		 * @var IContainer
-		 */
+		/** @var IContainer */
 		protected $container;
 
 		/**
 		 * @param IContainer $container
 		 */
-		public function lazyContainer(IContainer $container) {
+		public function injectContainer(IContainer $container) {
 			$this->container = $container;
 		}
 	}

@@ -11,7 +11,7 @@
 		/**
 		 * @param IMessageBus $messageBus
 		 */
-		public function lazyMessageBus(IMessageBus $messageBus) {
+		public function injectMessageBus(IMessageBus $messageBus) {
 			$this->messageBus = $messageBus;
 		}
 	}

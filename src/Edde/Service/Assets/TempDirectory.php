@@ -13,7 +13,7 @@
 		/**
 		 * @param ITempDirectory $tempDirectory
 		 */
-		public function lazyTempDirectory(ITempDirectory $tempDirectory) {
+		public function injectTempDirectory(ITempDirectory $tempDirectory) {
 			$this->tempDirectory = $tempDirectory;
 		}
 	}

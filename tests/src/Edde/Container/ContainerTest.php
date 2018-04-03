@@ -125,7 +125,7 @@
 			 * manual test is necessary because container is optimized for redundant create dependency calls
 			 */
 			$dependency = $this->container->getFactory('instanced')->getReflection($this->container, 'instanced');
-			self::assertEmpty($dependency->getLazies());
+			self::assertEmpty($dependency->getInjects());
 			self::assertEmpty($dependency->getParams());
 			self::assertEmpty($dependency->getConfigurators());
 		}
@@ -135,7 +135,7 @@
 		 */
 		public function testInterfaceDependencyFactory() {
 			$dependency = $this->container->getFactory(IContainer::class)->getReflection($this->container, IContainer::class);
-			self::assertEmpty($dependency->getLazies());
+			self::assertEmpty($dependency->getInjects());
 			self::assertEmpty($dependency->getParams());
 			self::assertEmpty($dependency->getConfigurators());
 		}

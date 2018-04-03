@@ -8,15 +8,13 @@
 	 * Lazy xml parser dependency.
 	 */
 	trait XmlParserService {
-		/**
-		 * @var IXmlParserService
-		 */
+		/** @var IXmlParserService */
 		protected $xmlParserService;
 
 		/**
 		 * @param IXmlParserService $xmlParserService
 		 */
-		public function lazyXmlParserService(IXmlParserService $xmlParserService): void {
+		public function injectXmlParserService(IXmlParserService $xmlParserService): void {
 			$this->xmlParserService = $xmlParserService;
 		}
 	}

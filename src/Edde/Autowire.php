@@ -8,19 +8,11 @@
 	use Edde\Container\IContainer;
 
 	trait Autowire {
-		protected $tAutowires = [];
-		protected $tLazies = [];
+		protected $tInjects = [];
 
 		/** @inheritdoc */
-		public function autowire(string $property, $dependency) {
-			$this->tAutowires[$property] = $dependency;
-			$this->{$property} = $dependency;
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function lazy(string $property, IContainer $container, string $dependency, array $params = []) {
-			$this->tLazies[$property] = [
+		public function registerAutowireDependency(string $property, IContainer $container, string $dependency, array $params = []) {
+			$this->tInjects[$property] = [
 				$container,
 				$dependency,
 				$params,
@@ -40,9 +32,9 @@
 		 * @throws Obj3ctException
 		 */
 		public function __get(string $name) {
-			if (isset($this->tLazies[$name])) {
+			if (isset($this->tInjects[$name])) {
 				/** @var $container IContainer */
-				[$container, $dependency, $params] = $this->tLazies[$name];
+				[$container, $dependency, $params] = $this->tInjects[$name];
 				/** @var $instance IConfigurable */
 				if (($instance = $this->{$name} = $container->create($dependency, $params, static::class)) instanceof IConfigurable && $instance->isSetup() === false) {
 					$instance->setup();
@@ -61,7 +53,7 @@
 		 * @throws Obj3ctException
 		 */
 		public function __set(string $name, $value) {
-			if (isset($this->tLazies[$name])) {
+			if (isset($this->tInjects[$name])) {
 				$this->{$name} = $value;
 				return $this;
 			}

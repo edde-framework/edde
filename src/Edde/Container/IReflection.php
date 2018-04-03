@@ -15,11 +15,11 @@
 		public function getParams(): array;
 
 		/**
-		 * get list of lazy parameters
+		 * get list of lazy properties
 		 *
 		 * @return IParameter[]
 		 */
-		public function getLazies(): array;
+		public function getInjects(): array;
 
 		/**
 		 * return list of configurator names

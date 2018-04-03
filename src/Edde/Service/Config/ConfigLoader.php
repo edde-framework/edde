@@ -11,7 +11,7 @@
 		/**
 		 * @param IConfigLoader $configLoader
 		 */
-		public function lazyConfigLoader(IConfigLoader $configLoader): void {
+		public function injectConfigLoader(IConfigLoader $configLoader): void {
 			$this->configLoader = $configLoader;
 		}
 	}

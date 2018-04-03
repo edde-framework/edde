@@ -5,15 +5,13 @@
 	use Edde\Xml\IXmlExportService;
 
 	trait XmlExportService {
-		/**
-		 * @var IXmlExportService
-		 */
+		/** @var IXmlExportService */
 		protected $xmlExportService;
 
 		/**
 		 * @param IXmlExportService $xmlExportService
 		 */
-		public function lazyXmlExportService(IXmlExportService $xmlExportService): void {
+		public function injectXmlExportService(IXmlExportService $xmlExportService): void {
 			$this->xmlExportService = $xmlExportService;
 		}
 	}

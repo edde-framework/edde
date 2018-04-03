@@ -5,15 +5,13 @@
 	use Edde\Router\IRouterService;
 
 	trait RouterService {
-		/**
-		 * @var IRouterService
-		 */
+		/** @var IRouterService */
 		protected $routerService;
 
 		/**
 		 * @param IRouterService $routerService
 		 */
-		public function lazyRouterService(IRouterService $routerService) {
+		public function injectRouterService(IRouterService $routerService) {
 			$this->routerService = $routerService;
 		}
 	}

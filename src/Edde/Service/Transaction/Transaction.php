@@ -11,7 +11,7 @@
 		/**
 		 * @param ITransaction $transaction
 		 */
-		public function lazyTransaction(ITransaction $transaction): void {
+		public function injectTransaction(ITransaction $transaction): void {
 			$this->transaction = $transaction;
 		}
 	}

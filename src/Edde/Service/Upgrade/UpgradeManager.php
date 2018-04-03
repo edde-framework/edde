@@ -5,15 +5,13 @@
 	use Edde\Upgrade\IUpgradeManager;
 
 	trait UpgradeManager {
-		/**
-		 * @var IUpgradeManager
-		 */
+		/** @var IUpgradeManager */
 		protected $upgradeManager;
 
 		/**
 		 * @param IUpgradeManager $upgradeManager
 		 */
-		public function lazyUpgradeManager(IUpgradeManager $upgradeManager) {
+		public function injectUpgradeManager(IUpgradeManager $upgradeManager) {
 			$this->upgradeManager = $upgradeManager;
 		}
 	}

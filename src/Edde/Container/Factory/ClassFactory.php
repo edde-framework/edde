@@ -26,13 +26,13 @@
 			if (isset(self::$reflectionCache[$dependency])) {
 				return self::$reflectionCache[$dependency];
 			}
-			$lazies = [];
+			$injects = [];
 			$configurators = [];
 			$reflectionClass = new ReflectionClass($dependency);
 			foreach ($reflectionClass->getMethods() as $reflectionMethod) {
 				$parameterReflectionClass = $reflectionMethod->getDeclaringClass();
 				if ($parameterReflectionClass->implementsInterface(IAutowire::class)) {
-					$lazies = array_merge($lazies, $this->getParams($parameterReflectionClass, $reflectionMethod, 'lazy'));
+					$injects = array_merge($injects, $this->getParams($parameterReflectionClass, $reflectionMethod, 'inject'));
 				}
 			}
 			$params = [];
@@ -47,7 +47,7 @@
 			if ($dependency !== null) {
 				$configurators = array_reverse(array_merge([$dependency], (new ReflectionClass($dependency))->getInterfaceNames()));
 			}
-			return self::$reflectionCache[$dependency] = new Reflection($params, $lazies, $configurators);
+			return self::$reflectionCache[$dependency] = new Reflection($params, $injects, $configurators);
 		}
 
 		/** @inheritdoc */

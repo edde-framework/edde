@@ -11,7 +11,7 @@
 		/**
 		 * @param IValidatorManager $validatorManager
 		 */
-		public function lazyValidatorManager(IValidatorManager $validatorManager): void {
+		public function injectValidatorManager(IValidatorManager $validatorManager): void {
 			$this->validatorManager = $validatorManager;
 		}
 	}

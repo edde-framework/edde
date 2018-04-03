@@ -11,7 +11,7 @@
 		/**
 		 * @param IStorage $storage
 		 */
-		public function lazyStorage(IStorage $storage): void {
+		public function injectStorage(IStorage $storage): void {
 			$this->storage = $storage;
 		}
 	}

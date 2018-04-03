@@ -5,15 +5,13 @@
 	use Edde\Schema\ISchemaManager;
 
 	trait SchemaManager {
-		/**
-		 * @var ISchemaManager
-		 */
+		/** @var ISchemaManager */
 		protected $schemaManager;
 
 		/**
 		 * @param ISchemaManager $schemaManager
 		 */
-		public function lazySchemaManager(ISchemaManager $schemaManager) {
+		public function injectSchemaManager(ISchemaManager $schemaManager) {
 			$this->schemaManager = $schemaManager;
 		}
 	}

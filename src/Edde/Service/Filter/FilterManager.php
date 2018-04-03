@@ -5,15 +5,13 @@
 	use Edde\Filter\IFilterManager;
 
 	trait FilterManager {
-		/**
-		 * @var IFilterManager
-		 */
+		/** @var IFilterManager */
 		protected $filterManager;
 
 		/**
 		 * @param IFilterManager $filterManager
 		 */
-		public function lazyFilterManager(IFilterManager $filterManager) {
+		public function injectFilterManager(IFilterManager $filterManager) {
 			$this->filterManager = $filterManager;
 		}
 	}

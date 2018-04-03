@@ -11,7 +11,7 @@
 		/**
 		 * @param IConfigService $configService
 		 */
-		public function lazyConfigService(IConfigService $configService): void {
+		public function injectConfigService(IConfigService $configService): void {
 			$this->configService = $configService;
 		}
 	}

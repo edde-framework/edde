@@ -13,7 +13,7 @@
 		/**
 		 * @param IContext $context
 		 */
-		public function lazyContext(IContext $context) {
+		public function injectContext(IContext $context) {
 			$this->context = $context;
 		}
 	}

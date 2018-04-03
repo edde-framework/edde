@@ -11,7 +11,7 @@
 		/**
 		 * @param IEventBus $eventBus
 		 */
-		public function lazyEventBus(IEventBus $eventBus): void {
+		public function injectEventBus(IEventBus $eventBus): void {
 			$this->eventBus = $eventBus;
 		}
 	}

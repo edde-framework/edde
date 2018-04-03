@@ -11,7 +11,7 @@
 		/**
 		 * @param IAccessService $accessService
 		 */
-		public function lazyAccessService(IAccessService $accessService): void {
+		public function injectAccessService(IAccessService $accessService): void {
 			$this->accessService = $accessService;
 		}
 	}

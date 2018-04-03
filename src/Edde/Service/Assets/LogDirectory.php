@@ -16,7 +16,7 @@
 		/**
 		 * @param ILogDirectory $logDirectory
 		 */
-		public function lazyLogDirectory(ILogDirectory $logDirectory) {
+		public function injectLogDirectory(ILogDirectory $logDirectory) {
 			$this->logDirectory = $logDirectory;
 		}
 	}

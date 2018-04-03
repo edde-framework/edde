@@ -14,7 +14,7 @@
 		/**
 		 * @param ILogService $logService
 		 */
-		public function lazyLogService(ILogService $logService) {
+		public function injectLogService(ILogService $logService) {
 			$this->logService = $logService;
 		}
 	}

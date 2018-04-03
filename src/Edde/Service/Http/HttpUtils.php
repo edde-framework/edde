@@ -5,15 +5,13 @@
 	use Edde\Http\IHttpUtils;
 
 	trait HttpUtils {
-		/**
-		 * @var IHttpUtils
-		 */
+		/** @var IHttpUtils */
 		protected $httpUtils;
 
 		/**
 		 * @param IHttpUtils $httpUtils
 		 */
-		public function lazyHttpUtils(IHttpUtils $httpUtils) {
+		public function injectHttpUtils(IHttpUtils $httpUtils) {
 			$this->httpUtils = $httpUtils;
 		}
 	}

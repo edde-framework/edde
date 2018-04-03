@@ -104,8 +104,13 @@
 
 		/** @inheritdoc */
 		public function dependency($instance, IReflection $reflection) {
-			foreach ($reflection->getLazies() as $parameter) {
-				$instance->lazy($parameter->getName(), $this, $parameter->getClass());
+			/**
+			 * formally keep condition to ensure typehint
+			 */
+			if ($instance instanceof IAutowire) {
+				foreach ($reflection->getInjects() as $parameter) {
+					$instance->registerAutowireDependency($parameter->getName(), $this, $parameter->getClass());
+				}
 			}
 			/**
 			 * support for dedicated configuration of a dependency

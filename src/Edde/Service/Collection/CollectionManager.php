@@ -11,7 +11,7 @@
 		/**
 		 * @param ICollectionManager $collectionManager
 		 */
-		public function lazyCollectionManager(ICollectionManager $collectionManager): void {
+		public function injectCollectionManager(ICollectionManager $collectionManager): void {
 			$this->collectionManager = $collectionManager;
 		}
 	}

@@ -11,7 +11,7 @@
 		/**
 		 * @param IPasswordService $passwordService
 		 */
-		public function lazyPasswordService(IPasswordService $passwordService): void {
+		public function injectPasswordService(IPasswordService $passwordService): void {
 			$this->passwordService = $passwordService;
 		}
 	}

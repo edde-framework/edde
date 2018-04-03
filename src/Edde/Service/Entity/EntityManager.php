@@ -5,15 +5,13 @@
 	use Edde\Entity\IEntityManager;
 
 	trait EntityManager {
-		/**
-		 * @var IEntityManager
-		 */
+		/** @var IEntityManager */
 		protected $entityManager;
 
 		/**
 		 * @param IEntityManager $entityManager
 		 */
-		public function lazyEntityManager(IEntityManager $entityManager) {
+		public function injectEntityManager(IEntityManager $entityManager) {
 			$this->entityManager = $entityManager;
 		}
 	}

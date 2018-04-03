@@ -13,7 +13,7 @@
 		/**
 		 * @param IAssetsDirectory $assetsDirectory
 		 */
-		public function lazyAssetsDirectory(IAssetsDirectory $assetsDirectory) {
+		public function injectAssetsDirectory(IAssetsDirectory $assetsDirectory) {
 			$this->assetsDirectory = $assetsDirectory;
 		}
 	}

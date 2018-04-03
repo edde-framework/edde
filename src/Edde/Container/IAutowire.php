@@ -5,28 +5,19 @@
 	/**
 	 * This is a formal interface for classes supporting autowiring. The specification
 	 * forces container to respect this interface, thus inject all dependencies based on
-	 * all available inject/lazy methods.
+	 * all available inject methods.
 	 */
 	interface IAutowire {
 		/**
-		 * inject the given dependency to the property
-		 *
-		 * @param string $property
-		 * @param mixed  $dependency
-		 *
-		 * @return $this
-		 */
-		public function autowire(string $property, $dependency);
-
-		/**
-		 * register the given container dependency on the given property
+		 * register the given container dependency on the given property; long name for this method is intentional
+		 * as it's not intended for a common use
 		 *
 		 * @param string     $property
 		 * @param IContainer $container
 		 * @param string     $dependency
-		 * @param array      $parameterList
+		 * @param array      $params
 		 *
 		 * @return $this
 		 */
-		public function lazy(string $property, IContainer $container, string $dependency, array $parameterList = []);
+		public function registerAutowireDependency(string $property, IContainer $container, string $dependency, array $params = []);
 	}

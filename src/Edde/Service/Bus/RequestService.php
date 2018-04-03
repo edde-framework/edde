@@ -11,7 +11,7 @@
 		/**
 		 * @param IRequestService $requestService
 		 */
-		public function lazyRequestService(IRequestService $requestService): void {
+		public function injectRequestService(IRequestService $requestService): void {
 			$this->requestService = $requestService;
 		}
 	}

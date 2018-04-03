@@ -67,21 +67,21 @@
 	}
 
 	class InjectDependencyObject extends AbstractDependencyObject {
-		public function lazyFooObject(FooObject $fooObject) {
+		public function injectFooObject(FooObject $fooObject) {
 			$this->fooObject = $fooObject;
 		}
 
-		public function lazyBarObject(BarObject $barObject) {
+		public function injectBarObject(BarObject $barObject) {
 			$this->barObject = $barObject;
 		}
 	}
 
 	class AutowireDependencyObject extends AbstractDependencyObject {
-		public function lazyFooObject(FooObject $fooObject) {
+		public function injectFooObject(FooObject $fooObject) {
 			$this->fooObject = $fooObject;
 		}
 
-		public function lazyBarObject(BarObject $barObject) {
+		public function injectBarObject(BarObject $barObject) {
 			$this->barObject = $barObject;
 		}
 	}

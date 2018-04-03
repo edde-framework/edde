@@ -5,15 +5,13 @@
 	use Edde\Sanitizer\ISanitizerManager;
 
 	trait SanitizerManager {
-		/**
-		 * @var ISanitizerManager
-		 */
+		/** @var ISanitizerManager */
 		protected $sanitizerManager;
 
 		/**
 		 * @param ISanitizerManager $sanitizerManager
 		 */
-		public function lazySanitizerManager(ISanitizerManager $sanitizerManager) {
+		public function injectSanitizerManager(ISanitizerManager $sanitizerManager) {
 			$this->sanitizerManager = $sanitizerManager;
 		}
 	}

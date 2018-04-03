@@ -5,15 +5,13 @@
 	use Edde\Utils\IStringUtils;
 
 	trait StringUtils {
-		/**
-		 * @var IStringUtils
-		 */
+		/** @var IStringUtils */
 		protected $stringUtils;
 
 		/**
 		 * @param IStringUtils $stringUtils
 		 */
-		public function lazyStringUtils(IStringUtils $stringUtils) {
+		public function injectStringUtils(IStringUtils $stringUtils) {
 			$this->stringUtils = $stringUtils;
 		}
 	}

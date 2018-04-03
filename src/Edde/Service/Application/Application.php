@@ -13,7 +13,7 @@
 		/**
 		 * @param IApplication $application
 		 */
-		public function lazyApplication(IApplication $application) {
+		public function injectApplication(IApplication $application) {
 			$this->application = $application;
 		}
 	}

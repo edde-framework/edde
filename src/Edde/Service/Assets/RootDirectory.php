@@ -13,7 +13,7 @@
 		/**
 		 * @param IRootDirectory $rootDirectory
 		 */
-		public function lazyRootDirectory(IRootDirectory $rootDirectory) {
+		public function injectRootDirectory(IRootDirectory $rootDirectory) {
 			$this->rootDirectory = $rootDirectory;
 		}
 	}

@@ -28,8 +28,8 @@
 		/**
 		 * register a new config handler for the given dependency
 		 *
-		 * @param string                     $name
-		 * @param \Edde\Config\IConfigurator $configurator
+		 * @param string        $name
+		 * @param IConfigurator $configurator
 		 *
 		 * @return IContainer
 		 */
