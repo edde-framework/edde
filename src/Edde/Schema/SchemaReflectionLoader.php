@@ -11,15 +11,10 @@
 
 	class SchemaReflectionLoader extends AbstractSchemaLoader implements ISchemaLoader {
 		use StringUtils;
-		/** @var ISchemaBuilder[] */
-		protected $schemaBuilders = [];
 
 		/** @inheritdoc */
-		public function load(string $schema): ISchemaBuilder {
+		public function load(string $schema): ISchema {
 			try {
-				if (isset($this->schemaBuilders[$schema])) {
-					return $this->schemaBuilders[$schema];
-				}
 				$reflectionClass = new ReflectionClass($schema);
 				$schemaBuilder = new SchemaBuilder($schema);
 				$primary = false;
@@ -124,7 +119,7 @@
 				if ($primary !== true) {
 					throw new SchemaException(sprintf('Primary property [%s::%s] is defined, but property does not exist; please add corresponding method to schema.', $schema, $primary));
 				}
-				return $this->schemaBuilders[$schema] = $schemaBuilder;
+				return $schemaBuilder->getSchema();
 			} catch (SchemaException $exception) {
 				throw $exception;
 			} catch (Throwable $throwable) {

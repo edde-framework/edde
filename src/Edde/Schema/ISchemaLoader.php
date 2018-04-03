@@ -8,9 +8,9 @@
 		 *
 		 * @param string $schema
 		 *
-		 * @return ISchemaBuilder
+		 * @return ISchema
 		 *
 		 * @throws SchemaException
 		 */
-		public function load(string $schema): ISchemaBuilder;
+		public function load(string $schema): ISchema;
 	}

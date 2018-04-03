@@ -36,17 +36,7 @@
 			if (isset($this->schemas[$name])) {
 				return $this->schemas[$name];
 			}
-			$schemaBuilder = $this->schemaLoader->load($name);
-			$this->schemas[$name] = $schema = $schemaBuilder->getSchema();
-			foreach ($schemaBuilder->getLinkBuilders() as $linkBuilder) {
-				$schema->link(new Link($name = $linkBuilder->getName(), $from = new Target($schema, $schema->getAttribute($linkBuilder->getSourceProperty())), $to = new Target($target = $this->load($linkBuilder->getTargetSchema()), $target->getAttribute($linkBuilder->getTargetProperty()))));
-				$target->linkTo(new Link($name, $from, $to));
-			}
-			if ($schema->isRelation()) {
-				[$from, $to] = $schema->getLinks();
-				$from->getTo()->getSchema()->relation(new Relation($schema, new Link($from->getName(), $from->getTo(), $from->getFrom()), $to));
-				$to->getTo()->getSchema()->relation(new Relation($schema, new Link($to->getName(), $to->getTo(), $to->getFrom()), $from));
-			}
+			$this->schemas[$name] = $schema = $this->schemaLoader->load($name);
 			if ($schema->hasAlias()) {
 				$this->schemas[$schema->getAlias()] = $schema;
 			}
