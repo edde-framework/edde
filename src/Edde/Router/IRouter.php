@@ -2,14 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Router;
 
-	use Edde\Container\IAutowire;
 	use Edde\Element\IRequest;
 
 	/**
 	 * Router is class responsible for handling current application
 	 * request (cli, http based, whatever).
 	 */
-	interface IRouter extends IAutowire {
+	interface IRouter {
 		/**
 		 * can this router provide IRequest?
 		 *

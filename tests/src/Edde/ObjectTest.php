@@ -23,14 +23,14 @@
 		}
 
 		public function testWriteException() {
-			$this->expectException(Obj3ctException::class);
+			$this->expectException(ObjectException::class);
 			$this->expectExceptionMessage('Writing to the undefined/private/protected property [Edde\Test\FooObject::$undefined].');
 			/** @noinspection PhpUndefinedFieldInspection */
 			$this->fooObject->undefined = true;
 		}
 
 		public function testReadException() {
-			$this->expectException(Obj3ctException::class);
+			$this->expectException(ObjectException::class);
 			$this->expectExceptionMessage('Reading from the undefined/private/protected property [Edde\Test\FooObject::$undefined].');
 			/** @noinspection PhpUndefinedFieldInspection */
 			$this->fooObject->undefined;

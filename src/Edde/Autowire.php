@@ -33,7 +33,7 @@
 		 * @return IConfigurable
 		 *
 		 * @throws ContainerException
-		 * @throws Obj3ctException
+		 * @throws ObjectException
 		 */
 		public function __get(string $name) {
 			if (isset($this->tAutowires[$name])) {
@@ -54,7 +54,7 @@
 		 *
 		 * @return $this
 		 *
-		 * @throws Obj3ctException
+		 * @throws ObjectException
 		 */
 		public function __set(string $name, $value) {
 			if (isset($this->tAutowires[$name])) {
