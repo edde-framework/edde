@@ -2,13 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Xml;
 
-	use Edde\Config\IConfigurable;
 	use Edde\Resource\IResource;
 
 	/**
 	 * Event based xml parser.
 	 */
-	interface IXmlParserService extends IConfigurable {
+	interface IXmlParserService {
 		/**
 		 * parse the given string
 		 *

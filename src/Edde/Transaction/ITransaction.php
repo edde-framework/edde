@@ -2,13 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Transaction;
 
-	use Edde\Config\IConfigurable;
+	use Edde\Service\IService;
 
 	/**
 	 * This should be used as a service, just to keep connection and
 	 * transactions separated even could be inside the same.
 	 */
-	interface ITransaction extends IConfigurable {
+	interface ITransaction extends IService {
 		/**
 		 * start a transaction
 		 *

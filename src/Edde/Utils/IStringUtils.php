@@ -2,12 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Utils;
 
-	use Edde\Config\IConfigurable;
-
 	/**
 	 * String utils interface.
 	 */
-	interface IStringUtils extends IConfigurable {
+	interface IStringUtils {
 		/**
 		 * make the string lowercase
 		 *

@@ -2,12 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Http;
 
-	use Edde\Config\IConfigurable;
-
 	/**
 	 * Formal interface for a cookie list implementation.
 	 */
-	interface ICookies extends IConfigurable {
+	interface ICookies {
 		/**
 		 * set a cookie
 		 *

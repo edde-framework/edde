@@ -2,12 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Xml;
 
-	use Edde\Config\IConfigurable;
-
 	/**
 	 * Implementation of xml handler.
 	 */
-	interface IXmlHandler extends IConfigurable {
+	interface IXmlHandler {
 		/**
 		 * @param string $text
 		 */

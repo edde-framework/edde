@@ -58,4 +58,10 @@
 
 		protected function handleSetup(): void {
 		}
+
+		public function __clone() {
+			parent::__clone();
+			$this->tInit = false;
+			$this->tSetup = false;
+		}
 	}

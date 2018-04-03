@@ -2,14 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
-	use Edde\Config\IConfigurable;
 	use Edde\Filter\FilterException;
 	use Edde\Generator\GeneratorException;
 	use Edde\Sanitizer\SanitizerException;
 	use Edde\Validator\ValidatorException;
 	use stdClass;
 
-	interface ISchemaManager extends IConfigurable {
+	interface ISchemaManager {
 		/**
 		 * try to load the given schema and return true/false if it exists
 		 *

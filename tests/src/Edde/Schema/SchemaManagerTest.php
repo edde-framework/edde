@@ -19,7 +19,7 @@
 			$projectMemberSchema = $this->schemaManager->load(ProjectMemberSchema::class);
 			$projectSchema = $this->schemaManager->load(ProjectSchema::class);
 			$userSchema = $this->schemaManager->load(UserSchema::class);
-			self::assertSame($projectMemberSchema, $this->schemaManager->load('foo-bar'));
+			self::assertSame($projectMemberSchema, $this->schemaManager->load('project-member'));
 			self::assertTrue($projectMemberSchema->isRelation(), 'relation schema... is not a relation schema!');
 			/**
 			 * links test

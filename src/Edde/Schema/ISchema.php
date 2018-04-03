@@ -2,9 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
-	use Edde\Config\IConfigurable;
-
-	interface ISchema extends IConfigurable {
+	interface ISchema {
 		/**
 		 * return name of a schema (it could have even "namespace" like name)
 		 *

@@ -2,9 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Http;
 
-	use Edde\Config\IConfigurable;
-
-	interface IHttpUtils extends IConfigurable {
+	interface IHttpUtils {
 		/**
 		 * parse accept header and return an ordered array with accept mime types
 		 *

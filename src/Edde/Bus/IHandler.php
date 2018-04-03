@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Bus;
 
-	use Edde\Config\IConfigurable;
 	use Edde\Container\ContainerException;
 	use Edde\Element\IElement;
 	use Edde\Validator\ValidationException;
@@ -10,7 +9,7 @@
 	/**
 	 * Element handler is able to handle individual type of an element (event, request, ...).
 	 */
-	interface IHandler extends IConfigurable {
+	interface IHandler {
 		/**
 		 * when true is returned, handler must be able properly handle the
 		 * given element; the handler still could throw an exception

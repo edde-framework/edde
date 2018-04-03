@@ -2,12 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Crypt;
 
-	use Edde\Config\IConfigurable;
-
 	/**
 	 * Service for random byte generation.
 	 */
-	interface IRandomService extends IConfigurable {
+	interface IRandomService {
 		/**
 		 * generate stream of bytes in given length
 		 *

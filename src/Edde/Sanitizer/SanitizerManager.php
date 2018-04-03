@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Sanitizer;
 
-	use Edde\Obj3ct;
+	use Edde\Service\AbstractService;
 
-	class SanitizerManager extends Obj3ct implements ISanitizerManager {
+	class SanitizerManager extends AbstractService implements ISanitizerManager {
 		/** @var ISanitizer[] */
 		protected $sanitizers = [];
 

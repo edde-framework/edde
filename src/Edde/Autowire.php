@@ -45,7 +45,7 @@
 				}
 				return $instance;
 			}
-			throw new Obj3ctException(sprintf('Reading from the undefined/private/protected property [%s::$%s].', static::class, $name));
+			return parent::__get($name);
 		}
 
 		/**
@@ -61,6 +61,6 @@
 				$this->{$name} = $value;
 				return $this;
 			}
-			throw new Obj3ctException(sprintf('Writing to the undefined/private/protected property [%s::$%s].', static::class, $name));
+			return parent::__set($name, $value);
 		}
 	}

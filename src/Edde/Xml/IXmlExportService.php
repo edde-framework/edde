@@ -2,12 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Xml;
 
-	use Edde\Config\IConfigurable;
 	use Edde\File\IFile;
 	use Edde\Node\INode;
 	use Iterator;
 
-	interface IXmlExportService extends IConfigurable {
+	interface IXmlExportService {
 		/**
 		 * export the given node to the xml file
 		 *

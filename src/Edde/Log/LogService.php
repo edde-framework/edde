@@ -31,7 +31,7 @@
 		}
 
 		/** @inheritdoc */
-		public function record(\Edde\Log\ILogRecord $logRecord): ILog {
+		public function record(ILogRecord $logRecord): ILog {
 			$tags = array_unique(($tags = $logRecord->getTags()) ? $tags : [null]);
 			if (empty($this->contentFilters) !== true) {
 				$log = $logRecord->getLog();

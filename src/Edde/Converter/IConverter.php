@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Converter;
 
-	use Edde\Config\IConfigurable;
 	use Edde\Content\IContent;
 
 	/**
@@ -11,7 +10,7 @@
 	 * different names for it's type, but no more conversions (like one converter do json_encode, decode,
 	 * serialize, ...).
 	 */
-	interface IConverter extends IConfigurable {
+	interface IConverter {
 		/**
 		 * return an array with types supported as an input type (for example it could be
 		 * string, text/plain, ... for target application/json)

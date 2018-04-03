@@ -2,13 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Entity;
 
-	use Edde\Config\IConfigurable;
 	use Edde\Container\ContainerException;
 	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
 	use stdClass;
 
-	interface IEntityManager extends IConfigurable {
+	interface IEntityManager {
 		/**
 		 * just create an entity with the given schema
 		 *

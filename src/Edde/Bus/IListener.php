@@ -2,9 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Bus;
 
-	use Edde\Config\IConfigurable;
-
-	interface IListener extends IConfigurable {
+	interface IListener {
 		/**
 		 * return listeners; key should be event name, value listener callback
 		 *

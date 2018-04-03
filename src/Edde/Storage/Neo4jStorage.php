@@ -5,18 +5,6 @@
 	use Edde\Config\ConfigException;
 	use Edde\Crate\IProperty;
 	use Edde\Entity\IEntity;
-	use Edde\Query\DeleteQuery;
-	use Edde\Query\DetachQuery;
-	use Edde\Query\DisconnectQuery;
-	use Edde\Query\Fragment\IWhere;
-	use Edde\Query\INativeQuery;
-	use Edde\Query\LinkQuery;
-	use Edde\Query\NativeQuery;
-	use Edde\Query\QueryException;
-	use Edde\Query\QueryQueue;
-	use Edde\Query\RelationQuery;
-	use Edde\Query\SelectQuery;
-	use Edde\Query\UnlinkQuery;
 	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Schema\SchemaManager;
