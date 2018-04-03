@@ -27,6 +27,6 @@
 			$this->container->registerFactory(new InstanceFactory(
 				IContext::class,
 				TestContext::class
-			), IContext::class);
+			));
 		}
 	}

@@ -28,6 +28,6 @@
 		/** @inheritdoc */
 		protected function setUp() {
 			parent::setUp();
-			$this->container->registerFactory(new InstanceFactory(IStorage::class, MysqlStorage::class), IStorage::class);
+			$this->container->registerFactory(new InstanceFactory(IStorage::class, MysqlStorage::class));
 		}
 	}

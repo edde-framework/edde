@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
-	use BarSchema;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\TestCase;
-	use FooBarSchema;
-	use FooSchema;
+	use Edde\User\UserSchema;
+	use ProjectMemberSchema;
+	use ProjectSchema;
 	use function array_values;
 
 	class SchemaManagerTest extends TestCase {
@@ -16,30 +16,30 @@
 		 * @throws SchemaException
 		 */
 		public function testRelationSchema() {
-			$fooBarSchema = $this->schemaManager->load(FooBarSchema::class);
-			$fooSchema = $this->schemaManager->load(FooSchema::class);
-			$barSchema = $this->schemaManager->load(BarSchema::class);
-			self::assertSame($fooBarSchema, $this->schemaManager->load('foo-bar'));
-			self::assertTrue($fooBarSchema->isRelation(), 'relation schema... is not a relation schema!');
+			$projectMemberSchema = $this->schemaManager->load(ProjectMemberSchema::class);
+			$projectSchema = $this->schemaManager->load(ProjectSchema::class);
+			$userSchema = $this->schemaManager->load(UserSchema::class);
+			self::assertSame($projectMemberSchema, $this->schemaManager->load('foo-bar'));
+			self::assertTrue($projectMemberSchema->isRelation(), 'relation schema... is not a relation schema!');
 			/**
 			 * links test
 			 */
-			self::assertCount(1, $links = $fooBarSchema->getLinks(FooSchema::class));
+			self::assertCount(1, $links = $projectMemberSchema->getLinks(UserSchema::class));
 			[$link] = $links;
-			self::assertSame(FooBarSchema::class, ($from = $link->getFrom())->getName());
-			self::assertSame(FooSchema::class, ($to = $link->getTo())->getName());
-			self::assertSame('foo', $from->getPropertyName());
+			self::assertSame(ProjectMemberSchema::class, ($from = $link->getFrom())->getName());
+			self::assertSame(ProjectSchema::class, ($to = $link->getTo())->getName());
+			self::assertSame('project', $from->getPropertyName());
 			self::assertSame('uuid', $to->getPropertyName());
-			self::assertCount(1, $links = $fooBarSchema->getLinks(BarSchema::class));
+			self::assertCount(1, $links = $projectMemberSchema->getLinks(UserSchema::class));
 			[$link] = $links;
-			self::assertSame(FooBarSchema::class, ($from = $link->getFrom())->getName());
-			self::assertSame(BarSchema::class, ($to = $link->getTo())->getName());
-			self::assertSame('bar', $from->getPropertyName());
+			self::assertSame(ProjectMemberSchema::class, ($from = $link->getFrom())->getName());
+			self::assertSame(UserSchema::class, ($to = $link->getTo())->getName());
+			self::assertSame('user', $from->getPropertyName());
 			self::assertSame('uuid', $to->getPropertyName());
 			/**
 			 * one way relation test
 			 */
-			self::assertCount(1, $relations = $fooSchema->getRelations(BarSchema::class));
+			self::assertCount(1, $relations = $projectSchema->getRelations(BarSchema::class));
 			/** @var $relation IRelation */
 			[$relation] = array_values($relations);
 			self::assertSame(FooSchema::class, ($fromLink = $relation->getFrom())->getFrom()->getName());
@@ -53,7 +53,7 @@
 			/**
 			 * reverse way relation test
 			 */
-			self::assertCount(1, $relations = $barSchema->getRelations(FooSchema::class));
+			self::assertCount(1, $relations = $userSchema->getRelations(FooSchema::class));
 			[$relation] = array_values($relations);
 			self::assertSame(BarSchema::class, ($fromLink = $relation->getFrom())->getFrom()->getName());
 			self::assertSame('uuid', $fromLink->getFrom()->getPropertyName());

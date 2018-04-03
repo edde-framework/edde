@@ -11,11 +11,10 @@
 	interface IContainer extends IConfigurable {
 		/**
 		 * @param IFactory $factory
-		 * @param string   $id
 		 *
 		 * @return IContainer
 		 */
-		public function registerFactory(IFactory $factory, string $id = null): IContainer;
+		public function registerFactory(IFactory $factory): IContainer;
 
 		/**
 		 * shorthand for cache registration

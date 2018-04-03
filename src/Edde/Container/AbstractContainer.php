@@ -7,25 +7,29 @@
 
 	abstract class AbstractContainer extends Obj3ct implements IContainer {
 		/** @var IFactory[] */
-		protected $factories = [];
+		protected $factories;
 		/** @var IConfigurator[][] */
-		protected $configurators = [];
+		protected $configurators;
+
+		/**
+		 * @param IFactory[]      $factories
+		 * @param IConfigurator[] $configurators
+		 */
+		public function __construct(array $factories = [], array $configurators = []) {
+			$this->factories = $factories;
+			$this->configurators = $configurators;
+		}
 
 		/** @inheritdoc */
-		public function registerFactory(IFactory $factory, string $id = null): IContainer {
-			if ($id !== null) {
-				$this->factories[$id] = $factory;
-				return $this;
-			}
+		public function registerFactory(IFactory $factory): IContainer {
 			$this->factories[] = $factory;
 			return $this;
 		}
 
 		/** @inheritdoc */
 		public function registerFactories(array $factories): IContainer {
-			$this->factories = [];
-			foreach ($factories as $id => $factory) {
-				$this->registerFactory($factory, is_string($id) ? $id : null);
+			foreach ($factories as $factory) {
+				$this->registerFactory($factory);
 			}
 			return $this;
 		}
@@ -38,7 +42,6 @@
 
 		/** @inheritdoc */
 		public function registerConfigurators(array $configurators): IContainer {
-			$this->configurators = [];
 			foreach ($configurators as $name => $configurator) {
 				$this->registerConfigurator($name, $configurator);
 			}

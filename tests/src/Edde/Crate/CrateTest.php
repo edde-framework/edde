@@ -5,7 +5,7 @@
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\TestCase;
-	use FooSchema;
+	use ProjectSchema;
 
 	class CrateTest extends TestCase {
 		use SchemaManager;
@@ -15,8 +15,8 @@
 		 */
 		public function testPropertyException() {
 			$this->expectException(SchemaException::class);
-			$this->expectExceptionMessage('Requested unknown attribute [FooSchema::unknown].');
-			$crate = new Crate($this->schemaManager->load(FooSchema::class));
+			$this->expectExceptionMessage('Requested unknown attribute [ProjectSchema::unknown].');
+			$crate = new Crate($this->schemaManager->load(ProjectSchema::class));
 			$crate->set('unknown', false);
 		}
 	}

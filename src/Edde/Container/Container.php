@@ -30,14 +30,13 @@
 	class Container extends AbstractContainer {
 		/** @var SplStack */
 		protected $stack;
-		/** @var IFactory[] */
-		protected $factoryMap;
 		/** @var IReflection[] */
 		protected $autowires;
 
 		public function __construct() {
+			parent::__construct();
 			$this->stack = new SplStack();
-			$this->factoryMap = [];
+			$this->factories = [];
 			$this->autowires = [];
 		}
 
@@ -48,8 +47,8 @@
 			 * to cache results; real cache is not used to keep container implementation
 			 * as simple as possible
 			 */
-			if (isset($this->factoryMap[$dependency])) {
-				return $this->factoryMap[$dependency];
+			if (isset($this->factories[$dependency])) {
+				return $this->factories[$dependency];
 			}
 			/**
 			 * container is able to handle dynamic dependencies without forcing user to implement all
@@ -58,7 +57,7 @@
 			 */
 			foreach ($this->factories as $factory) {
 				if ($factory->canHandle($this, $dependency)) {
-					return $this->factoryMap[$dependency] = $factory->getFactory($this);
+					return $this->factories[$dependency] = $factory->getFactory($this);
 				}
 			}
 			/**

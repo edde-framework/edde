@@ -16,6 +16,6 @@
 		/** @inheritdoc */
 		protected function setUp() {
 			parent::setUp();
-			$this->container->registerFactory(new InstanceFactory(IStorage::class, Neo4jStorage::class), IStorage::class);
+			$this->container->registerFactory(new InstanceFactory(IStorage::class, Neo4jStorage::class));
 		}
 	}

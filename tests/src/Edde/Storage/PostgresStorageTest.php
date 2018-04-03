@@ -25,7 +25,7 @@
 		 */
 		protected function setUp() {
 			parent::setUp();
-			$this->container->registerFactory(new InstanceFactory(IStorage::class, PostgresStorage::class), IStorage::class);
+			$this->container->registerFactory(new InstanceFactory(IStorage::class, PostgresStorage::class));
 			$this->storage->fetch('SET SEARCH_PATH TO "test"');
 		}
 	}
