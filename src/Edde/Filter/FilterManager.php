@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Filter;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 
-	class FilterManager extends Obj3ct implements IFilterManager {
+	class FilterManager extends Edde implements IFilterManager {
 		/** @var IFilter[] */
 		protected $filters = [];
 

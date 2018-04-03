@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 
-	class Relation extends Obj3ct implements IRelation {
+	class Relation extends Edde implements IRelation {
 		/** @var ISchema */
 		protected $schema;
 		/** @var ILink */

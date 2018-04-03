@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Container;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 
-	class Parameter extends Obj3ct implements IParameter {
+	class Parameter extends Edde implements IParameter {
 		/** @var string */
 		protected $name;
 		/** @var bool */

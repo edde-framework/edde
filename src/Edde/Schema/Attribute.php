@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
+	use Edde\Edde;
 	use Edde\Node\INode;
-	use Edde\Obj3ct;
 	use stdClass;
 
-	class Attribute extends Obj3ct implements IAttribute {
+	class Attribute extends Edde implements IAttribute {
 		/** @var stdClass */
 		protected $source;
 		/** @var INode */

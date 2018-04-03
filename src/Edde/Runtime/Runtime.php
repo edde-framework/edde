@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Runtime;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 
-	class Runtime extends Obj3ct implements IRuntime {
+	class Runtime extends Edde implements IRuntime {
 		/** @var array */
 		protected $args;
 

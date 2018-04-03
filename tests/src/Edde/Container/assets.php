@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Test;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 
 	/**
 	 * just fake function
@@ -15,7 +15,7 @@
 		return $fooObject;
 	}
 
-	class FooObject extends Obj3ct {
+	class FooObject extends Edde {
 		public $foo = 'foo';
 
 		public function getMoo() {
@@ -23,7 +23,7 @@
 		}
 	}
 
-	class BarObject extends Obj3ct {
+	class BarObject extends Edde {
 		public $bar = 'bar';
 		public $fooObject;
 
@@ -32,7 +32,7 @@
 		}
 	}
 
-	class FooBarObject extends Obj3ct {
+	class FooBarObject extends Edde {
 		/**
 		 * @var FooObject
 		 */
@@ -48,7 +48,7 @@
 		}
 	}
 
-	class AbstractDependencyObject extends Obj3ct {
+	class AbstractDependencyObject extends Edde {
 		/**
 		 * @var FooObject
 		 */

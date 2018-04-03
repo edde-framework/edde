@@ -2,14 +2,14 @@
 	declare(strict_types=1);
 	namespace Edde\Http;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 	use Edde\Service\Utils\StringUtils;
 	use Edde\Url\Url;
 
 	/**
 	 * Static set of helper functions around http protocol.
 	 */
-	class HttpUtils extends Obj3ct implements IHttpUtils {
+	class HttpUtils extends Edde implements IHttpUtils {
 		use StringUtils;
 
 		/** @inheritdoc */

@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Validator;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 
-	abstract class AbstractValidator extends Obj3ct implements IValidator {
+	abstract class AbstractValidator extends Edde implements IValidator {
 		/** @inheritdoc */
 		public function isValid($value, array $options = []): bool {
 			try {

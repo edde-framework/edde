@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Sanitizer;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 
-	abstract class AbstractSanitizer extends Obj3ct implements ISanitizer {
+	abstract class AbstractSanitizer extends Edde implements ISanitizer {
 	}

@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Generator;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 
-	class GeneratorManager extends Obj3ct implements IGeneratorManager {
+	class GeneratorManager extends Edde implements IGeneratorManager {
 		/** @var IGenerator[] */
 		protected $generators = [];
 

@@ -3,12 +3,12 @@
 	namespace Edde\Bus;
 
 	use Edde\Container\ContainerException;
+	use Edde\Edde;
 	use Edde\Element\IElement;
-	use Edde\Obj3ct;
 	use Edde\Service\Validator\ValidatorManager;
 	use Edde\Validator\ValidationException;
 
-	abstract class AbstractHandler extends Obj3ct implements IHandler {
+	abstract class AbstractHandler extends Edde implements IHandler {
 		use ValidatorManager;
 
 		/** @inheritdoc */

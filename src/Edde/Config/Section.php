@@ -2,10 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Config;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 	use stdClass;
 
-	class Section extends Obj3ct implements ISection {
+	class Section extends Edde implements ISection {
 		/** @var string */
 		protected $name;
 		/** @var stdClass */

@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Converter;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 
-	abstract class AbstractConverter extends Obj3ct implements IConverter {
+	abstract class AbstractConverter extends Edde implements IConverter {
 		protected $sources;
 		protected $targets;
 

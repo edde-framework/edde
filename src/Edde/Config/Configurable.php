@@ -1,8 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde;
-
-	use Edde\Config\IConfigurator;
+	namespace Edde\Config;
 
 	trait Configurable {
 		/** @var IConfigurator[] */

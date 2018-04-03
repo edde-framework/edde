@@ -2,16 +2,15 @@
 	declare(strict_types=1);
 	namespace Edde\Router;
 
-	use Edde\Autowire;
+	use Edde\Edde;
 	use Edde\Element\IRequest;
-	use Edde\Obj3ct;
 	use Edde\Service\Http\RequestService;
 	use Edde\Service\Runtime\Runtime;
 
-	abstract class AbstractRouter extends Obj3ct implements IRouter {
+	abstract class AbstractRouter extends Edde implements IRouter {
 		use RequestService;
 		use Runtime;
-		use Autowire;
+		use Edde\Container\Autowire;
 		/** @var IRequest */
 		protected $request;
 

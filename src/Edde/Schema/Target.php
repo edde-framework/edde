@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 
-	class Target extends Obj3ct implements ITarget {
+	class Target extends Edde implements ITarget {
 		/** @var ISchema */
 		protected $schema;
 		/** @var IAttribute */

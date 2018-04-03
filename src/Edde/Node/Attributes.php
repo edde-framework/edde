@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Node;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 
-	class Attributes extends Obj3ct implements IAttributes {
+	class Attributes extends Edde implements IAttributes {
 		protected $attributes;
 
 		public function __construct(array $attributes = null) {

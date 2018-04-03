@@ -3,9 +3,9 @@
 	namespace Edde\Response;
 
 	use Edde\Content\IContent;
-	use Edde\Obj3ct;
+	use Edde\Edde;
 
-	class Response extends Obj3ct implements IResponse {
+	class Response extends Edde implements IResponse {
 		/** @var IContent */
 		protected $content;
 

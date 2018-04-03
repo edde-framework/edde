@@ -6,12 +6,12 @@
 	use Edde\Container\IContainer;
 	use Edde\Container\IFactory;
 	use Edde\Container\IReflection;
-	use Edde\Obj3ct;
+	use Edde\Edde;
 
 	/**
 	 * Basic implementation for all dependency factories.
 	 */
-	abstract class AbstractFactory extends Obj3ct implements IFactory {
+	abstract class AbstractFactory extends Edde implements IFactory {
 		/** @inheritdoc */
 		public function getFactory(IContainer $container): IFactory {
 			return $this;

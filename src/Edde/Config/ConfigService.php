@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Config;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 	use Edde\Service\Config\ConfigLoader;
 	use stdClass;
 
-	class ConfigService extends Obj3ct implements IConfigService {
+	class ConfigService extends Edde implements IConfigService {
 		use ConfigLoader;
 		/** ISection[] */
 		protected $sections = [];

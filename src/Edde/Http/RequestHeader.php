@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Http;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 
-	class RequestHeader extends Obj3ct implements IRequestHeader {
+	class RequestHeader extends Edde implements IRequestHeader {
 		/** @var string[] */
 		protected $header;
 

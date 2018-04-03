@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Access;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 
-	class AccessService extends Obj3ct implements IAccessService {
+	class AccessService extends Edde implements IAccessService {
 	}

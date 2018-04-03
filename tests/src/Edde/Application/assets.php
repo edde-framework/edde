@@ -2,10 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Application;
 
+	use Edde\Edde;
 	use Edde\Element\IRequest;
 	use Edde\Element\Request;
 	use Edde\Element\Response;
-	use Edde\Obj3ct;
 	use Edde\Router\AbstractRouter;
 	use function array_merge;
 
@@ -18,7 +18,7 @@
 		}
 	}
 
-	class TestService extends Obj3ct {
+	class TestService extends Edde {
 		public function noResponse() {
 		}
 

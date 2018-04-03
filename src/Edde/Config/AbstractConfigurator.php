@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Config;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 
-	abstract class AbstractConfigurator extends Obj3ct implements IConfigurator {
+	abstract class AbstractConfigurator extends Edde implements IConfigurator {
 		/** @inheritdoc */
 		public function configure($instance) {
 		}

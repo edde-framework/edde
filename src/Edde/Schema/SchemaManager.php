@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Schema;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 	use Edde\Service\Filter\FilterManager;
 	use Edde\Service\Generator\GeneratorManager;
 	use Edde\Service\Sanitizer\SanitizerManager;
@@ -12,7 +12,7 @@
 	use Edde\Validator\ValidatorException;
 	use stdClass;
 
-	class SchemaManager extends Obj3ct implements ISchemaManager {
+	class SchemaManager extends Edde implements ISchemaManager {
 		use SchemaLoader;
 		use GeneratorManager;
 		use FilterManager;

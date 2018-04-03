@@ -2,10 +2,17 @@
 	declare(strict_types=1);
 	namespace Edde;
 
+	use Edde\Config\Configurable;
 	use Edde\Config\IConfigurable;
+	use Edde\Container\Autowire;
 	use Edde\Container\IAutowire;
 
 	/**
+	 * Edde is strange name for an object, but it's because of Object has been taken and it's quite
+	 * stylish as there would be "foo extends Edde" telling the thing is using Edde ;).
+	 *
+	 * <br>
+	 *
 	 * While watching TV with his wife, a man tosses peanuts into the air and catches them in his mouth.
 	 * Just as he throws another peanut into the air, the front door opens, causing him to turn his head.
 	 * The peanut falls into his ear and gets stuck.
@@ -16,7 +23,7 @@
 	 * After the daughter takes her date to the kitchen for something to eat, the mother turns to the father and says, "Isn't he smart? I wonder what he plans to be."
 	 * The father says, "From the smell of his fingers, I'd say our son-in-law."
 	 */
-	class Obj3ct extends SimpleObject implements IAutowire, IConfigurable {
+	class Edde extends SimpleObject implements IAutowire, IConfigurable {
 		use Autowire;
 		use Configurable;
 

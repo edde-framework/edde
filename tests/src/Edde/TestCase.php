@@ -5,6 +5,7 @@
 	use Edde\Assets\IRootDirectory;
 	use Edde\Config\AbstractConfigurator;
 	use Edde\Config\IConfigLoader;
+	use Edde\Container\Autowire;
 	use Edde\Container\ContainerException;
 	use Edde\Container\ContainerFactory;
 	use Edde\Container\Factory\ClassFactory;

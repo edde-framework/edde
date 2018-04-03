@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Utils;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 
-	class StringUtils extends Obj3ct implements IStringUtils {
+	class StringUtils extends Edde implements IStringUtils {
 		const SEPARATOR_LIST = [
 			'|',
 			':',

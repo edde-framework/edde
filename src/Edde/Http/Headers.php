@@ -2,12 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Http;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 
 	/**
 	 * Simple header list implementation over an array.
 	 */
-	class Headers extends Obj3ct implements IHeaders {
+	class Headers extends Edde implements IHeaders {
 		protected $headers = [];
 
 		/** @inheritdoc */

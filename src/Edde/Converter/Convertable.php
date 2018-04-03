@@ -3,7 +3,7 @@
 	namespace Edde\Converter;
 
 	use Edde\Content\IContent;
-	use Edde\Obj3ct;
+	use Edde\Edde;
 
 	/**
 	 * A biologist, a chemist and a statistician are out hunting.
@@ -11,7 +11,7 @@
 	 * The chemist takes a shot and misses 5th to the right.
 	 * The statistician yells "We got 'em!"
 	 */
-	class Convertable extends Obj3ct implements IConvertable {
+	class Convertable extends Edde implements IConvertable {
 		/** @var IConverter */
 		protected $converter;
 		/** @var IContent */

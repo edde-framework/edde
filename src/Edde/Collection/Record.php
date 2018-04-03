@@ -2,13 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Collection;
 
+	use Edde\Edde;
 	use Edde\Entity\EntityException;
 	use Edde\Entity\IEntity;
-	use Edde\Obj3ct;
 	use Edde\Schema\ISchema;
 	use Edde\Service\Entity\EntityManager;
 
-	class Record extends Obj3ct implements IRecord {
+	class Record extends Edde implements IRecord {
 		use EntityManager;
 		/** @var ISchema[] */
 		protected $schemas;

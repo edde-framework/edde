@@ -2,12 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Node;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 
 	/**
 	 * Pure node tree implementation; this class holds all common methods for node manipulation.
 	 */
-	class Tree extends Obj3ct implements ITree {
+	class Tree extends Edde implements ITree {
 		/** @var ITree */
 		protected $parent;
 		/** @var ITree[] */

@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\File;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 	use FilesystemIterator;
 	use RecursiveDirectoryIterator;
 	use RecursiveIteratorIterator;
@@ -11,7 +11,7 @@
 	/**
 	 * Representation of directory on the filesystem.
 	 */
-	class Directory extends Obj3ct implements IDirectory {
+	class Directory extends Edde implements IDirectory {
 		/** @var string */
 		protected $directory;
 

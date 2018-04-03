@@ -2,12 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Upgrade;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 	use Edde\Service\Log\LogService;
 	use Edde\Service\Storage\Storage;
 	use Throwable;
 
-	abstract class AbstractUpgrade extends Obj3ct implements IUpgrade {
+	abstract class AbstractUpgrade extends Edde implements IUpgrade {
 		use Storage;
 		use LogService;
 

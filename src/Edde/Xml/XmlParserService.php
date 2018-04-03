@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Xml;
 
+	use Edde\Edde;
 	use Edde\File\File;
-	use Edde\Obj3ct;
 	use Edde\Resource\IResource;
 	use Edde\Service\Utils\StringUtils;
 	use Iterator;
@@ -11,7 +11,7 @@
 	/**
 	 * Simple and fast event based xml parser.
 	 */
-	class XmlParserService extends Obj3ct implements IXmlParserService {
+	class XmlParserService extends Edde implements IXmlParserService {
 		use StringUtils;
 		protected const XML_TYPE_WARP = null;
 		protected const XML_TYPE_OPENTAG = 1;

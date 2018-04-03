@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Router;
 
+	use Edde\Edde;
 	use Edde\Element\IRequest;
-	use Edde\Obj3ct;
 	use Edde\Service\Log\LogService;
 
-	class RouterService extends Obj3ct implements IRouterService {
+	class RouterService extends Edde implements IRouterService {
 		use LogService;
 		/** @var IRouter[] */
 		protected $routers = [];

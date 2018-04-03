@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Bus;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 
-	abstract class AbstractListener extends Obj3ct implements IListener {
+	abstract class AbstractListener extends Edde implements IListener {
 	}

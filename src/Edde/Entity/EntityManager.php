@@ -2,12 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Entity;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 	use Edde\Schema\ISchema;
 	use Edde\Service\Container\Container;
 	use stdClass;
 
-	class EntityManager extends Obj3ct implements IEntityManager {
+	class EntityManager extends Edde implements IEntityManager {
 		use Container;
 
 		/** @inheritdoc */

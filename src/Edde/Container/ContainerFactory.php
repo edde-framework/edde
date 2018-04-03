@@ -49,6 +49,7 @@
 	use Edde\Crypt\IRandomService;
 	use Edde\Crypt\PasswordService;
 	use Edde\Crypt\RandomService;
+	use Edde\Edde;
 	use Edde\EddeException;
 	use Edde\Entity\EntityManager;
 	use Edde\Entity\IEntityManager;
@@ -62,7 +63,6 @@
 	use Edde\Http\RequestService as HttpRequestService;
 	use Edde\Log\ILogService;
 	use Edde\Log\LogService;
-	use Edde\Obj3ct;
 	use Edde\Router\IRouterService;
 	use Edde\Router\RouterService;
 	use Edde\Runtime\IRuntime;
@@ -99,7 +99,7 @@
 	 * “Why aren’t we going anywhere?” asked the girl.
 	 * “Well, I should have mentioned this before, but I’m actually a taxi driver, and the fare back to town is $25…”
 	 */
-	class ContainerFactory extends Obj3ct {
+	class ContainerFactory extends Edde {
 		/**
 		 * for the integration purposes
 		 *

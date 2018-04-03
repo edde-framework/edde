@@ -2,13 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Config;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 	use stdClass;
 	use function is_readable;
 	use function parse_ini_file;
 	use const INI_SCANNER_TYPED;
 
-	class ConfigLoader extends Obj3ct implements IConfigLoader {
+	class ConfigLoader extends Edde implements IConfigLoader {
 		/** @var array */
 		protected $configs = [];
 		/** @var stdClass */

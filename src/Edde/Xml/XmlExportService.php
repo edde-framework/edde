@@ -2,13 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Xml;
 
+	use Edde\Edde;
 	use Edde\File\IFile;
 	use Edde\Node\INode;
-	use Edde\Obj3ct;
 	use Iterator;
 	use SplStack;
 
-	class XmlExportService extends Obj3ct implements IXmlExportService {
+	class XmlExportService extends Edde implements IXmlExportService {
 		/** @inheritdoc */
 		public function node(Iterator $iterator): void {
 			$stack = new SplStack();

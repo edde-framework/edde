@@ -1,12 +1,10 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde;
+	namespace Edde\Container;
 
 	use Closure;
 	use Edde\Config\IConfigurable;
-	use Edde\Container\ContainerException;
-	use Edde\Container\IContainer;
-	use Edde\Container\IParameter;
+	use Edde\ObjectException;
 
 	trait Autowire {
 		protected $tAutowires = [];

@@ -3,10 +3,10 @@
 	namespace Edde\Common\Bus;
 
 	use Edde\Bus\AbstractListener;
+	use Edde\Edde;
 	use Edde\Element\IElement;
 	use Edde\Element\IResponse;
 	use Edde\Element\Response;
-	use Edde\Obj3ct;
 
 	class CommonListener extends AbstractListener {
 		/** @inheritdoc */
@@ -24,7 +24,7 @@
 		}
 	}
 
-	class SomeService extends Obj3ct {
+	class SomeService extends Edde {
 		public function requestedMethod(): IResponse {
 			$response = new Response('foo');
 			$response->setAttribute('yaay', true);

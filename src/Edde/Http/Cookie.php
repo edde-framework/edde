@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Http;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 
-	class Cookie extends Obj3ct implements ICookie {
+	class Cookie extends Edde implements ICookie {
 		/** @var array */
 		protected $cookie;
 

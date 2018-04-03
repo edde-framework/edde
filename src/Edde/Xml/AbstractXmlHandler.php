@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Xml;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 
-	abstract class AbstractXmlHandler extends Obj3ct implements IXmlHandler {
+	abstract class AbstractXmlHandler extends Edde implements IXmlHandler {
 	}

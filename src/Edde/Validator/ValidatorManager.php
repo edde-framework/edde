@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Validator;
 
-	use Edde\Obj3ct;
+	use Edde\Edde;
 
-	class ValidatorManager extends Obj3ct implements IValidatorManager {
+	class ValidatorManager extends Edde implements IValidatorManager {
 		/** @var IValidator[] */
 		protected $validators = [];
 
