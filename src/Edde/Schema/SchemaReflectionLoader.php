@@ -6,6 +6,7 @@
 	use Edde\Service\Utils\StringUtils;
 	use ReflectionClass;
 	use Throwable;
+	use function is_string;
 	use function str_replace;
 
 	class SchemaReflectionLoader extends AbstractSchemaLoader implements ISchemaLoader {
@@ -15,55 +16,60 @@
 
 		/** @inheritdoc */
 		public function getSchemaBuilder(string $schema): ISchemaBuilder {
-			return $this->schemaBuilders[$schema] ?? $this->schemaBuilders[$schema] = $this->reflect($schema);
-		}
-
-		/**
-		 * @param string $schema
-		 *
-		 * @return ISchemaBuilder
-		 *
-		 * @throws SchemaException
-		 */
-		protected function reflect(string $schema): ISchemaBuilder {
 			try {
 				if (isset($this->schemaBuilders[$schema])) {
 					return $this->schemaBuilders[$schema];
 				}
 				$reflectionClass = new ReflectionClass($schema);
 				$schemaBuilder = new SchemaBuilder($schema);
-				$methodCount = 0;
 				$primary = false;
-				$isRelation = false;
 				foreach ($reflectionClass->getConstants() as $name => $value) {
 					switch ($name) {
 						case 'alias':
+							/**
+							 * auto alias support; name kick off "schema" from the name and rest is used as an alias
+							 */
 							if ($value === true) {
 								$value = str_replace('-schema', '', $this->stringUtils->recamel($this->stringUtils->extract($schema), '-'));
 							}
 							$schemaBuilder->alias($value);
 							break;
 						case 'relation':
-							$schemaBuilder->relation($isRelation = $value);
+							/**
+							 * mark a schema as a relational schema
+							 */
+							$schemaBuilder->relation($value);
+							break;
+						case 'primary':
+							$primary = $value;
 							break;
 					}
 				}
+				if ($primary === false) {
+					throw new SchemaException(sprintf('Schema [%s] has no primary property; please define one (you can extend [%s] to use default uuid support).', $schema, UuidSchema::class));
+				}
+				/**
+				 * go through all methods as they're used as schema definition
+				 */
 				foreach ($reflectionClass->getMethods() as $reflectionMethod) {
-					$methodCount++;
 					$propertyBuilder = $schemaBuilder->property($propertyName = $reflectionMethod->getName());
+					/**
+					 * set default property type to a string
+					 */
 					$propertyBuilder->type($propertyType = 'string');
+					if (($type = $reflectionMethod->getReturnType()) !== null) {
+						$propertyBuilder->type($propertyType = $type->getName());
+						$propertyBuilder->required($type->allowsNull() === false);
+					}
+					if ($propertyName === $primary) {
+						$primary = true;
+						$propertyBuilder->primary();
+						$propertyBuilder->generator($propertyName);
+					}
 					foreach ($reflectionMethod->getParameters() as $parameter) {
 						switch ($parameter->getName()) {
 							case 'unique':
 								$propertyBuilder->unique();
-								break;
-							case 'primary':
-								if ($primary) {
-									throw new SchemaException(sprintf('Schema [%s] has another primary key [%s]; composite primary keys are not allowed!', $schema, $propertyName));
-								}
-								$primary = true;
-								$propertyBuilder->primary();
-								$propertyBuilder->generator($propertyName);
 								break;
 							case 'generator':
 								if (($generator = $parameter->getDefaultValue()) === null || is_string($generator) === false) {
@@ -89,18 +95,19 @@
 								}
 								$propertyBuilder->validator($validator);
 								break;
+							case 'type':
+								if (($type = $parameter->getDefaultValue()) === null || is_string($type) === false) {
+									throw new SchemaException(sprintf('Parameter [%s::%s($type)] must have a default string value as a type name.', $schema, $propertyName));
+								}
+								$propertyBuilder->type($type);
+								$propertyBuilder->required($parameter->isOptional());
+								break;
 							case 'default':
 								$propertyBuilder->default($parameter->getDefaultValue());
 								break;
+							default:
+								throw new SchemaException(sprintf('Unknown schema directive [%s::%s].', $schema, $propertyName));
 						}
-					}
-					if (($type = $reflectionMethod->getReturnType()) !== null) {
-						$propertyBuilder->type($propertyType = $type->getName());
-						$propertyBuilder->required($type->allowsNull() === false);
-					}
-					if ($reflectionMethod->getNumberOfParameters() === 1 && ($parameter = $reflectionMethod->getParameters()[0]) && ($type = $parameter->getType())) {
-						$propertyBuilder->link();
-						$schemaBuilder->link(new LinkBuilder($isRelation ? $schema : $propertyName, $schema, $propertyName, $type->getName(), $parameter->getName()));
 					}
 					switch ($propertyType) {
 						case 'float':
@@ -110,8 +117,12 @@
 						case DateTime::class:
 							$propertyBuilder->filter($propertyType);
 							$propertyBuilder->sanitizer($propertyType);
+							$propertyBuilder->validator($propertyType);
 							break;
 					}
+				}
+				if ($primary !== true) {
+					throw new SchemaException(sprintf('Primary property [%s::%s] is defined, but property does not exist; please add corresponding method to schema.', $schema, $primary));
 				}
 				return $this->schemaBuilders[$schema] = $schemaBuilder;
 			} catch (SchemaException $exception) {

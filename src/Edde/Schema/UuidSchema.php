@@ -3,5 +3,7 @@
 	namespace Edde\Schema;
 
 	interface UuidSchema {
-		public function uuid($primary): string;
+		const primary = 'uuid';
+
+		public function uuid(): string;
 	}
