@@ -6,20 +6,24 @@
 	use Edde\Config\IConfigurable;
 	use Edde\Container\ContainerException;
 	use Edde\Container\IContainer;
+	use Edde\Container\IParameter;
 
 	trait Autowire {
-		protected $tInjects = [];
+		protected $tAutowires = [];
 
 		/** @inheritdoc */
-		public function registerAutowireDependency(string $property, IContainer $container, string $dependency, array $params = []) {
-			$this->tInjects[$property] = [
-				$container,
-				$dependency,
-				$params,
-			];
-			call_user_func(Closure::bind(function (string $property) {
-				unset($this->{$property});
-			}, $this, static::class), $property);
+		public function autowires(array $parameters, IContainer $container) {
+			/** @var $parameter IParameter */
+			foreach ($parameters as $parameter) {
+				$property = $parameter->getName();
+				$this->tAutowires[$property] = [
+					$container,
+					$parameter->getClass(),
+				];
+				call_user_func(Closure::bind(function (string $property) {
+					unset($this->{$property});
+				}, $this, static::class), $property);
+			}
 			return $this;
 		}
 
@@ -32,11 +36,11 @@
 		 * @throws Obj3ctException
 		 */
 		public function __get(string $name) {
-			if (isset($this->tInjects[$name])) {
+			if (isset($this->tAutowires[$name])) {
 				/** @var $container IContainer */
-				[$container, $dependency, $params] = $this->tInjects[$name];
+				[$container, $dependency] = $this->tAutowires[$name];
 				/** @var $instance IConfigurable */
-				if (($instance = $this->{$name} = $container->create($dependency, $params, static::class)) instanceof IConfigurable && $instance->isSetup() === false) {
+				if (($instance = $this->{$name} = $container->create($dependency, [], static::class)) instanceof IConfigurable && $instance->isSetup() === false) {
 					$instance->setup();
 				}
 				return $instance;
@@ -53,7 +57,7 @@
 		 * @throws Obj3ctException
 		 */
 		public function __set(string $name, $value) {
-			if (isset($this->tInjects[$name])) {
+			if (isset($this->tAutowires[$name])) {
 				$this->{$name} = $value;
 				return $this;
 			}

@@ -108,9 +108,7 @@
 			 * formally keep condition to ensure typehint
 			 */
 			if ($instance instanceof IAutowire) {
-				foreach ($reflection->getInjects() as $parameter) {
-					$instance->registerAutowireDependency($parameter->getName(), $this, $parameter->getClass());
-				}
+				$instance->autowires($reflection->getInjects(), $this);
 			}
 			/**
 			 * support for dedicated configuration of a dependency

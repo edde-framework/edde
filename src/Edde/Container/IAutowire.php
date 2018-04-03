@@ -9,15 +9,10 @@
 	 */
 	interface IAutowire {
 		/**
-		 * register the given container dependency on the given property; long name for this method is intentional
-		 * as it's not intended for a common use
+		 * @param IParameter[] $parameters
+		 * @param IContainer   $container
 		 *
-		 * @param string     $property
-		 * @param IContainer $container
-		 * @param string     $dependency
-		 * @param array      $params
-		 *
-		 * @return $this
+		 * @return mixed
 		 */
-		public function registerAutowireDependency(string $property, IContainer $container, string $dependency, array $params = []);
+		public function autowires(array $parameters, IContainer $container);
 	}
