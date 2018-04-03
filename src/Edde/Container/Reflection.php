@@ -6,7 +6,6 @@
 
 	class Reflection extends Obj3ct implements IReflection {
 		protected $params;
-		protected $injects;
 		protected $lazies;
 		protected $configurators;
 
@@ -19,13 +18,11 @@
 		 * As the mother began to smile, the child added, "For those of you who are pissed off about the TWO HOUR delay, please see the b*tch in the kitchen."
 		 *
 		 * @param IParameter[] $params
-		 * @param IParameter[] $injects
 		 * @param IParameter[] $lazies
 		 * @param string[]     $configurators
 		 */
-		public function __construct(array $params = [], array $injects = [], array $lazies = [], array $configurators = []) {
+		public function __construct(array $params = [], array $lazies = [], array $configurators = []) {
 			$this->params = $params;
-			$this->injects = $injects;
 			$this->lazies = $lazies;
 			$this->configurators = $configurators;
 		}
@@ -33,11 +30,6 @@
 		/** @inheritdoc */
 		public function getParams(): array {
 			return $this->params;
-		}
-
-		/** @inheritdoc */
-		public function getInjects(): array {
-			return $this->injects;
 		}
 
 		/** @inheritdoc */

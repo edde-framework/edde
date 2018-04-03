@@ -15,13 +15,6 @@
 		public function getParams(): array;
 
 		/**
-		 * get list of injectable parameters
-		 *
-		 * @return IParameter[]
-		 */
-		public function getInjects(): array;
-
-		/**
 		 * get list of lazy parameters
 		 *
 		 * @return IParameter[]

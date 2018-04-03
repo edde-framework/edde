@@ -7,6 +7,7 @@
 	use Edde\Container\IReflection;
 	use Edde\Container\Parameter;
 	use Edde\Container\Reflection;
+	use ReflectionException;
 	use ReflectionFunction;
 
 	class CallbackFactory extends AbstractFactory {
@@ -24,8 +25,10 @@
 		protected $name;
 
 		/**
-		 * @param string   $name
 		 * @param callable $callback
+		 * @param string   $name
+		 *
+		 * @throws ReflectionException
 		 */
 		public function __construct(callable $callback, string $name = null) {
 			$this->reflectionFunction = new ReflectionFunction(Closure::fromCallable($this->callback = $callback));
@@ -43,14 +46,14 @@
 		 * @inheritdoc
 		 */
 		public function getReflection(IContainer $container, string $dependency): IReflection {
-			$parameterList = [];
+			$params = [];
 			foreach ($this->reflectionFunction->getParameters() as $reflectionParameter) {
 				if (($parameterReflectionClass = $reflectionParameter->getClass()) === null) {
 					break;
 				}
-				$parameterList[] = new Parameter($reflectionParameter->getName(), $reflectionParameter->isOptional(), $parameterReflectionClass->getName());
+				$params[] = new Parameter($reflectionParameter->getName(), $reflectionParameter->isOptional(), $parameterReflectionClass->getName());
 			}
-			return new Reflection($parameterList);
+			return new Reflection($params);
 		}
 
 		/**

@@ -128,7 +128,6 @@
 			self::assertEmpty($dependency->getLazies());
 			self::assertEmpty($dependency->getParams());
 			self::assertEmpty($dependency->getConfigurators());
-			self::assertEmpty($dependency->getInjects());
 		}
 
 		/**
@@ -139,7 +138,6 @@
 			self::assertEmpty($dependency->getLazies());
 			self::assertEmpty($dependency->getParams());
 			self::assertEmpty($dependency->getConfigurators());
-			self::assertEmpty($dependency->getInjects());
 		}
 
 		/**

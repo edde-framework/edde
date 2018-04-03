@@ -6,6 +6,10 @@
 
 	/**
 	 * just fake function
+	 *
+	 * @param FooObject $fooObject
+	 *
+	 * @return FooObject
 	 */
 	function foo(FooObject $fooObject): FooObject {
 		return $fooObject;
@@ -63,11 +67,11 @@
 	}
 
 	class InjectDependencyObject extends AbstractDependencyObject {
-		public function injectFooObject(FooObject $fooObject) {
+		public function lazyFooObject(FooObject $fooObject) {
 			$this->fooObject = $fooObject;
 		}
 
-		public function injectBarObject(BarObject $barObject) {
+		public function lazyBarObject(BarObject $barObject) {
 			$this->barObject = $barObject;
 		}
 	}

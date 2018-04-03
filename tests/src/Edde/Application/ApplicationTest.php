@@ -3,6 +3,7 @@
 	namespace Edde\Application;
 
 	use Edde\Config\AbstractConfigurator;
+	use Edde\Container\ContainerException;
 	use Edde\Log\ILogRecord;
 	use Edde\Log\SimpleLog;
 	use Edde\Router\IRouterService;
@@ -27,6 +28,9 @@
 			throw $record->getLog();
 		}
 
+		/**
+		 * @throws ContainerException
+		 */
 		public function testRun() {
 			$this->container->registerConfigurator(IRouterService::class, $this->container->inject(new class() extends AbstractConfigurator {
 				use Container;
@@ -42,6 +46,9 @@
 			self::assertEquals(0, $this->application->run());
 		}
 
+		/**
+		 * @throws ContainerException
+		 */
 		public function testRunResponse() {
 			$this->container->registerConfigurator(IRouterService::class, $this->container->inject(new class() extends AbstractConfigurator {
 				use Container;

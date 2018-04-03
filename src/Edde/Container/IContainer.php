@@ -97,24 +97,22 @@
 		 * try to autowire dependencies to $instance
 		 *
 		 * @param mixed $instance
-		 * @param bool  $force if true, dependencies will be autowired regardless of lazy injects
 		 *
 		 * @return mixed
 		 *
 		 * @throws ContainerException
 		 */
-		public function inject($instance, bool $force = false);
+		public function inject($instance);
 
 		/**
 		 * execute injects on the given instance
 		 *
 		 * @param mixed       $instance
 		 * @param IReflection $reflection
-		 * @param bool        $lazy
 		 *
 		 * @return mixed
 		 *
 		 * @throws ContainerException
 		 */
-		public function dependency($instance, IReflection $reflection, bool $lazy = true);
+		public function dependency($instance, IReflection $reflection);
 	}
