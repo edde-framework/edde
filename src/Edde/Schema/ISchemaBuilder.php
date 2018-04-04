@@ -13,15 +13,6 @@
 		public function alias(string $alias): ISchemaBuilder;
 
 		/**
-		 * mark a schema as relational schema
-		 *
-		 * @param bool $relation
-		 *
-		 * @return ISchemaBuilder
-		 */
-		public function relation(bool $relation): ISchemaBuilder;
-
-		/**
 		 * create a new property with the given name
 		 *
 		 * @param string $name
@@ -67,25 +58,9 @@
 		public function integer(string $name): IAttributeBuilder;
 
 		/**
-		 * add link builder
-		 *
-		 * @param ILinkBuilder $linkBuilder
-		 *
-		 * @return ISchemaBuilder
-		 *
-		 * @throws SchemaException
-		 */
-		public function link(ILinkBuilder $linkBuilder): ISchemaBuilder;
-
-		/**
 		 * build and return a schema
 		 *
 		 * @return ISchema
 		 */
-		public function getSchema(): ISchema;
-
-		/**
-		 * @return ILinkBuilder[]
-		 */
-		public function getLinkBuilders(): array;
+		public function create(): ISchema;
 	}

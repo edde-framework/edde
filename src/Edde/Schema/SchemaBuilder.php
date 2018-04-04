@@ -12,8 +12,6 @@
 		protected $propertyBuilders = [];
 		/** @var ISchema */
 		protected $schema;
-		/** @var ILinkBuilder[] */
-		protected $linkBuilders = [];
 
 		public function __construct(string $name) {
 			$this->source = (object)['name' => $name];
@@ -22,12 +20,6 @@
 		/** @inheritdoc */
 		public function alias(string $alias): ISchemaBuilder {
 			$this->source->alias = $alias;
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function relation(bool $relation): ISchemaBuilder {
-			$this->source->isRelation = $relation;
 			return $this;
 		}
 
@@ -57,16 +49,7 @@
 		}
 
 		/** @inheritdoc */
-		public function link(ILinkBuilder $linkBuilder): ISchemaBuilder {
-			$this->linkBuilders[] = $linkBuilder;
-			if (($this->source->isRelation ?? false) && count($this->linkBuilders) > 2) {
-				throw new SchemaException(sprintf('Relation schema [%s] must have exactly two links; if you need more links, remove "relation" flag from the schema.', $this->source->name));
-			}
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function getSchema(): ISchema {
+		public function create(): ISchema {
 			if ($this->schema) {
 				return $this->schema;
 			}
@@ -77,13 +60,7 @@
 			return $this->schema = new Schema(
 				$this->source->name,
 				$properties,
-				$this->source->isRelation ?? false,
 				$this->source->alias ?? null
 			);
-		}
-
-		/** @inheritdoc */
-		public function getLinkBuilders(): array {
-			return $this->linkBuilders;
 		}
 	}

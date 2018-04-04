@@ -119,11 +119,11 @@
 				if ($primary !== true) {
 					throw new SchemaException(sprintf('Primary property [%s::%s] is defined, but property does not exist; please add corresponding method to schema.', $schema, $primary));
 				}
-				return $schemaBuilder->getSchema();
+				return $schemaBuilder->create();
 			} catch (SchemaException $exception) {
 				throw $exception;
 			} catch (Throwable $throwable) {
-				throw new SchemaException(sprintf('Cannot do reflection of [%s]. Name is not probably a class.', $schema), 0, $throwable);
+				throw new SchemaException(sprintf('Cannot do schema reflection of [%s]: %s', $schema, $throwable->getMessage()), 0, $throwable);
 			}
 		}
 	}

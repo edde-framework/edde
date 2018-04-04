@@ -7,8 +7,6 @@
 	class Schema extends SimpleObject implements ISchema {
 		/** @var string */
 		protected $name;
-		/** @var bool */
-		protected $relation;
 		/** @var string|null */
 		protected $alias;
 		/** @var IAttribute[] */
@@ -17,17 +15,10 @@
 		protected $primary;
 		/** @var IAttribute[] */
 		protected $uniques = null;
-		/** @var ILink[][] */
-		protected $linkToList = [];
-		/** @var ILink[][] */
-		protected $links = [];
-		/** @var IRelation[][] */
-		protected $relations = [];
 
-		public function __construct(string $name, array $attributes, bool $relation, string $alias = null) {
+		public function __construct(string $name, array $attributes, string $alias = null) {
 			$this->name = $name;
 			$this->attributes = $attributes;
-			$this->relation = $relation;
 			$this->alias = $alias;
 		}
 
@@ -49,11 +40,6 @@
 		/** @inheritdoc */
 		public function getRealName(): string {
 			return $this->alias ?: $this->name;
-		}
-
-		/** @inheritdoc */
-		public function isRelation(): bool {
-			return $this->relation;
 		}
 
 		/** @inheritdoc */
@@ -104,69 +90,5 @@
 				}
 			}
 			return $this->uniques;
-		}
-
-		/** @inheritdoc */
-		public function linkTo(ILink $link): ISchema {
-			$this->linkToList[null][] = $this->linkToList[$link->getFrom()->getName()][] = $link;
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function getLinksTo(string $schema = null): array {
-			return $this->linkToList[$schema] ?? [];
-		}
-
-		/** @inheritdoc */
-		public function link(ILink $link): ISchema {
-			$this->links[null][] = $this->links[$link->getTo()->getName()][] = $link;
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function getLinks(string $schema = null): array {
-			return $this->links[$schema] ?? [];
-		}
-
-		/** @inheritdoc */
-		public function hasLink(string $schema): bool {
-			return isset($this->links[$schema]) !== false;
-		}
-
-		/** @inheritdoc */
-		public function getLink(string $schema): ILink {
-			if (($count = count($links = $this->getLinks($schema))) === 0) {
-				throw new SchemaException(sprintf('There are no links from [%s] to schema [%s].', $this->getName(), $schema));
-			} else if ($count !== 1) {
-				throw new SchemaException(sprintf('There are more links from [%s] to schema [%s]. You have to specify a link.', $this->getName(), $schema));
-			}
-			return $links[0];
-		}
-
-		/** @inheritdoc */
-		public function relation(IRelation $relation): ISchema {
-			$schema = $relation->getSchema()->getName();
-			$this->relations[null][$schema] = $this->relations[$relation->getTo()->getTo()->getName()][$schema] = $relation;
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function getRelations(string $schema = null): array {
-			return $this->relations[$schema] ?? [];
-		}
-
-		/** @inheritdoc */
-		public function hasRelation(string $schema): bool {
-			return isset($this->relation[$schema]) !== false;
-		}
-
-		/** @inheritdoc */
-		public function getRelation(string $schema, string $relation): IRelation {
-			if (($count = count($relations = $this->getRelations($schema))) === 0) {
-				throw new SchemaException(sprintf('There are no relations from [%s] to schema [%s].', $this->getName(), $schema));
-			} else if (isset($relations[$relation]) === false) {
-				throw new SchemaException(sprintf('Requested relation schema [%s] does not exists between [%s] and [%s].', $relation, $this->getName(), $schema));
-			}
-			return $relations[$relation];
 		}
 	}

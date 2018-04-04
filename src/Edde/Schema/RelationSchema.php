@@ -3,5 +3,4 @@
 	namespace Edde\Schema;
 
 	interface RelationSchema extends UuidSchema {
-		const relation = true;
 	}
