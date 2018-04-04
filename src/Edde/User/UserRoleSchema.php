@@ -3,9 +3,9 @@
 	namespace Edde\User;
 
 	use Edde\Role\RoleSchema;
-	use Edde\Schema\RelationSchema;
+	use Edde\Schema\UuidSchema;
 
-	interface UserRoleSchema extends RelationSchema {
+	interface UserRoleSchema extends UuidSchema {
 		public function user(): UserSchema;
 
 		public function role(): RoleSchema;

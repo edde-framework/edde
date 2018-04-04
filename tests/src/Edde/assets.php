@@ -1,8 +1,6 @@
 <?php
 	declare(strict_types=1);
 	use Edde\Access\AccessSchema;
-	use Edde\Schema\AliasSchema;
-	use Edde\Schema\RelationSchema;
 	use Edde\Schema\UuidSchema;
 	use Edde\User\UserSchema;
 
@@ -14,7 +12,9 @@
 		public function duration(): IntervalSchema;
 	}
 
-	interface IssueSchema extends UuidSchema, AliasSchema {
+	interface IssueSchema extends UuidSchema {
+		const alias = true;
+
 		public function name(): string;
 
 		public function due(): ?DateTime;
@@ -26,13 +26,15 @@
 		public function project(): ProjectSchema;
 	}
 
-	interface ProjectMemberSchema extends RelationSchema, AliasSchema {
+	interface ProjectMemberSchema extends UuidSchema {
+		const alias = true;
+
 		public function project(): ProjectSchema;
 
 		public function user(): UserSchema;
 	}
 
-	interface IssueAssigneeSchema extends RelationSchema {
+	interface IssueAssigneeSchema extends UuidSchema {
 		public function issue(): IssueSchema;
 
 		public function user(): UserSchema;
@@ -40,7 +42,7 @@
 		public function created($generator = 'stamp'): DateTime;
 	}
 
-	interface AccessProjectSchema extends RelationSchema {
+	interface AccessProjectSchema extends UuidSchema {
 		public function access(): AccessSchema;
 
 		public function project(): ProjectSchema;

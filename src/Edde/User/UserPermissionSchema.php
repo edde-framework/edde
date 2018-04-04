@@ -3,9 +3,9 @@
 	namespace Edde\User;
 
 	use Edde\Permission\PermissionSchema;
-	use Edde\Schema\RelationSchema;
+	use Edde\Schema\UuidSchema;
 
-	interface UserPermissionSchema extends RelationSchema {
+	interface UserPermissionSchema extends UuidSchema {
 		public function user(): UserSchema;
 
 		public function permission(): PermissionSchema;
