@@ -22,25 +22,35 @@
 		protected $schemas = [];
 
 		/** @inheritdoc */
-		public function hasSchema(string $schema): bool {
-			try {
-				$this->load($schema);
-				return true;
-			} catch (SchemaException $exception) {
-				return false;
+		public function load(string $name): ISchemaManager {
+			if (isset($this->schemas[$name]) === false) {
+				$this->schemas[$name] = $schema = $this->schemaLoader->load($name);
+				if ($schema->hasAlias()) {
+					$this->schemas[$schema->getAlias()] = $schema;
+				}
 			}
+			return $this;
 		}
 
 		/** @inheritdoc */
-		public function load(string $name): ISchema {
-			if (isset($this->schemas[$name])) {
-				return $this->schemas[$name];
+		public function loads(array $names): ISchemaManager {
+			foreach ($names as $name) {
+				$this->load($name);
 			}
-			$this->schemas[$name] = $schema = $this->schemaLoader->load($name);
-			if ($schema->hasAlias()) {
-				$this->schemas[$schema->getAlias()] = $schema;
+			return $this;
+		}
+
+		/** @inheritdoc */
+		public function hasSchema(string $name): bool {
+			return isset($this->schemas[$name]);
+		}
+
+		/** @inheritdoc */
+		public function getSchema(string $name): ISchema {
+			if (isset($this->schemas[$name]) === false) {
+				throw new SchemaException(sprintf('Requested schema [%s] is not loaded; try to use [%s::load("%s")].', $name, ISchemaManager::class, $name));
 			}
-			return $schema;
+			return $this->schemas[$name];
 		}
 
 		/** @inheritdoc */
@@ -132,6 +142,6 @@
 
 		/** @inheritdoc */
 		public function check(string $schema, stdClass $source): void {
-			$this->validate($this->load($schema), $source);
+			$this->validate($this->getSchema($schema), $source);
 		}
 	}

@@ -15,11 +15,20 @@
 		/**
 		 * @throws SchemaException
 		 */
+		public function testLoadException() {
+			$this->expectException(SchemaException::class);
+			$this->expectExceptionMessage('Requested schema [nope] is not loaded; try to use [Edde\Schema\ISchemaManager::load("nope")]');
+			$this->schemaManager->getSchema('nope');
+		}
+
+		/**
+		 * @throws SchemaException
+		 */
 		public function testRelationSchema() {
-			$projectMemberSchema = $this->schemaManager->load(ProjectMemberSchema::class);
-			$projectSchema = $this->schemaManager->load(ProjectSchema::class);
-			$userSchema = $this->schemaManager->load(UserSchema::class);
-			self::assertSame($projectMemberSchema, $this->schemaManager->load('project-member'));
+			$projectMemberSchema = $this->schemaManager->getSchema(ProjectMemberSchema::class);
+			$projectSchema = $this->schemaManager->getSchema(ProjectSchema::class);
+			$userSchema = $this->schemaManager->getSchema(UserSchema::class);
+			self::assertSame($projectMemberSchema, $this->schemaManager->getSchema('project-member'));
 			self::assertTrue($projectMemberSchema->isRelation(), 'relation schema... is not a relation schema!');
 			/**
 			 * links test
@@ -87,5 +96,14 @@
 			$sourceSchema = $this->schemaManager->load(FooSchema::class);
 			$relation = $sourceSchema->getRelation(BarSchema::class, FooBarSchema::class);
 			self::assertSame(FooBarSchema::class, $relation->getSchema()->getName());
+		}
+
+		protected function setUp() {
+			parent::setUp();
+			$this->schemaManager->loads([
+				ProjectMemberSchema::class,
+				ProjectSchema::class,
+				UserSchema::class,
+			]);
 		}
 	}

@@ -10,7 +10,6 @@
 	abstract class AbstractRouter extends Edde implements IRouter {
 		use RequestService;
 		use Runtime;
-		use Edde\Container\Autowire;
 		/** @var IRequest */
 		protected $request;
 

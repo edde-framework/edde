@@ -10,16 +10,39 @@
 
 	interface ISchemaManager {
 		/**
-		 * try to load the given schema and return true/false if it exists
+		 * load the given schema; no schema on return is intentional as it's not indented to use this
+		 * method to get schemas
 		 *
-		 * @param string $schema
+		 * @param string $name
+		 *
+		 * @return ISchemaManager
+		 *
+		 * @throws SchemaException
+		 */
+		public function load(string $name): ISchemaManager;
+
+		/**
+		 * just array of schemas to be loaded
+		 *
+		 * @param string[] $names
+		 *
+		 * @return ISchemaManager
+		 *
+		 * @throws SchemaException
+		 */
+		public function loads(array $names): ISchemaManager;
+
+		/**
+		 * is the given schema available?
+		 *
+		 * @param string $name
 		 *
 		 * @return bool
 		 */
-		public function hasSchema(string $schema): bool;
+		public function hasSchema(string $name): bool;
 
 		/**
-		 * get the given schema
+		 * return schema with the given name; if a schema is not loaded
 		 *
 		 * @param string $name
 		 *
@@ -27,7 +50,7 @@
 		 *
 		 * @throws SchemaException
 		 */
-		public function load(string $name): ISchema;
+		public function getSchema(string $name): ISchema;
 
 		/**
 		 * generate all empty values with a generator (using a schema)
