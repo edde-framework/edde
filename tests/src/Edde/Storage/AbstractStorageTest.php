@@ -36,7 +36,7 @@
 			$schemas = [
 			];
 			foreach ($schemas as $schema) {
-				$this->storage->create($this->schemaManager->load($schema));
+				$this->storage->create($this->schemaManager->getSchema($schema));
 			}
 			self::assertTrue(true, 'everything is ok');
 		}

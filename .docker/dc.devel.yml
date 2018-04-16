@@ -10,7 +10,7 @@ services:
                     - ../:/edde
                     - ./xdebug.ini:/etc/php7/conf.d/xdebug.ini
                 ports:
-                    - "4722:22"
+                    - "4822:22"
                 networks:
                     - edde-network
                 depends_on:
@@ -24,8 +24,8 @@ services:
                     - NEO4J_AUTH=neo4j/eeQFXk7kkqSm
                     - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
                 ports:
-                    - "7474:7474"
-                    - "7687:7687"
+                    - "17474:7474"
+                    - "17687:7687"
                 networks:
                     - edde-network
 
@@ -50,7 +50,7 @@ services:
         adminer:
             image: adminer:latest
             ports:
-                - "8080:8080"
+                - "18080:8080"
             networks:
                 - edde-network
 

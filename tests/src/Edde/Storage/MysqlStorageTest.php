@@ -4,6 +4,9 @@
 
 	use Edde\Container\Factory\InstanceFactory;
 	use Edde\Query\SelectQuery;
+	use Edde\User\UserSchema;
+	use ProjectMemberSchema;
+	use ProjectSchema;
 
 	class MysqlStorageTest extends AbstractStorageTest {
 		/**
@@ -16,12 +19,17 @@
 			$this->assertTrue(true, 'everything looks nice even here!');
 		}
 
-		public function testSelectQuery() {
+		public function testSimpleQuery() {
 			$selectQuery = new SelectQuery();
 			$selectQuery->uses([
+				'user'           => UserSchema::class,
+				'project-member' => ProjectMemberSchema::class,
+				'project'        => ProjectSchema::class,
 			]);
-			$selectQuery->join('foo', 'bar', 'foo-bar');
-			$selectQuery->returns(['foo', 'bar']);
+			$selectQuery->attach('project', 'user', 'project-member');
+			$selectQuery->equalTo('project-member', 'owner', true);
+			$selectQuery->order('project', 'name', 'asc');
+			$selectQuery->return('project');
 			$native = $this->storage->toNative($selectQuery);
 		}
 

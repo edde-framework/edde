@@ -2,8 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Query;
 
+	use function is_string;
+
 	class SelectQuery extends AbstractQuery implements ISelectQuery {
 		protected $uses = [];
+		protected $attaches = [];
+		protected $wheres = [];
+		protected $orders = [];
 		protected $returns = [];
 
 		public function __construct() {
@@ -19,8 +24,48 @@
 		/** @inheritdoc */
 		public function uses(array $schemas): ISelectQuery {
 			foreach ($schemas as $alias => $schema) {
-				$this->use($schema, (string)$alias);
+				$this->use($schema, is_string($alias) ? $alias : null);
 			}
+			return $this;
+		}
+
+		/** @inheritdoc */
+		public function attach(string $attach, string $to, string $relation): ISelectQuery {
+			$this->attaches[] = (object)[
+				'attach'   => $attach,
+				'to'       => $to,
+				'relation' => $relation,
+			];
+			return $this;
+		}
+
+		/** @inheritdoc */
+		public function equal(string $source, string $from, string $target, string $to): ISelectQuery {
+			$this->wheres[] = (object)[
+				'type'   => 'equal',
+				'source' => (object)['alias' => $source, 'property' => $from],
+				'target' => (object)['alias' => $target, 'property' => $to],
+			];
+			return $this;
+		}
+
+		/** @inheritdoc */
+		public function equalTo(string $alias, string $property, $value): ISelectQuery {
+			$this->wheres[] = (object)[
+				'type'  => 'equalTo',
+				'alias' => $alias,
+				'value' => $value,
+			];
+			return $this;
+		}
+
+		/** @inheritdoc */
+		public function order(string $alias, string $property, string $order = 'asc'): ISelectQuery {
+			$this->orders[] = (object)[
+				'alias'    => $alias,
+				'property' => $property,
+				'order'    => $order,
+			];
 			return $this;
 		}
 

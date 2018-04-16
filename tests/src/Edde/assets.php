@@ -32,6 +32,8 @@
 		public function project(): ProjectSchema;
 
 		public function user(): UserSchema;
+
+		public function owner($default = false): bool;
 	}
 
 	interface IssueAssigneeSchema extends UuidSchema {
