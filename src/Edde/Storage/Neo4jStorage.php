@@ -7,6 +7,7 @@
 	use Edde\Entity\IEntity;
 	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
+	use Edde\Service\Crypt\RandomService;
 	use Edde\Service\Schema\SchemaManager;
 	use Exception;
 	use GraphAware\Bolt\Configuration;
@@ -24,6 +25,7 @@
 
 	class Neo4jStorage extends AbstractStorage {
 		use SchemaManager;
+		use RandomService;
 		/** @var SessionInterface */
 		protected $session;
 		/** @var Transaction */
@@ -339,14 +341,15 @@
 		}
 
 		protected function formatAttributes(array $attributes): INativeQuery {
-			$propertyList = [];
+			$properties = [];
+			$params = [];
 			foreach ($attributes as $k => $v) {
 				if ($v !== null) {
-					$propertyList[] = $this->delimite($k) . ': $' . $this->delimite($parameterId = (sha1($k)));
+					$properties[] = $this->delimite($k) . ': $' . $this->delimite($parameterId = (sha1($this->randomService->bytes(64))));
 					$params[$parameterId] = $v;
 				}
 			}
-			return new NativeQuery('{' . implode(', ', $propertyList) . '}', $params);
+			return new NativeQuery('{' . implode(', ', $properties) . '}', $params);
 		}
 
 		/**
