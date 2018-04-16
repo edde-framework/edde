@@ -118,6 +118,10 @@
 			return new ConnectionException($message, 0, $throwable);
 		}
 
+		protected function executeNativeQuery(INativeQuery $nativeQuery) {
+			return $this->fetch($nativeQuery->getQuery(), $nativeQuery->getParams());
+		}
+
 		/**
 		 * @param ICrateSchemaQuery $crateSchemaQuery
 		 *
