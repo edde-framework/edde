@@ -13,6 +13,7 @@
 	use Edde\Query\IRelationQuery;
 	use Edde\Query\IUnlinkQuery;
 	use Edde\Query\NativeQuery;
+	use Edde\Service\Crypt\RandomService;
 	use Edde\Storage\INativeQuery;
 	use Edde\Storage\Query\Fragment\IWhere;
 	use Edde\Storage\Query\ICrateSchemaQuery;
@@ -32,6 +33,7 @@
 	use function implode;
 
 	class Neo4jConnection extends AbstractConnection {
+		use RandomService;
 		/** @var SessionInterface */
 		protected $session;
 		/** @var Transaction */
@@ -336,14 +338,15 @@
 		}
 
 		protected function formatAttributes(array $attributes): INativeQuery {
-			$propertyList = [];
+			$properties = [];
+			$params = [];
 			foreach ($attributes as $k => $v) {
 				if ($v !== null) {
-					$propertyList[] = $this->delimite($k) . ': $' . $this->delimite($parameterId = (sha1($k)));
+					$properties[] = $this->delimite($k) . ': $' . $this->delimite($parameterId = (sha1($this->randomService->bytes(64))));
 					$params[$parameterId] = $v;
 				}
 			}
-			return new NativeQuery('{' . implode(', ', $propertyList) . '}', $params);
+			return new NativeQuery('{' . implode(', ', $properties) . '}', $params);
 		}
 
 		/**
