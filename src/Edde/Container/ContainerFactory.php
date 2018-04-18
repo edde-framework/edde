@@ -34,7 +34,6 @@
 	use Edde\Configurator\Generator\GeneratorManagerConfigurator;
 	use Edde\Configurator\Router\RouterServiceConfigurator;
 	use Edde\Configurator\Sanitizer\SanitizerManagerConfigurator;
-	use Edde\Configurator\Schema\SchemaManagerConfigurator;
 	use Edde\Configurator\Validator\ValidatorManagerConfigurator;
 	use Edde\Container\Factory\CallbackFactory;
 	use Edde\Container\Factory\ClassFactory;
@@ -391,7 +390,6 @@
 				IFilterManager::class    => FilterManagerConfigurator::class,
 				ISanitizerManager::class => SanitizerManagerConfigurator::class,
 				IValidatorManager::class => ValidatorManagerConfigurator::class,
-				ISchemaManager::class    => SchemaManagerConfigurator::class,
 				IMessageBus::class       => MessageBusConfigurator::class,
 			];
 		}

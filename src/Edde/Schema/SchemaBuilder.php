@@ -24,6 +24,12 @@
 		}
 
 		/** @inheritdoc */
+		public function meta(array $meta): ISchemaBuilder {
+			$this->source->meta = $meta;
+			return $this;
+		}
+
+		/** @inheritdoc */
 		public function property(string $name): IAttributeBuilder {
 			return $this->propertyBuilders[$name] = new AttributeBuilder($name);
 		}
@@ -53,13 +59,14 @@
 			if ($this->schema) {
 				return $this->schema;
 			}
-			$properties = [];
+			$attributes = [];
 			foreach ($this->propertyBuilders as $name => $propertyBuilder) {
-				$properties[$name] = $propertyBuilder->getAttribute();
+				$attributes[$name] = $propertyBuilder->getAttribute();
 			}
 			return $this->schema = new Schema(
 				$this->source->name,
-				$properties,
+				$attributes,
+				$this->source->meta,
 				$this->source->alias ?? null
 			);
 		}

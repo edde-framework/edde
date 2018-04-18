@@ -54,6 +54,11 @@
 		}
 
 		/** @inheritdoc */
+		public function getSchemas(): array {
+			return $this->schemas;
+		}
+
+		/** @inheritdoc */
 		public function generate(ISchema $schema, stdClass $source): stdClass {
 			$result = clone $source;
 			foreach ($schema->getAttributes() as $property) {

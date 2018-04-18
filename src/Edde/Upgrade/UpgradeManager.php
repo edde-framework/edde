@@ -4,7 +4,9 @@
 
 	use Edde\Collection\ICollection;
 	use Edde\Entity\EntityNotFoundException;
+	use Edde\Service\Collection\CollectionManager;
 	use Edde\Service\Entity\EntityManager;
+	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
 	use Edde\Storage\UnknownTableException;
 	use Throwable;
@@ -12,14 +14,17 @@
 	class UpgradeManager extends AbstractUpgradeManager {
 		use EntityManager;
 		use Storage;
+		use SchemaManager;
+		use CollectionManager;
 
 		/** @inheritdoc */
 		public function getVersion(): ?string {
 			try {
 				try {
-					return $this->getCurrentCollection()->getEntity('u')->get('version');
+					return null;
+//					return $this->getCurrentCollection()->getEntity('u')->get('version');
 				} catch (UnknownTableException $exception) {
-					$this->storage->create(UpgradeSchema::class);
+					$this->storage->create($this->schemaManager->load(UpgradeSchema::class));
 					return null;
 				} catch (EntityNotFoundException $exception) {
 					return null;
@@ -31,7 +36,7 @@
 
 		/** @inheritdoc */
 		public function getCurrentCollection(): ICollection {
-			return $this->entityManager->collection('u', UpgradeSchema::class)->order('u.stamp', false);
+//			return $this->entityManager->collection('u', UpgradeSchema::class)->order('u.stamp', false);
 		}
 
 		/** @inheritdoc */

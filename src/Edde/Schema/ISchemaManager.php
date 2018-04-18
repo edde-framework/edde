@@ -53,6 +53,13 @@
 		public function getSchema(string $name): ISchema;
 
 		/**
+		 * return all known schemas
+		 *
+		 * @return ISchema[]
+		 */
+		public function getSchemas(): array;
+
+		/**
 		 * generate all empty values with a generator (using a schema)
 		 *
 		 * @param ISchema  $schema

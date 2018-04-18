@@ -6,6 +6,7 @@
 	use Edde\Service\Utils\StringUtils;
 	use ReflectionClass;
 	use Throwable;
+	use function is_array;
 	use function is_string;
 	use function str_replace;
 
@@ -29,14 +30,14 @@
 							}
 							$schemaBuilder->alias($value);
 							break;
-						case 'relation':
-							/**
-							 * mark a schema as a relational schema
-							 */
-							$schemaBuilder->relation($value);
-							break;
 						case 'primary':
 							$primary = $value;
+							break;
+						case 'meta':
+							if (is_array($value) === false) {
+								throw new SchemaException(sprintf('Meta for schema [%s] must be an array.', $schema));
+							}
+							$schemaBuilder->meta($value);
 							break;
 					}
 				}

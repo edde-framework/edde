@@ -32,6 +32,16 @@
 		public function getRealName(): string;
 
 		/**
+		 * return meta attribute of the schema
+		 *
+		 * @param string $name
+		 * @param null   $default
+		 *
+		 * @return mixed
+		 */
+		public function getMeta(string $name, $default = null);
+
+		/**
 		 * @param string $name
 		 *
 		 * @return IAttribute

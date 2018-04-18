@@ -3,6 +3,7 @@
 	namespace Edde\Upgrade;
 
 	use Edde\Config\IConfigurable;
+	use Exception;
 	use Throwable;
 
 	interface IUpgrade extends IConfigurable {
@@ -22,6 +23,8 @@
 		/**
 		 * execute an upgrade procedure (there could be anything, file moves, cache
 		 * invalidation, database structure update, ...)
+		 *
+		 * @throws Exception
 		 */
 		public function upgrade(): void;
 

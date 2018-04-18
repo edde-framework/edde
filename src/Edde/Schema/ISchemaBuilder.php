@@ -13,6 +13,15 @@
 		public function alias(string $alias): ISchemaBuilder;
 
 		/**
+		 * set meta data for the schema
+		 *
+		 * @param array $meta
+		 *
+		 * @return ISchemaBuilder
+		 */
+		public function meta(array $meta): ISchemaBuilder;
+
+		/**
 		 * create a new property with the given name
 		 *
 		 * @param string $name

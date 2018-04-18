@@ -11,14 +11,17 @@
 		protected $alias;
 		/** @var IAttribute[] */
 		protected $attributes = [];
+		/** @var array */
+		protected $meta = [];
 		/** @var IAttribute */
 		protected $primary;
 		/** @var IAttribute[] */
 		protected $uniques = null;
 
-		public function __construct(string $name, array $attributes, string $alias = null) {
+		public function __construct(string $name, array $attributes, array $meta = [], string $alias = null) {
 			$this->name = $name;
 			$this->attributes = $attributes;
+			$this->meta = $meta;
 			$this->alias = $alias;
 		}
 
@@ -40,6 +43,11 @@
 		/** @inheritdoc */
 		public function getRealName(): string {
 			return $this->alias ?: $this->name;
+		}
+
+		/** @inheritdoc */
+		public function getMeta(string $name, $default = null) {
+			return $this->meta[$name] ?? $default;
 		}
 
 		/** @inheritdoc */
