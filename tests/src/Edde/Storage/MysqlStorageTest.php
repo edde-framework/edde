@@ -3,10 +3,6 @@
 	namespace Edde\Storage;
 
 	use Edde\Container\Factory\InstanceFactory;
-	use Edde\Query\SelectQuery;
-	use Edde\User\UserSchema;
-	use ProjectMemberSchema;
-	use ProjectSchema;
 
 	class MysqlStorageTest extends AbstractStorageTest {
 		/**
@@ -20,17 +16,17 @@
 		}
 
 		public function testSimpleQuery() {
-			$selectQuery = new SelectQuery();
-			$selectQuery->uses([
-				'user'           => UserSchema::class,
-				'project-member' => ProjectMemberSchema::class,
-				'project'        => ProjectSchema::class,
-			]);
-			$selectQuery->attach('project', 'user', 'project-member');
-			$selectQuery->equalTo('project-member', 'owner', true);
-			$selectQuery->order('project', 'name', 'asc');
-			$selectQuery->return('project');
-			$native = $this->storage->toNative($selectQuery);
+//			$selectQuery = new SelectQuery();
+//			$selectQuery->uses([
+//				'user'           => UserSchema::class,
+//				'project-member' => ProjectMemberSchema::class,
+//				'project'        => ProjectSchema::class,
+//			]);
+//			$selectQuery->attach('project', 'user', 'project-member');
+//			$selectQuery->equalTo('project-member', 'owner', true);
+//			$selectQuery->order('project', 'name', 'asc');
+//			$selectQuery->return('project');
+//			$native = $this->storage->toNative($selectQuery);
 		}
 
 		/** @inheritdoc */

@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
-	use BarSchema;
 	use DateTime;
 	use Edde\Collection\CollectionException;
 	use Edde\Container\ContainerException;
