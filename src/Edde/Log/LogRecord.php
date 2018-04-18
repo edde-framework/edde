@@ -15,7 +15,7 @@
 		/**
 		 * @var array
 		 */
-		protected $tagList;
+		protected $tags;
 
 		/**
 		 * A blonde rings up an airline.
@@ -24,11 +24,11 @@
 		 * The blonde says, "Thanks!" and hangs up the phone.
 		 *
 		 * @param string $log
-		 * @param array  $tagList
+		 * @param array  $tags
 		 */
-		public function __construct($log, array $tagList = null) {
+		public function __construct($log, array $tags = null) {
 			$this->log = $log;
-			$this->tagList = $tagList;
+			$this->tags = $tags;
 		}
 
 		/**
@@ -42,6 +42,6 @@
 		 * @inheritdoc
 		 */
 		public function getTags(): ?array {
-			return $this->tagList;
+			return $this->tags;
 		}
 	}

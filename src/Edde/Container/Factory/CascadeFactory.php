@@ -2,15 +2,14 @@
 	declare(strict_types=1);
 	namespace Edde\Container\Factory;
 
-	use Edde\Service\Application\Context;
+	use Edde\Application\IContext;
+	use Edde\Container\IContainer;
 
 	class CascadeFactory extends AbstractDiscoveryFactory {
-		use Context;
-
-		/**
-		 * @inheritdoc
-		 */
-		protected function discover(string $name): array {
-			return $this->context->cascade('\\', $name);
+		/** @inheritdoc */
+		protected function discover(IContainer $container, string $name): array {
+			/** @var $context IContext */
+			$context = $container->create(IContext::class, [], __METHOD__);
+			return $context->cascade('\\', $name);
 		}
 	}

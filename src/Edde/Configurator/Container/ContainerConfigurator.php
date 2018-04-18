@@ -4,13 +4,14 @@
 
 	use Edde\Config\AbstractConfigurator;
 	use Edde\Config\IConfigurator;
+	use Edde\Container\ContainerException;
 	use Edde\Container\IContainer;
 	use Edde\Container\IFactory;
 
 	class ContainerConfigurator extends AbstractConfigurator {
 		/** @var IFactory[] */
 		protected $factories = [];
-		/** @var \Edde\Config\IConfigurator[] */
+		/** @var IConfigurator[] */
 		protected $configurators = [];
 
 		public function __construct(array $factories, array $configurators) {
@@ -20,6 +21,8 @@
 
 		/**
 		 * @param IContainer $instance
+		 *
+		 * @throws ContainerException
 		 */
 		public function configure($instance) {
 			parent::configure($instance);

@@ -53,6 +53,8 @@
 		 * @param string      $name
 		 *
 		 * @return mixed
+		 *
+		 * @throws ContainerException
 		 */
 		public function factory(IContainer $container, array $params, IReflection $dependency, string $name = null);
 

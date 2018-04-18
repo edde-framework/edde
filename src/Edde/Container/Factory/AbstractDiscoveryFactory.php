@@ -9,41 +9,33 @@
 	 * When there is need to search for a class in namespace hierarchy.
 	 */
 	abstract class AbstractDiscoveryFactory extends ClassFactory {
-		/**
-		 * @var string[]
-		 */
+		/** @var string[] */
 		protected $names = [];
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function canHandle(IContainer $container, string $dependency): bool {
-			if ($discover = $this->search($dependency)) {
+			if ($discover = $this->search($container, $dependency)) {
 				return parent::canHandle($container, $discover);
 			}
 			return false;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getReflection(IContainer $container, string $dependency): IReflection {
-			return parent::getReflection($container, $this->search($dependency));
+			return parent::getReflection($container, $this->search($container, $dependency));
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function factory(IContainer $container, array $params, IReflection $dependency, string $name = null) {
-			return parent::factory($container, $params, $dependency, $this->search($name));
+			return parent::factory($container, $params, $dependency, $this->search($container, $name));
 		}
 
-		protected function search(string $name) {
+		protected function search(IContainer $container, string $name) {
 			if (isset($this->names[$name]) || array_key_exists($name, $this->names)) {
 				return $this->names[$name];
 			}
 			/** @noinspection ForeachSourceInspection */
-			foreach ($this->discover($name) as $source) {
+			foreach ($this->discover($container, $name) as $source) {
 				if (class_exists($source)) {
 					return $this->names[$name] = $source;
 				}
@@ -54,9 +46,10 @@
 		/**
 		 * this method should return set of class names where this factory should look into
 		 *
-		 * @param string $name
+		 * @param IContainer $container
+		 * @param string     $name
 		 *
 		 * @return string[]
 		 */
-		abstract protected function discover(string $name): array;
+		abstract protected function discover(IContainer $container, string $name): array;
 	}

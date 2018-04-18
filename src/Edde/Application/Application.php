@@ -25,7 +25,6 @@
 			} catch (Throwable $exception) {
 				$this->logService->exception($exception, [
 					'edde',
-					'exception',
 					'application',
 				]);
 				http_response_code(
