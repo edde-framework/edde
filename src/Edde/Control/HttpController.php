@@ -94,20 +94,16 @@
 
 		/**
 		 * return no-content response
-		 *
-		 * @return IResponse
 		 */
-		public function sendNoContent(): IResponse {
-			return $this->response(new Response(new Content('', 'text/plain')), IResponse::R200_NO_CONTENT);
+		public function sendNoContent(): void {
+			$this->response(new Response(new Content('', 'text/plain')), IResponse::R200_NO_CONTENT)->execute();
 		}
 
 		/**
 		 * return empty created response
-		 *
-		 * @return IResponse
 		 */
-		public function sendCreated(): IResponse {
-			return $this->response(new Response(new Content('', 'text/plain')), IResponse::R200_OK_CREATED);
+		public function sendCreated(): void {
+			$this->response(new Response(new Content('', 'text/plain')), IResponse::R200_OK_CREATED)->execute();
 		}
 
 		/**
@@ -121,10 +117,18 @@
 			return $this->response(new Response(new GeneratorContent($generator, $type)), $code);
 		}
 
+		/**
+		 * just prepare response
+		 *
+		 * @param IResponse $response
+		 * @param int       $code
+		 *
+		 * @return IResponse
+		 */
 		public function response(IResponse $response, int $code = IResponse::R200_OK) {
 			$response->header('X-Powered-By', 'Edde Framework');
 			$response->header('Access-Control-Allow-Origin', '*');
 			$response->setCode($code);
-			return $response->execute();
+			return $response;
 		}
 	}
