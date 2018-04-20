@@ -5,13 +5,17 @@
 	use Throwable;
 
 	class MysqlStorage extends AbstractPdoStorage {
+		/**
+		 * @param string $config
+		 * @param array  $options
+		 */
 		public function __construct(string $config = 'mysql', array $options = []) {
 			parent::__construct($config, $options);
 		}
 
 		/** @inheritdoc */
-		public function delimite(string $delimite): string {
-			return '`' . str_replace('`', '``', $delimite) . '`';
+		public function delimit(string $delimit): string {
+			return '`' . str_replace('`', '``', $delimit) . '`';
 		}
 
 		/** @inheritdoc */

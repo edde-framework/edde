@@ -11,12 +11,12 @@
 
 		/** @inheritdoc */
 		protected function getDeleteSql(string $relation): string {
-			return 'DELETE FROM ' . $this->delimite($relation) . ' AS r WHERE ';
+			return 'DELETE FROM ' . $this->delimit($relation) . ' AS r WHERE ';
 		}
 
 		/** @inheritdoc */
-		public function delimite(string $delimite): string {
-			return '"' . str_replace('"', '""', $delimite) . '"';
+		public function delimit(string $delimit): string {
+			return '"' . str_replace('"', '""', $delimit) . '"';
 		}
 
 		/** @inheritdoc */

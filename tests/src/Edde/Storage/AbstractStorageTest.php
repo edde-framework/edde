@@ -17,6 +17,7 @@
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
 	use Edde\TestCase;
+	use LabelSchema;
 	use VoidSchema;
 	use function property_exists;
 
@@ -33,6 +34,7 @@
 		 */
 		public function testCreateSchema() {
 			$schemas = [
+				LabelSchema::class,
 			];
 			foreach ($schemas as $schema) {
 				$this->storage->create($this->schemaManager->getSchema($schema));
@@ -54,8 +56,8 @@
 		 */
 		public function testValidator() {
 			$this->expectException(SchemaValidationException::class);
-			$this->expectExceptionMessage('Validation of schema [SimpleSchema] failed.');
-			$this->storage->insert((object)['name' => true], SimpleSchema::class);
+			$this->expectExceptionMessage('Validation of schema [LabelSchema] failed.');
+			$this->storage->insert((object)['name' => true], LabelSchema::class);
 		}
 
 		/**
@@ -64,7 +66,7 @@
 		public function testInsert() {
 			$source = $this->storage->insert((object)[
 				'name' => 'this entity is new',
-			], SimpleSchema::class);
+			], LabelSchema::class);
 			self::assertTrue(property_exists($source, 'uuid'));
 			self::assertNotEmpty($source->uuid);
 		}
@@ -609,5 +611,13 @@
 				$current[] = $entity->get('name');
 			}
 			self::assertEmpty($current);
+		}
+
+		protected function setUp() {
+			parent::setUp();
+			$this->schemaManager->loads([
+				VoidSchema::class,
+				LabelSchema::class,
+			]);
 		}
 	}

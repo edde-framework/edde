@@ -66,7 +66,7 @@
 			return $this->schema = new Schema(
 				$this->source->name,
 				$attributes,
-				$this->source->meta,
+				$this->source->meta ?? [],
 				$this->source->alias ?? null
 			);
 		}

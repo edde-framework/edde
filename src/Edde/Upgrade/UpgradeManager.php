@@ -24,7 +24,7 @@
 					return null;
 //					return $this->getCurrentCollection()->getEntity('u')->get('version');
 				} catch (UnknownTableException $exception) {
-					$this->storage->create($this->schemaManager->load(UpgradeSchema::class));
+					$this->storage->create($this->schemaManager->getSchema(UpgradeSchema::class));
 					return null;
 				} catch (EntityNotFoundException $exception) {
 					return null;

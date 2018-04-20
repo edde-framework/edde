@@ -65,11 +65,11 @@
 		/** @inheritdoc */
 		public function create(ISchema $schema): IStorage {
 			try {
-				$sql = 'CREATE TABLE ' . $this->delimite($table = $schema->getRealName()) . " (\n\t";
+				$sql = 'CREATE TABLE ' . $this->delimit($table = $schema->getRealName()) . " (\n\t";
 				$columns = [];
 				$primaries = [];
 				foreach ($schema->getAttributes() as $property) {
-					$column = ($fragment = $this->delimite($property->getName())) . ' ' . $this->type($property->getType());
+					$column = ($fragment = $this->delimit($property->getName())) . ' ' . $this->type($property->getType());
 					if ($property->isPrimary()) {
 						$primaries[] = $fragment;
 					} else if ($property->isUnique()) {
@@ -81,13 +81,9 @@
 					$columns[] = $column;
 				}
 				if (empty($primaries) === false) {
-					$columns[] = "CONSTRAINT " . $this->delimite(sha1($table . '_primary_' . $primary = implode(', ', $primaries))) . ' PRIMARY KEY (' . $primary . ')';
+					$columns[] = "CONSTRAINT " . $this->delimit(sha1($table . '.primary.' . $primary = implode(', ', $primaries))) . ' PRIMARY KEY (' . $primary . ')';
 				}
-				$sql .= implode(",\n\t", $columns);
-				foreach ($schema->getLinks() as $link) {
-					$sql .= ",\n\tFOREIGN KEY (" . $this->delimite($link->getFrom()->getPropertyName()) . ') REFERENCES ' . $this->delimite($link->getTo()->getRealName()) . '(' . $this->delimite($link->getTo()->getPropertyName()) . ') ON DELETE CASCADE ON UPDATE CASCADE';
-				}
-				$this->exec($sql . "\n)");
+				$this->exec($sql . implode(",\n\t", $columns) . "\n)");
 				return $this;
 			} catch (Throwable $exception) {
 				throw $this->exception($exception);
@@ -98,18 +94,18 @@
 		public function insert(stdClass $source, string $name): stdClass {
 			try {
 				$this->schemaManager->validate(
-					$schema = $this->schemaManager->load($name),
+					$schema = $this->schemaManager->getSchema($name),
 					$generated = clone ($source = $this->schemaManager->generate(
 						$schema,
 						$source
 					))
 				);
-				$table = $this->delimite($schema->getRealName());
+				$table = $this->delimit($schema->getRealName());
 				$source = $this->schemaManager->sanitize($schema, $source);
 				$columns = [];
 				$params = [];
 				foreach ($source as $k => $v) {
-					$columns[] = $delimited = $this->delimite($k);
+					$columns[] = $delimited = $this->delimit($k);
 					$params[$paramId = sha1($k)] = $v;
 				}
 				$sql = 'INSERT INTO ' . $table . ' (' . implode(', ', $columns) . ') VALUES (:' . implode(', :', array_keys($params)) . ')';
@@ -154,7 +150,7 @@
 		}
 
 		protected function executeSelectQuery(SelectQuery $selectQuery) {
-			$alias = $this->delimite($selectQuery->getAlias());
+			$alias = $this->delimit($selectQuery->getAlias());
 			$current = $selectQuery->getAlias();
 			$params = [];
 			$schema = $selectQuery->getSchema();
@@ -162,20 +158,20 @@
 			foreach ($selectQuery->getJoins() as $name => $join) {
 				if ($join->isLink()) {
 					$link = $schema->getLink($join->getSchema());
-					$linkSql .= ' INNER JOIN ' . $this->delimite($link->getTo()->getRealName()) . ' ' . $relation = $this->delimite($name);
-					$from = ($this->delimite($current) . '.' . $this->delimite($link->getFrom()->getPropertyName()));
-					$linkSql .= ' ON ' . $relation . '.' . $this->delimite($link->getTo()->getPropertyName()) . ' = ' . $from;
+					$linkSql .= ' INNER JOIN ' . $this->delimit($link->getTo()->getRealName()) . ' ' . $relation = $this->delimit($name);
+					$from = ($this->delimit($current) . '.' . $this->delimit($link->getFrom()->getPropertyName()));
+					$linkSql .= ' ON ' . $relation . '.' . $this->delimit($link->getTo()->getPropertyName()) . ' = ' . $from;
 					$schema = $link->getTo()->getSchema();
 					$current = $name;
 					continue;
 				}
 				$relation = $schema->getRelation($join->getSchema(), $join->getRelation());
-				$linkSql .= ' INNER JOIN ' . $this->delimite($relation->getSchema()->getRealName()) . ' ' . ($join = $this->delimite($current . '\\r'));
-				$from = ($this->delimite($current) . '.' . $this->delimite($relation->getFrom()->getFrom()->getPropertyName()));
-				$linkSql .= ' ON ' . $join . '.' . $this->delimite($relation->getFrom()->getTo()->getPropertyName()) . ' = ' . $from;
-				$linkSql .= ' INNER JOIN ' . $this->delimite($relation->getTo()->getTo()->getRealName()) . ' ' . $this->delimite($name);
-				$to = $this->delimite($name) . '.' . $this->delimite($relation->getTo()->getTo()->getPropertyName());
-				$linkSql .= ' ON ' . $join . '.' . $this->delimite($relation->getTo()->getFrom()->getPropertyName()) . ' = ' . $to;
+				$linkSql .= ' INNER JOIN ' . $this->delimit($relation->getSchema()->getRealName()) . ' ' . ($join = $this->delimit($current . '\\r'));
+				$from = ($this->delimit($current) . '.' . $this->delimit($relation->getFrom()->getFrom()->getPropertyName()));
+				$linkSql .= ' ON ' . $join . '.' . $this->delimit($relation->getFrom()->getTo()->getPropertyName()) . ' = ' . $from;
+				$linkSql .= ' INNER JOIN ' . $this->delimit($relation->getTo()->getTo()->getRealName()) . ' ' . $this->delimit($name);
+				$to = $this->delimit($name) . '.' . $this->delimit($relation->getTo()->getTo()->getPropertyName());
+				$linkSql .= ' ON ' . $join . '.' . $this->delimit($relation->getTo()->getFrom()->getPropertyName()) . ' = ' . $to;
 				$schema = $relation->getTo()->getTo()->getSchema();
 				$current = $name;
 			}
@@ -186,14 +182,14 @@
 					continue;
 				}
 				foreach ($sourceSchema->getAttributes() as $property) {
-					$columns[] = $this->delimite($name) . '.' . $this->delimite($property->getName()) . ' AS ' . $this->delimite($name . '.' . $property->getName());
+					$columns[] = $this->delimit($name) . '.' . $this->delimit($property->getName()) . ' AS ' . $this->delimit($name . '.' . $property->getName());
 				}
 			}
 			$sql .= implode(', ', $columns);
 			if ($selectQuery->isCount()) {
-				$sql = 'SELECT COUNT(' . $selectQuery->getCount() . '.' . $this->delimite($schema->getPrimary()->getName()) . ') AS ' . $this->delimite($selectQuery->getCount() . '.count');
+				$sql = 'SELECT COUNT(' . $selectQuery->getCount() . '.' . $this->delimit($schema->getPrimary()->getName()) . ') AS ' . $this->delimit($selectQuery->getCount() . '.count');
 			}
-			$sql .= ' FROM ' . $this->delimite($selectQuery->getSchema()->getRealName()) . ' ' . $alias;
+			$sql .= ' FROM ' . $this->delimit($selectQuery->getSchema()->getRealName()) . ' ' . $alias;
 			$sql .= $linkSql;
 			if ($selectQuery->hasWhere()) {
 				$sql .= ' WHERE' . ($query = $this->fragmentWhereGroup($selectQuery->getWhere()))->getQuery();
@@ -204,7 +200,7 @@
 				foreach ($selectQuery->getOrders() as $column => $asc) {
 					$name = $alias;
 					if (($dot = strpos($column, '.')) !== false) {
-						$name = $this->delimite(substr($column, 0, $dot)) . '.' . $this->delimite(substr($column, $dot + 1));
+						$name = $this->delimit(substr($column, 0, $dot)) . '.' . $this->delimit(substr($column, $dot + 1));
 					}
 					$orders[] = $name . ' ' . ($asc ? 'ASC' : 'DESC');
 				}
@@ -221,7 +217,7 @@
 			$link = $unlinkQuery->getLink();
 			$entity = $unlinkQuery->getEntity();
 			$primary = $entity->getPrimary();
-			$sql = 'UPDATE ' . $this->delimite($entity->getSchema()->getRealName()) . ' SET ' . $this->delimite($link->getFrom()->getPropertyName()) . ' = null WHERE ' . $this->delimite($primary->getName()) . ' = :a';
+			$sql = 'UPDATE ' . $this->delimit($entity->getSchema()->getRealName()) . ' SET ' . $this->delimit($link->getFrom()->getPropertyName()) . ' = null WHERE ' . $this->delimit($primary->getName()) . ' = :a';
 			return $this->fetch($sql, ['a' => $primary->get()]);
 		}
 
@@ -229,7 +225,7 @@
 			$link = $linkQuery->getLink();
 			$entity = $linkQuery->getEntity();
 			$primary = $entity->getPrimary();
-			$sql = 'UPDATE ' . $this->delimite($entity->getSchema()->getRealName()) . ' SET ' . $this->delimite($link->getFrom()->getPropertyName()) . ' = :b WHERE ' . $this->delimite($primary->getName()) . ' = :a';
+			$sql = 'UPDATE ' . $this->delimit($entity->getSchema()->getRealName()) . ' SET ' . $this->delimit($link->getFrom()->getPropertyName()) . ' = :b WHERE ' . $this->delimit($primary->getName()) . ' = :a';
 			$entity->set($link->getFrom()->getPropertyName(), $to = $linkQuery->getTo()->getPrimary()->get());
 			return $this->fetch($sql, ['a' => $primary->get(), 'b' => $to]);
 		}
@@ -243,11 +239,11 @@
 			$using->set($relation->getFrom()->getTo()->getPropertyName(), $relationQuery->getEntity()->get($relation->getFrom()->getFrom()->getPropertyName()));
 			$using->set($relation->getTo()->getFrom()->getPropertyName(), $relationQuery->getTarget()->get($relation->getTo()->getTo()->getPropertyName()));
 			foreach ($using->sanitize() as $k => $v) {
-				$columns[] = $this->delimite($k);
+				$columns[] = $this->delimit($k);
 				$params[$paramId = sha1($k)] = $v;
 				$values[] = $paramId;
 			}
-			$sql = 'INSERT INTO ' . $this->delimite($relation->getSchema()->getRealName()) . ' (' . implode(', ', $columns) . ') VALUES (';
+			$sql = 'INSERT INTO ' . $this->delimit($relation->getSchema()->getRealName()) . ' (' . implode(', ', $columns) . ') VALUES (';
 			$sql .= ':' . implode(', :', $values);
 			$sql .= ')';
 			return $this->fetch($sql, $params);
@@ -256,15 +252,15 @@
 		protected function executeDeleteQuery(DeleteQuery $deleteQuery) {
 			$entity = $deleteQuery->getEntity();
 			$primary = $entity->getPrimary();
-			$sql = 'DELETE FROM ' . $this->delimite($entity->getSchema()->getRealName()) . ' WHERE ' . $this->delimite($primary->getName()) . ' = :a';
+			$sql = 'DELETE FROM ' . $this->delimit($entity->getSchema()->getRealName()) . ' WHERE ' . $this->delimit($primary->getName()) . ' = :a';
 			return $this->fetch($sql, ['a' => $primary->get()]);
 		}
 
 		protected function executeDetachQuery(DetachQuery $detachQuery) {
 			$relation = $detachQuery->getRelation();
 			$sql = $this->getDeleteSql($relation->getSchema()->getRealName());
-			$sql .= '(r.' . $this->delimite($relation->getFrom()->getTo()->getPropertyName()) . ' = :a AND ';
-			$sql .= 'r.' . $this->delimite($relation->getTo()->getFrom()->getPropertyName()) . ' = :b) ';
+			$sql .= '(r.' . $this->delimit($relation->getFrom()->getTo()->getPropertyName()) . ' = :a AND ';
+			$sql .= 'r.' . $this->delimit($relation->getTo()->getFrom()->getPropertyName()) . ' = :b) ';
 			/** @var $entity IEntity[] */
 			$entity = [
 				$detachQuery->getEntity(),
@@ -283,7 +279,7 @@
 		protected function executeDisconnectQuery(DisconnectQuery $disconnectQuery) {
 			$relation = $disconnectQuery->getRelation();
 			$sql = $this->getDeleteSql($relation->getSchema()->getRealName());
-			$sql .= '(r.' . $this->delimite($relation->getFrom()->getTo()->getPropertyName()) . ' = :a)';
+			$sql .= '(r.' . $this->delimit($relation->getFrom()->getTo()->getPropertyName()) . ' = :a)';
 			$entity = $disconnectQuery->getEntity();
 			$primary = $entity->getPrimary();
 			$params = [];
@@ -296,16 +292,16 @@
 		}
 
 		protected function getDeleteSql(string $relation): string {
-			return 'DELETE r FROM ' . $this->delimite($relation) . ' AS r WHERE ';
+			return 'DELETE r FROM ' . $this->delimit($relation) . ' AS r WHERE ';
 		}
 
 		protected function fragmentWhere(IWhere $where) {
 			[$expression, $type] = $params = $where->getWhere();
 			switch ($expression) {
 				case '=':
-					$name = $this->delimite($params[2]);
+					$name = $this->delimit($params[2]);
 					if (($dot = strpos($params[2], '.')) !== false) {
-						$name = $this->delimite(substr($params[2], 0, $dot)) . '.' . $this->delimite(substr($params[2], $dot + 1));
+						$name = $this->delimit(substr($params[2], 0, $dot)) . '.' . $this->delimit(substr($params[2], $dot + 1));
 					}
 					switch ($type) {
 						case 'expression':
@@ -315,15 +311,15 @@
 					}
 					throw new StorageException(sprintf('Unknown where operator [%s] target [%s].', get_class($where), $type));
 				case 'null':
-					$name = $this->delimite($params[2]);
+					$name = $this->delimit($params[2]);
 					if (($dot = strpos($params[2], '.')) !== false) {
-						$name = $this->delimite(substr($params[2], 0, $dot)) . '.' . $this->delimite(substr($params[2], $dot + 1));
+						$name = $this->delimit(substr($params[2], 0, $dot)) . '.' . $this->delimit(substr($params[2], $dot + 1));
 					}
 					return new NativeQuery($name . ' IS NULL');
 				case 'not-null':
-					$name = $this->delimite($params[2]);
+					$name = $this->delimit($params[2]);
 					if (($dot = strpos($params[2], '.')) !== false) {
-						$name = $this->delimite(substr($params[2], 0, $dot)) . '.' . $this->delimite(substr($params[2], $dot + 1));
+						$name = $this->delimit(substr($params[2], 0, $dot)) . '.' . $this->delimit(substr($params[2], $dot + 1));
 					}
 					return new NativeQuery($name . ' IS NOT NULL');
 				default:
@@ -341,10 +337,10 @@
 				if ($entity->isDirty() === false || $schema->isRelation()) {
 					continue;
 				}
-				$table = $this->delimite($schema->getRealName());
+				$table = $this->delimit($schema->getRealName());
 				$primary = $entity->getPrimary();
 				$count = ['count' => 0];
-				foreach ($this->fetch('SELECT COUNT(' . ($delimitedPrimary = $this->delimite($primary->getName())) . ') AS count FROM ' . $table . ' WHERE ' . $delimitedPrimary . ' = :a LIMIT 1', ['a' => $primary->get()]) as $count) {
+				foreach ($this->fetch('SELECT COUNT(' . ($delimitedPrimary = $this->delimit($primary->getName())) . ') AS count FROM ' . $table . ' WHERE ' . $delimitedPrimary . ' = :a LIMIT 1', ['a' => $primary->get()]) as $count) {
 					break;
 				}
 				$source = $this->schemaManager->sanitize($schema, $entity->toArray());
@@ -352,7 +348,7 @@
 				$params = [];
 				$set = [];
 				foreach ($source as $k => $v) {
-					$columns[] = $delimited = $this->delimite($k);
+					$columns[] = $delimited = $this->delimit($k);
 					$params[$paramId = sha1($k)] = $v;
 					$set[] = $delimited . ' = :' . $paramId;
 				}
@@ -392,7 +388,7 @@
 			$this->pdo->setAttribute(PDO::ATTR_TIMEOUT, 120);
 		}
 
-		abstract public function delimite(string $delimite): string;
+		abstract public function delimit(string $delimit): string;
 
 		/**
 		 * @param string $type

@@ -3,7 +3,6 @@
 	namespace Edde\Storage;
 
 	use Edde\Config\ISection;
-	use Edde\Query\INative;
 	use Edde\Query\IQuery;
 	use Edde\Service\Config\ConfigService;
 	use Edde\Service\Schema\SchemaManager;
@@ -25,8 +24,8 @@
 		}
 
 		/** @inheritdoc */
-		public function toNative(IQuery $query): INative {
-			return $this->{'native' . ucfirst($query->getType())}($query);
+		public function execute(IQuery $query) {
+			return $this->{'execute' . ucfirst($query->getType())}($query);
 		}
 
 		/** @inheritdoc */

@@ -4,12 +4,18 @@
 	use Edde\Schema\UuidSchema;
 	use Edde\User\UserSchema;
 
+	interface LabelSchema extends UuidSchema {
+		public function name($unique): string;
+	}
+
 	interface ProjectSchema extends UuidSchema {
 		public function name(): string;
 
 		public function owner(): UserSchema;
 
-		public function duration(): IntervalSchema;
+		public function start(): ?DateTime;
+
+		public function end(): ?DateTime;
 	}
 
 	interface IssueSchema extends UuidSchema {
@@ -48,12 +54,6 @@
 		public function access(): AccessSchema;
 
 		public function project(): ProjectSchema;
-	}
-
-	interface IntervalSchema extends UuidSchema {
-		public function start(): ?DateTime;
-
-		public function end(): ?DateTime;
 	}
 
 	interface VoidSchema extends UuidSchema {

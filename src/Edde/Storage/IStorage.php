@@ -3,7 +3,6 @@
 	namespace Edde\Storage;
 
 	use Edde\Collection\ICollection;
-	use Edde\Query\INative;
 	use Edde\Query\IQuery;
 	use Edde\Schema\ISchema;
 	use Edde\Transaction\ITransaction;
@@ -39,13 +38,14 @@
 		public function exec($query, array $params = []);
 
 		/**
-		 * generate native query
+		 * execute the given query; in fact, there could be more native queries than just one
+		 * Query
 		 *
 		 * @param IQuery $query
 		 *
-		 * @return INative
+		 * @return mixed
 		 */
-		public function toNative(IQuery $query): INative;
+		public function execute(IQuery $query);
 
 		/**
 		 * create new schema

@@ -14,9 +14,10 @@
 		 * @throws SchemaException
 		 */
 		public function testPropertyException() {
+			$this->schemaManager->load(ProjectSchema::class);
 			$this->expectException(SchemaException::class);
 			$this->expectExceptionMessage('Requested unknown attribute [ProjectSchema::unknown].');
-			$crate = new Crate($this->schemaManager->load(ProjectSchema::class));
+			$crate = new Crate($this->schemaManager->getSchema(ProjectSchema::class));
 			$crate->set('unknown', false);
 		}
 	}

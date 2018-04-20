@@ -12,6 +12,6 @@
 		public function validate($value, array $options = []): void {
 			/** @var $property IAttribute */
 			$property = $options['property'];
-			$this->schemaManager->validate($this->schemaManager->load($property->getType()), $value);
+			$this->schemaManager->validate($this->schemaManager->getSchema($property->getType()), $value);
 		}
 	}
