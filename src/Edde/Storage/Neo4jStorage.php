@@ -5,7 +5,6 @@
 	use Edde\Config\ConfigException;
 	use Edde\Crate\IProperty;
 	use Edde\Entity\IEntity;
-	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Crypt\RandomService;
 	use Edde\Service\Schema\SchemaManager;
@@ -100,14 +99,14 @@
 		}
 
 		/** @inheritdoc */
-		public function insert(stdClass $source, ISchema $schema): IStorage {
+		public function insert(string $schema, stdClass $source): IStorage {
 			$this->schemaManager->validate($schema, $source);
 			throw new Exception('not implemented yet');
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function update(stdClass $source, ISchema $schema): IStorage {
+		public function update(string $schema, stdClass $source): IStorage {
 			throw new Exception('not implemented yet');
 			return $this;
 		}

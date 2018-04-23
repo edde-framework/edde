@@ -2,11 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
-	use Edde\Collection\ICollection;
 	use Edde\Query\IQuery;
-	use Edde\Schema\ISchema;
 	use Edde\Transaction\ITransaction;
-	use Iterator;
 	use stdClass;
 
 	/**
@@ -61,24 +58,24 @@
 		/**
 		 * optimized insert
 		 *
+		 * @param string   $schema
 		 * @param stdClass $source
-		 * @param string   $name
 		 *
 		 * @return stdClass return data inserted into a storage (including defaults)
 		 *
 		 * @throws StorageException
 		 */
-		public function insert(stdClass $source, string $name): stdClass;
+		public function insert(string $schema, stdClass $source): stdClass;
 
 		/**
 		 * optimized update (by primary key)
 		 *
+		 * @param string   $schema
 		 * @param stdClass $source
-		 * @param ISchema  $schema
 		 *
 		 * @return IStorage
 		 */
-		public function update(stdClass $source, ISchema $schema): IStorage;
+		public function update(string $schema, stdClass $source): IStorage;
 
 		/**
 		 * as the whole framework is using UUID as a common identifier, this method is
@@ -87,18 +84,9 @@
 		 * internally method should use all unique properties to find desired model
 		 *
 		 * @param string $name
-		 * @param string $key
+		 * @param string $id search by this value
 		 *
 		 * @return stdClass
 		 */
-		public function load(string $name, string $key): stdClass;
-
-		/**
-		 * retrieve data specified by the given collection; kind of "SELECT FROM ..."
-		 *
-		 * @param ICollection $collection
-		 *
-		 * @return Iterator
-		 */
-		public function collection(ICollection $collection): Iterator;
+		public function load(string $name, string $id): stdClass;
 	}

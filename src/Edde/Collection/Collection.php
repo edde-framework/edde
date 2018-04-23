@@ -31,11 +31,10 @@
 		/** @inheritdoc */
 		public function insert(string $alias, stdClass $source): IEntity {
 			$this->storage->insert(
-				$source = $this->schemaManager->generate(
-					$schema = $this->getSchema($alias),
-					$source
-				),
-				$schema
+				$schema, $source = $this->schemaManager->generate(
+				$schema = $this->getSchema($alias),
+				$source
+			)
 			);
 			return $this->entityManager->entity($schema, $source);
 		}

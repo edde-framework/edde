@@ -6,6 +6,8 @@
 
 	interface LabelSchema extends UuidSchema {
 		public function name($unique): string;
+
+		public function system($default = false): bool;
 	}
 
 	interface ProjectSchema extends UuidSchema {

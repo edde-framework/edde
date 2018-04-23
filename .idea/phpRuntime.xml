@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PhpRuntimeConfiguration">
+    <extensions>
+      <extension name="ftp" enabled="false" />
+      <extension name="pcntl" enabled="false" />
+      <extension name="shmop" enabled="false" />
+      <extension name="sysvmsg" enabled="false" />
+      <extension name="sysvsem" enabled="false" />
+      <extension name="sysvshm" enabled="false" />
+      <extension name="xmlrpc" enabled="false" />
+    </extensions>
+  </component>
+</project>

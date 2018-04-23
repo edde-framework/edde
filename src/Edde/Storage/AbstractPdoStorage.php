@@ -2,14 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
-	use Edde\Collection\ICollection;
 	use Edde\Config\ConfigException;
 	use Edde\Entity\IEntity;
 	use Edde\Query\INative;
 	use Edde\Query\ISelectQuery;
-	use Edde\Schema\ISchema;
 	use Edde\Service\Schema\SchemaManager;
-	use Iterator;
 	use PDO;
 	use PDOException;
 	use stdClass;
@@ -94,10 +91,10 @@
 		}
 
 		/** @inheritdoc */
-		public function insert(stdClass $source, string $name): stdClass {
+		public function insert(string $schema, stdClass $source): stdClass {
 			try {
 				$this->schemaManager->validate(
-					$schema = $this->schemaManager->getSchema($name),
+					$schema = $this->schemaManager->getSchema($schema),
 					$generated = clone ($source = $this->schemaManager->generate(
 						$schema,
 						$source
@@ -108,7 +105,7 @@
 				$columns = [];
 				$params = [];
 				foreach ($source as $k => $v) {
-					$columns[] = $delimited = $this->delimit($k);
+					$columns[] = $this->delimit($k);
 					$params[$paramId = sha1($k)] = $v;
 				}
 				$sql = 'INSERT INTO ' . $table . ' (' . implode(', ', $columns) . ') VALUES (:' . implode(', :', array_keys($params)) . ')';
@@ -120,16 +117,12 @@
 		}
 
 		/** @inheritdoc */
-		public function update(stdClass $source, ISchema $schema): IStorage {
+		public function update(string $schema, stdClass $source): IStorage {
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function load(string $name, string $key): stdClass {
-		}
-
-		/** @inheritdoc */
-		public function collection(ICollection $collection): Iterator {
+		public function load(string $name, string $id): stdClass {
 		}
 
 		/** @inheritdoc */

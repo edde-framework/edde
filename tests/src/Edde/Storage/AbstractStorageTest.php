@@ -47,7 +47,7 @@
 		public function testInsertNoTable() {
 			self::expectException(UnknownTableException::class);
 			self::expectExceptionMessage('SQLSTATE[42S02]: Base table or view not found: 1146 Table \'edde.VoidSchema\' doesn\'t exist');
-			$this->storage->insert((object)[], VoidSchema::class);
+			$this->storage->insert(VoidSchema::class, (object)[]);
 		}
 
 		/**
@@ -56,18 +56,20 @@
 		public function testValidator() {
 			$this->expectException(SchemaValidationException::class);
 			$this->expectExceptionMessage('Validation of schema [LabelSchema] failed.');
-			$this->storage->insert((object)['name' => true], LabelSchema::class);
+			$this->storage->insert(LabelSchema::class, (object)['name' => true]);
 		}
 
 		/**
 		 * @throws StorageException
 		 */
 		public function testInsert() {
-			$source = $this->storage->insert((object)[
+			$source = $this->storage->insert(LabelSchema::class, (object)[
 				'name' => 'this entity is new',
-			], LabelSchema::class);
+			]);
 			self::assertTrue(property_exists($source, 'uuid'));
+			self::assertTrue(property_exists($source, 'system'));
 			self::assertNotEmpty($source->uuid);
+			self::assertFalse($source->system);
 		}
 
 		/**
@@ -76,9 +78,9 @@
 		public function testInsertException2() {
 			$this->expectException(SchemaValidationException::class);
 			$this->expectExceptionMessage('Validation of schema [SimpleSchema] failed.');
-			$this->storage->insert((object)[
+			$this->storage->insert(SimpleSchema::class, (object)[
 				'name' => null,
-			], SimpleSchema::class);
+			]);
 		}
 
 		/**
@@ -86,28 +88,28 @@
 		 */
 		public function testInsertUnique() {
 			$this->expectException(DuplicateEntryException::class);
-			$this->storage->insert((object)[
+			$this->storage->insert(SimpleSchema::class, (object)[
 				'name' => 'unique',
-			], SimpleSchema::class);
-			$this->storage->insert((object)[
+			]);
+			$this->storage->insert(SimpleSchema::class, (object)[
 				'name' => 'unique',
-			], SimpleSchema::class);
+			]);
 		}
 
 		/**
 		 * @throws StorageException
 		 */
 		public function testSave() {
-			$object = $this->storage->insert((object)[
+			$object = $this->storage->insert(SimpleSchema::class, (object)[
 				'name'     => 'some name for this entity',
 				'optional' => 'this string is optional, but I wanna fill it!',
-			], SimpleSchema::class);
+			]);
 			self::assertTrue(property_exists($object, 'uuid'));
 			self::assertNotEmpty($object->uuid);
-			$object = $this->storage->insert((object)[
+			$object = $this->storage->insert(SimpleSchema::class, (object)[
 				'name'     => 'another name',
 				'optional' => null,
-			], SimpleSchema::class);
+			]);
 			self::assertTrue(property_exists($object, 'uuid'));
 			self::assertNotEmpty($object->uuid);
 		}
