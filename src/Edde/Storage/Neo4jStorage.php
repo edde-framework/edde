@@ -67,7 +67,7 @@
 		}
 
 		/** @inheritdoc */
-		public function create(ISchema $schema): IStorage {
+		public function create(string $name): IStorage {
 			try {
 				if ($schema->isRelation()) {
 					return $this;

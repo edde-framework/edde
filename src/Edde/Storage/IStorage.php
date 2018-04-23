@@ -48,15 +48,15 @@
 		public function execute(IQuery $query);
 
 		/**
-		 * create new schema
+		 * create new schema (not all storages may support this, but exception should not be thrown)
 		 *
-		 * @param ISchema $schema
+		 * @param string $name schema name
 		 *
 		 * @return IStorage
 		 *
 		 * @throws StorageException
 		 */
-		public function create(ISchema $schema): IStorage;
+		public function create(string $name): IStorage;
 
 		/**
 		 * optimized insert
@@ -79,6 +79,19 @@
 		 * @return IStorage
 		 */
 		public function update(stdClass $source, ISchema $schema): IStorage;
+
+		/**
+		 * as the whole framework is using UUID as a common identifier, this method is
+		 * optimized to get a data (one "table" at time) without messing with query builders
+		 *
+		 * internally method should use all unique properties to find desired model
+		 *
+		 * @param string $name
+		 * @param string $key
+		 *
+		 * @return stdClass
+		 */
+		public function load(string $name, string $key): stdClass;
 
 		/**
 		 * retrieve data specified by the given collection; kind of "SELECT FROM ..."

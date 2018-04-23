@@ -29,7 +29,6 @@
 		use CollectionManager;
 
 		/**
-		 * @throws SchemaException
 		 * @throws StorageException
 		 */
 		public function testCreateSchema() {
@@ -37,7 +36,7 @@
 				LabelSchema::class,
 			];
 			foreach ($schemas as $schema) {
-				$this->storage->create($this->schemaManager->getSchema($schema));
+				$this->storage->create($schema);
 			}
 			self::assertTrue(true, 'everything is ok');
 		}

@@ -18,10 +18,12 @@
 
 	abstract class AbstractPdoStorage extends AbstractStorage {
 		use SchemaManager;
+		/** @var array */
 		protected $options;
 		/** @var PDO */
 		protected $pdo;
 
+		/** @inheritdoc */
 		public function __construct(string $config, array $options = []) {
 			parent::__construct($config);
 			$this->options = $options;
@@ -59,19 +61,20 @@
 			}
 		}
 
-		protected function nativeSelect(ISelectQuery $selectQuery): INative {
+		protected function executeSelect(ISelectQuery $selectQuery): INative {
 		}
 
 		/** @inheritdoc */
-		public function create(ISchema $schema): IStorage {
+		public function create(string $name): IStorage {
 			try {
+				$schema = $this->schemaManager->getSchema($name);
 				$sql = 'CREATE TABLE ' . $this->delimit($table = $schema->getRealName()) . " (\n\t";
 				$columns = [];
-				$primaries = [];
+				$primary = null;
 				foreach ($schema->getAttributes() as $property) {
 					$column = ($fragment = $this->delimit($property->getName())) . ' ' . $this->type($property->getType());
 					if ($property->isPrimary()) {
-						$primaries[] = $fragment;
+						$primary = $fragment;
 					} else if ($property->isUnique()) {
 						$column .= ' UNIQUE';
 					}
@@ -80,8 +83,8 @@
 					}
 					$columns[] = $column;
 				}
-				if (empty($primaries) === false) {
-					$columns[] = "CONSTRAINT " . $this->delimit(sha1($table . '.primary.' . $primary = implode(', ', $primaries))) . ' PRIMARY KEY (' . $primary . ')';
+				if ($primary) {
+					$columns[] = "CONSTRAINT " . $this->delimit(sha1($table . '.primary.' . $primary)) . ' PRIMARY KEY (' . $primary . ')';
 				}
 				$this->exec($sql . implode(",\n\t", $columns) . "\n)");
 				return $this;
@@ -119,6 +122,10 @@
 		/** @inheritdoc */
 		public function update(stdClass $source, ISchema $schema): IStorage {
 			return $this;
+		}
+
+		/** @inheritdoc */
+		public function load(string $name, string $key): stdClass {
 		}
 
 		/** @inheritdoc */
