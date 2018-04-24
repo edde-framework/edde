@@ -8,7 +8,7 @@
 	 */
 	interface IGenerator {
 		/**
-		 * generate a value (for example it could be obvious uuid or even last if from database)
+		 * generate a value (for example it could be obvious uuid or even last id from database)
 		 *
 		 * @param array $options
 		 *

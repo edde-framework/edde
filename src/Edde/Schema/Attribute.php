@@ -3,14 +3,11 @@
 	namespace Edde\Schema;
 
 	use Edde\Edde;
-	use Edde\Node\INode;
 	use stdClass;
 
 	class Attribute extends Edde implements IAttribute {
 		/** @var stdClass */
 		protected $source;
-		/** @var INode */
-		protected $link;
 
 		public function __construct(stdClass $source) {
 			$this->source = $source;
