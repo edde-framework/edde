@@ -11,11 +11,8 @@
 	use Edde\Http\EmptyBodyException;
 	use Edde\Http\IResponse;
 	use Edde\Http\Response;
-	use Edde\Schema\SchemaException;
-	use Edde\Schema\SchemaValidationException;
 	use Edde\Service\Http\RequestService;
 	use Edde\Service\Schema\SchemaManager;
-	use Edde\Validator\ValidatorException;
 
 	/**
 	 * Http control provides helpers for a http response style.
@@ -39,21 +36,6 @@
 		 */
 		protected function getContent(string $type = 'array') {
 			return $this->requestService->getContent($type);
-		}
-
-		/**
-		 * validate http input by the given schema; internally current request body
-		 * is used
-		 *
-		 * @param string $schema
-		 *
-		 * @throws EmptyBodyException
-		 * @throws SchemaException
-		 * @throws SchemaValidationException
-		 * @throws ValidatorException
-		 */
-		protected function validate(string $schema) {
-			$this->schemaManager->check($schema, $this->requestService->getContent('array'));
 		}
 
 		/**
@@ -96,14 +78,20 @@
 		 * return no-content response
 		 */
 		public function sendNoContent(): void {
-			$this->response(new Response(new Content('', 'text/plain')), IResponse::R200_NO_CONTENT)->execute();
+			$this->response(
+				new Response(new Content('', 'text/plain')),
+				IResponse::R200_NO_CONTENT
+			)->execute();
 		}
 
 		/**
 		 * return empty created response
 		 */
 		public function sendCreated(): void {
-			$this->response(new Response(new Content('', 'text/plain')), IResponse::R200_OK_CREATED)->execute();
+			$this->response(
+				new Response(new Content('', 'text/plain')),
+				IResponse::R200_OK_CREATED
+			)->execute();
 		}
 
 		/**
@@ -114,7 +102,10 @@
 		 * @return IResponse
 		 */
 		public function generator(callable $generator, string $type = 'text/plain', int $code = IResponse::R200_OK): IResponse {
-			return $this->response(new Response(new GeneratorContent($generator, $type)), $code);
+			return $this->response(
+				new Response(new GeneratorContent($generator, $type)),
+				$code
+			);
 		}
 
 		/**

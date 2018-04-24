@@ -11,6 +11,13 @@
 		public function getName(): string;
 
 		/**
+		 * return a primary attribute of this schema
+		 *
+		 * @return IAttribute
+		 */
+		public function getPrimary(): IAttribute;
+
+		/**
 		 * has this schema an alias?
 		 *
 		 * @return bool
@@ -56,23 +63,6 @@
 		 * @return IAttribute[]
 		 */
 		public function getAttributes(): array;
-
-		/**
-		 * has schema primary attribute?
-		 *
-		 * @return bool
-		 */
-		public function hasPrimary(): bool;
-
-		/**
-		 * return a primary attribute of this schema (should throw an exception
-		 * when there are more primary properties)
-		 *
-		 * @return IAttribute
-		 *
-		 * @throws SchemaException
-		 */
-		public function getPrimary(): IAttribute;
 
 		/**
 		 * return list of unique properties

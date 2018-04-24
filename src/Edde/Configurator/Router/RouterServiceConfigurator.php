@@ -3,6 +3,8 @@
 	namespace Edde\Configurator\Router;
 
 	use Edde\Config\AbstractConfigurator;
+	use Edde\Container\ContainerException;
+	use Edde\Router\IRouterService;
 	use Edde\Router\RequestRouter;
 	use Edde\Service\Container\Container;
 
@@ -10,7 +12,9 @@
 		use Container;
 
 		/**
-		 * @param \Edde\Router\IRouterService $instance
+		 * @param IRouterService $instance
+		 *
+		 * @throws ContainerException
 		 */
 		public function configure($instance) {
 			parent::configure($instance);

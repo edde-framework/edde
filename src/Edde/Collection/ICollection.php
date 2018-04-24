@@ -5,7 +5,6 @@
 	use Edde\Container\ContainerException;
 	use Edde\Entity\EntityException;
 	use Edde\Entity\IEntity;
-	use Edde\Generator\GeneratorException;
 	use Edde\Schema\SchemaException;
 	use Edde\Storage\StorageException;
 	use Edde\Transaction\TransactionException;
@@ -41,7 +40,6 @@
 		 * @throws StorageException
 		 * @throws EntityException
 		 * @throws SchemaException
-		 * @throws GeneratorException
 		 * @throws ContainerException
 		 */
 		public function insert(string $alias, stdClass $source): IEntity;

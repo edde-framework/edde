@@ -35,36 +35,21 @@
 		}
 
 		/** @inheritdoc */
-		public function primary(string $name): IAttributeBuilder {
-			return $this->property($name)->primary();
-		}
-
-		/** @inheritdoc */
-		public function string(string $name): IAttributeBuilder {
-			return $this->property($name)->type('string');
-		}
-
-		/** @inheritdoc */
-		public function text(string $name): IAttributeBuilder {
-			return $this->property($name)->type('text');
-		}
-
-		/** @inheritdoc */
-		public function integer(string $name): IAttributeBuilder {
-			return $this->property($name)->type('int');
-		}
-
-		/** @inheritdoc */
 		public function create(): ISchema {
 			if ($this->schema) {
 				return $this->schema;
 			}
 			$attributes = [];
+			$primary = null;
 			foreach ($this->propertyBuilders as $name => $propertyBuilder) {
-				$attributes[$name] = $propertyBuilder->getAttribute();
+				$attributes[$name] = $attribute = $propertyBuilder->getAttribute();
+				if ($attribute->isPrimary()) {
+					$primary = $attribute;
+				}
 			}
 			return $this->schema = new Schema(
 				$this->source->name,
+				$primary,
 				$attributes,
 				$this->source->meta ?? [],
 				$this->source->alias ?? null

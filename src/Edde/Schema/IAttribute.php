@@ -41,32 +41,6 @@
 		public function isRequired(): bool;
 
 		/**
-		 * @return bool
-		 */
-		public function isLink(): bool;
-
-		/**
-		 * return generator name for this attribute
-		 *
-		 * @return string
-		 */
-		public function getGenerator(): ?string;
-
-		/**
-		 * return filter name for this attribute
-		 *
-		 * @return null|string
-		 */
-		public function getFilter(): ?string;
-
-		/**
-		 * return name of the sanitizer for this property
-		 *
-		 * @return null|string
-		 */
-		public function getSanitizer(): ?string;
-
-		/**
 		 * return name of the validator for this property, if any
 		 *
 		 * @return null|string

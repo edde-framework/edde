@@ -58,5 +58,11 @@
 		public function project(): ProjectSchema;
 	}
 
+	interface DataSchema extends UuidSchema {
+		public function json($type = 'json');
+
+		public function php($type = 'php');
+	}
+
 	interface VoidSchema extends UuidSchema {
 	}

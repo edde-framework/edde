@@ -43,32 +43,8 @@
 		}
 
 		/** @inheritdoc */
-		public function generator(string $generator): IAttributeBuilder {
-			$this->source->generator = $generator;
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function filter(string $filter): IAttributeBuilder {
-			$this->source->filter = $filter;
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function sanitizer(string $sanitizer): IAttributeBuilder {
-			$this->source->sanitizer = $sanitizer;
-			return $this;
-		}
-
-		/** @inheritdoc */
 		public function validator(string $validator): IAttributeBuilder {
 			$this->source->validator = $validator;
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function link(): IAttributeBuilder {
-			$this->source->link = true;
 			return $this;
 		}
 

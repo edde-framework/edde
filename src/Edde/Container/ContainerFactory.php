@@ -13,28 +13,15 @@
 	use Edde\Assets\ITempDirectory;
 	use Edde\Assets\LogDirectory;
 	use Edde\Assets\TempDirectory;
-	use Edde\Bus\EventBus;
-	use Edde\Bus\IEventBus;
-	use Edde\Bus\IMessageBus;
-	use Edde\Bus\IMessageService;
-	use Edde\Bus\IRequestService;
-	use Edde\Bus\MessageBus;
-	use Edde\Bus\MessageService;
-	use Edde\Bus\RequestService;
 	use Edde\Collection\CollectionManager;
 	use Edde\Collection\ICollectionManager;
 	use Edde\Config\ConfigLoader;
 	use Edde\Config\ConfigService;
 	use Edde\Config\IConfigLoader;
 	use Edde\Config\IConfigService;
-	use Edde\Configurator\Bus\MessageBusConfigurator;
 	use Edde\Configurator\Container\ContainerConfigurator;
 	use Edde\Configurator\Converter\ConverterManagerConfigurator;
-	use Edde\Configurator\Filter\FilterManagerConfigurator;
-	use Edde\Configurator\Generator\GeneratorManagerConfigurator;
 	use Edde\Configurator\Router\RouterServiceConfigurator;
-	use Edde\Configurator\Sanitizer\SanitizerManagerConfigurator;
-	use Edde\Configurator\Validator\ValidatorManagerConfigurator;
 	use Edde\Container\Factory\CallbackFactory;
 	use Edde\Container\Factory\ClassFactory;
 	use Edde\Container\Factory\ExceptionFactory;
@@ -52,10 +39,6 @@
 	use Edde\EddeException;
 	use Edde\Entity\EntityManager;
 	use Edde\Entity\IEntityManager;
-	use Edde\Filter\FilterManager;
-	use Edde\Filter\IFilterManager;
-	use Edde\Generator\GeneratorManager;
-	use Edde\Generator\IGeneratorManager;
 	use Edde\Http\HttpUtils;
 	use Edde\Http\IHttpUtils;
 	use Edde\Http\IRequestService as IHttpRequestService;
@@ -66,8 +49,6 @@
 	use Edde\Router\RouterService;
 	use Edde\Runtime\IRuntime;
 	use Edde\Runtime\Runtime;
-	use Edde\Sanitizer\ISanitizerManager;
-	use Edde\Sanitizer\SanitizerManager;
 	use Edde\Schema\ISchemaLoader;
 	use Edde\Schema\ISchemaManager;
 	use Edde\Schema\SchemaManager;
@@ -79,8 +60,6 @@
 	use Edde\Upgrade\UpgradeManager;
 	use Edde\Utils\IStringUtils;
 	use Edde\Utils\StringUtils;
-	use Edde\Validator\IValidatorManager;
-	use Edde\Validator\ValidatorManager;
 	use Edde\Xml\IXmlExportService;
 	use Edde\Xml\IXmlParserService;
 	use Edde\Xml\XmlExportService;
@@ -312,7 +291,6 @@
 				 * user request into protocol element translation
 				 */
 				IRouterService::class      => RouterService::class,
-				IRequestService::class     => RequestService::class,
 				/**
 				 * content conversion implementation (mainly useful for server content
 				 * negotiation)
@@ -327,13 +305,6 @@
 				 */
 				ISchemaManager::class      => SchemaManager::class,
 				ISchemaLoader::class       => SchemaReflectionLoader::class,
-				/**
-				 * generator (related to schema) support
-				 */
-				IGeneratorManager::class   => GeneratorManager::class,
-				IFilterManager::class      => FilterManager::class,
-				ISanitizerManager::class   => SanitizerManager::class,
-				IValidatorManager::class   => ValidatorManager::class,
 				/**
 				 * random & security support
 				 */
@@ -362,13 +333,9 @@
 				IXmlExportService::class   => XmlExportService::class,
 				IXmlParserService::class   => XmlParserService::class,
 				/**
-				 * Message bus support; probably most important stuff of the
-				 * framework and the top killing feature :)
+				 * simple scalar configuration support (should not be used
+				 * for any complex config as it's considered to be anti-pattern)
 				 */
-				IMessageBus::class         => MessageBus::class,
-				IMessageService::class     => MessageService::class,
-				IEventBus::class           => EventBus::class,
-				IRequestService::class     => RequestService::class,
 				IConfigService::class      => ConfigService::class,
 				IConfigLoader::class       => ConfigLoader::class,
 				/**
@@ -386,11 +353,6 @@
 			return [
 				IRouterService::class    => RouterServiceConfigurator::class,
 				IConverterManager::class => ConverterManagerConfigurator::class,
-				IGeneratorManager::class => GeneratorManagerConfigurator::class,
-				IFilterManager::class    => FilterManagerConfigurator::class,
-				ISanitizerManager::class => SanitizerManagerConfigurator::class,
-				IValidatorManager::class => ValidatorManagerConfigurator::class,
-				IMessageBus::class       => MessageBusConfigurator::class,
 			];
 		}
 	}

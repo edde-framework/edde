@@ -7,19 +7,20 @@
 	class Schema extends SimpleObject implements ISchema {
 		/** @var string */
 		protected $name;
+		/** @var IAttribute */
+		protected $primary;
 		/** @var string|null */
 		protected $alias;
 		/** @var IAttribute[] */
 		protected $attributes = [];
 		/** @var array */
 		protected $meta = [];
-		/** @var IAttribute */
-		protected $primary;
 		/** @var IAttribute[] */
 		protected $uniques = null;
 
-		public function __construct(string $name, array $attributes, array $meta = [], string $alias = null) {
+		public function __construct(string $name, IAttribute $primary, array $attributes, array $meta = [], string $alias = null) {
 			$this->name = $name;
+			$this->primary = $primary;
 			$this->attributes = $attributes;
 			$this->meta = $meta;
 			$this->alias = $alias;
@@ -28,6 +29,11 @@
 		/** @inheritdoc */
 		public function getName(): string {
 			return $this->name;
+		}
+
+		/** @inheritdoc */
+		public function getPrimary(): IAttribute {
+			return $this->primary;
 		}
 
 		/** @inheritdoc */
@@ -61,29 +67,6 @@
 		/** @inheritdoc */
 		public function getAttributes(): array {
 			return $this->attributes;
-		}
-
-		/** @inheritdoc */
-		public function hasPrimary(): bool {
-			try {
-				$this->getPrimary();
-				return true;
-			} catch (SchemaException $exception) {
-				return false;
-			}
-		}
-
-		/** @inheritdoc */
-		public function getPrimary(): IAttribute {
-			if ($this->primary) {
-				return $this->primary;
-			}
-			foreach ($this->attributes as $attribute) {
-				if ($attribute->isPrimary()) {
-					return $this->primary = $attribute;
-				}
-			}
-			throw new SchemaException(sprintf('Schema [%s] has no primary attribute.', $this->getName()));
 		}
 
 		/** @inheritdoc */

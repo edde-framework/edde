@@ -39,26 +39,6 @@
 		}
 
 		/** @inheritdoc */
-		public function isLink(): bool {
-			return (bool)($this->source->link ?? false);
-		}
-
-		/** @inheritdoc */
-		public function getGenerator(): ?string {
-			return isset($this->source->generator) ? (string)$this->source->generator : null;
-		}
-
-		/** @inheritdoc */
-		public function getFilter(): ?string {
-			return isset($this->source->filter) ? (string)$this->source->filter : null;
-		}
-
-		/** @inheritdoc */
-		public function getSanitizer(): ?string {
-			return isset($this->source->sanitizer) ? (string)$this->source->sanitizer : null;
-		}
-
-		/** @inheritdoc */
 		public function getValidator(): ?string {
 			return isset($this->source->validator) ? (string)$this->source->validator : null;
 		}

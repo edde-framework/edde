@@ -4,14 +4,12 @@
 
 	use Edde\Edde;
 	use Edde\Http\IResponse;
-	use Edde\Service\Bus\RequestService;
 	use Edde\Service\Log\LogService;
 	use Edde\Service\Router\RouterService;
 	use Throwable;
 	use function http_response_code;
 
 	class Application extends Edde implements IApplication {
-		use RequestService;
 		use RouterService;
 		use LogService;
 

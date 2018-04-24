@@ -31,42 +31,6 @@
 		public function property(string $name): IAttributeBuilder;
 
 		/**
-		 * create a primary property on the schema
-		 *
-		 * @param string $name
-		 *
-		 * @return IAttributeBuilder
-		 */
-		public function primary(string $name): IAttributeBuilder;
-
-		/**
-		 * create a string type property with the given name
-		 *
-		 * @param string $name
-		 *
-		 * @return IAttributeBuilder
-		 */
-		public function string(string $name): IAttributeBuilder;
-
-		/**
-		 * create a text type property (should be unlimited text field)
-		 *
-		 * @param string $name
-		 *
-		 * @return IAttributeBuilder
-		 */
-		public function text(string $name): IAttributeBuilder;
-
-		/**
-		 * create a common integer property
-		 *
-		 * @param string $name
-		 *
-		 * @return IAttributeBuilder
-		 */
-		public function integer(string $name): IAttributeBuilder;
-
-		/**
 		 * build and return a schema
 		 *
 		 * @return ISchema

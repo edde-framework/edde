@@ -1,9 +1,0 @@
-<?php
-	declare(strict_types=1);
-	namespace Edde\Element;
-
-	class Error extends Element implements IError {
-		public function __construct(string $message, string $uuid, int $code = null, string $class = null) {
-			parent::__construct('error', $uuid, ['message' => $message, 'code' => $code, 'class' => $class]);
-		}
-	}

@@ -40,33 +40,6 @@
 		public function required(bool $required = true): IAttributeBuilder;
 
 		/**
-		 * name of value generator for this property (if value is null)
-		 *
-		 * @param string $generator
-		 *
-		 * @return IAttributeBuilder
-		 */
-		public function generator(string $generator): IAttributeBuilder;
-
-		/**
-		 * set the name of filter responsible for value filtering of this property
-		 *
-		 * @param string $filter
-		 *
-		 * @return IAttributeBuilder
-		 */
-		public function filter(string $filter): IAttributeBuilder;
-
-		/**
-		 * set a sanitizer for this property
-		 *
-		 * @param string $sanitizer
-		 *
-		 * @return IAttributeBuilder
-		 */
-		public function sanitizer(string $sanitizer): IAttributeBuilder;
-
-		/**
 		 * set a validator for this property
 		 *
 		 * @param string $validator
@@ -74,13 +47,6 @@
 		 * @return IAttributeBuilder
 		 */
 		public function validator(string $validator): IAttributeBuilder;
-
-		/**
-		 * mark property as a link (just a flag)
-		 *
-		 * @return IAttributeBuilder
-		 */
-		public function link(): IAttributeBuilder;
 
 		/**
 		 * set a default value for this property

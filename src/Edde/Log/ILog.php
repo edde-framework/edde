@@ -2,12 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Log;
 
+	use Edde\Config\IConfigurable;
 	use Throwable;
 
 	/**
 	 * Physical log storage (destination).
 	 */
-	interface ILog {
+	interface ILog extends IConfigurable {
 		/**
 		 * shortcut for record();
 		 *

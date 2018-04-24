@@ -30,13 +30,13 @@
 
 		/** @inheritdoc */
 		public function insert(string $alias, stdClass $source): IEntity {
-			$this->storage->insert(
-				$schema, $source = $this->schemaManager->generate(
-				$schema = $this->getSchema($alias),
-				$source
-			)
-			);
-			return $this->entityManager->entity($schema, $source);
+//			$this->storage->insert(
+//				$schema, $source = $this->schemaManager->generate(
+//				$schema = $this->getSchema($alias),
+//				$source
+//			)
+//			);
+//			return $this->entityManager->entity($schema, $source);
 		}
 
 		/** @inheritdoc */

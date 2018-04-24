@@ -60,30 +60,11 @@
 					if ($propertyName === $primary) {
 						$primary = true;
 						$propertyBuilder->primary();
-						$propertyBuilder->generator($propertyName);
 					}
 					foreach ($reflectionMethod->getParameters() as $parameter) {
 						switch ($parameter->getName()) {
 							case 'unique':
 								$propertyBuilder->unique();
-								break;
-							case 'generator':
-								if (($generator = $parameter->getDefaultValue()) === null || is_string($generator) === false) {
-									throw new SchemaException(sprintf('Parameter [%s::%s($generator)] must have default a string value as a generator name.', $schema, $propertyName));
-								}
-								$propertyBuilder->generator($generator);
-								break;
-							case 'filter':
-								if (($filter = $parameter->getDefaultValue()) === null || is_string($filter) === false) {
-									throw new SchemaException(sprintf('Parameter [%s::%s($filter)] must have a default string value as a filter name.', $schema, $propertyName));
-								}
-								$propertyBuilder->filter($filter);
-								break;
-							case 'sanitizer':
-								if (($sanitizer = $parameter->getDefaultValue()) === null || is_string($sanitizer) === false) {
-									throw new SchemaException(sprintf('Parameter [%s::%s($sanitizer)] must have a default string value as a sanitizer name.', $schema, $propertyName));
-								}
-								$propertyBuilder->sanitizer($sanitizer);
 								break;
 							case 'validator':
 								if (($validator = $parameter->getDefaultValue()) === null || is_string($validator) === false) {
@@ -111,8 +92,6 @@
 						case 'bool':
 						case 'datetime':
 						case DateTime::class:
-							$propertyBuilder->filter($propertyType);
-							$propertyBuilder->sanitizer($propertyType);
 							$propertyBuilder->validator($propertyType);
 							break;
 					}

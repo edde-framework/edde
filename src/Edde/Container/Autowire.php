@@ -43,6 +43,7 @@
 				}
 				return $instance;
 			}
+			/** @noinspection PhpUndefinedClassInspection */
 			return parent::__get($name);
 		}
 
@@ -59,6 +60,7 @@
 				$this->{$name} = $value;
 				return $this;
 			}
+			/** @noinspection PhpUndefinedClassInspection */
 			return parent::__set($name, $value);
 		}
 	}
