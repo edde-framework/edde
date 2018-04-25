@@ -2,17 +2,16 @@
 	declare(strict_types=1);
 	namespace Edde\Upgrade;
 
+	use Edde\Collection\EntityNotFoundException;
 	use Edde\Collection\ICollection;
-	use Edde\Entity\EntityNotFoundException;
 	use Edde\Service\Collection\CollectionManager;
-	use Edde\Service\Entity\EntityManager;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
 	use Edde\Storage\UnknownTableException;
 	use Throwable;
 
 	class UpgradeManager extends AbstractUpgradeManager {
-		use EntityManager;
+		use Edde\Service\Collection\EntityManager;
 		use Storage;
 		use SchemaManager;
 		use CollectionManager;

@@ -3,8 +3,6 @@
 	namespace Edde\Collection;
 
 	use Edde\Container\ContainerException;
-	use Edde\Entity\EntityException;
-	use Edde\Entity\IEntity;
 	use Edde\Schema\SchemaException;
 	use Edde\Storage\StorageException;
 	use Edde\Transaction\TransactionException;

@@ -2,11 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Router;
 
-	use Edde\Element\IRequest;
-	use Edde\Element\Request;
+	use Edde\Application\IRequest;
+	use Edde\Application\Request;
 	use Edde\Runtime\RuntimeException;
 	use Edde\Service\Container\Container;
-	use Edde\Service\Crypt\RandomService;
 	use Edde\Service\Utils\StringUtils;
 	use Throwable;
 
@@ -17,7 +16,7 @@
 	class RequestRouter extends AbstractRouter {
 		use Container;
 		use StringUtils;
-		use RandomService;
+		use Edde\Service\Security\RandomService;
 		const PREG_CONTROLLER = '~^/?(?<class>[.a-z0-9-]+)/(?<method>[a-z0-9_-]+)$~';
 		const PREG_REST = '~^/?rest/(?<class>[.a-z0-9-]+)$~';
 
@@ -71,11 +70,11 @@
 		 * @param string $class
 		 * @param string $method
 		 * @param string $type
-		 * @param array  $parameters
+		 * @param array  $params
 		 *
 		 * @return IRequest
 		 */
-		protected function factory(string $class, string $method, string $type, array $parameters): IRequest {
+		protected function factory(string $class, string $method, string $type, array $params): IRequest {
 			$class = explode('\\', str_replace([
 				' ',
 				'-',
@@ -91,8 +90,7 @@
 			$request = new Request(
 				implode('\\', $class),
 				'action' . $this->stringUtils->toCamelCase($method),
-				$this->randomService->uuid(),
-				$parameters
+				$params
 			);
 			$request->setAttribute('targets', $this->getTargets());
 			return $request;

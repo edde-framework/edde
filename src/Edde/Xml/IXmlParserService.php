@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Xml;
 
-	use Edde\Resource\IResource;
+	use Edde\Io\IResource;
 
 	/**
 	 * Event based xml parser.

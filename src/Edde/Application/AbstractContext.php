@@ -3,10 +3,9 @@
 	namespace Edde\Application;
 
 	use Edde\Edde;
-	use Edde\Service\Crypt\RandomService;
 
 	abstract class AbstractContext extends Edde implements IContext {
-		use RandomService;
+		use Edde\Service\Security\RandomService;
 		protected $uuid;
 
 		/** @inheritdoc */

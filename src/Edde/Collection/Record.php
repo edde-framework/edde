@@ -3,13 +3,10 @@
 	namespace Edde\Collection;
 
 	use Edde\Edde;
-	use Edde\Entity\EntityException;
-	use Edde\Entity\IEntity;
 	use Edde\Schema\ISchema;
-	use Edde\Service\Entity\EntityManager;
 
 	class Record extends Edde implements IRecord {
-		use EntityManager;
+		use Edde\Service\Collection\EntityManager;
 		/** @var ISchema[] */
 		protected $schemas;
 		/** @var array */

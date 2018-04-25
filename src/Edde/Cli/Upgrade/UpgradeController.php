@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Cli\Upgrade;
 
-	use Edde\Control\CliController;
+	use Edde\Controller\CliController;
 	use Edde\Edde;
 	use Edde\Service\Upgrade\UpgradeManager;
 	use Edde\Upgrade\CurrentVersionException;

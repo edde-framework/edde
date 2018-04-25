@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Router;
 
+	use Edde\Application\IRequest;
 	use Edde\Edde;
-	use Edde\Element\IRequest;
 	use Edde\Service\Http\RequestService;
 	use Edde\Service\Runtime\Runtime;
 

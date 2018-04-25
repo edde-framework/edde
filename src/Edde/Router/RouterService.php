@@ -2,9 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Router;
 
+	use Edde\Application\IRequest;
 	use Edde\Edde;
-	use Edde\Element\IRequest;
 	use Edde\Service\Log\LogService;
+	use Exception;
 
 	class RouterService extends Edde implements IRouterService {
 		use LogService;
@@ -43,7 +44,7 @@
 		public function canHandle(): bool {
 			try {
 				return ($this->router = $this->getRouter()) !== null;
-			} catch (\Exception $exception) {
+			} catch (Exception $exception) {
 				$this->logService->exception($exception, [
 					'edde',
 					'router-service',

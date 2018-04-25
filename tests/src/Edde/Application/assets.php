@@ -2,10 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Application;
 
+	use Edde\Content\Content;
 	use Edde\Edde;
-	use Edde\Element\IRequest;
-	use Edde\Element\Request;
-	use Edde\Element\Response;
 	use Edde\Router\AbstractRouter;
 	use function array_merge;
 
@@ -23,7 +21,7 @@
 		}
 
 		public function response() {
-			return new Response('321', ['code' => 123], []);
+			return new Response(new Content(null, 'prd'));
 		}
 	}
 
@@ -41,6 +39,6 @@
 
 		/** @inheritdoc */
 		public function createRequest(): IRequest {
-			return new Request(TestService::class, $this->method, '123');
+			return new Request(TestService::class, $this->method);
 		}
 	}

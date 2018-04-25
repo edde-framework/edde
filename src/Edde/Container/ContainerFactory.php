@@ -2,26 +2,16 @@
 	declare(strict_types=1);
 	namespace Edde\Container;
 
-	use Edde\Access\AccessService;
-	use Edde\Access\IAccessService;
 	use Edde\Application\Application;
 	use Edde\Application\IApplication;
-	use Edde\Assets\AssetsDirectory;
-	use Edde\Assets\IAssetsDirectory;
-	use Edde\Assets\ILogDirectory;
-	use Edde\Assets\IRootDirectory;
-	use Edde\Assets\ITempDirectory;
-	use Edde\Assets\LogDirectory;
-	use Edde\Assets\TempDirectory;
 	use Edde\Collection\CollectionManager;
+	use Edde\Collection\EntityManager;
 	use Edde\Collection\ICollectionManager;
+	use Edde\Collection\IEntityManager;
 	use Edde\Config\ConfigLoader;
 	use Edde\Config\ConfigService;
 	use Edde\Config\IConfigLoader;
 	use Edde\Config\IConfigService;
-	use Edde\Configurator\Container\ContainerConfigurator;
-	use Edde\Configurator\Converter\ConverterManagerConfigurator;
-	use Edde\Configurator\Router\RouterServiceConfigurator;
 	use Edde\Container\Factory\CallbackFactory;
 	use Edde\Container\Factory\ClassFactory;
 	use Edde\Container\Factory\ExceptionFactory;
@@ -30,15 +20,10 @@
 	use Edde\Container\Factory\LinkFactory;
 	use Edde\Container\Factory\ProxyFactory;
 	use Edde\Converter\ConverterManager;
+	use Edde\Converter\ConverterManagerConfigurator;
 	use Edde\Converter\IConverterManager;
-	use Edde\Crypt\IPasswordService;
-	use Edde\Crypt\IRandomService;
-	use Edde\Crypt\PasswordService;
-	use Edde\Crypt\RandomService;
 	use Edde\Edde;
 	use Edde\EddeException;
-	use Edde\Entity\EntityManager;
-	use Edde\Entity\IEntityManager;
 	use Edde\Http\HttpUtils;
 	use Edde\Http\IHttpUtils;
 	use Edde\Http\IRequestService as IHttpRequestService;
@@ -47,12 +32,17 @@
 	use Edde\Log\LogService;
 	use Edde\Router\IRouterService;
 	use Edde\Router\RouterService;
+	use Edde\Router\RouterServiceConfigurator;
 	use Edde\Runtime\IRuntime;
 	use Edde\Runtime\Runtime;
 	use Edde\Schema\ISchemaLoader;
 	use Edde\Schema\ISchemaManager;
 	use Edde\Schema\SchemaManager;
 	use Edde\Schema\SchemaReflectionLoader;
+	use Edde\Security\IPasswordService;
+	use Edde\Security\IRandomService;
+	use Edde\Security\PasswordService;
+	use Edde\Security\RandomService;
 	use Edde\Storage\IStorage;
 	use Edde\Storage\MysqlStorage;
 	use Edde\Transaction\ITransaction;
@@ -257,19 +247,6 @@
 
 		static public function getDefaultFactories(): array {
 			return [
-				IRootDirectory::class      => self::exception(sprintf('Root directory is not specified; please register [%s] interface.', IRootDirectory::class)),
-				IAssetsDirectory::class    => self::proxy(IRootDirectory::class, 'directory', [
-					'.assets',
-					AssetsDirectory::class,
-				]),
-				ITempDirectory::class      => self::proxy(IAssetsDirectory::class, 'directory', [
-					'temp',
-					TempDirectory::class,
-				]),
-				ILogDirectory::class       => self::proxy(IAssetsDirectory::class, 'directory', [
-					'logs',
-					LogDirectory::class,
-				]),
 				/**
 				 * utils
 				 */
@@ -321,12 +298,6 @@
 				 * an application upgrades support
 				 */
 				IUpgradeManager::class     => UpgradeManager::class,
-				/**
-				 * access (permission) subsystem
-				 *
-				 * - access is kind of alias for Authorization
-				 */
-				IAccessService::class      => AccessService::class,
 				/**
 				 * Xml support
 				 */

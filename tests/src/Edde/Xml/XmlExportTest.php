@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Xml;
 
-	use Edde\File\File;
+	use Edde\Io\File;
 	use Edde\Node\Node;
 	use Edde\Node\NodeException;
 	use Edde\Node\TreeIterator;

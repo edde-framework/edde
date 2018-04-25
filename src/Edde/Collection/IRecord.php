@@ -2,9 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Collection;
 
-	use Edde\Entity\EntityException;
-	use Edde\Entity\IEntity;
-
 	/**
 	 * Record is a row got from storage containing multpile entities
 	 * separated by an alias (kind of result set).

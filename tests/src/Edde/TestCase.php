@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde;
 
-	use Edde\Assets\IRootDirectory;
 	use Edde\Config\AbstractConfigurator;
 	use Edde\Config\IConfigLoader;
 	use Edde\Container\Autowire;
@@ -10,7 +9,6 @@
 	use Edde\Container\ContainerFactory;
 	use Edde\Container\Factory\ClassFactory;
 	use Edde\Container\IAutowire;
-	use Edde\Service\Assets\RootDirectory;
 	use Edde\Service\Container\Container;
 	use PHPUnit\Framework\TestCase as PhpUnitTestCase;
 	use ReflectionException;
@@ -27,7 +25,6 @@
 		 */
 		protected function setUp() {
 			ContainerFactory::inject($this, [
-				IRootDirectory::class => ContainerFactory::instance(RootDirectory::class, [__DIR__ . '/../..']),
 				new ClassFactory(),
 			], [
 				IConfigLoader::class => new class() extends AbstractConfigurator {

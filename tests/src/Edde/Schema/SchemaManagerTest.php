@@ -5,7 +5,6 @@
 	use Edde\Container\ContainerException;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\TestCase;
-	use Edde\User\UserSchema;
 	use ProjectMemberSchema;
 	use ProjectSchema;
 	use ReflectionException;
@@ -32,7 +31,6 @@
 			$this->schemaManager->loads([
 				ProjectMemberSchema::class,
 				ProjectSchema::class,
-				UserSchema::class,
 			]);
 		}
 	}

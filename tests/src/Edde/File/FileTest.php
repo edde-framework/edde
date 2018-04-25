@@ -2,13 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\File;
 
+	use Edde\Io\File;
+	use Edde\Io\IoException;
 	use Edde\TestCase;
 
 	class FileTest extends TestCase {
 		/**
-		 * @throws DirectoryException
-		 * @throws FileException
-		 * @throws RealPathException
+		 * @throws IoException
 		 */
 		public function testFile() {
 			$file = File::create(__DIR__ . '/temp/file');

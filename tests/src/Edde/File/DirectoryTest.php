@@ -2,6 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\File;
 
+	use Edde\Io\Directory;
+	use Edde\Io\IoException;
 	use Edde\TestCase;
 
 	class DirectoryTest extends TestCase {
@@ -11,8 +13,7 @@
 		}
 
 		/**
-		 * @throws DirectoryException
-		 * @throws RealPathException
+		 * @throws IoException
 		 */
 		public function testCreate() {
 			$directory = new Directory(__DIR__ . '/some/directory/here');

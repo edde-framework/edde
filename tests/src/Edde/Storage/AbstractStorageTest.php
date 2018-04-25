@@ -4,16 +4,15 @@
 
 	use DateTime;
 	use Edde\Collection\CollectionException;
+	use Edde\Collection\EntityException;
+	use Edde\Collection\EntityNotFoundException;
+	use Edde\Collection\IEntity;
 	use Edde\Container\ContainerException;
-	use Edde\Entity\EntityException;
-	use Edde\Entity\EntityNotFoundException;
-	use Edde\Entity\IEntity;
 	use Edde\Query\SelectQuery;
 	use Edde\Schema\SchemaException;
 	use Edde\Schema\SchemaValidationException;
 	use Edde\Service\Collection\CollectionManager;
 	use Edde\Service\Container\Container;
-	use Edde\Service\Entity\EntityManager;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
 	use Edde\TestCase;
@@ -22,7 +21,7 @@
 	use function property_exists;
 
 	abstract class AbstractStorageTest extends TestCase {
-		use EntityManager;
+		use Edde\Service\Collection\EntityManager;
 		use SchemaManager;
 		use Container;
 		use Storage;
@@ -116,7 +115,7 @@
 
 		/**
 		 * @throws CollectionException
-		 * @throws EntityException
+		 * @throws \Edde\Collection\EntityException
 		 * @throws SchemaException
 		 */
 		public function testCollection() {

@@ -3,7 +3,6 @@
 	namespace Edde\Storage;
 
 	use Edde\Config\ConfigException;
-	use Edde\Service\Crypt\RandomService;
 	use Edde\Service\Schema\SchemaManager;
 	use Exception;
 	use GraphAware\Bolt\Configuration;
@@ -19,7 +18,7 @@
 
 	class Neo4jStorage extends AbstractStorage {
 		use SchemaManager;
-		use RandomService;
+		use Edde\Service\Security\RandomService;
 		/** @var SessionInterface */
 		protected $session;
 		/** @var Transaction */

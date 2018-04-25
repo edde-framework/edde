@@ -2,13 +2,14 @@
 	declare(strict_types=1);
 	namespace Edde\Router;
 
-	use Edde\Element\IRequest;
+	use Edde\Application\IRequest;
+	use Edde\Config\IConfigurable;
 
 	/**
 	 * Router is class responsible for handling current application
 	 * request (cli, http based, whatever).
 	 */
-	interface IRouter {
+	interface IRouter extends IConfigurable {
 		/**
 		 * can this router provide IRequest?
 		 *
