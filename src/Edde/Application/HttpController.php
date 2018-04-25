@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Controller;
+	namespace Edde\Application;
 
 	use Edde\Content\Content;
 	use Edde\Content\GeneratorContent;
@@ -65,8 +65,8 @@
 		/**
 		 * execute response with simple text content
 		 *
-		 * @param string|\Edde\Io\IFile $content
-		 * @param int                   $code
+		 * @param string|IFile $content
+		 * @param int          $code
 		 *
 		 * @return IResponse
 		 */

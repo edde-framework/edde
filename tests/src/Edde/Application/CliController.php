@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Controller;
+	namespace Edde\Application;
 
 	use Edde\Service\Utils\StringUtils;
 	use ReflectionClass;

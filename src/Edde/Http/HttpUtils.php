@@ -145,13 +145,13 @@
 				fclose($handle);
 			}
 			$mime = strtolower(trim(array_shift($type)));
-			$parameterList = [];
+			$params = [];
 			foreach ($type as $part) {
 				$key = trim(substr($part, 0, $index = strpos($part, '=')));
 				$value = trim(trim(substr($part, $index + 1)), '"');
-				$parameterList[$key] = $value;
+				$params[$key] = $value;
 			}
-			return new ContentType($mime, $parameterList);
+			return new ContentType($mime, $params);
 		}
 
 		/** @inheritdoc */
