@@ -5,9 +5,7 @@
 	use Edde\Application\IApplication;
 
 	trait Application {
-		/**
-		 * @var IApplication
-		 */
+		/** @var IApplication */
 		protected $application;
 
 		/**

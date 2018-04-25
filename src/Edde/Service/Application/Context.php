@@ -5,9 +5,7 @@
 	use Edde\Application\IContext;
 
 	trait Context {
-		/**
-		 * @var IContext
-		 */
+		/** @var IContext */
 		protected $context;
 
 		/**

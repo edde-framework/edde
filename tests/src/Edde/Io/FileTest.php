@@ -1,9 +1,7 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\File;
+	namespace Edde\Io;
 
-	use Edde\Io\File;
-	use Edde\Io\IoException;
 	use Edde\TestCase;
 
 	class FileTest extends TestCase {

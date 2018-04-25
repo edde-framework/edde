@@ -4,9 +4,6 @@
 
 	use Edde\Xml\IXmlParserService;
 
-	/**
-	 * Lazy xml parser dependency.
-	 */
 	trait XmlParserService {
 		/** @var IXmlParserService */
 		protected $xmlParserService;
