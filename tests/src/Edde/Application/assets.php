@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Application;
 
-	use Edde\Content\Content;
 	use Edde\Edde;
 	use Edde\Router\AbstractRouter;
 	use function array_merge;
@@ -16,12 +15,12 @@
 		}
 	}
 
-	class TestService extends Edde {
+	class TestService extends Edde implements IController {
 		public function noResponse() {
 		}
 
 		public function response() {
-			return new Response(new Content(null, 'prd'));
+			return 123;
 		}
 	}
 

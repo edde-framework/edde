@@ -16,13 +16,13 @@
 		/**
 		 * try to get content with the acceptable list of targets (like array, object, ...)
 		 *
-		 * @param array ...$targetList
+		 * @param array ...$targets
 		 *
 		 * @return mixed
 		 *
 		 * @throws EmptyBodyException
 		 */
-		public function getContent(...$targetList);
+		public function getContent(...$targets);
 
 		/**
 		 * get current request url

@@ -45,11 +45,11 @@
 		}
 
 		/** @inheritdoc */
-		public function getContent(...$targetList) {
+		public function getContent(...$targets) {
 			if (($content = $this->getRequest()->getContent()) === null) {
 				throw new EmptyBodyException('Current request has no content.');
 			}
-			return $this->converterManager->convert($content, $targetList)->getContent();
+			return $this->converterManager->convert($content, $targets)->getContent();
 		}
 
 		/** @inheritdoc */

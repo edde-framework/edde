@@ -6,6 +6,9 @@
 	use Edde\Application\Request;
 	use Edde\Runtime\RuntimeException;
 	use Edde\Service\Container\Container;
+	use Edde\Service\Http\RequestService;
+	use Edde\Service\Runtime\Runtime;
+	use Edde\Service\Security\RandomService;
 	use Edde\Service\Utils\StringUtils;
 	use Throwable;
 
@@ -14,11 +17,15 @@
 	 * CLI and from HTTP request.
 	 */
 	class RequestRouter extends AbstractRouter {
+		use RequestService;
 		use Container;
+		use Runtime;
 		use StringUtils;
-		use Edde\Service\Security\RandomService;
+		use RandomService;
 		const PREG_CONTROLLER = '~^/?(?<class>[.a-z0-9-]+)/(?<method>[a-z0-9_-]+)$~';
 		const PREG_REST = '~^/?rest/(?<class>[.a-z0-9-]+)$~';
+		/** @var IRequest */
+		protected $request;
 
 		/** @inheritdoc */
 		public function canHandle(): bool {
@@ -31,7 +38,7 @@
 
 		/** @inheritdoc */
 		public function createRequest(): IRequest {
-			return $this->request ?: $this->request = ($this->isHttp() ? $this->createHttpRequest() : $this->createCliRequest());
+			return $this->request ?: $this->request = ($this->runtime->isConsoleMode() ? $this->createCliRequest() : $this->createHttpRequest());
 		}
 
 		/**
@@ -87,12 +94,10 @@
 			 * this is synthetic restriction to keep requests just for controller classes
 			 */
 			$class[$index] = $class[$index = (count($class) - 1)] . 'Controller';
-			$request = new Request(
+			return new Request(
 				implode('\\', $class),
 				'action' . $this->stringUtils->toCamelCase($method),
 				$params
 			);
-			$request->setAttribute('targets', $this->getTargets());
-			return $request;
 		}
 	}

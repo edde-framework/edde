@@ -9,34 +9,42 @@
 	use Edde\Service\Router\RouterService;
 	use Edde\Service\Utils\StringUtils;
 	use Throwable;
+	use function get_class;
 	use function http_response_code;
+	use function is_int;
 
 	class Application extends Edde implements IApplication {
-		use RouterService;
 		use Container;
+		use RouterService;
 		use StringUtils;
 		use LogService;
 
 		/** @inheritdoc */
 		public function run(): int {
 			try {
-				$request = $this->routerService->createRequest();
 				/**
 				 * ugly hack to convert input string to form of foo°foo-service which could be later
 				 * converted to Foo°FooService and ° could be replaced by "\" leading to Foo\FooService
 				 */
-				$service = str_replace(
-					'°',
-					'\\',
-					$this->stringUtils->toCamelCase(
-						str_replace(['.', '-'], ['°', '~'], $request->getService())
-					)
+				$service = $this->container->create(
+					str_replace(
+						'°',
+						'\\',
+						$this->stringUtils->toCamelCase(
+							str_replace(
+								['.', '-'],
+								['°', '~'],
+								($request = $this->routerService->createRequest())->getService()
+							)
+						)
+					),
+					[],
+					__METHOD__
 				);
-				$method = $this->stringUtils->toCamelHump($request->getMethod());
-				if (($response = $this->container->create($service, [], __METHOD__)->{$method}($element)) instanceof IElement) {
-					return $response->setReference($element->getUuid());
+				if ($service instanceof IController === false) {
+					throw new ApplicationException(sprintf('Service [%s] is not instance of [%s].', get_class($service), IController::class));
 				}
-				return 0;
+				return is_int($result = $service->{$this->stringUtils->toCamelHump($request->getMethod())}($request)) ? (int)$result : 0;
 			} catch (Throwable $exception) {
 				$this->logService->exception($exception, [
 					'edde',
@@ -45,7 +53,7 @@
 				http_response_code(
 					($code = $exception->getCode()) === 0 ? IResponse::R500_SERVER_ERROR : $code
 				);
-				return $code === 0 ? -1 : $code;
+				return $code === 0 ? 1 : $code;
 			}
 		}
 	}
