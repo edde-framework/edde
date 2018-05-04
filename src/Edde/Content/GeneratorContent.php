@@ -9,7 +9,6 @@
 
 		/** @inheritdoc */
 		public function getIterator() {
-			$content = $this->content;
-			return $content();
+			return ($this->content)();
 		}
 	}

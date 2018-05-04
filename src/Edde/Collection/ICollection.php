@@ -5,7 +5,6 @@
 	use Edde\Container\ContainerException;
 	use Edde\Schema\SchemaException;
 	use Edde\Storage\StorageException;
-	use Edde\Transaction\TransactionException;
 	use IteratorAggregate;
 	use stdClass;
 	use Traversable;
@@ -22,7 +21,7 @@
 		 *
 		 * @return ICollection
 		 *
-		 * @throws TransactionException
+		 * @throws StorageException
 		 */
 		public function create(): ICollection;
 

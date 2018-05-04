@@ -3,6 +3,7 @@
 	namespace Edde\Http;
 
 	use Edde\Config\IConfigurable;
+	use Edde\Converter\ConverterException;
 	use Edde\Url\IUrl;
 
 	interface IRequestService extends IConfigurable {
@@ -21,6 +22,7 @@
 		 * @return mixed
 		 *
 		 * @throws EmptyBodyException
+		 * @throws ConverterException
 		 */
 		public function getContent(...$targets);
 

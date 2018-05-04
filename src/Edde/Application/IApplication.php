@@ -8,7 +8,7 @@
 	 */
 	interface IApplication {
 		/**
-		 * execute the application and return a status code; application should not
+		 * execute an application and return a status code; application should not
 		 * die in hard way (thus internally Throwable should be caught)
 		 *
 		 * @return int

@@ -4,6 +4,7 @@
 
 	use Edde\Content\Content;
 	use Edde\Content\IContent;
+	use stdClass;
 
 	class JsonDecodeConverter extends AbstractConverter {
 		public function __construct() {
@@ -13,7 +14,7 @@
 			], [
 				'array',
 				'object',
-				\stdClass::class,
+				stdClass::class,
 			]);
 		}
 
@@ -23,9 +24,9 @@
 				case 'array':
 					return new Content(json_decode($content->getContent(), true), 'array');
 				case 'object':
-				case \stdClass::class:
+				case stdClass::class:
 					return new Content(json_decode($content->getContent()), $target);
-				case  null:
+				case null:
 					return $content;
 			}
 			throw new ConverterException(sprintf('Conversion from [%s] to [%s] is not supported by [%s]', $content->getType(), $target, static::class));

@@ -117,7 +117,7 @@
 		 * @return IResponse
 		 */
 		public function response(IResponse $response, int $code = IResponse::R200_OK) {
-			$response->header('X-Powered-By', 'Edde Framework');
+			$response->header('X-Powered-By', 'Edde Framework "' . self::$codename . '" ' . self::$framework);
 			$response->header('Access-Control-Allow-Origin', '*');
 			$response->setCode($code);
 			return $response;

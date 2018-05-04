@@ -3,7 +3,6 @@
 	namespace Edde\Storage;
 
 	use Edde\Query\IQuery;
-	use Edde\Transaction\ITransaction;
 	use stdClass;
 
 	/**

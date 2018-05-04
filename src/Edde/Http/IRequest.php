@@ -9,15 +9,6 @@
 	 */
 	interface IRequest extends IHttp {
 		/**
-		 * set the request method
-		 *
-		 * @param string $method
-		 *
-		 * @return IRequest
-		 */
-		public function setMethod(string $method): IRequest;
-
-		/**
 		 * @return string
 		 */
 		public function getMethod(): string;
@@ -35,19 +26,9 @@
 		public function getRemoteAddress(): ?string;
 
 		/**
-		 * @return null|string
-		 */
-		public function getRemoteHost(): ?string;
-
-		/**
 		 * @return IUrl
 		 */
 		public function getUrl(): IUrl;
-
-		/**
-		 * @return IUrl|null
-		 */
-		public function getReferer(): ?IUrl;
 
 		/**
 		 * @return bool

@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Transaction;
+	namespace Edde\Storage;
 
 	use Edde\Edde;
 	use Throwable;
@@ -22,7 +22,7 @@
 		/** @inheritdoc */
 		public function commit(): ITransaction {
 			if ($this->transaction === 0) {
-				throw new TransactionException('Cannot commit a transaction - there is no one running!');
+				throw new StorageException('Cannot commit a transaction - there is no one running!');
 			} else if ($this->transaction === 1) {
 				$this->onCommit();
 			}
@@ -37,7 +37,7 @@
 		/** @inheritdoc */
 		public function rollback(): ITransaction {
 			if ($this->transaction === 0) {
-				throw new TransactionException('Cannot rollback a transaction - there is no one running!');
+				throw new StorageException('Cannot rollback a transaction - there is no one running!');
 			} else if ($this->transaction === 1) {
 				$this->onRollback();
 			}
@@ -54,7 +54,7 @@
 				return $result;
 			} catch (Throwable $exception) {
 				$this->rollback();
-				throw new TransactionException(sprintf('Transaction failed: %s', $exception->getMessage()), 0, $exception);
+				throw new StorageException(sprintf('Transaction failed: %s', $exception->getMessage()), 0, $exception);
 			}
 		}
 

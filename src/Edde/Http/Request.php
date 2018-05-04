@@ -3,7 +3,6 @@
 	namespace Edde\Http;
 
 	use Edde\Url\IUrl;
-	use Edde\Url\Url;
 
 	/**
 	 * A small boy was awoken in the middle of the night by strange noises from his parents’ room, and he decided to investigate.
@@ -32,26 +31,21 @@
 
 		/**
 		 * @param IUrl     $url
+		 * @param string   $method
+		 * @param string   $remoteAddress
 		 * @param IHeaders $headers
 		 * @param ICookies $cookies
 		 */
-		public function __construct(IUrl $url, IHeaders $headers, ICookies $cookies) {
+		public function __construct(IUrl $url, string $method, ?string $remoteAddress, IHeaders $headers, ICookies $cookies) {
 			parent::__construct($headers, $cookies);
 			$this->url = $url;
-		}
-
-		/** @inheritdoc */
-		public function setMethod(string $method): IRequest {
-			/**
-			 * here is safe to use PHP function because $method is (should be) simple string
-			 */
-			$this->method = strtoupper($method);
-			return $this;
+			$this->method = $method;
+			$this->remoteAddress = $remoteAddress;
 		}
 
 		/** @inheritdoc */
 		public function getMethod(): string {
-			return $this->method ?: $this->method = strtoupper($_SERVER['REQUEST_METHOD']);
+			return $this->method;
 		}
 
 		/** @inheritdoc */
@@ -61,22 +55,12 @@
 
 		/** @inheritdoc */
 		public function getRemoteAddress(): ?string {
-			return $this->remoteAddress ?: $this->remoteAddress = ($_SERVER['REMOTE_ADDR'] ?? null);
-		}
-
-		/** @inheritdoc */
-		public function getRemoteHost(): ?string {
-			return $this->remoteHost === null && $this->remoteAddress !== null ? $this->remoteHost = gethostbyaddr($this->remoteAddress) : null;
+			return $this->remoteAddress;
 		}
 
 		/** @inheritdoc */
 		public function getUrl(): IUrl {
 			return $this->url;
-		}
-
-		/** @inheritdoc */
-		public function getReferer(): ?IUrl {
-			return $this->referer === null && $this->headers->has('referer') ? $this->referer = Url::create($this->headers->get('referer')) : null;
 		}
 
 		/** @inheritdoc */

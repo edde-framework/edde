@@ -24,6 +24,9 @@
 	use Edde\Converter\IConverterManager;
 	use Edde\Edde;
 	use Edde\EddeException;
+	use Edde\Filter\FilterManager;
+	use Edde\Filter\FilterManagerConfigurator;
+	use Edde\Filter\IFilterManager;
 	use Edde\Http\HttpUtils;
 	use Edde\Http\IHttpUtils;
 	use Edde\Http\IRequestService as IHttpRequestService;
@@ -44,8 +47,8 @@
 	use Edde\Security\PasswordService;
 	use Edde\Security\RandomService;
 	use Edde\Storage\IStorage;
+	use Edde\Storage\ITransaction;
 	use Edde\Storage\MysqlStorage;
-	use Edde\Transaction\ITransaction;
 	use Edde\Upgrade\IUpgradeManager;
 	use Edde\Upgrade\UpgradeManager;
 	use Edde\Utils\IStringUtils;
@@ -295,6 +298,10 @@
 				ITransaction::class        => IStorage::class,
 				ICollectionManager::class  => CollectionManager::class,
 				/**
+				 * general filtering (data conversion) support
+				 */
+				IFilterManager::class      => FilterManager::class,
+				/**
 				 * an application upgrades support
 				 */
 				IUpgradeManager::class     => UpgradeManager::class,
@@ -324,6 +331,7 @@
 			return [
 				IRouterService::class    => RouterServiceConfigurator::class,
 				IConverterManager::class => ConverterManagerConfigurator::class,
+				IFilterManager::class    => FilterManagerConfigurator::class,
 			];
 		}
 	}

@@ -6,7 +6,6 @@
 	use Edde\Query\IQuery;
 	use Edde\Service\Config\ConfigService;
 	use Edde\Service\Schema\SchemaManager;
-	use Edde\Transaction\AbstractTransaction;
 
 	abstract class AbstractStorage extends AbstractTransaction implements IStorage {
 		use ConfigService;
