@@ -4,7 +4,6 @@
 
 	use DateTime;
 	use Edde\Collection\CollectionException;
-	use Edde\Collection\EntityException;
 	use Edde\Collection\EntityNotFoundException;
 	use Edde\Collection\IEntity;
 	use Edde\Container\ContainerException;
@@ -21,7 +20,6 @@
 	use function property_exists;
 
 	abstract class AbstractStorageTest extends TestCase {
-		use Edde\Service\Collection\EntityManager;
 		use SchemaManager;
 		use Container;
 		use Storage;

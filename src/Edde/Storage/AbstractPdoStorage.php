@@ -5,6 +5,7 @@
 	use Edde\Config\ConfigException;
 	use Edde\Query\INative;
 	use Edde\Query\ISelectQuery;
+	use Edde\Service\Filter\SchemaFilter;
 	use Edde\Service\Schema\SchemaManager;
 	use PDO;
 	use PDOException;
@@ -14,6 +15,7 @@
 
 	abstract class AbstractPdoStorage extends AbstractStorage {
 		use SchemaManager;
+		use SchemaFilter;
 		/** @var array */
 		protected $options;
 		/** @var PDO */
@@ -92,16 +94,17 @@
 		/** @inheritdoc */
 		public function insert(string $schema, stdClass $source): stdClass {
 			try {
+				$schema = $this->schemaManager->getSchema($schema);
 				$table = $this->delimit($schema->getRealName());
 				$columns = [];
 				$params = [];
-				foreach ($source as $k => $v) {
+				foreach ($source = $this->schemaFilter->input($schema, $source, 'storage') as $k => $v) {
 					$columns[] = $this->delimit($k);
 					$params[$paramId = sha1($k)] = $v;
 				}
 				$sql = 'INSERT INTO ' . $table . ' (' . implode(', ', $columns) . ') VALUES (:' . implode(', :', array_keys($params)) . ')';
 				$this->fetch($sql, $params);
-				return $generated;
+				return $source;
 			} catch (Throwable $exception) {
 				throw $this->exception($exception);
 			}
