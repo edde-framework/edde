@@ -5,14 +5,13 @@
 	use Edde\Content\InputContent;
 	use Edde\Content\PostContent;
 	use Edde\Edde;
-	use Edde\Service\Converter\ConverterManager;
 	use Edde\Service\Http\HttpUtils;
 	use Edde\Url\IUrl;
 	use Edde\Url\Url;
+	use Exception;
 
 	class RequestService extends Edde implements IRequestService {
 		use HttpUtils;
-		use ConverterManager;
 		/** @var IRequest */
 		protected $request;
 
@@ -51,7 +50,7 @@
 			if (($content = $this->getRequest()->getContent()) === null) {
 				throw new EmptyBodyException('Current request has no content.');
 			}
-			return $this->converterManager->convert($content, $targets)->getContent();
+			throw new Exception('Not implemented Yet');
 		}
 
 		/** @inheritdoc */

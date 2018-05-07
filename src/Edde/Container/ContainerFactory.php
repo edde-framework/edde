@@ -19,9 +19,6 @@
 	use Edde\Container\Factory\InterfaceFactory;
 	use Edde\Container\Factory\LinkFactory;
 	use Edde\Container\Factory\ProxyFactory;
-	use Edde\Converter\ConverterManager;
-	use Edde\Converter\ConverterManagerConfigurator;
-	use Edde\Converter\IConverterManager;
 	use Edde\Edde;
 	use Edde\EddeException;
 	use Edde\Filter\FilterManager;
@@ -274,11 +271,6 @@
 				 */
 				IRouterService::class      => RouterService::class,
 				/**
-				 * content conversion implementation (mainly useful for server content
-				 * negotiation)
-				 */
-				IConverterManager::class   => ConverterManager::class,
-				/**
 				 * general service for http request/response
 				 */
 				IHttpRequestService::class => HttpRequestService::class,
@@ -290,35 +282,35 @@
 				/**
 				 * random & security support
 				 */
-				IRandomService::class     => RandomService::class,
-				IPasswordService::class   => PasswordService::class,
+				IRandomService::class      => RandomService::class,
+				IPasswordService::class    => PasswordService::class,
 				/**
 				 * storage support
 				 */
-				IEntityManager::class     => EntityManager::class,
-				IStorage::class           => MysqlStorage::class,
-				ITransaction::class       => IStorage::class,
-				ICollectionManager::class => CollectionManager::class,
+				IEntityManager::class      => EntityManager::class,
+				IStorage::class            => MysqlStorage::class,
+				ITransaction::class        => IStorage::class,
+				ICollectionManager::class  => CollectionManager::class,
 				/**
 				 * general filtering (data conversion) support
 				 */
-				IFilterManager::class     => FilterManager::class,
-				ISchemaFilter::class      => SchemaFilter::class,
+				IFilterManager::class      => FilterManager::class,
+				ISchemaFilter::class       => SchemaFilter::class,
 				/**
 				 * an application upgrades support
 				 */
-				IUpgradeManager::class    => UpgradeManager::class,
+				IUpgradeManager::class     => UpgradeManager::class,
 				/**
 				 * Xml support
 				 */
-				IXmlExportService::class  => XmlExportService::class,
-				IXmlParserService::class  => XmlParserService::class,
+				IXmlExportService::class   => XmlExportService::class,
+				IXmlParserService::class   => XmlParserService::class,
 				/**
 				 * simple scalar configuration support (should not be used
 				 * for any complex config as it's considered to be anti-pattern)
 				 */
-				IConfigService::class     => ConfigService::class,
-				IConfigLoader::class      => ConfigLoader::class,
+				IConfigService::class      => ConfigService::class,
+				IConfigLoader::class       => ConfigLoader::class,
 				/**
 				 * an application handles lifecycle workflow
 				 */
@@ -332,9 +324,8 @@
 
 		static public function getDefaultConfigurators(): array {
 			return [
-				IRouterService::class    => RouterServiceConfigurator::class,
-				IConverterManager::class => ConverterManagerConfigurator::class,
-				IFilterManager::class    => FilterManagerConfigurator::class,
+				IRouterService::class => RouterServiceConfigurator::class,
+				IFilterManager::class => FilterManagerConfigurator::class,
 			];
 		}
 	}
