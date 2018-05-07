@@ -43,6 +43,12 @@
 		}
 
 		/** @inheritdoc */
+		public function filter(string $type, string $filter): IAttributeBuilder {
+			$this->source->filters[$type] = $filter;
+			return $this;
+		}
+
+		/** @inheritdoc */
 		public function validator(string $validator): IAttributeBuilder {
 			$this->source->validator = $validator;
 			return $this;

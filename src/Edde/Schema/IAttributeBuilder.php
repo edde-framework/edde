@@ -40,6 +40,14 @@
 		public function required(bool $required = true): IAttributeBuilder;
 
 		/**
+		 * @param string $type
+		 * @param string $filter
+		 *
+		 * @return IAttributeBuilder
+		 */
+		public function filter(string $type, string $filter): IAttributeBuilder;
+
+		/**
 		 * set a validator for this property
 		 *
 		 * @param string $validator

@@ -51,4 +51,13 @@
 		 * @return mixed
 		 */
 		public function getDefault();
+
+		/**
+		 * get a filter with the given name
+		 *
+		 * @param string $name
+		 *
+		 * @return string|null
+		 */
+		public function getFilter(string $name): ?string;
 	}

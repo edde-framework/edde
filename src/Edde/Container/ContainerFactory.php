@@ -27,6 +27,8 @@
 	use Edde\Filter\FilterManager;
 	use Edde\Filter\FilterManagerConfigurator;
 	use Edde\Filter\IFilterManager;
+	use Edde\Filter\ISchemaFilter;
+	use Edde\Filter\SchemaFilter;
 	use Edde\Http\HttpUtils;
 	use Edde\Http\IHttpUtils;
 	use Edde\Http\IRequestService as IHttpRequestService;
@@ -288,34 +290,35 @@
 				/**
 				 * random & security support
 				 */
-				IRandomService::class      => RandomService::class,
-				IPasswordService::class    => PasswordService::class,
+				IRandomService::class     => RandomService::class,
+				IPasswordService::class   => PasswordService::class,
 				/**
 				 * storage support
 				 */
-				IEntityManager::class      => EntityManager::class,
-				IStorage::class            => MysqlStorage::class,
-				ITransaction::class        => IStorage::class,
-				ICollectionManager::class  => CollectionManager::class,
+				IEntityManager::class     => EntityManager::class,
+				IStorage::class           => MysqlStorage::class,
+				ITransaction::class       => IStorage::class,
+				ICollectionManager::class => CollectionManager::class,
 				/**
 				 * general filtering (data conversion) support
 				 */
-				IFilterManager::class      => FilterManager::class,
+				IFilterManager::class     => FilterManager::class,
+				ISchemaFilter::class      => SchemaFilter::class,
 				/**
 				 * an application upgrades support
 				 */
-				IUpgradeManager::class     => UpgradeManager::class,
+				IUpgradeManager::class    => UpgradeManager::class,
 				/**
 				 * Xml support
 				 */
-				IXmlExportService::class   => XmlExportService::class,
-				IXmlParserService::class   => XmlParserService::class,
+				IXmlExportService::class  => XmlExportService::class,
+				IXmlParserService::class  => XmlParserService::class,
 				/**
 				 * simple scalar configuration support (should not be used
 				 * for any complex config as it's considered to be anti-pattern)
 				 */
-				IConfigService::class      => ConfigService::class,
-				IConfigLoader::class       => ConfigLoader::class,
+				IConfigService::class     => ConfigService::class,
+				IConfigLoader::class      => ConfigLoader::class,
 				/**
 				 * an application handles lifecycle workflow
 				 */

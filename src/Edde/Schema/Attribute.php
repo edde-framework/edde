@@ -47,4 +47,9 @@
 		public function getDefault() {
 			return isset($this->source->default) ? $this->source->default : null;
 		}
+
+		/** @inheritdoc */
+		public function getFilter(string $name): ?string {
+			return isset($this->source->filters[$name]) ? (string)$this->source->filters[$name] : null;
+		}
 	}

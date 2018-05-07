@@ -11,6 +11,8 @@
 	interface ProjectSchema extends UuidSchema {
 		public function name(): string;
 
+		public function created($generator = 'stamp'): DateTime;
+
 		public function start(): ?DateTime;
 
 		public function end(): ?DateTime;

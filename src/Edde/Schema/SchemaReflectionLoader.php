@@ -48,39 +48,52 @@
 				 * go through all methods as they're used as schema definition
 				 */
 				foreach ($reflectionClass->getMethods() as $reflectionMethod) {
-					$propertyBuilder = $schemaBuilder->property($propertyName = $reflectionMethod->getName());
+					$attributeBuilder = $schemaBuilder->property($propertyName = $reflectionMethod->getName());
 					/**
 					 * set default property type to a string
 					 */
-					$propertyBuilder->type($propertyType = 'string');
+					$attributeBuilder->type($propertyType = 'string');
 					if (($type = $reflectionMethod->getReturnType()) !== null) {
-						$propertyBuilder->type($propertyType = $type->getName());
-						$propertyBuilder->required($type->allowsNull() === false);
+						$attributeBuilder->type($propertyType = $type->getName());
+						$attributeBuilder->required($type->allowsNull() === false);
 					}
 					if ($propertyName === $primary) {
 						$primary = true;
-						$propertyBuilder->primary();
+						$attributeBuilder->primary();
+						$attributeBuilder->filter('generator', $propertyName);
 					}
 					foreach ($reflectionMethod->getParameters() as $parameter) {
-						switch ($parameter->getName()) {
+						switch ($parameterName = $parameter->getName()) {
 							case 'unique':
-								$propertyBuilder->unique();
+								$attributeBuilder->unique();
+								break;
+							case 'generator':
+								if (($generator = $parameter->getDefaultValue()) === null || is_string($generator) === false) {
+									throw new SchemaException(sprintf('Parameter [%s::%s($generator)] must have default a string value as a generator name.', $schema, $propertyName));
+								}
+								$attributeBuilder->filter($parameterName, $generator);
+								break;
+							case 'filter':
+								if (($filter = $parameter->getDefaultValue()) === null || is_string($filter) === false) {
+									throw new SchemaException(sprintf('Parameter [%s::%s($filter)] must have a default string value as a filter name.', $schema, $propertyName));
+								}
+								$attributeBuilder->filter($parameterName, $filter);
 								break;
 							case 'validator':
 								if (($validator = $parameter->getDefaultValue()) === null || is_string($validator) === false) {
 									throw new SchemaException(sprintf('Parameter [%s::%s($validator)] must have a default string value as a validator name.', $schema, $propertyName));
 								}
-								$propertyBuilder->validator($validator);
+								$attributeBuilder->validator($validator);
 								break;
 							case 'type':
 								if (($type = $parameter->getDefaultValue()) === null || is_string($type) === false) {
 									throw new SchemaException(sprintf('Parameter [%s::%s($type)] must have a default string value as a type name.', $schema, $propertyName));
 								}
-								$propertyBuilder->type($type);
-								$propertyBuilder->required($parameter->isOptional());
+								$attributeBuilder->type($type);
+								$attributeBuilder->required($parameter->isOptional());
 								break;
 							case 'default':
-								$propertyBuilder->default($parameter->getDefaultValue());
+								$attributeBuilder->default($parameter->getDefaultValue());
 								break;
 							default:
 								throw new SchemaException(sprintf('Unknown schema directive [%s::%s].', $schema, $propertyName));
@@ -92,7 +105,8 @@
 						case 'bool':
 						case 'datetime':
 						case DateTime::class:
-							$propertyBuilder->validator($propertyType);
+							$attributeBuilder->filter('type', $propertyType);
+							$attributeBuilder->validator($propertyType);
 							break;
 					}
 				}
