@@ -1,14 +1,13 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Filter;
+	namespace Edde\Schema;
 
 	use Edde\Edde;
-	use Edde\Schema\ISchema;
 	use Edde\Service\Filter\FilterManager;
 	use stdClass;
 	use function property_exists;
 
-	class SchemaFilter extends Edde implements ISchemaFilter {
+	class SchemaFilterService extends Edde implements ISchemaFilterService {
 		use FilterManager;
 
 		/** @inheritdoc */

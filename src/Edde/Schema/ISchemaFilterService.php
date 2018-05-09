@@ -1,12 +1,12 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Filter;
+	namespace Edde\Schema;
 
 	use Edde\Config\IConfigurable;
-	use Edde\Schema\ISchema;
+	use Edde\Filter\FilterException;
 	use stdClass;
 
-	interface ISchemaFilter extends IConfigurable {
+	interface ISchemaFilterService extends IConfigurable {
 		/**
 		 * filter an object by schema's filters {filter, generator, sanitizer, ...)
 		 *

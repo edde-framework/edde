@@ -24,8 +24,6 @@
 	use Edde\Filter\FilterManager;
 	use Edde\Filter\FilterManagerConfigurator;
 	use Edde\Filter\IFilterManager;
-	use Edde\Filter\ISchemaFilter;
-	use Edde\Filter\SchemaFilter;
 	use Edde\Http\HttpUtils;
 	use Edde\Http\IHttpUtils;
 	use Edde\Http\IRequestService as IHttpRequestService;
@@ -37,10 +35,14 @@
 	use Edde\Router\RouterServiceConfigurator;
 	use Edde\Runtime\IRuntime;
 	use Edde\Runtime\Runtime;
+	use Edde\Schema\ISchemaFilterService;
 	use Edde\Schema\ISchemaLoader;
 	use Edde\Schema\ISchemaManager;
+	use Edde\Schema\ISchemaValidatorService;
+	use Edde\Schema\SchemaFilterService;
 	use Edde\Schema\SchemaManager;
 	use Edde\Schema\SchemaReflectionLoader;
+	use Edde\Schema\SchemaValidatorService;
 	use Edde\Security\IPasswordService;
 	use Edde\Security\IRandomService;
 	use Edde\Security\PasswordService;
@@ -52,6 +54,8 @@
 	use Edde\Upgrade\UpgradeManager;
 	use Edde\Utils\IStringUtils;
 	use Edde\Utils\StringUtils;
+	use Edde\Validator\IValidatorManager;
+	use Edde\Validator\ValidatorManager;
 	use Edde\Xml\IXmlExportService;
 	use Edde\Xml\IXmlParserService;
 	use Edde\Xml\XmlExportService;
@@ -252,73 +256,78 @@
 				/**
 				 * utils
 				 */
-				IHttpUtils::class          => HttpUtils::class,
-				IStringUtils::class        => StringUtils::class,
+				IHttpUtils::class              => HttpUtils::class,
+				IStringUtils::class            => StringUtils::class,
 				/**
 				 * container implementation
 				 */
-				IContainer::class          => Container::class,
+				IContainer::class              => Container::class,
 				/**
 				 * runtime info provider
 				 */
-				IRuntime::class            => Runtime::class,
+				IRuntime::class                => Runtime::class,
 				/**
 				 * log support
 				 */
-				ILogService::class         => LogService::class,
+				ILogService::class             => LogService::class,
 				/**
 				 * user request into protocol element translation
 				 */
-				IRouterService::class      => RouterService::class,
+				IRouterService::class          => RouterService::class,
 				/**
 				 * general service for http request/response
 				 */
-				IHttpRequestService::class => HttpRequestService::class,
+				IHttpRequestService::class     => HttpRequestService::class,
 				/**
 				 * schema support
 				 */
-				ISchemaManager::class      => SchemaManager::class,
-				ISchemaLoader::class       => SchemaReflectionLoader::class,
+				ISchemaManager::class          => SchemaManager::class,
+				ISchemaLoader::class           => SchemaReflectionLoader::class,
+				ISchemaFilterService::class    => SchemaFilterService::class,
+				ISchemaValidatorService::class => SchemaValidatorService::class,
+				/**
+				 * validation support
+				 */
+				IValidatorManager::class       => ValidatorManager::class,
 				/**
 				 * random & security support
 				 */
-				IRandomService::class      => RandomService::class,
-				IPasswordService::class    => PasswordService::class,
+				IRandomService::class          => RandomService::class,
+				IPasswordService::class        => PasswordService::class,
 				/**
 				 * storage support
 				 */
-				IEntityManager::class      => EntityManager::class,
-				IStorage::class            => MysqlStorage::class,
-				ITransaction::class        => IStorage::class,
-				ICollectionManager::class  => CollectionManager::class,
+				IEntityManager::class          => EntityManager::class,
+				IStorage::class                => MysqlStorage::class,
+				ITransaction::class            => IStorage::class,
+				ICollectionManager::class      => CollectionManager::class,
 				/**
 				 * general filtering (data conversion) support
 				 */
-				IFilterManager::class      => FilterManager::class,
-				ISchemaFilter::class       => SchemaFilter::class,
+				IFilterManager::class          => FilterManager::class,
 				/**
 				 * an application upgrades support
 				 */
-				IUpgradeManager::class     => UpgradeManager::class,
+				IUpgradeManager::class         => UpgradeManager::class,
 				/**
 				 * Xml support
 				 */
-				IXmlExportService::class   => XmlExportService::class,
-				IXmlParserService::class   => XmlParserService::class,
+				IXmlExportService::class       => XmlExportService::class,
+				IXmlParserService::class       => XmlParserService::class,
 				/**
 				 * simple scalar configuration support (should not be used
 				 * for any complex config as it's considered to be anti-pattern)
 				 */
-				IConfigService::class      => ConfigService::class,
-				IConfigLoader::class       => ConfigLoader::class,
+				IConfigService::class          => ConfigService::class,
+				IConfigLoader::class           => ConfigLoader::class,
 				/**
 				 * an application handles lifecycle workflow
 				 */
-				IApplication::class        => Application::class,
+				IApplication::class            => Application::class,
 				/**
 				 * magical factory for an application execution
 				 */
-				'application'              => IApplication::class . '::run',
+				'application'                  => IApplication::class . '::run',
 			];
 		}
 

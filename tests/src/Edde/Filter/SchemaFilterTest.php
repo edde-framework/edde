@@ -5,7 +5,6 @@
 	use DateTime;
 	use Edde\Container\ContainerException;
 	use Edde\Schema\SchemaException;
-	use Edde\Service\Filter\SchemaFilter;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\TestCase;
 	use ProjectSchema;
@@ -13,7 +12,7 @@
 	use function is_string;
 
 	class SchemaFilterTest extends TestCase {
-		use SchemaFilter;
+		use \Edde\Service\Schema\SchemaFilterService;
 		use SchemaManager;
 
 		/**

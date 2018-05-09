@@ -5,8 +5,9 @@
 	use Edde\Config\ConfigException;
 	use Edde\Query\INative;
 	use Edde\Query\ISelectQuery;
-	use Edde\Service\Filter\SchemaFilter;
+	use Edde\Service\Schema\SchemaFilterService;
 	use Edde\Service\Schema\SchemaManager;
+	use Edde\Service\Schema\SchemaValidatorService;
 	use PDO;
 	use PDOException;
 	use stdClass;
@@ -15,7 +16,8 @@
 
 	abstract class AbstractPdoStorage extends AbstractStorage {
 		use SchemaManager;
-		use SchemaFilter;
+		use SchemaFilterService;
+		use SchemaValidatorService;
 		/** @var array */
 		protected $options;
 		/** @var PDO */
@@ -98,7 +100,9 @@
 				$table = $this->delimit($schema->getRealName());
 				$columns = [];
 				$params = [];
-				foreach ($source = $this->schemaFilter->input($schema, $source, 'storage') as $k => $v) {
+				$source = $this->schemaFilterService->input($schema, $source, 'storage');
+				$this->schemaValidatorService->validate($schema, $source);
+				foreach ($source as $k => $v) {
 					$columns[] = $this->delimit($k);
 					$params[$paramId = sha1($k)] = $v;
 				}
