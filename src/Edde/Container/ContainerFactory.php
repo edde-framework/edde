@@ -56,6 +56,7 @@
 	use Edde\Utils\StringUtils;
 	use Edde\Validator\IValidatorManager;
 	use Edde\Validator\ValidatorManager;
+	use Edde\Validator\ValidatorManagerConfigurator;
 	use Edde\Xml\IXmlExportService;
 	use Edde\Xml\IXmlParserService;
 	use Edde\Xml\XmlExportService;
@@ -333,8 +334,9 @@
 
 		static public function getDefaultConfigurators(): array {
 			return [
-				IRouterService::class => RouterServiceConfigurator::class,
-				IFilterManager::class => FilterManagerConfigurator::class,
+				IRouterService::class    => RouterServiceConfigurator::class,
+				IFilterManager::class    => FilterManagerConfigurator::class,
+				IValidatorManager::class => ValidatorManagerConfigurator::class,
 			];
 		}
 	}

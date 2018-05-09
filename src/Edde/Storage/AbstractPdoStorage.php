@@ -100,8 +100,11 @@
 				$table = $this->delimit($schema->getRealName());
 				$columns = [];
 				$params = [];
-				$source = $this->schemaFilterService->input($schema, $source, 'storage');
-				$this->schemaValidatorService->validate($schema, $source);
+				$this->schemaValidatorService->validate(
+					$schema,
+					$source = $this->schemaFilterService->input($schema, $source, 'storage'),
+					'storage'
+				);
 				foreach ($source as $k => $v) {
 					$columns[] = $this->delimit($k);
 					$params[$paramId = sha1($k)] = $v;
