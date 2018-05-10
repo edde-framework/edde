@@ -3,12 +3,23 @@
 	namespace Edde\Validator;
 
 	use Edde\Config\AbstractConfigurator;
+	use Edde\Container\ContainerException;
+	use Edde\Service\Container\Container;
 
 	class ValidatorManagerConfigurator extends AbstractConfigurator {
+		use Container;
+
 		/**
 		 * @param $instance IValidatorManager
+		 *
+		 * @throws ContainerException
 		 */
 		public function configure($instance) {
 			parent::configure($instance);
+			$instance->registerValidators([
+				'int'          => $validator = $this->container->create(IntValidator::class, [], __METHOD__),
+				'storage:int'  => $validator,
+				'storage:bool' => $validator,
+			]);
 		}
 	}

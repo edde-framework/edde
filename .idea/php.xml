@@ -379,11 +379,17 @@
   <component name="PhpProjectSharedConfiguration" php_language_level="7.2" />
   <component name="PhpStepFilterConfiguration">
     <skipped_functions>
+      <skipped_function name="Edde\Storage\MysqlStorageTest-&gt;__get" />
+      <skipped_function name="Edde\Storage\MysqlStorage-&gt;__get" />
       <skipped_function name="Edde\Schema\SchemaValidatorService-&gt;__get" />
+      <skipped_function name="Edde\Storage\MysqlStorageTest-&gt;__set" />
     </skipped_functions>
     <option name="skippedFunctions">
       <list>
+        <option value="Edde\Storage\MysqlStorageTest-&gt;__get" />
+        <option value="Edde\Storage\MysqlStorage-&gt;__get" />
         <option value="Edde\Schema\SchemaValidatorService-&gt;__get" />
+        <option value="Edde\Storage\MysqlStorageTest-&gt;__set" />
       </list>
     </option>
   </component>
