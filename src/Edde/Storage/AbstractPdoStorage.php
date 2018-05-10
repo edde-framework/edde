@@ -100,9 +100,26 @@
 				$table = $this->delimit($schema->getRealName());
 				$columns = [];
 				$params = [];
+				/**
+				 * first validation of the pure input to see if values being filtered
+				 * are correct...
+				 */
 				$this->schemaValidatorService->validate(
 					$schema,
-					$source = $this->schemaFilterService->input($schema, $source, 'storage'),
+					$source,
+					'storage:entity'
+				);
+				/**
+				 * actual filter from PHP side to storage side (thus input to storage)
+				 */
+				$source = $this->schemaFilterService->input($schema, $source, 'storage');
+				/**
+				 * and validation of filtered values prepared for storage to see if filter
+				 * provided expected data to be stored
+				 */
+				$this->schemaValidatorService->validate(
+					$schema,
+					$source,
 					'storage'
 				);
 				foreach ($source as $k => $v) {
