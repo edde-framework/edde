@@ -383,6 +383,8 @@
       <skipped_function name="Edde\Storage\MysqlStorage-&gt;__get" />
       <skipped_function name="Edde\Schema\SchemaValidatorService-&gt;__get" />
       <skipped_function name="Edde\Storage\MysqlStorageTest-&gt;__set" />
+      <skipped_function name="Edde\Storage\MysqlStorage-&gt;__set" />
+      <skipped_function name="Edde\Schema\SchemaValidatorService-&gt;__set" />
     </skipped_functions>
     <option name="skippedFunctions">
       <list>
@@ -390,6 +392,8 @@
         <option value="Edde\Storage\MysqlStorage-&gt;__get" />
         <option value="Edde\Schema\SchemaValidatorService-&gt;__get" />
         <option value="Edde\Storage\MysqlStorageTest-&gt;__set" />
+        <option value="Edde\Storage\MysqlStorage-&gt;__set" />
+        <option value="Edde\Schema\SchemaValidatorService-&gt;__set" />
       </list>
     </option>
   </component>

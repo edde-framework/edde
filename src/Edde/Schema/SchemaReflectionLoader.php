@@ -103,6 +103,7 @@
 						case 'float':
 						case 'int':
 						case 'bool':
+						case 'string':
 						case 'datetime':
 						case DateTime::class:
 							$attributeBuilder->filter('type', $propertyType);

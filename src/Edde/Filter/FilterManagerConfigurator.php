@@ -25,6 +25,8 @@
 				'storage:uuid'     => $filter,
 				'datetime'         => $filter = $this->container->create(DateTimeFilter::class, [], __METHOD__),
 				'storage:DateTime' => $filter,
+				'string'           => $filter = $this->container->create(StringFilter::class, [], __METHOD__),
+				'storage:string'   => $filter,
 			]);
 		}
 	}
