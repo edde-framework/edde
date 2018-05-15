@@ -67,7 +67,10 @@
 			self::assertTrue(property_exists($source, 'uuid'));
 			self::assertTrue(property_exists($source, 'system'));
 			self::assertNotEmpty($source->uuid);
-			self::assertFalse($source->system);
+			/**
+			 * because insert returns data actually inserted into database
+			 */
+			self::assertEquals(0, $source->system);
 		}
 
 		/**
@@ -87,7 +90,8 @@
 		public function testInsertUnique() {
 			$this->expectException(DuplicateEntryException::class);
 			$this->storage->insert(LabelSchema::class, (object)[
-				'name' => 'unique',
+				'name'   => 'unique',
+				'system' => true,
 			]);
 			$this->storage->insert(LabelSchema::class, (object)[
 				'name' => 'unique',
@@ -111,26 +115,13 @@
 			}
 			sort($entities);
 			self::assertEquals([
-				[
-					'name'     => 'another name',
-					'optional' => null,
-					'value'    => null,
-					'date'     => null,
-					'question' => null,
+				(object)[
+					'name'   => 'this entity is new',
+					'system' => false,
 				],
-				[
-					'name'     => 'some name for this entity',
-					'optional' => 'this string is optional, but I wanna fill it!',
-					'value'    => null,
-					'date'     => null,
-					'question' => null,
-				],
-				[
-					'name'     => 'this entity is new',
-					'optional' => 'foo-bar',
-					'value'    => null,
-					'date'     => null,
-					'question' => null,
+				(object)[
+					'name'   => 'unique',
+					'system' => true,
 				],
 			], $entities);
 		}

@@ -3,6 +3,7 @@
 	namespace Edde\Storage;
 
 	use Edde\Config\ConfigException;
+	use Edde\Filter\FilterException;
 	use Edde\Query\ISelectQuery;
 	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
@@ -30,20 +31,12 @@
 		}
 
 		/** @inheritdoc */
-		public function fetch($query, array $params = []): Generator {
+		public function fetch($query, array $params = []) {
 			try {
 				$statement = $this->pdo->prepare($query);
 				$statement->setFetchMode(PDO::FETCH_ASSOC);
 				$statement->execute($params);
-				foreach ($statement as $item) {
-					$items = [];
-					foreach ($item as $k => $v) {
-						[$alias, $property] = explode('.', $k, 2);
-						$items[$alias] = $items[$alias] ?? new stdClass();
-						$items[$alias]->$property = $v;
-					}
-					yield new Row($items);
-				}
+				return $statement;
 			} catch (PDOException $exception) {
 				throw $this->exception($exception);
 			}
@@ -66,8 +59,9 @@
 		 *
 		 * @return Generator
 		 *
-		 * @throws StorageException
 		 * @throws SchemaException
+		 * @throws StorageException
+		 * @throws FilterException
 		 */
 		protected function executeSelect(ISelectQuery $selectQuery): Generator {
 			$query = "SELECT\n\t";
@@ -88,7 +82,18 @@
 			}
 			$query .= implode(",\n\t", $select) . "\n";
 			$query .= "FROM\n\t" . implode(",\n\t", $froms) . "\n";
-			yield from $this->fetch($query, $params);
+			foreach ($this->fetch($query, $params) as $row) {
+				$items = [];
+				foreach ($row as $k => $v) {
+					[$alias, $property] = explode('.', $k, 2);
+					$items[$alias] = $items[$alias] ?? new stdClass();
+					$items[$alias]->$property = $v;
+				}
+				foreach ($items as $alias => $item) {
+					$items[$alias] = $this->prepareOutput($schemas[$uses[$alias]], $item);
+				}
+				yield new Row($items);
+			}
 		}
 
 		/** @inheritdoc */

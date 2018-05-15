@@ -12,7 +12,6 @@
 	use Edde\Service\Utils\StringUtils;
 	use Edde\Service\Validator\ValidatorManager;
 	use Edde\Validator\ValidatorException;
-	use Generator;
 	use stdClass;
 
 	abstract class AbstractStorage extends AbstractTransaction implements IStorage {
@@ -34,8 +33,8 @@
 		}
 
 		/** @inheritdoc */
-		public function execute(IQuery $query): Generator {
-			yield from $this->{'execute' . $this->stringUtils->toCamelCase($query->getType())}($query);
+		public function execute(IQuery $query) {
+			return $this->{'execute' . $this->stringUtils->toCamelCase($query->getType())}($query);
 		}
 
 		/**
