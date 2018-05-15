@@ -3,6 +3,7 @@
 	namespace Edde\Validator;
 
 	use Edde\Edde;
+	use stdClass;
 
 	class ValidatorManager extends Edde implements IValidatorManager {
 		/** @var IValidator[] */
@@ -23,10 +24,10 @@
 		}
 
 		/** @inheritdoc */
-		public function validate(string $name, $value): void {
+		public function validate(string $name, $value, ?stdClass $options = null): void {
 			if (isset($this->validators[$name]) === false) {
 				throw new ValidatorException(sprintf('Requested unknown validator [%s].', $name));
 			}
-			$this->validators[$name]->validate($value);
+			$this->validators[$name]->validate($value, $options);
 		}
 	}

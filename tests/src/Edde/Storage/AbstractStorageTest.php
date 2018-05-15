@@ -15,6 +15,7 @@
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
 	use Edde\TestCase;
+	use Edde\Validator\ValidatorException;
 	use LabelSchema;
 	use VoidSchema;
 	use function property_exists;
@@ -51,8 +52,8 @@
 		 * @throws StorageException
 		 */
 		public function testValidator() {
-			$this->expectException(SchemaValidationException::class);
-			$this->expectExceptionMessage('Validation of schema [LabelSchema] failed.');
+			$this->expectException(ValidatorException::class);
+			$this->expectExceptionMessage('Value [LabelSchema::name] is not string.');
 			$this->storage->insert(LabelSchema::class, (object)['name' => true]);
 		}
 
