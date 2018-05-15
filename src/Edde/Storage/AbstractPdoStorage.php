@@ -3,8 +3,11 @@
 	namespace Edde\Storage;
 
 	use Edde\Config\ConfigException;
+	use Edde\Filter\FilterException;
 	use Edde\Query\INative;
 	use Edde\Query\ISelectQuery;
+	use Edde\Schema\ISchema;
+	use Edde\Service\Filter\FilterManager;
 	use Edde\Service\Schema\SchemaFilterService;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Schema\SchemaValidatorService;
@@ -18,6 +21,7 @@
 		use SchemaManager;
 		use SchemaFilterService;
 		use SchemaValidatorService;
+		use FilterManager;
 		/** @var array */
 		protected $options;
 		/** @var PDO */
@@ -91,6 +95,58 @@
 			} catch (Throwable $exception) {
 				throw $this->exception($exception);
 			}
+		}
+
+		/**
+		 * @param ISchema  $schema
+		 * @param stdClass $stdClass
+		 *
+		 * @return stdClass
+		 * @throws FilterException
+		 */
+		protected function prepareInput(ISchema $schema, stdClass $stdClass): stdClass {
+			$stdClass = clone $stdClass;
+			foreach ($schema->getAttributes() as $name => $attribute) {
+				/**
+				 * if there is a generator and property does not exists, generate a new value; property should not exists to
+				 * accept NULL and empty values as generated value
+				 */
+				if (($generator = $attribute->getFilter('generator')) && (property_exists($stdClass, $name) === false)) {
+					$stdClass->$name = $this->filterManager->getFilter('storage:' . $generator)->input(null);
+				}
+				/**
+				 * default value will provide default all the times, thus from this point it's safe to use $stdClass->$name
+				 */
+				if (property_exists($stdClass, $name) === false) {
+					$stdClass->$name = $attribute->getDefault();
+				}
+				if ($filter = $attribute->getFilter('type')) {
+					$stdClass->$name = $this->filterManager->getFilter('storage:' . $filter)->input($stdClass->$name);
+				}
+				/**
+				 * common filter support; filter name is used for both directions
+				 */
+				if ($filter = $attribute->getFilter('filter')) {
+					$stdClass->$name = $this->filterManager->getFilter('storage:' . $filter)->input($stdClass->$name);
+				}
+			}
+			return $stdClass;
+		}
+
+		protected function prepareOutput(ISchema $schema, stdClass $stdClass): stdClass {
+			$stdClass = clone $stdClass;
+			foreach ($schema->getAttributes() as $name => $attribute) {
+				if (property_exists($stdClass, $name) === false) {
+					$stdClass->$name = $attribute->getDefault();
+				}
+				if ($filter = $attribute->getFilter('type')) {
+					$stdClass->$name = $this->filterManager->getFilter('storage:' . $filter)->output($stdClass->$name);
+				}
+				if ($filter = $attribute->getFilter('filter')) {
+					$stdClass->$name = $this->filterManager->getFilter('storage:' . $filter)->output($stdClass->$name);
+				}
+			}
+			return $stdClass;
 		}
 
 		/** @inheritdoc */
