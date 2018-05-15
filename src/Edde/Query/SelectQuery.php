@@ -90,4 +90,9 @@
 			}
 			return $this->uses[$alias];
 		}
+
+		/** @inheritdoc */
+		public function getSchemas(): array {
+			return $this->uses;
+		}
 	}

@@ -89,4 +89,11 @@
 		 * @throws QueryException
 		 */
 		public function getSchema(string $alias): string;
+
+		/**
+		 * return schemas used in this query; value could be duplicated as an array is [alias => value]
+		 *
+		 * @return string[]
+		 */
+		public function getSchemas(): array;
 	}

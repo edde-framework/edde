@@ -41,7 +41,6 @@
 		 * around the code
 		 */
 		public function __clone() {
-			$this->tInit = false;
-			$this->tSetup = false;
+			$this->tState = 0;
 		}
 	}

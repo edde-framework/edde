@@ -2,30 +2,41 @@
 	declare(strict_types=1);
 	namespace Edde\Collection;
 
+	use Edde\Schema\SchemaException;
+	use Edde\Storage\IRow;
+	use Edde\Storage\StorageException;
+	use stdClass;
+
 	/**
 	 * Record is a row got from storage containing multpile entities
 	 * separated by an alias (kind of result set).
 	 */
 	interface IRecord {
 		/**
-		 * get source for the given alias (this will not create an entity)
+		 * return source row (with all aliases queried)
+		 *
+		 * @return IRow
+		 */
+		public function getRow(): IRow;
+
+		/**
+		 * return item from a row
 		 *
 		 * @param string $alias
 		 *
-		 * @return array
+		 * @return stdClass
 		 *
-		 * @throws EntityException
+		 * @throws StorageException
 		 */
-		public function getSource(string $alias): array;
+		public function getItem(string $alias): stdClass;
 
 		/**
-		 * get an entity by the given alias
-		 *
 		 * @param string $alias
 		 *
 		 * @return IEntity
 		 *
-		 * @throws EntityException
+		 * @throws StorageException
+		 * @throws SchemaException
 		 */
 		public function getEntity(string $alias): IEntity;
 	}

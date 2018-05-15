@@ -3,6 +3,7 @@
 	namespace Edde\Storage;
 
 	use Edde\Query\IQuery;
+	use Generator;
 	use stdClass;
 
 	/**
@@ -15,11 +16,11 @@
 		 * @param mixed $query
 		 * @param array $params
 		 *
-		 * @return mixed
+		 * @return Row[]|Generator
 		 *
 		 * @throws StorageException
 		 */
-		public function fetch($query, array $params = []);
+		public function fetch($query, array $params = []): Generator;
 
 		/**
 		 * exec raw query without returning any data (create database, table, ...)
@@ -39,9 +40,9 @@
 		 *
 		 * @param IQuery $query
 		 *
-		 * @return mixed
+		 * @return IRow[]|Generator
 		 */
-		public function execute(IQuery $query);
+		public function execute(IQuery $query): Generator;
 
 		/**
 		 * create new schema (not all storages may support this, but exception should not be thrown)

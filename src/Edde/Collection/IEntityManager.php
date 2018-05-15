@@ -2,8 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Collection;
 
-	use Edde\Container\ContainerException;
-	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
 	use stdClass;
 
@@ -11,13 +9,12 @@
 		/**
 		 * just create an entity with the given schema
 		 *
-		 * @param ISchema       $schema
+		 * @param string        $schema
 		 * @param stdClass|null $default
 		 *
 		 * @return IEntity
 		 *
-		 * @throws ContainerException
 		 * @throws SchemaException
 		 */
-		public function entity(ISchema $schema, stdClass $default = null): IEntity;
+		public function entity(string $schema, stdClass $default = null): IEntity;
 	}

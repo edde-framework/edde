@@ -3,13 +3,17 @@
 	namespace Edde\Storage;
 
 	use Edde\Config\ConfigException;
-	use Edde\Query\INative;
 	use Edde\Query\ISelectQuery;
+	use Edde\Schema\ISchema;
+	use Edde\Schema\SchemaException;
 	use Edde\Service\Schema\SchemaManager;
+	use Generator;
 	use PDO;
 	use PDOException;
 	use stdClass;
 	use Throwable;
+	use function array_unique;
+	use function array_values;
 	use function implode;
 
 	abstract class AbstractPdoStorage extends AbstractStorage {
@@ -25,27 +29,27 @@
 			$this->options = $options;
 		}
 
-		/**
-		 * @inheritdoc
-		 *
-		 * @throws Throwable
-		 */
-		public function fetch($query, array $params = []) {
+		/** @inheritdoc */
+		public function fetch($query, array $params = []): Generator {
 			try {
 				$statement = $this->pdo->prepare($query);
 				$statement->setFetchMode(PDO::FETCH_ASSOC);
 				$statement->execute($params);
-				return $statement;
+				foreach ($statement as $item) {
+					$items = [];
+					foreach ($item as $k => $v) {
+						[$alias, $property] = explode('.', $k, 2);
+						$items[$alias] = $items[$alias] ?? new stdClass();
+						$items[$alias]->$property = $v;
+					}
+					yield new Row($items);
+				}
 			} catch (PDOException $exception) {
 				throw $this->exception($exception);
 			}
 		}
 
-		/**
-		 * @inheritdoc
-		 *
-		 * @throws Throwable
-		 */
+		/** @inheritdoc */
 		public function exec($query, array $params = []) {
 			try {
 				if (empty($params) === false) {
@@ -57,7 +61,34 @@
 			}
 		}
 
-		protected function executeSelect(ISelectQuery $selectQuery): INative {
+		/**
+		 * @param ISelectQuery $selectQuery
+		 *
+		 * @return Generator
+		 *
+		 * @throws StorageException
+		 * @throws SchemaException
+		 */
+		protected function executeSelect(ISelectQuery $selectQuery): Generator {
+			$query = "SELECT\n\t";
+			$params = [];
+			$uses = $selectQuery->getSchemas();
+			/** @var $schemas ISchema[] */
+			$schemas = [];
+			foreach (array_unique(array_values($uses)) as $schema) {
+				$schemas[$schema] = $this->schemaManager->getSchema($schema);
+			}
+			$select = [];
+			$froms = [];
+			foreach ($uses as $alias => $schema) {
+				foreach ($schemas[$schema]->getAttributes() as $name => $attribute) {
+					$select[] = $this->delimit($alias) . '.' . $this->delimit($name) . ' AS ' . $this->delimit($alias . '.' . $name);
+				}
+				$froms[] = $this->delimit($schemas[$schema]->getRealName()) . ' ' . $this->delimit($alias);
+			}
+			$query .= implode(",\n\t", $select) . "\n";
+			$query .= "FROM\n\t" . implode(",\n\t", $froms) . "\n";
+			yield from $this->fetch($query, $params);
 		}
 
 		/** @inheritdoc */

@@ -114,10 +114,10 @@
 
 		/** @inheritdoc */
 		public function toObject(): stdClass {
-			$object = new stdClass();
+			$stdClass = new stdClass();
 			foreach ($this->schema->getAttributes() as $k => $property) {
-				$object->$k = $this->get($k, $property->getDefault());
+				$stdClass->$k = $this->get($k, $property->getDefault());
 			}
-			return $object;
+			return $stdClass;
 		}
 	}

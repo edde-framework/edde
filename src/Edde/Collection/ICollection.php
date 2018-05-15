@@ -2,7 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Collection;
 
-	use Edde\Container\ContainerException;
+	use Edde\Query\ISelectQuery;
+	use Edde\Query\QueryException;
 	use Edde\Schema\SchemaException;
 	use Edde\Storage\StorageException;
 	use IteratorAggregate;
@@ -13,6 +14,13 @@
 	 * A collection is read-only result of some (usually selection) query.
 	 */
 	interface ICollection extends IteratorAggregate {
+		/**
+		 * return current select query of a collection
+		 *
+		 * @return ISelectQuery
+		 */
+		public function getSelectQuery(): ISelectQuery;
+
 		/**
 		 * create all schemas in this collection (simply, CREATE TABLE ...)
 		 *
@@ -33,11 +41,9 @@
 		 *
 		 * @return IEntity return newly create entity
 		 *
-		 * @throws CollectionException
 		 * @throws StorageException
-		 * @throws EntityException
+		 * @throws QueryException
 		 * @throws SchemaException
-		 * @throws ContainerException
 		 */
 		public function insert(string $alias, stdClass $source): IEntity;
 

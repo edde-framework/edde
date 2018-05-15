@@ -96,15 +96,16 @@
 
 		/**
 		 * @throws CollectionException
-		 * @throws \Edde\Collection\EntityException
 		 * @throws SchemaException
+		 * @throws StorageException
 		 */
 		public function testCollection() {
 			$collection = $this->collectionManager->collection();
-			$collection->use(SimpleSchema::class);
+			$selectQuery = $collection->getSelectQuery();
+			$selectQuery->use(LabelSchema::class);
 			$entities = [];
 			foreach ($collection as $record) {
-				$entity = $record->getEntity(SimpleSchema::class)->toObject();
+				$entity = $record->getEntity(LabelSchema::class)->toObject();
 				unset($entity->uuid);
 				$entities[] = $entity;
 			}
