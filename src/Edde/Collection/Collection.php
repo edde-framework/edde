@@ -3,6 +3,7 @@
 	namespace Edde\Collection;
 
 	use Edde\Edde;
+	use Edde\Service\Collection\EntityManager;
 	use Edde\Service\Container\Container;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
@@ -14,7 +15,7 @@
 		use Transaction;
 		use Storage;
 		use SchemaManager;
-		use Edde\Service\Collection\EntityManager;
+		use EntityManager;
 
 		/** @inheritdoc */
 		public function create(): ICollection {

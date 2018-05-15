@@ -95,24 +95,6 @@
 		}
 
 		/**
-		 * @throws StorageException
-		 */
-		public function testSave() {
-			$object = $this->storage->insert(SimpleSchema::class, (object)[
-				'name'     => 'some name for this entity',
-				'optional' => 'this string is optional, but I wanna fill it!',
-			]);
-			self::assertTrue(property_exists($object, 'uuid'));
-			self::assertNotEmpty($object->uuid);
-			$object = $this->storage->insert(SimpleSchema::class, (object)[
-				'name'     => 'another name',
-				'optional' => null,
-			]);
-			self::assertTrue(property_exists($object, 'uuid'));
-			self::assertNotEmpty($object->uuid);
-		}
-
-		/**
 		 * @throws CollectionException
 		 * @throws \Edde\Collection\EntityException
 		 * @throws SchemaException
