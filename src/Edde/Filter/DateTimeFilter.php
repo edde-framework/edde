@@ -4,7 +4,6 @@
 
 	use DateTime;
 	use stdClass;
-	use const DATE_ISO8601;
 
 	class DateTimeFilter extends AbstractFilter {
 		/** @inheritdoc */
@@ -12,7 +11,7 @@
 			if ($value && $value instanceof DateTime === false) {
 				$value = new DateTime($value);
 			}
-			return $value ? $value->format(DATE_ISO8601) : null;
+			return $value ? $value->format('Y-m-d H:i:s.u') : null;
 		}
 
 		/** @inheritdoc */

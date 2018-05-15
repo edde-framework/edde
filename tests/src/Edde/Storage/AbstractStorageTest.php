@@ -10,12 +10,14 @@
 	use Edde\Query\SelectQuery;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Collection\CollectionManager;
+	use Edde\Service\Collection\EntityManager;
 	use Edde\Service\Container\Container;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
 	use Edde\TestCase;
 	use Edde\Validator\ValidatorException;
 	use LabelSchema;
+	use ProjectSchema;
 	use VoidSchema;
 	use function property_exists;
 
@@ -24,6 +26,7 @@
 		use Container;
 		use Storage;
 		use CollectionManager;
+		use EntityManager;
 
 		/**
 		 * @throws StorageException
@@ -31,6 +34,7 @@
 		public function testCreateSchema() {
 			$schemas = [
 				LabelSchema::class,
+				ProjectSchema::class,
 			];
 			foreach ($schemas as $schema) {
 				$this->storage->create($schema);
@@ -127,23 +131,20 @@
 		}
 
 		/**
-		 * @throws SchemaException
-		 * @throws ContainerException
+		 * @throws StorageException
 		 */
 		public function testUpdate() {
-			$entity = $this->entityManager->entity(SimpleSchema::class, [
-				'name'     => 'to-be-updated',
-				'optional' => 'this is a new nice and updated string',
-				'value'    => 3.14,
-				'date'     => new DateTime('24.12.2020 12:24:13'),
-				'question' => false,
-			])->commit();
-			$entity->set('optional', null);
-			$expect = $entity->toArray();
-			$entity->commit();
-			$entity = $this->entityManager->collection('c', SimpleSchema::class)->entity('c', $entity->get('uuid'));
-			self::assertFalse($entity->isDirty(), 'entity should NOT be dirty right after load!');
-			self::assertEquals($expect, $array = $entity->toArray());
+			$source = $this->storage->insert(ProjectSchema::class, (object)[
+				'name'  => 'some-project-here',
+				'start' => new DateTime(),
+				'end'   => new DateTime(),
+			]);
+			$this->storage->update(ProjectSchema::class, (object)[
+				'uuid' => $source->uuid,
+				'end'  => null,
+			]);
+			$actual = $this->storage->load(ProjectSchema::class, $source->uuid);
+			self::assertEquals($source, $actual);
 			self::assertTrue(($type = gettype($array['value'])) === 'double', 'value [' . $type . '] is not float!');
 			self::assertInstanceOf(DateTime::class, $array['date']);
 			self::assertTrue(($type = gettype($array['question'])) === 'boolean', 'question [' . $type . '] is not bool!');
@@ -591,6 +592,7 @@
 			$this->schemaManager->loads([
 				VoidSchema::class,
 				LabelSchema::class,
+				ProjectSchema::class,
 			]);
 		}
 	}

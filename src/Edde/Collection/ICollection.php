@@ -22,6 +22,14 @@
 		public function getSelectQuery(): ISelectQuery;
 
 		/**
+		 * @param string      $schema
+		 * @param string|null $alias
+		 *
+		 * @return ICollection
+		 */
+		public function use(string $schema, string $alias = null): ICollection;
+
+		/**
 		 * create all schemas in this collection (simply, CREATE TABLE ...)
 		 *
 		 * thus should run in exclusive transaction as some database systems has

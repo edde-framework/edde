@@ -5,8 +5,6 @@
 	interface ICollectionManager {
 		/**
 		 * @return ICollection
-		 *
-		 * @throws CollectionException
 		 */
 		public function collection(): ICollection;
 	}

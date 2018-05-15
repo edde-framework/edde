@@ -129,15 +129,21 @@
 		public function insert(string $schema, stdClass $source): stdClass {
 			try {
 				$schema = $this->schemaManager->getSchema($schema);
-				$table = $this->delimit($schema->getRealName());
 				$columns = [];
 				$params = [];
 				foreach ($source = $this->prepareInput($schema, $source) as $k => $v) {
 					$columns[] = $this->delimit($k);
-					$params[$paramId = sha1($k)] = $v;
+					$params[sha1($k)] = $v;
 				}
-				$sql = 'INSERT INTO ' . $table . ' (' . implode(', ', $columns) . ') VALUES (:' . implode(', :', array_keys($params)) . ')';
-				$this->fetch($sql, $params);
+				$this->fetch(
+					"INSERT INTO\n\t" .
+					$this->delimit($schema->getRealName()) .
+					" (\n\t" . implode(",\n\t", $columns) .
+					")\n\tVALUES (\n\t:" .
+					implode(",\n\t:", array_keys($params)) .
+					"\n)\n",
+					$params
+				);
 				return $source;
 			} catch (Throwable $exception) {
 				throw $this->exception($exception);
@@ -145,8 +151,24 @@
 		}
 
 		/** @inheritdoc */
-		public function update(string $schema, stdClass $source): IStorage {
-			return $this;
+		public function update(string $schema, stdClass $source): stdClass {
+			try {
+				$schema = $this->schemaManager->getSchema($schema);
+				$table = $this->delimit($schema->getRealName());
+				$params = [];
+				$columns = [];
+				foreach ($source = $this->prepareInput($schema, $source) as $k => $v) {
+					$params[$paramId = sha1($k)] = $v;
+					$columns[] = ':' . $paramId . '=' . $this->delimit($k);
+				}
+				$query = "UPDATE\n\t" . $table . "\n";
+				$query .= "SET\n\t" . implode(",\n\t", $columns);
+				$query .= "WHERE\nblabla";
+				$this->fetch($query, $params);
+				return $source;
+			} catch (Throwable $exception) {
+				throw $this->exception($exception);
+			}
 		}
 
 		/** @inheritdoc */

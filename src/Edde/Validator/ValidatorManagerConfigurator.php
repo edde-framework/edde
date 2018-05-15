@@ -17,12 +17,16 @@
 		public function configure($instance) {
 			parent::configure($instance);
 			$instance->registerValidators([
-				'int'            => $validator = $this->container->create(IntValidator::class, [], __METHOD__),
-				'storage:int'    => $validator,
-				'string'         => $validator = $this->container->create(StringValidator::class, [], __METHOD__),
-				'storage:string' => $validator,
-				'bool'           => $validator = $this->container->create(BoolValidator::class, [], __METHOD__),
-				'storage:bool'   => $validator,
+				'int'              => $validator = $this->container->create(IntValidator::class, [], __METHOD__),
+				'storage:int'      => $validator,
+				'string'           => $validator = $this->container->create(StringValidator::class, [], __METHOD__),
+				'storage:string'   => $validator,
+				'bool'             => $validator = $this->container->create(BoolValidator::class, [], __METHOD__),
+				'storage:bool'     => $validator,
+				'datetime'         => $validator = $this->container->create(DateTimeValidator::class, [], __METHOD__),
+				'storage:datetime' => $validator,
+				'DateTime'         => $validator,
+				'storage:DateTime' => $validator,
 			]);
 		}
 	}

@@ -72,9 +72,9 @@
 		 * @param string   $schema
 		 * @param stdClass $source
 		 *
-		 * @return IStorage
+		 * @return stdClass
 		 */
-		public function update(string $schema, stdClass $source): IStorage;
+		public function update(string $schema, stdClass $source): stdClass;
 
 		/**
 		 * as the whole framework is using UUID as a common identifier, this method is

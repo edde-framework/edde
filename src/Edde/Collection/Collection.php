@@ -31,6 +31,12 @@
 		}
 
 		/** @inheritdoc */
+		public function use(string $schema, string $alias = null): ICollection {
+			$this->selectQuery->use($schema, $alias);
+			return $this;
+		}
+
+		/** @inheritdoc */
 		public function create(): ICollection {
 			$this->transaction->transaction(function () {
 				foreach ($this->selectQuery->getSchemas() as $schema) {
