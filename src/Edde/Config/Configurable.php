@@ -6,9 +6,7 @@
 		/** @var IConfigurator[] */
 		protected $tConfigurators = [];
 		/** @var bool */
-		protected $tInit = false;
-		/** @var bool */
-		protected $tSetup = false;
+		protected $tState = 0;
 
 		/** @inheritdoc */
 		public function addConfigurator(IConfigurator $configurator) {
@@ -24,20 +22,20 @@
 
 		/** @inheritdoc */
 		public function init() {
-			if ($this->tInit) {
+			if ($this->tState > 0) {
 				return $this;
 			}
-			$this->tInit = true;
+			$this->tState++;
 			$this->handleInit();
 			return $this;
 		}
 
 		/** @inheritdoc */
 		public function setup() {
-			if ($this->tSetup) {
+			if ($this->tState > 1) {
 				return $this;
 			}
-			$this->tSetup = true;
+			$this->tState++;
 			$this->init();
 			foreach ($this->tConfigurators as $configHandler) {
 				$configHandler->configure($this);
@@ -48,7 +46,7 @@
 
 		/** @inheritdoc */
 		public function isSetup(): bool {
-			return $this->tSetup;
+			return $this->tState > 1;
 		}
 
 		protected function handleInit(): void {
