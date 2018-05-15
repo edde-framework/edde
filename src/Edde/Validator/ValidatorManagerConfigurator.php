@@ -19,9 +19,10 @@
 			$instance->registerValidators([
 				'int'            => $validator = $this->container->create(IntValidator::class, [], __METHOD__),
 				'storage:int'    => $validator,
-				'storage:bool'   => $validator,
 				'string'         => $validator = $this->container->create(StringValidator::class, [], __METHOD__),
 				'storage:string' => $validator,
+				'bool'           => $validator = $this->container->create(BoolValidator::class, [], __METHOD__),
+				'storage:bool'   => $validator,
 			]);
 		}
 	}

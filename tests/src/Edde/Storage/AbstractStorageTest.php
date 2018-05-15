@@ -61,9 +61,10 @@
 		 * @throws StorageException
 		 */
 		public function testInsert() {
-			$source = $this->storage->insert(LabelSchema::class, (object)[
+			$source = $this->storage->insert(LabelSchema::class, $object = (object)[
 				'name' => 'this entity is new',
 			]);
+			self::assertNotEquals($object, $source);
 			self::assertTrue(property_exists($source, 'uuid'));
 			self::assertTrue(property_exists($source, 'system'));
 			self::assertNotEmpty($source->uuid);

@@ -96,7 +96,7 @@
 				$table = $this->delimit($schema->getRealName());
 				$columns = [];
 				$params = [];
-				foreach ($this->prepareInput($schema, $source) as $k => $v) {
+				foreach ($source = $this->prepareInput($schema, $source) as $k => $v) {
 					$columns[] = $this->delimit($k);
 					$params[$paramId = sha1($k)] = $v;
 				}

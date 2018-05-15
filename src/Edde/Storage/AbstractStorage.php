@@ -58,7 +58,7 @@
 				/**
 				 * default value will provide default all the times, thus from this point it's safe to use $stdClass->$name
 				 */
-				if (property_exists($stdClass, $name) === false && ($default = $attribute->getDefault())) {
+				if (property_exists($stdClass, $name) === false && ($default = $attribute->getDefault()) !== null) {
 					$stdClass->$name = $default;
 				}
 				if (property_exists($stdClass, $name) === false) {
