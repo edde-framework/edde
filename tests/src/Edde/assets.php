@@ -9,6 +9,8 @@
 	}
 
 	interface ProjectSchema extends UuidSchema {
+		const alias = true;
+
 		public function name(): string;
 
 		public function created($generator = 'stamp'): DateTime;

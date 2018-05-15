@@ -82,10 +82,10 @@
 		 *
 		 * internally method should use all unique properties to find desired model
 		 *
-		 * @param string $name
+		 * @param string $schema
 		 * @param string $id search by this value
 		 *
 		 * @return stdClass
 		 */
-		public function load(string $name, string $id): stdClass;
+		public function load(string $schema, string $id): stdClass;
 	}

@@ -42,19 +42,20 @@
 		 *
 		 * @param ISchema  $schema
 		 * @param stdClass $stdClass
+		 * @param bool     $update
 		 *
 		 * @return stdClass
 		 * @throws FilterException
 		 * @throws ValidatorException
 		 */
-		protected function prepareInput(ISchema $schema, stdClass $stdClass): stdClass {
+		protected function prepareInput(ISchema $schema, stdClass $stdClass, bool $update = false): stdClass {
 			$stdClass = clone $stdClass;
 			foreach ($schema->getAttributes() as $name => $attribute) {
 				/**
 				 * if there is a generator and property does not exists, generate a new value; property should not exists to
 				 * accept NULL and empty values as generated value
 				 */
-				if (($generator = $attribute->getFilter('generator')) && (property_exists($stdClass, $name) === false)) {
+				if (($generator = $attribute->getFilter('generator')) && (property_exists($stdClass, $name) === false) && $update === false) {
 					$stdClass->$name = $this->filterManager->getFilter('storage:' . $generator)->input(null);
 				}
 				/**
@@ -62,6 +63,9 @@
 				 */
 				if (property_exists($stdClass, $name) === false && ($default = $attribute->getDefault()) !== null) {
 					$stdClass->$name = $default;
+				}
+				if (property_exists($stdClass, $name) === false && $update) {
+					continue;
 				}
 				if (property_exists($stdClass, $name) === false || $stdClass->$name === null) {
 					if ($attribute->isRequired()) {

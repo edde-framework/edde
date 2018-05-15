@@ -16,6 +16,7 @@
 	use function array_unique;
 	use function array_values;
 	use function implode;
+	use function sha1;
 
 	abstract class AbstractPdoStorage extends AbstractStorage {
 		use SchemaManager;
@@ -154,17 +155,20 @@
 		public function update(string $schema, stdClass $source): stdClass {
 			try {
 				$schema = $this->schemaManager->getSchema($schema);
+				$primary = $schema->getPrimary();
 				$table = $this->delimit($schema->getRealName());
-				$params = [];
+				$params = [
+					'primary' => $source->{$primary->getName()},
+				];
 				$columns = [];
-				foreach ($source = $this->prepareInput($schema, $source) as $k => $v) {
+				foreach ($source = $this->prepareInput($schema, $source, true) as $k => $v) {
 					$params[$paramId = sha1($k)] = $v;
-					$columns[] = ':' . $paramId . '=' . $this->delimit($k);
+					$columns[] = $this->delimit($k) . ' = :' . $paramId;
 				}
-				$query = "UPDATE\n\t" . $table . "\n";
-				$query .= "SET\n\t" . implode(",\n\t", $columns);
-				$query .= "WHERE\nblabla";
-				$this->fetch($query, $params);
+				$this->fetch(
+					"UPDATE\n\t" . $table . "\nSET\n\t" . implode(",\n\t", $columns) . "\nWHERE\n\t" . $this->delimit($primary->getName()) . ' = :primary',
+					$params
+				);
 				return $source;
 			} catch (Throwable $exception) {
 				throw $this->exception($exception);
@@ -172,7 +176,16 @@
 		}
 
 		/** @inheritdoc */
-		public function load(string $name, string $id): stdClass {
+		public function load(string $schema, string $id): stdClass {
+			try {
+				$schema = $this->schemaManager->getSchema($schema);
+				$query = "SELECT * FROM " . $this->delimit($schema->getRealName()) . " WHERE " . $this->delimit($schema->getPrimary()->getName()) . ' = :primary';
+				foreach ($this->fetch($query, ['primary' => $id]) as $item) {
+					return $this->prepareOutput($schema, (object)$item);
+				}
+			} catch (Throwable $exception) {
+				throw $this->exception($exception);
+			}
 		}
 
 		/** @inheritdoc */
