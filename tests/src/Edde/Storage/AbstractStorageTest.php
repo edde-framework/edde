@@ -9,7 +9,6 @@
 	use Edde\Container\ContainerException;
 	use Edde\Query\SelectQuery;
 	use Edde\Schema\SchemaException;
-	use Edde\Schema\SchemaValidationException;
 	use Edde\Service\Collection\CollectionManager;
 	use Edde\Service\Container\Container;
 	use Edde\Service\Schema\SchemaManager;
@@ -75,9 +74,9 @@
 		 * @throws StorageException
 		 */
 		public function testInsertException2() {
-			$this->expectException(SchemaValidationException::class);
-			$this->expectExceptionMessage('Validation of schema [SimpleSchema] failed.');
-			$this->storage->insert(SimpleSchema::class, (object)[
+			$this->expectException(ValidatorException::class);
+			$this->expectExceptionMessage('Required value [LabelSchema::name] is not set or null.');
+			$this->storage->insert(LabelSchema::class, (object)[
 				'name' => null,
 			]);
 		}
@@ -87,10 +86,10 @@
 		 */
 		public function testInsertUnique() {
 			$this->expectException(DuplicateEntryException::class);
-			$this->storage->insert(SimpleSchema::class, (object)[
+			$this->storage->insert(LabelSchema::class, (object)[
 				'name' => 'unique',
 			]);
-			$this->storage->insert(SimpleSchema::class, (object)[
+			$this->storage->insert(LabelSchema::class, (object)[
 				'name' => 'unique',
 			]);
 		}

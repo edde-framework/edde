@@ -61,7 +61,10 @@
 				if (property_exists($stdClass, $name) === false && ($default = $attribute->getDefault()) !== null) {
 					$stdClass->$name = $default;
 				}
-				if (property_exists($stdClass, $name) === false) {
+				if (property_exists($stdClass, $name) === false || $stdClass->$name === null) {
+					if ($attribute->isRequired()) {
+						throw new ValidatorException(sprintf('Required value [%s::%s] is not set or null.', $schema->getName(), $name));
+					}
 					continue;
 				}
 				if ($validator = $attribute->getValidator()) {
