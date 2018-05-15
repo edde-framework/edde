@@ -61,6 +61,9 @@
 				if (property_exists($stdClass, $name) === false && ($default = $attribute->getDefault())) {
 					$stdClass->$name = $default;
 				}
+				if (property_exists($stdClass, $name) === false) {
+					continue;
+				}
 				if ($validator = $attribute->getValidator()) {
 					$this->validatorManager->validate('storage:' . $validator, $stdClass->$name, (object)['name' => $schema->getName() . '::' . $name]);
 				}
