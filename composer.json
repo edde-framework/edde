@@ -27,7 +27,7 @@
 	"require": {
 		"php": ">=7.1",
 		"roave/security-advisories": "dev-master",
-		"graphaware/neo4j-bolt": "dev-master",
+		"graphaware/neo4j-bolt": "1.11.0",
 		"phpunit/phpunit": "^6.5.0"
 	},
 	"archive": {
