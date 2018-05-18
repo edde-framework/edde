@@ -120,6 +120,7 @@
 		public function response(IResponse $response, int $code = IResponse::R200_OK): IResponse {
 			$response->header('X-Powered-By', 'Edde Framework');
 			$response->header('Access-Control-Allow-Origin', '*');
+			$response->header('Access-Control-Expose-Headers', '*');
 			$response->setCode($code);
 			return $response;
 		}
