@@ -3,6 +3,8 @@
 	namespace Edde\Storage;
 
 	use DateTime;
+	use Edde\Collection\EntityQueue;
+	use Edde\Container\ContainerException;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Collection\CollectionManager;
 	use Edde\Service\Collection\EntityManager;
@@ -13,6 +15,8 @@
 	use Edde\Validator\ValidatorException;
 	use LabelSchema;
 	use ProjectSchema;
+	use ReflectionException;
+	use UserSchema;
 	use VoidSchema;
 	use function property_exists;
 
@@ -29,6 +33,7 @@
 		public function testCreateSchema() {
 			$schemas = [
 				LabelSchema::class,
+				UserSchema::class,
 				ProjectSchema::class,
 			];
 			foreach ($schemas as $schema) {
@@ -141,12 +146,32 @@
 			self::assertInstanceOf(DateTime::class, $actual->start);
 		}
 
+		/**
+		 * @throws SchemaException
+		 * @throws StorageException
+		 */
+		public function testEntityQueue() {
+			$entityQueue = new EntityQueue();
+			$entityQueue->save($entity = $this->entityManager->entity(UserSchema::class, (object)[
+				'login'    => 'root',
+				'password' => 'toor',
+			]));
+			$entityQueue->commit($this->storage);
+			$entity->get('uuid'); // not null
+		}
+
+		/**
+		 * @throws SchemaException
+		 * @throws ContainerException
+		 * @throws ReflectionException
+		 */
 		protected function setUp() {
 			parent::setUp();
 			$this->schemaManager->loads([
 				VoidSchema::class,
 				LabelSchema::class,
 				ProjectSchema::class,
+				UserSchema::class,
 			]);
 		}
 	}

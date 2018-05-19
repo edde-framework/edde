@@ -17,6 +17,7 @@
 	use function array_unique;
 	use function array_values;
 	use function implode;
+	use function property_exists;
 	use function sha1;
 
 	abstract class AbstractPdoStorage extends AbstractStorage {
@@ -137,7 +138,7 @@
 					"\n)\n",
 					$params
 				);
-				return $source;
+				return $this->prepareOutput($schema, $source);
 			} catch (Throwable $exception) {
 				throw $this->exception($exception);
 			}
@@ -161,7 +162,28 @@
 					"UPDATE\n\t" . $table . "\nSET\n\t" . implode(",\n\t", $columns) . "\nWHERE\n\t" . $this->delimit($primary->getName()) . ' = :primary',
 					$params
 				);
-				return $source;
+				return $this->prepareOutput($schema, $source);
+			} catch (Throwable $exception) {
+				throw $this->exception($exception);
+			}
+		}
+
+		/** @inheritdoc */
+		public function save(string $schema, stdClass $source): stdClass {
+			try {
+				$schema = $this->schemaManager->getSchema($schema);
+				$primary = $schema->getPrimary()->getName();
+				if (property_exists($source, $primary) === false || $source->$primary === null) {
+					return $this->insert($schema->getName(), $source);
+				}
+				$count = ['count' => 0];
+				foreach ($this->fetch('SELECT COUNT(' . $this->delimit($primary) . ') AS count FROM ' . $this->delimit($schema->getRealName())) as $count) {
+					break;
+				}
+				if ($count['count'] === 0) {
+					return $this->insert($schema->getName(), $source);
+				}
+				return $this->update($schema->getName(), $source);
 			} catch (Throwable $exception) {
 				throw $this->exception($exception);
 			}

@@ -77,6 +77,16 @@
 		public function update(string $schema, stdClass $source): stdClass;
 
 		/**
+		 * insert or update; if primary is not present, entity will be inserted directly
+		 *
+		 * @param string   $schema
+		 * @param stdClass $source
+		 *
+		 * @return stdClass
+		 */
+		public function save(string $schema, stdClass $source): stdClass;
+
+		/**
 		 * as the whole framework is using UUID as a common identifier, this method is
 		 * optimized to get a data (one "table" at time) without messing with query builders
 		 *

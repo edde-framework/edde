@@ -2,6 +2,12 @@
 	declare(strict_types=1);
 	use Edde\Schema\UuidSchema;
 
+	interface UserSchema extends UuidSchema {
+		public function login($unique = true): string;
+
+		public function password(): string;
+	}
+
 	interface LabelSchema extends UuidSchema {
 		public function name($unique): string;
 
@@ -37,19 +43,23 @@
 
 		public function project(): ProjectSchema;
 
+		public function user(): UserSchema;
+
 		public function owner($default = false): bool;
+	}
+
+	interface ProjectLabelSchema extends UuidSchema {
+		const alias = true;
+
+		public function project(): ProjectSchema;
+
+		public function label(): LabelSchema;
 	}
 
 	interface IssueAssigneeSchema extends UuidSchema {
 		public function issue(): IssueSchema;
 
 		public function created($generator = 'stamp'): DateTime;
-	}
-
-	interface DataSchema extends UuidSchema {
-		public function json($type = 'json');
-
-		public function php($type = 'php');
 	}
 
 	interface VoidSchema extends UuidSchema {

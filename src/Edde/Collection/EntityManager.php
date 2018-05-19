@@ -14,10 +14,6 @@
 		/** @inheritdoc */
 		public function entity(string $schema, stdClass $default = null): IEntity {
 			/** @var $entity IEntity */
-			$entity = $this->container->create(Entity::class, [$this->schemaManager->getSchema($schema)], __METHOD__);
-			if ($default) {
-				$entity->push($default);
-			}
-			return $entity;
+			return ($entity = new Entity($this->schemaManager->getSchema($schema))) && $default ? $entity->push($default) : $entity;
 		}
 	}
