@@ -3,9 +3,12 @@
 	namespace Edde\Storage;
 
 	use Edde\Config\ConfigException;
+	use Edde\Query\ISelectQuery;
+	use Edde\Schema\ISchema;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Security\RandomService;
 	use Exception;
+	use Generator;
 	use GraphAware\Bolt\Configuration;
 	use GraphAware\Bolt\Exception\MessageFailureException;
 	use GraphAware\Bolt\GraphDatabase;
@@ -15,6 +18,7 @@
 	use GraphAware\Common\Type\MapAccessor;
 	use stdClass;
 	use Throwable;
+	use function implode;
 
 	class Neo4jStorage extends AbstractStorage {
 		use SchemaManager;
@@ -104,6 +108,35 @@
 
 		/** @inheritdoc */
 		public function load(string $schema, string $id): stdClass {
+		}
+
+		protected function executeSelect(ISelectQuery $selectQuery): Generator {
+			$cypher = "MATCH\n";
+			$returns = [];
+			$params = [];
+			$uses = $selectQuery->getSchemas();
+			/** @var $schemas ISchema[] */
+			$schemas = [];
+			foreach (array_unique(array_values($uses)) as $schema) {
+				$schemas[$schema] = $this->schemaManager->getSchema($schema);
+			}
+			$froms = [];
+			foreach ($uses as $alias => $schema) {
+				$froms[] = '(' . ($returns[] = $this->delimit($alias)) . ':' . $this->delimit($schemas[$schema]->getRealName()) . ')';
+			}
+			$cypher .= "\t" . implode(",\n", $froms) . "\nRETURN\n\t" . implode(',', $returns);
+			foreach ($this->fetch($cypher, $params) as $row) {
+				$items = [];
+				foreach ($row as $k => $v) {
+					[$alias, $property] = explode('.', $k, 2);
+					$items[$alias] = $items[$alias] ?? new stdClass();
+					$items[$alias]->$property = $v;
+				}
+				foreach ($items as $alias => $item) {
+					$items[$alias] = $this->prepareOutput($schemas[$uses[$alias]], $item);
+				}
+				yield new Row($items);
+			}
 		}
 
 		/** @inheritdoc */
