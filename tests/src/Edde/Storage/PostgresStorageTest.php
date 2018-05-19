@@ -3,7 +3,7 @@
 	namespace Edde\Storage;
 
 	use Edde\Container\ContainerException;
-	use Edde\Container\Factory\InstanceFactory;
+	use Edde\Container\Factory\InterfaceFactory;
 	use ReflectionException;
 
 	class PostgresStorageTest extends AbstractStorageTest {
@@ -25,7 +25,7 @@
 		 */
 		protected function setUp() {
 			parent::setUp();
-			$this->container->registerFactory(new InstanceFactory(IStorage::class, PostgresStorage::class));
-			$this->storage->fetch('SET SEARCH_PATH TO "test"');
+			$this->container->registerFactory(new InterfaceFactory(IStorage::class, PostgresStorage::class));
+			$this->storage->fetch('SET "search_path" TO "test"');
 		}
 	}
