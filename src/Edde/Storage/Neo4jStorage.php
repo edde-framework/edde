@@ -104,26 +104,10 @@
 
 		/** @inheritdoc */
 		public function update(string $schema, stdClass $source): stdClass {
-			try {
-				$schema = $this->schemaManager->getSchema($schema);
-				$primary = $schema->getPrimary();
-				$params = [
-					'primary' => $source->{$primary->getName()},
-				];
-				foreach ($source = $this->prepareInput($schema, $source, true) as $k => $v) {
-					$params[sha1($k)] = $v;
-				}
-				$this->fetch(
-					'MERGE (a:' . $this->delimit($schema->getRealName()) . ' {' . $this->delimit($primary = $schema->getPrimary()->getName()) . ': $primary}) SET a = $set',
-					[
-						'primary' => $source->{$primary},
-						'set'     => (array)$source,
-					]
-				);
-				return $source;
-			} catch (Throwable $exception) {
-				throw $this->exception($exception);
-			}
+			/**
+			 * neo4j has same method for update/insert
+			 */
+			return $this->insert($schema, $source);
 		}
 
 		/** @inheritdoc */
