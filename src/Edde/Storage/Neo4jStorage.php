@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
+	use Edde\Collection\EntityNotFoundException;
 	use Edde\Config\ConfigException;
 	use Edde\Filter\FilterException;
 	use Edde\Query\ISelectQuery;
@@ -112,6 +113,19 @@
 
 		/** @inheritdoc */
 		public function load(string $schema, string $id): stdClass {
+			try {
+				$schema = $this->schemaManager->getSchema($schema);
+				$primary = $schema->getPrimary();
+				$query = 'MATCH (n:' . $this->delimit($schema->getRealName()) . ' {' . $this->delimit($primary->getName()) . ': $primary}) RETURN n';
+				foreach ($this->fetch($query, ['primary' => $id]) as $item) {
+					return $this->row($item, ['schema' => $schema], ['n' => 'schema'])->getItem('n');
+				}
+				throw new EntityNotFoundException(sprintf('Cannot load any entity [%s] with id [%s].', $schema, $id));
+			} catch (EntityNotFoundException $exception) {
+				throw $exception;
+			} catch (Throwable $exception) {
+				throw $this->exception($exception);
+			}
 		}
 
 		/**

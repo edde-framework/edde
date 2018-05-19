@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
+	use Edde\Collection\EntityNotFoundException;
 	use Edde\Config\ConfigException;
 	use Edde\Filter\FilterException;
 	use Edde\Query\ISelectQuery;
@@ -174,6 +175,9 @@
 				foreach ($this->fetch($query, ['primary' => $id]) as $item) {
 					return $this->prepareOutput($schema, (object)$item);
 				}
+				throw new EntityNotFoundException(sprintf('Cannot load any entity [%s] with id [%s].', $schema, $id));
+			} catch (EntityNotFoundException $exception) {
+				throw $exception;
 			} catch (Throwable $exception) {
 				throw $this->exception($exception);
 			}
