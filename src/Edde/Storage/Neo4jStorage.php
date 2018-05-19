@@ -4,6 +4,7 @@
 
 	use Edde\Config\ConfigException;
 	use Edde\Service\Schema\SchemaManager;
+	use Edde\Service\Security\RandomService;
 	use Exception;
 	use GraphAware\Bolt\Configuration;
 	use GraphAware\Bolt\Exception\MessageFailureException;
@@ -18,7 +19,7 @@
 
 	class Neo4jStorage extends AbstractStorage {
 		use SchemaManager;
-		use Edde\Service\Security\RandomService;
+		use RandomService;
 		/** @var SessionInterface */
 		protected $session;
 		/** @var Transaction */
@@ -62,12 +63,9 @@
 		/** @inheritdoc */
 		public function create(string $name): IStorage {
 			try {
-				if ($schema->isRelation()) {
-					return $this;
-				}
 				$primaries = null;
 				$indexes = null;
-				$delimited = $this->delimite($schema->getRealName());
+				$delimited = $this->delimit($schema->getRealName());
 				foreach ($schema->getAttributes() as $property) {
 					$schema = $property->getName();
 					$fragment = 'n.' . $this->delimite($schema);
@@ -93,16 +91,18 @@
 		}
 
 		/** @inheritdoc */
-		public function insert(string $schema, stdClass $source): IStorage {
+		public function insert(string $schema, stdClass $source): stdClass {
 			$this->schemaManager->validate($schema, $source);
 			throw new Exception('not implemented yet');
-			return $this;
 		}
 
 		/** @inheritdoc */
-		public function update(string $schema, stdClass $source): IStorage {
+		public function update(string $schema, stdClass $source): stdClass {
 			throw new Exception('not implemented yet');
-			return $this;
+		}
+
+		/** @inheritdoc */
+		public function load(string $schema, string $id): stdClass {
 		}
 
 		/** @inheritdoc */
