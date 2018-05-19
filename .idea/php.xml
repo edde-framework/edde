@@ -370,10 +370,12 @@
   <component name="PhpStepFilterConfiguration">
     <skipped_functions>
       <skipped_function name="Edde\Storage\PostgresStorageTest-&gt;__get" />
+      <skipped_function name="Edde\Storage\Neo4jStorageTest-&gt;__get" />
     </skipped_functions>
     <option name="skippedFunctions">
       <list>
         <option value="Edde\Storage\PostgresStorageTest-&gt;__get" />
+        <option value="Edde\Storage\Neo4jStorageTest-&gt;__get" />
       </list>
     </option>
   </component>

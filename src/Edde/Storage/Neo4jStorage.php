@@ -15,7 +15,6 @@
 	use GraphAware\Common\Type\MapAccessor;
 	use stdClass;
 	use Throwable;
-	use function implode;
 
 	class Neo4jStorage extends AbstractStorage {
 		use SchemaManager;
@@ -63,26 +62,18 @@
 		/** @inheritdoc */
 		public function create(string $name): IStorage {
 			try {
-				$primaries = null;
-				$indexes = null;
-				$delimited = $this->delimit($schema->getRealName());
-				foreach ($schema->getAttributes() as $property) {
-					$schema = $property->getName();
-					$fragment = 'n.' . $this->delimite($schema);
+				$schema = $this->schemaManager->getSchema($name);
+				$node = $this->delimit($schema->getRealName());
+				foreach ($schema->getAttributes() as $name => $property) {
+					$fragment = 'n.' . $this->delimit($property->getName());
 					if ($property->isPrimary()) {
-						$primaries[] = $fragment;
+						$this->fetch('CREATE CONSTRAINT ON (n:' . $node . ') ASSERT (' . $fragment . ') IS NODE KEY');
 					} else if ($property->isUnique()) {
-						$this->fetch('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT ' . $fragment . ' IS UNIQUE');
+						$this->fetch('CREATE CONSTRAINT ON (n:' . $node . ') ASSERT ' . $fragment . ' IS UNIQUE');
 					}
 					if ($property->isRequired()) {
-						$this->fetch('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT exists(' . $fragment . ')');
+						$this->fetch('CREATE CONSTRAINT ON (n:' . $node . ') ASSERT exists(' . $fragment . ')');
 					}
-				}
-				if ($indexes) {
-					$this->fetch('CREATE INDEX ON :' . $delimited . '(' . implode(',', $indexes) . ')');
-				}
-				if ($primaries) {
-					$this->fetch('CREATE CONSTRAINT ON (n:' . $delimited . ') ASSERT (' . implode(', ', $primaries) . ') IS NODE KEY');
 				}
 				return $this;
 			} catch (Throwable $exception) {
@@ -92,8 +83,18 @@
 
 		/** @inheritdoc */
 		public function insert(string $schema, stdClass $source): stdClass {
-			$this->schemaManager->validate($schema, $source);
-			throw new Exception('not implemented yet');
+			$source = $this->prepareInput(
+				$schema = $this->schemaManager->getSchema($schema),
+				$source
+			);
+			$this->fetch(
+				'MERGE (a:' . $this->delimit($schema->getRealName()) . ' {' . $this->delimit($primary = $schema->getPrimary()->getName()) . ': $primary}) SET a = $set',
+				[
+					'primary' => $source->{$primary},
+					'set'     => (array)$source,
+				]
+			);
+			return $source;
 		}
 
 		/** @inheritdoc */

@@ -13,6 +13,10 @@
 			self::assertTrue(true, 'everything is ok, yapee!');
 		}
 
+		public function testInsertNoTable() {
+			self::assertTrue(true, 'this test is disabled because it makes no sense for Neo4j');
+		}
+
 		/** @inheritdoc */
 		protected function setUp() {
 			parent::setUp();
