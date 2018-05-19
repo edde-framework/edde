@@ -3,39 +3,39 @@
   <component name="PhpAnalysisConfiguration" call_tree_analysis_depth="3" />
   <component name="PhpIncludePathManager">
     <include_path>
-      <path value="$PROJECT_DIR$/lib/sebastian/code-unit-reverse-lookup" />
-      <path value="$PROJECT_DIR$/lib/sebastian/comparator" />
-      <path value="$PROJECT_DIR$/lib/sebastian/diff" />
-      <path value="$PROJECT_DIR$/lib/sebastian/environment" />
-      <path value="$PROJECT_DIR$/lib/sebastian/exporter" />
-      <path value="$PROJECT_DIR$/lib/sebastian/global-state" />
-      <path value="$PROJECT_DIR$/lib/sebastian/object-enumerator" />
-      <path value="$PROJECT_DIR$/lib/sebastian/object-reflector" />
-      <path value="$PROJECT_DIR$/lib/sebastian/recursion-context" />
-      <path value="$PROJECT_DIR$/lib/sebastian/resource-operations" />
-      <path value="$PROJECT_DIR$/lib/sebastian/version" />
-      <path value="$PROJECT_DIR$/lib/symfony/event-dispatcher" />
-      <path value="$PROJECT_DIR$/lib/theseer/tokenizer" />
-      <path value="$PROJECT_DIR$/lib/webmozart/assert" />
-      <path value="$PROJECT_DIR$/lib/composer" />
-      <path value="$PROJECT_DIR$/lib/doctrine/instantiator" />
-      <path value="$PROJECT_DIR$/lib/graphaware/neo4j-bolt" />
-      <path value="$PROJECT_DIR$/lib/graphaware/neo4j-common" />
-      <path value="$PROJECT_DIR$/lib/myclabs/deep-copy" />
-      <path value="$PROJECT_DIR$/lib/myclabs/php-enum" />
-      <path value="$PROJECT_DIR$/lib/phar-io/manifest" />
-      <path value="$PROJECT_DIR$/lib/phar-io/version" />
-      <path value="$PROJECT_DIR$/lib/phpdocumentor/reflection-common" />
-      <path value="$PROJECT_DIR$/lib/phpdocumentor/reflection-docblock" />
-      <path value="$PROJECT_DIR$/lib/phpdocumentor/type-resolver" />
       <path value="$PROJECT_DIR$/lib/phpspec/prophecy" />
-      <path value="$PROJECT_DIR$/lib/phpunit/php-code-coverage" />
-      <path value="$PROJECT_DIR$/lib/phpunit/php-file-iterator" />
-      <path value="$PROJECT_DIR$/lib/phpunit/php-text-template" />
-      <path value="$PROJECT_DIR$/lib/phpunit/php-timer" />
-      <path value="$PROJECT_DIR$/lib/phpunit/php-token-stream" />
+      <path value="$PROJECT_DIR$/lib/phpdocumentor/type-resolver" />
+      <path value="$PROJECT_DIR$/lib/phpdocumentor/reflection-docblock" />
+      <path value="$PROJECT_DIR$/lib/phpdocumentor/reflection-common" />
+      <path value="$PROJECT_DIR$/lib/phar-io/version" />
+      <path value="$PROJECT_DIR$/lib/phar-io/manifest" />
+      <path value="$PROJECT_DIR$/lib/myclabs/php-enum" />
+      <path value="$PROJECT_DIR$/lib/myclabs/deep-copy" />
+      <path value="$PROJECT_DIR$/lib/graphaware/neo4j-common" />
+      <path value="$PROJECT_DIR$/lib/graphaware/neo4j-bolt" />
+      <path value="$PROJECT_DIR$/lib/doctrine/instantiator" />
+      <path value="$PROJECT_DIR$/lib/composer" />
+      <path value="$PROJECT_DIR$/lib/webmozart/assert" />
+      <path value="$PROJECT_DIR$/lib/theseer/tokenizer" />
+      <path value="$PROJECT_DIR$/lib/symfony/event-dispatcher" />
+      <path value="$PROJECT_DIR$/lib/sebastian/version" />
+      <path value="$PROJECT_DIR$/lib/sebastian/resource-operations" />
+      <path value="$PROJECT_DIR$/lib/sebastian/recursion-context" />
+      <path value="$PROJECT_DIR$/lib/sebastian/object-reflector" />
+      <path value="$PROJECT_DIR$/lib/sebastian/object-enumerator" />
+      <path value="$PROJECT_DIR$/lib/sebastian/global-state" />
+      <path value="$PROJECT_DIR$/lib/sebastian/exporter" />
+      <path value="$PROJECT_DIR$/lib/sebastian/environment" />
+      <path value="$PROJECT_DIR$/lib/sebastian/diff" />
+      <path value="$PROJECT_DIR$/lib/sebastian/comparator" />
+      <path value="$PROJECT_DIR$/lib/sebastian/code-unit-reverse-lookup" />
       <path value="$PROJECT_DIR$/lib/phpunit/phpunit-mock-objects" />
       <path value="$PROJECT_DIR$/lib/phpunit/phpunit" />
+      <path value="$PROJECT_DIR$/lib/phpunit/php-token-stream" />
+      <path value="$PROJECT_DIR$/lib/phpunit/php-timer" />
+      <path value="$PROJECT_DIR$/lib/phpunit/php-text-template" />
+      <path value="$PROJECT_DIR$/lib/phpunit/php-file-iterator" />
+      <path value="$PROJECT_DIR$/lib/phpunit/php-code-coverage" />
     </include_path>
   </component>
   <component name="PhpInterpreters">
@@ -366,19 +366,7 @@
       </server>
     </servers>
   </component>
-  <component name="PhpProjectSharedConfiguration" php_language_level="7.2" />
-  <component name="PhpStepFilterConfiguration">
-    <skipped_functions>
-      <skipped_function name="Edde\Storage\PostgresStorageTest-&gt;__get" />
-      <skipped_function name="Edde\Storage\Neo4jStorageTest-&gt;__get" />
-    </skipped_functions>
-    <option name="skippedFunctions">
-      <list>
-        <option value="Edde\Storage\PostgresStorageTest-&gt;__get" />
-        <option value="Edde\Storage\Neo4jStorageTest-&gt;__get" />
-      </list>
-    </option>
-  </component>
+  <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
   <component name="PhpUnit">
     <phpunit_settings>
       <phpunit_by_interpreter interpreter_id="24e550ee-60c1-4aa1-a4a7-b059cc3d8574" load_method="CUSTOM_LOADER" configuration_file_path="/edde/phpunit.xml" custom_loader_path="/edde/lib/autoload.php" phpunit_phar_path="" use_configuration_file="true" />
