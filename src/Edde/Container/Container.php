@@ -47,8 +47,8 @@
 			 * to cache results; real cache is not used to keep container implementation
 			 * as simple as possible
 			 */
-			if (isset($this->factories[$dependency])) {
-				return $this->factories[$dependency];
+			if (isset($this->factories[$dependencyId = 'dependency:' . $dependency])) {
+				return $this->factories[$dependencyId];
 			}
 			/**
 			 * container is able to handle dynamic dependencies without forcing user to implement all
@@ -57,7 +57,7 @@
 			 */
 			foreach ($this->factories as $factory) {
 				if ($factory->canHandle($this, $dependency)) {
-					return $this->factories[$dependency] = $factory->getFactory($this);
+					return $this->factories[$dependencyId] = $factory->getFactory($this);
 				}
 			}
 			/**

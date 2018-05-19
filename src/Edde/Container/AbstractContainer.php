@@ -22,6 +22,10 @@
 
 		/** @inheritdoc */
 		public function registerFactory(IFactory $factory): IContainer {
+			if ($uuid = $factory->getUuid()) {
+				$this->factories[$uuid] = $this->factories['dependency:' . $uuid] = $factory;
+				return $this;
+			}
 			$this->factories[] = $factory;
 			return $this;
 		}

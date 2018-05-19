@@ -7,6 +7,13 @@
 	 */
 	interface IFactory {
 		/**
+		 * return an uuid of this factory; this is used for the ability to replace factory if needed
+		 *
+		 * @return string
+		 */
+		public function getUuid(): ?string;
+
+		/**
 		 * is this factory able to handle the given input?
 		 *
 		 * @param IContainer $container

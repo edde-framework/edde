@@ -14,17 +14,11 @@
 	 * A wife is supposed to make her husband's dick hard, not his life...!
 	 */
 	class InterfaceFactory extends ClassFactory {
-		/**
-		 * @var string
-		 */
+		/** @var string */
 		protected $interface;
-		/**
-		 * @var string
-		 */
+		/**  @var string */
 		protected $class;
-		/**
-		 * @var mixed
-		 */
+		/** @var mixed */
 		protected $instance;
 
 		/**
@@ -34,6 +28,11 @@
 		public function __construct(string $interface, string $class) {
 			$this->interface = $interface;
 			$this->class = $class;
+		}
+
+		/** @inheritdoc */
+		public function getUuid(): ?string {
+			return $this->interface;
 		}
 
 		/**

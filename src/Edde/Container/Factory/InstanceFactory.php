@@ -46,6 +46,11 @@
 		}
 
 		/** @inheritdoc */
+		public function getUuid(): ?string {
+			return $this->name;
+		}
+
+		/** @inheritdoc */
 		public function canHandle(IContainer $container, string $dependency): bool {
 			return $this->name === $dependency;
 		}

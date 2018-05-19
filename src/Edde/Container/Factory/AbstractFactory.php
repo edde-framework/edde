@@ -13,6 +13,11 @@
 	 */
 	abstract class AbstractFactory extends Edde implements IFactory {
 		/** @inheritdoc */
+		public function getUuid(): ?string {
+			return null;
+		}
+
+		/** @inheritdoc */
 		public function getFactory(IContainer $container): IFactory {
 			return $this;
 		}
