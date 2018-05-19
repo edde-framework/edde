@@ -3,8 +3,10 @@
 	namespace Edde\Storage;
 
 	use Edde\Config\ConfigException;
+	use Edde\Filter\FilterException;
 	use Edde\Query\ISelectQuery;
 	use Edde\Schema\ISchema;
+	use Edde\Schema\SchemaException;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Security\RandomService;
 	use Exception;
@@ -110,6 +112,14 @@
 		public function load(string $schema, string $id): stdClass {
 		}
 
+		/**
+		 * @param ISelectQuery $selectQuery
+		 *
+		 * @return Generator
+		 * @throws StorageException
+		 * @throws FilterException
+		 * @throws SchemaException
+		 */
 		protected function executeSelect(ISelectQuery $selectQuery): Generator {
 			$cypher = "MATCH\n";
 			$returns = [];
@@ -126,16 +136,7 @@
 			}
 			$cypher .= "\t" . implode(",\n", $froms) . "\nRETURN\n\t" . implode(',', $returns);
 			foreach ($this->fetch($cypher, $params) as $row) {
-				$items = [];
-				foreach ($row as $k => $v) {
-					[$alias, $property] = explode('.', $k, 2);
-					$items[$alias] = $items[$alias] ?? new stdClass();
-					$items[$alias]->$property = $v;
-				}
-				foreach ($items as $alias => $item) {
-					$items[$alias] = $this->prepareOutput($schemas[$uses[$alias]], $item);
-				}
-				yield new Row($items);
+				yield $this->row($row, $schemas, $uses);
 			}
 		}
 

@@ -84,16 +84,7 @@
 			$query .= implode(",\n\t", $select) . "\n";
 			$query .= "FROM\n\t" . implode(",\n\t", $froms) . "\n";
 			foreach ($this->fetch($query, $params) as $row) {
-				$items = [];
-				foreach ($row as $k => $v) {
-					[$alias, $property] = explode('.', $k, 2);
-					$items[$alias] = $items[$alias] ?? new stdClass();
-					$items[$alias]->$property = $v;
-				}
-				foreach ($items as $alias => $item) {
-					$items[$alias] = $this->prepareOutput($schemas[$uses[$alias]], $item);
-				}
-				yield new Row($items);
+				yield $this->row($row, $schemas, $uses);
 			}
 		}
 

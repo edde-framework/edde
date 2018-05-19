@@ -114,6 +114,27 @@
 			return $stdClass;
 		}
 
+		/**
+		 * @param array     $row
+		 * @param ISchema[] $schemas
+		 * @param string[]  $uses
+		 *
+		 * @return IRow
+		 * @throws FilterException
+		 */
+		protected function row(array $row, array $schemas, array $uses): IRow {
+			$items = [];
+			foreach ($row as $k => $v) {
+				[$alias, $property] = explode('.', $k, 2);
+				$items[$alias] = $items[$alias] ?? new stdClass();
+				$items[$alias]->$property = $v;
+			}
+			foreach ($items as $alias => $item) {
+				$items[$alias] = $this->prepareOutput($schemas[$uses[$alias]], $item);
+			}
+			return new Row($items);
+		}
+
 		/** @inheritdoc */
 		protected function handleSetup(): void {
 			parent::handleSetup();
