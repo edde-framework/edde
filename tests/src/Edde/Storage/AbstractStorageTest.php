@@ -127,15 +127,15 @@
 		 * @throws StorageException
 		 */
 		public function testUpdate() {
-			$source = $this->storage->insert(ProjectSchema::class, (object)[
-				'name'  => 'some-project-here',
-				'start' => new DateTime(),
-				'end'   => new DateTime(),
+			$source = $this->storage->insert(ProjectSchema::class, $object = (object)[
+				'name'    => 'some-project-here',
+				'created' => new DateTime(),
+				'start'   => new DateTime(),
+				'end'     => new DateTime(),
 			]);
-			$this->storage->update(ProjectSchema::class, (object)[
-				'uuid' => $source->uuid,
-				'end'  => null,
-			]);
+			$object->end = null;
+			$object->uuid = $source->uuid;
+			$this->storage->update(ProjectSchema::class, $object);
 			$actual = $this->storage->load(ProjectSchema::class, $source->uuid);
 			self::assertNull($actual->end);
 			self::assertInstanceOf(DateTime::class, $actual->start);
