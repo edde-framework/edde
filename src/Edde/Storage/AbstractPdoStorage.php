@@ -177,7 +177,7 @@
 					return $this->insert($schema->getName(), $source);
 				}
 				$count = ['count' => 0];
-				foreach ($this->fetch('SELECT COUNT(' . $this->delimit($primary) . ') AS count FROM ' . $this->delimit($schema->getRealName())) as $count) {
+				foreach ($this->fetch('SELECT COUNT(' . $this->delimit($primary) . ') AS count FROM ' . $this->delimit($schema->getRealName()) . ' WHERE ' . $this->delimit($primary) . ' = :primary', ['primary' => $source->$primary]) as $count) {
 					break;
 				}
 				if ($count['count'] === 0) {

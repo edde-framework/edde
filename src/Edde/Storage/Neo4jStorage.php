@@ -112,6 +112,27 @@
 		}
 
 		/** @inheritdoc */
+		public function save(string $schema, stdClass $source): stdClass {
+			try {
+				$schema = $this->schemaManager->getSchema($schema);
+				$primary = $schema->getPrimary()->getName();
+				if (property_exists($source, $primary) === false || $source->$primary === null) {
+					return $this->insert($schema->getName(), $source);
+				}
+				$count = ['count' => 0];
+				foreach ($this->fetch('MATCH (n:' . $this->delimit($schema->getRealName()) . ' {' . $this->delimit($primary) . ': $primary}) RETURN count(n) AS count', ['primary' => $source->$primary]) as $count) {
+					break;
+				}
+				if ($count['count'] === 0) {
+					return $this->insert($schema->getName(), $source);
+				}
+				return $this->update($schema->getName(), $source);
+			} catch (Throwable $exception) {
+				throw $this->exception($exception);
+			}
+		}
+
+		/** @inheritdoc */
 		public function load(string $schema, string $id): stdClass {
 			try {
 				$schema = $this->schemaManager->getSchema($schema);

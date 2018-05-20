@@ -157,7 +157,7 @@
 				'password' => 'toor',
 			]));
 			$entityQueue->commit($this->storage);
-			$entity->get('uuid'); // not null
+			self::assertNotNull($entity->get('uuid'));
 		}
 
 		/**
