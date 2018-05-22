@@ -8,17 +8,27 @@
 	use Throwable;
 	use function is_array;
 	use function is_string;
+	use function key;
+	use function reset;
 	use function str_replace;
 
 	class SchemaReflectionLoader extends AbstractSchemaLoader implements ISchemaLoader {
 		use StringUtils;
+		/** @var ISchema[] */
+		protected $schemas = [];
 
 		/** @inheritdoc */
 		public function load(string $schema): ISchema {
 			try {
+				if (isset($this->schemas[$schema])) {
+					return $this->schemas[$schema];
+				}
 				$reflectionClass = new ReflectionClass($schema);
 				$schemaBuilder = new SchemaBuilder($schema);
 				$primary = false;
+				$source = null;
+				$target = null;
+				$relation = 0;
 				foreach ($reflectionClass->getConstants() as $name => $value) {
 					switch ($name) {
 						case 'alias':
@@ -32,6 +42,9 @@
 							break;
 						case 'primary':
 							$primary = $value;
+							break;
+						case 'relation':
+							[$source, $target] = [key($value), reset($value)];
 							break;
 						case 'meta':
 							if (is_array($value) === false) {
@@ -61,6 +74,14 @@
 						$primary = true;
 						$attributeBuilder->primary();
 						$attributeBuilder->filter('generator', $propertyName);
+					} else if ($propertyName === $source) {
+						$relation++;
+						$sourceSchema = $this->load($propertyType);
+						$attributeBuilder->type($sourceSchema->getPrimary()->getType());
+					} else if ($propertyName === $target) {
+						$relation++;
+						$targetSchema = $this->load($propertyType);
+						$attributeBuilder->type($targetSchema->getPrimary()->getType());
 					}
 					foreach ($reflectionMethod->getParameters() as $parameter) {
 						switch ($parameterName = $parameter->getName()) {
@@ -111,10 +132,13 @@
 							break;
 					}
 				}
+				if ($source && $target && $relation !== 2) {
+					throw new SchemaException(sprintf('Target [%s] or source [%s] property of relation is not present in schema [%s].', $source, $target, $schema));
+				}
 				if ($primary !== true) {
 					throw new SchemaException(sprintf('Primary property [%s::%s] is defined, but property does not exist; please add corresponding method to schema.', $schema, $primary));
 				}
-				return $schemaBuilder->create();
+				return $this->schemas[$schema] = $schemaBuilder->create();
 			} catch (SchemaException $exception) {
 				throw $exception;
 			} catch (Throwable $throwable) {

@@ -96,6 +96,19 @@
 		public function save(IEntity $entity): IStorage;
 
 		/**
+		 * save more entities in a transaction
+		 *
+		 * @param iterable $entities
+		 *
+		 * @return IStorage
+		 *
+		 * @throws StorageException
+		 * @throws ValidatorException
+		 * @throws FilterException
+		 */
+		public function saves(iterable $entities): IStorage;
+
+		/**
 		 * as the whole framework is using UUID as a common identifier, this method is
 		 * optimized to get a data (one "table" at time) without messing with query builders
 		 *
@@ -105,4 +118,16 @@
 		 * @return IEntity
 		 */
 		public function load(string $schema, string $id): IEntity;
+
+		/**
+		 * create relation entity and make a relation between ($entity)-[$relation]->($target); relation
+		 * MUST be saved explicitly as there could be mandatory attributes on it
+		 *
+		 * @param IEntity $entity
+		 * @param IEntity $target
+		 * @param string  $relation
+		 *
+		 * @return IEntity relation entity; it's possible to set up relation attributes and save entity
+		 */
+		public function attach(IEntity $entity, IEntity $target, string $relation): IEntity;
 	}

@@ -38,6 +38,16 @@
 			return $this->{'execute' . $this->stringUtils->toCamelCase($query->getType())}($query);
 		}
 
+		/** @inheritdoc */
+		public function saves(iterable $entities): IStorage {
+			$this->transaction(function () use ($entities) {
+				foreach ($entities as $entity) {
+					$this->save($entity);
+				}
+			});
+			return $this;
+		}
+
 		/**
 		 * sanitizer and validate input
 		 *
@@ -109,7 +119,7 @@
 		/**
 		 * validate and sanitize output
 		 *
-		 * @param ISchema $schema
+		 * @param ISchema  $schema
 		 * @param stdClass $stdClass
 		 *
 		 * @return stdClass

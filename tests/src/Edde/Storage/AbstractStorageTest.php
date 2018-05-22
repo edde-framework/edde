@@ -14,6 +14,7 @@
 	use Edde\TestCase;
 	use Edde\Validator\ValidatorException;
 	use LabelSchema;
+	use ProjectMemberSchema;
 	use ProjectSchema;
 	use ReflectionException;
 	use UserSchema;
@@ -34,6 +35,7 @@
 				LabelSchema::class,
 				UserSchema::class,
 				ProjectSchema::class,
+				ProjectMemberSchema::class,
 			];
 			foreach ($schemas as $schema) {
 				$this->storage->create($schema);
@@ -49,6 +51,7 @@
 		 */
 		public function testInsertNoTable() {
 			self::expectException(UnknownTableException::class);
+			$this->schemaManager->load(VoidSchema::class);
 			$this->storage->insert($this->entityManager->entity(VoidSchema::class));
 		}
 
@@ -177,6 +180,29 @@
 		}
 
 		/**
+		 * @throws FilterException
+		 * @throws SchemaException
+		 * @throws StorageException
+		 * @throws ValidatorException
+		 */
+		public function testAttach() {
+			$project = $this->entityManager->entity(ProjectSchema::class, (object)[
+				'name' => 'to be linked',
+			]);
+			$user = $this->entityManager->entity(UserSchema::class, (object)[
+				'login'    => 'root',
+				'password' => '123',
+			]);
+			$relation = $this->storage->attach($project, $user, ProjectMemberSchema::class);
+			$relation->set('owner', true);
+			$this->storage->saves([
+				$project,
+				$user,
+				$relation,
+			]);
+		}
+
+		/**
 		 * @throws SchemaException
 		 * @throws ContainerException
 		 * @throws ReflectionException
@@ -184,10 +210,10 @@
 		protected function setUp() {
 			parent::setUp();
 			$this->schemaManager->loads([
-				VoidSchema::class,
 				LabelSchema::class,
 				ProjectSchema::class,
 				UserSchema::class,
+				ProjectMemberSchema::class,
 			]);
 		}
 	}

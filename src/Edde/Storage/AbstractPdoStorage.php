@@ -209,6 +209,11 @@
 		}
 
 		/** @inheritdoc */
+		public function attach(IEntity $entity, IEntity $target, string $relation): IEntity {
+			$relation = new Entity($schema = $this->schemaManager->getSchema($relation));
+		}
+
+		/** @inheritdoc */
 		public function onStart(): void {
 			$this->pdo->beginTransaction();
 		}

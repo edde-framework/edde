@@ -43,6 +43,7 @@
 	}
 
 	interface ProjectMemberSchema extends UuidSchema {
+		const relation = ['project' => 'user'];
 		const alias = true;
 
 		public function project(): ProjectSchema;
