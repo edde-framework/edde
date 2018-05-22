@@ -66,22 +66,13 @@
 		public function default($default): IAttributeBuilder;
 
 		/**
-		 * mark this attribute as a source of relation; (source)->(target)
+		 * attribute is a reference to another schema
 		 *
-		 * @param string $source
-		 *
-		 * @return IAttributeBuilder
-		 */
-		public function source(string $source): IAttributeBuilder;
-
-		/**
-		 * mark this attribute as a target of relation; (source)->(target)
-		 *
-		 * @param string $target
+		 * @param string $schema
 		 *
 		 * @return IAttributeBuilder
 		 */
-		public function target(string $target): IAttributeBuilder;
+		public function schema(string $schema): IAttributeBuilder;
 
 		/**
 		 * creates and return a property

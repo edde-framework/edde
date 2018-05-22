@@ -21,7 +21,9 @@
 				$reflectionClass = new ReflectionClass($schema);
 				$schemaBuilder = new SchemaBuilder($schema);
 				$primary = false;
+				/** @var $source string */
 				$source = null;
+				/** @var $target string */
 				$target = null;
 				$relation = 0;
 				foreach ($reflectionClass->getConstants() as $name => $value) {
@@ -69,12 +71,9 @@
 						$primary = true;
 						$attributeBuilder->primary();
 						$attributeBuilder->filter('generator', $propertyName);
-					} else if ($propertyName === $source) {
+					} else if ($propertyName === $source || $propertyName === $target) {
 						$relation++;
-						$attributeBuilder->source($propertyType);
-					} else if ($propertyName === $target) {
-						$relation++;
-						$attributeBuilder->target($propertyType);
+						$attributeBuilder->schema($propertyType);
 					}
 					foreach ($reflectionMethod->getParameters() as $parameter) {
 						switch ($parameterName = $parameter->getName()) {
@@ -127,7 +126,7 @@
 				}
 				if ($source && $target && $relation !== 2) {
 					throw new SchemaException(sprintf('Target [%s] or source [%s] property of relation is not present in schema [%s].', $source, $target, $schema));
-				} else if ($relation === 2) {
+				} else if ($source && $target && $relation === 2) {
 					$schemaBuilder->relation($source, $target);
 				}
 				if ($primary !== true) {

@@ -61,14 +61,8 @@
 		}
 
 		/** @inheritdoc */
-		public function source(string $source): IAttributeBuilder {
-			$this->source->source = $source;
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function target(string $target): IAttributeBuilder {
-			$this->source->target = $target;
+		public function schema(string $schema): IAttributeBuilder {
+			$this->source->schema = $schema;
 			return $this;
 		}
 
