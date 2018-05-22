@@ -7,11 +7,14 @@
 	use Edde\Collection\IEntity;
 	use Edde\Config\ConfigException;
 	use Edde\Filter\FilterException;
+	use Edde\Query\INative;
 	use Edde\Query\ISelectQuery;
+	use Edde\Query\Native;
 	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Security\RandomService;
+	use Exception;
 	use Generator;
 	use GraphAware\Bolt\Configuration;
 	use GraphAware\Bolt\Exception\MessageFailureException;
@@ -20,6 +23,7 @@
 	use GraphAware\Bolt\Protocol\V1\Transaction;
 	use GraphAware\Bolt\Result\Result;
 	use GraphAware\Common\Type\MapAccessor;
+	use stdClass;
 	use Throwable;
 	use function implode;
 
@@ -128,6 +132,9 @@
 		public function save(IEntity $entity): IStorage {
 			try {
 				$schema = $entity->getSchema();
+				if ($schema->isRelation()) {
+					return $this->relation($entity);
+				}
 				$primary = $entity->getPrimary();
 				$attribute = $entity->getPrimary()->getAttribute();
 				if ($primary->get() === null) {
@@ -146,18 +153,60 @@
 			}
 		}
 
+		protected function relation(IEntity $entity): IStorage {
+			$schema = $entity->getSchema();
+			$sourceAttribute = $schema->getSource();
+			$targetAttribute = $schema->getTarget();
+			$sourceSchema = $this->schemaManager->getSchema($sourceAttribute->getSchema());
+			$targetSchema = $this->schemaManager->getSchema($targetAttribute->getSchema());
+			$cypher = null;
+			$params = [
+				'a' => $entity->get($sourceAttribute->getName()),
+				'b' => $entity->get($targetAttribute->getName()),
+			];
+			$cypher .= 'MERGE (a:' . $this->delimit($sourceSchema->getRealName()) . ' {' . $this->delimit($sourceSchema->getPrimary()->getName()) . ": \$a})\n";
+			$cypher .= 'MERGE (b:' . $this->delimit($targetSchema->getRealName()) . ' {' . $this->delimit($targetSchema->getPrimary()->getName()) . ": \$b})\n";
+			$cypher .= 'MERGE (a)';
+			$cypher .= '-[:' . $this->delimit($schema->getRealName());
+			$source = $this->prepareInsert($entity);
+			$nativeQuery = $this->formatAttributes($source);
+			$cypher .= $nativeQuery->getQuery();
+			$params = array_merge($params, $nativeQuery->getParams());
+			$cypher .= ']';
+			$cypher .= "->(b)\n";
+			$this->fetch($cypher, $params);
+			$entity->put($this->prepareOutput($schema, $source));
+			$entity->commit();
+			return $this;
+		}
+
+		protected function formatAttributes(stdClass $source): INative {
+			$properties = [];
+			$params = [];
+			foreach ($source as $k => $v) {
+				if ($v !== null) {
+					$properties[] = $this->delimit($k) . ': $' . $this->delimit($parameterId = (sha1($this->randomService->bytes(64))));
+					$params[$parameterId] = $v;
+				}
+			}
+			return new Native('{' . implode(', ', $properties) . '}', $params);
+		}
+
 		/** @inheritdoc */
 		public function load(string $schema, string $id): IEntity {
 			try {
 				$schema = $this->schemaManager->getSchema($schema);
 				$primary = $schema->getPrimary();
+				if ($schema->isRelation()) {
+					throw new Exception('nip');
+				}
 				$query = 'MATCH (n:' . $this->delimit($schema->getRealName()) . ' {' . $this->delimit($primary->getName()) . ': $primary}) RETURN n';
 				foreach ($this->fetch($query, ['primary' => $id]) as $item) {
 					$entity = new Entity($schema);
 					$entity->push($this->row($item, ['schema' => $schema], ['n' => 'schema'])->getItem('n'));
 					return $entity;
 				}
-				throw new EntityNotFoundException(sprintf('Cannot load any entity [%s] with id [%s].', $schema, $id));
+				throw new EntityNotFoundException(sprintf('Cannot load any entity [%s] with id [%s].', $schema->getName(), $id));
 			} catch (EntityNotFoundException $exception) {
 				throw $exception;
 			} catch (Throwable $exception) {

@@ -7,41 +7,41 @@
 
 	abstract class AbstractTransaction extends Edde implements ITransaction {
 		/** @var int */
-		protected $transaction = 0;
+		protected $transactionCount = 0;
 
 		/** @inheritdoc */
 		public function start(): ITransaction {
-			if ($this->transaction > 0) {
-				$this->transaction++;
+			if ($this->transactionCount > 0) {
+				$this->transactionCount++;
 			}
 			$this->onStart();
-			$this->transaction++;
+			$this->transactionCount++;
 			return $this;
 		}
 
 		/** @inheritdoc */
 		public function commit(): ITransaction {
-			if ($this->transaction === 0) {
+			if ($this->transactionCount === 0) {
 				throw new StorageException('Cannot commit a transaction - there is no one running!');
-			} else if ($this->transaction === 1) {
+			} else if ($this->transactionCount === 1) {
 				$this->onCommit();
 			}
 			/**
 			 * it's intentional to lower the number of transaction after commit as a driver could throw an
 			 * exception, thus transaction state could not be consistent
 			 */
-			$this->transaction--;
+			$this->transactionCount--;
 			return $this;
 		}
 
 		/** @inheritdoc */
 		public function rollback(): ITransaction {
-			if ($this->transaction === 0) {
+			if ($this->transactionCount === 0) {
 				throw new StorageException('Cannot rollback a transaction - there is no one running!');
-			} else if ($this->transaction === 1) {
+			} else if ($this->transactionCount === 1) {
 				$this->onRollback();
 			}
-			$this->transaction--;
+			$this->transactionCount--;
 			return $this;
 		}
 

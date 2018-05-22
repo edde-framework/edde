@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
+	use Edde\Collection\Entity;
 	use Edde\Collection\IEntity;
 	use Edde\Config\ISection;
 	use Edde\Filter\FilterException;
@@ -46,6 +47,29 @@
 				}
 			});
 			return $this;
+		}
+
+		/** @inheritdoc */
+		public function attach(IEntity $entity, IEntity $target, string $relation): IEntity {
+			return $this->transaction(function () use ($entity, $target, $relation) {
+				$relationEntity = new Entity($relationSchema = $this->schemaManager->getSchema($relation));
+				$entitySchema = $entity->getSchema();
+				$targetSchema = $target->getSchema();
+				$sourceAttribute = $relationSchema->getSource();
+				$targetAttribute = $relationSchema->getTarget();
+				if ($relationSchema->isRelation() === false) {
+					throw new StorageException(sprintf('Cannot attach [%s] to [%s] because relation [%s] is not relation.', $entitySchema->getName(), $targetSchema->getName(), $relation));
+				} else if (($expectedSchemaName = $sourceAttribute->getSchema()) !== ($schemaName = $entitySchema->getName())) {
+					throw new StorageException(sprintf('Source schema [%s] of entity differs from expected relation [%s] source schema [%s]; did you swap source ($entity) and $target?.', $schemaName, $relation, $expectedSchemaName));
+				} else if (($expectedSchemaName = $targetAttribute->getSchema()) !== ($schemaName = $targetSchema->getName())) {
+					throw new StorageException(sprintf('Target schema [%s] of entity differs from expected relation [%s] source schema [%s]; did you swap source ($entity) and $target?.', $schemaName, $relation, $expectedSchemaName));
+				}
+				$this->save($entity);
+				$this->save($target);
+				$relationEntity->set($sourceAttribute->getName(), $entity->getPrimary()->get());
+				$relationEntity->set($targetAttribute->getName(), $target->getPrimary()->get());
+				return $relationEntity;
+			});
 		}
 
 		/**
