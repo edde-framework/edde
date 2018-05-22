@@ -17,6 +17,7 @@
 				if ($schema->hasAlias()) {
 					$this->schemas[$schema->getAlias()] = $schema;
 				}
+				$this->link($schema);
 			}
 			return $this;
 		}
@@ -45,5 +46,16 @@
 		/** @inheritdoc */
 		public function getSchemas(): array {
 			return $this->schemas;
+		}
+
+		/**
+		 * compute relations between schemas
+		 *
+		 * @param ISchema $schema
+		 *
+		 * @return ISchemaManager
+		 */
+		protected function link(ISchema $schema): ISchemaManager {
+			return $this;
 		}
 	}

@@ -35,6 +35,15 @@
 		}
 
 		/** @inheritdoc */
+		public function relation(string $source, string $target): ISchemaBuilder {
+			$this->source->relation = (object)[
+				'source' => $source,
+				'target' => $target,
+			];
+			return $this;
+		}
+
+		/** @inheritdoc */
 		public function create(): ISchema {
 			if ($this->schema) {
 				return $this->schema;
@@ -48,11 +57,9 @@
 				}
 			}
 			return $this->schema = new Schema(
-				$this->source->name,
+				$this->source,
 				$primary,
-				$attributes,
-				$this->source->meta ?? [],
-				$this->source->alias ?? null
+				$attributes
 			);
 		}
 	}

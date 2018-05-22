@@ -127,6 +127,8 @@
 				}
 				if ($source && $target && $relation !== 2) {
 					throw new SchemaException(sprintf('Target [%s] or source [%s] property of relation is not present in schema [%s].', $source, $target, $schema));
+				} else if ($relation === 2) {
+					$schemaBuilder->relation($source, $target);
 				}
 				if ($primary !== true) {
 					throw new SchemaException(sprintf('Primary property [%s::%s] is defined, but property does not exist; please add corresponding method to schema.', $schema, $primary));

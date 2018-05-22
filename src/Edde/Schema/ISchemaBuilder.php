@@ -31,6 +31,16 @@
 		public function property(string $name): IAttributeBuilder;
 
 		/**
+		 * mark this schema as a relation (source)->(target)
+		 *
+		 * @param string $source
+		 * @param string $target
+		 *
+		 * @return ISchemaBuilder
+		 */
+		public function relation(string $source, string $target): ISchemaBuilder;
+
+		/**
 		 * build and return a schema
 		 *
 		 * @return ISchema

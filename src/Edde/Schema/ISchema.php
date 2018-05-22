@@ -27,9 +27,9 @@
 		/**
 		 * get alias of this schema
 		 *
-		 * @return string
+		 * @return string|null
 		 */
-		public function getAlias(): string;
+		public function getAlias(): ?string;
 
 		/**
 		 * return alias or the original schema name

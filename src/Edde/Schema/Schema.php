@@ -3,32 +3,28 @@
 	namespace Edde\Schema;
 
 	use Edde\SimpleObject;
+	use stdClass;
+	use function property_exists;
 
 	class Schema extends SimpleObject implements ISchema {
-		/** @var string */
-		protected $name;
+		/** @var stdClass */
+		protected $source;
 		/** @var IAttribute */
 		protected $primary;
-		/** @var string|null */
-		protected $alias;
 		/** @var IAttribute[] */
 		protected $attributes = [];
-		/** @var array */
-		protected $meta = [];
 		/** @var IAttribute[] */
 		protected $uniques = null;
 
-		public function __construct(string $name, IAttribute $primary, array $attributes, array $meta = [], string $alias = null) {
-			$this->name = $name;
+		public function __construct(stdClass $source, IAttribute $primary, array $attributes) {
+			$this->source = $source;
 			$this->primary = $primary;
 			$this->attributes = $attributes;
-			$this->meta = $meta;
-			$this->alias = $alias;
 		}
 
 		/** @inheritdoc */
 		public function getName(): string {
-			return $this->name;
+			return (string)$this->source->name;
 		}
 
 		/** @inheritdoc */
@@ -38,22 +34,22 @@
 
 		/** @inheritdoc */
 		public function hasAlias(): bool {
-			return $this->alias !== null;
+			return property_exists($this->source, 'alias') && $this->source->alias !== null;
 		}
 
 		/** @inheritdoc */
-		public function getAlias(): string {
-			return $this->alias;
+		public function getAlias(): ?string {
+			return property_exists($this->source, 'alias') ? (string)$this->source->alias : null;
 		}
 
 		/** @inheritdoc */
 		public function getRealName(): string {
-			return $this->alias ?: $this->name;
+			return $this->getAlias() ?: $this->getName();
 		}
 
 		/** @inheritdoc */
 		public function getMeta(string $name, $default = null) {
-			return $this->meta[$name] ?? $default;
+			return $this->source->meta ?? $default;
 		}
 
 		/** @inheritdoc */
