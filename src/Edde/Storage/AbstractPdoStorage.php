@@ -18,7 +18,6 @@
 	use function array_unique;
 	use function array_values;
 	use function implode;
-	use function property_exists;
 	use function sha1;
 
 	abstract class AbstractPdoStorage extends AbstractStorage {
@@ -172,19 +171,20 @@
 		/** @inheritdoc */
 		public function save(IEntity $entity): IStorage {
 			try {
-				$schema = $this->schemaManager->getSchema($schema);
-				$primary = $schema->getPrimary()->getName();
-				if (property_exists($source, $primary) === false || $source->$primary === null) {
-					return $this->insert($schema->getName(), $source);
+				$schema = $entity->getSchema();
+				$primary = $entity->getPrimary();
+				$attribute = $entity->getPrimary()->getAttribute();
+				if ($primary->get() === null) {
+					return $this->insert($entity);
 				}
 				$count = ['count' => 0];
-				foreach ($this->fetch('SELECT COUNT(' . $this->delimit($primary) . ') AS count FROM ' . $this->delimit($schema->getRealName()) . ' WHERE ' . $this->delimit($primary) . ' = :primary', ['primary' => $source->$primary]) as $count) {
+				foreach ($this->fetch('SELECT COUNT(' . $this->delimit($attribute->getName()) . ') AS count FROM ' . $this->delimit($schema->getRealName()) . ' WHERE ' . $this->delimit($attribute->getName()) . ' = :primary', ['primary' => $primary->get()]) as $count) {
 					break;
 				}
 				if ($count['count'] === 0) {
-					return $this->insert($schema->getName(), $source);
+					return $this->insert($entity);
 				}
-				return $this->update($schema->getName(), $source);
+				return $this->update($entity);
 			} catch (Throwable $exception) {
 				throw $this->exception($exception);
 			}

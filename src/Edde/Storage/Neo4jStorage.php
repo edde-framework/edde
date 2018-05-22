@@ -128,18 +128,19 @@
 		public function save(IEntity $entity): IStorage {
 			try {
 				$schema = $entity->getSchema();
-				$primary = $schema->getPrimary()->getName();
-				if (property_exists($source, $primary) === false || $source->$primary === null) {
-					return $this->insert($schema->getName(), $source);
+				$primary = $entity->getPrimary();
+				$attribute = $entity->getPrimary()->getAttribute();
+				if ($primary->get() === null) {
+					return $this->insert($entity);
 				}
 				$count = ['count' => 0];
-				foreach ($this->fetch('MATCH (n:' . $this->delimit($schema->getRealName()) . ' {' . $this->delimit($primary) . ': $primary}) RETURN count(n) AS count', ['primary' => $source->$primary]) as $count) {
+				foreach ($this->fetch('MATCH (n:' . $this->delimit($schema->getRealName()) . ' {' . $this->delimit($attribute->getName()) . ': $primary}) RETURN count(n) AS count', ['primary' => $primary->get()]) as $count) {
 					break;
 				}
 				if ($count['count'] === 0) {
-					return $this->insert($schema->getName(), $source);
+					return $this->insert($entity);
 				}
-				return $this->update($schema->getName(), $source);
+				return $this->update($entity);
 			} catch (Throwable $exception) {
 				throw $this->exception($exception);
 			}

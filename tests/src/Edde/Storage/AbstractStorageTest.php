@@ -157,6 +157,26 @@
 		}
 
 		/**
+		 * @throws FilterException
+		 * @throws SchemaException
+		 * @throws StorageException
+		 * @throws ValidatorException
+		 */
+		public function testSave() {
+			$this->storage->save($entity = $this->entityManager->entity(ProjectSchema::class, (object)[
+				'name'    => 'some-project-here',
+				'created' => new DateTime(),
+				'start'   => new DateTime(),
+				'end'     => new DateTime(),
+			]));
+			$entity->set('end', null);
+			$this->storage->save($entity);
+			$actual = $this->storage->load(ProjectSchema::class, $entity->getPrimary()->get());
+			self::assertNull($actual->get('end'));
+			self::assertInstanceOf(DateTime::class, $actual->get('start'));
+		}
+
+		/**
 		 * @throws SchemaException
 		 * @throws ContainerException
 		 * @throws ReflectionException
