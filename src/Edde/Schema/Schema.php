@@ -81,6 +81,22 @@
 
 		/** @inheritdoc */
 		public function isRelation(): bool {
-			return property_exists($this->source, 'relation');
+			return property_exists($this->source, 'relation') && $this->source->relation !== null;
+		}
+
+		/** @inheritdoc */
+		public function getSource(): IAttribute {
+			if ($this->isRelation() === false) {
+				throw new SchemaException(sprintf('Schema [%s] is not relation; relation source is not available!', $this->getName()));
+			}
+			return $this->getAttribute($this->source->relation->source);
+		}
+
+		/** @inheritdoc */
+		public function getTarget(): IAttribute {
+			if ($this->isRelation() === false) {
+				throw new SchemaException(sprintf('Schema [%s] is not relation; relation target is not available!', $this->getName()));
+			}
+			return $this->getAttribute($this->source->relation->target);
 		}
 	}

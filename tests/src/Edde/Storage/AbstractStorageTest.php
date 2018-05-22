@@ -185,6 +185,31 @@
 		 * @throws StorageException
 		 * @throws ValidatorException
 		 */
+		public function testAttachException() {
+			$this->expectException(StorageException::class);
+			$this->expectExceptionMessage('Source schema [UserSchema] of entity differs from expected relation [ProjectMemberSchema] source schema [ProjectSchema]; did you swap source ($entity) and $target?');
+			$project = $this->entityManager->entity(ProjectSchema::class, (object)[
+				'name' => 'to be linked',
+			]);
+			$user = $this->entityManager->entity(UserSchema::class, (object)[
+				'login'    => 'root',
+				'password' => '123',
+			]);
+			$relation = $this->storage->attach($user, $project, ProjectMemberSchema::class);
+			$relation->set('owner', true);
+			$this->storage->saves([
+				$project,
+				$user,
+				$relation,
+			]);
+		}
+
+		/**
+		 * @throws FilterException
+		 * @throws SchemaException
+		 * @throws StorageException
+		 * @throws ValidatorException
+		 */
 		public function testAttach() {
 			$project = $this->entityManager->entity(ProjectSchema::class, (object)[
 				'name' => 'to be linked',
@@ -195,11 +220,11 @@
 			]);
 			$relation = $this->storage->attach($project, $user, ProjectMemberSchema::class);
 			$relation->set('owner', true);
-			$this->storage->saves([
-				$project,
-				$user,
-				$relation,
-			]);
+			$this->storage->save($relation);
+			$relation = $this->storage->load(ProjectMemberSchema::class, $relation->get('uuid'));
+			self::assertTrue($relation->get('owner'));
+			self::assertEquals($relation->get('project'), $project->get('uuid'));
+			self::assertEquals($relation->get('user'), $user->get('uuid'));
 		}
 
 		/**

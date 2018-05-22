@@ -5,6 +5,7 @@
 	use Edde\Collection\IEntity;
 	use Edde\Filter\FilterException;
 	use Edde\Query\IQuery;
+	use Edde\Schema\SchemaException;
 	use Edde\Validator\ValidatorException;
 
 	/**
@@ -121,13 +122,17 @@
 
 		/**
 		 * create relation entity and make a relation between ($entity)-[$relation]->($target); relation
-		 * MUST be saved explicitly as there could be mandatory attributes on it
+		 * MUST be saved explicitly as there could be mandatory attributes on it; $entity and $target got
+		 * also saved in this method to ensure primary key presence
 		 *
 		 * @param IEntity $entity
 		 * @param IEntity $target
 		 * @param string  $relation
 		 *
 		 * @return IEntity relation entity; it's possible to set up relation attributes and save entity
+		 *
+		 * @throws StorageException
+		 * @throws SchemaException
 		 */
 		public function attach(IEntity $entity, IEntity $target, string $relation): IEntity;
 	}

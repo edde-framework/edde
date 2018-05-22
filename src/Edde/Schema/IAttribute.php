@@ -60,4 +60,20 @@
 		 * @return string|null
 		 */
 		public function getFilter(string $name): ?string;
+
+		/**
+		 * is this property reference to another schema?
+		 *
+		 * @return bool
+		 */
+		public function hasSchema(): bool;
+
+		/**
+		 * return target schema or thrown an exception if not available
+		 *
+		 * @return string
+		 *
+		 * @throws SchemaException
+		 */
+		public function getSchema(): string;
 	}

@@ -77,4 +77,22 @@
 		 * @return bool
 		 */
 		public function isRelation(): bool;
+
+		/**
+		 * get source attribute of relation (source)->(target)
+		 *
+		 * @return IAttribute
+		 *
+		 * @throws SchemaException
+		 */
+		public function getSource(): IAttribute;
+
+		/**
+		 * get target attribute of relation (source)->(target)
+		 *
+		 * @return IAttribute
+		 *
+		 * @throws SchemaException
+		 */
+		public function getTarget(): IAttribute;
 	}
