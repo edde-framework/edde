@@ -14,15 +14,10 @@
 
 	class SchemaReflectionLoader extends AbstractSchemaLoader implements ISchemaLoader {
 		use StringUtils;
-		/** @var ISchema[] */
-		protected $schemas = [];
 
 		/** @inheritdoc */
 		public function load(string $schema): ISchema {
 			try {
-				if (isset($this->schemas[$schema])) {
-					return $this->schemas[$schema];
-				}
 				$reflectionClass = new ReflectionClass($schema);
 				$schemaBuilder = new SchemaBuilder($schema);
 				$primary = false;
@@ -33,7 +28,7 @@
 					switch ($name) {
 						case 'alias':
 							/**
-							 * auto alias support; name kick off "schema" from the name and rest is used as an alias
+							 * auto alias support; kick off "schema" from the name and rest is used as an alias
 							 */
 							if ($value === true) {
 								$value = str_replace('-schema', '', $this->stringUtils->recamel($this->stringUtils->extract($schema), '-'));
@@ -76,12 +71,10 @@
 						$attributeBuilder->filter('generator', $propertyName);
 					} else if ($propertyName === $source) {
 						$relation++;
-						$sourceSchema = $this->load($propertyType);
-						$attributeBuilder->type($sourceSchema->getPrimary()->getType());
+						$attributeBuilder->source($propertyType);
 					} else if ($propertyName === $target) {
 						$relation++;
-						$targetSchema = $this->load($propertyType);
-						$attributeBuilder->type($targetSchema->getPrimary()->getType());
+						$attributeBuilder->target($propertyType);
 					}
 					foreach ($reflectionMethod->getParameters() as $parameter) {
 						switch ($parameterName = $parameter->getName()) {
@@ -138,7 +131,7 @@
 				if ($primary !== true) {
 					throw new SchemaException(sprintf('Primary property [%s::%s] is defined, but property does not exist; please add corresponding method to schema.', $schema, $primary));
 				}
-				return $this->schemas[$schema] = $schemaBuilder->create();
+				return $schemaBuilder->create();
 			} catch (SchemaException $exception) {
 				throw $exception;
 			} catch (Throwable $throwable) {

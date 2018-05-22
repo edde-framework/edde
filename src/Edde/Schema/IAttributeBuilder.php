@@ -66,6 +66,24 @@
 		public function default($default): IAttributeBuilder;
 
 		/**
+		 * mark this attribute as a source of relation; (source)->(target)
+		 *
+		 * @param string $source
+		 *
+		 * @return IAttributeBuilder
+		 */
+		public function source(string $source): IAttributeBuilder;
+
+		/**
+		 * mark this attribute as a target of relation; (source)->(target)
+		 *
+		 * @param string $target
+		 *
+		 * @return IAttributeBuilder
+		 */
+		public function target(string $target): IAttributeBuilder;
+
+		/**
 		 * creates and return a property
 		 *
 		 * @return IAttribute
