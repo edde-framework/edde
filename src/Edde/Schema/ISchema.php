@@ -70,4 +70,11 @@
 		 * @return IAttribute[]
 		 */
 		public function getUniques(): array;
+
+		/**
+		 * is this schema relation?
+		 *
+		 * @return bool
+		 */
+		public function isRelation(): bool;
 	}

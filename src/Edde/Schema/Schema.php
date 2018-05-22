@@ -78,4 +78,9 @@
 			}
 			return $this->uniques;
 		}
+
+		/** @inheritdoc */
+		public function isRelation(): bool {
+			return property_exists($this->source, 'relation');
+		}
 	}

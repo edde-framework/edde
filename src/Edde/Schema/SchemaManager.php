@@ -12,12 +12,12 @@
 
 		/** @inheritdoc */
 		public function load(string $name): ISchemaManager {
-			if (isset($this->schemas[$name]) === false) {
-				$this->schemas[$name] = $schema = $this->schemaLoader->load($name);
-				if ($schema->hasAlias()) {
-					$this->schemas[$schema->getAlias()] = $schema;
-				}
-				$this->link($schema);
+			if (isset($this->schemas[$name]) !== false) {
+				return $this;
+			}
+			$this->schemas[$name] = $schema = $this->schemaLoader->load($name);
+			if ($schema->hasAlias()) {
+				$this->schemas[$schema->getAlias()] = $schema;
 			}
 			return $this;
 		}
@@ -46,16 +46,5 @@
 		/** @inheritdoc */
 		public function getSchemas(): array {
 			return $this->schemas;
-		}
-
-		/**
-		 * compute relations between schemas
-		 *
-		 * @param ISchema $schema
-		 *
-		 * @return ISchemaManager
-		 */
-		protected function link(ISchema $schema): ISchemaManager {
-			return $this;
 		}
 	}
