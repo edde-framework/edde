@@ -3,7 +3,6 @@
 	namespace Edde\Storage;
 
 	use DateTime;
-	use Edde\Collection\EntityQueue;
 	use Edde\Container\ContainerException;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Collection\CollectionManager;
@@ -14,7 +13,6 @@
 	use Edde\TestCase;
 	use Edde\Validator\ValidatorException;
 	use LabelSchema;
-	use ProjectMemberSchema;
 	use ProjectSchema;
 	use ReflectionException;
 	use UserSchema;
@@ -145,25 +143,6 @@
 			$actual = $this->storage->load(ProjectSchema::class, $source->uuid);
 			self::assertNull($actual->end);
 			self::assertInstanceOf(DateTime::class, $actual->start);
-		}
-
-		/**
-		 * @throws SchemaException
-		 * @throws StorageException
-		 */
-		public function testEntityQueue() {
-			$entityQueue = new EntityQueue();
-			$entityQueue->save($user = $this->entityManager->entity(UserSchema::class, (object)[
-				'login'    => 'root',
-				'password' => 'toor',
-			]));
-			$entityQueue->save($project = $this->entityManager->entity(ProjectSchema::class, (object)[
-				'name'  => 'My Cool Project',
-				'start' => new DateTime(),
-			]));
-			$entityQueue->attach($user, $project, ProjectMemberSchema::class);
-			$entityQueue->commit($this->storage);
-			self::assertNotNull($user->get('uuid'));
 		}
 
 		/**
