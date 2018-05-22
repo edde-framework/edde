@@ -18,6 +18,31 @@
 		}
 
 		/** @inheritdoc */
+		public function attach(IEntity $entity, IEntity $target, string $relation): IEntityQueue {
+			$this->entityQueue[] = [
+				'save',
+				$entity,
+				$target,
+			];
+			return $this;
+		}
+
+		/** @inheritdoc */
+		public function detach(IEntity $entity, IEntity $target, string $relation): IEntityQueue {
+			return $this;
+		}
+
+		/** @inheritdoc */
+		public function link(IEntity $entity, IEntity $target, string $relation): IEntityQueue {
+			return $this;
+		}
+
+		/** @inheritdoc */
+		public function disconnect(IEntity $entity, string $target, string $relation): IEntityQueue {
+			return $this;
+		}
+
+		/** @inheritdoc */
 		public function commit(IStorage $storage): IEntityQueue {
 			$storage->transaction(function () use ($storage) {
 				foreach ($this->entityQueue as $entityQueue) {

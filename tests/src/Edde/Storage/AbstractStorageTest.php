@@ -14,6 +14,7 @@
 	use Edde\TestCase;
 	use Edde\Validator\ValidatorException;
 	use LabelSchema;
+	use ProjectMemberSchema;
 	use ProjectSchema;
 	use ReflectionException;
 	use UserSchema;
@@ -152,12 +153,17 @@
 		 */
 		public function testEntityQueue() {
 			$entityQueue = new EntityQueue();
-			$entityQueue->save($entity = $this->entityManager->entity(UserSchema::class, (object)[
+			$entityQueue->save($user = $this->entityManager->entity(UserSchema::class, (object)[
 				'login'    => 'root',
 				'password' => 'toor',
 			]));
+			$entityQueue->save($project = $this->entityManager->entity(ProjectSchema::class, (object)[
+				'name'  => 'My Cool Project',
+				'start' => new DateTime(),
+			]));
+			$entityQueue->attach($user, $project, ProjectMemberSchema::class);
 			$entityQueue->commit($this->storage);
-			self::assertNotNull($entity->get('uuid'));
+			self::assertNotNull($user->get('uuid'));
 		}
 
 		/**

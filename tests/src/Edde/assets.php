@@ -34,6 +34,10 @@
 		public function due(): ?DateTime;
 
 		public function weight($default = 1.0): float;
+	}
+
+	interface IssueProjectSchema extends UuidSchema {
+		public function issue(): IssueSchema;
 
 		public function project(): ProjectSchema;
 	}
@@ -58,6 +62,8 @@
 
 	interface IssueAssigneeSchema extends UuidSchema {
 		public function issue(): IssueSchema;
+
+		public function user(): UserSchema;
 
 		public function created($generator = 'stamp'): DateTime;
 	}
