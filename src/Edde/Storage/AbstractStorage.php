@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
+	use Edde\Collection\IEntity;
 	use Edde\Config\ISection;
 	use Edde\Filter\FilterException;
 	use Edde\Query\IQuery;
@@ -40,41 +41,57 @@
 		/**
 		 * sanitizer and validate input
 		 *
-		 * @param ISchema  $schema
-		 * @param stdClass $stdClass
-		 * @param bool     $update
+		 * @param IEntity $entity
 		 *
 		 * @return stdClass
+		 *
 		 * @throws FilterException
 		 * @throws ValidatorException
 		 */
-		protected function prepareInput(ISchema $schema, stdClass $stdClass, bool $update = false): stdClass {
-			$stdClass = clone $stdClass;
+		protected function prepareInsert(IEntity $entity): stdClass {
+			$stdClass = $entity->toObject();
+			$schema = $entity->getSchema();
 			foreach ($schema->getAttributes() as $name => $attribute) {
-				/**
-				 * if there is a generator and property does not exists, generate a new value; property should not exists to
-				 * accept NULL and empty values as generated value
-				 */
-				if (($generator = $attribute->getFilter('generator')) && (property_exists($stdClass, $name) === false) && $update === false) {
+				if (($generator = $attribute->getFilter('generator')) && $stdClass->$name === null) {
 					$stdClass->$name = $this->filterManager->getFilter('storage:' . $generator)->input(null);
 				}
-				/**
-				 * default value will provide default all the times, thus from this point it's safe to use $stdClass->$name
-				 */
-				if (property_exists($stdClass, $name) === false && ($default = $attribute->getDefault()) !== null) {
-					$stdClass->$name = $default;
-				}
-				if (property_exists($stdClass, $name) === false && $update) {
-					continue;
-				}
-				if (property_exists($stdClass, $name) === false || $stdClass->$name === null) {
-					if ($attribute->isRequired()) {
-						throw new ValidatorException(sprintf('Required value [%s::%s] is not set or null.', $schema->getName(), $name));
-					}
-					continue;
-				}
+				$stdClass->$name = $stdClass->$name ?: $attribute->getDefault();
 				if ($validator = $attribute->getValidator()) {
-					$this->validatorManager->validate('storage:' . $validator, $stdClass->$name, (object)['name' => $schema->getName() . '::' . $name]);
+					$this->validatorManager->validate('storage:' . $validator, $stdClass->$name, (object)[
+						'name'     => $schema->getName() . '::' . $name,
+						'required' => $attribute->isRequired(),
+					]);
+				}
+				if ($filter = $attribute->getFilter('type')) {
+					$stdClass->$name = $this->filterManager->getFilter('storage:' . $filter)->input($stdClass->$name);
+				}
+				/**
+				 * common filter support; filter name is used for both directions
+				 */
+				if ($filter = $attribute->getFilter('filter')) {
+					$stdClass->$name = $this->filterManager->getFilter('storage:' . $filter)->input($stdClass->$name);
+				}
+			}
+			return $stdClass;
+		}
+
+		/**
+		 * @param IEntity $entity
+		 *
+		 * @return stdClass
+		 *
+		 * @throws FilterException
+		 * @throws ValidatorException
+		 */
+		protected function prepareUpdate(IEntity $entity): stdClass {
+			$stdClass = $entity->toObject();
+			$schema = $entity->getSchema();
+			foreach ($schema->getAttributes() as $name => $attribute) {
+				if ($validator = $attribute->getValidator()) {
+					$this->validatorManager->validate('storage:' . $validator, $stdClass->$name, (object)[
+						'name'     => $schema->getName() . '::' . $name,
+						'required' => $attribute->isRequired(),
+					]);
 				}
 				if ($filter = $attribute->getFilter('type')) {
 					$stdClass->$name = $this->filterManager->getFilter('storage:' . $filter)->input($stdClass->$name);
@@ -92,7 +109,7 @@
 		/**
 		 * validate and sanitize output
 		 *
-		 * @param ISchema  $schema
+		 * @param ISchema $schema
 		 * @param stdClass $stdClass
 		 *
 		 * @return stdClass

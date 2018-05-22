@@ -5,7 +5,6 @@
 	use Edde\Schema\ISchema;
 	use Edde\SimpleObject;
 	use stdClass;
-	use function array_filter;
 
 	class Crate extends SimpleObject implements ICrate {
 		/** @var ISchema */
@@ -117,10 +116,8 @@
 		public function toObject(): stdClass {
 			$stdClass = new stdClass();
 			foreach ($this->schema->getAttributes() as $k => $property) {
-				$stdClass->$k = $this->get($k, $property->getDefault());
+				$stdClass->$k = $this->get($k);
 			}
-			return (object)array_filter((array)$stdClass, function ($item) {
-				return $item !== null;
-			});
+			return $stdClass;
 		}
 	}

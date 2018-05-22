@@ -4,6 +4,7 @@
 
 	use DateTime;
 	use Edde\Container\ContainerException;
+	use Edde\Filter\FilterException;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Collection\CollectionManager;
 	use Edde\Service\Collection\EntityManager;
@@ -17,7 +18,6 @@
 	use ReflectionException;
 	use UserSchema;
 	use VoidSchema;
-	use function property_exists;
 
 	abstract class AbstractStorageTest extends TestCase {
 		use SchemaManager;
@@ -42,62 +42,71 @@
 		}
 
 		/**
+		 * @throws SchemaException
 		 * @throws StorageException
+		 * @throws ValidatorException
+		 * @throws FilterException
 		 */
 		public function testInsertNoTable() {
 			self::expectException(UnknownTableException::class);
-			$this->storage->insert(VoidSchema::class, (object)[]);
+			$this->storage->insert($this->entityManager->entity(VoidSchema::class));
 		}
 
 		/**
+		 * @throws SchemaException
 		 * @throws StorageException
+		 * @throws ValidatorException
+		 * @throws FilterException
 		 */
 		public function testValidator() {
 			$this->expectException(ValidatorException::class);
 			$this->expectExceptionMessage('Value [LabelSchema::name] is not string.');
-			$this->storage->insert(LabelSchema::class, (object)['name' => true]);
+			$this->storage->insert($this->entityManager->entity(LabelSchema::class, (object)['name' => true]));
 		}
 
 		/**
+		 * @throws SchemaException
 		 * @throws StorageException
+		 * @throws ValidatorException
+		 * @throws FilterException
 		 */
 		public function testInsert() {
-			$source = $this->storage->insert(LabelSchema::class, $object = (object)[
+			$this->storage->insert($entity = $this->entityManager->entity(LabelSchema::class, $object = (object)[
 				'name' => 'this entity is new',
-			]);
-			self::assertNotEquals($object, $source);
-			self::assertTrue(property_exists($source, 'uuid'));
-			self::assertTrue(property_exists($source, 'system'));
-			self::assertNotEmpty($source->uuid);
-			/**
-			 * because insert returns data actually inserted into database
-			 */
-			self::assertEquals(0, $source->system);
+			]));
+			self::assertNotNull($entity->get('uuid'));
+			self::assertFalse($entity->get('system'));
 		}
 
 		/**
+		 * @throws SchemaException
 		 * @throws StorageException
+		 * @throws ValidatorException
+		 * @throws FilterException
 		 */
 		public function testInsertException2() {
 			$this->expectException(ValidatorException::class);
-			$this->expectExceptionMessage('Required value [LabelSchema::name] is not set or null.');
-			$this->storage->insert(LabelSchema::class, (object)[
+			$this->expectExceptionMessage('Required value [LabelSchema::name] is null.');
+			$this->storage->insert($this->entityManager->entity(LabelSchema::class, (object)[
 				'name' => null,
-			]);
+			]));
 		}
 
 		/**
+		 * @throws SchemaException
 		 * @throws StorageException
+		 * @throws ValidatorException
+		 * @throws FilterException
 		 */
 		public function testInsertUnique() {
 			$this->expectException(DuplicateEntryException::class);
-			$this->storage->insert(LabelSchema::class, (object)[
+			$this->storage->insert($this->entityManager->entity(LabelSchema::class, (object)[
 				'name'   => 'unique',
 				'system' => true,
-			]);
-			$this->storage->insert(LabelSchema::class, (object)[
+			]));
+			$this->storage->insert($this->entityManager->entity(LabelSchema::class, (object)[
 				'name' => 'unique',
-			]);
+			]));
 		}
 
 		/**
@@ -128,21 +137,23 @@
 		}
 
 		/**
+		 * @throws SchemaException
 		 * @throws StorageException
+		 * @throws ValidatorException
+		 * @throws FilterException
 		 */
 		public function testUpdate() {
-			$source = $this->storage->insert(ProjectSchema::class, $object = (object)[
+			$this->storage->insert($entity = $this->entityManager->entity(ProjectSchema::class, (object)[
 				'name'    => 'some-project-here',
 				'created' => new DateTime(),
 				'start'   => new DateTime(),
 				'end'     => new DateTime(),
-			]);
-			$object->end = null;
-			$object->uuid = $source->uuid;
-			$this->storage->update(ProjectSchema::class, $object);
-			$actual = $this->storage->load(ProjectSchema::class, $source->uuid);
-			self::assertNull($actual->end);
-			self::assertInstanceOf(DateTime::class, $actual->start);
+			]));
+			$entity->set('end', null);
+			$this->storage->update($entity);
+			$actual = $this->storage->load(ProjectSchema::class, $entity->getPrimary()->get());
+			self::assertNull($actual->get('end'));
+			self::assertInstanceOf(DateTime::class, $actual->get('start'));
 		}
 
 		/**

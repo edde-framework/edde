@@ -8,7 +8,7 @@
 	class BoolValidator extends AbstractValidator {
 		/** @inheritdoc */
 		public function validate($value, ?stdClass $options = null): void {
-			if (is_bool($value) === false) {
+			if ($this->checkRequired($value, $options) && is_bool($value) === false) {
 				throw new ValidatorException(sprintf('Value [%s] is not boolean.', $this->getValueName($options)));
 			}
 		}

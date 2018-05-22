@@ -2,7 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
+	use Edde\Collection\Entity;
 	use Edde\Collection\EntityNotFoundException;
+	use Edde\Collection\IEntity;
 	use Edde\Config\ConfigException;
 	use Edde\Filter\FilterException;
 	use Edde\Query\ISelectQuery;
@@ -18,7 +20,6 @@
 	use GraphAware\Bolt\Protocol\V1\Transaction;
 	use GraphAware\Bolt\Result\Result;
 	use GraphAware\Common\Type\MapAccessor;
-	use stdClass;
 	use Throwable;
 	use function implode;
 
@@ -88,11 +89,9 @@
 		}
 
 		/** @inheritdoc */
-		public function insert(string $schema, stdClass $source): stdClass {
-			$source = $this->prepareInput(
-				$schema = $this->schemaManager->getSchema($schema),
-				$source
-			);
+		public function insert(IEntity $entity): IStorage {
+			$source = $this->prepareInsert($entity);
+			$schema = $entity->getSchema();
 			$this->fetch(
 				'MERGE (a:' . $this->delimit($schema->getRealName()) . ' {' . $this->delimit($primary = $schema->getPrimary()->getName()) . ': $primary}) SET a = $set',
 				[
@@ -100,21 +99,35 @@
 					'set'     => (array)$source,
 				]
 			);
-			return $source;
+			$entity->put($this->prepareOutput($schema, $source));
+			$entity->commit();
+			return $this;
 		}
 
 		/** @inheritdoc */
-		public function update(string $schema, stdClass $source): stdClass {
+		public function update(IEntity $entity): IStorage {
 			/**
-			 * neo4j has same method for update/insert
+			 * despite duplicate piece of code it's better to keep two almost-same pieces than one with strange behavior related to one
+			 * storage system
 			 */
-			return $this->insert($schema, $source);
+			$source = $this->prepareUpdate($entity);
+			$schema = $entity->getSchema();
+			$this->fetch(
+				'MERGE (a:' . $this->delimit($schema->getRealName()) . ' {' . $this->delimit($primary = $schema->getPrimary()->getName()) . ': $primary}) SET a = $set',
+				[
+					'primary' => $source->{$primary},
+					'set'     => (array)$source,
+				]
+			);
+			$entity->put($this->prepareOutput($schema, $source));
+			$entity->commit();
+			return $this;
 		}
 
 		/** @inheritdoc */
-		public function save(string $schema, stdClass $source): stdClass {
+		public function save(IEntity $entity): IStorage {
 			try {
-				$schema = $this->schemaManager->getSchema($schema);
+				$schema = $entity->getSchema();
 				$primary = $schema->getPrimary()->getName();
 				if (property_exists($source, $primary) === false || $source->$primary === null) {
 					return $this->insert($schema->getName(), $source);
@@ -133,13 +146,15 @@
 		}
 
 		/** @inheritdoc */
-		public function load(string $schema, string $id): stdClass {
+		public function load(string $schema, string $id): IEntity {
 			try {
 				$schema = $this->schemaManager->getSchema($schema);
 				$primary = $schema->getPrimary();
 				$query = 'MATCH (n:' . $this->delimit($schema->getRealName()) . ' {' . $this->delimit($primary->getName()) . ': $primary}) RETURN n';
 				foreach ($this->fetch($query, ['primary' => $id]) as $item) {
-					return $this->row($item, ['schema' => $schema], ['n' => 'schema'])->getItem('n');
+					$entity = new Entity($schema);
+					$entity->push($this->row($item, ['schema' => $schema], ['n' => 'schema'])->getItem('n'));
+					return $entity;
 				}
 				throw new EntityNotFoundException(sprintf('Cannot load any entity [%s] with id [%s].', $schema, $id));
 			} catch (EntityNotFoundException $exception) {
@@ -167,11 +182,11 @@
 			foreach (array_unique(array_values($uses)) as $schema) {
 				$schemas[$schema] = $this->schemaManager->getSchema($schema);
 			}
-			$froms = [];
+			$from = [];
 			foreach ($uses as $alias => $schema) {
-				$froms[] = '(' . ($returns[] = $this->delimit($alias)) . ':' . $this->delimit($schemas[$schema]->getRealName()) . ')';
+				$from[] = '(' . ($returns[] = $this->delimit($alias)) . ':' . $this->delimit($schemas[$schema]->getRealName()) . ')';
 			}
-			$cypher .= "\t" . implode(",\n", $froms) . "\nRETURN\n\t" . implode(',', $returns);
+			$cypher .= "\t" . implode(",\n", $from) . "\nRETURN\n\t" . implode(',', $returns);
 			foreach ($this->fetch($cypher, $params) as $row) {
 				yield $this->row($row, $schemas, $uses);
 			}

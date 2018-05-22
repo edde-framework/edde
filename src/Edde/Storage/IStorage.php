@@ -2,8 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
+	use Edde\Collection\IEntity;
+	use Edde\Filter\FilterException;
 	use Edde\Query\IQuery;
-	use stdClass;
+	use Edde\Validator\ValidatorException;
 
 	/**
 	 * Low-level storage implementation with all supported query types explicitly typed.
@@ -55,47 +57,52 @@
 		public function create(string $name): IStorage;
 
 		/**
-		 * optimized insert
+		 * optimized insert; entity is updated with new values (for example generated uuid)
 		 *
-		 * @param string   $schema
-		 * @param stdClass $source
+		 * @param IEntity $entity
 		 *
-		 * @return stdClass return data inserted into a storage (including defaults)
+		 * @return IStorage
 		 *
 		 * @throws StorageException
+		 * @throws ValidatorException
+		 * @throws FilterException
 		 */
-		public function insert(string $schema, stdClass $source): stdClass;
+		public function insert(IEntity $entity): IStorage;
 
 		/**
 		 * optimized update (by primary key)
 		 *
-		 * @param string   $schema
-		 * @param stdClass $source
+		 * @param IEntity $entity
 		 *
-		 * @return stdClass
+		 * @return IStorage
+		 *
+		 * @throws StorageException
+		 * @throws ValidatorException
+		 * @throws FilterException
 		 */
-		public function update(string $schema, stdClass $source): stdClass;
+		public function update(IEntity $entity): IStorage;
 
 		/**
 		 * insert or update; if primary is not present, entity will be inserted directly
 		 *
-		 * @param string   $schema
-		 * @param stdClass $source
+		 * @param IEntity $entity
 		 *
-		 * @return stdClass
+		 * @return IStorage
+		 *
+		 * @throws StorageException
+		 * @throws ValidatorException
+		 * @throws FilterException
 		 */
-		public function save(string $schema, stdClass $source): stdClass;
+		public function save(IEntity $entity): IStorage;
 
 		/**
 		 * as the whole framework is using UUID as a common identifier, this method is
 		 * optimized to get a data (one "table" at time) without messing with query builders
 		 *
-		 * internally method should use all unique properties to find desired model
-		 *
 		 * @param string $schema
 		 * @param string $id search by this value
 		 *
-		 * @return stdClass
+		 * @return IEntity
 		 */
-		public function load(string $schema, string $id): stdClass;
+		public function load(string $schema, string $id): IEntity;
 	}

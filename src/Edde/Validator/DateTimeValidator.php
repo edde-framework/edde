@@ -8,7 +8,7 @@
 	class DateTimeValidator extends AbstractValidator {
 		/** @inheritdoc */
 		public function validate($value, ?stdClass $options = null): void {
-			if ($value instanceof DateTime === false) {
+			if ($this->checkRequired($value, $options) && $value instanceof DateTime === false) {
 				throw new ValidatorException(sprintf('Value [%s] is not instanceof DateTime.', $this->getValueName($options)));
 			}
 		}

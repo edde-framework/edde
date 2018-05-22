@@ -8,7 +8,7 @@
 	class StringValidator extends AbstractValidator {
 		/** @inheritdoc */
 		public function validate($value, ?stdClass $options = null): void {
-			if (is_string($value) === false) {
+			if ($this->checkRequired($value, $options) && is_string($value) === false) {
 				throw new ValidatorException(sprintf('Value [%s] is not string.', $this->getValueName($options)));
 			}
 		}

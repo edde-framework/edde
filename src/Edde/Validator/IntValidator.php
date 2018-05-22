@@ -8,7 +8,7 @@
 	class IntValidator extends AbstractValidator {
 		/** @inheritdoc */
 		public function validate($value, ?stdClass $options = null): void {
-			if (is_int($value) === false) {
+			if ($this->checkRequired($value, $options) && is_int($value) === false) {
 				throw new ValidatorException(sprintf('Value [%s] is not integer.', $this->getValueName($options)));
 			}
 		}

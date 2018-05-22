@@ -2,7 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
+	use Edde\Collection\Entity;
 	use Edde\Collection\EntityNotFoundException;
+	use Edde\Collection\IEntity;
 	use Edde\Config\ConfigException;
 	use Edde\Filter\FilterException;
 	use Edde\Query\ISelectQuery;
@@ -12,7 +14,6 @@
 	use Generator;
 	use PDO;
 	use PDOException;
-	use stdClass;
 	use Throwable;
 	use function array_unique;
 	use function array_values;
@@ -76,15 +77,14 @@
 				$schemas[$schema] = $this->schemaManager->getSchema($schema);
 			}
 			$select = [];
-			$froms = [];
+			$from = [];
 			foreach ($uses as $alias => $schema) {
 				foreach ($schemas[$schema]->getAttributes() as $name => $attribute) {
 					$select[] = $this->delimit($alias) . '.' . $this->delimit($name) . ' AS ' . $this->delimit($alias . '.' . $name);
 				}
-				$froms[] = $this->delimit($schemas[$schema]->getRealName()) . ' ' . $this->delimit($alias);
+				$from[] = $this->delimit($schemas[$schema]->getRealName()) . ' ' . $this->delimit($alias);
 			}
-			$query .= implode(",\n\t", $select) . "\n";
-			$query .= "FROM\n\t" . implode(",\n\t", $froms) . "\n";
+			$query .= implode(",\n\t", $select) . "\nFROM\n\t" . implode(",\n\t", $from) . "\n";
 			foreach ($this->fetch($query, $params) as $row) {
 				yield $this->row($row, $schemas, $uses);
 			}
@@ -120,41 +120,40 @@
 		}
 
 		/** @inheritdoc */
-		public function insert(string $schema, stdClass $source): stdClass {
+		public function insert(IEntity $entity): IStorage {
 			try {
-				$schema = $this->schemaManager->getSchema($schema);
 				$columns = [];
 				$params = [];
-				foreach ($source = $this->prepareInput($schema, $source) as $k => $v) {
+				foreach ($source = $this->prepareInsert($entity) as $k => $v) {
 					$columns[] = $this->delimit($k);
 					$params[sha1($k)] = $v;
 				}
 				$this->fetch(
 					"INSERT INTO\n\t" .
-					$this->delimit($schema->getRealName()) .
+					$this->delimit(($schema = $entity->getSchema())->getRealName()) .
 					" (\n\t" . implode(",\n\t", $columns) .
 					")\n\tVALUES (\n\t:" .
 					implode(",\n\t:", array_keys($params)) .
 					"\n)\n",
 					$params
 				);
-				return $this->prepareOutput($schema, $source);
+				$entity->put($this->prepareOutput($schema, $source));
+				$entity->commit();
+				return $this;
 			} catch (Throwable $exception) {
 				throw $this->exception($exception);
 			}
 		}
 
 		/** @inheritdoc */
-		public function update(string $schema, stdClass $source): stdClass {
+		public function update(IEntity $entity): IStorage {
 			try {
-				$schema = $this->schemaManager->getSchema($schema);
+				$schema = $entity->getSchema();
 				$primary = $schema->getPrimary();
 				$table = $this->delimit($schema->getRealName());
-				$params = [
-					'primary' => $source->{$primary->getName()},
-				];
+				$params = ['primary' => $entity->getPrimary()->get()];
 				$columns = [];
-				foreach ($source = $this->prepareInput($schema, $source, true) as $k => $v) {
+				foreach ($source = $this->prepareUpdate($entity) as $k => $v) {
 					$params[$paramId = sha1($k)] = $v;
 					$columns[] = $this->delimit($k) . ' = :' . $paramId;
 				}
@@ -162,14 +161,16 @@
 					"UPDATE\n\t" . $table . "\nSET\n\t" . implode(",\n\t", $columns) . "\nWHERE\n\t" . $this->delimit($primary->getName()) . ' = :primary',
 					$params
 				);
-				return $this->prepareOutput($schema, $source);
+				$entity->put($this->prepareOutput($schema, $source));
+				$entity->commit();
+				return $this;
 			} catch (Throwable $exception) {
 				throw $this->exception($exception);
 			}
 		}
 
 		/** @inheritdoc */
-		public function save(string $schema, stdClass $source): stdClass {
+		public function save(IEntity $entity): IStorage {
 			try {
 				$schema = $this->schemaManager->getSchema($schema);
 				$primary = $schema->getPrimary()->getName();
@@ -190,12 +191,14 @@
 		}
 
 		/** @inheritdoc */
-		public function load(string $schema, string $id): stdClass {
+		public function load(string $schema, string $id): IEntity {
 			try {
 				$schema = $this->schemaManager->getSchema($schema);
 				$query = "SELECT * FROM " . $this->delimit($schema->getRealName()) . " WHERE " . $this->delimit($schema->getPrimary()->getName()) . ' = :primary';
 				foreach ($this->fetch($query, ['primary' => $id]) as $item) {
-					return $this->prepareOutput($schema, (object)$item);
+					$entity = new Entity($schema);
+					$entity->push($this->prepareOutput($schema, (object)$item));
+					return $entity;
 				}
 				throw new EntityNotFoundException(sprintf('Cannot load any entity [%s] with id [%s].', $schema, $id));
 			} catch (EntityNotFoundException $exception) {
