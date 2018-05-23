@@ -14,7 +14,6 @@
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Security\RandomService;
-	use Exception;
 	use Generator;
 	use GraphAware\Bolt\Configuration;
 	use GraphAware\Bolt\Exception\MessageFailureException;
@@ -197,10 +196,10 @@
 			try {
 				$schema = $this->schemaManager->getSchema($schema);
 				$primary = $schema->getPrimary();
-				if ($schema->isRelation()) {
-					throw new Exception('nip');
-				}
 				$query = 'MATCH (n:' . $this->delimit($schema->getRealName()) . ' {' . $this->delimit($primary->getName()) . ': $primary}) RETURN n';
+				if ($schema->isRelation()) {
+					$query = 'MATCH ()-[n:' . $this->delimit($schema->getRealName()) . ' {' . $this->delimit($primary->getName()) . ': $primary}]-() RETURN n';
+				}
 				foreach ($this->fetch($query, ['primary' => $id]) as $item) {
 					$entity = new Entity($schema);
 					$entity->push($this->row($item, ['schema' => $schema], ['n' => 'schema'])->getItem('n'));
