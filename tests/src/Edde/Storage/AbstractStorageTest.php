@@ -141,10 +141,11 @@
 		}
 
 		/**
+		 * @throws EntityNotFoundException
+		 * @throws FilterException
 		 * @throws SchemaException
 		 * @throws StorageException
 		 * @throws ValidatorException
-		 * @throws FilterException
 		 */
 		public function testUpdate() {
 			$this->storage->insert($entity = $this->entityManager->entity(ProjectSchema::class, (object)[
@@ -161,6 +162,7 @@
 		}
 
 		/**
+		 * @throws EntityNotFoundException
 		 * @throws FilterException
 		 * @throws SchemaException
 		 * @throws StorageException
@@ -206,6 +208,7 @@
 		}
 
 		/**
+		 * @throws EntityNotFoundException
 		 * @throws FilterException
 		 * @throws SchemaException
 		 * @throws StorageException
@@ -235,6 +238,7 @@
 		}
 
 		/**
+		 * @throws EntityNotFoundException
 		 * @throws FilterException
 		 * @throws SchemaException
 		 * @throws StorageException
@@ -263,32 +267,79 @@
 			self::assertTrue($relation->get('owner'));
 		}
 
-//		public function testLink() {
-//			$project = $this->entityManager->entity(ProjectSchema::class, (object)[
-//				'uuid' => 'two-pi',
-//				'name' => 'multilink, yaay',
-//			]);
-//		}
-
-		public function testDetachException() {
+		/**
+		 * @throws EntityNotFoundException
+		 * @throws StorageException
+		 */
+		public function testUnlinkException() {
 			$this->expectException(StorageException::class);
 			$this->expectExceptionMessage('Source schema [UserSchema] of entity differs from expected relation [ProjectMemberSchema] source schema [ProjectSchema]; did you swap source ($entity) and $target?');
-			$this->storage->detach(
-				$user = $this->storage->load(UserSchema::class, 'two'),
-				$project = $this->storage->load(ProjectSchema::class, 'one'),
+			$this->storage->unlink(
+				$this->storage->load(UserSchema::class, 'two'),
+				$this->storage->load(ProjectSchema::class, 'one'),
 				ProjectMemberSchema::class
 			);
 		}
 
-		public function testDetach() {
+		/**
+		 * @throws EntityNotFoundException
+		 * @throws StorageException
+		 */
+		public function testUnlink() {
 			$this->expectException(EntityNotFoundException::class);
 			$this->expectExceptionMessage('Cannot load any entity [ProjectMemberSchema] with id [relation].');
-			$this->storage->detach(
+			$this->storage->unlink(
 				$project = $this->storage->load(ProjectSchema::class, 'one'),
 				$user = $this->storage->load(UserSchema::class, 'two'),
 				ProjectMemberSchema::class
 			);
 			$this->storage->load(ProjectMemberSchema::class, 'relation');
+		}
+
+		/**
+		 * @throws EntityNotFoundException
+		 * @throws SchemaException
+		 * @throws StorageException
+		 */
+		public function testLinkException() {
+			$this->expectException(StorageException::class);
+			$this->expectExceptionMessage('Source schema [UserSchema] of entity differs from expected relation [ProjectMemberSchema] source schema [ProjectSchema]; did you swap source ($entity) and $target?');
+			$project = $this->entityManager->entity(ProjectSchema::class, (object)[
+				'uuid' => 'two-pi',
+				'name' => 'multilink, yaay',
+			]);
+			$this->storage->link(
+				$this->storage->load(UserSchema::class, 'two'),
+				$project,
+				ProjectMemberSchema::class
+			);
+		}
+
+		/**
+		 * @throws EntityNotFoundException
+		 * @throws FilterException
+		 * @throws SchemaException
+		 * @throws StorageException
+		 * @throws ValidatorException
+		 */
+		public function testLink() {
+			$this->expectException(EntityNotFoundException::class);
+			$this->expectExceptionMessage('Cannot load any entity [ProjectMemberSchema] with id [original].');
+			$project = $this->entityManager->entity(ProjectSchema::class, (object)[
+				'uuid' => 'two-pi',
+				'name' => 'multilink, yaay',
+			]);
+			$user = $this->storage->load(UserSchema::class, 'two');
+			$original = $this->storage->attach($project, $user, ProjectMemberSchema::class);
+			$original->set('uuid', 'original');
+			$this->storage->save($original);
+			$relation = $this->storage->link(
+				$project,
+				$user,
+				ProjectMemberSchema::class
+			);
+			$this->storage->save($relation);
+			$this->storage->load(ProjectMemberSchema::class, $original->get('uuid'));
 		}
 
 		/**

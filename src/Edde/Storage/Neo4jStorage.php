@@ -179,7 +179,7 @@
 		}
 
 		/** @inheritdoc */
-		public function detach(IEntity $entity, IEntity $target, string $relation): IStorage {
+		public function unlink(IEntity $entity, IEntity $target, string $relation): IStorage {
 			$this->checkRelation(
 				$relationSchema = $this->schemaManager->getSchema($relation),
 				$entitySchema = $entity->getSchema(),

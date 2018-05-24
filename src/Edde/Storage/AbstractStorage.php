@@ -52,19 +52,23 @@
 
 		/** @inheritdoc */
 		public function attach(IEntity $entity, IEntity $target, string $relation): IEntity {
-			return $this->transaction(function () use ($entity, $target, $relation) {
-				$relationEntity = new Entity($relationSchema = $this->schemaManager->getSchema($relation));
-				$entitySchema = $entity->getSchema();
-				$targetSchema = $target->getSchema();
-				$sourceAttribute = $relationSchema->getSource();
-				$targetAttribute = $relationSchema->getTarget();
-				$this->checkRelation($relationSchema, $entitySchema, $targetSchema);
-				$this->save($entity);
-				$this->save($target);
-				$relationEntity->set($sourceAttribute->getName(), $entity->getPrimary()->get());
-				$relationEntity->set($targetAttribute->getName(), $target->getPrimary()->get());
-				return $relationEntity;
-			});
+			$relationEntity = new Entity($relationSchema = $this->schemaManager->getSchema($relation));
+			$entitySchema = $entity->getSchema();
+			$targetSchema = $target->getSchema();
+			$sourceAttribute = $relationSchema->getSource();
+			$targetAttribute = $relationSchema->getTarget();
+			$this->checkRelation($relationSchema, $entitySchema, $targetSchema);
+			$this->save($entity);
+			$this->save($target);
+			$relationEntity->set($sourceAttribute->getName(), $entity->getPrimary()->get());
+			$relationEntity->set($targetAttribute->getName(), $target->getPrimary()->get());
+			return $relationEntity;
+		}
+
+		/** @inheritdoc */
+		public function link(IEntity $entity, IEntity $target, string $relation): IEntity {
+			$this->unlink($entity, $target, $relation);
+			return $this->attach($entity, $target, $relation);
 		}
 
 		/**

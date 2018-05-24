@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
+	use Edde\Collection\EntityNotFoundException;
 	use Edde\Collection\IEntity;
 	use Edde\Filter\FilterException;
 	use Edde\Query\IQuery;
@@ -117,6 +118,9 @@
 		 * @param string $id search by this value
 		 *
 		 * @return IEntity
+		 *
+		 * @throws StorageException
+		 * @throws EntityNotFoundException
 		 */
 		public function load(string $schema, string $id): IEntity;
 
@@ -137,17 +141,6 @@
 		public function attach(IEntity $entity, IEntity $target, string $relation): IEntity;
 
 		/**
-		 * unlink all relations between given entities and make a new one; detach method is used for this
-		 *
-		 * @param IEntity $entity
-		 * @param IEntity $target
-		 * @param string  $relation
-		 *
-		 * @return IEntity
-		 */
-		public function link(IEntity $entity, IEntity $target, string $relation): IEntity;
-
-		/**
 		 * remove all relations between given entities
 		 *
 		 * @param IEntity $entity
@@ -155,6 +148,22 @@
 		 * @param string  $relation
 		 *
 		 * @return IStorage
+		 *
+		 * @throws StorageException
 		 */
-		public function detach(IEntity $entity, IEntity $target, string $relation): IStorage;
+		public function unlink(IEntity $entity, IEntity $target, string $relation): IStorage;
+
+		/**
+		 * unlink all relations between given entities and make a new one; detach method is used for this
+		 *
+		 * @param IEntity $entity
+		 * @param IEntity $target
+		 * @param string  $relation
+		 *
+		 * @return IEntity
+		 *
+		 * @throws StorageException
+		 * @throws SchemaException
+		 */
+		public function link(IEntity $entity, IEntity $target, string $relation): IEntity;
 	}
