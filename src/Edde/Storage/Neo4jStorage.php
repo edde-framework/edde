@@ -160,8 +160,8 @@
 			$sourceSchema = $this->schemaManager->getSchema($sourceAttribute->getSchema());
 			$targetSchema = $this->schemaManager->getSchema($targetAttribute->getSchema());
 			$cypher = null;
-			$cypher .= 'MERGE (a:' . $this->delimit($sourceSchema->getRealName()) . ' {' . $this->delimit($sourceSchema->getPrimary()->getName()) . ": \$a})\n";
-			$cypher .= 'MERGE (b:' . $this->delimit($targetSchema->getRealName()) . ' {' . $this->delimit($targetSchema->getPrimary()->getName()) . ": \$b})\n";
+			$cypher .= 'MATCH (a:' . $this->delimit($sourceSchema->getRealName()) . ' {' . $this->delimit($sourceSchema->getPrimary()->getName()) . ": \$a})\n";
+			$cypher .= 'MATCH (b:' . $this->delimit($targetSchema->getRealName()) . ' {' . $this->delimit($targetSchema->getPrimary()->getName()) . ": \$b})\n";
 			$cypher .= 'MERGE (a)-[r:' . $this->delimit($schema->getRealName()) . ' {' . $this->delimit($primary->getName()) . ": \$primary}]->(b)\n";
 			$cypher .= 'SET r = $set';
 			$source = $this->prepareInsert($entity);
