@@ -261,12 +261,12 @@
 			self::assertTrue($relation->get('owner'));
 		}
 
-		public function testLink() {
-			$project = $this->entityManager->entity(ProjectSchema::class, (object)[
-				'uuid' => 'two-pi',
-				'name' => 'multilink, yaay',
-			]);
-		}
+//		public function testLink() {
+//			$project = $this->entityManager->entity(ProjectSchema::class, (object)[
+//				'uuid' => 'two-pi',
+//				'name' => 'multilink, yaay',
+//			]);
+//		}
 
 		/**
 		 * @throws SchemaException
