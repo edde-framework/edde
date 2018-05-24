@@ -233,6 +233,12 @@
 			self::assertFalse($relation->get('owner'));
 		}
 
+		/**
+		 * @throws FilterException
+		 * @throws SchemaException
+		 * @throws StorageException
+		 * @throws ValidatorException
+		 */
 		public function testAttachInsertUpdate() {
 			$relation = $this->storage->attach(
 				$project = $this->storage->load(ProjectSchema::class, 'one'),
@@ -253,6 +259,13 @@
 			$this->storage->update($relation);
 			$relation = $this->storage->load(ProjectMemberSchema::class, $relation->get('uuid'));
 			self::assertTrue($relation->get('owner'));
+		}
+
+		public function testLink() {
+			$project = $this->entityManager->entity(ProjectSchema::class, (object)[
+				'uuid' => 'two-pi',
+				'name' => 'multilink, yaay',
+			]);
 		}
 
 		/**

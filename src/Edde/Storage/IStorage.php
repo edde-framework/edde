@@ -121,7 +121,7 @@
 		public function load(string $schema, string $id): IEntity;
 
 		/**
-		 * create relation entity and make a relation between ($entity)-[$relation]->($target); relation
+		 * create a relation entity and make a relation between ($entity)-[$relation]->($target); relation
 		 * MUST be saved explicitly as there could be mandatory attributes on it; $entity and $target got
 		 * also saved in this method to ensure primary key presence
 		 *
@@ -135,4 +135,15 @@
 		 * @throws SchemaException
 		 */
 		public function attach(IEntity $entity, IEntity $target, string $relation): IEntity;
+
+		/**
+		 * unlink all relations between given entities and make a new one; detach method is used for this
+		 *
+		 * @param IEntity $entity
+		 * @param IEntity $target
+		 * @param string  $relation
+		 *
+		 * @return IEntity
+		 */
+		public function link(IEntity $entity, IEntity $target, string $relation): IEntity;
 	}
