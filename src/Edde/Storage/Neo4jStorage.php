@@ -156,6 +156,77 @@
 			}
 		}
 
+		/** @inheritdoc */
+		public function load(string $schema, string $id): IEntity {
+			try {
+				$schema = $this->schemaManager->getSchema($schema);
+				$primary = $schema->getPrimary();
+				$query = 'MATCH (n:' . $this->delimit($schema->getRealName()) . ' {' . $this->delimit($primary->getName()) . ': $primary}) RETURN n';
+				if ($schema->isRelation()) {
+					$query = 'MATCH ()-[n:' . $this->delimit($schema->getRealName()) . ' {' . $this->delimit($primary->getName()) . ': $primary}]-() RETURN n';
+				}
+				foreach ($this->fetch($query, ['primary' => $id]) as $item) {
+					$entity = new Entity($schema);
+					$entity->push($this->row($item, ['schema' => $schema], ['n' => 'schema'])->getItem('n'));
+					return $entity;
+				}
+				throw new EntityNotFoundException(sprintf('Cannot load any entity [%s] with id [%s].', $schema->getName(), $id));
+			} catch (EntityNotFoundException $exception) {
+				throw $exception;
+			} catch (Throwable $exception) {
+				throw $this->exception($exception);
+			}
+		}
+
+		/** @inheritdoc */
+		public function detach(IEntity $entity, IEntity $target, string $relation): IStorage {
+			$this->checkRelation(
+				$relationSchema = $this->schemaManager->getSchema($relation),
+				$entitySchema = $entity->getSchema(),
+				$targetSchema = $target->getSchema()
+			);
+			$this->fetch(
+				'MATCH (:' . $this->delimit($entitySchema->getRealName()) . ' {' . $this->delimit($entitySchema->getPrimary()->getName()) . ': $a})-[r:' . $this->delimit($relationSchema->getRealName()) . ']->(:' . $this->delimit($targetSchema->getRealName()) . ' {' . $this->delimit($entitySchema->getPrimary()->getName()) . ': $b}) DETACH DELETE r',
+				[
+					'a' => $entity->getPrimary()->get(),
+					'b' => $target->getPrimary()->get(),
+				]
+			);
+			return $this;
+		}
+
+		/** @inheritdoc */
+		public function onStart(): void {
+			($this->transaction = $this->session->transaction())->begin();
+		}
+
+		/** @inheritdoc */
+		public function onCommit(): void {
+			try {
+				$this->transaction->commit();
+				$this->transaction = null;
+			} catch (Throwable $throwable) {
+				$this->exception($throwable);
+			}
+		}
+
+		/** @inheritdoc */
+		public function onRollback(): void {
+			try {
+				$this->transaction->rollback();
+			} catch (MessageFailureException $exception) {
+				/**
+				 * this is incredibly ugly, but transaction state should be tracked in this driver, so it's
+				 * possible to suppress this transaction; related to Neo4j, it's dying on transaction commit, thus
+				 * making whole this stuff a bit more complicated
+				 */
+				if ($exception->getMessage() !== 'No current transaction to rollback.') {
+					throw $exception;
+				}
+			}
+			$this->transaction = null;
+		}
+
 		/**
 		 * @param IEntity $entity
 		 *
@@ -190,28 +261,6 @@
 			return $this;
 		}
 
-		/** @inheritdoc */
-		public function load(string $schema, string $id): IEntity {
-			try {
-				$schema = $this->schemaManager->getSchema($schema);
-				$primary = $schema->getPrimary();
-				$query = 'MATCH (n:' . $this->delimit($schema->getRealName()) . ' {' . $this->delimit($primary->getName()) . ': $primary}) RETURN n';
-				if ($schema->isRelation()) {
-					$query = 'MATCH ()-[n:' . $this->delimit($schema->getRealName()) . ' {' . $this->delimit($primary->getName()) . ': $primary}]-() RETURN n';
-				}
-				foreach ($this->fetch($query, ['primary' => $id]) as $item) {
-					$entity = new Entity($schema);
-					$entity->push($this->row($item, ['schema' => $schema], ['n' => 'schema'])->getItem('n'));
-					return $entity;
-				}
-				throw new EntityNotFoundException(sprintf('Cannot load any entity [%s] with id [%s].', $schema->getName(), $id));
-			} catch (EntityNotFoundException $exception) {
-				throw $exception;
-			} catch (Throwable $exception) {
-				throw $this->exception($exception);
-			}
-		}
-
 		/**
 		 * @param ISelectQuery $selectQuery
 		 *
@@ -238,38 +287,6 @@
 			foreach ($this->fetch($cypher, $params) as $row) {
 				yield $this->row($row, $schemas, $uses);
 			}
-		}
-
-		/** @inheritdoc */
-		public function onStart(): void {
-			($this->transaction = $this->session->transaction())->begin();
-		}
-
-		/** @inheritdoc */
-		public function onCommit(): void {
-			try {
-				$this->transaction->commit();
-				$this->transaction = null;
-			} catch (Throwable $throwable) {
-				$this->exception($throwable);
-			}
-		}
-
-		/** @inheritdoc */
-		public function onRollback(): void {
-			try {
-				$this->transaction->rollback();
-			} catch (MessageFailureException $exception) {
-				/**
-				 * this is incredibly ugly, but transaction state should be tracked in this driver, so it's
-				 * possible to suppress this transaction; related to Neo4j, it's dying on transaction commit, thus
-				 * making whole this stuff a bit more complicated
-				 */
-				if ($exception->getMessage() !== 'No current transaction to rollback.') {
-					throw $exception;
-				}
-			}
-			$this->transaction = null;
 		}
 
 		protected function exception(Throwable $throwable): Throwable {

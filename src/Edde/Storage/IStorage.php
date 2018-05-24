@@ -146,4 +146,15 @@
 		 * @return IEntity
 		 */
 		public function link(IEntity $entity, IEntity $target, string $relation): IEntity;
+
+		/**
+		 * remove all relations between given entities
+		 *
+		 * @param IEntity $entity
+		 * @param IEntity $target
+		 * @param string  $relation
+		 *
+		 * @return IStorage
+		 */
+		public function detach(IEntity $entity, IEntity $target, string $relation): IStorage;
 	}

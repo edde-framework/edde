@@ -3,6 +3,7 @@
 	namespace Edde\Storage;
 
 	use DateTime;
+	use Edde\Collection\EntityNotFoundException;
 	use Edde\Container\ContainerException;
 	use Edde\Filter\FilterException;
 	use Edde\Schema\SchemaException;
@@ -245,9 +246,10 @@
 				$user = $this->storage->load(UserSchema::class, 'two'),
 				ProjectMemberSchema::class
 			);
+			$relation->set('uuid', 'relation');
 			$relation->set('owner', true);
 			$this->storage->insert($relation);
-			$relation = $this->storage->load(ProjectMemberSchema::class, $relation->get('uuid'));
+			$relation = $this->storage->load(ProjectMemberSchema::class, 'relation');
 			self::assertTrue($relation->get('owner'));
 			self::assertEquals($relation->get('project'), $project->get('uuid'));
 			self::assertEquals($relation->get('user'), $user->get('uuid'));
@@ -267,6 +269,27 @@
 //				'name' => 'multilink, yaay',
 //			]);
 //		}
+
+		public function testDetachException() {
+			$this->expectException(StorageException::class);
+			$this->expectExceptionMessage('Source schema [UserSchema] of entity differs from expected relation [ProjectMemberSchema] source schema [ProjectSchema]; did you swap source ($entity) and $target?');
+			$this->storage->detach(
+				$user = $this->storage->load(UserSchema::class, 'two'),
+				$project = $this->storage->load(ProjectSchema::class, 'one'),
+				ProjectMemberSchema::class
+			);
+		}
+
+		public function testDetach() {
+			$this->expectException(EntityNotFoundException::class);
+			$this->expectExceptionMessage('Cannot load any entity [ProjectMemberSchema] with id [relation].');
+			$this->storage->detach(
+				$project = $this->storage->load(ProjectSchema::class, 'one'),
+				$user = $this->storage->load(UserSchema::class, 'two'),
+				ProjectMemberSchema::class
+			);
+			$this->storage->load(ProjectMemberSchema::class, 'relation');
+		}
 
 		/**
 		 * @throws SchemaException
