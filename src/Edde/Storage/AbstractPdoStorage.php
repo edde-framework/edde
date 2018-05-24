@@ -57,38 +57,6 @@
 			}
 		}
 
-		/**
-		 * @param ISelectQuery $selectQuery
-		 *
-		 * @return Generator
-		 *
-		 * @throws SchemaException
-		 * @throws StorageException
-		 * @throws FilterException
-		 */
-		protected function executeSelect(ISelectQuery $selectQuery): Generator {
-			$query = "SELECT\n\t";
-			$params = [];
-			$uses = $selectQuery->getSchemas();
-			/** @var $schemas ISchema[] */
-			$schemas = [];
-			foreach (array_unique(array_values($uses)) as $schema) {
-				$schemas[$schema] = $this->schemaManager->getSchema($schema);
-			}
-			$select = [];
-			$from = [];
-			foreach ($uses as $alias => $schema) {
-				foreach ($schemas[$schema]->getAttributes() as $name => $attribute) {
-					$select[] = $this->delimit($alias) . '.' . $this->delimit($name) . ' AS ' . $this->delimit($alias . '.' . $name);
-				}
-				$from[] = $this->delimit($schemas[$schema]->getRealName()) . ' ' . $this->delimit($alias);
-			}
-			$query .= implode(",\n\t", $select) . "\nFROM\n\t" . implode(",\n\t", $from) . "\n";
-			foreach ($this->fetch($query, $params) as $row) {
-				yield $this->row($row, $schemas, $uses);
-			}
-		}
-
 		/** @inheritdoc */
 		public function create(string $name): IStorage {
 			try {
@@ -200,12 +168,29 @@
 					$entity->push($this->prepareOutput($schema, (object)$item));
 					return $entity;
 				}
-				throw new EntityNotFoundException(sprintf('Cannot load any entity [%s] with id [%s].', $schema, $id));
+				throw new EntityNotFoundException(sprintf('Cannot load any entity [%s] with id [%s].', $schema->getName(), $id));
 			} catch (EntityNotFoundException $exception) {
 				throw $exception;
 			} catch (Throwable $exception) {
 				throw $this->exception($exception);
 			}
+		}
+
+		/** @inheritdoc */
+		public function detach(IEntity $entity, IEntity $target, string $relation): IStorage {
+			$this->checkRelation(
+				$relationSchema = $this->schemaManager->getSchema($relation),
+				$entity->getSchema(),
+				$target->getSchema()
+			);
+			$this->fetch(
+				'DELETE FROM ' . $this->delimit($relationSchema->getRealName()) . ' WHERE ' . $this->delimit($relationSchema->getSource()->getName()) . ' = :a AND ' . $this->delimit($relationSchema->getTarget()->getName()) . ' = :b',
+				[
+					'a' => $entity->getPrimary()->get(),
+					'b' => $target->getPrimary()->get(),
+				]
+			);
+			return $this;
 		}
 
 		/** @inheritdoc */
@@ -221,6 +206,38 @@
 		/** @inheritdoc */
 		public function onRollback(): void {
 			$this->pdo->rollBack();
+		}
+
+		/**
+		 * @param ISelectQuery $selectQuery
+		 *
+		 * @return Generator
+		 *
+		 * @throws SchemaException
+		 * @throws StorageException
+		 * @throws FilterException
+		 */
+		protected function executeSelect(ISelectQuery $selectQuery): Generator {
+			$query = "SELECT\n\t";
+			$params = [];
+			$uses = $selectQuery->getSchemas();
+			/** @var $schemas ISchema[] */
+			$schemas = [];
+			foreach (array_unique(array_values($uses)) as $schema) {
+				$schemas[$schema] = $this->schemaManager->getSchema($schema);
+			}
+			$select = [];
+			$from = [];
+			foreach ($uses as $alias => $schema) {
+				foreach ($schemas[$schema]->getAttributes() as $name => $attribute) {
+					$select[] = $this->delimit($alias) . '.' . $this->delimit($name) . ' AS ' . $this->delimit($alias . '.' . $name);
+				}
+				$from[] = $this->delimit($schemas[$schema]->getRealName()) . ' ' . $this->delimit($alias);
+			}
+			$query .= implode(",\n\t", $select) . "\nFROM\n\t" . implode(",\n\t", $from) . "\n";
+			foreach ($this->fetch($query, $params) as $row) {
+				yield $this->row($row, $schemas, $uses);
+			}
 		}
 
 		/**

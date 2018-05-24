@@ -135,4 +135,15 @@
 		 * @throws SchemaException
 		 */
 		public function attach(IEntity $entity, IEntity $target, string $relation): IEntity;
+
+		/**
+		 * remove all relations between given entities
+		 *
+		 * @param IEntity $entity
+		 * @param IEntity $target
+		 * @param string  $relation
+		 *
+		 * @return IStorage
+		 */
+		public function detach(IEntity $entity, IEntity $target, string $relation): IStorage;
 	}
