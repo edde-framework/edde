@@ -14,6 +14,7 @@
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Security\RandomService;
+	use Edde\Validator\ValidatorException;
 	use Generator;
 	use GraphAware\Bolt\Configuration;
 	use GraphAware\Bolt\Exception\MessageFailureException;
@@ -152,6 +153,16 @@
 			}
 		}
 
+		/**
+		 * @param IEntity $entity
+		 *
+		 * @return IStorage
+		 *
+		 * @throws FilterException
+		 * @throws SchemaException
+		 * @throws StorageException
+		 * @throws ValidatorException
+		 */
 		protected function relation(IEntity $entity): IStorage {
 			$schema = $entity->getSchema();
 			$primary = $schema->getPrimary();
