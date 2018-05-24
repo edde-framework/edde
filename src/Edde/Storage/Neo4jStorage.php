@@ -154,26 +154,23 @@
 
 		protected function relation(IEntity $entity): IStorage {
 			$schema = $entity->getSchema();
+			$primary = $schema->getPrimary();
 			$sourceAttribute = $schema->getSource();
 			$targetAttribute = $schema->getTarget();
 			$sourceSchema = $this->schemaManager->getSchema($sourceAttribute->getSchema());
 			$targetSchema = $this->schemaManager->getSchema($targetAttribute->getSchema());
 			$cypher = null;
-			$params = [
-				'a' => $entity->get($sourceAttribute->getName()),
-				'b' => $entity->get($targetAttribute->getName()),
-			];
 			$cypher .= 'MERGE (a:' . $this->delimit($sourceSchema->getRealName()) . ' {' . $this->delimit($sourceSchema->getPrimary()->getName()) . ": \$a})\n";
 			$cypher .= 'MERGE (b:' . $this->delimit($targetSchema->getRealName()) . ' {' . $this->delimit($targetSchema->getPrimary()->getName()) . ": \$b})\n";
-			$cypher .= 'MERGE (a)';
-			$cypher .= '-[:' . $this->delimit($schema->getRealName());
+			$cypher .= 'MERGE (a)-[r:' . $this->delimit($schema->getRealName()) . ' {' . $this->delimit($primary->getName()) . ": \$primary}]->(b)\n";
+			$cypher .= 'SET r = $set';
 			$source = $this->prepareInsert($entity);
-			$nativeQuery = $this->formatAttributes($source);
-			$cypher .= $nativeQuery->getQuery();
-			$params = array_merge($params, $nativeQuery->getParams());
-			$cypher .= ']';
-			$cypher .= "->(b)\n";
-			$this->fetch($cypher, $params);
+			$this->fetch($cypher, [
+				'a'       => $entity->get($sourceAttribute->getName()),
+				'b'       => $entity->get($targetAttribute->getName()),
+				'primary' => $source->{$primary->getName()},
+				'set'     => (array)$source,
+			]);
 			$entity->put($this->prepareOutput($schema, $source));
 			$entity->commit();
 			return $this;
