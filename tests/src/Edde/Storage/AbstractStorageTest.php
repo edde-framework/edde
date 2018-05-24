@@ -167,7 +167,7 @@
 		 */
 		public function testSave() {
 			$this->storage->save($entity = $this->entityManager->entity(ProjectSchema::class, (object)[
-				'name'    => 'some-project-here',
+				'name'    => 'another-some-project-here',
 				'created' => new DateTime(),
 				'start'   => new DateTime(),
 				'end'     => new DateTime(),
@@ -212,9 +212,11 @@
 		 */
 		public function testAttach() {
 			$project = $this->entityManager->entity(ProjectSchema::class, (object)[
+				'uuid' => 'one',
 				'name' => 'to be linked',
 			]);
 			$user = $this->entityManager->entity(UserSchema::class, (object)[
+				'uuid'     => 'two',
 				'login'    => 'root',
 				'password' => '123',
 			]);
@@ -229,6 +231,20 @@
 			$this->storage->save($relation);
 			$relation = $this->storage->load(ProjectMemberSchema::class, $relation->get('uuid'));
 			self::assertFalse($relation->get('owner'));
+		}
+
+		public function testAttachInsert() {
+			$relation = $this->storage->attach(
+				$project = $this->storage->load(ProjectSchema::class, 'one'),
+				$user = $this->storage->load(UserSchema::class, 'two'),
+				ProjectMemberSchema::class
+			);
+			$relation->set('owner', true);
+			$this->storage->insert($relation);
+			$relation = $this->storage->load(ProjectMemberSchema::class, $relation->get('uuid'));
+			self::assertTrue($relation->get('owner'));
+			self::assertEquals($relation->get('project'), $project->get('uuid'));
+			self::assertEquals($relation->get('user'), $user->get('uuid'));
 		}
 
 		/**

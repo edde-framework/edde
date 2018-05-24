@@ -7,9 +7,7 @@
 	use Edde\Collection\IEntity;
 	use Edde\Config\ConfigException;
 	use Edde\Filter\FilterException;
-	use Edde\Query\INative;
 	use Edde\Query\ISelectQuery;
-	use Edde\Query\Native;
 	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Schema\SchemaManager;
@@ -23,7 +21,6 @@
 	use GraphAware\Bolt\Protocol\V1\Transaction;
 	use GraphAware\Bolt\Result\Result;
 	use GraphAware\Common\Type\MapAccessor;
-	use stdClass;
 	use Throwable;
 	use function implode;
 
@@ -94,10 +91,13 @@
 
 		/** @inheritdoc */
 		public function insert(IEntity $entity): IStorage {
-			$source = $this->prepareInsert($entity);
 			$schema = $entity->getSchema();
+			if ($schema->isRelation()) {
+				return $this->relation($entity);
+			}
+			$source = $this->prepareInsert($entity);
 			$this->fetch(
-				'MERGE (a:' . $this->delimit($schema->getRealName()) . ' {' . $this->delimit($primary = $schema->getPrimary()->getName()) . ': $primary}) SET a = $set',
+				'CREATE (a:' . $this->delimit($schema->getRealName()) . ' {' . $this->delimit($primary = $schema->getPrimary()->getName()) . ': $primary}) SET a = $set',
 				[
 					'primary' => $source->{$primary},
 					'set'     => (array)$source,
@@ -185,18 +185,6 @@
 			$entity->put($this->prepareOutput($schema, $source));
 			$entity->commit();
 			return $this;
-		}
-
-		protected function formatAttributes(stdClass $source): INative {
-			$properties = [];
-			$params = [];
-			foreach ($source as $k => $v) {
-				if ($v !== null) {
-					$properties[] = $this->delimit($k) . ': $' . $this->delimit($parameterId = (sha1($this->randomService->bytes(64))));
-					$params[$parameterId] = $v;
-				}
-			}
-			return new Native('{' . implode(', ', $properties) . '}', $params);
 		}
 
 		/** @inheritdoc */
