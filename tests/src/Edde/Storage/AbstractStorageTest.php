@@ -225,6 +225,10 @@
 			self::assertTrue($relation->get('owner'));
 			self::assertEquals($relation->get('project'), $project->get('uuid'));
 			self::assertEquals($relation->get('user'), $user->get('uuid'));
+			$relation->set('owner', false);
+			$this->storage->save($relation);
+			$relation = $this->storage->load(ProjectMemberSchema::class, $relation->get('uuid'));
+			self::assertFalse($relation->get('owner'));
 		}
 
 		/**
