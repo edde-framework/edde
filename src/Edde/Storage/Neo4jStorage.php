@@ -114,8 +114,11 @@
 			 * despite duplicate piece of code it's better to keep two almost-same pieces than one with strange behavior related to one
 			 * storage system
 			 */
-			$source = $this->prepareUpdate($entity);
 			$schema = $entity->getSchema();
+			if ($schema->isRelation()) {
+				return $this->relation($entity);
+			}
+			$source = $this->prepareUpdate($entity);
 			$this->fetch(
 				'MERGE (a:' . $this->delimit($schema->getRealName()) . ' {' . $this->delimit($primary = $schema->getPrimary()->getName()) . ': $primary}) SET a = $set',
 				[

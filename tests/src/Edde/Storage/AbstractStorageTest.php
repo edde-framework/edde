@@ -233,7 +233,7 @@
 			self::assertFalse($relation->get('owner'));
 		}
 
-		public function testAttachInsert() {
+		public function testAttachInsertUpdate() {
 			$relation = $this->storage->attach(
 				$project = $this->storage->load(ProjectSchema::class, 'one'),
 				$user = $this->storage->load(UserSchema::class, 'two'),
@@ -245,6 +245,14 @@
 			self::assertTrue($relation->get('owner'));
 			self::assertEquals($relation->get('project'), $project->get('uuid'));
 			self::assertEquals($relation->get('user'), $user->get('uuid'));
+			$relation->set('owner', false);
+			$this->storage->update($relation);
+			$relation = $this->storage->load(ProjectMemberSchema::class, $relation->get('uuid'));
+			self::assertFalse($relation->get('owner'));
+			$relation->set('owner', true);
+			$this->storage->update($relation);
+			$relation = $this->storage->load(ProjectMemberSchema::class, $relation->get('uuid'));
+			self::assertTrue($relation->get('owner'));
 		}
 
 		/**
