@@ -125,6 +125,15 @@
 		public function load(string $schema, string $id): IEntity;
 
 		/**
+		 * delete given entity
+		 *
+		 * @param IEntity $entity
+		 *
+		 * @return IStorage
+		 */
+		public function delete(IEntity $entity): IStorage;
+
+		/**
 		 * create a relation entity and make a relation between ($entity)-[$relation]->($target); relation
 		 * MUST be saved explicitly as there could be mandatory attributes on it; $entity and $target got
 		 * also saved in this method to ensure primary key presence

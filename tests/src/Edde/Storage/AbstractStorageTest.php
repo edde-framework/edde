@@ -343,6 +343,25 @@
 		}
 
 		/**
+		 * @throws EntityNotFoundException
+		 * @throws FilterException
+		 * @throws SchemaException
+		 * @throws StorageException
+		 * @throws ValidatorException
+		 */
+		public function testDelete() {
+			$this->expectException(EntityNotFoundException::class);
+			$this->expectExceptionMessage('Cannot load any entity [ProjectSchema] with id [to-be-deleted].');
+			$project = $this->entityManager->entity(ProjectSchema::class, (object)[
+				'uuid' => 'to-be-deleted',
+				'name' => 'kill me, bitch!',
+			]);
+			$this->storage->save($project);
+			$this->storage->delete($project);
+			$this->storage->load(ProjectSchema::class, 'to-be-deleted');
+		}
+
+		/**
 		 * @throws SchemaException
 		 * @throws ContainerException
 		 * @throws ReflectionException

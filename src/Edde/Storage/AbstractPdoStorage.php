@@ -177,6 +177,19 @@
 		}
 
 		/** @inheritdoc */
+		public function delete(IEntity $entity): IStorage {
+			$schema = $entity->getSchema();
+			$primary = $entity->getPrimary();
+			$this->fetch(
+				'DELETE FROM ' . $this->delimit($schema->getRealName()) . ' WHERE ' . $this->delimit($primary->getAttribute()->getName()) . ' = :primary',
+				[
+					'primary' => $primary->get(),
+				]
+			);
+			return $this;
+		}
+
+		/** @inheritdoc */
 		public function unlink(IEntity $entity, IEntity $target, string $relation): IStorage {
 			$this->checkRelation(
 				$relationSchema = $this->schemaManager->getSchema($relation),

@@ -196,6 +196,11 @@
 		}
 
 		/** @inheritdoc */
+		public function delete(IEntity $entity): IStorage {
+			return $this;
+		}
+
+		/** @inheritdoc */
 		public function onStart(): void {
 			($this->transaction = $this->session->transaction())->begin();
 		}
