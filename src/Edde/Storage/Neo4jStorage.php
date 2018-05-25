@@ -197,6 +197,14 @@
 
 		/** @inheritdoc */
 		public function delete(IEntity $entity): IStorage {
+			$schema = $entity->getSchema();
+			$primary = $entity->getPrimary();
+			$this->fetch(
+				'MATCH (n:' . $this->delimit($schema->getRealName()) . ' {' . $this->delimit($primary->getAttribute()->getName()) . ': $primary}) DETACH DELETE n',
+				[
+					'primary' => $primary->get(),
+				]
+			);
 			return $this;
 		}
 
