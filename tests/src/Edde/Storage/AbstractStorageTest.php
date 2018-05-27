@@ -119,8 +119,8 @@
 		 */
 		public function testCollection() {
 			$collection = $this->collectionManager->collection();
-			$selectQuery = $collection->getQuery();
-			$selectQuery->use(LabelSchema::class);
+			$query = $collection->getQuery();
+			$query->use(LabelSchema::class);
 			$entities = [];
 			foreach ($collection as $record) {
 				$entity = $record->getEntity(LabelSchema::class)->toObject();
