@@ -2,6 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Query;
 
+	use stdClass;
+
 	interface IQuery {
 		/**
 		 * add a source schema to the query
@@ -34,6 +36,27 @@
 		public function attach(string $attach, string $to, string $relation): IQuery;
 
 		/**
+		 * @return bool
+		 */
+		public function hasAttaches(): bool;
+
+		/**
+		 * is the given alias attached?
+		 *
+		 * @param string $alias
+		 *
+		 * @return bool
+		 */
+		public function isAttached(string $alias): bool;
+
+		/**
+		 * return all attaches in this query
+		 *
+		 * @return stdClass[]
+		 */
+		public function getAttaches(): array;
+
+		/**
 		 * property equalization
 		 *
 		 * @param string $source source alias
@@ -55,6 +78,20 @@
 		 * @return IQuery
 		 */
 		public function equalTo(string $alias, string $property, $value): IQuery;
+
+		/**
+		 * are there some filters?
+		 *
+		 * @return bool
+		 */
+		public function hasWhere(): bool;
+
+		/**
+		 * return internal where objects
+		 *
+		 * @return stdClass[]
+		 */
+		public function getWheres(): array;
 
 		/**
 		 * @param string $alias

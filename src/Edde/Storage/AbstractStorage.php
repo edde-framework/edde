@@ -6,6 +6,7 @@
 	use Edde\Collection\IEntity;
 	use Edde\Config\ISection;
 	use Edde\Filter\FilterException;
+	use Edde\Schema\IAttribute;
 	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Config\ConfigService;
@@ -109,17 +110,30 @@
 						'required' => $attribute->isRequired(),
 					]);
 				}
-				if ($filter = $attribute->getFilter('type')) {
-					$stdClass->$name = $this->filterManager->getFilter('storage:' . $filter)->input($stdClass->$name);
-				}
-				/**
-				 * common filter support; filter name is used for both directions
-				 */
-				if ($filter = $attribute->getFilter('filter')) {
-					$stdClass->$name = $this->filterManager->getFilter('storage:' . $filter)->input($stdClass->$name);
-				}
+				$stdClass->$name = $this->filterValue($attribute, $stdClass->$name);
 			}
 			return $stdClass;
+		}
+
+		/**
+		 * @param IAttribute $attribute
+		 * @param mixed      $value
+		 *
+		 * @return mixed
+		 *
+		 * @throws FilterException
+		 */
+		protected function filterValue(IAttribute $attribute, $value) {
+			if ($filter = $attribute->getFilter('type')) {
+				$value = $this->filterManager->getFilter('storage:' . $filter)->input($value);
+			}
+			/**
+			 * common filter support; filter name is used for both directions
+			 */
+			if ($filter = $attribute->getFilter('filter')) {
+				$value = $this->filterManager->getFilter('storage:' . $filter)->input($value);
+			}
+			return $value;
 		}
 
 		/**

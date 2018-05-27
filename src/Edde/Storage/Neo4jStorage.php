@@ -23,6 +23,8 @@
 	use GraphAware\Common\Type\MapAccessor;
 	use Throwable;
 	use function implode;
+	use function random_bytes;
+	use function sha1;
 
 	class Neo4jStorage extends AbstractStorage {
 		use SchemaManager;
@@ -72,14 +74,18 @@
 			$cypher = "MATCH\n";
 			$returns = [];
 			$params = [];
-			$uses = $query->getSelects();
+			$selects = $query->getSelects();
+			$attaches = $query->getAttaches();
 			/** @var $schemas ISchema[] */
 			$schemas = [];
-			foreach (array_unique(array_values($uses)) as $schema) {
+			foreach (array_unique(array_values($selects)) as $schema) {
 				$schemas[$schema] = $this->schemaManager->getSchema($schema);
 			}
 			$from = [];
-			foreach ($uses as $alias => $schema) {
+			foreach ($selects as $alias => $schema) {
+				if ($query->isAttached($alias)) {
+					continue;
+				}
 				$schema = $schemas[$schema];
 				if ($schema->isRelation()) {
 					$from[] = '()-[' . ($returns[] = $this->delimit($alias)) . ':' . $this->delimit($schema->getRealName()) . ']->()';
@@ -87,9 +93,33 @@
 				}
 				$from[] = '(' . ($returns[] = $this->delimit($alias)) . ':' . $this->delimit($schema->getRealName()) . ')';
 			}
-			$cypher .= "\t" . implode(",\n", $from) . "\nRETURN\n\t" . implode(',', $returns);
+			foreach ($attaches as $attach) {
+				$sourceSchema = $schemas[$selects[$attach->attach]];
+				$relationSchema = $schemas[$selects[$attach->relation]];
+				$targetSchema = $schemas[$selects[$attach->to]];
+				$from[] = '(' . ($returns[] = $this->delimit($attach->attach)) . ': ' . $this->delimit($sourceSchema->getRealName()) . ')-[' . ($returns[] = $this->delimit($attach->relation)) . ': ' . $this->delimit($relationSchema->getRealName()) . ']->(' . ($returns[] = $this->delimit($attach->to)) . ': ' . $this->delimit($targetSchema->getRealName()) . ')';
+			}
+			$cypher .= "\t" . implode(",\n\t", $from) . "\n";
+			if ($query->hasWhere() && $wheres = $query->getWheres()) {
+				$cypher .= "WHERE\n\t";
+				$whereList = [];
+				foreach ($wheres as $stdClass) {
+					switch ($stdClass->type) {
+						case 'equal':
+							break;
+						case 'equalTo':
+							$whereList[] = $this->delimit($stdClass->alias) . '.' . $this->delimit($stdClass->property) . ' = $' . ($paramId = '_' . sha1(random_bytes(42)));
+							$params[$paramId] = $this->filterValue($schemas[$selects[$stdClass->alias]]->getAttribute($stdClass->property), $stdClass->value);
+							break;
+						default:
+							throw new StorageException(sprintf('Unsupported where type [%s].', $stdClass->type));
+					}
+				}
+				$cypher .= implode(" AND\n\t", $whereList) . "\n";
+			}
+			$cypher .= "RETURN\n\t" . implode(',', $returns);
 			foreach ($this->fetch($cypher, $params) as $row) {
-				yield $this->row($row, $schemas, $uses);
+				yield $this->row($row, $schemas, $selects);
 			}
 		}
 

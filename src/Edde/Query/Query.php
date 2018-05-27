@@ -3,14 +3,20 @@
 	namespace Edde\Query;
 
 	use Edde\SimpleObject;
+	use stdClass;
 	use function is_string;
 
 	class Query extends SimpleObject implements IQuery {
 		/** @var string[] */
 		protected $selects = [];
+		/** @var stdClass[] */
 		protected $attaches = [];
+		/** @var bool[] */
+		protected $attached = [];
+		/** @var stdClass[] */
 		protected $wheres = [];
 		protected $orders = [];
+		/** @var string[] */
 		protected $returns = [];
 
 		/** @inheritdoc */
@@ -34,7 +40,23 @@
 				'to'       => $to,
 				'relation' => $relation,
 			];
+			$this->attached[$attach] = $this->attached[$to] = $this->attached[$relation] = true;
 			return $this;
+		}
+
+		/** @inheritdoc */
+		public function hasAttaches(): bool {
+			return empty($this->attaches) === false;
+		}
+
+		/** @inheritdoc */
+		public function isAttached(string $alias): bool {
+			return isset($this->attached[$alias]);
+		}
+
+		/** @inheritdoc */
+		public function getAttaches(): array {
+			return $this->attaches;
 		}
 
 		/** @inheritdoc */
@@ -50,11 +72,22 @@
 		/** @inheritdoc */
 		public function equalTo(string $alias, string $property, $value): IQuery {
 			$this->wheres[] = (object)[
-				'type'  => 'equalTo',
-				'alias' => $alias,
-				'value' => $value,
+				'type'     => 'equalTo',
+				'alias'    => $alias,
+				'property' => $property,
+				'value'    => $value,
 			];
 			return $this;
+		}
+
+		/** @inheritdoc */
+		public function hasWhere(): bool {
+			return empty($this->wheres) === false;
+		}
+
+		/** @inheritdoc */
+		public function getWheres(): array {
+			return $this->wheres;
 		}
 
 		/** @inheritdoc */

@@ -415,10 +415,10 @@
 				'password' => '1234',
 			]);
 			$entities[] = $project = $this->entityManager->entity(ProjectSchema::class, (object)[
-				'name' => 'project',
+				'name' => 'expected project',
 			]);
 			$entities[] = $project2 = $this->entityManager->entity(ProjectSchema::class, (object)[
-				'name' => 'project',
+				'name' => 'another - less - expected project',
 			]);
 			$entities[] = $relation = $this->storage->attach($project, $user, ProjectMemberSchema::class);
 			$relation->set('owner', true);
@@ -430,15 +430,16 @@
 				'u'  => UserSchema::class,
 				'p'  => ProjectSchema::class,
 				'pm' => ProjectMemberSchema::class,
-				'l'  => LabelSchema::class,
 			]);
 			$query->attach('p', 'u', 'pm');
 			$query->equalTo('u', 'uuid', 'on');
 			$query->equalTo('pm', 'owner', true);
+			$query->equalTo('p', 'name', 'expected project');
 			foreach ($collection as $record) {
 				$user = $record->getEntity('u');
-				self::assertSame($user->get('uuid'), 'on');
+				self::assertSame('on', $user->get('uuid'));
 				self::assertTrue($record->getEntity('pm')->get('owner'));
+				self::assertSame('expected project', $record->getEntity('p')->get('name'));
 			}
 		}
 
