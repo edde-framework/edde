@@ -8,7 +8,6 @@
 	use Edde\Container\ContainerException;
 	use Edde\Filter\FilterException;
 	use Edde\Query\Query;
-	use Edde\Query\QueryException;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Collection\CollectionManager;
 	use Edde\Service\Collection\EntityManager;
@@ -403,11 +402,11 @@
 		}
 
 		/**
+		 * @throws CollectionException
 		 * @throws FilterException
 		 * @throws SchemaException
 		 * @throws StorageException
 		 * @throws ValidatorException
-		 * @throws QueryException
 		 */
 		public function testABitMoreComplexQuery() {
 			$entities[] = $user = $this->entityManager->entity(UserSchema::class, (object)[
@@ -434,6 +433,13 @@
 				'l'  => LabelSchema::class,
 			]);
 			$query->attach('p', 'u', 'pm');
+			$query->equalTo('u', 'uuid', 'on');
+			$query->equalTo('pm', 'owner', true);
+			foreach ($collection as $record) {
+				$user = $record->getEntity('u');
+				self::assertSame($user->get('uuid'), 'on');
+				self::assertTrue($record->getEntity('pm')->get('owner'));
+			}
 		}
 
 		/**
