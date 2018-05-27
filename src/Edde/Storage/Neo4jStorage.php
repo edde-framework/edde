@@ -68,6 +68,27 @@
 		}
 
 		/** @inheritdoc */
+		public function query(IQuery $query): Generator {
+			$cypher = "MATCH\n";
+			$returns = [];
+			$params = [];
+			$uses = $query->getSchemas();
+			/** @var $schemas ISchema[] */
+			$schemas = [];
+			foreach (array_unique(array_values($uses)) as $schema) {
+				$schemas[$schema] = $this->schemaManager->getSchema($schema);
+			}
+			$from = [];
+			foreach ($uses as $alias => $schema) {
+				$from[] = '(' . ($returns[] = $this->delimit($alias)) . ':' . $this->delimit($schemas[$schema]->getRealName()) . ')';
+			}
+			$cypher .= "\t" . implode(",\n", $from) . "\nRETURN\n\t" . implode(',', $returns);
+			foreach ($this->fetch($cypher, $params) as $row) {
+				yield $this->row($row, $schemas, $uses);
+			}
+		}
+
+		/** @inheritdoc */
 		public function create(string $name): IStorage {
 			try {
 				$schema = $this->schemaManager->getSchema($name);
@@ -272,34 +293,6 @@
 			$entity->put($this->prepareOutput($schema, $source));
 			$entity->commit();
 			return $this;
-		}
-
-		/**
-		 * @param IQuery $query
-		 *
-		 * @return Generator
-		 * @throws StorageException
-		 * @throws FilterException
-		 * @throws SchemaException
-		 */
-		protected function executeSelect(IQuery $query): Generator {
-			$cypher = "MATCH\n";
-			$returns = [];
-			$params = [];
-			$uses = $query->getSchemas();
-			/** @var $schemas ISchema[] */
-			$schemas = [];
-			foreach (array_unique(array_values($uses)) as $schema) {
-				$schemas[$schema] = $this->schemaManager->getSchema($schema);
-			}
-			$from = [];
-			foreach ($uses as $alias => $schema) {
-				$from[] = '(' . ($returns[] = $this->delimit($alias)) . ':' . $this->delimit($schemas[$schema]->getRealName()) . ')';
-			}
-			$cypher .= "\t" . implode(",\n", $from) . "\nRETURN\n\t" . implode(',', $returns);
-			foreach ($this->fetch($cypher, $params) as $row) {
-				yield $this->row($row, $schemas, $uses);
-			}
 		}
 
 		protected function exception(Throwable $throwable): Throwable {

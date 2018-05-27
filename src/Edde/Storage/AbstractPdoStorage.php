@@ -6,10 +6,8 @@
 	use Edde\Collection\EntityNotFoundException;
 	use Edde\Collection\IEntity;
 	use Edde\Config\ConfigException;
-	use Edde\Filter\FilterException;
 	use Edde\Query\IQuery;
 	use Edde\Schema\ISchema;
-	use Edde\Schema\SchemaException;
 	use Edde\Service\Schema\SchemaManager;
 	use Generator;
 	use PDO;
@@ -54,6 +52,30 @@
 				return $this->pdo->exec($query);
 			} catch (PDOException $exception) {
 				throw $this->exception($exception);
+			}
+		}
+
+		/** @inheritdoc */
+		public function query(IQuery $query): Generator {
+			$sql = "SELECT\n\t";
+			$params = [];
+			$uses = $query->getSchemas();
+			/** @var $schemas ISchema[] */
+			$schemas = [];
+			foreach (array_unique(array_values($uses)) as $schema) {
+				$schemas[$schema] = $this->schemaManager->getSchema($schema);
+			}
+			$select = [];
+			$from = [];
+			foreach ($uses as $alias => $schema) {
+				foreach ($schemas[$schema]->getAttributes() as $name => $attribute) {
+					$select[] = $this->delimit($alias) . '.' . $this->delimit($name) . ' AS ' . $this->delimit($alias . '.' . $name);
+				}
+				$from[] = $this->delimit($schemas[$schema]->getRealName()) . ' ' . $this->delimit($alias);
+			}
+			$sql .= implode(",\n\t", $select) . "\nFROM\n\t" . implode(",\n\t", $from) . "\n";
+			foreach ($this->fetch($sql, $params) as $row) {
+				yield $this->row($row, $schemas, $uses);
 			}
 		}
 
@@ -219,38 +241,6 @@
 		/** @inheritdoc */
 		public function onRollback(): void {
 			$this->pdo->rollBack();
-		}
-
-		/**
-		 * @param IQuery $query
-		 *
-		 * @return Generator
-		 *
-		 * @throws SchemaException
-		 * @throws StorageException
-		 * @throws FilterException
-		 */
-		protected function executeSelect(IQuery $query): Generator {
-			$sql = "SELECT\n\t";
-			$params = [];
-			$uses = $query->getSchemas();
-			/** @var $schemas ISchema[] */
-			$schemas = [];
-			foreach (array_unique(array_values($uses)) as $schema) {
-				$schemas[$schema] = $this->schemaManager->getSchema($schema);
-			}
-			$select = [];
-			$from = [];
-			foreach ($uses as $alias => $schema) {
-				foreach ($schemas[$schema]->getAttributes() as $name => $attribute) {
-					$select[] = $this->delimit($alias) . '.' . $this->delimit($name) . ' AS ' . $this->delimit($alias . '.' . $name);
-				}
-				$from[] = $this->delimit($schemas[$schema]->getRealName()) . ' ' . $this->delimit($alias);
-			}
-			$sql .= implode(",\n\t", $select) . "\nFROM\n\t" . implode(",\n\t", $from) . "\n";
-			foreach ($this->fetch($sql, $params) as $row) {
-				yield $this->row($row, $schemas, $uses);
-			}
 		}
 
 		/**

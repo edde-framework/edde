@@ -57,7 +57,7 @@
 		/** @inheritdoc */
 		public function getIterator() {
 			$uses = $this->query->getSchemas();
-			foreach ($this->storage->execute($this->query) as $row) {
+			foreach ($this->storage->query($this->query) as $row) {
 				yield $this->container->create(Record::class, [$row, $uses], __METHOD__);
 			}
 		}

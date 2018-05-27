@@ -8,6 +8,7 @@
 	use Edde\Query\IQuery;
 	use Edde\Schema\SchemaException;
 	use Edde\Validator\ValidatorException;
+	use Generator;
 
 	/**
 	 * Low-level storage implementation with all supported query types explicitly typed.
@@ -43,9 +44,12 @@
 		 *
 		 * @param IQuery $query
 		 *
-		 * @return mixed
+		 * @return Generator|Row[]
+		 *
+		 * @throws StorageException
+		 * @throws FilterException
 		 */
-		public function execute(IQuery $query);
+		public function query(IQuery $query): Generator;
 
 		/**
 		 * create new schema (not all storages may support this, but exception should not be thrown)

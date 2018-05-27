@@ -6,7 +6,6 @@
 	use Edde\Collection\IEntity;
 	use Edde\Config\ISection;
 	use Edde\Filter\FilterException;
-	use Edde\Query\IQuery;
 	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Config\ConfigService;
@@ -33,11 +32,6 @@
 		 */
 		public function __construct(string $config) {
 			$this->config = $config;
-		}
-
-		/** @inheritdoc */
-		public function execute(IQuery $query) {
-			return $this->{'execute' . $this->stringUtils->toCamelCase($query->getType())}($query);
 		}
 
 		/** @inheritdoc */
