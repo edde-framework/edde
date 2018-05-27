@@ -443,6 +443,11 @@
 			}
 		}
 
+		public function testCount() {
+			self::assertEquals(7, $this->storage->count(($collection = $this->collectionManager->collection()->select(ProjectSchema::class))->getQuery())[ProjectSchema::class]);
+			self::assertEquals(4, $this->storage->count($this->collectionManager->collection()->select(ProjectMemberSchema::class)->getQuery())[ProjectMemberSchema::class]);
+		}
+
 		/**
 		 * @throws SchemaException
 		 * @throws ContainerException

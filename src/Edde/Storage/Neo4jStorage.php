@@ -23,6 +23,7 @@
 	use GraphAware\Common\Type\MapAccessor;
 	use Throwable;
 	use function implode;
+	use function sprintf;
 	use function vsprintf;
 
 	class Neo4jStorage extends AbstractStorage {
@@ -70,15 +71,21 @@
 
 		/** @inheritdoc */
 		public function query(IQuery $query): Generator {
+			$selects = $query->getSelects();
+			/** @var $schemas ISchema[] */
+			$schemas = $this->getSchemas($query);
+			[$cypher, $params] = $this->formatQuery($query);
+			foreach ($this->fetch($cypher, $params) as $row) {
+				yield $this->row($row, $schemas, $selects);
+			}
+		}
+
+		protected function formatQuery(IQuery $query, bool $count = false): array {
 			$returns = [];
 			$params = [];
-			$selects = $query->getSelects();
 			$attaches = $query->getAttaches();
-			/** @var $schemas ISchema[] */
-			$schemas = [];
-			foreach (array_unique(array_values($selects)) as $schema) {
-				$schemas[$schema] = $this->schemaManager->getSchema($schema);
-			}
+			$selects = $query->getSelects();
+			$schemas = $this->getSchemas($query);
 			$from = [];
 			foreach ($selects as $alias => $schema) {
 				if ($query->isAttached($alias)) {
@@ -133,10 +140,13 @@
 				}
 				$cypher .= implode(" AND\n\t", $whereList) . "\n";
 			}
-			$cypher .= "RETURN\n\t" . implode(',', $returns);
-			foreach ($this->fetch($cypher, $params) as $row) {
-				yield $this->row($row, $schemas, $selects);
+			if ($count) {
+				foreach ($returns as &$return) {
+					$return = sprintf('COUNT(%s) AS %s', $return, $return);
+				}
 			}
+			$cypher .= "RETURN\n\t" . implode(',', $returns);
+			return [$cypher, $params];
 		}
 
 		/** @inheritdoc */

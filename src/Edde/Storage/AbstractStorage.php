@@ -6,6 +6,7 @@
 	use Edde\Collection\IEntity;
 	use Edde\Config\ISection;
 	use Edde\Filter\FilterException;
+	use Edde\Query\IQuery;
 	use Edde\Schema\IAttribute;
 	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
@@ -16,6 +17,7 @@
 	use Edde\Service\Validator\ValidatorManager;
 	use Edde\Validator\ValidatorException;
 	use stdClass;
+	use function sprintf;
 
 	abstract class AbstractStorage extends AbstractTransaction implements IStorage {
 		use ConfigService;
@@ -64,6 +66,15 @@
 		public function link(IEntity $entity, IEntity $target, string $relation): IEntity {
 			$this->unlink($entity, $target, $relation);
 			return $this->attach($entity, $target, $relation);
+		}
+
+		/** @inheritdoc */
+		public function count(IQuery $query): array {
+			[$formatted, $params] = $this->formatQuery($query, true);
+			foreach ($this->fetch($formatted, $params) as $row) {
+				return $row;
+			}
+			throw new StorageException(sprintf('Cannot get counts from a query.'));
 		}
 
 		/**
@@ -193,14 +204,29 @@
 		}
 
 		/**
+		 * @param IQuery $query
+		 *
+		 * @return ISchema[]
+		 *
+		 * @throws SchemaException
+		 */
+		protected function getSchemas(IQuery $query) {
+			$schemas = [];
+			foreach (array_unique(array_values($query->getSelects())) as $schema) {
+				$schemas[$schema] = $this->schemaManager->getSchema($schema);
+			}
+			return $schemas;
+		}
+
+		/**
 		 * @param array     $row
 		 * @param ISchema[] $schemas
-		 * @param string[]  $uses
+		 * @param string[]  $selects
 		 *
 		 * @return IRow
 		 * @throws FilterException
 		 */
-		protected function row(array $row, array $schemas, array $uses): IRow {
+		protected function row(array $row, array $schemas, array $selects): IRow {
 			$items = [];
 			foreach ($row as $k => $v) {
 				[$alias, $property] = explode('.', $k, 2);
@@ -208,7 +234,7 @@
 				$items[$alias]->$property = $v;
 			}
 			foreach ($items as $alias => $item) {
-				$items[$alias] = $this->prepareOutput($schemas[$uses[$alias]], $item);
+				$items[$alias] = $this->prepareOutput($schemas[$selects[$alias]], $item);
 			}
 			return new Row($items);
 		}
@@ -218,4 +244,6 @@
 			parent::handleSetup();
 			$this->section = $this->configService->require($this->config);
 		}
+
+		abstract protected function formatQuery(IQuery $query, bool $count = false): array;
 	}

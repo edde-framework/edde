@@ -294,6 +294,10 @@
 			$this->pdo->rollBack();
 		}
 
+		protected function formatQuery(IQuery $query, bool $count = false): array {
+			return [];
+		}
+
 		/**
 		 * @param Throwable $throwable
 		 *

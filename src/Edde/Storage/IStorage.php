@@ -179,4 +179,15 @@
 		 * @throws SchemaException
 		 */
 		public function link(IEntity $entity, IEntity $target, string $relation): IEntity;
+
+		/**
+		 * get a count of items without order and limit (to get number of items for paging computation with applied where)
+		 *
+		 * @param IQuery $query
+		 *
+		 * @return array
+		 *
+		 * @throws StorageException
+		 */
+		public function count(IQuery $query): array;
 	}
