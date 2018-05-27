@@ -3,7 +3,7 @@
 	namespace Edde\Collection;
 
 	use Edde\Edde;
-	use Edde\Query\ISelectQuery;
+	use Edde\Query\IQuery;
 	use Edde\Service\Collection\EntityManager;
 	use Edde\Service\Container\Container;
 	use Edde\Service\Storage\Storage;
@@ -15,31 +15,31 @@
 		use Transaction;
 		use Storage;
 		use EntityManager;
-		/** @var ISelectQuery */
-		protected $selectQuery;
+		/** @var IQuery */
+		protected $query;
 
 		/**
-		 * @param ISelectQuery $selectQuery
+		 * @param IQuery $query
 		 */
-		public function __construct(ISelectQuery $selectQuery) {
-			$this->selectQuery = $selectQuery;
+		public function __construct(IQuery $query) {
+			$this->query = $query;
 		}
 
 		/** @inheritdoc */
-		public function getSelectQuery(): ISelectQuery {
-			return $this->selectQuery;
+		public function getQuery(): IQuery {
+			return $this->query;
 		}
 
 		/** @inheritdoc */
 		public function use(string $schema, string $alias = null): ICollection {
-			$this->selectQuery->use($schema, $alias);
+			$this->query->use($schema, $alias);
 			return $this;
 		}
 
 		/** @inheritdoc */
 		public function create(): ICollection {
 			$this->transaction->transaction(function () {
-				foreach ($this->selectQuery->getSchemas() as $schema) {
+				foreach ($this->query->getSchemas() as $schema) {
 					$this->storage->create($schema);
 				}
 			});
@@ -49,15 +49,15 @@
 		/** @inheritdoc */
 		public function insert(string $alias, stdClass $source): IEntity {
 			return $this->entityManager->entity(
-				$schema = $this->selectQuery->getSchema($alias),
+				$schema = $this->query->getSchema($alias),
 				$this->storage->insert($schema, $source)
 			);
 		}
 
 		/** @inheritdoc */
 		public function getIterator() {
-			$uses = $this->selectQuery->getSchemas();
-			foreach ($this->storage->execute($this->selectQuery) as $row) {
+			$uses = $this->query->getSchemas();
+			foreach ($this->storage->execute($this->query) as $row) {
 				yield $this->container->create(Record::class, [$row, $uses], __METHOD__);
 			}
 		}

@@ -119,7 +119,7 @@
 		 */
 		public function testCollection() {
 			$collection = $this->collectionManager->collection();
-			$selectQuery = $collection->getSelectQuery();
+			$selectQuery = $collection->getQuery();
 			$selectQuery->use(LabelSchema::class);
 			$entities = [];
 			foreach ($collection as $record) {

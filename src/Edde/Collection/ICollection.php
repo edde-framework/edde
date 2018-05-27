@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Collection;
 
-	use Edde\Query\ISelectQuery;
+	use Edde\Query\IQuery;
 	use Edde\Query\QueryException;
 	use Edde\Schema\SchemaException;
 	use Edde\Storage\StorageException;
@@ -17,9 +17,9 @@
 		/**
 		 * return current select query of a collection
 		 *
-		 * @return ISelectQuery
+		 * @return IQuery
 		 */
-		public function getSelectQuery(): ISelectQuery;
+		public function getQuery(): IQuery;
 
 		/**
 		 * @param string      $schema

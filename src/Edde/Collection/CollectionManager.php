@@ -3,7 +3,7 @@
 	namespace Edde\Collection;
 
 	use Edde\Edde;
-	use Edde\Query\SelectQuery;
+	use Edde\Query\Query;
 	use Edde\Service\Container\Container;
 
 	class CollectionManager extends Edde implements ICollectionManager {
@@ -11,6 +11,6 @@
 
 		/** @inheritdoc */
 		public function collection(): ICollection {
-			return $this->container->create(Collection::class, [new SelectQuery()], __METHOD__);
+			return $this->container->create(Collection::class, [new Query()], __METHOD__);
 		}
 	}

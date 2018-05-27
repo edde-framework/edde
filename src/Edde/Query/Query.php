@@ -2,27 +2,24 @@
 	declare(strict_types=1);
 	namespace Edde\Query;
 
+	use Edde\SimpleObject;
 	use function is_string;
 
-	class SelectQuery extends AbstractQuery implements ISelectQuery {
+	class Query extends SimpleObject implements IQuery {
 		protected $uses = [];
 		protected $attaches = [];
 		protected $wheres = [];
 		protected $orders = [];
 		protected $returns = [];
 
-		public function __construct() {
-			parent::__construct('select');
-		}
-
 		/** @inheritdoc */
-		public function use(string $schema, string $alias = null): ISelectQuery {
+		public function use(string $schema, string $alias = null): IQuery {
 			$this->uses[$alias ?: $schema] = $schema;
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function uses(array $schemas): ISelectQuery {
+		public function uses(array $schemas): IQuery {
 			foreach ($schemas as $alias => $schema) {
 				$this->use($schema, is_string($alias) ? $alias : null);
 			}
@@ -30,7 +27,7 @@
 		}
 
 		/** @inheritdoc */
-		public function attach(string $attach, string $to, string $relation): ISelectQuery {
+		public function attach(string $attach, string $to, string $relation): IQuery {
 			$this->attaches[] = (object)[
 				'attach'   => $attach,
 				'to'       => $to,
@@ -40,7 +37,7 @@
 		}
 
 		/** @inheritdoc */
-		public function equal(string $source, string $from, string $target, string $to): ISelectQuery {
+		public function equal(string $source, string $from, string $target, string $to): IQuery {
 			$this->wheres[] = (object)[
 				'type'   => 'equal',
 				'source' => (object)['alias' => $source, 'property' => $from],
@@ -50,7 +47,7 @@
 		}
 
 		/** @inheritdoc */
-		public function equalTo(string $alias, string $property, $value): ISelectQuery {
+		public function equalTo(string $alias, string $property, $value): IQuery {
 			$this->wheres[] = (object)[
 				'type'  => 'equalTo',
 				'alias' => $alias,
@@ -60,7 +57,7 @@
 		}
 
 		/** @inheritdoc */
-		public function order(string $alias, string $property, string $order = 'asc'): ISelectQuery {
+		public function order(string $alias, string $property, string $order = 'asc'): IQuery {
 			$this->orders[] = (object)[
 				'alias'    => $alias,
 				'property' => $property,
@@ -70,13 +67,13 @@
 		}
 
 		/** @inheritdoc */
-		public function return(string $alias): ISelectQuery {
+		public function return(string $alias): IQuery {
 			$this->returns[$alias] = $alias;
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function returns(array $aliases): ISelectQuery {
+		public function returns(array $aliases): IQuery {
 			foreach ($aliases as $alias) {
 				$this->return($alias);
 			}

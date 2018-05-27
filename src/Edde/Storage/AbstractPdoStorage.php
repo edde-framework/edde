@@ -7,7 +7,7 @@
 	use Edde\Collection\IEntity;
 	use Edde\Config\ConfigException;
 	use Edde\Filter\FilterException;
-	use Edde\Query\ISelectQuery;
+	use Edde\Query\IQuery;
 	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Schema\SchemaManager;
@@ -222,7 +222,7 @@
 		}
 
 		/**
-		 * @param ISelectQuery $selectQuery
+		 * @param IQuery $query
 		 *
 		 * @return Generator
 		 *
@@ -230,10 +230,10 @@
 		 * @throws StorageException
 		 * @throws FilterException
 		 */
-		protected function executeSelect(ISelectQuery $selectQuery): Generator {
-			$query = "SELECT\n\t";
+		protected function executeSelect(IQuery $query): Generator {
+			$sql = "SELECT\n\t";
 			$params = [];
-			$uses = $selectQuery->getSchemas();
+			$uses = $query->getSchemas();
 			/** @var $schemas ISchema[] */
 			$schemas = [];
 			foreach (array_unique(array_values($uses)) as $schema) {
@@ -247,8 +247,8 @@
 				}
 				$from[] = $this->delimit($schemas[$schema]->getRealName()) . ' ' . $this->delimit($alias);
 			}
-			$query .= implode(",\n\t", $select) . "\nFROM\n\t" . implode(",\n\t", $from) . "\n";
-			foreach ($this->fetch($query, $params) as $row) {
+			$sql .= implode(",\n\t", $select) . "\nFROM\n\t" . implode(",\n\t", $from) . "\n";
+			foreach ($this->fetch($sql, $params) as $row) {
 				yield $this->row($row, $schemas, $uses);
 			}
 		}
