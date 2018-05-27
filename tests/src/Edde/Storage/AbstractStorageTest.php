@@ -387,7 +387,7 @@
 			$this->storage->saves($entities);
 			$collection = $this->collectionManager->collection($query = new Query());
 			self::assertSame($collection->getQuery(), $query);
-			$query->uses([
+			$collection->uses([
 				'u'  => UserSchema::class,
 				'p'  => ProjectSchema::class,
 				'pm' => ProjectMemberSchema::class,

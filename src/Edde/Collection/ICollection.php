@@ -30,6 +30,13 @@
 		public function use(string $schema, string $alias = null): ICollection;
 
 		/**
+		 * @param string[] $schemas
+		 *
+		 * @return ICollection
+		 */
+		public function uses(array $schemas): ICollection;
+
+		/**
 		 * create all schemas in this collection (simply, CREATE TABLE ...)
 		 *
 		 * thus should run in exclusive transaction as some database systems has

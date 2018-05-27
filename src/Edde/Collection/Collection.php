@@ -37,6 +37,12 @@
 		}
 
 		/** @inheritdoc */
+		public function uses(array $schemas): ICollection {
+			$this->query->uses($schemas);
+			return $this;
+		}
+
+		/** @inheritdoc */
 		public function create(): ICollection {
 			$this->transaction->transaction(function () {
 				foreach ($this->query->getSchemas() as $schema) {
