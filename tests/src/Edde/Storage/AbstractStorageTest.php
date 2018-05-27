@@ -394,10 +394,10 @@
 				'l'  => LabelSchema::class,
 			]);
 			foreach ($collection as $record) {
-				$record->getEntity('u');
-				$record->getEntity('p');
-				$record->getEntity('pm');
-				$record->getEntity('l');
+				self::assertEquals(UserSchema::class, $record->getEntity('u')->getSchema()->getName());
+				self::assertEquals(ProjectSchema::class, $record->getEntity('p')->getSchema()->getName());
+				self::assertEquals(ProjectMemberSchema::class, $record->getEntity('pm')->getSchema()->getName());
+				self::assertEquals(LabelSchema::class, $record->getEntity('l')->getSchema()->getName());
 			}
 		}
 
