@@ -6,6 +6,7 @@
 	use Edde\Collection\EntityNotFoundException;
 	use Edde\Container\ContainerException;
 	use Edde\Filter\FilterException;
+	use Edde\Query\Query;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Collection\CollectionManager;
 	use Edde\Service\Collection\EntityManager;
@@ -359,6 +360,23 @@
 			$this->storage->save($project);
 			$this->storage->delete($project);
 			$this->storage->load(ProjectSchema::class, 'to-be-deleted');
+		}
+
+		/**
+		 * @throws FilterException
+		 * @throws SchemaException
+		 * @throws StorageException
+		 * @throws ValidatorException
+		 */
+		public function testQuery() {
+			$user = $this->entityManager->entity(UserSchema::class, (object)[
+				'uuid'     => 'ja',
+				'login'    => 'me',
+				'password' => '1234',
+			]);
+			$this->storage->save($user);
+			$collection = $this->collectionManager->collection($query = new Query());
+			self::assertSame($collection->getQuery(), $query);
 		}
 
 		/**

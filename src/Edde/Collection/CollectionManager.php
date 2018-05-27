@@ -3,6 +3,7 @@
 	namespace Edde\Collection;
 
 	use Edde\Edde;
+	use Edde\Query\IQuery;
 	use Edde\Query\Query;
 	use Edde\Service\Container\Container;
 
@@ -10,7 +11,7 @@
 		use Container;
 
 		/** @inheritdoc */
-		public function collection(): ICollection {
-			return $this->container->create(Collection::class, [new Query()], __METHOD__);
+		public function collection(IQuery $query = null): ICollection {
+			return $this->container->create(Collection::class, [$query ?: new Query()], __METHOD__);
 		}
 	}
