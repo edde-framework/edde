@@ -17,6 +17,7 @@
 	use function array_values;
 	use function implode;
 	use function sha1;
+	use function vsprintf;
 
 	abstract class AbstractPdoStorage extends AbstractStorage {
 		use SchemaManager;
@@ -57,25 +58,56 @@
 
 		/** @inheritdoc */
 		public function query(IQuery $query): Generator {
-			$sql = "SELECT\n\t";
 			$params = [];
-			$uses = $query->getSelects();
+			$selects = $query->getSelects();
+			$attaches = $query->getAttaches();
 			/** @var $schemas ISchema[] */
 			$schemas = [];
-			foreach (array_unique(array_values($uses)) as $schema) {
+			foreach (array_unique(array_values($selects)) as $schema) {
 				$schemas[$schema] = $this->schemaManager->getSchema($schema);
 			}
 			$select = [];
 			$from = [];
-			foreach ($uses as $alias => $schema) {
+			foreach ($selects as $alias => $schema) {
 				foreach ($schemas[$schema]->getAttributes() as $name => $attribute) {
-					$select[] = $this->delimit($alias) . '.' . $this->delimit($name) . ' AS ' . $this->delimit($alias . '.' . $name);
+					$select[] = vsprintf('%s.%s AS %s', [
+						$this->delimit($alias),
+						$this->delimit($name),
+						$this->delimit($alias . '.' . $name),
+					]);
 				}
-				$from[] = $this->delimit($schemas[$schema]->getRealName()) . ' ' . $this->delimit($alias);
+				if ($query->isAttached($alias)) {
+					continue;
+				}
+				$from[] = vsprintf('%s %s', [
+					$this->delimit($schemas[$schema]->getRealName()),
+					$this->delimit($alias),
+				]);
 			}
-			$sql .= implode(",\n\t", $select) . "\nFROM\n\t" . implode(",\n\t", $from) . "\n";
+			foreach ($attaches as $attach) {
+				$sourceSchema = $schemas[$selects[$attach->attach]];
+				$relationSchema = $schemas[$selects[$attach->relation]];
+				$targetSchema = $schemas[$selects[$attach->to]];
+				$this->checkRelation($relationSchema, $sourceSchema, $targetSchema);
+				$from[] = vsprintf("%s %s\n\t\tINNER JOIN %s %s ON %2\$s.%s = %4\$s.%s\n\t\tINNER JOIN %s %s ON %2\$s.%s = %8\$s.%s", [
+					$this->delimit($relationSchema->getRealName()),
+					$this->delimit($attach->relation),
+					$this->delimit($sourceSchema->getRealName()),
+					$this->delimit($attach->attach),
+					$this->delimit($relationSchema->getSource()->getName()),
+					$this->delimit($sourceSchema->getPrimary()->getName()),
+					$this->delimit($targetSchema->getRealName()),
+					$this->delimit($attach->to),
+					$this->delimit($relationSchema->getTarget()->getName()),
+					$this->delimit($targetSchema->getPrimary()->getName()),
+				]);
+			}
+			$sql = vsprintf("SELECT\n\t%s\nFROM\n\t%s\n", [
+				implode(",\n\t", $select),
+				implode(",\n\t", $from),
+			]);
 			foreach ($this->fetch($sql, $params) as $row) {
-				yield $this->row($row, $schemas, $uses);
+				yield $this->row($row, $schemas, $selects);
 			}
 		}
 

@@ -97,6 +97,7 @@
 				$sourceSchema = $schemas[$selects[$attach->attach]];
 				$relationSchema = $schemas[$selects[$attach->relation]];
 				$targetSchema = $schemas[$selects[$attach->to]];
+				$this->checkRelation($relationSchema, $sourceSchema, $targetSchema);
 				$from[] = '(' . ($returns[] = $this->delimit($attach->attach)) . ': ' . $this->delimit($sourceSchema->getRealName()) . ')-[' . ($returns[] = $this->delimit($attach->relation)) . ': ' . $this->delimit($relationSchema->getRealName()) . ']->(' . ($returns[] = $this->delimit($attach->to)) . ': ' . $this->delimit($targetSchema->getRealName()) . ')';
 			}
 			$cypher .= "\t" . implode(",\n\t", $from) . "\n";
