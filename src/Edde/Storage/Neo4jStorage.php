@@ -169,7 +169,10 @@
 			}
 			$source = $this->prepareInsert($entity);
 			$this->fetch(
-				'CREATE (a:' . $this->delimit($schema->getRealName()) . ' {' . $this->delimit($primary = $schema->getPrimary()->getName()) . ': $primary}) SET a = $set',
+				vsprintf('CREATE (a: %s {%s: $primary}) SET a = $set', [
+					$this->delimit($schema->getRealName()),
+					$this->delimit($primary = $schema->getPrimary()->getName()),
+				]),
 				[
 					'primary' => $source->{$primary},
 					'set'     => (array)$source,
@@ -192,7 +195,10 @@
 			}
 			$source = $this->prepareUpdate($entity);
 			$this->fetch(
-				'MERGE (a:' . $this->delimit($schema->getRealName()) . ' {' . $this->delimit($primary = $schema->getPrimary()->getName()) . ': $primary}) SET a = $set',
+				vsprintf('MERGE (a: %s {%s: $primary}) SET a = $set', [
+					$this->delimit($schema->getRealName()),
+					$this->delimit($primary = $schema->getPrimary()->getName()),
+				]),
 				[
 					'primary' => $source->{$primary},
 					'set'     => (array)$source,
