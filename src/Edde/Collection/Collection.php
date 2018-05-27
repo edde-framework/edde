@@ -8,7 +8,6 @@
 	use Edde\Service\Container\Container;
 	use Edde\Service\Storage\Storage;
 	use Edde\Service\Transaction\Transaction;
-	use stdClass;
 
 	class Collection extends Edde implements ICollection {
 		use Container;
@@ -53,11 +52,9 @@
 		}
 
 		/** @inheritdoc */
-		public function insert(string $alias, stdClass $source): IEntity {
-			return $this->entityManager->entity(
-				$schema = $this->query->getSelect($alias),
-				$this->storage->insert($schema, $source)
-			);
+		public function count(string $alias): int {
+			$this->query->getSelect($alias);
+			return (int)$this->storage->count($this->query)[$alias];
 		}
 
 		/** @inheritdoc */

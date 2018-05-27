@@ -4,10 +4,8 @@
 
 	use Edde\Query\IQuery;
 	use Edde\Query\QueryException;
-	use Edde\Schema\SchemaException;
 	use Edde\Storage\StorageException;
 	use IteratorAggregate;
-	use stdClass;
 	use Traversable;
 
 	/**
@@ -51,18 +49,16 @@
 		public function create(): ICollection;
 
 		/**
-		 * insert a new item into a schema represented by the given alias
+		 * return count of the given alias
 		 *
-		 * @param string   $alias
-		 * @param stdClass $source
+		 * @param string $alias
 		 *
-		 * @return IEntity return newly create entity
+		 * @return int
 		 *
-		 * @throws StorageException
 		 * @throws QueryException
-		 * @throws SchemaException
+		 * @throws StorageException
 		 */
-		public function insert(string $alias, stdClass $source): IEntity;
+		public function count(string $alias): int;
 
 		/**
 		 * @return Traversable|IRecord[]

@@ -8,6 +8,7 @@
 	use Edde\Container\ContainerException;
 	use Edde\Filter\FilterException;
 	use Edde\Query\Query;
+	use Edde\Query\QueryException;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Collection\CollectionManager;
 	use Edde\Service\Collection\EntityManager;
@@ -443,9 +444,14 @@
 			}
 		}
 
+		/**
+		 * @throws StorageException
+		 * @throws QueryException
+		 */
 		public function testCount() {
 			self::assertEquals(7, $this->storage->count(($collection = $this->collectionManager->collection()->select(ProjectSchema::class))->getQuery())[ProjectSchema::class]);
 			self::assertEquals(4, $this->storage->count($this->collectionManager->collection()->select(ProjectMemberSchema::class)->getQuery())[ProjectMemberSchema::class]);
+			self::assertSame(7, $collection->count(ProjectSchema::class));
 		}
 
 		/**

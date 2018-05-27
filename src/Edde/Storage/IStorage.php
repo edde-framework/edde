@@ -185,7 +185,7 @@
 		 *
 		 * @param IQuery $query
 		 *
-		 * @return array
+		 * @return int[]
 		 *
 		 * @throws StorageException
 		 */
