@@ -23,8 +23,7 @@
 	use GraphAware\Common\Type\MapAccessor;
 	use Throwable;
 	use function implode;
-	use function random_bytes;
-	use function sha1;
+	use function vsprintf;
 
 	class Neo4jStorage extends AbstractStorage {
 		use SchemaManager;
@@ -71,7 +70,6 @@
 
 		/** @inheritdoc */
 		public function query(IQuery $query): Generator {
-			$cypher = "MATCH\n";
 			$returns = [];
 			$params = [];
 			$selects = $query->getSelects();
@@ -88,28 +86,45 @@
 				}
 				$schema = $schemas[$schema];
 				if ($schema->isRelation()) {
-					$from[] = '()-[' . ($returns[] = $this->delimit($alias)) . ':' . $this->delimit($schema->getRealName()) . ']->()';
+					$from[] = vsprintf('()-[%s: %s]->()', [
+						$returns[] = $this->delimit($alias),
+						$this->delimit($schema->getRealName()),
+					]);
 					continue;
 				}
-				$from[] = '(' . ($returns[] = $this->delimit($alias)) . ':' . $this->delimit($schema->getRealName()) . ')';
+				$from[] = vsprintf('(%s: %s)', [
+					$returns[] = $this->delimit($alias),
+					$this->delimit($schema->getRealName()),
+				]);
 			}
 			foreach ($attaches as $attach) {
 				$sourceSchema = $schemas[$selects[$attach->attach]];
 				$relationSchema = $schemas[$selects[$attach->relation]];
 				$targetSchema = $schemas[$selects[$attach->to]];
 				$this->checkRelation($relationSchema, $sourceSchema, $targetSchema);
-				$from[] = '(' . ($returns[] = $this->delimit($attach->attach)) . ': ' . $this->delimit($sourceSchema->getRealName()) . ')-[' . ($returns[] = $this->delimit($attach->relation)) . ': ' . $this->delimit($relationSchema->getRealName()) . ']->(' . ($returns[] = $this->delimit($attach->to)) . ': ' . $this->delimit($targetSchema->getRealName()) . ')';
+				$from[] = vsprintf('(%s: %s)-[%s: %s]->(%s: %s)', [
+					$returns[] = $this->delimit($attach->attach),
+					$this->delimit($sourceSchema->getRealName()),
+					$returns[] = $this->delimit($attach->relation),
+					$this->delimit($relationSchema->getRealName()),
+					$returns[] = $this->delimit($attach->to),
+					$this->delimit($targetSchema->getRealName()),
+				]);
 			}
-			$cypher .= "\t" . implode(",\n\t", $from) . "\n";
+			$cypher = vsprintf("MATCH\n\t%s\n", [
+				implode(",\n\t", $from),
+			]);
 			if ($query->hasWhere() && $wheres = $query->getWheres()) {
 				$cypher .= "WHERE\n\t";
 				$whereList = [];
-				foreach ($wheres as $stdClass) {
+				foreach ($wheres as $index => $stdClass) {
 					switch ($stdClass->type) {
-						case 'equal':
-							break;
 						case 'equalTo':
-							$whereList[] = $this->delimit($stdClass->alias) . '.' . $this->delimit($stdClass->property) . ' = $' . ($paramId = '_' . sha1(random_bytes(42)));
+							$whereList[] = vsprintf('%s.%s = $%s', [
+								$this->delimit($stdClass->alias),
+								$this->delimit($stdClass->property),
+								$paramId = '_' . $index,
+							]);
 							$params[$paramId] = $this->filterValue($schemas[$selects[$stdClass->alias]]->getAttribute($stdClass->property), $stdClass->value);
 							break;
 						default:

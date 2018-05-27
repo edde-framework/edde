@@ -106,6 +106,25 @@
 				implode(",\n\t", $select),
 				implode(",\n\t", $from),
 			]);
+			if ($query->hasWhere() && $wheres = $query->getWheres()) {
+				$sql .= "WHERE\n\t";
+				$whereList = [];
+				foreach ($wheres as $index => $stdClass) {
+					switch ($stdClass->type) {
+						case 'equalTo':
+							$whereList[] = vsprintf('%s.%s = :%s', [
+								$this->delimit($stdClass->alias),
+								$this->delimit($stdClass->property),
+								$paramId = '_' . $index,
+							]);
+							$params[$paramId] = $this->filterValue($schemas[$selects[$stdClass->alias]]->getAttribute($stdClass->property), $stdClass->value);
+							break;
+						default:
+							throw new StorageException(sprintf('Unsupported where type [%s].', $stdClass->type));
+					}
+				}
+				$sql .= implode(" AND\n\t", $whereList) . "\n";
+			}
 			foreach ($this->fetch($sql, $params) as $row) {
 				yield $this->row($row, $schemas, $selects);
 			}
