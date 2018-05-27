@@ -3,6 +3,7 @@
 	namespace Edde\Storage;
 
 	use DateTime;
+	use Edde\Collection\CollectionException;
 	use Edde\Collection\EntityNotFoundException;
 	use Edde\Container\ContainerException;
 	use Edde\Filter\FilterException;
@@ -367,16 +368,37 @@
 		 * @throws SchemaException
 		 * @throws StorageException
 		 * @throws ValidatorException
+		 * @throws CollectionException
 		 */
 		public function testQuery() {
-			$user = $this->entityManager->entity(UserSchema::class, (object)[
+			$entities[] = $user = $this->entityManager->entity(UserSchema::class, (object)[
 				'uuid'     => 'ja',
 				'login'    => 'me',
 				'password' => '1234',
 			]);
-			$this->storage->save($user);
+			$entities[] = $project = $this->entityManager->entity(ProjectSchema::class, (object)[
+				'name' => 'project',
+			]);
+			$entities[] = $this->entityManager->entity(LabelSchema::class, (object)[
+				'name' => 'lejbl',
+			]);
+			$entities[] = $relation = $this->storage->attach($project, $user, ProjectMemberSchema::class);
+			$relation->set('owner', true);
+			$this->storage->saves($entities);
 			$collection = $this->collectionManager->collection($query = new Query());
 			self::assertSame($collection->getQuery(), $query);
+			$query->uses([
+				'u'  => UserSchema::class,
+				'p'  => ProjectSchema::class,
+				'pm' => ProjectMemberSchema::class,
+				'l'  => LabelSchema::class,
+			]);
+			foreach ($collection as $record) {
+				$record->getEntity('u');
+				$record->getEntity('p');
+				$record->getEntity('pm');
+				$record->getEntity('l');
+			}
 		}
 
 		/**

@@ -2,25 +2,23 @@
 	declare(strict_types=1);
 	namespace Edde\Collection;
 
-	use Edde\Edde;
-	use Edde\Service\Collection\EntityManager;
+	use Edde\SimpleObject;
 	use Edde\Storage\IRow;
 	use stdClass;
 
-	class Record extends Edde implements IRecord {
-		use EntityManager;
+	class Record extends SimpleObject implements IRecord {
 		/** @var IRow */
 		protected $row;
-		protected $schemas;
+		/** @var IEntity[] */
 		protected $entities = [];
 
 		/**
-		 * @param IRow     $row
-		 * @param string[] $schemas
+		 * @param IRow      $row
+		 * @param IEntity[] $entities
 		 */
-		public function __construct(IRow $row, array $schemas) {
+		public function __construct(IRow $row, array $entities) {
 			$this->row = $row;
-			$this->schemas = $schemas;
+			$this->entities = $entities;
 		}
 
 		/** @inheritdoc */
@@ -35,9 +33,9 @@
 
 		/** @inheritdoc */
 		public function getEntity(string $alias): IEntity {
-			if (isset($this->entities[$alias])) {
-				return $this->entities[$alias];
+			if (isset($this->entities[$alias]) === false) {
+				throw new CollectionException(sprintf('Requested unknown entity alias from a record [%s]; available aliases are [%s].', $alias, implode(', ', array_keys($this->entities))));
 			}
-			return $this->entities[$alias] = $this->entityManager->entity($this->schemas[$alias], $this->row->getItem($alias));
+			return $this->entities[$alias];
 		}
 	}

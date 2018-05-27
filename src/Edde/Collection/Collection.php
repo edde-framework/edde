@@ -58,7 +58,11 @@
 		public function getIterator() {
 			$uses = $this->query->getSchemas();
 			foreach ($this->storage->query($this->query) as $row) {
-				yield $this->container->create(Record::class, [$row, $uses], __METHOD__);
+				$entities = [];
+				foreach ($row->getItems() as $alias => $item) {
+					$entities[$alias] = $this->entityManager->entity($uses[$alias], $item);
+				}
+				yield new Record($row, $entities);
 			}
 		}
 	}

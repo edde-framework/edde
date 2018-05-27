@@ -16,4 +16,9 @@
 		 * @throws StorageException
 		 */
 		public function getItem(string $alias): stdClass;
+
+		/**
+		 * @return stdClass[]
+		 */
+		public function getItems(): array;
 	}

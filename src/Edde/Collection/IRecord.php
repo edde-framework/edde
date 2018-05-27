@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Collection;
 
-	use Edde\Schema\SchemaException;
 	use Edde\Storage\IRow;
 	use Edde\Storage\StorageException;
 	use stdClass;
@@ -35,8 +34,7 @@
 		 *
 		 * @return IEntity
 		 *
-		 * @throws StorageException
-		 * @throws SchemaException
+		 * @throws CollectionException
 		 */
 		public function getEntity(string $alias): IEntity;
 	}

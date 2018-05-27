@@ -80,7 +80,12 @@
 			}
 			$from = [];
 			foreach ($uses as $alias => $schema) {
-				$from[] = '(' . ($returns[] = $this->delimit($alias)) . ':' . $this->delimit($schemas[$schema]->getRealName()) . ')';
+				$schema = $schemas[$schema];
+				if ($schema->isRelation()) {
+					$from[] = '()-[' . ($returns[] = $this->delimit($alias)) . ':' . $this->delimit($schema->getRealName()) . ']->()';
+					continue;
+				}
+				$from[] = '(' . ($returns[] = $this->delimit($alias)) . ':' . $this->delimit($schema->getRealName()) . ')';
 			}
 			$cypher .= "\t" . implode(",\n", $from) . "\nRETURN\n\t" . implode(',', $returns);
 			foreach ($this->fetch($cypher, $params) as $row) {
