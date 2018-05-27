@@ -8,6 +8,7 @@
 	use Edde\Container\ContainerException;
 	use Edde\Filter\FilterException;
 	use Edde\Query\Query;
+	use Edde\Query\QueryException;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Collection\CollectionManager;
 	use Edde\Service\Collection\EntityManager;
@@ -122,7 +123,7 @@
 		public function testCollection() {
 			$collection = $this->collectionManager->collection();
 			$query = $collection->getQuery();
-			$query->use(LabelSchema::class);
+			$query->select(LabelSchema::class);
 			$entities = [];
 			foreach ($collection as $record) {
 				$entity = $record->getEntity(LabelSchema::class)->toObject();
@@ -387,7 +388,7 @@
 			$this->storage->saves($entities);
 			$collection = $this->collectionManager->collection($query = new Query());
 			self::assertSame($collection->getQuery(), $query);
-			$collection->uses([
+			$collection->selects([
 				'u'  => UserSchema::class,
 				'p'  => ProjectSchema::class,
 				'pm' => ProjectMemberSchema::class,
@@ -399,6 +400,40 @@
 				self::assertEquals(ProjectMemberSchema::class, $record->getEntity('pm')->getSchema()->getName());
 				self::assertEquals(LabelSchema::class, $record->getEntity('l')->getSchema()->getName());
 			}
+		}
+
+		/**
+		 * @throws FilterException
+		 * @throws SchemaException
+		 * @throws StorageException
+		 * @throws ValidatorException
+		 * @throws QueryException
+		 */
+		public function testABitMoreComplexQuery() {
+			$entities[] = $user = $this->entityManager->entity(UserSchema::class, (object)[
+				'uuid'     => 'on',
+				'login'    => 'tadaa',
+				'password' => '1234',
+			]);
+			$entities[] = $project = $this->entityManager->entity(ProjectSchema::class, (object)[
+				'name' => 'project',
+			]);
+			$entities[] = $project2 = $this->entityManager->entity(ProjectSchema::class, (object)[
+				'name' => 'project',
+			]);
+			$entities[] = $relation = $this->storage->attach($project, $user, ProjectMemberSchema::class);
+			$relation->set('owner', true);
+			$entities[] = $this->storage->attach($project2, $user, ProjectMemberSchema::class);
+			$this->storage->saves($entities);
+			$collection = $this->collectionManager->collection($query = new Query());
+			self::assertSame($collection->getQuery(), $query);
+			$collection->selects([
+				'u'  => UserSchema::class,
+				'p'  => ProjectSchema::class,
+				'pm' => ProjectMemberSchema::class,
+				'l'  => LabelSchema::class,
+			]);
+			$query->attach('p', 'u', 'pm');
 		}
 
 		/**

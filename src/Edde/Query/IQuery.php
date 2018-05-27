@@ -11,7 +11,7 @@
 		 *
 		 * @return IQuery
 		 */
-		public function use(string $schema, string $alias = null): IQuery;
+		public function select(string $schema, string $alias = null): IQuery;
 
 		/**
 		 * make use of the given schema names; [$alias => $schema]
@@ -20,7 +20,7 @@
 		 *
 		 * @return IQuery
 		 */
-		public function uses(array $schemas): IQuery;
+		public function selects(array $schemas): IQuery;
 
 		/**
 		 * attach is kind of "join" - it makes relation between schema aliases
@@ -88,12 +88,12 @@
 		 *
 		 * @throws QueryException
 		 */
-		public function getSchema(string $alias): string;
+		public function getSelect(string $alias): string;
 
 		/**
 		 * return schemas used in this query; value could be duplicated as an array is [alias => value]
 		 *
 		 * @return string[]
 		 */
-		public function getSchemas(): array;
+		public function getSelects(): array;
 	}

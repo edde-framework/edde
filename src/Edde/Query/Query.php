@@ -6,22 +6,23 @@
 	use function is_string;
 
 	class Query extends SimpleObject implements IQuery {
-		protected $uses = [];
+		/** @var string[] */
+		protected $selects = [];
 		protected $attaches = [];
 		protected $wheres = [];
 		protected $orders = [];
 		protected $returns = [];
 
 		/** @inheritdoc */
-		public function use(string $schema, string $alias = null): IQuery {
-			$this->uses[$alias ?: $schema] = $schema;
+		public function select(string $schema, string $alias = null): IQuery {
+			$this->selects[$alias ?: $schema] = $schema;
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function uses(array $schemas): IQuery {
+		public function selects(array $schemas): IQuery {
 			foreach ($schemas as $alias => $schema) {
-				$this->use($schema, is_string($alias) ? $alias : null);
+				$this->select($schema, is_string($alias) ? $alias : null);
 			}
 			return $this;
 		}
@@ -81,15 +82,15 @@
 		}
 
 		/** @inheritdoc */
-		public function getSchema(string $alias): string {
-			if (isset($this->uses[$alias]) === false) {
+		public function getSelect(string $alias): string {
+			if (isset($this->selects[$alias]) === false) {
 				throw new QueryException(sprintf('Requested alias [%s] is not available in the query.', $alias));
 			}
-			return $this->uses[$alias];
+			return $this->selects[$alias];
 		}
 
 		/** @inheritdoc */
-		public function getSchemas(): array {
-			return $this->uses;
+		public function getSelects(): array {
+			return $this->selects;
 		}
 	}

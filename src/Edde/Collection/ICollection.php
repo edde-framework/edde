@@ -22,19 +22,21 @@
 		public function getQuery(): IQuery;
 
 		/**
+		 * proxy to IQuery method
+		 *
 		 * @param string      $schema
 		 * @param string|null $alias
 		 *
 		 * @return ICollection
 		 */
-		public function use(string $schema, string $alias = null): ICollection;
+		public function select(string $schema, string $alias = null): ICollection;
 
 		/**
 		 * @param string[] $schemas
 		 *
 		 * @return ICollection
 		 */
-		public function uses(array $schemas): ICollection;
+		public function selects(array $schemas): ICollection;
 
 		/**
 		 * create all schemas in this collection (simply, CREATE TABLE ...)

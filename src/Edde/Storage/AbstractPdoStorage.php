@@ -59,7 +59,7 @@
 		public function query(IQuery $query): Generator {
 			$sql = "SELECT\n\t";
 			$params = [];
-			$uses = $query->getSchemas();
+			$uses = $query->getSelects();
 			/** @var $schemas ISchema[] */
 			$schemas = [];
 			foreach (array_unique(array_values($uses)) as $schema) {

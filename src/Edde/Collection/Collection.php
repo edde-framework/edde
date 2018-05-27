@@ -31,21 +31,21 @@
 		}
 
 		/** @inheritdoc */
-		public function use(string $schema, string $alias = null): ICollection {
-			$this->query->use($schema, $alias);
+		public function select(string $schema, string $alias = null): ICollection {
+			$this->query->select($schema, $alias);
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function uses(array $schemas): ICollection {
-			$this->query->uses($schemas);
+		public function selects(array $schemas): ICollection {
+			$this->query->selects($schemas);
 			return $this;
 		}
 
 		/** @inheritdoc */
 		public function create(): ICollection {
 			$this->transaction->transaction(function () {
-				foreach ($this->query->getSchemas() as $schema) {
+				foreach ($this->query->getSelects() as $schema) {
 					$this->storage->create($schema);
 				}
 			});
@@ -55,14 +55,14 @@
 		/** @inheritdoc */
 		public function insert(string $alias, stdClass $source): IEntity {
 			return $this->entityManager->entity(
-				$schema = $this->query->getSchema($alias),
+				$schema = $this->query->getSelect($alias),
 				$this->storage->insert($schema, $source)
 			);
 		}
 
 		/** @inheritdoc */
 		public function getIterator() {
-			$uses = $this->query->getSchemas();
+			$uses = $this->query->getSelects();
 			foreach ($this->storage->query($this->query) as $row) {
 				$entities = [];
 				foreach ($row->getItems() as $alias => $item) {
