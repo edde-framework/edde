@@ -158,6 +158,12 @@
 				}
 				$cypher .= implode(" ,\n\t", $orderList) . "\n";
 			}
+			if ($count === false && $query->hasPage() && $page = $query->getPage()) {
+				$cypher .= vsprintf('SKIP %d LIMIT %d', [
+					$page->page * $page->size,
+					$page->size,
+				]);
+			}
 			return [$cypher, $params];
 		}
 

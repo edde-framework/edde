@@ -310,6 +310,12 @@
 				}
 				$sql .= implode(" ,\n\t", $orderList) . "\n";
 			}
+			if ($count === false && $query->hasPage() && $page = $query->getPage()) {
+				$sql .= vsprintf('LIMIT %d OFFSET %d', [
+					$page->size,
+					$page->page * $page->size,
+				]);
+			}
 			return [$sql, $params];
 		}
 

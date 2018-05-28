@@ -48,6 +48,12 @@
 		}
 
 		/** @inheritdoc */
+		public function page(int $page, int $size): ICollection {
+			$this->query->page($page, $size);
+			return $this;
+		}
+
+		/** @inheritdoc */
 		public function count(string $alias): int {
 			$this->query->getSelect($alias);
 			return (int)$this->storage->count($this->query)[$alias];

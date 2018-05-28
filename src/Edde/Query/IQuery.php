@@ -115,6 +115,24 @@
 		public function getOrders(): array;
 
 		/**
+		 * @param int $page
+		 * @param int $size
+		 *
+		 * @return IQuery
+		 */
+		public function page(int $page, int $size): IQuery;
+
+		/**
+		 * @return bool
+		 */
+		public function hasPage(): bool;
+
+		/**
+		 * @return stdClass
+		 */
+		public function getPage(): stdClass;
+
+		/**
 		 * which alias should be returned by the query
 		 *
 		 * @param string $alias

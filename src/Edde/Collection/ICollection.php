@@ -46,6 +46,16 @@
 		public function order(string $alias, string $property, string $order = 'asc'): ICollection;
 
 		/**
+		 * limit/offset
+		 *
+		 * @param int $page
+		 * @param int $size
+		 *
+		 * @return ICollection
+		 */
+		public function page(int $page, int $size): ICollection;
+
+		/**
 		 * return count of the given alias
 		 *
 		 * @param string $alias

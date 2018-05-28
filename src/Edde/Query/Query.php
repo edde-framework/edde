@@ -17,6 +17,8 @@
 		protected $wheres = [];
 		/** @var stdClass[] */
 		protected $orders = [];
+		/** @var stdClass */
+		protected $page;
 		/** @var string[] */
 		protected $returns = [];
 
@@ -109,6 +111,25 @@
 		/** @inheritdoc */
 		public function getOrders(): array {
 			return $this->orders;
+		}
+
+		/** @inheritdoc */
+		public function page(int $page, int $size): IQuery {
+			$this->page = (object)[
+				'page' => $page,
+				'size' => $size,
+			];
+			return $this;
+		}
+
+		/** @inheritdoc */
+		public function hasPage(): bool {
+			return $this->page !== null;
+		}
+
+		/** @inheritdoc */
+		public function getPage(): stdClass {
+			return $this->page;
 		}
 
 		/** @inheritdoc */

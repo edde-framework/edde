@@ -491,6 +491,51 @@
 		}
 
 		/**
+		 * @throws CollectionException
+		 * @throws QueryException
+		 * @throws StorageException
+		 */
+		public function testPaging() {
+			$collection = $this->collectionManager->collection();
+			$collection->select(ToBeOrdered::class);
+			$collection->order(ToBeOrdered::class, 'index', 'desc');
+			$collection->page(1, 3);
+			$expected = [
+				6.42,
+				5.3,
+				4.9,
+			];
+			self::assertEquals(9, $collection->count(ToBeOrdered::class));
+			$actual = [];
+			foreach ($collection as $record) {
+				$actual[] = $record->getEntity(ToBeOrdered::class)->get('index');
+			}
+			self::assertEquals($expected, $actual);
+			$collection->page(0, 3);
+			$expected = [
+				9.4,
+				8.123,
+				7.2,
+			];
+			$actual = [];
+			foreach ($collection as $record) {
+				$actual[] = $record->getEntity(ToBeOrdered::class)->get('index');
+			}
+			self::assertEquals($expected, $actual);
+			$collection->page(2, 3);
+			$expected = [
+				3.1,
+				2.3,
+				1.1,
+			];
+			$actual = [];
+			foreach ($collection as $record) {
+				$actual[] = $record->getEntity(ToBeOrdered::class)->get('index');
+			}
+			self::assertEquals($expected, $actual);
+		}
+
+		/**
 		 * @throws SchemaException
 		 * @throws ContainerException
 		 * @throws ReflectionException
