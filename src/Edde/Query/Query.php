@@ -15,6 +15,7 @@
 		protected $attached = [];
 		/** @var stdClass[] */
 		protected $wheres = [];
+		/** @var stdClass[] */
 		protected $orders = [];
 		/** @var string[] */
 		protected $returns = [];
@@ -98,6 +99,16 @@
 				'order'    => $order,
 			];
 			return $this;
+		}
+
+		/** @inheritdoc */
+		public function hasOrder(): bool {
+			return empty($this->orders) === false;
+		}
+
+		/** @inheritdoc */
+		public function getOrders(): array {
+			return $this->orders;
 		}
 
 		/** @inheritdoc */

@@ -103,6 +103,18 @@
 		public function order(string $alias, string $property, string $order = 'asc'): IQuery;
 
 		/**
+		 * should this query be ordered?
+		 *
+		 * @return bool
+		 */
+		public function hasOrder(): bool;
+
+		/**
+		 * @return stdClass[]
+		 */
+		public function getOrders(): array;
+
+		/**
 		 * which alias should be returned by the query
 		 *
 		 * @param string $alias
