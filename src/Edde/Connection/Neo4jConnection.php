@@ -401,7 +401,7 @@
 					if (($dot = strpos($column, '.')) !== false) {
 						$name = $this->delimite(substr($column, 0, $dot)) . '.' . $this->delimite(substr($column, $dot + 1));
 					}
-					$orders[] = 'LOWER(' . $name . ') ' . ($asc ? 'ASC' : 'DESC');
+					$orders[] = $name . ' ' . ($asc ? 'ASC' : 'DESC');
 				}
 				$cypher .= 'ORDER BY ' . implode(', ', $orders);
 			}
