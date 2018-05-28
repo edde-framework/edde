@@ -3,27 +3,23 @@
 	namespace Edde\Validator;
 
 	use Edde\Config\AbstractConfigurator;
-	use Edde\Container\ContainerException;
-	use Edde\Service\Container\Container;
 
 	class ValidatorManagerConfigurator extends AbstractConfigurator {
-		use Container;
-
 		/**
 		 * @param $instance IValidatorManager
-		 *
-		 * @throws ContainerException
 		 */
 		public function configure($instance) {
 			parent::configure($instance);
 			$instance->registerValidators([
-				'int'              => $validator = $this->container->create(IntValidator::class, [], __METHOD__),
+				'int'              => $validator = new IntValidator(),
 				'storage:int'      => $validator,
-				'string'           => $validator = $this->container->create(StringValidator::class, [], __METHOD__),
+				'float'            => $validator = new FloatValidator(),
+				'storage:float'    => $validator,
+				'string'           => $validator = new StringValidator(),
 				'storage:string'   => $validator,
-				'bool'             => $validator = $this->container->create(BoolValidator::class, [], __METHOD__),
+				'bool'             => $validator = new BoolValidator(),
 				'storage:bool'     => $validator,
-				'datetime'         => $validator = $this->container->create(DateTimeValidator::class, [], __METHOD__),
+				'datetime'         => $validator = new DateTimeValidator(),
 				'storage:datetime' => $validator,
 				'DateTime'         => $validator,
 				'storage:DateTime' => $validator,

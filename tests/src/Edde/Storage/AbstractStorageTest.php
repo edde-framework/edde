@@ -21,8 +21,10 @@
 	use ProjectMemberSchema;
 	use ProjectSchema;
 	use ReflectionException;
+	use ToBeOrdered;
 	use UserSchema;
 	use VoidSchema;
+	use function shuffle;
 
 	abstract class AbstractStorageTest extends TestCase {
 		use SchemaManager;
@@ -40,6 +42,7 @@
 				UserSchema::class,
 				ProjectSchema::class,
 				ProjectMemberSchema::class,
+				ToBeOrdered::class,
 			];
 			foreach ($schemas as $schema) {
 				$this->storage->create($schema);
@@ -117,8 +120,7 @@
 		}
 
 		/**
-		 * @throws SchemaException
-		 * @throws StorageException
+		 * @throws CollectionException
 		 */
 		public function testCollection() {
 			$collection = $this->collectionManager->collection();
@@ -454,6 +456,41 @@
 		}
 
 		/**
+		 * @throws CollectionException
+		 * @throws FilterException
+		 * @throws SchemaException
+		 * @throws StorageException
+		 * @throws ValidatorException
+		 */
+		public function testOrder() {
+			$collection = $this->collectionManager->collection();
+			$shuffled = $expected = [
+				9.4,
+				8.123,
+				7.2,
+				6.42,
+				5.3,
+				4.9,
+				3.1,
+				2.3,
+				1.1,
+			];
+			shuffle($shuffled);
+			foreach ($shuffled as $item) {
+				$this->storage->insert($this->entityManager->entity(ToBeOrdered::class, (object)[
+					'index' => $item,
+				]));
+			}
+			$collection->select(ToBeOrdered::class);
+			$collection->order(ToBeOrdered::class, 'index', 'desc');
+			$actual = [];
+			foreach ($collection as $record) {
+				$actual[] = $record->getEntity(ToBeOrdered::class)->get('index');
+			}
+			self::assertEquals($expected, $actual);
+		}
+
+		/**
 		 * @throws SchemaException
 		 * @throws ContainerException
 		 * @throws ReflectionException
@@ -465,6 +502,7 @@
 				ProjectSchema::class,
 				UserSchema::class,
 				ProjectMemberSchema::class,
+				ToBeOrdered::class,
 			]);
 		}
 	}

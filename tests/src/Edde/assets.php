@@ -69,5 +69,9 @@
 		public function created($generator = 'stamp'): DateTime;
 	}
 
+	interface ToBeOrdered extends UuidSchema {
+		public function index(): float;
+	}
+
 	interface VoidSchema extends UuidSchema {
 	}

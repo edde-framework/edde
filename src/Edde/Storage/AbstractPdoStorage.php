@@ -18,7 +18,10 @@
 	use function array_unique;
 	use function array_values;
 	use function implode;
+	use function in_array;
 	use function sha1;
+	use function sprintf;
+	use function strtoupper;
 	use function vsprintf;
 
 	abstract class AbstractPdoStorage extends AbstractStorage {
@@ -294,6 +297,18 @@
 					}
 				}
 				$sql .= implode(" AND\n\t", $whereList) . "\n";
+			}
+			if ($count === false && $query->hasOrder() && $orders = $query->getOrders()) {
+				$sql .= "ORDER BY\n\t";
+				$orderList = [];
+				foreach ($orders as $stdClass) {
+					$orderList[] = vsprintf('%s.%s %s', [
+						$this->delimit($stdClass->alias),
+						$this->delimit($stdClass->property),
+						in_array($order = strtoupper($stdClass->order), ['ASC', 'DESC']) ? $order : 'ASC',
+					]);
+				}
+				$sql .= implode(" ,\n\t", $orderList) . "\n";
 			}
 			return [$sql, $params];
 		}

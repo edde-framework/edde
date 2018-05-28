@@ -37,16 +37,13 @@
 		public function selects(array $schemas): ICollection;
 
 		/**
-		 * create all schemas in this collection (simply, CREATE TABLE ...)
-		 *
-		 * thus should run in exclusive transaction as some database systems has
-		 * problems with schema & data modifications in one transaction
+		 * @param string $alias
+		 * @param string $property
+		 * @param string $order
 		 *
 		 * @return ICollection
-		 *
-		 * @throws StorageException
 		 */
-		public function create(): ICollection;
+		public function order(string $alias, string $property, string $order = 'asc'): ICollection;
 
 		/**
 		 * return count of the given alias

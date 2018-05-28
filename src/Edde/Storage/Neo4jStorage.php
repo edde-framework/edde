@@ -146,6 +146,18 @@
 				}
 			}
 			$cypher .= "RETURN\n\t" . implode(',', $returns);
+			if ($count === false && $query->hasOrder() && $orders = $query->getOrders()) {
+				$cypher .= "\nORDER BY\n\t";
+				$orderList = [];
+				foreach ($orders as $stdClass) {
+					$orderList[] = vsprintf('%s.%s %s', [
+						$this->delimit($stdClass->alias),
+						$this->delimit($stdClass->property),
+						in_array($order = strtoupper($stdClass->order), ['ASC', 'DESC']) ? $order : 'ASC',
+					]);
+				}
+				$cypher .= implode(" ,\n\t", $orderList) . "\n";
+			}
 			return [$cypher, $params];
 		}
 

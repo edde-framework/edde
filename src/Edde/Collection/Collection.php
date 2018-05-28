@@ -42,12 +42,8 @@
 		}
 
 		/** @inheritdoc */
-		public function create(): ICollection {
-			$this->transaction->transaction(function () {
-				foreach ($this->query->getSelects() as $schema) {
-					$this->storage->create($schema);
-				}
-			});
+		public function order(string $alias, string $property, string $order = 'asc'): ICollection {
+			$this->query->order($alias, $property, $order);
 			return $this;
 		}
 

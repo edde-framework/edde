@@ -17,16 +17,18 @@
 		public function configure($instance) {
 			parent::configure($instance);
 			$instance->registerFilters([
-				'bool-int'         => $filter = $this->container->create(BoolIntFilter::class, [], __METHOD__),
+				'bool-int'         => $filter = new BoolIntFilter(),
 				'storage:bool'     => $filter,
-				'storage:stamp'    => $filter = $this->container->create(StampFilter::class, [], __METHOD__),
-				'bool'             => $filter = $this->container->create(BoolFilter::class, [], __METHOD__),
+				'storage:stamp'    => $filter = new StampFilter(),
+				'bool'             => $filter = new BoolFilter(),
 				'uuid'             => $filter = $this->container->create(UuidFilter::class, [], __METHOD__),
 				'storage:uuid'     => $filter,
-				'datetime'         => $filter = $this->container->create(DateTimeFilter::class, [], __METHOD__),
+				'datetime'         => $filter = new DateTimeFilter(),
 				'storage:DateTime' => $filter,
-				'string'           => $filter = $this->container->create(StringFilter::class, [], __METHOD__),
+				'string'           => $filter = new StampFilter(),
 				'storage:string'   => $filter,
+				'float'            => $filter = new FloatFilter(),
+				'storage:float'    => $filter,
 			]);
 		}
 	}
