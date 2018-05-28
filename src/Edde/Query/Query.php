@@ -63,16 +63,6 @@
 		}
 
 		/** @inheritdoc */
-		public function equal(string $source, string $from, string $target, string $to): IQuery {
-			$this->wheres[] = (object)[
-				'type'   => 'equal',
-				'source' => (object)['alias' => $source, 'property' => $from],
-				'target' => (object)['alias' => $target, 'property' => $to],
-			];
-			return $this;
-		}
-
-		/** @inheritdoc */
 		public function equalTo(string $alias, string $property, $value): IQuery {
 			$this->wheres[] = (object)[
 				'type'     => 'equalTo',

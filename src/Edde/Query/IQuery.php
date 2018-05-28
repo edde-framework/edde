@@ -57,18 +57,6 @@
 		public function getAttaches(): array;
 
 		/**
-		 * property equalization
-		 *
-		 * @param string $source source alias
-		 * @param string $from   source property on source alias
-		 * @param string $target target alias
-		 * @param string $to     target property on target alias
-		 *
-		 * @return IQuery
-		 */
-		public function equal(string $source, string $from, string $target, string $to): IQuery;
-
-		/**
 		 * where equal to a value (not to an another property)
 		 *
 		 * @param string $alias    schema alias of a property
