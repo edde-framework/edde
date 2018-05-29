@@ -9,8 +9,8 @@
 		protected $wheres = [];
 
 		/** @inheritdoc */
-		public function where(string $name, bool $force = false): IWhere {
-			if ($force === false && isset($this->wheres[$name])) {
+		public function where(string $name): IWhere {
+			if ($this->hasWhere($name)) {
 				throw new QueryException(sprintf('Where [%s] is already registered in a where list.', $name));
 			}
 			/**
@@ -18,6 +18,11 @@
 			 * without messing up
 			 */
 			return $this->wheres[$name] = new Where($name);
+		}
+
+		/** @inheritdoc */
+		public function hasWhere(string $name): bool {
+			return isset($this->wheres[$name]);
 		}
 
 		/** @inheritdoc */

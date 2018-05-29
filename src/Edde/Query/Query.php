@@ -15,8 +15,8 @@
 		protected $attached = [];
 		/** @var IWheres */
 		protected $wheres;
-		/** @var IGroup[] */
-		protected $groups = [];
+		/** @var IGroups */
+		protected $groups;
 		/** @var stdClass[] */
 		protected $orders = [];
 		/** @var stdClass */
@@ -70,6 +70,11 @@
 		/** @inheritdoc */
 		public function wheres(): IWheres {
 			return $this->wheres ?: $this->wheres = new Wheres();
+		}
+
+		/** @inheritdoc */
+		public function groups(): IGroups {
+			return $this->groups ?: $this->groups = new Groups($this->wheres);
 		}
 
 		/** @inheritdoc */

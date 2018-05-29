@@ -7,13 +7,19 @@
 		 * add a name where to be later used in query (where itself is not active)
 		 *
 		 * @param string $name
-		 * @param bool   $force if where exists, force replace
 		 *
 		 * @return IWhere
 		 *
-		 * @throws QueryException if where is already registered and $force is false
+		 * @throws QueryException if where is already registered
 		 */
-		public function where(string $name, bool $force = false): IWhere;
+		public function where(string $name): IWhere;
+
+		/**
+		 * @param string $name
+		 *
+		 * @return bool
+		 */
+		public function hasWhere(string $name): bool;
 
 		/**
 		 * are there some wheres?

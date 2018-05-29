@@ -62,6 +62,11 @@
 		public function wheres(): IWheres;
 
 		/**
+		 * @return IGroups
+		 */
+		public function groups(): IGroups;
+
+		/**
 		 * @param string $alias
 		 * @param string $property
 		 * @param string $order
