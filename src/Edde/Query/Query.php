@@ -15,6 +15,8 @@
 		protected $attached = [];
 		/** @var IWhere[] */
 		protected $wheres = [];
+		/** @var IChain */
+		protected $chain;
 		/** @var stdClass[] */
 		protected $orders = [];
 		/** @var stdClass */
@@ -74,6 +76,11 @@
 			 * without messing up
 			 */
 			return $this->wheres[$name] = new Where($name);
+		}
+
+		/** @inheritdoc */
+		public function chain(string $name): IChain {
+			return ($this->chain = $this->chain ?: new Chain($this->wheres))->select($name);
 		}
 
 		/** @inheritdoc */

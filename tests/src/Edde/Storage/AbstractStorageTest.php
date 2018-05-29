@@ -436,20 +436,28 @@
 				'pm' => ProjectMemberSchema::class,
 			]);
 			$query->attach('p', 'u', 'pm');
+			// ...
 			$query->where('user-uuid')->equalTo('u', 'uuid');
 			$query->where('project-owner')->equalTo('pm', 'owner');
 			$query->where('project-name')->equalTo('p', 'name');
+			// ...
+			$query->chain('user-uuid')->and('project-owner')->and('project-name');
+			$query->chain('user-uuid')->group('user-uuid-group');
+			// ...
 			$query->params([
 				'user-uuid'    => 'on',
 				'is-owner'     => true,
 				'project-name' => 'expected project',
 			]);
+			$count = 0;
 			foreach ($collection as $record) {
+				$count++;
 				$user = $record->getEntity('u');
 				self::assertSame('on', $user->get('uuid'));
 				self::assertTrue($record->getEntity('pm')->get('owner'));
 				self::assertSame('expected project', $record->getEntity('p')->get('name'));
 			}
+			self::assertEquals(1, $count);
 		}
 
 		/**

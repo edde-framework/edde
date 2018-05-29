@@ -69,6 +69,17 @@
 		public function where(string $name, bool $force = false): IWhere;
 
 		/**
+		 * chain where clauses (thus build where into a query)
+		 *
+		 * @param string $name
+		 *
+		 * @return IChain
+		 *
+		 * @throws QueryException
+		 */
+		public function chain(string $name): IChain;
+
+		/**
 		 * are there some filters?
 		 *
 		 * @return bool
