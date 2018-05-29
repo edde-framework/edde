@@ -77,7 +77,7 @@
 		/**
 		 * return internal where objects
 		 *
-		 * @return stdClass[]
+		 * @return IWhere[]
 		 */
 		public function getWheres(): array;
 

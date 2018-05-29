@@ -13,7 +13,7 @@
 		protected $attaches = [];
 		/** @var bool[] */
 		protected $attached = [];
-		/** @var stdClass[] */
+		/** @var IWhere[] */
 		protected $wheres = [];
 		/** @var stdClass[] */
 		protected $orders = [];
@@ -64,12 +64,7 @@
 
 		/** @inheritdoc */
 		public function equalTo(string $alias, string $property, $value): IQuery {
-			$this->wheres[] = (object)[
-				'type'     => 'equalTo',
-				'alias'    => $alias,
-				'property' => $property,
-				'value'    => $value,
-			];
+			$this->wheres[] = (new Where())->equalTo($alias, $property, $value);
 			return $this;
 		}
 

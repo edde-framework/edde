@@ -12,7 +12,7 @@
 		/** @inheritdoc */
 		public function equalTo(string $alias, string $property, $value): IWhere {
 			$this->where = (object)[
-				'type'     => __METHOD__,
+				'type'     => __FUNCTION__,
 				'alias'    => $alias,
 				'property' => $property,
 				'value'    => $value,

@@ -282,7 +282,8 @@
 			if ($query->hasWhere() && $wheres = $query->getWheres()) {
 				$sql .= "WHERE\n\t";
 				$whereList = [];
-				foreach ($wheres as $index => $stdClass) {
+				foreach ($wheres as $index => $where) {
+					$stdClass = $where->toObject();
 					switch ($stdClass->type) {
 						case 'equalTo':
 							$whereList[] = vsprintf('%s.%s = :%s', [
