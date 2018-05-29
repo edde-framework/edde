@@ -126,7 +126,7 @@
 			if ($query->hasWhere() && $wheres = $query->getWheres()) {
 				$cypher .= "WHERE\n\t";
 				$whereList = [];
-				foreach ($wheres as $index => $where) {
+				foreach ($wheres as $where) {
 					$stdClass = $where->toObject();
 					switch ($stdClass->type) {
 						case 'equalTo':
