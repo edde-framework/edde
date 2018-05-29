@@ -13,8 +13,8 @@
 		protected $attaches = [];
 		/** @var bool[] */
 		protected $attached = [];
-		/** @var IWhere[] */
-		protected $wheres = [];
+		/** @var IWheres */
+		protected $wheres;
 		/** @var IGroup[] */
 		protected $groups = [];
 		/** @var stdClass[] */
@@ -68,35 +68,8 @@
 		}
 
 		/** @inheritdoc */
-		public function where(string $name, bool $force = false): IWhere {
-			if ($force === false && isset($this->wheres[$name])) {
-				throw new QueryException(sprintf('Where [%s] is already registered in a query.', $name));
-			}
-			/**
-			 * override is intentional; it's a bit less transparent, but it allows user to update where
-			 * without messing up
-			 */
-			return $this->wheres[$name] = new Where($name);
-		}
-
-		/** @inheritdoc */
-		public function hasWhere(): bool {
-			return empty($this->wheres) === false;
-		}
-
-		/** @inheritdoc */
-		public function getWheres(): array {
-			return $this->wheres;
-		}
-
-		/** @inheritdoc */
-		public function group(string $name = null): IGroup {
-			return $this->groups[$name] = $this->groups[$name] ?? new Group($this->wheres);
-		}
-
-		/** @inheritdoc */
-		public function chain(string $name): IChain {
-			return $this->group()->chain($name);
+		public function wheres(): IWheres {
+			return $this->wheres ?: $this->wheres = new Wheres();
 		}
 
 		/** @inheritdoc */

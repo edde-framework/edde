@@ -437,13 +437,14 @@
 			]);
 			$query->attach('p', 'u', 'pm');
 			// ... 1. prepare individual wheres which could be used
-			$query->where('project status in')->in('p', 'status');
-			$query->where('user uuid')->equalTo('u', 'uuid');
-			$query->where('is owner')->equalTo('pm', 'owner');
-			$query->where('project name')->equalTo('p', 'name');
+			$wheres = $query->wheres();
+			$wheres->where('project status in')->in('p', 'status');
+			$wheres->where('user uuid')->equalTo('u', 'uuid');
+			$wheres->where('is owner')->equalTo('pm', 'owner');
+			$wheres->where('project name')->equalTo('p', 'name');
 			// ... 2. chain them together using operators and groups
-			$query->group('da group')->chain('user uuid')->and('is owner')->and('project name');
-			$query->chain('project status in')->or('da group');
+//			$query->group('da group')->chain('user uuid')->and('is owner')->and('project name');
+//			$query->chain('project status in')->or('da group');
 			// ... 3. set parameters for where based on given or guessed names
 			$query->params([
 				'user uuid'         => 'on',

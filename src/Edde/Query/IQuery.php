@@ -57,44 +57,9 @@
 		public function getAttaches(): array;
 
 		/**
-		 * add a name where to be later used in query (where itself is not active)
-		 *
-		 * @param string $name
-		 * @param bool   $force if where exists, force replace
-		 *
-		 * @return IWhere
-		 *
-		 * @throws QueryException if where is already registered and $force is false
+		 * @return IWheres
 		 */
-		public function where(string $name, bool $force = false): IWhere;
-
-		/**
-		 * are there some filters?
-		 *
-		 * @return bool
-		 */
-		public function hasWhere(): bool;
-
-		/**
-		 * return internal where objects
-		 *
-		 * @return IWhere[]
-		 */
-		public function getWheres(): array;
-
-		/**
-		 * @param string $name
-		 *
-		 * @return IGroup
-		 */
-		public function group(string $name = null): IGroup;
-
-		/**
-		 * @param string $name
-		 *
-		 * @return IChain
-		 */
-		public function chain(string $name): IChain;
+		public function wheres(): IWheres;
 
 		/**
 		 * @param string $alias
