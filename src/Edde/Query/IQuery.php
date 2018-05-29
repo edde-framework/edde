@@ -57,15 +57,16 @@
 		public function getAttaches(): array;
 
 		/**
-		 * where equal to a value (not to an another property)
+		 * add a name where to be later used in query (where itself is not active)
 		 *
-		 * @param string $alias    schema alias of a property
-		 * @param string $property property of a source alias
-		 * @param mixed  $value    simple scalar value
+		 * @param string $name
+		 * @param bool   $force if where exists, force replace
 		 *
-		 * @return IQuery
+		 * @return IWhere
+		 *
+		 * @throws QueryException if where is already registered and $force is false
 		 */
-		public function equalTo(string $alias, string $property, $value): IQuery;
+		public function where(string $name, bool $force = false): IWhere;
 
 		/**
 		 * are there some filters?
@@ -151,4 +152,25 @@
 		 * @return string[]
 		 */
 		public function getSelects(): array;
+
+		/**
+		 * set query params; it should override currently set params
+		 *
+		 * @param array $params
+		 *
+		 * @return IQuery
+		 */
+		public function params(array $params): IQuery;
+
+		/**
+		 * @return bool
+		 */
+		public function hasParams(): bool;
+
+		/**
+		 * return query params
+		 *
+		 * @return array
+		 */
+		public function getParams(): array;
 	}

@@ -407,6 +407,7 @@
 		/**
 		 * @throws CollectionException
 		 * @throws FilterException
+		 * @throws QueryException
 		 * @throws SchemaException
 		 * @throws StorageException
 		 * @throws ValidatorException
@@ -435,9 +436,14 @@
 				'pm' => ProjectMemberSchema::class,
 			]);
 			$query->attach('p', 'u', 'pm');
-			$query->equalTo('u', 'uuid', 'on');
-			$query->equalTo('pm', 'owner', true);
-			$query->equalTo('p', 'name', 'expected project');
+			$query->where('user-uuid')->equalTo('u', 'uuid');
+			$query->where('project-owner')->equalTo('pm', 'owner');
+			$query->where('project-name')->equalTo('p', 'name');
+			$query->params([
+				'user-uuid'    => 'on',
+				'is-owner'     => true,
+				'project-name' => 'expected project',
+			]);
 			foreach ($collection as $record) {
 				$user = $record->getEntity('u');
 				self::assertSame('on', $user->get('uuid'));

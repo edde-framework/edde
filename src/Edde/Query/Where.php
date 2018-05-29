@@ -6,16 +6,30 @@
 	use stdClass;
 
 	class Where extends SimpleObject implements IWhere {
+		/** @var string */
+		protected $name;
 		/** @var stdClass */
 		protected $where;
 
+		/**
+		 * @param string $name
+		 */
+		public function __construct(string $name) {
+			$this->name = $name;
+		}
+
 		/** @inheritdoc */
-		public function equalTo(string $alias, string $property, $value): IWhere {
+		public function getName(): string {
+			return $this->name;
+		}
+
+		/** @inheritdoc */
+		public function equalTo(string $alias, string $property, string $param = null): IWhere {
 			$this->where = (object)[
 				'type'     => __FUNCTION__,
 				'alias'    => $alias,
 				'property' => $property,
-				'value'    => $value,
+				'param'    => $param ?: $this->name,
 			];
 			return $this;
 		}

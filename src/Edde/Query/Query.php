@@ -21,6 +21,8 @@
 		protected $page;
 		/** @var string[] */
 		protected $returns = [];
+		/** @var array */
+		protected $params = [];
 
 		/** @inheritdoc */
 		public function select(string $schema, string $alias = null): IQuery {
@@ -63,9 +65,15 @@
 		}
 
 		/** @inheritdoc */
-		public function equalTo(string $alias, string $property, $value): IQuery {
-			$this->wheres[] = (new Where())->equalTo($alias, $property, $value);
-			return $this;
+		public function where(string $name, bool $force = false): IWhere {
+			if ($force === false && isset($this->wheres[$name])) {
+				throw new QueryException(sprintf('Where [%s] is already registered in a query.', $name));
+			}
+			/**
+			 * override is intentional; it's a bit less transparent, but it allows user to update where
+			 * without messing up
+			 */
+			return $this->wheres[$name] = new Where($name);
 		}
 
 		/** @inheritdoc */
@@ -142,5 +150,21 @@
 		/** @inheritdoc */
 		public function getSelects(): array {
 			return $this->selects;
+		}
+
+		/** @inheritdoc */
+		public function params(array $params): IQuery {
+			$this->params = $params;
+			return $this;
+		}
+
+		/** @inheritdoc */
+		public function hasParams(): bool {
+			return $this->params !== null && empty($this->params) === false;
+		}
+
+		/** @inheritdoc */
+		public function getParams(): array {
+			return $this->params;
 		}
 	}
