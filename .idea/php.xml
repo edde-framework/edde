@@ -29,7 +29,6 @@
       <path value="$PROJECT_DIR$/lib/sebastian/diff" />
       <path value="$PROJECT_DIR$/lib/sebastian/comparator" />
       <path value="$PROJECT_DIR$/lib/sebastian/code-unit-reverse-lookup" />
-      <path value="$PROJECT_DIR$/lib/phpunit/phpunit-mock-objects" />
       <path value="$PROJECT_DIR$/lib/phpunit/phpunit" />
       <path value="$PROJECT_DIR$/lib/phpunit/php-token-stream" />
       <path value="$PROJECT_DIR$/lib/phpunit/php-timer" />

@@ -28,7 +28,6 @@
       <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/php-timer" />
       <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/php-token-stream" />
       <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/phpunit" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/phpunit-mock-objects" />
       <excludeFolder url="file://$MODULE_DIR$/lib/pimple/pimple" />
       <excludeFolder url="file://$MODULE_DIR$/lib/psr/container" />
       <excludeFolder url="file://$MODULE_DIR$/lib/psr/log" />

@@ -11,7 +11,7 @@
 	"authors": [
 		{
 			"name": "Marek Hanzal",
-			"email": "marek.hanzal@edde-framework.org"
+			"email": "marek.hanzal@x32.cz"
 		}
 	],
 	"config": {
@@ -28,12 +28,6 @@
 		"php": ">=7.1",
 		"roave/security-advisories": "dev-master",
 		"graphaware/neo4j-bolt": "dev-master",
-		"phpunit/phpunit": "^6.5.0"
-	},
-	"archive": {
-		"exclude": [
-			"*",
-			"!/src"
-		]
+		"phpunit/phpunit": "^7.1.5"
 	}
 }

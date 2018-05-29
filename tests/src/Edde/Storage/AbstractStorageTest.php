@@ -438,7 +438,7 @@
 			$query->attach('p', 'u', 'pm');
 			// ...
 			$query->where('user-uuid')->equalTo('u', 'uuid');
-			$query->where('project-owner')->equalTo('pm', 'owner');
+			$query->where('is-owner')->equalTo('pm', 'owner');
 			$query->where('project-name')->equalTo('p', 'name');
 			// ...
 			$query->chain('user-uuid')->and('project-owner')->and('project-name');

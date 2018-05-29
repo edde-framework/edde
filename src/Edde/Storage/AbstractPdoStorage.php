@@ -231,7 +231,7 @@
 		 * @throws SchemaException
 		 */
 		protected function formatQuery(IQuery $query, bool $count = false): array {
-			$params = [];
+			$params = $query->getParams();
 			$selects = $query->getSelects();
 			$attaches = $query->getAttaches();
 			/** @var $schemas ISchema[] */
@@ -282,16 +282,20 @@
 			if ($query->hasWhere() && $wheres = $query->getWheres()) {
 				$sql .= "WHERE\n\t";
 				$whereList = [];
-				foreach ($wheres as $index => $where) {
+				foreach ($wheres as $where) {
 					$stdClass = $where->toObject();
 					switch ($stdClass->type) {
 						case 'equalTo':
 							$whereList[] = vsprintf('%s.%s = :%s', [
 								$this->delimit($stdClass->alias),
 								$this->delimit($stdClass->property),
-								$paramId = '_' . $index,
+								$paramId = '_' . sha1($stdClass->param),
 							]);
-							$params[$paramId] = $this->filterValue($schemas[$selects[$stdClass->alias]]->getAttribute($stdClass->property), $stdClass->value);
+							if (isset($params[$stdClass->param]) === false) {
+								throw new StorageException(sprintf('Missing where parameter [%s]; available parameters [%s].', $stdClass->param, implode(', ', $params)));
+							}
+							$params[$paramId] = $this->filterValue($schemas[$selects[$stdClass->alias]]->getAttribute($stdClass->property), $params[$stdClass->param]);
+							unset($params[$stdClass->param]);
 							break;
 						default:
 							throw new StorageException(sprintf('Unsupported where type [%s].', $stdClass->type));

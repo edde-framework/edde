@@ -174,11 +174,6 @@
 		public function params(array $params): IQuery;
 
 		/**
-		 * @return bool
-		 */
-		public function hasParams(): bool;
-
-		/**
 		 * return query params
 		 *
 		 * @return array

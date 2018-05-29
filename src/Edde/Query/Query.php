@@ -166,11 +166,6 @@
 		}
 
 		/** @inheritdoc */
-		public function hasParams(): bool {
-			return $this->params !== null && empty($this->params) === false;
-		}
-
-		/** @inheritdoc */
 		public function getParams(): array {
 			return $this->params;
 		}
