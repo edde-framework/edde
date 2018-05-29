@@ -35,6 +35,17 @@
 		}
 
 		/** @inheritdoc */
+		public function in(string $alias, string $property, string $param = null): IWhere {
+			$this->where = (object)[
+				'type'     => __FUNCTION__,
+				'alias'    => $alias,
+				'property' => $property,
+				'param'    => $param ?: $this->name,
+			];
+			return $this;
+		}
+
+		/** @inheritdoc */
 		public function toObject(): stdClass {
 			return $this->where;
 		}

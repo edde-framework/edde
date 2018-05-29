@@ -437,17 +437,19 @@
 			]);
 			$query->attach('p', 'u', 'pm');
 			// ...
-			$query->where('user-uuid')->equalTo('u', 'uuid');
-			$query->where('is-owner')->equalTo('pm', 'owner');
-			$query->where('project-name')->equalTo('p', 'name');
+			$query->where('project status in')->in('p', 'status');
+			$query->where('user uuid')->equalTo('u', 'uuid');
+			$query->where('is owner')->equalTo('pm', 'owner');
+			$query->where('project name')->equalTo('p', 'name');
 			// ...
-			$query->chain('user-uuid')->and('project-owner')->and('project-name');
-			$query->chain('user-uuid')->group('user-uuid-group');
+//			$query->chain('user uuid')->and('project-owner')->and('project-name');
+//			$query->chain('user uuid')->group('user-uuid-group');
 			// ...
 			$query->params([
-				'user-uuid'    => 'on',
-				'is-owner'     => true,
-				'project-name' => 'expected project',
+				'user uuid'         => 'on',
+				'is owner'          => true,
+				'project name'      => 'expected project',
+				'project status in' => [ProjectSchema::STATUS_CREATED, ProjectSchema::STATUS_STARTED],
 			]);
 			$count = 0;
 			foreach ($collection as $record) {

@@ -15,13 +15,22 @@
 		/**
 		 * where equal to a value (not to an another property)
 		 *
-		 * @param string $alias    schema alias of a property
-		 * @param string $property property of a source alias
-		 * @param string $param    parameter name reference; if not specified, where name should be used
+		 * @param string      $alias    schema alias of a property
+		 * @param string      $property property of a source alias
+		 * @param string|null $param    parameter name reference; if not specified, where name should be used
 		 *
 		 * @return IWhere
 		 */
 		public function equalTo(string $alias, string $property, string $param = null): IWhere;
+
+		/**
+		 * @param string      $alias    schema alias of a property
+		 * @param string      $property property of a source alias
+		 * @param string|null $param    parameter name reference; if not specified, where name should be used
+		 *
+		 * @return IWhere
+		 */
+		public function in(string $alias, string $property, string $param = null): IWhere;
 
 		/**
 		 * return internal where object

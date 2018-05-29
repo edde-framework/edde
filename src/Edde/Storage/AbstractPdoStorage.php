@@ -19,6 +19,7 @@
 	use function array_values;
 	use function implode;
 	use function in_array;
+	use function is_array;
 	use function sha1;
 	use function sprintf;
 	use function strtoupper;
@@ -138,6 +139,22 @@
 								throw new StorageException(sprintf('Missing where parameter [%s]; available parameters [%s].', $stdClass->param, implode(', ', $params)));
 							}
 							$params[$paramId] = $this->filterValue($schemas[$selects[$stdClass->alias]]->getAttribute($stdClass->property), $params[$stdClass->param]);
+							unset($params[$stdClass->param]);
+							break;
+						case 'in':
+							if (isset($params[$stdClass->param]) === false) {
+								throw new StorageException(sprintf('Missing where parameter [%s]; available parameters [%s].', $stdClass->param, implode(', ', $params)));
+							} else if (is_array($params[$stdClass->param]) === false) {
+								throw new StorageException(sprintf('Where in parameter [%s] is not an array.', $stdClass->param));
+							}
+							$whereList[] = vsprintf('%s.%s IN (:a, :b)', [
+								$this->delimit($stdClass->alias),
+								$this->delimit($stdClass->property),
+//								str_repeat('?,', count($ids = $params[$stdClass->param]) - 1) . '?',
+							]);
+							$params['a'] = 0;
+							$params['b'] = 1;
+//							$params[$paramId] = $this->filterValue($schemas[$selects[$stdClass->alias]]->getAttribute($stdClass->property), $params[$stdClass->param]);
 							unset($params[$stdClass->param]);
 							break;
 						default:
