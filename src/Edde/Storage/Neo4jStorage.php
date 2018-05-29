@@ -141,6 +141,26 @@
 							$params[$paramId] = $this->filterValue($schemas[$selects[$stdClass->alias]]->getAttribute($stdClass->property), $params[$stdClass->param]);
 							unset($params[$stdClass->param]);
 							break;
+						case 'in':
+							if (isset($params[$stdClass->param]) === false) {
+								throw new StorageException(sprintf('Missing where parameter [%s]; available parameters [%s].', $stdClass->param, implode(', ', $params)));
+							} else if (is_iterable($params[$stdClass->param]) === false) {
+								throw new StorageException(sprintf('Where in parameter [%s] is not an iterable.', $stdClass->param));
+							}
+							$schema = $schemas[$selects[$stdClass->alias]];
+							$attribute = $schema->getAttribute($stdClass->property);
+							$items = [];
+							foreach ($params[$stdClass->param] as $item) {
+								$items[] = $this->filterValue($attribute, $item);
+							}
+							$whereList[] = vsprintf('%s.%s IN $%s', [
+								$this->delimit($stdClass->alias),
+								$this->delimit($stdClass->property),
+								$paramId = '_' . sha1($stdClass->param),
+							]);
+							$params[$paramId] = $items;
+							unset($params[$stdClass->param]);
+							break;
 						default:
 							throw new StorageException(sprintf('Unsupported where type [%s].', $stdClass->type));
 					}
