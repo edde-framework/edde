@@ -16,8 +16,14 @@
 
 	interface ProjectSchema extends UuidSchema {
 		const alias = true;
+		const STATUS_CREATED = 0;
+		const STATUS_STARTED = 1;
+		const STATUS_ENDED = 2;
+		const STATUS_ARCHIVED = 3;
 
 		public function name(): string;
+
+		public function status($default = self::STATUS_CREATED): int;
 
 		public function created($generator = 'stamp'): DateTime;
 

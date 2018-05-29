@@ -29,6 +29,8 @@
 				'storage:string'   => $filter,
 				'float'            => $filter = new FloatFilter(),
 				'storage:float'    => $filter,
+				'int'              => $filter = new IntFilter(),
+				'storage:int'      => $filter,
 			]);
 		}
 	}
