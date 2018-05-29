@@ -15,8 +15,8 @@
 		protected $attached = [];
 		/** @var IWhere[] */
 		protected $wheres = [];
-		/** @var IChain */
-		protected $chain;
+		/** @var IGroup[] */
+		protected $groups = [];
 		/** @var stdClass[] */
 		protected $orders = [];
 		/** @var stdClass */
@@ -80,11 +80,6 @@
 		}
 
 		/** @inheritdoc */
-		public function chain(string $name): IChain {
-			return ($this->chain = $this->chain ?: new Chain($this->wheres))->select($name);
-		}
-
-		/** @inheritdoc */
 		public function hasWhere(): bool {
 			return empty($this->wheres) === false;
 		}
@@ -92,6 +87,16 @@
 		/** @inheritdoc */
 		public function getWheres(): array {
 			return $this->wheres;
+		}
+
+		/** @inheritdoc */
+		public function group(string $name = null): IGroup {
+			return $this->groups[$name] = $this->groups[$name] ?? new Group($this->wheres);
+		}
+
+		/** @inheritdoc */
+		public function chain(string $name): IChain {
+			return $this->group()->chain($name);
 		}
 
 		/** @inheritdoc */

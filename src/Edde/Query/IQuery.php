@@ -69,17 +69,6 @@
 		public function where(string $name, bool $force = false): IWhere;
 
 		/**
-		 * chain where clauses (thus build where into a query)
-		 *
-		 * @param string $name
-		 *
-		 * @return IChain
-		 *
-		 * @throws QueryException
-		 */
-		public function chain(string $name): IChain;
-
-		/**
 		 * are there some filters?
 		 *
 		 * @return bool
@@ -92,6 +81,20 @@
 		 * @return IWhere[]
 		 */
 		public function getWheres(): array;
+
+		/**
+		 * @param string $name
+		 *
+		 * @return IGroup
+		 */
+		public function group(string $name = null): IGroup;
+
+		/**
+		 * @param string $name
+		 *
+		 * @return IChain
+		 */
+		public function chain(string $name): IChain;
 
 		/**
 		 * @param string $alias
