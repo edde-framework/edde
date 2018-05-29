@@ -11,6 +11,7 @@
 	use Edde\Query\NativeQuery;
 	use Edde\Schema\ISchema;
 	use Edde\Service\Schema\SchemaManager;
+	use Edde\Service\Security\RandomService;
 	use Generator;
 	use PDO;
 	use PDOException;
@@ -19,7 +20,7 @@
 	use function array_values;
 	use function implode;
 	use function in_array;
-	use function is_array;
+	use function is_iterable;
 	use function sha1;
 	use function sprintf;
 	use function strtoupper;
@@ -27,6 +28,7 @@
 
 	abstract class AbstractPdoStorage extends AbstractStorage {
 		use SchemaManager;
+		use RandomService;
 		/** @var array */
 		protected $options;
 		/** @var PDO */
@@ -144,17 +146,28 @@
 						case 'in':
 							if (isset($params[$stdClass->param]) === false) {
 								throw new StorageException(sprintf('Missing where parameter [%s]; available parameters [%s].', $stdClass->param, implode(', ', $params)));
-							} else if (is_array($params[$stdClass->param]) === false) {
-								throw new StorageException(sprintf('Where in parameter [%s] is not an array.', $stdClass->param));
+							} else if (is_iterable($params[$stdClass->param]) === false) {
+								throw new StorageException(sprintf('Where in parameter [%s] is not an iterable.', $stdClass->param));
 							}
-							$whereList[] = vsprintf('%s.%s IN (:a, :b)', [
+							$schema = $schemas[$selects[$stdClass->alias]];
+							$attribute = $schema->getAttribute($stdClass->property);
+							$this->exec(vsprintf('CREATE TEMPORARY TABLE %s ( item %s )', [
+								$temporary = $this->delimit($this->randomService->uuid()),
+								$this->type($attribute->getType()),
+							]));
+							$statement = $this->pdo->prepare(vsprintf('INSERT INTO %s (item) VALUES (:item)', [
+								$temporary,
+							]));
+							foreach ($params[$stdClass->param] as $item) {
+								$statement->execute([
+									'item' => $this->filterValue($attribute, $item),
+								]);
+							}
+							$whereList[] = vsprintf('%s.%s IN (SELECT item FROM %s)', [
 								$this->delimit($stdClass->alias),
 								$this->delimit($stdClass->property),
-//								str_repeat('?,', count($ids = $params[$stdClass->param]) - 1) . '?',
+								$temporary,
 							]);
-							$params['a'] = 0;
-							$params['b'] = 1;
-//							$params[$paramId] = $this->filterValue($schemas[$selects[$stdClass->alias]]->getAttribute($stdClass->property), $params[$stdClass->param]);
 							unset($params[$stdClass->param]);
 							break;
 						default:

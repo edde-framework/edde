@@ -449,7 +449,9 @@
 				'user uuid'         => 'on',
 				'is owner'          => true,
 				'project name'      => 'expected project',
-				'project status in' => [ProjectSchema::STATUS_CREATED, ProjectSchema::STATUS_STARTED],
+				'project status in' => (function () {
+					yield from [ProjectSchema::STATUS_CREATED, ProjectSchema::STATUS_STARTED];
+				})(),
 			]);
 			$count = 0;
 			foreach ($collection as $record) {
