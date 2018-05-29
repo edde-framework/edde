@@ -179,4 +179,20 @@
 		 * @return array
 		 */
 		public function getParams(): array;
+
+		/**
+		 * mark this query as a count query
+		 *
+		 * @param bool $count
+		 *
+		 * @return IQuery
+		 */
+		public function count(bool $count = true): IQuery;
+
+		/**
+		 * is this query "count" query?
+		 *
+		 * @return bool
+		 */
+		public function isCount(): bool;
 	}

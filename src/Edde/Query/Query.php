@@ -25,6 +25,7 @@
 		protected $returns = [];
 		/** @var array */
 		protected $params = [];
+		protected $count = false;
 
 		/** @inheritdoc */
 		public function select(string $schema, string $alias = null): IQuery {
@@ -168,5 +169,16 @@
 		/** @inheritdoc */
 		public function getParams(): array {
 			return $this->params;
+		}
+
+		/** @inheritdoc */
+		public function count(bool $count = true): IQuery {
+			$this->count = $count;
+			return $this;
+		}
+
+		/** @inheritdoc */
+		public function isCount(): bool {
+			return $this->count;
 		}
 	}

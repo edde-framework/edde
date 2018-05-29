@@ -7,8 +7,9 @@
 	use Edde\Collection\IEntity;
 	use Edde\Config\ConfigException;
 	use Edde\Filter\FilterException;
+	use Edde\Query\INativeQuery;
 	use Edde\Query\IQuery;
-	use Edde\Schema\ISchema;
+	use Edde\Query\NativeQuery;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Security\RandomService;
@@ -72,31 +73,22 @@
 		/** @inheritdoc */
 		public function query(IQuery $query): Generator {
 			$selects = $query->getSelects();
-			/** @var $schemas ISchema[] */
 			$schemas = $this->getSchemas($query);
-			[$cypher, $params] = $this->formatQuery($query);
-			foreach ($this->fetch($cypher, $params) as $row) {
+			$nativeQuery = $this->native($query);
+			foreach ($this->fetch($nativeQuery->getQuery(), $nativeQuery->getParams()) as $row) {
 				yield $this->row($row, $schemas, $selects);
 			}
 		}
 
-		/**
-		 * @param IQuery $query
-		 * @param bool   $count
-		 *
-		 * @return array
-		 *
-		 * @throws FilterException
-		 * @throws SchemaException
-		 * @throws StorageException
-		 */
-		protected function formatQuery(IQuery $query, bool $count = false): array {
-			$returns = [];
+		/** @inheritdoc */
+		public function native(IQuery $query): INativeQuery {
 			$params = $query->getParams();
 			$attaches = $query->getAttaches();
 			$selects = $query->getSelects();
 			$schemas = $this->getSchemas($query);
+			$count = $query->isCount();
 			$from = [];
+			$returns = [];
 			foreach ($selects as $alias => $schema) {
 				if ($query->isAttached($alias)) {
 					continue;
@@ -179,7 +171,7 @@
 					$page->size,
 				]);
 			}
-			return [$cypher, $params];
+			return new NativeQuery($cypher, $params);
 		}
 
 		/** @inheritdoc */

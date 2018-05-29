@@ -6,10 +6,10 @@
 	use Edde\Collection\EntityNotFoundException;
 	use Edde\Collection\IEntity;
 	use Edde\Config\ConfigException;
-	use Edde\Filter\FilterException;
+	use Edde\Query\INativeQuery;
 	use Edde\Query\IQuery;
+	use Edde\Query\NativeQuery;
 	use Edde\Schema\ISchema;
-	use Edde\Schema\SchemaException;
 	use Edde\Service\Schema\SchemaManager;
 	use Generator;
 	use PDO;
@@ -63,12 +63,108 @@
 
 		/** @inheritdoc */
 		public function query(IQuery $query): Generator {
-			[$sql, $params] = $this->formatQuery($query, false);
+			$nativeQuery = $this->native($query);
 			$schemas = $this->getSchemas($query);
 			$selects = $query->getSelects();
-			foreach ($this->fetch($sql, $params) as $row) {
+			foreach ($this->fetch($nativeQuery->getQuery(), $nativeQuery->getParams()) as $row) {
 				yield $this->row($row, $schemas, $selects);
 			}
+		}
+
+		/** @inheritdoc */
+		public function native(IQuery $query): INativeQuery {
+			$params = $query->getParams();
+			$selects = $query->getSelects();
+			$attaches = $query->getAttaches();
+			$count = $query->isCount();
+			/** @var $schemas ISchema[] */
+			$schemas = [];
+			foreach (array_unique(array_values($selects)) as $schema) {
+				$schemas[$schema] = $this->schemaManager->getSchema($schema);
+			}
+			$select = [];
+			$from = [];
+			foreach ($selects as $alias => $schema) {
+				foreach ($schemas[$schema]->getAttributes() as $name => $attribute) {
+					$select[] = vsprintf($count ? 'COUNT(%s.%s) AS %s' : '%s.%s AS %s', [
+						$this->delimit($alias),
+						$this->delimit($name),
+						$this->delimit($count ? $alias : $alias . '.' . $name),
+					]);
+				}
+				if ($query->isAttached($alias)) {
+					continue;
+				}
+				$from[] = vsprintf('%s %s', [
+					$this->delimit($schemas[$schema]->getRealName()),
+					$this->delimit($alias),
+				]);
+			}
+			foreach ($attaches as $attach) {
+				$sourceSchema = $schemas[$selects[$attach->attach]];
+				$relationSchema = $schemas[$selects[$attach->relation]];
+				$targetSchema = $schemas[$selects[$attach->to]];
+				$this->checkRelation($relationSchema, $sourceSchema, $targetSchema);
+				$from[] = vsprintf("%s %s\n\t\tINNER JOIN %s %s ON %2\$s.%s = %4\$s.%s\n\t\tINNER JOIN %s %s ON %2\$s.%s = %8\$s.%s", [
+					$this->delimit($relationSchema->getRealName()),
+					$this->delimit($attach->relation),
+					$this->delimit($sourceSchema->getRealName()),
+					$this->delimit($attach->attach),
+					$this->delimit($relationSchema->getSource()->getName()),
+					$this->delimit($sourceSchema->getPrimary()->getName()),
+					$this->delimit($targetSchema->getRealName()),
+					$this->delimit($attach->to),
+					$this->delimit($relationSchema->getTarget()->getName()),
+					$this->delimit($targetSchema->getPrimary()->getName()),
+				]);
+			}
+			$sql = vsprintf("SELECT\n\t%s\nFROM\n\t%s\n", [
+				implode(",\n\t", $select),
+				implode(",\n\t", $from),
+			]);
+			if ($query->hasWhere() && $wheres = $query->getWheres()) {
+				$sql .= "WHERE\n\t";
+				$whereList = [];
+				foreach ($wheres as $where) {
+					$stdClass = $where->toObject();
+					switch ($stdClass->type) {
+						case 'equalTo':
+							$whereList[] = vsprintf('%s.%s = :%s', [
+								$this->delimit($stdClass->alias),
+								$this->delimit($stdClass->property),
+								$paramId = '_' . sha1($stdClass->param),
+							]);
+							if (isset($params[$stdClass->param]) === false) {
+								throw new StorageException(sprintf('Missing where parameter [%s]; available parameters [%s].', $stdClass->param, implode(', ', $params)));
+							}
+							$params[$paramId] = $this->filterValue($schemas[$selects[$stdClass->alias]]->getAttribute($stdClass->property), $params[$stdClass->param]);
+							unset($params[$stdClass->param]);
+							break;
+						default:
+							throw new StorageException(sprintf('Unsupported where type [%s].', $stdClass->type));
+					}
+				}
+				$sql .= implode(" AND\n\t", $whereList) . "\n";
+			}
+			if ($count === false && $query->hasOrder() && $orders = $query->getOrders()) {
+				$sql .= "ORDER BY\n\t";
+				$orderList = [];
+				foreach ($orders as $stdClass) {
+					$orderList[] = vsprintf('%s.%s %s', [
+						$this->delimit($stdClass->alias),
+						$this->delimit($stdClass->property),
+						in_array($order = strtoupper($stdClass->order), ['ASC', 'DESC']) ? $order : 'ASC',
+					]);
+				}
+				$sql .= implode(" ,\n\t", $orderList) . "\n";
+			}
+			if ($count === false && $query->hasPage() && $page = $query->getPage()) {
+				$sql .= vsprintf('LIMIT %d OFFSET %d', [
+					$page->size,
+					$page->page * $page->size,
+				]);
+			}
+			return new NativeQuery($sql, $params);
 		}
 
 		/** @inheritdoc */
@@ -218,110 +314,6 @@
 				]
 			);
 			return $this;
-		}
-
-		/**
-		 * @param IQuery $query
-		 * @param bool   $count
-		 *
-		 * @return array
-		 *
-		 * @throws StorageException
-		 * @throws FilterException
-		 * @throws SchemaException
-		 */
-		protected function formatQuery(IQuery $query, bool $count = false): array {
-			$params = $query->getParams();
-			$selects = $query->getSelects();
-			$attaches = $query->getAttaches();
-			/** @var $schemas ISchema[] */
-			$schemas = [];
-			foreach (array_unique(array_values($selects)) as $schema) {
-				$schemas[$schema] = $this->schemaManager->getSchema($schema);
-			}
-			$select = [];
-			$from = [];
-			foreach ($selects as $alias => $schema) {
-				foreach ($schemas[$schema]->getAttributes() as $name => $attribute) {
-					$select[] = vsprintf($count ? 'COUNT(%s.%s) AS %s' : '%s.%s AS %s', [
-						$this->delimit($alias),
-						$this->delimit($name),
-						$this->delimit($count ? $alias : $alias . '.' . $name),
-					]);
-				}
-				if ($query->isAttached($alias)) {
-					continue;
-				}
-				$from[] = vsprintf('%s %s', [
-					$this->delimit($schemas[$schema]->getRealName()),
-					$this->delimit($alias),
-				]);
-			}
-			foreach ($attaches as $attach) {
-				$sourceSchema = $schemas[$selects[$attach->attach]];
-				$relationSchema = $schemas[$selects[$attach->relation]];
-				$targetSchema = $schemas[$selects[$attach->to]];
-				$this->checkRelation($relationSchema, $sourceSchema, $targetSchema);
-				$from[] = vsprintf("%s %s\n\t\tINNER JOIN %s %s ON %2\$s.%s = %4\$s.%s\n\t\tINNER JOIN %s %s ON %2\$s.%s = %8\$s.%s", [
-					$this->delimit($relationSchema->getRealName()),
-					$this->delimit($attach->relation),
-					$this->delimit($sourceSchema->getRealName()),
-					$this->delimit($attach->attach),
-					$this->delimit($relationSchema->getSource()->getName()),
-					$this->delimit($sourceSchema->getPrimary()->getName()),
-					$this->delimit($targetSchema->getRealName()),
-					$this->delimit($attach->to),
-					$this->delimit($relationSchema->getTarget()->getName()),
-					$this->delimit($targetSchema->getPrimary()->getName()),
-				]);
-			}
-			$sql = vsprintf("SELECT\n\t%s\nFROM\n\t%s\n", [
-				implode(",\n\t", $select),
-				implode(",\n\t", $from),
-			]);
-			if ($query->hasWhere() && $wheres = $query->getWheres()) {
-				$sql .= "WHERE\n\t";
-				$whereList = [];
-				foreach ($wheres as $where) {
-					$stdClass = $where->toObject();
-					switch ($stdClass->type) {
-						case 'equalTo':
-							$whereList[] = vsprintf('%s.%s = :%s', [
-								$this->delimit($stdClass->alias),
-								$this->delimit($stdClass->property),
-								$paramId = '_' . sha1($stdClass->param),
-							]);
-							if (isset($params[$stdClass->param]) === false) {
-								throw new StorageException(sprintf('Missing where parameter [%s]; available parameters [%s].', $stdClass->param, implode(', ', $params)));
-							}
-							$params[$paramId] = $this->filterValue($schemas[$selects[$stdClass->alias]]->getAttribute($stdClass->property), $params[$stdClass->param]);
-							unset($params[$stdClass->param]);
-							break;
-						default:
-							throw new StorageException(sprintf('Unsupported where type [%s].', $stdClass->type));
-					}
-				}
-				$sql .= implode(" AND\n\t", $whereList) . "\n";
-			}
-			if ($count === false && $query->hasOrder() && $orders = $query->getOrders()) {
-				$sql .= "ORDER BY\n\t";
-				$orderList = [];
-				foreach ($orders as $stdClass) {
-					$orderList[] = vsprintf('%s.%s %s', [
-						$this->delimit($stdClass->alias),
-						$this->delimit($stdClass->property),
-						in_array($order = strtoupper($stdClass->order), ['ASC', 'DESC']) ? $order : 'ASC',
-					]);
-				}
-				$sql .= implode(" ,\n\t", $orderList) . "\n";
-			}
-			if ($count === false && $query->hasPage() && $page = $query->getPage()) {
-				$sql .= vsprintf('LIMIT %d OFFSET %d', [
-					$page->size,
-					$page->page * $page->size,
-				]);
-			}
-			return [$sql, $params];
 		}
 
 		/** @inheritdoc */

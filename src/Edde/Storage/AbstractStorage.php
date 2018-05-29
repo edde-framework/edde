@@ -70,8 +70,10 @@
 
 		/** @inheritdoc */
 		public function count(IQuery $query): array {
-			[$formatted, $params] = $this->formatQuery($query, true);
-			foreach ($this->fetch($formatted, $params) as $row) {
+			$query->count(true);
+			$nativeQuery = $this->native($query);
+			$query->count(false);
+			foreach ($this->fetch($nativeQuery->getQuery(), $nativeQuery->getParams()) as $row) {
 				return $row;
 			}
 			throw new StorageException(sprintf('Cannot get counts from a query.'));
@@ -244,6 +246,4 @@
 			parent::handleSetup();
 			$this->section = $this->configService->require($this->config);
 		}
-
-		abstract protected function formatQuery(IQuery $query, bool $count = false): array;
 	}
