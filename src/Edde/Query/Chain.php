@@ -10,7 +10,7 @@
 		protected $chains = [];
 
 		/** @inheritdoc */
-		public function chain(string $name): IChain {
+		public function where(string $name): IChain {
 			$this->chains = [];
 			return $this->and($name);
 		}

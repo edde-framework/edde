@@ -22,13 +22,6 @@
 		public function hasWhere(string $name): bool;
 
 		/**
-		 * are there some wheres?
-		 *
-		 * @return bool
-		 */
-		public function isEmpty(): bool;
-
-		/**
 		 * return internal where objects
 		 *
 		 * @return IWhere[]
@@ -36,20 +29,7 @@
 		public function getWheres(): array;
 
 		/**
-		 * create a new named chain
-		 *
-		 * @param string|nuLL $name
-		 *
-		 * @return IChain
-		 *
-		 * @throws QueryException
+		 * @return IChains
 		 */
-		public function group(string $name = null): IChain;
-
-		/**
-		 * @param string $name
-		 *
-		 * @return bool
-		 */
-		public function hasGroup(?string $name): bool;
+		public function chains(): IChains;
 	}

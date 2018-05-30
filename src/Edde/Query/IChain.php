@@ -10,7 +10,7 @@
 		 *
 		 * @return IChain
 		 */
-		public function chain(string $name): IChain;
+		public function where(string $name): IChain;
 
 		/**
 		 * @param string $name
