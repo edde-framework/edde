@@ -4,6 +4,15 @@
 
 	interface IChain {
 		/**
+		 * start a new chain
+		 *
+		 * @param string $name
+		 *
+		 * @return IChain
+		 */
+		public function chain(string $name): IChain;
+
+		/**
 		 * @param string $name
 		 *
 		 * @return IChain

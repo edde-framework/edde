@@ -443,12 +443,8 @@
 			$wheres->where('is owner')->equalTo('pm', 'owner');
 			$wheres->where('project name')->equalTo('p', 'name');
 			// ... 2. chain them together using operators and groups
-			/**
-			 *      ((a = :a AND b = :b) OR (c = :c))
-			 */
-			$groups = $query->groups();
-			$groups->group('da group')->chain('user uuid')->and('is owner')->and('project name');
-			$groups->group()->chain('project status in')->or('da group');
+			$wheres->group('da group')->chain('user uuid')->and('is owner')->and('project name');
+			$wheres->group()->chain('project status in')->or('da group');
 			// ... 3. set parameters for where based on given or guessed names
 			$query->params([
 				'user uuid'         => 'on',

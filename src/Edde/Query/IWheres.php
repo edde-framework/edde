@@ -34,4 +34,22 @@
 		 * @return IWhere[]
 		 */
 		public function getWheres(): array;
+
+		/**
+		 * create a new named chain
+		 *
+		 * @param string|nuLL $name
+		 *
+		 * @return IChain
+		 *
+		 * @throws QueryException
+		 */
+		public function group(string $name = null): IChain;
+
+		/**
+		 * @param string $name
+		 *
+		 * @return bool
+		 */
+		public function hasGroup(?string $name): bool;
 	}

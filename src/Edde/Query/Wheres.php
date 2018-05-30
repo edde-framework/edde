@@ -7,6 +7,8 @@
 	class Wheres extends SimpleObject implements IWheres {
 		/** @var IWhere[] */
 		protected $wheres = [];
+		/** @var IChain[] */
+		protected $chains = [];
 
 		/** @inheritdoc */
 		public function where(string $name): IWhere {
@@ -33,5 +35,18 @@
 		/** @inheritdoc */
 		public function getWheres(): array {
 			return $this->wheres;
+		}
+
+		/** @inheritdoc */
+		public function group(string $name = null): IChain {
+			if ($this->hasGroup($name)) {
+				throw new QueryException(sprintf('Group [%s] is already registered in where list.', $name));
+			}
+			return $this->chains[$name] = new Chain();
+		}
+
+		/** @inheritdoc */
+		public function hasGroup(?string $name): bool {
+			return isset($this->chains[$name]);
 		}
 	}
