@@ -14,6 +14,7 @@
 	use Edde\Query\IUnlinkQuery;
 	use Edde\Query\NativeQuery;
 	use Edde\Service\Crypt\RandomService;
+	use Edde\Service\Log\LogService;
 	use Edde\Storage\INativeQuery;
 	use Edde\Storage\Query\Fragment\IWhere;
 	use Edde\Storage\Query\ICrateSchemaQuery;
@@ -34,6 +35,7 @@
 
 	class Neo4jConnection extends AbstractConnection {
 		use RandomService;
+		use LogService;
 		/** @var SessionInterface */
 		protected $session;
 		/** @var Transaction */
@@ -46,6 +48,10 @@
 		/** @inheritdoc */
 		public function fetch($query, array $params = []) {
 			try {
+				$this->logService->log(json_encode([
+					'query'  => $query,
+					'params' => $params,
+				]), ['query']);
 				return (function (Result $result) {
 					foreach ($result->getRecords() as $record) {
 						$keys = $record->keys();

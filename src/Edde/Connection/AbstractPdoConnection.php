@@ -12,6 +12,7 @@
 	use Edde\Query\IRelationQuery;
 	use Edde\Query\IUnlinkQuery;
 	use Edde\Query\NativeQuery;
+	use Edde\Service\Log\LogService;
 	use Edde\Storage\Query\Fragment\IWhere;
 	use Edde\Storage\Query\ICrateSchemaQuery;
 	use Edde\Storage\Query\ISelectQuery;
@@ -20,8 +21,10 @@
 	use PDOStatement;
 	use Throwable;
 	use function implode;
+	use function json_encode;
 
 	abstract class AbstractPdoConnection extends AbstractConnection {
+		use LogService;
 		protected $options;
 		/** @var PDO */
 		protected $pdo;
@@ -38,6 +41,10 @@
 		 */
 		public function fetch($query, array $params = []) {
 			try {
+				$this->logService->log(json_encode([
+					'query'  => $query,
+					'params' => $params,
+				]), ['query']);
 				$statement = $this->pdo->prepare($query);
 				$statement->setFetchMode(PDO::FETCH_ASSOC);
 				$statement->execute($params);

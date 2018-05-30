@@ -22,12 +22,16 @@
 	use Edde\Entity\EntityException;
 	use Edde\Entity\EntityNotFoundException;
 	use Edde\Entity\IEntity;
+	use Edde\Log\AbstractLog;
+	use Edde\Log\ILog;
+	use Edde\Log\ILogRecord;
 	use Edde\Query\CreateSchemaQuery;
 	use Edde\Query\SelectQuery;
 	use Edde\Schema\SchemaException;
 	use Edde\Schema\SchemaValidationException;
 	use Edde\Service\Container\Container;
 	use Edde\Service\Entity\EntityManager;
+	use Edde\Service\Log\LogService;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
 	use Edde\TestCase;
@@ -37,6 +41,8 @@
 		use SchemaManager;
 		use Storage;
 		use Container;
+		use LogService;
+		protected $queryLog;
 
 		/**
 		 * @throws ConnectionException
@@ -670,5 +676,22 @@
 				$current[] = $entity->get('name');
 			}
 			self::assertEmpty($current);
+		}
+
+		protected function setUp() {
+			parent::setUp();
+			$this->logService->registerLog($this->queryLog = new class() extends AbstractLog {
+				protected $queries = [];
+
+				/** @inheritdoc */
+				public function record(ILogRecord $logRecord): ILog {
+					$this->queries[] = $logRecord->getLog();
+					return $this;
+				}
+
+				public function getQueries() {
+					return $this->queries;
+				}
+			}, ['query']);
 		}
 	}
