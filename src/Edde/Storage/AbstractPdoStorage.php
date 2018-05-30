@@ -6,19 +6,18 @@
 	use Edde\Collection\EntityNotFoundException;
 	use Edde\Collection\IEntity;
 	use Edde\Config\ConfigException;
+	use Edde\Query\IChain;
 	use Edde\Query\INativeQuery;
 	use Edde\Query\IQuery;
 	use Edde\Query\IWhere;
 	use Edde\Query\NativeQuery;
-	use Edde\Schema\ISchema;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Security\RandomService;
 	use Generator;
 	use PDO;
 	use PDOException;
 	use Throwable;
-	use function array_unique;
-	use function array_values;
+	use function array_pop;
 	use function implode;
 	use function in_array;
 	use function sha1;
@@ -80,11 +79,7 @@
 			$selects = $query->getSelects();
 			$attaches = $query->getAttaches();
 			$count = $query->isCount();
-			/** @var $schemas ISchema[] */
-			$schemas = [];
-			foreach (array_unique(array_values($selects)) as $schema) {
-				$schemas[$schema] = $this->schemaManager->getSchema($schema);
-			}
+			$schemas = $this->getSchemas($query);
 			$select = [];
 			$from = [];
 			foreach ($selects as $alias => $schema) {
@@ -126,7 +121,7 @@
 				implode(",\n\t", $from),
 			]);
 			if (($chains = ($wheres = $query->wheres())->chains())->hasChains()) {
-				$formatWhere = function (IWhere $where, array $schemas, array $selects, array &$params): string {
+				$formatWhere = function (IWhere $where, array $schemas, array $selects, array $params): string {
 					$where = $where->toObject();
 					switch ($where->type) {
 						case 'equalTo':
@@ -136,9 +131,9 @@
 							$fragment = vsprintf('%s.%s = :%s', [
 								$this->delimit($where->alias),
 								$this->delimit($where->property),
-								$paramId = '_' . sha1($where->param),
+								$where->param,
 							]);
-							$params[$paramId] = $this->filterValue($schemas[$selects[$where->alias]]->getAttribute($where->property), $params[$where->param]);
+							$params[$where->param] = $this->filterValue($schemas[$selects[$where->alias]]->getAttribute($where->property), $params[$where->param]);
 							unset($params[$where->param]);
 							return $fragment;
 						case 'in':
@@ -171,17 +166,26 @@
 							throw new StorageException(sprintf('Unsupported where type [%s].', $where->type));
 					}
 				};
-				$sql .= "WHERE\n\t";
 				$fragments = [];
-				foreach ($chains->getChain() as $stdClass) {
-					if ($chains->hasChain($stdClass->name)) {
-						// do magic with chains
-						continue;
+				$formatChain = function (IQuery $query, IChain $chain, callable $formatChain, callable $formatWhere, array &$fragments): void {
+					$wheres = $query->wheres();
+					$chains = $wheres->chains();
+					$fragments[] = '(';
+					foreach ($chain as $stdClass) {
+						if ($chains->hasChain($stdClass->name)) {
+							$fragments[] = $formatChain($query, $chains->getChain($stdClass->name), $formatChain, $formatWhere, $fragments);
+							continue;
+						}
+						$p = $query->getParams();
+						$fragments[] = $formatWhere($wheres->getWhere($stdClass->name), $this->getSchemas($query), $query->getSelects(), $p);
+						$fragments[] = ' ' . strtoupper($stdClass->operator) . ' ';
 					}
-					$fragments[] = $formatWhere($wheres->getWhere($stdClass->name), $schemas, $selects, $params);
-					$fragments[] = strtoupper($stdClass->operator);
-				}
-				$sql .= implode(" AND\n\t", $wheres) . "\n";
+					array_pop($fragments);
+					$fragments[] = ')';
+				};
+				$sql .= "WHERE\n\t";
+				$formatChain($query, $chains->getChain(), $formatChain, $formatWhere, $fragments) . "\n";
+				$sql .= implode('', $fragments);
 			}
 			if ($count === false && $query->hasOrder() && $orders = $query->getOrders()) {
 				$sql .= "ORDER BY\n\t";
