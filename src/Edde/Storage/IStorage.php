@@ -7,6 +7,7 @@
 	use Edde\Filter\FilterException;
 	use Edde\Query\INativeQuery;
 	use Edde\Query\IQuery;
+	use Edde\Query\QueryException;
 	use Edde\Schema\SchemaException;
 	use Edde\Validator\ValidatorException;
 	use Generator;
@@ -58,6 +59,7 @@
 		 * @return INativeQuery
 		 *
 		 * @throws StorageException
+		 * @throws QueryException
 		 */
 		public function native(IQuery $query): INativeQuery;
 

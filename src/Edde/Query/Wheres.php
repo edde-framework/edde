@@ -3,6 +3,8 @@
 	namespace Edde\Query;
 
 	use Edde\SimpleObject;
+	use function array_keys;
+	use function implode;
 
 	class Wheres extends SimpleObject implements IWheres {
 		/** @var IWhere[] */
@@ -28,8 +30,11 @@
 		}
 
 		/** @inheritdoc */
-		public function isEmpty(): bool {
-			return empty($this->wheres) === false;
+		public function getWhere(string $name): IWhere {
+			if ($this->hasWhere($name) === false) {
+				throw new QueryException(sprintf('Requested unknown where [%s]; available wheres [%s].', $name, implode(', ', array_keys($this->wheres))));
+			}
+			return $this->wheres[$name];
 		}
 
 		/** @inheritdoc */
@@ -40,5 +45,10 @@
 		/** @inheritdoc */
 		public function chains(): IChains {
 			return $this->chains ?: $this->chains = new Chains();
+		}
+
+		/** @inheritdoc */
+		public function getIterator() {
+			yield from $this->wheres;
 		}
 	}

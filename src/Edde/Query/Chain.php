@@ -32,4 +32,9 @@
 			];
 			return $this;
 		}
+
+		/** @inheritdoc */
+		public function getIterator() {
+			yield from $this->chains;
+		}
 	}

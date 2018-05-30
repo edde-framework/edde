@@ -2,7 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Query;
 
-	interface IChain {
+	use IteratorAggregate;
+	use stdClass;
+	use Traversable;
+
+	interface IChain extends IteratorAggregate {
 		/**
 		 * start a new chain
 		 *
@@ -25,4 +29,9 @@
 		 * @return IChain
 		 */
 		public function or(string $name): IChain;
+
+		/**
+		 * @return Traversable|stdClass[]
+		 */
+		public function getIterator();
 	}

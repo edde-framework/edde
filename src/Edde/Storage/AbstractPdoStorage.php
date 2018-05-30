@@ -8,6 +8,7 @@
 	use Edde\Config\ConfigException;
 	use Edde\Query\INativeQuery;
 	use Edde\Query\IQuery;
+	use Edde\Query\IWhere;
 	use Edde\Query\NativeQuery;
 	use Edde\Schema\ISchema;
 	use Edde\Service\Schema\SchemaManager;
@@ -20,7 +21,6 @@
 	use function array_values;
 	use function implode;
 	use function in_array;
-	use function is_iterable;
 	use function sha1;
 	use function sprintf;
 	use function strtoupper;
@@ -125,32 +125,30 @@
 				implode(",\n\t", $select),
 				implode(",\n\t", $from),
 			]);
-			if ($query->hasWhere() && $wheres = $query->getWheres()) {
-				$sql .= "WHERE\n\t";
-				$whereList = [];
-				foreach ($wheres as $where) {
-					$stdClass = $where->toObject();
-					switch ($stdClass->type) {
+			if (($chains = ($wheres = $query->wheres())->chains())->hasChains()) {
+				$formatWhere = function (IWhere $where, array $schemas, array $selects, array &$params): string {
+					$where = $where->toObject();
+					switch ($where->type) {
 						case 'equalTo':
-							$whereList[] = vsprintf('%s.%s = :%s', [
-								$this->delimit($stdClass->alias),
-								$this->delimit($stdClass->property),
-								$paramId = '_' . sha1($stdClass->param),
+							if (isset($params[$where->param]) === false) {
+								throw new StorageException(sprintf('Missing where parameter [%s]; available parameters [%s].', $where->param, implode(', ', $params)));
+							}
+							$fragment = vsprintf('%s.%s = :%s', [
+								$this->delimit($where->alias),
+								$this->delimit($where->property),
+								$paramId = '_' . sha1($where->param),
 							]);
-							if (isset($params[$stdClass->param]) === false) {
-								throw new StorageException(sprintf('Missing where parameter [%s]; available parameters [%s].', $stdClass->param, implode(', ', $params)));
-							}
-							$params[$paramId] = $this->filterValue($schemas[$selects[$stdClass->alias]]->getAttribute($stdClass->property), $params[$stdClass->param]);
-							unset($params[$stdClass->param]);
-							break;
+							$params[$paramId] = $this->filterValue($schemas[$selects[$where->alias]]->getAttribute($where->property), $params[$where->param]);
+							unset($params[$where->param]);
+							return $fragment;
 						case 'in':
-							if (isset($params[$stdClass->param]) === false) {
-								throw new StorageException(sprintf('Missing where parameter [%s]; available parameters [%s].', $stdClass->param, implode(', ', $params)));
-							} else if (is_iterable($params[$stdClass->param]) === false) {
-								throw new StorageException(sprintf('Where in parameter [%s] is not an iterable.', $stdClass->param));
+							if (isset($params[$where->param]) === false) {
+								throw new StorageException(sprintf('Missing where parameter [%s]; available parameters [%s].', $where->param, implode(', ', $params)));
+							} else if (is_iterable($params[$where->param]) === false) {
+								throw new StorageException(sprintf('Where in parameter [%s] is not an iterable.', $where->param));
 							}
-							$schema = $schemas[$selects[$stdClass->alias]];
-							$attribute = $schema->getAttribute($stdClass->property);
+							$schema = $schemas[$selects[$where->alias]];
+							$attribute = $schema->getAttribute($where->property);
 							$this->exec(vsprintf('CREATE TEMPORARY TABLE %s ( item %s )', [
 								$temporary = $this->delimit($this->randomService->uuid()),
 								$this->type($attribute->getType()),
@@ -158,23 +156,32 @@
 							$statement = $this->pdo->prepare(vsprintf('INSERT INTO %s (item) VALUES (:item)', [
 								$temporary,
 							]));
-							foreach ($params[$stdClass->param] as $item) {
+							foreach ($params[$where->param] as $item) {
 								$statement->execute([
 									'item' => $this->filterValue($attribute, $item),
 								]);
 							}
-							$whereList[] = vsprintf('%s.%s IN (SELECT item FROM %s)', [
-								$this->delimit($stdClass->alias),
-								$this->delimit($stdClass->property),
+							unset($params[$where->param]);
+							return vsprintf('%s.%s IN (SELECT item FROM %s)', [
+								$this->delimit($where->alias),
+								$this->delimit($where->property),
 								$temporary,
 							]);
-							unset($params[$stdClass->param]);
-							break;
 						default:
-							throw new StorageException(sprintf('Unsupported where type [%s].', $stdClass->type));
+							throw new StorageException(sprintf('Unsupported where type [%s].', $where->type));
 					}
+				};
+				$sql .= "WHERE\n\t";
+				$fragments = [];
+				foreach ($chains->getChain() as $stdClass) {
+					if ($chains->hasChain($stdClass->name)) {
+						// do magic with chains
+						continue;
+					}
+					$fragments[] = $formatWhere($wheres->getWhere($stdClass->name), $schemas, $selects, $params);
+					$fragments[] = strtoupper($stdClass->operator);
 				}
-				$sql .= implode(" AND\n\t", $whereList) . "\n";
+				$sql .= implode(" AND\n\t", $wheres) . "\n";
 			}
 			if ($count === false && $query->hasOrder() && $orders = $query->getOrders()) {
 				$sql .= "ORDER BY\n\t";
