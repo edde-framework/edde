@@ -133,6 +133,13 @@
 		public function getSelects(): array;
 
 		/**
+		 * return unique list of used schemas; $schema => $schema (both strings)
+		 *
+		 * @return string[]
+		 */
+		public function getSchemas(): array;
+
+		/**
 		 * set query params; it should override currently set params
 		 *
 		 * @param array $params

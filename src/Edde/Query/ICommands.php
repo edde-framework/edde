@@ -14,6 +14,13 @@
 		public function addCommand(ICommand $command): ICommands;
 
 		/**
+		 * @param ICommands $commands
+		 *
+		 * @return ICommands
+		 */
+		public function addCommands(ICommands $commands): ICommands;
+
+		/**
 		 * @return Traversable|ICommand[]
 		 */
 		public function getIterator();

@@ -21,6 +21,8 @@
 		protected $page;
 		/** @var string[] */
 		protected $returns = [];
+		/** @var string[] */
+		protected $schemas;
 		/** @var array */
 		protected $params = [];
 		protected $count = false;
@@ -134,6 +136,18 @@
 		/** @inheritdoc */
 		public function getSelects(): array {
 			return $this->selects;
+		}
+
+		/** @inheritdoc */
+		public function getSchemas(): array {
+			if ($this->schemas) {
+				return $this->schemas;
+			}
+			$this->schemas = [];
+			foreach (array_unique(array_values($this->getSelects())) as $schema) {
+				$this->schemas[$schema] = $schema;
+			}
+			return $this->schemas;
 		}
 
 		/** @inheritdoc */

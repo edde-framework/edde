@@ -19,11 +19,9 @@
 	use Throwable;
 	use function array_pop;
 	use function implode;
-	use function in_array;
 	use function sha1;
 	use function sprintf;
 	use function strtoupper;
-	use function vsprintf;
 
 	abstract class AbstractPdoStorage extends AbstractStorage {
 		use SchemaManager;
@@ -76,95 +74,9 @@
 		/** @inheritdoc */
 		public function native(IQuery $query): ICommand {
 			$params = $query->getParams();
-			$selects = $query->getSelects();
-			$attaches = $query->getAttaches();
-			$count = $query->isCount();
-			$schemas = $this->getSchemas($query);
-			$select = [];
-			$from = [];
-			foreach ($selects as $alias => $schema) {
-				foreach ($schemas[$schema]->getAttributes() as $name => $attribute) {
-					$select[] = vsprintf($count ? 'COUNT(%s.%s) AS %s' : '%s.%s AS %s', [
-						$this->delimit($alias),
-						$this->delimit($name),
-						$this->delimit($count ? $alias : $alias . '.' . $name),
-					]);
-				}
-				if ($query->isAttached($alias)) {
-					continue;
-				}
-				$from[] = vsprintf('%s %s', [
-					$this->delimit($schemas[$schema]->getRealName()),
-					$this->delimit($alias),
-				]);
-			}
-			foreach ($attaches as $attach) {
-				$sourceSchema = $schemas[$selects[$attach->attach]];
-				$relationSchema = $schemas[$selects[$attach->relation]];
-				$targetSchema = $schemas[$selects[$attach->to]];
-				$this->checkRelation($relationSchema, $sourceSchema, $targetSchema);
-				$from[] = vsprintf("%s %s\n\t\tINNER JOIN %s %s ON %2\$s.%s = %4\$s.%s\n\t\tINNER JOIN %s %s ON %2\$s.%s = %8\$s.%s", [
-					$this->delimit($relationSchema->getRealName()),
-					$this->delimit($attach->relation),
-					$this->delimit($sourceSchema->getRealName()),
-					$this->delimit($attach->attach),
-					$this->delimit($relationSchema->getSource()->getName()),
-					$this->delimit($sourceSchema->getPrimary()->getName()),
-					$this->delimit($targetSchema->getRealName()),
-					$this->delimit($attach->to),
-					$this->delimit($relationSchema->getTarget()->getName()),
-					$this->delimit($targetSchema->getPrimary()->getName()),
-				]);
-			}
-			$sql = vsprintf("SELECT\n\t%s\nFROM\n\t%s\n", [
-				implode(",\n\t", $select),
-				implode(",\n\t", $from),
-			]);
 			if (($chains = ($wheres = $query->wheres())->chains())->hasChains()) {
 				$formatWhere = function (IWhere $where, array $schemas, array $selects, array $params): string {
 					$where = $where->toObject();
-					switch ($where->type) {
-						case 'equalTo':
-							if (isset($params[$where->param]) === false) {
-								throw new StorageException(sprintf('Missing where parameter [%s]; available parameters [%s].', $where->param, implode(', ', $params)));
-							}
-							$fragment = vsprintf('%s.%s = :%s', [
-								$this->delimit($where->alias),
-								$this->delimit($where->property),
-								$where->param,
-							]);
-							$params[$where->param] = $this->filterValue($schemas[$selects[$where->alias]]->getAttribute($where->property), $params[$where->param]);
-							unset($params[$where->param]);
-							return $fragment;
-						case 'in':
-							if (isset($params[$where->param]) === false) {
-								throw new StorageException(sprintf('Missing where parameter [%s]; available parameters [%s].', $where->param, implode(', ', $params)));
-							} else if (is_iterable($params[$where->param]) === false) {
-								throw new StorageException(sprintf('Where in parameter [%s] is not an iterable.', $where->param));
-							}
-							$schema = $schemas[$selects[$where->alias]];
-							$attribute = $schema->getAttribute($where->property);
-							$this->exec(vsprintf('CREATE TEMPORARY TABLE %s ( item %s )', [
-								$temporary = $this->delimit($this->randomService->uuid()),
-								$this->type($attribute->getType()),
-							]));
-							$statement = $this->pdo->prepare(vsprintf('INSERT INTO %s (item) VALUES (:item)', [
-								$temporary,
-							]));
-							foreach ($params[$where->param] as $item) {
-								$statement->execute([
-									'item' => $this->filterValue($attribute, $item),
-								]);
-							}
-							unset($params[$where->param]);
-							return vsprintf('%s.%s IN (SELECT item FROM %s)', [
-								$this->delimit($where->alias),
-								$this->delimit($where->property),
-								$temporary,
-							]);
-						default:
-							throw new StorageException(sprintf('Unsupported where type [%s].', $where->type));
-					}
 				};
 				$fragments = [];
 				$formatChain = function (IQuery $query, IChain $chain, callable $formatChain, callable $formatWhere, array &$fragments): void {
@@ -186,24 +98,6 @@
 				$sql .= "WHERE\n\t";
 				$formatChain($query, $chains->getChain(), $formatChain, $formatWhere, $fragments) . "\n";
 				$sql .= implode('', $fragments);
-			}
-			if ($count === false && $query->hasOrder() && $orders = $query->getOrders()) {
-				$sql .= "ORDER BY\n\t";
-				$orderList = [];
-				foreach ($orders as $stdClass) {
-					$orderList[] = vsprintf('%s.%s %s', [
-						$this->delimit($stdClass->alias),
-						$this->delimit($stdClass->property),
-						in_array($order = strtoupper($stdClass->order), ['ASC', 'DESC']) ? $order : 'ASC',
-					]);
-				}
-				$sql .= implode(" ,\n\t", $orderList) . "\n";
-			}
-			if ($count === false && $query->hasPage() && $page = $query->getPage()) {
-				$sql .= vsprintf('LIMIT %d OFFSET %d', [
-					$page->size,
-					$page->page * $page->size,
-				]);
 			}
 			return new Command($sql, $params);
 		}
