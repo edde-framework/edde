@@ -2,7 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Query;
 
-	interface INativeQuery {
+	/**
+	 * Command is compile query on native command (native query).
+	 */
+	interface ICommand {
 		/**
 		 * @return string
 		 */

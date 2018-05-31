@@ -7,9 +7,9 @@
 	use Edde\Collection\IEntity;
 	use Edde\Config\ConfigException;
 	use Edde\Filter\FilterException;
-	use Edde\Query\INativeQuery;
+	use Edde\Query\Command;
+	use Edde\Query\ICommand;
 	use Edde\Query\IQuery;
-	use Edde\Query\NativeQuery;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Security\RandomService;
@@ -74,14 +74,14 @@
 		public function query(IQuery $query): Generator {
 			$selects = $query->getSelects();
 			$schemas = $this->getSchemas($query);
-			$nativeQuery = $this->native($query);
-			foreach ($this->fetch($nativeQuery->getQuery(), $nativeQuery->getParams()) as $row) {
+			$command = $this->native($query);
+			foreach ($this->fetch($command->getQuery(), $command->getParams()) as $row) {
 				yield $this->row($row, $schemas, $selects);
 			}
 		}
 
 		/** @inheritdoc */
-		public function native(IQuery $query): INativeQuery {
+		public function native(IQuery $query): ICommand {
 			$params = $query->getParams();
 			$attaches = $query->getAttaches();
 			$selects = $query->getSelects();
@@ -191,7 +191,7 @@
 					$page->size,
 				]);
 			}
-			return new NativeQuery($cypher, $params);
+			return new Command($cypher, $params);
 		}
 
 		/** @inheritdoc */

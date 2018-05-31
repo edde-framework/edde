@@ -4,7 +4,7 @@
 
 	use Edde\SimpleObject;
 
-	class NativeQuery extends SimpleObject implements INativeQuery {
+	class Command extends SimpleObject implements ICommand {
 		/** @var string */
 		protected $query;
 		/** @var array */

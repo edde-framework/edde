@@ -6,11 +6,11 @@
 	use Edde\Collection\EntityNotFoundException;
 	use Edde\Collection\IEntity;
 	use Edde\Config\ConfigException;
+	use Edde\Query\Command;
 	use Edde\Query\IChain;
-	use Edde\Query\INativeQuery;
+	use Edde\Query\ICommand;
 	use Edde\Query\IQuery;
 	use Edde\Query\IWhere;
-	use Edde\Query\NativeQuery;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Security\RandomService;
 	use Generator;
@@ -65,16 +65,16 @@
 
 		/** @inheritdoc */
 		public function query(IQuery $query): Generator {
-			$nativeQuery = $this->native($query);
+			$command = $this->native($query);
 			$schemas = $this->getSchemas($query);
 			$selects = $query->getSelects();
-			foreach ($this->fetch($nativeQuery->getQuery(), $nativeQuery->getParams()) as $row) {
+			foreach ($this->fetch($command->getQuery(), $command->getParams()) as $row) {
 				yield $this->row($row, $schemas, $selects);
 			}
 		}
 
 		/** @inheritdoc */
-		public function native(IQuery $query): INativeQuery {
+		public function native(IQuery $query): ICommand {
 			$params = $query->getParams();
 			$selects = $query->getSelects();
 			$attaches = $query->getAttaches();
@@ -205,7 +205,7 @@
 					$page->page * $page->size,
 				]);
 			}
-			return new NativeQuery($sql, $params);
+			return new Command($sql, $params);
 		}
 
 		/** @inheritdoc */

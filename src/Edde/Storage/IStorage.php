@@ -5,7 +5,7 @@
 	use Edde\Collection\EntityNotFoundException;
 	use Edde\Collection\IEntity;
 	use Edde\Filter\FilterException;
-	use Edde\Query\INativeQuery;
+	use Edde\Query\ICommand;
 	use Edde\Query\IQuery;
 	use Edde\Query\QueryException;
 	use Edde\Schema\SchemaException;
@@ -56,12 +56,12 @@
 		/**
 		 * @param IQuery $query
 		 *
-		 * @return INativeQuery
+		 * @return ICommand
 		 *
 		 * @throws StorageException
 		 * @throws QueryException
 		 */
-		public function native(IQuery $query): INativeQuery;
+		public function native(IQuery $query): ICommand;
 
 		/**
 		 * create new schema (not all storages may support this, but exception should not be thrown)
