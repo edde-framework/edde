@@ -6,7 +6,6 @@
 	use Edde\Collection\EntityNotFoundException;
 	use Edde\Collection\IEntity;
 	use Edde\Config\ConfigException;
-	use Edde\Container\ContainerException;
 	use Edde\Filter\FilterException;
 	use Edde\Query\IQuery;
 	use Edde\Schema\SchemaException;
@@ -70,7 +69,7 @@
 
 		/** @inheritdoc */
 		public function query(IQuery $query, array $binds = []): Generator {
-			$schemas = $this->getSchemas($query);
+			$schemas = $this->schemaManager->getSchemas($query->getSchemas());
 			$selects = $query->getSelects();
 			$params = [];
 			foreach ($query->params($binds) as $name => $param) {
@@ -85,24 +84,18 @@
 					$params[$hash][] = $this->attribute($attribute, $v);
 				}
 			}
-			foreach ($this->fetch($this->compiler()->compile($query), $params) as $row) {
+			foreach ($this->fetch($this->compiler->compile($query), $params) as $row) {
 				yield $this->row($row, $schemas, $selects);
 			}
-		}
-
-		/** @inheritdoc */
-		public function compiler(): ICompiler {
-			return $this->compiler ?: $this->compiler = $this->container->create(Neo4jCompiler::class, [], __METHOD__);
 		}
 
 		/** @inheritdoc */
 		public function create(string $name): IStorage {
 			try {
 				$schema = $this->schemaManager->getSchema($name);
-				$compiler = $this->compiler();
-				$node = $compiler->delimit($schema->getRealName());
+				$node = $this->compiler->delimit($schema->getRealName());
 				foreach ($schema->getAttributes() as $name => $property) {
-					$fragment = 'n.' . $compiler->delimit($property->getName());
+					$fragment = 'n.' . $this->compiler->delimit($property->getName());
 					if ($property->isPrimary()) {
 						$this->fetch('CREATE CONSTRAINT ON (n:' . $node . ') ASSERT (' . $fragment . ') IS NODE KEY');
 					} else if ($property->isUnique()) {
@@ -126,11 +119,10 @@
 				return $this->relation($entity);
 			}
 			$source = $this->prepareInsert($entity);
-			$compiler = $this->compiler();
 			$this->fetch(
 				vsprintf('CREATE (a: %s {%s: $primary}) SET a = $set', [
-					$compiler->delimit($schema->getRealName()),
-					$compiler->delimit($primary = $schema->getPrimary()->getName()),
+					$this->compiler->delimit($schema->getRealName()),
+					$this->compiler->delimit($primary = $schema->getPrimary()->getName()),
 				]),
 				[
 					'primary' => $source->{$primary},
@@ -153,11 +145,10 @@
 				return $this->relation($entity);
 			}
 			$source = $this->prepareUpdate($entity);
-			$compiler = $this->compiler();
 			$this->fetch(
 				vsprintf('MERGE (a: %s {%s: $primary}) SET a = $set', [
-					$compiler->delimit($schema->getRealName()),
-					$compiler->delimit($primary = $schema->getPrimary()->getName()),
+					$this->compiler->delimit($schema->getRealName()),
+					$this->compiler->delimit($primary = $schema->getPrimary()->getName()),
 				]),
 				[
 					'primary' => $source->{$primary},
@@ -176,14 +167,13 @@
 				if ($schema->isRelation()) {
 					return $this->relation($entity);
 				}
-				$compiler = $this->compiler();
 				$primary = $entity->getPrimary();
 				$attribute = $entity->getPrimary()->getAttribute();
 				if ($primary->get() === null) {
 					return $this->insert($entity);
 				}
 				$count = ['count' => 0];
-				foreach ($this->fetch('MATCH (n:' . $compiler->delimit($schema->getRealName()) . ' {' . $compiler->delimit($attribute->getName()) . ': $primary}) RETURN count(n) AS count', ['primary' => $primary->get()]) as $count) {
+				foreach ($this->fetch('MATCH (n:' . $this->compiler->delimit($schema->getRealName()) . ' {' . $this->compiler->delimit($attribute->getName()) . ': $primary}) RETURN count(n) AS count', ['primary' => $primary->get()]) as $count) {
 					break;
 				}
 				if ($count['count'] === 0) {
@@ -199,12 +189,11 @@
 		/** @inheritdoc */
 		public function load(string $schema, string $id): IEntity {
 			try {
-				$compiler = $this->compiler();
 				$schema = $this->schemaManager->getSchema($schema);
 				$primary = $schema->getPrimary();
-				$query = 'MATCH (n:' . $compiler->delimit($schema->getRealName()) . ' {' . $compiler->delimit($primary->getName()) . ': $primary}) RETURN n';
+				$query = 'MATCH (n:' . $this->compiler->delimit($schema->getRealName()) . ' {' . $this->compiler->delimit($primary->getName()) . ': $primary}) RETURN n';
 				if ($schema->isRelation()) {
-					$query = 'MATCH ()-[n:' . $compiler->delimit($schema->getRealName()) . ' {' . $compiler->delimit($primary->getName()) . ': $primary}]-() RETURN n';
+					$query = 'MATCH ()-[n:' . $this->compiler->delimit($schema->getRealName()) . ' {' . $this->compiler->delimit($primary->getName()) . ': $primary}]-() RETURN n';
 				}
 				foreach ($this->fetch($query, ['primary' => $id]) as $item) {
 					$entity = new Entity($schema);
@@ -226,9 +215,8 @@
 				$entitySchema = $entity->getSchema(),
 				$targetSchema = $target->getSchema()
 			);
-			$compiler = $this->compiler();
 			$this->fetch(
-				'MATCH (:' . $compiler->delimit($entitySchema->getRealName()) . ' {' . $compiler->delimit($entitySchema->getPrimary()->getName()) . ': $a})-[r:' . $compiler->delimit($relationSchema->getRealName()) . ']->(:' . $compiler->delimit($targetSchema->getRealName()) . ' {' . $compiler->delimit($entitySchema->getPrimary()->getName()) . ': $b}) DETACH DELETE r',
+				'MATCH (:' . $this->compiler->delimit($entitySchema->getRealName()) . ' {' . $this->compiler->delimit($entitySchema->getPrimary()->getName()) . ': $a})-[r:' . $this->compiler->delimit($relationSchema->getRealName()) . ']->(:' . $this->compiler->delimit($targetSchema->getRealName()) . ' {' . $this->compiler->delimit($entitySchema->getPrimary()->getName()) . ': $b}) DETACH DELETE r',
 				[
 					'a' => $entity->getPrimary()->get(),
 					'b' => $target->getPrimary()->get(),
@@ -241,9 +229,8 @@
 		public function delete(IEntity $entity): IStorage {
 			$schema = $entity->getSchema();
 			$primary = $entity->getPrimary();
-			$compiler = $this->compiler();
 			$this->fetch(
-				'MATCH (n:' . $compiler->delimit($schema->getRealName()) . ' {' . $compiler->delimit($primary->getAttribute()->getName()) . ': $primary}) DETACH DELETE n',
+				'MATCH (n:' . $this->compiler->delimit($schema->getRealName()) . ' {' . $this->compiler->delimit($primary->getAttribute()->getName()) . ': $primary}) DETACH DELETE n',
 				[
 					'primary' => $primary->get(),
 				]
@@ -292,10 +279,8 @@
 		 * @throws SchemaException
 		 * @throws StorageException
 		 * @throws ValidatorException
-		 * @throws ContainerException
 		 */
 		protected function relation(IEntity $entity): IStorage {
-			$compiler = $this->compiler();
 			$schema = $entity->getSchema();
 			$primary = $schema->getPrimary();
 			$sourceAttribute = $schema->getSource();
@@ -307,9 +292,9 @@
 				$targetSchema
 			);
 			$cypher = null;
-			$cypher .= 'MATCH (a:' . $compiler->delimit($sourceSchema->getRealName()) . ' {' . $compiler->delimit($sourceSchema->getPrimary()->getName()) . ": \$a})\n";
-			$cypher .= 'MATCH (b:' . $compiler->delimit($targetSchema->getRealName()) . ' {' . $compiler->delimit($targetSchema->getPrimary()->getName()) . ": \$b})\n";
-			$cypher .= 'MERGE (a)-[r:' . $compiler->delimit($schema->getRealName()) . ' {' . $compiler->delimit($primary->getName()) . ": \$primary}]->(b)\n";
+			$cypher .= 'MATCH (a:' . $this->compiler->delimit($sourceSchema->getRealName()) . ' {' . $this->compiler->delimit($sourceSchema->getPrimary()->getName()) . ": \$a})\n";
+			$cypher .= 'MATCH (b:' . $this->compiler->delimit($targetSchema->getRealName()) . ' {' . $this->compiler->delimit($targetSchema->getPrimary()->getName()) . ": \$b})\n";
+			$cypher .= 'MERGE (a)-[r:' . $this->compiler->delimit($schema->getRealName()) . ' {' . $this->compiler->delimit($primary->getName()) . ": \$primary}]->(b)\n";
 			$cypher .= 'SET r = $set';
 			$source = $this->prepareInsert($entity);
 			$this->fetch($cypher, [
@@ -321,6 +306,11 @@
 			$entity->put($this->prepareOutput($schema, $source));
 			$entity->commit();
 			return $this;
+		}
+
+		/** @inheritdoc */
+		public function createCompiler(): ICompiler {
+			return $this->compiler ?: $this->compiler = $this->container->create(Neo4jCompiler::class, [], __METHOD__);
 		}
 
 		protected function exception(Throwable $throwable): Throwable {

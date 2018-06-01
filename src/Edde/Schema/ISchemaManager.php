@@ -47,9 +47,13 @@
 		public function getSchema(string $name): ISchema;
 
 		/**
-		 * return all known schemas
+		 * return schemas by name
+		 *
+		 * @param string[] $names
 		 *
 		 * @return ISchema[]
+		 *
+		 * @throws SchemaException
 		 */
-		public function getSchemas(): array;
+		public function getSchemas(array $names): array;
 	}

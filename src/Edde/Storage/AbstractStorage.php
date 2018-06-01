@@ -9,7 +9,6 @@
 	use Edde\Query\IQuery;
 	use Edde\Schema\IAttribute;
 	use Edde\Schema\ISchema;
-	use Edde\Schema\SchemaException;
 	use Edde\Service\Config\ConfigService;
 	use Edde\Service\Filter\FilterManager;
 	use Edde\Service\Schema\SchemaManager;
@@ -78,7 +77,7 @@
 		/** @inheritdoc */
 		public function count(IQuery $query): array {
 			try {
-				foreach ($this->fetch($this->compiler()->compile($query->count(true))) as $row) {
+				foreach ($this->fetch($this->compiler->compile($query->count(true))) as $row) {
 					return $row;
 				}
 				throw new StorageException(sprintf('Cannot get counts from a query.'));
@@ -194,21 +193,6 @@
 		}
 
 		/**
-		 * @param IQuery $query
-		 *
-		 * @return ISchema[]
-		 *
-		 * @throws SchemaException
-		 */
-		protected function getSchemas(IQuery $query) {
-			$schemas = [];
-			foreach ($query->getSchemas() as $schema) {
-				$schemas[$schema] = $this->schemaManager->getSchema($schema);
-			}
-			return $schemas;
-		}
-
-		/**
 		 * @param array     $row
 		 * @param ISchema[] $schemas
 		 * @param string[]  $selects
@@ -233,5 +217,6 @@
 		protected function handleSetup(): void {
 			parent::handleSetup();
 			$this->section = $this->configService->require($this->config);
+			$this->compiler = $this->createCompiler();
 		}
 	}

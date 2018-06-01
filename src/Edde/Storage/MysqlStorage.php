@@ -34,7 +34,7 @@
 		}
 
 		/** @inheritdoc */
-		public function compiler(): ICompiler {
+		public function createCompiler(): ICompiler {
 			return $this->compiler ?: $this->compiler = $this->container->create(PdoCompiler::class, ['`'], __METHOD__);
 		}
 

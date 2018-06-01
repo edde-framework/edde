@@ -56,13 +56,6 @@
 		public function query(IQuery $query, array $binds = []): Generator;
 
 		/**
-		 * provides instance of compiler compatible with this storage
-		 *
-		 * @return ICompiler
-		 */
-		public function compiler(): ICompiler;
-
-		/**
 		 * create new schema (not all storages may support this, but exception should not be thrown)
 		 *
 		 * @param string $name schema name
@@ -211,4 +204,11 @@
 		 * @throws StorageException
 		 */
 		public function count(IQuery $query): array;
+
+		/**
+		 * provides instance of compiler compatible with this storage
+		 *
+		 * @return ICompiler
+		 */
+		public function createCompiler(): ICompiler;
 	}

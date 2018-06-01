@@ -51,8 +51,7 @@
 
 		/** @inheritdoc */
 		public function query(IQuery $query, array $binds = []): Generator {
-			$compiler = $this->compiler();
-			$schemas = $this->getSchemas($query);
+			$schemas = $this->schemaManager->getSchemas($query->getSchemas());
 			$selects = $query->getSelects();
 			$params = [];
 			foreach ($query->params($binds) as $name => $param) {
@@ -71,7 +70,7 @@
 				 * it's not necessary to thanks me
 				 */
 				$this->exec(vsprintf('CREATE TEMPORARY TABLE %s ( item %s )', [
-					$temporary = $compiler->delimit($hash),
+					$temporary = $this->compiler->delimit($hash),
 					$this->type($attribute->getType()),
 				]));
 				$statement = $this->pdo->prepare(vsprintf('INSERT INTO %s (item) VALUES (:item)', [
@@ -83,7 +82,7 @@
 					]);
 				}
 			}
-			foreach ($this->fetch($compiler->compile($query), $params) as $row) {
+			foreach ($this->fetch($this->compiler->compile($query), $params) as $row) {
 				yield $this->row($row, $schemas, $selects);
 			}
 		}
@@ -92,12 +91,11 @@
 		public function create(string $name): IStorage {
 			try {
 				$schema = $this->schemaManager->getSchema($name);
-				$compiler = $this->compiler();
-				$sql = 'CREATE TABLE ' . $compiler->delimit($table = $schema->getRealName()) . " (\n\t";
+				$sql = 'CREATE TABLE ' . $this->compiler->delimit($table = $schema->getRealName()) . " (\n\t";
 				$columns = [];
 				$primary = null;
 				foreach ($schema->getAttributes() as $attribute) {
-					$column = ($fragment = $compiler->delimit($attribute->getName())) . ' ' . $this->type($attribute->hasSchema() ? $this->schemaManager->getSchema($attribute->getSchema())->getPrimary()->getType() : $attribute->getType());
+					$column = ($fragment = $this->compiler->delimit($attribute->getName())) . ' ' . $this->type($attribute->hasSchema() ? $this->schemaManager->getSchema($attribute->getSchema())->getPrimary()->getType() : $attribute->getType());
 					if ($attribute->isPrimary()) {
 						$primary = $fragment;
 					} else if ($attribute->isUnique()) {
@@ -109,7 +107,7 @@
 					$columns[] = $column;
 				}
 				if ($primary) {
-					$columns[] = "CONSTRAINT " . $compiler->delimit(sha1($table . '.primary.' . $primary)) . ' PRIMARY KEY (' . $primary . ')';
+					$columns[] = "CONSTRAINT " . $this->compiler->delimit(sha1($table . '.primary.' . $primary)) . ' PRIMARY KEY (' . $primary . ')';
 				}
 				$this->exec($sql . implode(",\n\t", $columns) . "\n)");
 				return $this;
@@ -124,14 +122,13 @@
 			try {
 				$columns = [];
 				$params = [];
-				$compiler = $this->compiler();
 				foreach ($source = $this->prepareInsert($entity) as $k => $v) {
-					$columns[] = $compiler->delimit($k);
+					$columns[] = $this->compiler->delimit($k);
 					$params[sha1($k)] = $v;
 				}
 				$this->fetch(
 					"INSERT INTO\n\t" .
-					$compiler->delimit(($schema = $entity->getSchema())->getRealName()) .
+					$this->compiler->delimit(($schema = $entity->getSchema())->getRealName()) .
 					" (\n\t" . implode(",\n\t", $columns) .
 					")\n\tVALUES (\n\t:" .
 					implode(",\n\t:", array_keys($params)) .
@@ -152,16 +149,15 @@
 			try {
 				$schema = $entity->getSchema();
 				$primary = $schema->getPrimary();
-				$compiler = $this->compiler();
-				$table = $compiler->delimit($schema->getRealName());
+				$table = $this->compiler->delimit($schema->getRealName());
 				$params = ['primary' => $entity->getPrimary()->get()];
 				$columns = [];
 				foreach ($source = $this->prepareUpdate($entity) as $k => $v) {
 					$params[$paramId = sha1($k)] = $v;
-					$columns[] = $compiler->delimit($k) . ' = :' . $paramId;
+					$columns[] = $this->compiler->delimit($k) . ' = :' . $paramId;
 				}
 				$this->fetch(
-					"UPDATE\n\t" . $table . "\nSET\n\t" . implode(",\n\t", $columns) . "\nWHERE\n\t" . $compiler->delimit($primary->getName()) . ' = :primary',
+					"UPDATE\n\t" . $table . "\nSET\n\t" . implode(",\n\t", $columns) . "\nWHERE\n\t" . $this->compiler->delimit($primary->getName()) . ' = :primary',
 					$params
 				);
 				$entity->put($this->prepareOutput($schema, $source));
@@ -182,9 +178,13 @@
 				if ($primary->get() === null) {
 					return $this->insert($entity);
 				}
+				$params = [
+					$this->compiler->delimit($attribute->getName()),
+					$this->compiler->delimit($schema->getRealName()),
+					$this->compiler->delimit($attribute->getName()),
+				];
 				$count = ['count' => 0];
-				$compiler = $this->compiler();
-				foreach ($this->fetch('SELECT COUNT(' . $compiler->delimit($attribute->getName()) . ') AS count FROM ' . $compiler->delimit($schema->getRealName()) . ' WHERE ' . $compiler->delimit($attribute->getName()) . ' = :primary', ['primary' => $primary->get()]) as $count) {
+				foreach ($this->fetch(vsprintf('SELECT COUNT(%s) AS count FROM %s WHERE %s = :primary', $params), ['primary' => $primary->get()]) as $count) {
 					break;
 				}
 				if ($count['count'] === 0) {
@@ -201,8 +201,7 @@
 		public function load(string $schema, string $id): IEntity {
 			try {
 				$schema = $this->schemaManager->getSchema($schema);
-				$compiler = $this->compiler();
-				$query = "SELECT * FROM " . $compiler->delimit($schema->getRealName()) . " WHERE " . $compiler->delimit($schema->getPrimary()->getName()) . ' = :primary';
+				$query = "SELECT * FROM " . $this->compiler->delimit($schema->getRealName()) . " WHERE " . $this->compiler->delimit($schema->getPrimary()->getName()) . ' = :primary';
 				foreach ($this->fetch($query, ['primary' => $id]) as $item) {
 					$entity = new Entity($schema);
 					$entity->push($this->prepareOutput($schema, (object)$item));
@@ -221,9 +220,8 @@
 		public function delete(IEntity $entity): IStorage {
 			$schema = $entity->getSchema();
 			$primary = $entity->getPrimary();
-			$compiler = $this->compiler();
 			$this->fetch(
-				'DELETE FROM ' . $compiler->delimit($schema->getRealName()) . ' WHERE ' . $compiler->delimit($primary->getAttribute()->getName()) . ' = :primary',
+				'DELETE FROM ' . $this->compiler->delimit($schema->getRealName()) . ' WHERE ' . $this->compiler->delimit($primary->getAttribute()->getName()) . ' = :primary',
 				[
 					'primary' => $primary->get(),
 				]
@@ -237,9 +235,8 @@
 				$entity->getSchema(),
 				$target->getSchema()
 			);
-			$compiler = $this->compiler();
 			$this->fetch(
-				'DELETE FROM ' . $compiler->delimit($relationSchema->getRealName()) . ' WHERE ' . $compiler->delimit($relationSchema->getSource()->getName()) . ' = :a AND ' . $compiler->delimit($relationSchema->getTarget()->getName()) . ' = :b',
+				'DELETE FROM ' . $this->compiler->delimit($relationSchema->getRealName()) . ' WHERE ' . $this->compiler->delimit($relationSchema->getSource()->getName()) . ' = :a AND ' . $this->compiler->delimit($relationSchema->getTarget()->getName()) . ' = :b',
 				[
 					'a' => $entity->getPrimary()->get(),
 					'b' => $target->getPrimary()->get(),
