@@ -6,7 +6,6 @@
 	use Edde\Query\Commands;
 	use Edde\Query\IChain;
 	use Edde\Query\IChains;
-	use Edde\Query\ICommand;
 	use Edde\Query\ICommands;
 	use Edde\Query\IQuery;
 	use Edde\Query\IWhere;
@@ -15,8 +14,11 @@
 	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Schema\SchemaManager;
+	use function array_shift;
 	use function implode;
 	use function sha1;
+	use function str_repeat;
+	use function strtoupper;
 	use function vsprintf;
 
 	class PdoCompiler extends AbstractCompiler {
@@ -114,54 +116,58 @@
 		 * @param IWheres $wheres
 		 * @param IChains $chains
 		 * @param IChain  $chain
+		 * @param int     $level
 		 *
 		 * @return string
 		 *
 		 * @throws QueryException
 		 */
-		public function chain(IWheres $wheres, IChains $chains, IChain $chain): string {
+		public function chain(IWheres $wheres, IChains $chains, IChain $chain, int $level = 1): string {
+			$fragments = [];
+			$tabs = str_repeat("\t", $level);
 			foreach ($chain as $stdClass) {
+				$operator = ' ' . strtoupper($stdClass->operator) . ' ';
 				if ($chains->hasChain($stdClass->name)) {
-					$this->chain($wheres, $chains, $chains->getChain($stdClass->name));
+					$fragments[] = $operator;
+					$fragments[] = "(\n\t" . $tabs . $this->chain($wheres, $chains, $chains->getChain($stdClass->name), $level + 1) . "\n" . $tabs . ')';
 					continue;
 				}
-				$this->where($wheres->getWhere($stdClass->name));
+				$fragments[] = $operator . "\n" . $tabs;
+				$fragments[] = $this->where($wheres->getWhere($stdClass->name));
 			}
+			/**
+			 * shift the very first operator as it makes no sense
+			 */
+			array_shift($fragments);
+			return implode('', $fragments);
 		}
 
 		/**
 		 * @param IWhere $where
-		 * @param array  $params
 		 *
-		 * @return ICommand
+		 * @return string
 		 *
 		 * @throws QueryException
 		 */
-		public function where(IWhere $where, array $params): ICommand {
+		public function where(IWhere $where): string {
 			$stdClass = $where->toObject();
 			switch ($stdClass->type) {
 				case 'equalTo':
-					if (isset($params[$stdClass->param]) === false) {
-						throw new QueryException(sprintf('Missing where parameter [%s]; available parameters [%s].', $stdClass->param, implode(', ', $params)));
-					}
-					$fragment = vsprintf('%s.%s = :%s', [
+//					if (isset($params[$stdClass->param]) === false) {
+//						throw new QueryException(sprintf('Missing where parameter [%s]; available parameters [%s].', $stdClass->param, implode(', ', $params)));
+//					}
+					return vsprintf('%s.%s = :%s', [
 						$this->delimit($stdClass->alias),
 						$this->delimit($stdClass->property),
 						$paramId = $this->param($stdClass->param),
 					]);
-					$params[$paramId] = $this->filterValue($schemas[$selects[$stdClass->alias]]->getAttribute($stdClass->property), $params[$stdClass->param]);
-					unset($params[$stdClass->param]);
-					return $fragment;
 				case 'in':
-					if (isset($params[$stdClass->param]) === false) {
-						throw new QueryException(sprintf('Missing where parameter [%s]; available parameters [%s].', $stdClass->param, implode(', ', $params)));
-					} else if (is_iterable($params[$stdClass->param]) === false) {
-						throw new QueryException(sprintf('Where in parameter [%s] is not an iterable.', $stdClass->param));
-					}
+//					if (isset($params[$stdClass->param]) === false) {
+//						throw new QueryException(sprintf('Missing where parameter [%s]; available parameters [%s].', $stdClass->param, implode(', ', $params)));
+//					} else if (is_iterable($params[$stdClass->param]) === false) {
+//						throw new QueryException(sprintf('Where in parameter [%s] is not an iterable.', $stdClass->param));
+//					}
 					$in = [];
-//					$schema = $schemas[$selects[$stdClass->alias]];
-//					$attribute = $schema->getAttribute($stdClass->property);
-					unset($params[$stdClass->param]);
 					return vsprintf('%s.%s IN (:%s)', [
 						$this->delimit($stdClass->alias),
 						$this->delimit($stdClass->property),
