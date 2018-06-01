@@ -50,7 +50,7 @@
 		 * @throws StorageException
 		 * @throws FilterException
 		 */
-		public function query(IQuery $query, array $binds): Generator;
+		public function query(IQuery $query, array $binds = []): Generator;
 
 		/**
 		 * provides instance of compiler compatible with this storage

@@ -156,7 +156,7 @@
 		}
 
 		/** @inheritdoc */
-		public function binds(array $bind): IBinds {
+		public function binds(array $bind): array {
 			return $this->getParams()->getBinds($bind);
 		}
 

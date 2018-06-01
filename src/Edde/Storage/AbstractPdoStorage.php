@@ -67,11 +67,10 @@
 		/** @inheritdoc */
 		public function query(IQuery $query, array $binds = []): Generator {
 			$compiler = $this->compiler();
-			$binds = $query->binds($binds);
 			$schemas = $this->getSchemas($query);
 			$selects = $query->getSelects();
 			$params = [];
-			foreach ($binds->getBinds() as $name => $bind) {
+			foreach ($query->binds($binds) as $name => $bind) {
 				$param = $bind->getParam();
 				$hash = $param->getHash();
 				$schema = $schemas[$selects[$param->getAlias()]];

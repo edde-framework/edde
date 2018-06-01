@@ -27,11 +27,11 @@
 		 *
 		 * @param array $binds
 		 *
-		 * @return IBinds
+		 * @return IBind[]
 		 *
 		 * @throws QueryException
 		 */
-		public function getBinds(array $binds): IBinds;
+		public function getBinds(array $binds): array;
 
 		/**
 		 * @return Traversable|Param[]

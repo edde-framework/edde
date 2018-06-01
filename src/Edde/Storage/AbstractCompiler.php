@@ -3,11 +3,52 @@
 	namespace Edde\Storage;
 
 	use Edde\Edde;
+	use Edde\Query\IChain;
+	use Edde\Query\IChains;
+	use Edde\Query\IWhere;
+	use Edde\Query\IWheres;
 	use Edde\Query\QueryException;
 	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
+	use Edde\Service\Schema\SchemaManager;
 
 	abstract class AbstractCompiler extends Edde implements ICompiler {
+		use SchemaManager;
+		/** @var string */
+		protected $delimiter;
+
+		/**
+		 * @param string $delimiter
+		 */
+		public function __construct(string $delimiter) {
+			$this->delimiter = $delimiter;
+		}
+
+		/** @inheritdoc */
+		public function delimit(string $delimit): string {
+			return $this->delimiter . str_replace($this->delimiter, $this->delimiter . $this->delimiter, $delimit) . $this->delimiter;
+		}
+
+		public function chain(IWheres $wheres, IChains $chains, IChain $chain, int $level = 1): string {
+			$fragments = [];
+			$tabs = str_repeat("\t", $level);
+			foreach ($chain as $stdClass) {
+				$operator = ' ' . strtoupper($stdClass->operator) . ' ';
+				if ($chains->hasChain($stdClass->name)) {
+					$fragments[] = $operator;
+					$fragments[] = "(\n\t" . $tabs . $this->chain($wheres, $chains, $chains->getChain($stdClass->name), $level + 1) . "\n" . $tabs . ')';
+					continue;
+				}
+				$fragments[] = $operator . "\n" . $tabs;
+				$fragments[] = $this->where($wheres->getWhere($stdClass->name));
+			}
+			/**
+			 * shift the very first operator as it makes no sense
+			 */
+			array_shift($fragments);
+			return implode('', $fragments);
+		}
+
 		/**
 		 * @param ISchema $relationSchema
 		 * @param ISchema $entitySchema
@@ -27,4 +68,21 @@
 				throw new QueryException(sprintf('Target schema [%s] of entity differs from expected relation [%s] source schema [%s]; did you swap source ($entity) and $target?.', $schemaName, $relationSchema->getName(), $expectedSchemaName));
 			}
 		}
+
+		/**
+		 * @param array $selects
+		 *
+		 * @return ISchema[]
+		 *
+		 * @throws SchemaException
+		 */
+		protected function getSchemas(array $selects): array {
+			$schemas = [];
+			foreach ($selects as $schema) {
+				$schemas[$schema] = $this->schemaManager->getSchema($schema);
+			}
+			return $schemas;
+		}
+
+		abstract public function where(IWhere $where): string;
 	}

@@ -26,11 +26,12 @@
 		}
 
 		/** @inheritdoc */
-		public function getBinds(array $binds): IBinds {
+		public function getBinds(array $binds): array {
+			$array = [];
 			foreach ($binds as $k => &$v) {
-				$v = new Bind($this->getParam($k), $v);
+				$array[$k] = new Bind($this->getParam($k), $v);
 			}
-			return new Binds($binds);
+			return $array;
 		}
 
 		/** @inheritdoc */

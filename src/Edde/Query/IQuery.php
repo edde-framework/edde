@@ -151,11 +151,11 @@
 		 *
 		 * @param array $bind
 		 *
-		 * @return IBinds
+		 * @return IBind[]
 		 *
 		 * @throws QueryException
 		 */
-		public function binds(array $bind): IBinds;
+		public function binds(array $bind): array;
 
 		/**
 		 * mark this query as a count query

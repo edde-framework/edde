@@ -9,8 +9,8 @@
 	use Edde\Filter\FilterException;
 	use Edde\Query\IQuery;
 	use Edde\Schema\SchemaException;
+	use Edde\Service\Container\Container;
 	use Edde\Service\Schema\SchemaManager;
-	use Edde\Service\Security\RandomService;
 	use Edde\Validator\ValidatorException;
 	use Generator;
 	use GraphAware\Bolt\Configuration;
@@ -21,17 +21,18 @@
 	use GraphAware\Bolt\Result\Result;
 	use GraphAware\Common\Type\MapAccessor;
 	use Throwable;
-	use function implode;
 	use function sprintf;
 	use function vsprintf;
 
 	class Neo4jStorage extends AbstractStorage {
 		use SchemaManager;
-		use RandomService;
+		use Container;
 		/** @var SessionInterface */
 		protected $session;
 		/** @var Transaction */
 		protected $transaction;
+		/** @var ICompiler */
+		protected $compiler;
 
 		public function __construct(string $config = 'neo4j') {
 			parent::__construct($config);
@@ -69,126 +70,31 @@
 		}
 
 		/** @inheritdoc */
-		public function query(IQuery $query): Generator {
-			$selects = $query->getSelects();
+		public function query(IQuery $query, array $binds = []): Generator {
 			$schemas = $this->getSchemas($query);
-			$command = $this->native($query);
-			foreach ($this->fetch($command->getQuery(), $command->getParams()) as $row) {
+			$selects = $query->getSelects();
+			$params = [];
+			foreach ($query->binds($binds) as $name => $bind) {
+				$param = $bind->getParam();
+				$hash = $param->getHash();
+				$schema = $schemas[$selects[$param->getAlias()]];
+				$attribute = $schema->getAttribute($param->getProperty());
+				if (is_iterable($value = $bind->getValue()) === false) {
+					$params[$hash] = $this->filterValue($attribute, $bind->getValue());
+					continue;
+				}
+				foreach ($value as $v) {
+					$params[$hash][] = $this->filterValue($attribute, $v);
+				}
+			}
+			foreach ($this->fetch($this->compiler()->compile($query), $params) as $row) {
 				yield $this->row($row, $schemas, $selects);
 			}
 		}
 
 		/** @inheritdoc */
-		public function native(IQuery $query): string {
-			$params = $query->getParams();
-			$attaches = $query->getAttaches();
-			$selects = $query->getSelects();
-			$schemas = $this->getSchemas($query);
-			$count = $query->isCount();
-			$from = [];
-			$returns = [];
-			foreach ($selects as $alias => $schema) {
-				if ($query->isAttached($alias)) {
-					continue;
-				}
-				$schema = $schemas[$schema];
-				if ($schema->isRelation()) {
-					$from[] = vsprintf('()-[%s: %s]->()', [
-						$returns[] = $this->delimit($alias),
-						$this->delimit($schema->getRealName()),
-					]);
-					continue;
-				}
-				$from[] = vsprintf('(%s: %s)', [
-					$returns[] = $this->delimit($alias),
-					$this->delimit($schema->getRealName()),
-				]);
-			}
-			foreach ($attaches as $attach) {
-				$sourceSchema = $schemas[$selects[$attach->attach]];
-				$relationSchema = $schemas[$selects[$attach->relation]];
-				$targetSchema = $schemas[$selects[$attach->to]];
-				$this->checkRelation($relationSchema, $sourceSchema, $targetSchema);
-				$from[] = vsprintf('(%s: %s)-[%s: %s]->(%s: %s)', [
-					$returns[] = $this->delimit($attach->attach),
-					$this->delimit($sourceSchema->getRealName()),
-					$returns[] = $this->delimit($attach->relation),
-					$this->delimit($relationSchema->getRealName()),
-					$returns[] = $this->delimit($attach->to),
-					$this->delimit($targetSchema->getRealName()),
-				]);
-			}
-			$cypher = vsprintf("MATCH\n\t%s\n", [
-				implode(",\n\t", $from),
-			]);
-			if ($query->hasWhere() && $wheres = $query->getWheres()) {
-				$cypher .= "WHERE\n\t";
-				$whereList = [];
-				foreach ($wheres as $where) {
-					$stdClass = $where->toObject();
-					switch ($stdClass->type) {
-						case 'equalTo':
-							$whereList[] = vsprintf('%s.%s = $%s', [
-								$this->delimit($stdClass->alias),
-								$this->delimit($stdClass->property),
-								$paramId = '_' . sha1($stdClass->param),
-							]);
-							if (isset($params[$stdClass->param]) === false) {
-								throw new StorageException(sprintf('Missing where parameter [%s]; available parameters [%s].', $stdClass->param, implode(', ', $params)));
-							}
-							$params[$paramId] = $this->filterValue($schemas[$selects[$stdClass->alias]]->getAttribute($stdClass->property), $params[$stdClass->param]);
-							unset($params[$stdClass->param]);
-							break;
-						case 'in':
-							if (isset($params[$stdClass->param]) === false) {
-								throw new StorageException(sprintf('Missing where parameter [%s]; available parameters [%s].', $stdClass->param, implode(', ', $params)));
-							} else if (is_iterable($params[$stdClass->param]) === false) {
-								throw new StorageException(sprintf('Where in parameter [%s] is not an iterable.', $stdClass->param));
-							}
-							$schema = $schemas[$selects[$stdClass->alias]];
-							$attribute = $schema->getAttribute($stdClass->property);
-							$items = [];
-							foreach ($params[$stdClass->param] as $item) {
-								$items[] = $this->filterValue($attribute, $item);
-							}
-							$whereList[] = vsprintf('%s.%s IN $%s', [
-								$this->delimit($stdClass->alias),
-								$this->delimit($stdClass->property),
-								$paramId = '_' . sha1($stdClass->param),
-							]);
-							$params[$paramId] = $items;
-							unset($params[$stdClass->param]);
-							break;
-						default:
-							throw new StorageException(sprintf('Unsupported where type [%s].', $stdClass->type));
-					}
-				}
-				$cypher .= implode(" AND\n\t", $whereList) . "\n";
-			}
-			if ($count) {
-				foreach ($returns as &$return) {
-					$return = sprintf('COUNT(%s) AS %s', $return, $return);
-				}
-			}
-			$cypher .= "RETURN\n\t" . implode(',', $returns);
-			if ($count === false && $query->hasOrder() && $orders = $query->getOrders()) {
-				$cypher .= "\nORDER BY\n\t";
-				$orderList = [];
-				foreach ($orders as $stdClass) {
-					$orderList[] = vsprintf('%s.%s %s', [
-						$this->delimit($stdClass->alias),
-						$this->delimit($stdClass->property),
-						in_array($order = strtoupper($stdClass->order), ['ASC', 'DESC']) ? $order : 'ASC',
-					]);
-				}
-				$cypher .= implode(" ,\n\t", $orderList) . "\n";
-			}
-			if ($count === false && $query->hasPage() && $page = $query->getPage()) {
-				$cypher .= vsprintf('SKIP %d LIMIT %d', [
-					$page->page * $page->size,
-					$page->size,
-				]);
-			}
+		public function compiler(): ICompiler {
+			return $this->compiler ?: $this->compiler = $this->container->create(Neo4jCompiler::class, [], __METHOD__);
 		}
 
 		/** @inheritdoc */
