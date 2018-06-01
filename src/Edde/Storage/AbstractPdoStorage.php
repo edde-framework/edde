@@ -58,7 +58,7 @@
 				$schema = $schemas[$selects[$param->getAlias()]];
 				$attribute = $schema->getAttribute($param->getProperty());
 				if (is_iterable($value = $param->getValue()) === false) {
-					$params[$hash] = $this->filterValue($attribute, $param->getValue());
+					$params[$hash] = $this->attribute($attribute, $param->getValue());
 					continue;
 				}
 				/**
@@ -77,7 +77,7 @@
 				]));
 				foreach ($value as $v) {
 					$statement->execute([
-						'item' => $this->filterValue($attribute, $v),
+						'item' => $this->attribute($attribute, $v),
 					]);
 				}
 			}
