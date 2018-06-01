@@ -4,14 +4,19 @@
 
 	use Edde\Query\Command;
 	use Edde\Query\Commands;
+	use Edde\Query\IChain;
+	use Edde\Query\IChains;
+	use Edde\Query\ICommand;
 	use Edde\Query\ICommands;
 	use Edde\Query\IQuery;
 	use Edde\Query\IWhere;
+	use Edde\Query\IWheres;
 	use Edde\Query\QueryException;
 	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Schema\SchemaManager;
 	use function implode;
+	use function sha1;
 	use function vsprintf;
 
 	class PdoCompiler extends AbstractCompiler {
@@ -78,6 +83,11 @@
 				implode(",\n\t", $columns),
 				implode(",\n\t", $from),
 			]);
+			if (($chains = ($wheres = $query->wheres())->chains())->hasChains()) {
+				$sql .= vsprintf("WHERE\n\t%s\n", [
+					$this->chain($wheres, $chains, $chains->getChain()),
+				]);
+			}
 			if ($isCount === false && $query->hasOrder() && $orders = $query->getOrders()) {
 				$sql .= "ORDER BY\n\t";
 				$orderList = [];
@@ -100,10 +110,35 @@
 			return $commands;
 		}
 
-		/** @inheritdoc */
-		public function where(IWhere $where): ICommands {
+		/**
+		 * @param IWheres $wheres
+		 * @param IChains $chains
+		 * @param IChain  $chain
+		 *
+		 * @return string
+		 *
+		 * @throws QueryException
+		 */
+		public function chain(IWheres $wheres, IChains $chains, IChain $chain): string {
+			foreach ($chain as $stdClass) {
+				if ($chains->hasChain($stdClass->name)) {
+					$this->chain($wheres, $chains, $chains->getChain($stdClass->name));
+					continue;
+				}
+				$this->where($wheres->getWhere($stdClass->name));
+			}
+		}
+
+		/**
+		 * @param IWhere $where
+		 * @param array  $params
+		 *
+		 * @return ICommand
+		 *
+		 * @throws QueryException
+		 */
+		public function where(IWhere $where, array $params): ICommand {
 			$stdClass = $where->toObject();
-			$commands = [];
 			switch ($stdClass->type) {
 				case 'equalTo':
 					if (isset($params[$stdClass->param]) === false) {
@@ -112,40 +147,33 @@
 					$fragment = vsprintf('%s.%s = :%s', [
 						$this->delimit($stdClass->alias),
 						$this->delimit($stdClass->property),
-						$stdClass->param,
+						$paramId = $this->param($stdClass->param),
 					]);
-					$params[$stdClass->param] = $this->filterValue($schemas[$selects[$stdClass->alias]]->getAttribute($stdClass->property), $params[$stdClass->param]);
+					$params[$paramId] = $this->filterValue($schemas[$selects[$stdClass->alias]]->getAttribute($stdClass->property), $params[$stdClass->param]);
 					unset($params[$stdClass->param]);
 					return $fragment;
-//				case 'in':
-//					if (isset($params[$stdClass->param]) === false) {
-//						throw new QueryException(sprintf('Missing where parameter [%s]; available parameters [%s].', $stdClass->param, implode(', ', $params)));
-//					} else if (is_iterable($params[$stdClass->param]) === false) {
-//						throw new QueryException(sprintf('Where in parameter [%s] is not an iterable.', $stdClass->param));
-//					}
+				case 'in':
+					if (isset($params[$stdClass->param]) === false) {
+						throw new QueryException(sprintf('Missing where parameter [%s]; available parameters [%s].', $stdClass->param, implode(', ', $params)));
+					} else if (is_iterable($params[$stdClass->param]) === false) {
+						throw new QueryException(sprintf('Where in parameter [%s] is not an iterable.', $stdClass->param));
+					}
+					$in = [];
 //					$schema = $schemas[$selects[$stdClass->alias]];
 //					$attribute = $schema->getAttribute($stdClass->property);
-//					$this->exec(vsprintf('CREATE TEMPORARY TABLE %s ( item %s )', [
-//						$temporary = $this->delimit($this->randomService->uuid()),
-//						$this->type($attribute->getType()),
-//					]));
-//					$statement = $this->pdo->prepare(vsprintf('INSERT INTO %s (item) VALUES (:item)', [
-//						$temporary,
-//					]));
-//					foreach ($params[$stdClass->param] as $item) {
-//						$statement->execute([
-//							'item' => $this->filterValue($attribute, $item),
-//						]);
-//					}
-//					unset($params[$stdClass->param]);
-//					return vsprintf('%s.%s IN (SELECT item FROM %s)', [
-//						$this->delimit($stdClass->alias),
-//						$this->delimit($stdClass->property),
-//						$temporary,
-//					]);
+					unset($params[$stdClass->param]);
+					return vsprintf('%s.%s IN (:%s)', [
+						$this->delimit($stdClass->alias),
+						$this->delimit($stdClass->property),
+						implode(', :', $in),
+					]);
 				default:
 					throw new QueryException(sprintf('Unsupported where type [%s] in [%s].', $stdClass->type, static::class));
 			}
+		}
+
+		protected function param(string $name): string {
+			return '_' . sha1($name);
 		}
 
 		/** @inheritdoc */

@@ -90,11 +90,11 @@
 		public function getParameterList(): array;
 
 		/**
-		 * @param array $parameterList
+		 * @param array $params
 		 *
 		 * @return IUrl
 		 */
-		public function setParams(array $parameterList): IUrl;
+		public function setParams(array $params): IUrl;
 
 		/**
 		 * @param array $params

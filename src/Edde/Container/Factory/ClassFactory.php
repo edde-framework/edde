@@ -52,7 +52,7 @@
 
 		/** @inheritdoc */
 		public function factory(IContainer $container, array $params, IReflection $dependency, string $name = null) {
-			$params = $this->parameters($container, $params, $dependency);
+			$params = $this->params($container, $params, $dependency);
 			if (empty($params)) {
 				return new $name();
 			}

@@ -61,6 +61,6 @@
 		 */
 		public function factory(IContainer $container, array $params, IReflection $dependency, string $name = null) {
 			$callback = $this->callback;
-			return $callback(...$this->parameters($container, $params, $dependency));
+			return $callback(...$this->params($container, $params, $dependency));
 		}
 	}

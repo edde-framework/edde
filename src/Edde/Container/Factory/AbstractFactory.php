@@ -23,7 +23,7 @@
 		}
 
 		/** @inheritdoc */
-		public function fetch(IContainer $container, string $name, array $parameterList) {
+		public function fetch(IContainer $container, string $name, array $params) {
 		}
 
 		/** @inheritdoc */
@@ -33,7 +33,7 @@
 
 		/**
 		 * @param IContainer  $container
-		 * @param array       $parameterList
+		 * @param array       $params
 		 * @param IReflection $reflection
 		 * @param string|null $name
 		 *
@@ -41,8 +41,8 @@
 		 *
 		 * @throws ContainerException
 		 */
-		protected function parameters(IContainer $container, array $parameterList, IReflection $reflection, string $name = null) {
-			$grab = count($parameterList);
+		protected function params(IContainer $container, array $params, IReflection $reflection, string $name = null) {
+			$grab = count($params);
 			$dependencyList = [];
 			foreach ($reflection->getParams() as $parameter) {
 				if (--$grab >= 0 || $parameter->isOptional()) {
@@ -50,6 +50,6 @@
 				}
 				$dependencyList[] = $container->factory($container->getFactory($class = $parameter->getClass(), $name), $class, [], $name);
 			}
-			return array_merge($parameterList, $dependencyList);
+			return array_merge($params, $dependencyList);
 		}
 	}

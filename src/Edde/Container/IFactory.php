@@ -47,11 +47,11 @@
 		 *
 		 * @param IContainer $container
 		 * @param string     $name
-		 * @param array      $parameterList
+		 * @param array      $params
 		 *
 		 * @return mixed|null if null is returned, container should execute dependency creation
 		 */
-		public function fetch(IContainer $container, string $name, array $parameterList);
+		public function fetch(IContainer $container, string $name, array $params);
 
 		/**
 		 * @param IContainer  $container
