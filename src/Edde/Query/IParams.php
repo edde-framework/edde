@@ -31,7 +31,7 @@
 		 *
 		 * @throws QueryException
 		 */
-		public function binds(array $binds): IBinds;
+		public function getBinds(array $binds): IBinds;
 
 		/**
 		 * @return Traversable|Param[]

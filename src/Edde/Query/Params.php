@@ -3,7 +3,8 @@
 	namespace Edde\Query;
 
 	use Edde\SimpleObject;
-	use function sha1;
+	use function array_keys;
+	use function implode;
 	use function sprintf;
 
 	class Params extends SimpleObject implements IParams {
@@ -12,20 +13,20 @@
 
 		/** @inheritdoc */
 		public function param(IParam $param): IParams {
-			$this->params[$param->getHash()] = $param;
+			$this->params[$param->getName()] = $param;
 			return $this;
 		}
 
 		/** @inheritdoc */
 		public function getParam(string $name): IParam {
-			if (isset($this->params[$hash = sha1($name)]) === false) {
-				throw new QueryException(sprintf('Requested unknown parameter [%s].', $name));
+			if (isset($this->params[$name]) === false) {
+				throw new QueryException(sprintf('Requested unknown parameter [%s]; available parameters are [%s].', $name, implode(', ', array_keys($this->params))));
 			}
-			return $this->params[$hash];
+			return $this->params[$name];
 		}
 
 		/** @inheritdoc */
-		public function binds(array $binds): IBinds {
+		public function getBinds(array $binds): IBinds {
 			foreach ($binds as $k => &$v) {
 				$v = new Bind($this->getParam($k), $v);
 			}

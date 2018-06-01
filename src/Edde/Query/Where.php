@@ -29,25 +29,27 @@
 
 		/** @inheritdoc */
 		public function equalTo(string $alias, string $property, string $param = null): IWhere {
+			$param = new Param($alias, $property, $param ?: $this->name);
 			$this->where = (object)[
 				'type'     => __FUNCTION__,
 				'alias'    => $alias,
 				'property' => $property,
-				'param'    => $param = ($param ?: $this->name),
+				'param'    => $param->getHash(),
 			];
-			$this->params->param(new Param($alias, $property, $param));
+			$this->params->param($param);
 			return $this;
 		}
 
 		/** @inheritdoc */
 		public function in(string $alias, string $property, string $param = null): IWhere {
+			$param = new Param($alias, $property, $param ?: $this->name);
 			$this->where = (object)[
 				'type'     => __FUNCTION__,
 				'alias'    => $alias,
 				'property' => $property,
-				'param'    => $param = ($param ?: $this->name),
+				'param'    => $param->getHash(),
 			];
-			$this->params->param(new Param($alias, $property, $param));
+			$this->params->param($param);
 			return $this;
 		}
 

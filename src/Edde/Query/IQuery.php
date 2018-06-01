@@ -152,6 +152,8 @@
 		 * @param array $bind
 		 *
 		 * @return IBinds
+		 *
+		 * @throws QueryException
 		 */
 		public function binds(array $bind): IBinds;
 

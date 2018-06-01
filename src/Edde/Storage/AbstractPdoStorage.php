@@ -67,7 +67,7 @@
 
 		/** @inheritdoc */
 		public function query(IQuery $query, array $binds = []): Generator {
-			$command = $this->native($query, $binds);
+			$command = $this->native($query);
 			$schemas = $this->getSchemas($query);
 			$selects = $query->getSelects();
 			$compiler = $this->compiler();
