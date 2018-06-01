@@ -95,4 +95,12 @@
 		 * @throws SchemaException
 		 */
 		public function getTarget(): IAttribute;
+
+		/**
+		 * @param ISchema $source
+		 * @param ISchema $target
+		 *
+		 * @throws SchemaException
+		 */
+		public function checkRelation(ISchema $source, ISchema $target): void;
 	}

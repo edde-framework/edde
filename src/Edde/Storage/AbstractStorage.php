@@ -50,24 +50,29 @@
 		}
 
 		/** @inheritdoc */
-		public function attach(IEntity $entity, IEntity $target, string $relation): IEntity {
+		public function attach(IEntity $source, IEntity $target, string $relation): IEntity {
 			$relationEntity = new Entity($relationSchema = $this->schemaManager->getSchema($relation));
-			$entitySchema = $entity->getSchema();
-			$targetSchema = $target->getSchema();
-			$sourceAttribute = $relationSchema->getSource();
-			$targetAttribute = $relationSchema->getTarget();
-			$this->checkRelation($relationSchema, $entitySchema, $targetSchema);
-			$this->save($entity);
+			$relationSchema->checkRelation(
+				$source->getSchema(),
+				$target->getSchema()
+			);
+			$this->save($source);
 			$this->save($target);
-			$relationEntity->set($sourceAttribute->getName(), $entity->getPrimary()->get());
-			$relationEntity->set($targetAttribute->getName(), $target->getPrimary()->get());
+			$relationEntity->set(
+				$relationSchema->getSource()->getName(),
+				$source->getPrimary()->get()
+			);
+			$relationEntity->set(
+				$relationSchema->getTarget()->getName(),
+				$target->getPrimary()->get()
+			);
 			return $relationEntity;
 		}
 
 		/** @inheritdoc */
-		public function link(IEntity $entity, IEntity $target, string $relation): IEntity {
-			$this->unlink($entity, $target, $relation);
-			return $this->attach($entity, $target, $relation);
+		public function link(IEntity $source, IEntity $target, string $relation): IEntity {
+			$this->unlink($source, $target, $relation);
+			return $this->attach($source, $target, $relation);
 		}
 
 		/** @inheritdoc */
@@ -79,26 +84,6 @@
 				return $row;
 			}
 			throw new StorageException(sprintf('Cannot get counts from a query.'));
-		}
-
-		/**
-		 * @param ISchema $relationSchema
-		 * @param ISchema $entitySchema
-		 * @param ISchema $targetSchema
-		 *
-		 * @throws StorageException
-		 * @throws SchemaException
-		 */
-		protected function checkRelation(ISchema $relationSchema, ISchema $entitySchema, ISchema $targetSchema): void {
-			$sourceAttribute = $relationSchema->getSource();
-			$targetAttribute = $relationSchema->getTarget();
-			if ($relationSchema->isRelation() === false) {
-				throw new StorageException(sprintf('Cannot attach [%s] to [%s] because relation [%s] is not relation.', $entitySchema->getName(), $targetSchema->getName(), $relationSchema->getName()));
-			} else if (($expectedSchemaName = $sourceAttribute->getSchema()) !== ($schemaName = $entitySchema->getName())) {
-				throw new StorageException(sprintf('Source schema [%s] of entity differs from expected relation [%s] source schema [%s]; did you swap source ($entity) and $target?.', $schemaName, $relationSchema->getName(), $expectedSchemaName));
-			} else if (($expectedSchemaName = $targetAttribute->getSchema()) !== ($schemaName = $targetSchema->getName())) {
-				throw new StorageException(sprintf('Target schema [%s] of entity differs from expected relation [%s] source schema [%s]; did you swap source ($entity) and $target?.', $schemaName, $relationSchema->getName(), $expectedSchemaName));
-			}
 		}
 
 		/**

@@ -99,4 +99,34 @@
 			}
 			return $this->getAttribute($this->source->relation->target);
 		}
+
+		/** @inheritdoc */
+		public function checkRelation(ISchema $source, ISchema $target): void {
+			$sourceAttribute = $this->getSource();
+			$targetAttribute = $this->getTarget();
+			if ($this->isRelation() === false) {
+				throw new SchemaException(vsprintf('Invalid relation (%s)-[!%s]->(%s): Relation schema [%s] is not a relation.', [
+					$source->getName(),
+					$this->getName(),
+					$target->getName(),
+					$this->getName(),
+				]));
+			} else if (($expectedSchemaName = $sourceAttribute->getSchema()) !== $source->getName()) {
+				throw new SchemaException(vsprintf('Invalid relation (!%s)-[%s]->(%s): Source schema [%s] differs from expected relation [%s]; did you swap $source and $target schema?.', [
+					$source->getName(),
+					$this->getName(),
+					$target->getName(),
+					$source->getName(),
+					$expectedSchemaName,
+				]));
+			} else if (($expectedSchemaName = $targetAttribute->getSchema()) !== $target->getName()) {
+				throw new SchemaException(vsprintf('Invalid relation (%s)-[%s]->(!%s): Target schema [%s] differs from expected relation [%s]; did you swap $source and $target schema?.', [
+					$source->getName(),
+					$this->getName(),
+					$target->getName(),
+					$target->getName(),
+					$expectedSchemaName,
+				]));
+			}
+		}
 	}

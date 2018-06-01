@@ -213,8 +213,7 @@
 
 		/** @inheritdoc */
 		public function unlink(IEntity $entity, IEntity $target, string $relation): IStorage {
-			$this->checkRelation(
-				$relationSchema = $this->schemaManager->getSchema($relation),
+			($relationSchema = $this->schemaManager->getSchema($relation))->checkRelation(
 				$entitySchema = $entity->getSchema(),
 				$targetSchema = $target->getSchema()
 			);

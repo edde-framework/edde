@@ -156,7 +156,7 @@
 		 * MUST be saved explicitly as there could be mandatory attributes on it; $entity and $target got
 		 * also saved in this method to ensure primary key presence
 		 *
-		 * @param IEntity $entity
+		 * @param IEntity $source
 		 * @param IEntity $target
 		 * @param string  $relation
 		 *
@@ -165,7 +165,7 @@
 		 * @throws StorageException
 		 * @throws SchemaException
 		 */
-		public function attach(IEntity $entity, IEntity $target, string $relation): IEntity;
+		public function attach(IEntity $source, IEntity $target, string $relation): IEntity;
 
 		/**
 		 * remove all relations between given entities
@@ -177,13 +177,14 @@
 		 * @return IStorage
 		 *
 		 * @throws StorageException
+		 * @throws SchemaException
 		 */
 		public function unlink(IEntity $entity, IEntity $target, string $relation): IStorage;
 
 		/**
 		 * unlink all relations between given entities and make a new one; detach method is used for this
 		 *
-		 * @param IEntity $entity
+		 * @param IEntity $source
 		 * @param IEntity $target
 		 * @param string  $relation
 		 *
@@ -192,7 +193,7 @@
 		 * @throws StorageException
 		 * @throws SchemaException
 		 */
-		public function link(IEntity $entity, IEntity $target, string $relation): IEntity;
+		public function link(IEntity $source, IEntity $target, string $relation): IEntity;
 
 		/**
 		 * get a count of items without order and limit (to get number of items for paging computation with applied where)

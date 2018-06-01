@@ -121,7 +121,9 @@
 
 		/**
 		 * @throws CollectionException
+		 * @throws FilterException
 		 * @throws QueryException
+		 * @throws SchemaException
 		 * @throws StorageException
 		 */
 		public function testCollection() {
@@ -196,8 +198,8 @@
 		 * @throws ValidatorException
 		 */
 		public function testAttachException() {
-			$this->expectException(StorageException::class);
-			$this->expectExceptionMessage('Source schema [UserSchema] of entity differs from expected relation [ProjectMemberSchema] source schema [ProjectSchema]; did you swap source ($entity) and $target?');
+			$this->expectException(SchemaException::class);
+			$this->expectExceptionMessage('Invalid relation (!UserSchema)-[ProjectMemberSchema]->(ProjectSchema): Source schema [UserSchema] differs from expected relation [ProjectSchema]; did you swap $source and $target schema?');
 			$project = $this->entityManager->entity(ProjectSchema::class, (object)[
 				'name' => 'to be linked',
 			]);
@@ -276,11 +278,12 @@
 
 		/**
 		 * @throws EntityNotFoundException
+		 * @throws SchemaException
 		 * @throws StorageException
 		 */
 		public function testUnlinkException() {
-			$this->expectException(StorageException::class);
-			$this->expectExceptionMessage('Source schema [UserSchema] of entity differs from expected relation [ProjectMemberSchema] source schema [ProjectSchema]; did you swap source ($entity) and $target?');
+			$this->expectException(SchemaException::class);
+			$this->expectExceptionMessage('Invalid relation (!UserSchema)-[ProjectMemberSchema]->(ProjectSchema): Source schema [UserSchema] differs from expected relation [ProjectSchema]; did you swap $source and $target schema?');
 			$this->storage->unlink(
 				$this->storage->load(UserSchema::class, 'two'),
 				$this->storage->load(ProjectSchema::class, 'one'),
@@ -290,6 +293,7 @@
 
 		/**
 		 * @throws EntityNotFoundException
+		 * @throws SchemaException
 		 * @throws StorageException
 		 */
 		public function testUnlink() {
@@ -309,8 +313,8 @@
 		 * @throws StorageException
 		 */
 		public function testLinkException() {
-			$this->expectException(StorageException::class);
-			$this->expectExceptionMessage('Source schema [UserSchema] of entity differs from expected relation [ProjectMemberSchema] source schema [ProjectSchema]; did you swap source ($entity) and $target?');
+			$this->expectException(SchemaException::class);
+			$this->expectExceptionMessage('Invalid relation (!UserSchema)-[ProjectMemberSchema]->(ProjectSchema): Source schema [UserSchema] differs from expected relation [ProjectSchema]; did you swap $source and $target schema?');
 			$project = $this->entityManager->entity(ProjectSchema::class, (object)[
 				'uuid' => 'two-pi',
 				'name' => 'multilink, yaay',
@@ -514,7 +518,9 @@
 
 		/**
 		 * @throws CollectionException
+		 * @throws FilterException
 		 * @throws QueryException
+		 * @throws SchemaException
 		 * @throws StorageException
 		 */
 		public function testPaging() {

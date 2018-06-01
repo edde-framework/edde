@@ -35,8 +35,7 @@
 				]);
 			}
 			foreach ($query->getAttaches() as $attach) {
-				$this->checkRelation(
-					$relationSchema = $schemas[$selects[$attach->relation]],
+				($relationSchema = $schemas[$selects[$attach->relation]])->checkRelation(
 					$sourceSchema = $schemas[$selects[$attach->attach]],
 					$targetSchema = $schemas[$selects[$attach->to]]
 				);
