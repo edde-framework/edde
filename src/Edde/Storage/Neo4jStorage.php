@@ -72,13 +72,12 @@
 			$schemas = $this->getSchemas($query);
 			$selects = $query->getSelects();
 			$params = [];
-			foreach ($query->binds($binds) as $name => $bind) {
-				$param = $bind->getParam();
+			foreach ($query->params($binds) as $name => $param) {
 				$hash = $param->getHash();
 				$schema = $schemas[$selects[$param->getAlias()]];
 				$attribute = $schema->getAttribute($param->getProperty());
-				if (is_iterable($value = $bind->getValue()) === false) {
-					$params[$hash] = $this->filterValue($attribute, $bind->getValue());
+				if (is_iterable($value = $param->getValue()) === false) {
+					$params[$hash] = $this->filterValue($attribute, $param->getValue());
 					continue;
 				}
 				foreach ($value as $v) {

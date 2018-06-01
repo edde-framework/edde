@@ -24,4 +24,18 @@
 		 * @return string
 		 */
 		public function getHash(): string;
+
+		/**
+		 * bind a value to a param
+		 *
+		 * @param mixed $value
+		 *
+		 * @return IParam
+		 */
+		public function setValue($value): IParam;
+
+		/**
+		 * @return mixed
+		 */
+		public function getValue();
 	}

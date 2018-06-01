@@ -56,6 +56,9 @@
 
 		/** @inheritdoc */
 		public function count(string $alias): int {
+			/**
+			 * ensure that alias is available in a select
+			 */
 			$this->query->getSelect($alias);
 			return (int)$this->storage->count($this->query)[$alias];
 		}

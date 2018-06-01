@@ -3,8 +3,7 @@
 	namespace Edde\Query;
 
 	use Edde\SimpleObject;
-	use function array_keys;
-	use function implode;
+	use function array_key_exists;
 	use function sprintf;
 
 	class Params extends SimpleObject implements IParams {
@@ -18,19 +17,14 @@
 		}
 
 		/** @inheritdoc */
-		public function getParam(string $name): IParam {
-			if (isset($this->params[$name]) === false) {
-				throw new QueryException(sprintf('Requested unknown parameter [%s]; available parameters are [%s].', $name, implode(', ', array_keys($this->params))));
+		public function params(array $values): array {
+			$params = [];
+			foreach ($this->params as $name => $param) {
+				if (array_key_exists($name, $values) === false) {
+					throw new QueryException(sprintf('Missing parameter [%s] in values.', $name));
+				}
+				$params[$name] = $param->setValue($values[$name]);
 			}
-			return $this->params[$name];
-		}
-
-		/** @inheritdoc */
-		public function getBinds(array $binds): array {
-			$array = [];
-			foreach ($binds as $k => &$v) {
-				$array[$k] = new Bind($this->getParam($k), $v);
-			}
-			return $array;
+			return $params;
 		}
 	}

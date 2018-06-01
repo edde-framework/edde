@@ -11,22 +11,13 @@
 		public function param(IParam $param): IParams;
 
 		/**
-		 * @param string $name
+		 * return params with bound values
 		 *
-		 * @return IParam
+		 * @param array $values
 		 *
-		 * @throws QueryException
-		 */
-		public function getParam(string $name): IParam;
-
-		/**
-		 * bind this params object with actual parameters
-		 *
-		 * @param array $binds
-		 *
-		 * @return IBind[]
+		 * @return IParam[]
 		 *
 		 * @throws QueryException
 		 */
-		public function getBinds(array $binds): array;
+		public function params(array $values): array;
 	}

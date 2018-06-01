@@ -12,6 +12,8 @@
 		protected $property;
 		/** @var string */
 		protected $name;
+		/** @var mixed */
+		protected $value;
 
 		/**
 		 * @param string $alias
@@ -42,5 +44,16 @@
 		/** @inheritdoc */
 		public function getHash(): string {
 			return '_' . sha1($this->name);
+		}
+
+		/** @inheritdoc */
+		public function setValue($value): IParam {
+			$this->value = $value;
+			return $this;
+		}
+
+		/** @inheritdoc */
+		public function getValue() {
+			return $this->value;
 		}
 	}

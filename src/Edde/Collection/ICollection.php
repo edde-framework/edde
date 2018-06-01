@@ -2,8 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Collection;
 
+	use Edde\Filter\FilterException;
 	use Edde\Query\IQuery;
 	use Edde\Query\QueryException;
+	use Edde\Schema\SchemaException;
 	use Edde\Storage\StorageException;
 	use Generator;
 
@@ -72,7 +74,9 @@
 		 * @return Generator|IRecord[]
 		 *
 		 * @throws StorageException
+		 * @throws FilterException
 		 * @throws QueryException
+		 * @throws SchemaException
 		 */
 		public function execute(array $binds = []): Generator;
 	}

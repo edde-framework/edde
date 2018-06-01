@@ -147,15 +147,15 @@
 		public function getParams(): IParams;
 
 		/**
-		 * every call returns a new Bind object with specified parameters
+		 * return parameters with bound values
 		 *
 		 * @param array $bind
 		 *
-		 * @return IBind[]
+		 * @return IParam[]
 		 *
 		 * @throws QueryException
 		 */
-		public function binds(array $bind): array;
+		public function params(array $bind): array;
 
 		/**
 		 * mark this query as a count query
