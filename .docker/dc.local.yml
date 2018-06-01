@@ -1,0 +1,62 @@
+version: '2'
+services:
+        edde:
+                image: edde
+                container_name: edde
+                environment:
+                    - XDEBUG_IP=$XDEBUG_IP
+                    - PHP_IDE_CONFIG=serverName=edde
+                volumes:
+                    - ../:/edde
+                    - ./xdebug.ini:/etc/php7/conf.d/xdebug.ini
+                ports:
+                    - "4722:22"
+                networks:
+                    - edde-network
+                depends_on:
+                    - neo4j
+                    - postgres
+                    - mysql
+
+        neo4j:
+                image: neo4j:3.3-enterprise
+                environment:
+                    - NEO4J_AUTH=neo4j/eeQFXk7kkqSm
+                    - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
+                ports:
+                    - "7474:7474"
+                    - "7687:7687"
+                networks:
+                    - edde-network
+
+        postgres:
+            image: postgres:latest
+            environment:
+                - POSTGRES_USER=edde
+                - POSTGRES_PASSWORD=PBXxSgEWY3LT
+            ports:
+                - "5432:5432"
+            networks:
+                - edde-network
+
+        mysql:
+            image: mariadb:latest
+            environment:
+                - MYSQL_ROOT_PASSWORD=enPUxu8SRctV
+                - MYSQL_DATABASE=edde
+                - MYSQL_USER=edde
+                - MYSQL_PASSWORD=enPUxu8SRctV
+            ports:
+                - "3306:3306"
+            networks:
+                - edde-network
+
+        adminer:
+            image: adminer:latest
+            ports:
+                - "8080:8080"
+            networks:
+                - edde-network
+
+networks:
+        edde-network:
