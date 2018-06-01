@@ -373,7 +373,9 @@
 		}
 
 		/**
+		 * @throws CollectionException
 		 * @throws FilterException
+		 * @throws QueryException
 		 * @throws SchemaException
 		 * @throws StorageException
 		 * @throws ValidatorException
@@ -401,12 +403,15 @@
 				'pm' => ProjectMemberSchema::class,
 				'l'  => LabelSchema::class,
 			]);
-			foreach ($collection as $record) {
+			$count = 0;
+			foreach ($collection->execute() as $record) {
+				$count++;
 				self::assertEquals(UserSchema::class, $record->getEntity('u')->getSchema()->getName());
 				self::assertEquals(ProjectSchema::class, $record->getEntity('p')->getSchema()->getName());
 				self::assertEquals(ProjectMemberSchema::class, $record->getEntity('pm')->getSchema()->getName());
 				self::assertEquals(LabelSchema::class, $record->getEntity('l')->getSchema()->getName());
 			}
+			self::assertSame(60, $count);
 		}
 
 		/**
