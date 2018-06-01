@@ -19,13 +19,4 @@
 		public function getBinds(): array {
 			return $this->binds;
 		}
-
-		/** @inheritdoc */
-		public function getParams(): array {
-			$params = [];
-			foreach ($this->binds as $bind) {
-				$params[$bind->getParam()->getHash()] = $bind->getBind();
-			}
-			return $params;
-		}
 	}

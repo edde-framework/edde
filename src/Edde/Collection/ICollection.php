@@ -74,5 +74,5 @@
 		 * @throws StorageException
 		 * @throws QueryException
 		 */
-		public function execute(array $binds): Generator;
+		public function execute(array $binds = []): Generator;
 	}

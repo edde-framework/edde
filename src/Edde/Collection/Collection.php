@@ -61,7 +61,7 @@
 		}
 
 		/** @inheritdoc */
-		public function execute(array $binds): Generator {
+		public function execute(array $binds = []): Generator {
 			$uses = $this->query->getSelects();
 			foreach ($this->storage->query($this->query, $binds) as $row) {
 				$entities = [];

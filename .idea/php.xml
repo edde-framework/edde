@@ -35,6 +35,7 @@
       <path value="$PROJECT_DIR$/lib/phpunit/php-text-template" />
       <path value="$PROJECT_DIR$/lib/phpunit/php-file-iterator" />
       <path value="$PROJECT_DIR$/lib/phpunit/php-code-coverage" />
+      <path value="$PROJECT_DIR$/lib/phpunit/phpunit-mock-objects" />
     </include_path>
   </component>
   <component name="PhpInterpreters">
@@ -366,6 +367,16 @@
     </servers>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
+  <component name="PhpStepFilterConfiguration">
+    <skipped_functions>
+      <skipped_function name="Edde\Collection\Collection-&gt;__get" />
+    </skipped_functions>
+    <option name="skippedFunctions">
+      <list>
+        <option value="Edde\Collection\Collection-&gt;__get" />
+      </list>
+    </option>
+  </component>
   <component name="PhpUnit">
     <phpunit_settings>
       <phpunit_by_interpreter interpreter_id="24e550ee-60c1-4aa1-a4a7-b059cc3d8574" load_method="CUSTOM_LOADER" configuration_file_path="/edde/phpunit.xml" custom_loader_path="/edde/lib/autoload.php" phpunit_phar_path="" use_configuration_file="true" />

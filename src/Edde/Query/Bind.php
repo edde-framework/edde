@@ -25,7 +25,7 @@
 		}
 
 		/** @inheritdoc */
-		public function getBind() {
+		public function getValue() {
 			return $this->bind;
 		}
 	}

@@ -121,13 +121,15 @@
 
 		/**
 		 * @throws CollectionException
+		 * @throws QueryException
+		 * @throws StorageException
 		 */
 		public function testCollection() {
 			$collection = $this->collectionManager->collection();
 			$query = $collection->getQuery();
 			$query->select(LabelSchema::class);
 			$entities = [];
-			foreach ($collection as $record) {
+			foreach ($collection->execute() as $record) {
 				$entity = $record->getEntity(LabelSchema::class)->toObject();
 				unset($entity->uuid);
 				$entities[] = $entity;
@@ -371,7 +373,6 @@
 		 * @throws SchemaException
 		 * @throws StorageException
 		 * @throws ValidatorException
-		 * @throws CollectionException
 		 */
 		public function testQuery() {
 			$entities[] = $user = $this->entityManager->entity(UserSchema::class, (object)[
@@ -445,7 +446,7 @@
 			// ... 2. chain them together using operators and groups
 			$chains = $wheres->chains();
 			$chains->chain('da group')->where('user uuid')->and('is owner')->and('project name');
-			$chains->chain()->where('project status in')->or('da group');
+			$chains->chain()->where('project status in')->and('da group');
 			// ... 3. set parameters for where based on given or guessed names
 			$bind = [
 				'project status in' => (function () {
@@ -476,7 +477,9 @@
 		}
 
 		/**
+		 * @throws CollectionException
 		 * @throws FilterException
+		 * @throws QueryException
 		 * @throws SchemaException
 		 * @throws StorageException
 		 * @throws ValidatorException
@@ -503,7 +506,7 @@
 			$collection->select(ToBeOrdered::class);
 			$collection->order(ToBeOrdered::class, 'index', 'desc');
 			$actual = [];
-			foreach ($collection as $record) {
+			foreach ($collection->execute() as $record) {
 				$actual[] = $record->getEntity(ToBeOrdered::class)->get('index');
 			}
 			self::assertEquals($expected, $actual);
@@ -526,7 +529,7 @@
 			];
 			self::assertEquals(9, $collection->count(ToBeOrdered::class));
 			$actual = [];
-			foreach ($collection as $record) {
+			foreach ($collection->execute() as $record) {
 				$actual[] = $record->getEntity(ToBeOrdered::class)->get('index');
 			}
 			self::assertEquals($expected, $actual);
@@ -537,7 +540,7 @@
 				7.2,
 			];
 			$actual = [];
-			foreach ($collection as $record) {
+			foreach ($collection->execute() as $record) {
 				$actual[] = $record->getEntity(ToBeOrdered::class)->get('index');
 			}
 			self::assertEquals($expected, $actual);
@@ -548,7 +551,7 @@
 				1.1,
 			];
 			$actual = [];
-			foreach ($collection as $record) {
+			foreach ($collection->execute() as $record) {
 				$actual[] = $record->getEntity(ToBeOrdered::class)->get('index');
 			}
 			self::assertEquals($expected, $actual);

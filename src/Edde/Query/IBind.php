@@ -15,5 +15,5 @@
 		 *
 		 * @return mixed
 		 */
-		public function getBind();
+		public function getValue();
 	}

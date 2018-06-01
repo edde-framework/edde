@@ -67,29 +67,41 @@
 
 		/** @inheritdoc */
 		public function query(IQuery $query, array $binds = []): Generator {
-			$command = $this->native($query);
-			$schemas = $this->getSchemas($query);
-			$selects = $query->getSelects();
 			$compiler = $this->compiler();
 			$binds = $query->binds($binds);
-			foreach ($binds as $name => $bind) {
-				if (is_iterable($bind) === false) {
+			$schemas = $this->getSchemas($query);
+			$selects = $query->getSelects();
+			$params = [];
+			foreach ($binds->getBinds() as $name => $bind) {
+				$param = $bind->getParam();
+				$hash = $param->getHash();
+				$schema = $schemas[$selects[$param->getAlias()]];
+				$attribute = $schema->getAttribute($param->getProperty());
+				if (is_iterable($value = $bind->getValue()) === false) {
+					$params[$hash] = $this->filterValue($attribute, $bind->getValue());
 					continue;
 				}
+				/**
+				 * this is ugly hack, because of some motherfucker who not implement array support for
+				 * WHERE IN clause; so in general it was much more easier to use param name as a temporary
+				 * table name from which WHERE IN makes sub-query
+				 *
+				 * it's not necessary to thanks me
+				 */
 				$this->exec(vsprintf('CREATE TEMPORARY TABLE %s ( item %s )', [
-					$temporary = $compiler->delimit($name),
-					'RESOLVE TYPE, BITCH',
+					$temporary = $compiler->delimit($hash),
+					$this->type($attribute->getType()),
 				]));
 				$statement = $this->pdo->prepare(vsprintf('INSERT INTO %s (item) VALUES (:item)', [
 					$temporary,
 				]));
-				foreach ($bind as $v) {
+				foreach ($value as $v) {
 					$statement->execute([
-						'item' => $v,
+						'item' => $this->filterValue($attribute, $v),
 					]);
 				}
 			}
-			foreach ($this->fetch($command->getQuery(), $binds->getParams()) as $row) {
+			foreach ($this->fetch($this->native($query)->getQuery(), $params) as $row) {
 				yield $this->row($row, $schemas, $selects);
 			}
 		}

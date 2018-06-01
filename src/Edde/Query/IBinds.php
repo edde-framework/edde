@@ -7,11 +7,4 @@
 		 * @return IBind[]
 		 */
 		public function getBinds(): array;
-
-		/**
-		 * return array of params
-		 *
-		 * @return array
-		 */
-		public function getParams(): array;
 	}

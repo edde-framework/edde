@@ -39,17 +39,16 @@
 			$from = [];
 			foreach (($selects = $query->getSelects()) as $alias => $schema) {
 				foreach ($schemas[$schema]->getAttributes() as $name => $attribute) {
-					$source = $schemas[$schema]->getRealName();
 					$columns[] = $isCount ?
 						vsprintf('COUNT(%s.%s) AS %s', [
 							$this->delimit($alias),
 							$this->delimit($name),
-							$this->delimit($source),
+							$this->delimit($alias),
 						]) :
 						vsprintf('%s.%s AS %s', [
 							$this->delimit($alias),
 							$this->delimit($name),
-							$this->delimit($source . '.' . $name),
+							$this->delimit($alias . '.' . $name),
 						]);
 				}
 				if ($query->isAttached($alias)) {

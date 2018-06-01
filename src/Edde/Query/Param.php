@@ -30,6 +30,16 @@
 		}
 
 		/** @inheritdoc */
+		public function getAlias(): string {
+			return $this->alias;
+		}
+
+		/** @inheritdoc */
+		public function getProperty(): string {
+			return $this->property;
+		}
+
+		/** @inheritdoc */
 		public function getHash(): string {
 			return '_' . sha1($this->name);
 		}
