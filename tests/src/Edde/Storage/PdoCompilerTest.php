@@ -43,7 +43,10 @@
 			$chains->chain('da group')->where('user uuid')->and('is owner')->and('project name');
 			$chains->chain()->where('project status in')->or('da group');
 			// ... 3. set parameters for where based on given or guessed names
-			$query->params([
+//			$query->params();
+			/** @var $compiler ICompiler */
+			$compiler = $this->container->create(PdoCompiler::class, ['"'], __METHOD__);
+			$commands = $compiler->compile($query, [
 				'user uuid'         => 'on',
 				'is owner'          => true,
 				'project name'      => 'expected project',
@@ -51,9 +54,6 @@
 					yield from [ProjectSchema::STATUS_CREATED, ProjectSchema::STATUS_STARTED];
 				})(),
 			]);
-			/** @var $compiler ICompiler */
-			$compiler = $this->container->create(PdoCompiler::class, ['"'], __METHOD__);
-			$commands = $compiler->compile($query);
 		}
 
 		/**

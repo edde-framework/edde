@@ -23,8 +23,8 @@
 		protected $returns = [];
 		/** @var string[] */
 		protected $schemas;
-		/** @var array */
-		protected $params = [];
+		/** @var IParams */
+		protected $params;
 		protected $count = false;
 
 		/** @inheritdoc */
@@ -69,7 +69,7 @@
 
 		/** @inheritdoc */
 		public function wheres(): IWheres {
-			return $this->wheres ?: $this->wheres = new Wheres();
+			return $this->wheres ?: $this->wheres = new Wheres($this->getParams());
 		}
 
 		/** @inheritdoc */
@@ -151,14 +151,8 @@
 		}
 
 		/** @inheritdoc */
-		public function params(array $params): IQuery {
-			$this->params = $params;
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function getParams(): array {
-			return $this->params;
+		public function getParams(): IParams {
+			return $this->params ?: $this->params = new Params();
 		}
 
 		/** @inheritdoc */

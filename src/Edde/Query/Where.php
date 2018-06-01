@@ -8,19 +8,23 @@
 	class Where extends SimpleObject implements IWhere {
 		/** @var string */
 		protected $name;
+		/** @var IParams */
+		protected $params;
 		/** @var stdClass */
 		protected $where;
 
 		/**
-		 * @param string $name
+		 * @param string  $name
+		 * @param IParams $params
 		 */
-		public function __construct(string $name) {
+		public function __construct(string $name, IParams $params) {
 			$this->name = $name;
+			$this->params = $params;
 		}
 
 		/** @inheritdoc */
-		public function getName(): string {
-			return $this->name;
+		public function getParams(): IParams {
+			return $this->params;
 		}
 
 		/** @inheritdoc */
@@ -29,8 +33,9 @@
 				'type'     => __FUNCTION__,
 				'alias'    => $alias,
 				'property' => $property,
-				'param'    => $param ?: $this->name,
+				'param'    => $param = ($param ?: $this->name),
 			];
+			$this->params->param(new Param($alias, $property, $param));
 			return $this;
 		}
 
@@ -40,8 +45,9 @@
 				'type'     => __FUNCTION__,
 				'alias'    => $alias,
 				'property' => $property,
-				'param'    => $param ?: $this->name,
+				'param'    => $param = ($param ?: $this->name),
 			];
+			$this->params->param(new Param($alias, $property, $param));
 			return $this;
 		}
 

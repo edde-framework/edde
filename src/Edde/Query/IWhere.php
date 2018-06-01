@@ -6,11 +6,9 @@
 
 	interface IWhere {
 		/**
-		 * where name
-		 *
-		 * @return string
+		 * @return IParams
 		 */
-		public function getName(): string;
+		public function getParams(): IParams;
 
 		/**
 		 * where equal to a value (not to an another property)

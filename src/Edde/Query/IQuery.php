@@ -140,20 +140,11 @@
 		public function getSchemas(): array;
 
 		/**
-		 * set query params; it should override currently set params
+		 * return parameter definitions (this is not for actual parameters)
 		 *
-		 * @param array $params
-		 *
-		 * @return IQuery
+		 * @return IParams
 		 */
-		public function params(array $params): IQuery;
-
-		/**
-		 * return query params
-		 *
-		 * @return array
-		 */
-		public function getParams(): array;
+		public function getParams(): IParams;
 
 		/**
 		 * mark this query as a count query

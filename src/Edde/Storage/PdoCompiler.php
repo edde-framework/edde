@@ -3,10 +3,9 @@
 	namespace Edde\Storage;
 
 	use Edde\Query\Command;
-	use Edde\Query\Commands;
 	use Edde\Query\IChain;
 	use Edde\Query\IChains;
-	use Edde\Query\ICommands;
+	use Edde\Query\ICommand;
 	use Edde\Query\IQuery;
 	use Edde\Query\IWhere;
 	use Edde\Query\IWheres;
@@ -16,7 +15,6 @@
 	use Edde\Service\Schema\SchemaManager;
 	use function array_shift;
 	use function implode;
-	use function sha1;
 	use function str_repeat;
 	use function strtoupper;
 	use function vsprintf;
@@ -34,8 +32,7 @@
 		}
 
 		/** @inheritdoc */
-		public function compile(IQuery $query): ICommands {
-			$commands = new Commands();
+		public function compile(IQuery $query, array $params = []): ICommand {
 			$isCount = $query->isCount();
 			$schemas = $this->getSchemas($query->getSchemas());
 			$columns = [];
@@ -108,8 +105,7 @@
 					$page->page * $page->size,
 				]);
 			}
-			$commands->addCommand(new Command($sql));
-			return $commands;
+			return new Command($sql);
 		}
 
 		/**
@@ -153,13 +149,10 @@
 			$stdClass = $where->toObject();
 			switch ($stdClass->type) {
 				case 'equalTo':
-//					if (isset($params[$stdClass->param]) === false) {
-//						throw new QueryException(sprintf('Missing where parameter [%s]; available parameters [%s].', $stdClass->param, implode(', ', $params)));
-//					}
 					return vsprintf('%s.%s = :%s', [
 						$this->delimit($stdClass->alias),
 						$this->delimit($stdClass->property),
-						$paramId = $this->param($stdClass->param),
+						$where->getParams()->getParam($stdClass->param)->getHash(),
 					]);
 				case 'in':
 //					if (isset($params[$stdClass->param]) === false) {
@@ -176,10 +169,6 @@
 				default:
 					throw new QueryException(sprintf('Unsupported where type [%s] in [%s].', $stdClass->type, static::class));
 			}
-		}
-
-		protected function param(string $name): string {
-			return '_' . sha1($name);
 		}
 
 		/** @inheritdoc */

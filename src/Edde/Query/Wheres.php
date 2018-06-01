@@ -7,10 +7,19 @@
 	use function implode;
 
 	class Wheres extends SimpleObject implements IWheres {
+		/** @var IParams */
+		protected $params;
 		/** @var IWhere[] */
 		protected $wheres = [];
 		/** @var IChains */
 		protected $chains;
+
+		/**
+		 * @param IParams $params
+		 */
+		public function __construct(IParams $params) {
+			$this->params = $params;
+		}
 
 		/** @inheritdoc */
 		public function where(string $name): IWhere {
@@ -21,7 +30,7 @@
 			 * override is intentional; it's a bit less transparent, but it allows user to update where
 			 * without messing up
 			 */
-			return $this->wheres[$name] = new Where($name);
+			return $this->wheres[$name] = new Where($name, $this->params);
 		}
 
 		/** @inheritdoc */
