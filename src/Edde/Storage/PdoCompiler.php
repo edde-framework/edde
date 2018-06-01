@@ -168,10 +168,10 @@
 //						throw new QueryException(sprintf('Where in parameter [%s] is not an iterable.', $stdClass->param));
 //					}
 					$in = [];
-					return vsprintf('%s.%s IN (:%s)', [
+					return vsprintf('%s.%s IN (%s)', [
 						$this->delimit($stdClass->alias),
 						$this->delimit($stdClass->property),
-						implode(', :', $in),
+						empty($in) ? 'SELECT TRUE LIMIT 0 OFFSET 0' : ':' . implode(', :', $in),
 					]);
 				default:
 					throw new QueryException(sprintf('Unsupported where type [%s] in [%s].', $stdClass->type, static::class));
