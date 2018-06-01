@@ -29,6 +29,8 @@
 		protected $config;
 		/** @var ISection */
 		protected $section;
+		/** @var ICompiler */
+		protected $compiler;
 
 		/**
 		 * @param string $config

@@ -31,8 +31,6 @@
 		protected $session;
 		/** @var Transaction */
 		protected $transaction;
-		/** @var ICompiler */
-		protected $compiler;
 
 		public function __construct(string $config = 'neo4j') {
 			parent::__construct($config);

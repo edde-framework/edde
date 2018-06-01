@@ -2,11 +2,14 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
+	use Edde\Service\Container\Container;
 	use Throwable;
 
 	class MysqlStorage extends AbstractPdoStorage {
-		public function __construct(string $config = 'mysql', array $options = []) {
-			parent::__construct($config, '`', $options);
+		use Container;
+
+		public function __construct(string $config = 'mysql') {
+			parent::__construct($config);
 		}
 
 		/** @inheritdoc */
@@ -28,6 +31,11 @@
 					return 'DATETIME(6)';
 			}
 			throw new StorageException(sprintf('Unknown type [%s] in driver [%s]', $type, static::class));
+		}
+
+		/** @inheritdoc */
+		public function compiler(): ICompiler {
+			return $this->compiler ?: $this->compiler = $this->container->create(PdoCompiler::class, ['`'], __METHOD__);
 		}
 
 		/** @inheritdoc */

@@ -7,9 +7,7 @@
 	use Edde\Collection\IEntity;
 	use Edde\Config\ConfigException;
 	use Edde\Query\IQuery;
-	use Edde\Service\Container\Container;
 	use Edde\Service\Schema\SchemaManager;
-	use Edde\Service\Security\RandomService;
 	use Generator;
 	use PDO;
 	use PDOException;
@@ -22,23 +20,8 @@
 
 	abstract class AbstractPdoStorage extends AbstractStorage {
 		use SchemaManager;
-		use RandomService;
-		use Container;
-		/** @var string */
-		protected $delimiter;
-		/** @var array */
-		protected $options;
 		/** @var PDO */
 		protected $pdo;
-		/** @var ICompiler */
-		protected $compiler;
-
-		/** @inheritdoc */
-		public function __construct(string $config, string $delimiter, array $options = []) {
-			parent::__construct($config);
-			$this->delimiter = $delimiter;
-			$this->options = $options;
-		}
 
 		/** @inheritdoc */
 		public function fetch($query, array $params = []) {
@@ -102,11 +85,6 @@
 			foreach ($this->fetch($compiler->compile($query), $params) as $row) {
 				yield $this->row($row, $schemas, $selects);
 			}
-		}
-
-		/** @inheritdoc */
-		public function compiler(): ICompiler {
-			return $this->compiler ?: $this->compiler = $this->container->create(PdoCompiler::class, [$this->delimiter], __METHOD__);
 		}
 
 		/** @inheritdoc */
@@ -299,8 +277,7 @@
 			$this->pdo = new PDO(
 				$this->section->require('dsn'),
 				$this->section->require('user'),
-				$this->section->optional('password'),
-				$this->options
+				$this->section->optional('password')
 			);
 			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$this->pdo->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
