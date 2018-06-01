@@ -7,26 +7,17 @@
 	class Command extends SimpleObject implements ICommand {
 		/** @var string */
 		protected $query;
-		/** @var array */
-		protected $params;
 
 		/**
 		 * @param string $query
-		 * @param array  $params
 		 */
-		public function __construct(string $query, array $params = []) {
+		public function __construct(string $query) {
 			$this->query = $query;
-			$this->params = $params;
 		}
 
 		/** @inheritdoc */
 		public function getQuery(): string {
 			return $this->query;
-		}
-
-		/** @inheritdoc */
-		public function getParams(): array {
-			return $this->params;
 		}
 
 		/** @inheritdoc */

@@ -8,6 +8,7 @@
 	use Edde\Service\Container\Container;
 	use Edde\Service\Storage\Storage;
 	use Edde\Service\Transaction\Transaction;
+	use Generator;
 
 	class Collection extends Edde implements ICollection {
 		use Container;
@@ -60,9 +61,9 @@
 		}
 
 		/** @inheritdoc */
-		public function getIterator() {
+		public function execute(array $binds): Generator {
 			$uses = $this->query->getSelects();
-			foreach ($this->storage->query($this->query) as $row) {
+			foreach ($this->storage->query($this->query, $binds) as $row) {
 				$entities = [];
 				foreach ($row->getItems() as $alias => $item) {
 					$entities[$alias] = $this->entityManager->entity($uses[$alias], $item);

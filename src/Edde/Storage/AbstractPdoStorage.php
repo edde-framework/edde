@@ -8,6 +8,7 @@
 	use Edde\Config\ConfigException;
 	use Edde\Query\ICommand;
 	use Edde\Query\IQuery;
+	use Edde\Service\Container\Container;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Security\RandomService;
 	use Generator;
@@ -15,20 +16,28 @@
 	use PDOException;
 	use Throwable;
 	use function implode;
+	use function is_iterable;
 	use function sha1;
 	use function sprintf;
+	use function vsprintf;
 
 	abstract class AbstractPdoStorage extends AbstractStorage {
 		use SchemaManager;
 		use RandomService;
+		use Container;
+		/** @var string */
+		protected $delimiter;
 		/** @var array */
 		protected $options;
 		/** @var PDO */
 		protected $pdo;
+		/** @var ICompiler */
+		protected $compiler;
 
 		/** @inheritdoc */
-		public function __construct(string $config, array $options = []) {
+		public function __construct(string $config, string $delimiter, array $options = []) {
 			parent::__construct($config);
+			$this->delimiter = $delimiter;
 			$this->options = $options;
 		}
 
@@ -57,28 +66,54 @@
 		}
 
 		/** @inheritdoc */
-		public function query(IQuery $query): Generator {
-			$command = $this->native($query);
+		public function query(IQuery $query, array $binds = []): Generator {
+			$command = $this->native($query, $binds);
 			$schemas = $this->getSchemas($query);
 			$selects = $query->getSelects();
-			foreach ($this->fetch($command->getQuery(), $command->getParams()) as $row) {
+			$compiler = $this->compiler();
+			$binds = $query->binds($binds);
+			foreach ($binds as $name => $bind) {
+				if (is_iterable($bind) === false) {
+					continue;
+				}
+				$this->exec(vsprintf('CREATE TEMPORARY TABLE %s ( item %s )', [
+					$temporary = $compiler->delimit($name),
+					'RESOLVE TYPE, BITCH',
+				]));
+				$statement = $this->pdo->prepare(vsprintf('INSERT INTO %s (item) VALUES (:item)', [
+					$temporary,
+				]));
+				foreach ($bind as $v) {
+					$statement->execute([
+						'item' => $v,
+					]);
+				}
+			}
+			foreach ($this->fetch($command->getQuery(), $binds->getParams()) as $row) {
 				yield $this->row($row, $schemas, $selects);
 			}
 		}
 
 		/** @inheritdoc */
 		public function native(IQuery $query): ICommand {
+			return $this->compiler()->compile($query);
+		}
+
+		/** @inheritdoc */
+		public function compiler(): ICompiler {
+			return $this->compiler ?: $this->compiler = $this->container->create(PdoCompiler::class, [$this->delimiter], __METHOD__);
 		}
 
 		/** @inheritdoc */
 		public function create(string $name): IStorage {
 			try {
 				$schema = $this->schemaManager->getSchema($name);
-				$sql = 'CREATE TABLE ' . $this->delimit($table = $schema->getRealName()) . " (\n\t";
+				$compiler = $this->compiler();
+				$sql = 'CREATE TABLE ' . $compiler->delimit($table = $schema->getRealName()) . " (\n\t";
 				$columns = [];
 				$primary = null;
 				foreach ($schema->getAttributes() as $attribute) {
-					$column = ($fragment = $this->delimit($attribute->getName())) . ' ' . $this->type($attribute->hasSchema() ? $this->schemaManager->getSchema($attribute->getSchema())->getPrimary()->getType() : $attribute->getType());
+					$column = ($fragment = $compiler->delimit($attribute->getName())) . ' ' . $this->type($attribute->hasSchema() ? $this->schemaManager->getSchema($attribute->getSchema())->getPrimary()->getType() : $attribute->getType());
 					if ($attribute->isPrimary()) {
 						$primary = $fragment;
 					} else if ($attribute->isUnique()) {
@@ -90,7 +125,7 @@
 					$columns[] = $column;
 				}
 				if ($primary) {
-					$columns[] = "CONSTRAINT " . $this->delimit(sha1($table . '.primary.' . $primary)) . ' PRIMARY KEY (' . $primary . ')';
+					$columns[] = "CONSTRAINT " . $compiler->delimit(sha1($table . '.primary.' . $primary)) . ' PRIMARY KEY (' . $primary . ')';
 				}
 				$this->exec($sql . implode(",\n\t", $columns) . "\n)");
 				return $this;
@@ -104,13 +139,14 @@
 			try {
 				$columns = [];
 				$params = [];
+				$compiler = $this->compiler();
 				foreach ($source = $this->prepareInsert($entity) as $k => $v) {
-					$columns[] = $this->delimit($k);
+					$columns[] = $compiler->delimit($k);
 					$params[sha1($k)] = $v;
 				}
 				$this->fetch(
 					"INSERT INTO\n\t" .
-					$this->delimit(($schema = $entity->getSchema())->getRealName()) .
+					$compiler->delimit(($schema = $entity->getSchema())->getRealName()) .
 					" (\n\t" . implode(",\n\t", $columns) .
 					")\n\tVALUES (\n\t:" .
 					implode(",\n\t:", array_keys($params)) .
@@ -130,15 +166,16 @@
 			try {
 				$schema = $entity->getSchema();
 				$primary = $schema->getPrimary();
-				$table = $this->delimit($schema->getRealName());
+				$compiler = $this->compiler();
+				$table = $compiler->delimit($schema->getRealName());
 				$params = ['primary' => $entity->getPrimary()->get()];
 				$columns = [];
 				foreach ($source = $this->prepareUpdate($entity) as $k => $v) {
 					$params[$paramId = sha1($k)] = $v;
-					$columns[] = $this->delimit($k) . ' = :' . $paramId;
+					$columns[] = $compiler->delimit($k) . ' = :' . $paramId;
 				}
 				$this->fetch(
-					"UPDATE\n\t" . $table . "\nSET\n\t" . implode(",\n\t", $columns) . "\nWHERE\n\t" . $this->delimit($primary->getName()) . ' = :primary',
+					"UPDATE\n\t" . $table . "\nSET\n\t" . implode(",\n\t", $columns) . "\nWHERE\n\t" . $compiler->delimit($primary->getName()) . ' = :primary',
 					$params
 				);
 				$entity->put($this->prepareOutput($schema, $source));
@@ -159,7 +196,8 @@
 					return $this->insert($entity);
 				}
 				$count = ['count' => 0];
-				foreach ($this->fetch('SELECT COUNT(' . $this->delimit($attribute->getName()) . ') AS count FROM ' . $this->delimit($schema->getRealName()) . ' WHERE ' . $this->delimit($attribute->getName()) . ' = :primary', ['primary' => $primary->get()]) as $count) {
+				$compiler = $this->compiler();
+				foreach ($this->fetch('SELECT COUNT(' . $compiler->delimit($attribute->getName()) . ') AS count FROM ' . $compiler->delimit($schema->getRealName()) . ' WHERE ' . $compiler->delimit($attribute->getName()) . ' = :primary', ['primary' => $primary->get()]) as $count) {
 					break;
 				}
 				if ($count['count'] === 0) {
@@ -175,7 +213,8 @@
 		public function load(string $schema, string $id): IEntity {
 			try {
 				$schema = $this->schemaManager->getSchema($schema);
-				$query = "SELECT * FROM " . $this->delimit($schema->getRealName()) . " WHERE " . $this->delimit($schema->getPrimary()->getName()) . ' = :primary';
+				$compiler = $this->compiler();
+				$query = "SELECT * FROM " . $compiler->delimit($schema->getRealName()) . " WHERE " . $compiler->delimit($schema->getPrimary()->getName()) . ' = :primary';
 				foreach ($this->fetch($query, ['primary' => $id]) as $item) {
 					$entity = new Entity($schema);
 					$entity->push($this->prepareOutput($schema, (object)$item));
@@ -193,8 +232,9 @@
 		public function delete(IEntity $entity): IStorage {
 			$schema = $entity->getSchema();
 			$primary = $entity->getPrimary();
+			$compiler = $this->compiler();
 			$this->fetch(
-				'DELETE FROM ' . $this->delimit($schema->getRealName()) . ' WHERE ' . $this->delimit($primary->getAttribute()->getName()) . ' = :primary',
+				'DELETE FROM ' . $compiler->delimit($schema->getRealName()) . ' WHERE ' . $compiler->delimit($primary->getAttribute()->getName()) . ' = :primary',
 				[
 					'primary' => $primary->get(),
 				]
@@ -209,8 +249,9 @@
 				$entity->getSchema(),
 				$target->getSchema()
 			);
+			$compiler = $this->compiler();
 			$this->fetch(
-				'DELETE FROM ' . $this->delimit($relationSchema->getRealName()) . ' WHERE ' . $this->delimit($relationSchema->getSource()->getName()) . ' = :a AND ' . $this->delimit($relationSchema->getTarget()->getName()) . ' = :b',
+				'DELETE FROM ' . $compiler->delimit($relationSchema->getRealName()) . ' WHERE ' . $compiler->delimit($relationSchema->getSource()->getName()) . ' = :a AND ' . $compiler->delimit($relationSchema->getTarget()->getName()) . ' = :b',
 				[
 					'a' => $entity->getPrimary()->get(),
 					'b' => $target->getPrimary()->get(),
@@ -263,8 +304,6 @@
 			$this->pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
 			$this->pdo->setAttribute(PDO::ATTR_TIMEOUT, 120);
 		}
-
-		abstract public function delimit(string $delimit): string;
 
 		/**
 		 * @param string $type

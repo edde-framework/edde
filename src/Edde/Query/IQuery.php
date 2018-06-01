@@ -151,9 +151,9 @@
 		 *
 		 * @param array $bind
 		 *
-		 * @return IBind
+		 * @return IBinds
 		 */
-		public function bind(array $bind): IBind;
+		public function binds(array $bind): IBinds;
 
 		/**
 		 * mark this query as a count query

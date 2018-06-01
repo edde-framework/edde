@@ -25,11 +25,13 @@
 		/**
 		 * bind this params object with actual parameters
 		 *
-		 * @param array $bind
+		 * @param array $binds
 		 *
-		 * @return IBind
+		 * @return IBinds
+		 *
+		 * @throws QueryException
 		 */
-		public function bind(array $bind): IBind;
+		public function binds(array $binds): IBinds;
 
 		/**
 		 * @return Traversable|Param[]

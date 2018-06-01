@@ -447,16 +447,16 @@
 			$chains->chain('da group')->where('user uuid')->and('is owner')->and('project name');
 			$chains->chain()->where('project status in')->or('da group');
 			// ... 3. set parameters for where based on given or guessed names
-			$query->params([
-				'user uuid'         => 'on',
-				'is owner'          => true,
-				'project name'      => 'expected project',
+			$bind = [
 				'project status in' => (function () {
 					yield from [ProjectSchema::STATUS_CREATED, ProjectSchema::STATUS_STARTED];
 				})(),
-			]);
+				'user uuid'         => 'on',
+				'is owner'          => true,
+				'project name'      => 'expected project',
+			];
 			$count = 0;
-			foreach ($collection as $record) {
+			foreach ($collection->execute($bind) as $record) {
 				$count++;
 				$user = $record->getEntity('u');
 				self::assertSame('on', $user->get('uuid'));
@@ -476,7 +476,6 @@
 		}
 
 		/**
-		 * @throws CollectionException
 		 * @throws FilterException
 		 * @throws SchemaException
 		 * @throws StorageException

@@ -12,11 +12,6 @@
 		public function getQuery(): string;
 
 		/**
-		 * @return array
-		 */
-		public function getParams(): array;
-
-		/**
 		 * @return string
 		 */
 		public function __toString(): string;

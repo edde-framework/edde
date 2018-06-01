@@ -3,40 +3,29 @@
 	namespace Edde\Query;
 
 	use Edde\SimpleObject;
-	use function array_key_exists;
-	use function array_keys;
-	use function implode;
-	use function sprintf;
 
 	class Bind extends SimpleObject implements IBind {
-		/** @var IParams */
-		protected $params;
-		/** @var array */
+		/** @var IParam */
+		protected $param;
+		/** @var mixed */
 		protected $bind;
 
 		/**
-		 * @param IParams $params
-		 * @param array   $bind
+		 * @param IParam $param
+		 * @param mixed  $bind
 		 */
-		public function __construct(IParams $params, array $bind) {
-			$this->params = $params;
+		public function __construct(IParam $param, $bind) {
+			$this->param = $param;
 			$this->bind = $bind;
 		}
 
 		/** @inheritdoc */
-		public function getParam(string $name): IParam {
-			$param = $this->params->getParam($name);
-			if (isset($this->bind[$name]) === false && array_key_exists($name, $this->bind) === false) {
-				throw new QueryException(sprintf('Parameter [%s] exists, but it is not bound. Bound parameters are [%s].', $name, implode(', ', array_keys($this->bind))));
-			}
-			return $param;
+		public function getParam(): IParam {
+			return $this->param;
 		}
 
 		/** @inheritdoc */
-		public function getBind(string $name) {
-			/**
-			 * this call is here to use getParam() with it's internal check of param existence
-			 */
-			return $this->bind[$this->getParam($name)->getName()];
+		public function getBind() {
+			return $this->bind;
 		}
 	}

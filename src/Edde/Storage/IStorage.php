@@ -45,13 +45,14 @@
 		 * Query
 		 *
 		 * @param IQuery $query
+		 * @param array  $binds
 		 *
 		 * @return Generator|Row[]
 		 *
 		 * @throws StorageException
 		 * @throws FilterException
 		 */
-		public function query(IQuery $query): Generator;
+		public function query(IQuery $query, array $binds): Generator;
 
 		/**
 		 * @param IQuery $query
@@ -62,6 +63,13 @@
 		 * @throws QueryException
 		 */
 		public function native(IQuery $query): ICommand;
+
+		/**
+		 * provides instance of compiler compatible with this storage
+		 *
+		 * @return ICompiler
+		 */
+		public function compiler(): ICompiler;
 
 		/**
 		 * create new schema (not all storages may support this, but exception should not be thrown)

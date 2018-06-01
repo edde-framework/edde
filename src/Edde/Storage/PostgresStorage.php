@@ -6,17 +6,7 @@
 
 	class PostgresStorage extends AbstractPdoStorage {
 		public function __construct(string $config = 'postgres', array $options = []) {
-			parent::__construct($config, $options);
-		}
-
-		/** @inheritdoc */
-		protected function getDeleteSql(string $relation): string {
-			return 'DELETE FROM ' . $this->delimit($relation) . ' AS r WHERE ';
-		}
-
-		/** @inheritdoc */
-		public function delimit(string $delimit): string {
-			return '"' . str_replace('"', '""', $delimit) . '"';
+			parent::__construct($config, '"', $options);
 		}
 
 		/** @inheritdoc */

@@ -5,13 +5,12 @@
 	use Edde\Query\IQuery;
 	use Edde\Query\QueryException;
 	use Edde\Storage\StorageException;
-	use IteratorAggregate;
-	use Traversable;
+	use Generator;
 
 	/**
 	 * A collection is read-only result of some (usually selection) query.
 	 */
-	interface ICollection extends IteratorAggregate {
+	interface ICollection {
 		/**
 		 * return current select query of a collection
 		 *
@@ -68,7 +67,12 @@
 		public function count(string $alias): int;
 
 		/**
-		 * @return Traversable|IRecord[]
+		 * @param array $binds
+		 *
+		 * @return Generator|IRecord[]
+		 *
+		 * @throws StorageException
+		 * @throws QueryException
 		 */
-		public function getIterator();
+		public function execute(array $binds): Generator;
 	}

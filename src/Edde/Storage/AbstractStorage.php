@@ -214,7 +214,7 @@
 		 */
 		protected function getSchemas(IQuery $query) {
 			$schemas = [];
-			foreach (array_unique(array_values($query->getSelects())) as $schema) {
+			foreach ($query->getSchemas() as $schema) {
 				$schemas[$schema] = $this->schemaManager->getSchema($schema);
 			}
 			return $schemas;

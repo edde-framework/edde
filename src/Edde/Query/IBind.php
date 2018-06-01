@@ -4,24 +4,16 @@
 
 	interface IBind {
 		/**
-		 * return param by name and ensures that a value is bound (array key exists)
-		 *
-		 * @param string $name
+		 * return bind param definition
 		 *
 		 * @return IParam
-		 *
-		 * @throws QueryException
 		 */
-		public function getParam(string $name): IParam;
+		public function getParam(): IParam;
 
 		/**
-		 * return bound value
-		 *
-		 * @param string $name
+		 * return actual bound value
 		 *
 		 * @return mixed
-		 *
-		 * @throws QueryException
 		 */
-		public function getBind(string $name);
+		public function getBind();
 	}
