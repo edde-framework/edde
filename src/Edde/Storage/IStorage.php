@@ -83,6 +83,7 @@
 		 * @throws StorageException
 		 * @throws ValidatorException
 		 * @throws FilterException
+		 * @throws SchemaException
 		 */
 		public function insert(IEntity $entity): IStorage;
 
@@ -96,6 +97,7 @@
 		 * @throws StorageException
 		 * @throws ValidatorException
 		 * @throws FilterException
+		 * @throws SchemaException
 		 */
 		public function update(IEntity $entity): IStorage;
 

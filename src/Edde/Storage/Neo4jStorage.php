@@ -302,6 +302,10 @@
 			$targetAttribute = $schema->getTarget();
 			$sourceSchema = $this->schemaManager->getSchema($sourceAttribute->getSchema());
 			$targetSchema = $this->schemaManager->getSchema($targetAttribute->getSchema());
+			$schema->checkRelation(
+				$sourceSchema,
+				$targetSchema
+			);
 			$cypher = null;
 			$cypher .= 'MATCH (a:' . $compiler->delimit($sourceSchema->getRealName()) . ' {' . $compiler->delimit($sourceSchema->getPrimary()->getName()) . ": \$a})\n";
 			$cypher .= 'MATCH (b:' . $compiler->delimit($targetSchema->getRealName()) . ' {' . $compiler->delimit($targetSchema->getPrimary()->getName()) . ": \$b})\n";
