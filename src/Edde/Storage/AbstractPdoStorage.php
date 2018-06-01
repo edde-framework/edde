@@ -31,6 +31,7 @@
 				$statement->execute($params);
 				return $statement;
 			} catch (PDOException $exception) {
+				/** @noinspection PhpUnhandledExceptionInspection */
 				throw $this->exception($exception);
 			}
 		}
@@ -43,6 +44,7 @@
 				}
 				return $this->pdo->exec($query);
 			} catch (PDOException $exception) {
+				/** @noinspection PhpUnhandledExceptionInspection */
 				throw $this->exception($exception);
 			}
 		}
@@ -112,6 +114,7 @@
 				$this->exec($sql . implode(",\n\t", $columns) . "\n)");
 				return $this;
 			} catch (Throwable $exception) {
+				/** @noinspection PhpUnhandledExceptionInspection */
 				throw $this->exception($exception);
 			}
 		}
@@ -139,6 +142,7 @@
 				$entity->commit();
 				return $this;
 			} catch (Throwable $exception) {
+				/** @noinspection PhpUnhandledExceptionInspection */
 				throw $this->exception($exception);
 			}
 		}
@@ -164,6 +168,7 @@
 				$entity->commit();
 				return $this;
 			} catch (Throwable $exception) {
+				/** @noinspection PhpUnhandledExceptionInspection */
 				throw $this->exception($exception);
 			}
 		}
@@ -187,6 +192,7 @@
 				}
 				return $this->update($entity);
 			} catch (Throwable $exception) {
+				/** @noinspection PhpUnhandledExceptionInspection */
 				throw $this->exception($exception);
 			}
 		}
@@ -206,6 +212,7 @@
 			} catch (EntityNotFoundException $exception) {
 				throw $exception;
 			} catch (Throwable $exception) {
+				/** @noinspection PhpUnhandledExceptionInspection */
 				throw $this->exception($exception);
 			}
 		}
