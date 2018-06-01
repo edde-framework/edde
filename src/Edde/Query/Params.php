@@ -33,9 +33,4 @@
 			}
 			return $array;
 		}
-
-		/** @inheritdoc */
-		public function getIterator() {
-			yield from $this->params;
-		}
 	}

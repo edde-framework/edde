@@ -6,6 +6,7 @@
 	use Edde\Collection\IEntity;
 	use Edde\Filter\FilterException;
 	use Edde\Query\IQuery;
+	use Edde\Query\QueryException;
 	use Edde\Schema\SchemaException;
 	use Edde\Validator\ValidatorException;
 	use Generator;
@@ -49,6 +50,8 @@
 		 *
 		 * @throws StorageException
 		 * @throws FilterException
+		 * @throws QueryException
+		 * @throws SchemaException
 		 */
 		public function query(IQuery $query, array $binds = []): Generator;
 
@@ -142,6 +145,9 @@
 		 * @param IEntity $entity
 		 *
 		 * @return IStorage
+		 *
+		 * @throws SchemaException
+		 * @throws StorageException
 		 */
 		public function delete(IEntity $entity): IStorage;
 

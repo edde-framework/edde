@@ -2,10 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Query;
 
-	use IteratorAggregate;
-	use Traversable;
-
-	interface IParams extends IteratorAggregate {
+	interface IParams {
 		/**
 		 * @param IParam $param
 		 *
@@ -32,9 +29,4 @@
 		 * @throws QueryException
 		 */
 		public function getBinds(array $binds): array;
-
-		/**
-		 * @return Traversable|Param[]
-		 */
-		public function getIterator();
 	}
