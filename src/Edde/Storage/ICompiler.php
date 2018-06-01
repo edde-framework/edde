@@ -3,6 +3,7 @@
 	namespace Edde\Storage;
 
 	use Edde\Config\IConfigurable;
+	use Edde\Query\IBind;
 	use Edde\Query\ICommand;
 	use Edde\Query\IQuery;
 	use Edde\Query\QueryException;
@@ -12,15 +13,15 @@
 		/**
 		 * compile query into native command
 		 *
-		 * @param IQuery $query
-		 * @param array  $params
+		 * @param IQuery     $query
+		 * @param IBind|null $bind
 		 *
 		 * @return ICommand
 		 *
 		 * @throws QueryException
 		 * @throws SchemaException
 		 */
-		public function compile(IQuery $query, array $params = []): ICommand;
+		public function compile(IQuery $query, IBind $bind = null): ICommand;
 
 		/**
 		 * @param string $delimit

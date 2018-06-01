@@ -147,6 +147,15 @@
 		public function getParams(): IParams;
 
 		/**
+		 * every call returns a new Bind object with specified parameters
+		 *
+		 * @param array $bind
+		 *
+		 * @return IBind
+		 */
+		public function bind(array $bind): IBind;
+
+		/**
 		 * mark this query as a count query
 		 *
 		 * @param bool $count

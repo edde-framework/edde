@@ -6,22 +6,17 @@
 	use Edde\Collection\EntityNotFoundException;
 	use Edde\Collection\IEntity;
 	use Edde\Config\ConfigException;
-	use Edde\Query\Command;
-	use Edde\Query\IChain;
 	use Edde\Query\ICommand;
 	use Edde\Query\IQuery;
-	use Edde\Query\IWhere;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Security\RandomService;
 	use Generator;
 	use PDO;
 	use PDOException;
 	use Throwable;
-	use function array_pop;
 	use function implode;
 	use function sha1;
 	use function sprintf;
-	use function strtoupper;
 
 	abstract class AbstractPdoStorage extends AbstractStorage {
 		use SchemaManager;
@@ -73,33 +68,6 @@
 
 		/** @inheritdoc */
 		public function native(IQuery $query): ICommand {
-			$params = $query->getParams();
-			if (($chains = ($wheres = $query->wheres())->chains())->hasChains()) {
-				$formatWhere = function (IWhere $where, array $schemas, array $selects, array $params): string {
-					$where = $where->toObject();
-				};
-				$fragments = [];
-				$formatChain = function (IQuery $query, IChain $chain, callable $formatChain, callable $formatWhere, array &$fragments): void {
-					$wheres = $query->wheres();
-					$chains = $wheres->chains();
-					$fragments[] = '(';
-					foreach ($chain as $stdClass) {
-						if ($chains->hasChain($stdClass->name)) {
-							$fragments[] = $formatChain($query, $chains->getChain($stdClass->name), $formatChain, $formatWhere, $fragments);
-							continue;
-						}
-						$p = $query->getParams();
-						$fragments[] = $formatWhere($wheres->getWhere($stdClass->name), $this->getSchemas($query), $query->getSelects(), $p);
-						$fragments[] = ' ' . strtoupper($stdClass->operator) . ' ';
-					}
-					array_pop($fragments);
-					$fragments[] = ')';
-				};
-				$sql .= "WHERE\n\t";
-				$formatChain($query, $chains->getChain(), $formatChain, $formatWhere, $fragments) . "\n";
-				$sql .= implode('', $fragments);
-			}
-			return new Command($sql, $params);
 		}
 
 		/** @inheritdoc */

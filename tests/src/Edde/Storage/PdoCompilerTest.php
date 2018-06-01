@@ -42,18 +42,17 @@
 			$chains = $wheres->chains();
 			$chains->chain('da group')->where('user uuid')->and('is owner')->and('project name');
 			$chains->chain()->where('project status in')->or('da group');
-			// ... 3. set parameters for where based on given or guessed names
-//			$query->params();
 			/** @var $compiler ICompiler */
 			$compiler = $this->container->create(PdoCompiler::class, ['"'], __METHOD__);
-			$commands = $compiler->compile($query, [
+			// ... 3. set parameters for where based on given or guessed names
+			$commands = $compiler->compile($query, $query->bind([
 				'user uuid'         => 'on',
 				'is owner'          => true,
 				'project name'      => 'expected project',
 				'project status in' => (function () {
 					yield from [ProjectSchema::STATUS_CREATED, ProjectSchema::STATUS_STARTED];
 				})(),
-			]);
+			]));
 		}
 
 		/**

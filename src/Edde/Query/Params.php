@@ -5,6 +5,7 @@
 	use Edde\SimpleObject;
 	use function array_keys;
 	use function implode;
+	use function sprintf;
 
 	class Params extends SimpleObject implements IParams {
 		/** @var IParam[] */
@@ -22,6 +23,11 @@
 				throw new QueryException(sprintf('Requested unknown parameter [%s]; available parameters are [%s].', implode(', ', array_keys($this->params))));
 			}
 			return $this->params[$name];
+		}
+
+		/** @inheritdoc */
+		public function bind(array $bind): IBind {
+			return new Bind($this, $bind);
 		}
 
 		/** @inheritdoc */

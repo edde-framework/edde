@@ -23,6 +23,15 @@
 		public function getParam(string $name): IParam;
 
 		/**
+		 * bind this params object with actual parameters
+		 *
+		 * @param array $bind
+		 *
+		 * @return IBind
+		 */
+		public function bind(array $bind): IBind;
+
+		/**
 		 * @return Traversable|Param[]
 		 */
 		public function getIterator();

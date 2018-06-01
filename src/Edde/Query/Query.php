@@ -156,6 +156,11 @@
 		}
 
 		/** @inheritdoc */
+		public function bind(array $bind): IBind {
+			return $this->params->bind($bind);
+		}
+
+		/** @inheritdoc */
 		public function count(bool $count = true): IQuery {
 			$this->count = $count;
 			return $this;

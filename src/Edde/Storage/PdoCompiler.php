@@ -3,6 +3,7 @@
 	namespace Edde\Storage;
 
 	use Edde\Query\Command;
+	use Edde\Query\IBind;
 	use Edde\Query\IChain;
 	use Edde\Query\IChains;
 	use Edde\Query\ICommand;
@@ -13,8 +14,11 @@
 	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Schema\SchemaManager;
+	use function array_keys;
 	use function array_shift;
 	use function implode;
+	use function is_iterable;
+	use function sha1;
 	use function str_repeat;
 	use function strtoupper;
 	use function vsprintf;
@@ -32,7 +36,7 @@
 		}
 
 		/** @inheritdoc */
-		public function compile(IQuery $query, array $params = []): ICommand {
+		public function compile(IQuery $query, IBind $bind = null): ICommand {
 			$isCount = $query->isCount();
 			$schemas = $this->getSchemas($query->getSchemas());
 			$columns = [];
@@ -84,7 +88,7 @@
 			]);
 			if (($chains = ($wheres = $query->wheres())->chains())->hasChains()) {
 				$sql .= vsprintf("WHERE\n\t%s\n", [
-					$this->chain($wheres, $chains, $chains->getChain()),
+					$this->chain($wheres, $chains, $chains->getChain(), $bind),
 				]);
 			}
 			if ($isCount === false && $query->hasOrder() && $orders = $query->getOrders()) {
@@ -112,24 +116,25 @@
 		 * @param IWheres $wheres
 		 * @param IChains $chains
 		 * @param IChain  $chain
+		 * @param IBind   $bind
 		 * @param int     $level
 		 *
 		 * @return string
 		 *
 		 * @throws QueryException
 		 */
-		public function chain(IWheres $wheres, IChains $chains, IChain $chain, int $level = 1): string {
+		public function chain(IWheres $wheres, IChains $chains, IChain $chain, IBind $bind, int $level = 1): string {
 			$fragments = [];
 			$tabs = str_repeat("\t", $level);
 			foreach ($chain as $stdClass) {
 				$operator = ' ' . strtoupper($stdClass->operator) . ' ';
 				if ($chains->hasChain($stdClass->name)) {
 					$fragments[] = $operator;
-					$fragments[] = "(\n\t" . $tabs . $this->chain($wheres, $chains, $chains->getChain($stdClass->name), $level + 1) . "\n" . $tabs . ')';
+					$fragments[] = "(\n\t" . $tabs . $this->chain($wheres, $chains, $chains->getChain($stdClass->name), $bind, $level + 1) . "\n" . $tabs . ')';
 					continue;
 				}
 				$fragments[] = $operator . "\n" . $tabs;
-				$fragments[] = $this->where($wheres->getWhere($stdClass->name));
+				$fragments[] = $this->where($wheres->getWhere($stdClass->name), $bind);
 			}
 			/**
 			 * shift the very first operator as it makes no sense
@@ -140,31 +145,33 @@
 
 		/**
 		 * @param IWhere $where
+		 * @param IBind  $bind
 		 *
 		 * @return string
 		 *
 		 * @throws QueryException
 		 */
-		public function where(IWhere $where): string {
+		public function where(IWhere $where, IBind $bind): string {
 			$stdClass = $where->toObject();
 			switch ($stdClass->type) {
 				case 'equalTo':
 					return vsprintf('%s.%s = :%s', [
 						$this->delimit($stdClass->alias),
 						$this->delimit($stdClass->property),
-						$where->getParams()->getParam($stdClass->param)->getHash(),
+						$bind->getParam($stdClass->param)->getHash(),
 					]);
 				case 'in':
-//					if (isset($params[$stdClass->param]) === false) {
-//						throw new QueryException(sprintf('Missing where parameter [%s]; available parameters [%s].', $stdClass->param, implode(', ', $params)));
-//					} else if (is_iterable($params[$stdClass->param]) === false) {
-//						throw new QueryException(sprintf('Where in parameter [%s] is not an iterable.', $stdClass->param));
-//					}
+					if (is_iterable($value = $bind->getBind($stdClass->param)) === false) {
+						throw new QueryException(sprintf('Parameter [%s] must be iterable (array, generator, ...).', $stdClass->param));
+					}
 					$in = [];
+					foreach ($value as $k => $v) {
+						$in['_' . sha1($k . $stdClass->param)] = $v;
+					}
 					return vsprintf('%s.%s IN (%s)', [
 						$this->delimit($stdClass->alias),
 						$this->delimit($stdClass->property),
-						empty($in) ? 'SELECT TRUE LIMIT 0 OFFSET 0' : ':' . implode(', :', $in),
+						empty($in) ? 'SELECT TRUE LIMIT 0 OFFSET 0' : ':' . implode(', :', array_keys($in)),
 					]);
 				default:
 					throw new QueryException(sprintf('Unsupported where type [%s] in [%s].', $stdClass->type, static::class));
