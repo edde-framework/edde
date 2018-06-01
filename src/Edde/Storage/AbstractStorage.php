@@ -77,13 +77,14 @@
 
 		/** @inheritdoc */
 		public function count(IQuery $query): array {
-			$query->count(true);
-			$compiled = $this->compiler()->compile($query);
-			$query->count(false);
-			foreach ($this->fetch($compiled) as $row) {
-				return $row;
+			try {
+				foreach ($this->fetch($this->compiler()->compile($query->count(true))) as $row) {
+					return $row;
+				}
+				throw new StorageException(sprintf('Cannot get counts from a query.'));
+			} finally {
+				$query->count(false);
 			}
-			throw new StorageException(sprintf('Cannot get counts from a query.'));
 		}
 
 		/**

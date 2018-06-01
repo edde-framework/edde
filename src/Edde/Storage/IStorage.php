@@ -165,6 +165,8 @@
 		 * @return IEntity relation entity; it's possible to set up relation attributes and save entity
 		 *
 		 * @throws StorageException
+		 * @throws ValidatorException
+		 * @throws FilterException
 		 * @throws SchemaException
 		 */
 		public function attach(IEntity $source, IEntity $target, string $relation): IEntity;
@@ -193,6 +195,8 @@
 		 * @return IEntity
 		 *
 		 * @throws StorageException
+		 * @throws ValidatorException
+		 * @throws FilterException
 		 * @throws SchemaException
 		 */
 		public function link(IEntity $source, IEntity $target, string $relation): IEntity;
