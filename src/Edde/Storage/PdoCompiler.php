@@ -2,10 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
-	use Edde\Query\Command;
 	use Edde\Query\IChain;
 	use Edde\Query\IChains;
-	use Edde\Query\ICommand;
 	use Edde\Query\IQuery;
 	use Edde\Query\IWhere;
 	use Edde\Query\IWheres;
@@ -32,7 +30,7 @@
 		}
 
 		/** @inheritdoc */
-		public function compile(IQuery $query): ICommand {
+		public function compile(IQuery $query): string {
 			$isCount = $query->isCount();
 			$schemas = $this->getSchemas($query->getSchemas());
 			$columns = [];
@@ -104,7 +102,7 @@
 					$page->page * $page->size,
 				]);
 			}
-			return new Command($sql);
+			return $sql;
 		}
 
 		/**

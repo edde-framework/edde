@@ -3,23 +3,22 @@
 	namespace Edde\Storage;
 
 	use Edde\Config\IConfigurable;
-	use Edde\Query\ICommand;
 	use Edde\Query\IQuery;
 	use Edde\Query\QueryException;
 	use Edde\Schema\SchemaException;
 
 	interface ICompiler extends IConfigurable {
 		/**
-		 * compile query into native command
+		 * compile query into string
 		 *
 		 * @param IQuery $query
 		 *
-		 * @return ICommand
+		 * @return string
 		 *
 		 * @throws QueryException
 		 * @throws SchemaException
 		 */
-		public function compile(IQuery $query): ICommand;
+		public function compile(IQuery $query): string;
 
 		/**
 		 * @param string $delimit

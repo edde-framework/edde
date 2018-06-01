@@ -6,7 +6,6 @@
 	use Edde\Collection\EntityNotFoundException;
 	use Edde\Collection\IEntity;
 	use Edde\Config\ConfigException;
-	use Edde\Query\ICommand;
 	use Edde\Query\IQuery;
 	use Edde\Service\Container\Container;
 	use Edde\Service\Schema\SchemaManager;
@@ -101,14 +100,9 @@
 					]);
 				}
 			}
-			foreach ($this->fetch($this->native($query)->getQuery(), $params) as $row) {
+			foreach ($this->fetch($compiler->compile($query), $params) as $row) {
 				yield $this->row($row, $schemas, $selects);
 			}
-		}
-
-		/** @inheritdoc */
-		public function native(IQuery $query): ICommand {
-			return $this->compiler()->compile($query);
 		}
 
 		/** @inheritdoc */

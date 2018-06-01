@@ -5,9 +5,7 @@
 	use Edde\Collection\EntityNotFoundException;
 	use Edde\Collection\IEntity;
 	use Edde\Filter\FilterException;
-	use Edde\Query\ICommand;
 	use Edde\Query\IQuery;
-	use Edde\Query\QueryException;
 	use Edde\Schema\SchemaException;
 	use Edde\Validator\ValidatorException;
 	use Generator;
@@ -53,16 +51,6 @@
 		 * @throws FilterException
 		 */
 		public function query(IQuery $query, array $binds): Generator;
-
-		/**
-		 * @param IQuery $query
-		 *
-		 * @return ICommand
-		 *
-		 * @throws StorageException
-		 * @throws QueryException
-		 */
-		public function native(IQuery $query): ICommand;
 
 		/**
 		 * provides instance of compiler compatible with this storage

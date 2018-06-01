@@ -7,8 +7,6 @@
 	use Edde\Collection\IEntity;
 	use Edde\Config\ConfigException;
 	use Edde\Filter\FilterException;
-	use Edde\Query\Command;
-	use Edde\Query\ICommand;
 	use Edde\Query\IQuery;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Schema\SchemaManager;
@@ -81,7 +79,7 @@
 		}
 
 		/** @inheritdoc */
-		public function native(IQuery $query): ICommand {
+		public function native(IQuery $query): string {
 			$params = $query->getParams();
 			$attaches = $query->getAttaches();
 			$selects = $query->getSelects();
@@ -191,7 +189,6 @@
 					$page->size,
 				]);
 			}
-			return new Command($cypher, $params);
 		}
 
 		/** @inheritdoc */
