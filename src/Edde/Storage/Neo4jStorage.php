@@ -317,18 +317,23 @@
 				$sourceSchema = $this->schemaManager->getSchema($sourceAttribute->getSchema()),
 				$targetSchema = $this->schemaManager->getSchema($targetAttribute->getSchema())
 			);
-			$cypher = null;
-			$cypher .= 'MATCH (a:' . $this->compiler->delimit($sourceSchema->getRealName()) . ' {' . $this->compiler->delimit($sourceSchema->getPrimary()->getName()) . ": \$a})\n";
-			$cypher .= 'MATCH (b:' . $this->compiler->delimit($targetSchema->getRealName()) . ' {' . $this->compiler->delimit($targetSchema->getPrimary()->getName()) . ": \$b})\n";
-			$cypher .= 'MERGE (a)-[r:' . $this->compiler->delimit($schema->getRealName()) . ' {' . $this->compiler->delimit($primary->getName()) . ": \$primary}]->(b)\n";
-			$cypher .= 'SET r = $set';
 			$source = $this->prepareInsert($entity);
-			$this->fetch($cypher, [
-				'a'       => $entity->get($sourceAttribute->getName()),
-				'b'       => $entity->get($targetAttribute->getName()),
-				'primary' => $source->{$primary->getName()},
-				'set'     => (array)$source,
-			]);
+			$this->fetch(
+				vsprintf('MATCH (a:%s {%s: $a}) MATCH (b:%s {%s: $b}) MERGE (a)-[r:%s {%s: $primary}]->(b) SET r = $set', [
+					$this->compiler->delimit($sourceSchema->getRealName()),
+					$this->compiler->delimit($sourceSchema->getPrimary()->getName()),
+					$this->compiler->delimit($targetSchema->getRealName()),
+					$this->compiler->delimit($targetSchema->getPrimary()->getName()),
+					$this->compiler->delimit($schema->getRealName()),
+					$this->compiler->delimit($primary->getName()),
+				]),
+				[
+					'a'       => $entity->get($sourceAttribute->getName()),
+					'b'       => $entity->get($targetAttribute->getName()),
+					'primary' => $source->{$primary->getName()},
+					'set'     => (array)$source,
+				]
+			);
 			$entity->put($this->prepareOutput($schema, $source));
 			$entity->commit();
 			return $this;
