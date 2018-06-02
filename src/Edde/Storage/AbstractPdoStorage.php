@@ -91,11 +91,18 @@
 		public function create(string $name): IStorage {
 			try {
 				$schema = $this->schemaManager->getSchema($name);
-				$sql = 'CREATE TABLE ' . $this->compiler->delimit($table = $schema->getRealName()) . " (\n\t";
+				$table = $schema->getRealName();
 				$columns = [];
 				$primary = null;
 				foreach ($schema->getAttributes() as $attribute) {
-					$column = ($fragment = $this->compiler->delimit($attribute->getName())) . ' ' . $this->type($attribute->hasSchema() ? $this->schemaManager->getSchema($attribute->getSchema())->getPrimary()->getType() : $attribute->getType());
+					$column = vsprintf('%s %s', [
+						$fragment = $this->compiler->delimit($attribute->getName()),
+						$this->type(
+							$attribute->hasSchema() ?
+								$this->schemaManager->getSchema($attribute->getSchema())->getPrimary()->getType() :
+								$attribute->getType()
+						),
+					]);
 					if ($attribute->isPrimary()) {
 						$primary = $fragment;
 					} else if ($attribute->isUnique()) {
@@ -107,9 +114,15 @@
 					$columns[] = $column;
 				}
 				if ($primary) {
-					$columns[] = "CONSTRAINT " . $this->compiler->delimit(sha1($table . '.primary.' . $primary)) . ' PRIMARY KEY (' . $primary . ')';
+					$columns[] = vsprintf('CONSTRAINT %s PRIMARY KEY (%s)', [
+						$this->compiler->delimit(sha1($table . '.primary.' . $primary)),
+						$primary,
+					]);
 				}
-				$this->exec($sql . implode(",\n\t", $columns) . "\n)");
+				$this->exec(vsprintf("CREATE TABLE %s (\n\t%s\n)", [
+					$this->compiler->delimit($table),
+					implode(",\n\t", $columns),
+				]));
 				return $this;
 			} catch (Throwable $exception) {
 				/** @noinspection PhpUnhandledExceptionInspection */
