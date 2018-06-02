@@ -84,7 +84,7 @@
 					$params[$hash][] = $this->attribute($attribute, $v);
 				}
 			}
-			foreach ($this->fetch($this->compiler->compile($query), $params) as $row) {
+			foreach ($this->fetch($this->compiler->query($query), $params) as $row) {
 				yield $this->row($row, $schemas, $selects);
 			}
 		}

@@ -18,7 +18,17 @@
 		 * @throws QueryException
 		 * @throws SchemaException
 		 */
-		public function compile(IQuery $query): string;
+		public function query(IQuery $query): string;
+
+		/**
+		 * compile simple insert command
+		 *
+		 * @param string $name
+		 * @param array  $properties param => property
+		 *
+		 * @return string
+		 */
+		public function insert(string $name, array $properties): string;
 
 		/**
 		 * @param string $delimit

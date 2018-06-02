@@ -12,7 +12,7 @@
 		}
 
 		/** @inheritdoc */
-		public function compile(IQuery $query): string {
+		public function query(IQuery $query): string {
 			$isCount = $query->isCount();
 			$schemas = $this->getSchemas($query->getSchemas());
 			$from = [];

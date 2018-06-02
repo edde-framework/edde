@@ -5,13 +5,14 @@
 	use Edde\Query\IQuery;
 	use Edde\Query\IWhere;
 	use Edde\Query\QueryException;
+	use function array_map;
 	use function implode;
 	use function strtoupper;
 	use function vsprintf;
 
 	class PdoCompiler extends AbstractCompiler {
 		/** @inheritdoc */
-		public function compile(IQuery $query): string {
+		public function query(IQuery $query): string {
 			$isCount = $query->isCount();
 			$schemas = $this->getSchemas($query->getSchemas());
 			$columns = [];
@@ -110,5 +111,16 @@
 				default:
 					throw new QueryException(sprintf('Unsupported where type [%s] in [%s].', $stdClass->type, static::class));
 			}
+		}
+
+		/** @inheritdoc */
+		public function insert(string $name, array $properties): string {
+			return vsprintf('INSERT INTO %s (%s) VALUES (:%s)', [
+				$this->delimit($name),
+				implode(',', array_map(function ($item) {
+					return $this->delimit($item);
+				}, $properties)),
+				implode(',:', array_keys($properties)),
+			]);
 		}
 	}
