@@ -56,8 +56,6 @@
 			$params = [];
 			foreach ($query->params($binds) as $name => $param) {
 				$hash = $param->getHash();
-				$schema = $schemas[$selects[$param->getAlias()]];
-				$attribute = $schema->getAttribute($param->getProperty());
 				if (is_iterable($value = $param->getValue()) === false) {
 					$params[$hash] = $param->getValue();
 					continue;
@@ -71,7 +69,7 @@
 				 */
 				$this->exec(vsprintf('CREATE TEMPORARY TABLE %s ( item %s )', [
 					$temporary = $this->compiler->delimit($hash),
-					$this->type($attribute->getType()),
+					$this->type($schemas[$selects[$param->getAlias()]]->getAttribute($param->getProperty())->getType()),
 				]));
 				$statement = $this->pdo->prepare(vsprintf('INSERT INTO %s (item) VALUES (:item)', [
 					$temporary,
