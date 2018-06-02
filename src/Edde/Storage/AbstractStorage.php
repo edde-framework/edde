@@ -110,7 +110,7 @@
 						'required' => $attribute->isRequired(),
 					]);
 				}
-				$stdClass->$name = $this->attribute($attribute, $stdClass->$name);
+				$stdClass->$name = $this->filterValue($attribute, $stdClass->$name);
 			}
 			return $stdClass;
 		}
@@ -123,7 +123,7 @@
 		 *
 		 * @throws FilterException
 		 */
-		protected function attribute(IAttribute $attribute, $value) {
+		protected function filterValue(IAttribute $attribute, $value) {
 			if ($filter = $attribute->getFilter('type')) {
 				$value = $this->filterManager->getFilter('storage:' . $filter)->input($value);
 			}
