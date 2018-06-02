@@ -24,11 +24,12 @@
 		 * compile simple insert command
 		 *
 		 * @param string $name
+		 * @param string $primary    name of primary property (primary key)
 		 * @param array  $properties param => property
 		 *
 		 * @return string
 		 */
-		public function insert(string $name, array $properties): string;
+		public function insert(string $name, string $primary, array $properties): string;
 
 		/**
 		 * @param string $delimit

@@ -108,4 +108,12 @@
 					throw new QueryException(sprintf('Unsupported where type [%s] in [%s].', $stdClass->type, static::class));
 			}
 		}
+
+		/** @inheritdoc */
+		public function insert(string $name, string $primary, array $properties): string {
+			return vsprintf('CREATE (a: %s {%s: $primary}) SET a = $set', [
+				$this->delimit($name),
+				$this->delimit($primary),
+			]);
+		}
 	}

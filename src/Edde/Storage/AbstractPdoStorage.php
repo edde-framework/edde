@@ -140,7 +140,7 @@
 					$params[sha1($k)] = $v;
 				}
 				$this->fetch(
-					$this->compiler->insert(($schema = $entity->getSchema())->getRealName(), $columns),
+					$this->compiler->insert(($schema = $entity->getSchema())->getRealName(), $schema->getPrimary()->getName(), $columns),
 					$params
 				);
 				$entity->put($this->prepareOutput($schema, $source));

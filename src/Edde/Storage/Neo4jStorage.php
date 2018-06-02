@@ -129,10 +129,7 @@
 			}
 			$source = $this->prepareInsert($entity);
 			$this->fetch(
-				vsprintf('CREATE (a: %s {%s: $primary}) SET a = $set', [
-					$this->compiler->delimit($schema->getRealName()),
-					$this->compiler->delimit($primary = $schema->getPrimary()->getName()),
-				]),
+				$this->compiler->insert($schema->getRealName(), $primary = $schema->getPrimary()->getName(), []),
 				[
 					'primary' => $source->{$primary},
 					'set'     => (array)$source,

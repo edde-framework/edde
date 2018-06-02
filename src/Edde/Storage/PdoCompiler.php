@@ -114,7 +114,7 @@
 		}
 
 		/** @inheritdoc */
-		public function insert(string $name, array $properties): string {
+		public function insert(string $name, string $primary, array $properties): string {
 			return vsprintf('INSERT INTO %s (%s) VALUES (:%s)', [
 				$this->delimit($name),
 				implode(',', array_map(function ($item) {
