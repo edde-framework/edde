@@ -71,7 +71,11 @@
 		public function query(IQuery $query, array $binds = []): Generator {
 			$schemas = $this->schemaManager->getSchemas($query->getSchemas());
 			$selects = $query->getSelects();
-			foreach ($this->fetch($this->compiler->compile($query), $this->storageFilterService->params($query, $binds)) as $row) {
+			$params = [];
+			foreach ($this->storageFilterService->params($query, $binds) as $param) {
+				$params[$param->getHash()] = $param->getValue();
+			}
+			foreach ($this->fetch($this->compiler->compile($query), $params) as $row) {
 				yield $this->row($row, $schemas, $selects);
 			}
 		}

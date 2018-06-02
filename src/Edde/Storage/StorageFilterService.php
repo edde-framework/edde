@@ -94,13 +94,13 @@
 			$selects = $query->getSelects();
 			foreach ($query->params($binds) as $name => $param) {
 				$attribute = $schemas[$selects[$param->getAlias()]]->getAttribute($param->getProperty());
-				$params[$hash = $param->getHash()] = is_iterable($value = $param->getValue()) ?
+				$params[$hash = $param->getName()] = is_iterable($value = $param->getValue()) ?
 					array_map(function ($value) use ($attribute) {
 						return $this->value($attribute, $value);
 					}, iterator_to_array($value)) :
 					$this->value($attribute, $value);
 			}
-			return $params;
+			return $query->params($params);
 		}
 
 		/**

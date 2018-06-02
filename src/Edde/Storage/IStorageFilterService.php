@@ -4,6 +4,7 @@
 
 	use Edde\Config\IConfigurable;
 	use Edde\Filter\FilterException;
+	use Edde\Query\IParam;
 	use Edde\Query\IQuery;
 	use Edde\Query\QueryException;
 	use Edde\Schema\ISchema;
@@ -57,7 +58,7 @@
 		 * @param IQuery $query
 		 * @param array  $binds
 		 *
-		 * @return array
+		 * @return IParam[]
 		 *
 		 * @throws QueryException
 		 * @throws SchemaException
