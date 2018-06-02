@@ -97,12 +97,21 @@
 				foreach ($schema->getAttributes() as $name => $property) {
 					$fragment = 'n.' . $this->compiler->delimit($property->getName());
 					if ($property->isPrimary()) {
-						$this->fetch('CREATE CONSTRAINT ON (n:' . $node . ') ASSERT (' . $fragment . ') IS NODE KEY');
+						$this->fetch(vsprintf('CREATE CONSTRAINT ON (n:%s) ASSERT (%s) IS NODE KEY', [
+							$node,
+							$fragment,
+						]));
 					} else if ($property->isUnique()) {
-						$this->fetch('CREATE CONSTRAINT ON (n:' . $node . ') ASSERT ' . $fragment . ' IS UNIQUE');
+						$this->fetch(vsprintf('CREATE CONSTRAINT ON (n:%s) ASSERT %s IS UNIQUE', [
+							$node,
+							$fragment,
+						]));
 					}
 					if ($property->isRequired()) {
-						$this->fetch('CREATE CONSTRAINT ON (n:' . $node . ') ASSERT exists(' . $fragment . ')');
+						$this->fetch(vsprintf('CREATE CONSTRAINT ON (n:%s) ASSERT exists(%s)', [
+							$node,
+							$fragment,
+						]));
 					}
 				}
 				return $this;
@@ -173,7 +182,11 @@
 					return $this->insert($entity);
 				}
 				$count = ['count' => 0];
-				foreach ($this->fetch('MATCH (n:' . $this->compiler->delimit($schema->getRealName()) . ' {' . $this->compiler->delimit($attribute->getName()) . ': $primary}) RETURN count(n) AS count', ['primary' => $primary->get()]) as $count) {
+				$params = [
+					$this->compiler->delimit($schema->getRealName()),
+					$this->compiler->delimit($attribute->getName()),
+				];
+				foreach ($this->fetch(vsprintf('MATCH (n:%s {%s: $primary}) RETURN count(n) AS count', $params), ['primary' => $primary->get()]) as $count) {
 					break;
 				}
 				if ($count['count'] === 0) {
@@ -191,9 +204,15 @@
 			try {
 				$schema = $this->schemaManager->getSchema($schema);
 				$primary = $schema->getPrimary();
-				$query = 'MATCH (n:' . $this->compiler->delimit($schema->getRealName()) . ' {' . $this->compiler->delimit($primary->getName()) . ': $primary}) RETURN n';
+				$query = vsprintf('MATCH (n:%s {%s: $primary}) RETURN n', [
+					$this->compiler->delimit($schema->getRealName()),
+					$this->compiler->delimit($primary->getName()),
+				]);
 				if ($schema->isRelation()) {
-					$query = 'MATCH ()-[n:' . $this->compiler->delimit($schema->getRealName()) . ' {' . $this->compiler->delimit($primary->getName()) . ': $primary}]-() RETURN n';
+					$query = vsprintf('MATCH ()-[n:%s {%s: $primary}]-() RETURN n', [
+						$this->compiler->delimit($schema->getRealName()),
+						$this->compiler->delimit($primary->getName()),
+					]);
 				}
 				foreach ($this->fetch($query, ['primary' => $id]) as $item) {
 					$entity = new Entity($schema);
