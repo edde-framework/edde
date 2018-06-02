@@ -2,8 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
-	use Edde\Collection\Entity;
-	use Edde\Collection\EntityNotFoundException;
 	use Edde\Collection\IEntity;
 	use Edde\Config\ConfigException;
 	use Edde\Query\IQuery;
@@ -83,9 +81,8 @@
 					]);
 				}
 			}
-			$selects = $query->getSelects();
-			foreach ($this->fetch($this->compiler->compile($query), $params) as $row) {
-				yield $this->row($row, $selects);
+			foreach ($this->fetch($this->compiler->compile($query), $params) as $items) {
+				yield new Row($query, $items);
 			}
 		}
 
@@ -216,28 +213,6 @@
 		}
 
 		/** @inheritdoc */
-		public function load(string $schema, string $id): IEntity {
-			try {
-				$schema = $this->schemaManager->getSchema($schema);
-				$params = [
-					$this->compiler->delimit($schema->getRealName()),
-					$this->compiler->delimit($schema->getPrimary()->getName()),
-				];
-				foreach ($this->fetch(vsprintf('SELECT * FROM %s WHERE %s = :primary', $params), ['primary' => $id]) as $item) {
-					$entity = new Entity($schema);
-					$entity->push($this->storageFilterService->output($schema, (object)$item));
-					return $entity;
-				}
-				throw new EntityNotFoundException(sprintf('Cannot load any entity [%s] with id [%s].', $schema->getName(), $id));
-			} catch (EntityNotFoundException $exception) {
-				throw $exception;
-			} catch (Throwable $exception) {
-				/** @noinspection PhpUnhandledExceptionInspection */
-				throw $this->exception($exception);
-			}
-		}
-
-		/** @inheritdoc */
 		public function delete(IEntity $entity): IStorage {
 			$schema = $entity->getSchema();
 			$primary = $entity->getPrimary();
@@ -286,15 +261,6 @@
 		/** @inheritdoc */
 		public function onRollback(): void {
 			$this->pdo->rollBack();
-		}
-
-		/**
-		 * @param Throwable $throwable
-		 *
-		 * @return Throwable
-		 */
-		protected function exception(Throwable $throwable): Throwable {
-			return $throwable;
 		}
 
 		/**

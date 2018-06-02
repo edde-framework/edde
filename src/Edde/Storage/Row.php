@@ -2,19 +2,24 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
+	use Edde\Query\IQuery;
 	use Edde\SimpleObject;
 	use stdClass;
 	use function array_keys;
 	use function implode;
 
 	class Row extends SimpleObject implements IRow {
+		/** @var IQuery */
+		protected $query;
 		/** @var stdClass[] */
 		protected $items;
 
 		/**
+		 * @param IQuery     $query
 		 * @param stdClass[] $items
 		 */
-		public function __construct(array $items) {
+		public function __construct(IQuery $query, array $items) {
+			$this->query = $query;
 			$this->items = $items;
 		}
 

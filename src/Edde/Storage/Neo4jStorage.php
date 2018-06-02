@@ -2,8 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
-	use Edde\Collection\Entity;
-	use Edde\Collection\EntityNotFoundException;
 	use Edde\Collection\IEntity;
 	use Edde\Config\ConfigException;
 	use Edde\Filter\FilterException;
@@ -21,7 +19,6 @@
 	use GraphAware\Bolt\Result\Result;
 	use GraphAware\Common\Type\MapAccessor;
 	use Throwable;
-	use function sprintf;
 	use function vsprintf;
 
 	class Neo4jStorage extends AbstractStorage {
@@ -73,9 +70,8 @@
 			foreach ($this->storageFilterService->params($query, $binds) as $param) {
 				$params[$param->getHash()] = $param->getValue();
 			}
-			$selects = $query->getSelects();
-			foreach ($this->fetch($this->compiler->compile($query), $params) as $row) {
-				yield $this->row($row, $selects);
+			foreach ($this->fetch($this->compiler->compile($query), $params) as $items) {
+				yield new Row($query, $items);
 			}
 		}
 
@@ -183,35 +179,6 @@
 					return $this->insert($entity);
 				}
 				return $this->update($entity);
-			} catch (Throwable $exception) {
-				/** @noinspection PhpUnhandledExceptionInspection */
-				throw $this->exception($exception);
-			}
-		}
-
-		/** @inheritdoc */
-		public function load(string $schema, string $id): IEntity {
-			try {
-				$schema = $this->schemaManager->getSchema($schema);
-				$primary = $schema->getPrimary();
-				$query = vsprintf('MATCH (n:%s {%s: $primary}) RETURN n', [
-					$this->compiler->delimit($schema->getRealName()),
-					$this->compiler->delimit($primary->getName()),
-				]);
-				if ($schema->isRelation()) {
-					$query = vsprintf('MATCH ()-[n:%s {%s: $primary}]-() RETURN n', [
-						$this->compiler->delimit($schema->getRealName()),
-						$this->compiler->delimit($primary->getName()),
-					]);
-				}
-				foreach ($this->fetch($query, ['primary' => $id]) as $item) {
-					$entity = new Entity($schema);
-					$entity->push($this->row($item, ['n' => $schema])->getItem('n'));
-					return $entity;
-				}
-				throw new EntityNotFoundException(sprintf('Cannot load any entity [%s] with id [%s].', $schema->getName(), $id));
-			} catch (EntityNotFoundException $exception) {
-				throw $exception;
 			} catch (Throwable $exception) {
 				/** @noinspection PhpUnhandledExceptionInspection */
 				throw $this->exception($exception);

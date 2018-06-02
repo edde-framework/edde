@@ -69,6 +69,7 @@
 		 *
 		 * @throws QueryException
 		 * @throws StorageException
+		 * @throws SchemaException
 		 */
 		public function count(string $alias): int;
 

@@ -3,18 +3,16 @@
 	namespace Edde\Storage;
 
 	use Edde\Collection\Entity;
+	use Edde\Collection\EntityNotFoundException;
 	use Edde\Collection\IEntity;
 	use Edde\Config\ISection;
-	use Edde\Filter\FilterException;
 	use Edde\Query\IQuery;
+	use Edde\Service\Collection\CollectionManager;
 	use Edde\Service\Config\ConfigService;
-	use Edde\Service\Filter\FilterManager;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\StorageFilterService;
 	use Edde\Service\Utils\StringUtils;
-	use Edde\Service\Validator\ValidatorManager;
-	use Edde\Validator\ValidatorException;
-	use stdClass;
+	use Throwable;
 	use function sprintf;
 
 	abstract class AbstractStorage extends AbstractTransaction implements IStorage {
@@ -22,8 +20,7 @@
 		use SchemaManager;
 		use StringUtils;
 		use StorageFilterService;
-		use FilterManager;
-		use ValidatorManager;
+		use CollectionManager;
 		/** @var string */
 		protected $config;
 		/** @var ISection */
@@ -46,6 +43,25 @@
 				}
 			});
 			return $this;
+		}
+
+		/** @inheritdoc */
+		public function load(string $schema, string $id): IEntity {
+			try {
+				$collection = $this->collectionManager->collection();
+				$collection->select($alias = $schema);
+				$schema = $this->schemaManager->getSchema($schema);
+				$collection->getQuery()->wheres()->where('primary')->equalTo($alias, $schema->getPrimary()->getName());
+				foreach ($collection->execute(['primary' => $id]) as $record) {
+					return $record->getEntity($alias);
+				}
+				throw new EntityNotFoundException(sprintf('Cannot load any entity [%s] with id [%s].', $schema->getName(), $id));
+			} catch (EntityNotFoundException $exception) {
+				throw $exception;
+			} catch (Throwable $exception) {
+				/** @noinspection PhpUnhandledExceptionInspection */
+				throw $this->exception($exception);
+			}
 		}
 
 		/** @inheritdoc */
@@ -86,15 +102,6 @@
 			}
 		}
 
-		/**
-		 * @param array    $row
-		 * @param string[] $selects
-		 *
-		 * @return IRow
-		 *
-		 * @throws FilterException
-		 * @throws ValidatorException
-		 */
 		protected function row(array $row, array $selects): IRow {
 			$items = [];
 			foreach ($row as $k => $v) {
@@ -106,6 +113,15 @@
 				$items[$alias] = $this->storageFilterService->output($selects[$alias], $item);
 			}
 			return new Row($items);
+		}
+
+		/**
+		 * @param Throwable $throwable
+		 *
+		 * @return Throwable
+		 */
+		protected function exception(Throwable $throwable): Throwable {
+			return $throwable;
 		}
 
 		/** @inheritdoc */
