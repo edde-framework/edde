@@ -140,10 +140,10 @@
 					$params[sha1($k)] = $v;
 				}
 				$this->fetch(
-					vsprintf("INSERT INTO %s (\n\t%s\n) VALUES (\n\t:%s\n)", [
+					vsprintf('INSERT INTO %s (%s) VALUES (:%s)', [
 						$this->compiler->delimit(($schema = $entity->getSchema())->getRealName()),
-						implode(",\n\t", $columns),
-						implode(",\n\t:", array_keys($params)),
+						implode(',', $columns),
+						implode(',:', array_keys($params)),
 					]),
 					$params
 				);
@@ -165,11 +165,15 @@
 				$params = ['primary' => $entity->getPrimary()->get()];
 				$columns = [];
 				foreach ($source = $this->prepareUpdate($entity) as $k => $v) {
-					$params[$paramId = sha1($k)] = $v;
-					$columns[] = $this->compiler->delimit($k) . ' = :' . $paramId;
+					$columns[] = $this->compiler->delimit($k) . ' = :' . ($paramId = sha1($k));
+					$params[$paramId] = $v;
 				}
 				$this->fetch(
-					"UPDATE\n\t" . $table . "\nSET\n\t" . implode(",\n\t", $columns) . "\nWHERE\n\t" . $this->compiler->delimit($primary->getName()) . ' = :primary',
+					vsprintf('UPDATE %s SET %s WHERE %s = :primary', [
+						$table,
+						implode(', ', $columns),
+						$this->compiler->delimit($primary->getName()),
+					]),
 					$params
 				);
 				$entity->put($this->prepareOutput($schema, $source));
@@ -213,8 +217,11 @@
 		public function load(string $schema, string $id): IEntity {
 			try {
 				$schema = $this->schemaManager->getSchema($schema);
-				$query = "SELECT * FROM " . $this->compiler->delimit($schema->getRealName()) . " WHERE " . $this->compiler->delimit($schema->getPrimary()->getName()) . ' = :primary';
-				foreach ($this->fetch($query, ['primary' => $id]) as $item) {
+				$params = [
+					$this->compiler->delimit($schema->getRealName()),
+					$this->compiler->delimit($schema->getPrimary()->getName()),
+				];
+				foreach ($this->fetch(vsprintf('SELECT * FROM %s WHERE %s = :primary', $params), ['primary' => $id]) as $item) {
 					$entity = new Entity($schema);
 					$entity->push($this->prepareOutput($schema, (object)$item));
 					return $entity;
@@ -233,7 +240,10 @@
 			$schema = $entity->getSchema();
 			$primary = $entity->getPrimary();
 			$this->fetch(
-				'DELETE FROM ' . $this->compiler->delimit($schema->getRealName()) . ' WHERE ' . $this->compiler->delimit($primary->getAttribute()->getName()) . ' = :primary',
+				vsprintf('DELETE FROM %s WHERE %s = :primary', [
+					$this->compiler->delimit($schema->getRealName()),
+					$this->compiler->delimit($primary->getAttribute()->getName()),
+				]),
 				[
 					'primary' => $primary->get(),
 				]
@@ -248,7 +258,11 @@
 				$target->getSchema()
 			);
 			$this->fetch(
-				'DELETE FROM ' . $this->compiler->delimit($relationSchema->getRealName()) . ' WHERE ' . $this->compiler->delimit($relationSchema->getSource()->getName()) . ' = :a AND ' . $this->compiler->delimit($relationSchema->getTarget()->getName()) . ' = :b',
+				vsprintf('DELETE FROM %s WHERE %s = :a AND %s = :b', [
+					$this->compiler->delimit($relationSchema->getRealName()),
+					$this->compiler->delimit($relationSchema->getSource()->getName()),
+					$this->compiler->delimit($relationSchema->getTarget()->getName()),
+				]),
 				[
 					'a' => $entity->getPrimary()->get(),
 					'b' => $target->getPrimary()->get(),
