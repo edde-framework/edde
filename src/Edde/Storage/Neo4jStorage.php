@@ -235,7 +235,13 @@
 				$targetSchema = $target->getSchema()
 			);
 			$this->fetch(
-				'MATCH (:' . $this->compiler->delimit($entitySchema->getRealName()) . ' {' . $this->compiler->delimit($entitySchema->getPrimary()->getName()) . ': $a})-[r:' . $this->compiler->delimit($relationSchema->getRealName()) . ']->(:' . $this->compiler->delimit($targetSchema->getRealName()) . ' {' . $this->compiler->delimit($entitySchema->getPrimary()->getName()) . ': $b}) DETACH DELETE r',
+				vsprintf('MATCH (:%s {%s: $a})-[r:%s]->(:%s {%s: $b}) DETACH DELETE r', [
+					$this->compiler->delimit($entitySchema->getRealName()),
+					$this->compiler->delimit($entitySchema->getPrimary()->getName()),
+					$this->compiler->delimit($relationSchema->getRealName()),
+					$this->compiler->delimit($targetSchema->getRealName()),
+					$this->compiler->delimit($entitySchema->getPrimary()->getName()),
+				]),
 				[
 					'a' => $entity->getPrimary()->get(),
 					'b' => $target->getPrimary()->get(),
@@ -249,7 +255,10 @@
 			$schema = $entity->getSchema();
 			$primary = $entity->getPrimary();
 			$this->fetch(
-				'MATCH (n:' . $this->compiler->delimit($schema->getRealName()) . ' {' . $this->compiler->delimit($primary->getAttribute()->getName()) . ': $primary}) DETACH DELETE n',
+				vsprintf('MATCH (n:%s {%s: $primary}) DETACH DELETE n', [
+					$this->compiler->delimit($schema->getRealName()),
+					$this->compiler->delimit($primary->getAttribute()->getName()),
+				]),
 				[
 					'primary' => $primary->get(),
 				]
@@ -304,11 +313,9 @@
 			$primary = $schema->getPrimary();
 			$sourceAttribute = $schema->getSource();
 			$targetAttribute = $schema->getTarget();
-			$sourceSchema = $this->schemaManager->getSchema($sourceAttribute->getSchema());
-			$targetSchema = $this->schemaManager->getSchema($targetAttribute->getSchema());
 			$schema->checkRelation(
-				$sourceSchema,
-				$targetSchema
+				$sourceSchema = $this->schemaManager->getSchema($sourceAttribute->getSchema()),
+				$targetSchema = $this->schemaManager->getSchema($targetAttribute->getSchema())
 			);
 			$cypher = null;
 			$cypher .= 'MATCH (a:' . $this->compiler->delimit($sourceSchema->getRealName()) . ' {' . $this->compiler->delimit($sourceSchema->getPrimary()->getName()) . ": \$a})\n";
