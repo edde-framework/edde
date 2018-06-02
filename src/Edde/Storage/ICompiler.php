@@ -7,6 +7,9 @@
 	use Edde\Query\QueryException;
 	use Edde\Schema\SchemaException;
 
+	/**
+	 * Query compiler.
+	 */
 	interface ICompiler extends IConfigurable {
 		/**
 		 * compile query into string
@@ -18,18 +21,7 @@
 		 * @throws QueryException
 		 * @throws SchemaException
 		 */
-		public function query(IQuery $query): string;
-
-		/**
-		 * compile simple insert command
-		 *
-		 * @param string $name
-		 * @param string $primary    name of primary property (primary key)
-		 * @param array  $properties param => property
-		 *
-		 * @return string
-		 */
-		public function insert(string $name, string $primary, array $properties): string;
+		public function compile(IQuery $query): string;
 
 		/**
 		 * @param string $delimit

@@ -82,7 +82,7 @@
 					]);
 				}
 			}
-			foreach ($this->fetch($this->compiler->query($query), $params) as $row) {
+			foreach ($this->fetch($this->compiler->compile($query), $params) as $row) {
 				yield $this->row($row, $schemas, $selects);
 			}
 		}
@@ -136,11 +136,15 @@
 				$columns = [];
 				$params = [];
 				foreach ($source = $this->prepareInsert($entity) as $k => $v) {
-					$columns[sha1($k)] = $k;
+					$columns[sha1($k)] = $this->compiler->delimit($k);
 					$params[sha1($k)] = $v;
 				}
 				$this->fetch(
-					$this->compiler->insert(($schema = $entity->getSchema())->getRealName(), $schema->getPrimary()->getName(), $columns),
+					vsprintf('INSERT INTO %s (%s) VALUES (:%s)', [
+						$this->compiler->delimit(($schema = $entity->getSchema())->getRealName()),
+						implode(',', $columns),
+						implode(',:', array_keys($params)),
+					]),
 					$params
 				);
 				$entity->put($this->prepareOutput($schema, $source));

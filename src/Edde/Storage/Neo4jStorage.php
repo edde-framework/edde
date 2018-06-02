@@ -84,7 +84,7 @@
 					$params[$hash][] = $this->attribute($attribute, $v);
 				}
 			}
-			foreach ($this->fetch($this->compiler->query($query), $params) as $row) {
+			foreach ($this->fetch($this->compiler->compile($query), $params) as $row) {
 				yield $this->row($row, $schemas, $selects);
 			}
 		}
@@ -129,7 +129,10 @@
 			}
 			$source = $this->prepareInsert($entity);
 			$this->fetch(
-				$this->compiler->insert($schema->getRealName(), $primary = $schema->getPrimary()->getName(), []),
+				vsprintf('CREATE (a: %s {%s: $primary}) SET a = $set', [
+					$this->compiler->delimit($schema->getRealName()),
+					$this->compiler->delimit($primary = $schema->getPrimary()->getName()),
+				]),
 				[
 					'primary' => $source->{$primary},
 					'set'     => (array)$source,
