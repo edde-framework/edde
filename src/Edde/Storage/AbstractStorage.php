@@ -7,11 +7,11 @@
 	use Edde\Config\ISection;
 	use Edde\Filter\FilterException;
 	use Edde\Query\IQuery;
-	use Edde\Schema\IAttribute;
 	use Edde\Schema\ISchema;
 	use Edde\Service\Config\ConfigService;
 	use Edde\Service\Filter\FilterManager;
 	use Edde\Service\Schema\SchemaManager;
+	use Edde\Service\Storage\StorageFilterService;
 	use Edde\Service\Utils\StringUtils;
 	use Edde\Service\Validator\ValidatorManager;
 	use Edde\Validator\ValidatorException;
@@ -22,6 +22,7 @@
 		use ConfigService;
 		use SchemaManager;
 		use StringUtils;
+		use StorageFilterService;
 		use FilterManager;
 		use ValidatorManager;
 		/** @var string */
@@ -87,118 +88,14 @@
 		}
 
 		/**
-		 * sanitizer and validate input
-		 *
-		 * @param IEntity $entity
-		 *
-		 * @return stdClass
-		 *
-		 * @throws FilterException
-		 * @throws ValidatorException
-		 */
-		protected function prepareInsert(IEntity $entity): stdClass {
-			$stdClass = $entity->toObject();
-			$schema = $entity->getSchema();
-			foreach ($schema->getAttributes() as $name => $attribute) {
-				if (($generator = $attribute->getFilter('generator')) && $stdClass->$name === null) {
-					$stdClass->$name = $this->filterManager->getFilter('storage:' . $generator)->input(null);
-				}
-				$stdClass->$name = $stdClass->$name ?: $attribute->getDefault();
-				if ($validator = $attribute->getValidator()) {
-					$this->validatorManager->validate('storage:' . $validator, $stdClass->$name, (object)[
-						'name'     => $schema->getName() . '::' . $name,
-						'required' => $attribute->isRequired(),
-					]);
-				}
-				$stdClass->$name = $this->filterValue($attribute, $stdClass->$name);
-			}
-			return $stdClass;
-		}
-
-		/**
-		 * @param IAttribute $attribute
-		 * @param mixed      $value
-		 *
-		 * @return mixed
-		 *
-		 * @throws FilterException
-		 */
-		protected function filterValue(IAttribute $attribute, $value) {
-			if ($filter = $attribute->getFilter('type')) {
-				$value = $this->filterManager->getFilter('storage:' . $filter)->input($value);
-			}
-			/**
-			 * common filter support; filter name is used for both directions
-			 */
-			if ($filter = $attribute->getFilter('filter')) {
-				$value = $this->filterManager->getFilter('storage:' . $filter)->input($value);
-			}
-			return $value;
-		}
-
-		/**
-		 * @param IEntity $entity
-		 *
-		 * @return stdClass
-		 *
-		 * @throws FilterException
-		 * @throws ValidatorException
-		 */
-		protected function prepareUpdate(IEntity $entity): stdClass {
-			$stdClass = $entity->toObject();
-			$schema = $entity->getSchema();
-			foreach ($schema->getAttributes() as $name => $attribute) {
-				if ($validator = $attribute->getValidator()) {
-					$this->validatorManager->validate('storage:' . $validator, $stdClass->$name, (object)[
-						'name'     => $schema->getName() . '::' . $name,
-						'required' => $attribute->isRequired(),
-					]);
-				}
-				if ($filter = $attribute->getFilter('type')) {
-					$stdClass->$name = $this->filterManager->getFilter('storage:' . $filter)->input($stdClass->$name);
-				}
-				/**
-				 * common filter support; filter name is used for both directions
-				 */
-				if ($filter = $attribute->getFilter('filter')) {
-					$stdClass->$name = $this->filterManager->getFilter('storage:' . $filter)->input($stdClass->$name);
-				}
-			}
-			return $stdClass;
-		}
-
-		/**
-		 * validate and sanitize output
-		 *
-		 * @param ISchema  $schema
-		 * @param stdClass $stdClass
-		 *
-		 * @return stdClass
-		 * @throws FilterException
-		 */
-		protected function prepareOutput(ISchema $schema, stdClass $stdClass): stdClass {
-			$stdClass = clone $stdClass;
-			foreach ($schema->getAttributes() as $name => $attribute) {
-				if (property_exists($stdClass, $name) === false) {
-					$stdClass->$name = $attribute->getDefault();
-				}
-				if ($filter = $attribute->getFilter('type')) {
-					$stdClass->$name = $this->filterManager->getFilter('storage:' . $filter)->output($stdClass->$name);
-				}
-				if ($filter = $attribute->getFilter('filter')) {
-					$stdClass->$name = $this->filterManager->getFilter('storage:' . $filter)->output($stdClass->$name);
-				}
-			}
-			return $stdClass;
-		}
-
-		/**
 		 * @param array     $row
 		 * @param ISchema[] $schemas
 		 * @param string[]  $selects
 		 *
 		 * @return IRow
+		 *
 		 * @throws FilterException
+		 * @throws ValidatorException
 		 */
 		protected function row(array $row, array $schemas, array $selects): IRow {
 			$items = [];
@@ -208,7 +105,7 @@
 				$items[$alias]->$property = $v;
 			}
 			foreach ($items as $alias => $item) {
-				$items[$alias] = $this->prepareOutput($schemas[$selects[$alias]], $item);
+				$items[$alias] = $this->storageFilterService->output($schemas[$selects[$alias]], $item);
 			}
 			return new Row($items);
 		}

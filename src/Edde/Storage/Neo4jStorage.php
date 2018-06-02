@@ -127,7 +127,7 @@
 			if ($schema->isRelation()) {
 				return $this->relation($entity);
 			}
-			$source = $this->prepareInsert($entity);
+			$source = $this->storageFilterService->input($entity->getSchema(), $entity->toObject());
 			$this->fetch(
 				vsprintf('CREATE (a: %s {%s: $primary}) SET a = $set', [
 					$this->compiler->delimit($schema->getRealName()),
@@ -138,7 +138,7 @@
 					'set'     => (array)$source,
 				]
 			);
-			$entity->put($this->prepareOutput($schema, $source));
+			$entity->put($this->storageFilterService->output($schema, $source));
 			$entity->commit();
 			return $this;
 		}
@@ -153,7 +153,7 @@
 			if ($schema->isRelation()) {
 				return $this->relation($entity);
 			}
-			$source = $this->prepareUpdate($entity);
+			$source = $this->storageFilterService->update($entity->getSchema(), $entity->toObject());
 			$this->fetch(
 				vsprintf('MERGE (a: %s {%s: $primary}) SET a = $set', [
 					$this->compiler->delimit($schema->getRealName()),
@@ -164,7 +164,7 @@
 					'set'     => (array)$source,
 				]
 			);
-			$entity->put($this->prepareOutput($schema, $source));
+			$entity->put($this->storageFilterService->output($schema, $source));
 			$entity->commit();
 			return $this;
 		}
@@ -317,7 +317,7 @@
 				$sourceSchema = $this->schemaManager->getSchema($sourceAttribute->getSchema()),
 				$targetSchema = $this->schemaManager->getSchema($targetAttribute->getSchema())
 			);
-			$source = $this->prepareInsert($entity);
+			$source = $this->storageFilterService->input($entity->getSchema(), $entity->toObject());
 			$this->fetch(
 				vsprintf('MATCH (a:%s {%s: $a}) MATCH (b:%s {%s: $b}) MERGE (a)-[r:%s {%s: $primary}]->(b) SET r = $set', [
 					$this->compiler->delimit($sourceSchema->getRealName()),
@@ -334,7 +334,7 @@
 					'set'     => (array)$source,
 				]
 			);
-			$entity->put($this->prepareOutput($schema, $source));
+			$entity->put($this->storageFilterService->output($schema, $source));
 			$entity->commit();
 			return $this;
 		}

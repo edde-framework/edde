@@ -202,6 +202,8 @@
 		 * @return int[]
 		 *
 		 * @throws StorageException
+		 * @throws SchemaException
+		 * @throws QueryException
 		 */
 		public function count(IQuery $query): array;
 
