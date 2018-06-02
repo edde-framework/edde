@@ -2,23 +2,27 @@
 	declare(strict_types=1);
 	namespace Edde\Query;
 
+	use Edde\Schema\ISchema;
 	use stdClass;
 
+	/**
+	 * Low level query support.
+	 */
 	interface IQuery {
 		/**
 		 * add a source schema to the query
 		 *
-		 * @param string      $schema
+		 * @param ISchema     $schema
 		 * @param string|null $alias
 		 *
 		 * @return IQuery
 		 */
-		public function select(string $schema, string $alias = null): IQuery;
+		public function select(ISchema $schema, string $alias = null): IQuery;
 
 		/**
 		 * make use of the given schema names; [$alias => $schema]
 		 *
-		 * @param string[] $schemas
+		 * @param ISchema[] $schemas
 		 *
 		 * @return IQuery
 		 */
@@ -119,23 +123,23 @@
 		/**
 		 * @param string $alias
 		 *
-		 * @return string
+		 * @return ISchema
 		 *
 		 * @throws QueryException
 		 */
-		public function getSelect(string $alias): string;
+		public function getSchema(string $alias): ISchema;
 
 		/**
 		 * return schemas used in this query; value could be duplicated as an array is [alias => value]
 		 *
-		 * @return string[]
+		 * @return ISchema[]
 		 */
 		public function getSelects(): array;
 
 		/**
 		 * return unique list of used schemas; $schema => $schema (both strings)
 		 *
-		 * @return string[]
+		 * @return ISchema[]
 		 */
 		public function getSchemas(): array;
 

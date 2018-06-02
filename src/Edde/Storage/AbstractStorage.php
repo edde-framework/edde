@@ -7,7 +7,6 @@
 	use Edde\Config\ISection;
 	use Edde\Filter\FilterException;
 	use Edde\Query\IQuery;
-	use Edde\Schema\ISchema;
 	use Edde\Service\Config\ConfigService;
 	use Edde\Service\Filter\FilterManager;
 	use Edde\Service\Schema\SchemaManager;
@@ -88,16 +87,15 @@
 		}
 
 		/**
-		 * @param array     $row
-		 * @param ISchema[] $schemas
-		 * @param string[]  $selects
+		 * @param array    $row
+		 * @param string[] $selects
 		 *
 		 * @return IRow
 		 *
 		 * @throws FilterException
 		 * @throws ValidatorException
 		 */
-		protected function row(array $row, array $schemas, array $selects): IRow {
+		protected function row(array $row, array $selects): IRow {
 			$items = [];
 			foreach ($row as $k => $v) {
 				[$alias, $property] = explode('.', $k, 2);
@@ -105,7 +103,7 @@
 				$items[$alias]->$property = $v;
 			}
 			foreach ($items as $alias => $item) {
-				$items[$alias] = $this->storageFilterService->output($schemas[$selects[$alias]], $item);
+				$items[$alias] = $this->storageFilterService->output($selects[$alias], $item);
 			}
 			return new Row($items);
 		}

@@ -14,14 +14,12 @@
 		/** @inheritdoc */
 		public function compile(IQuery $query): string {
 			$isCount = $query->isCount();
-			$schemas = $this->getSchemas($query->getSchemas());
 			$from = [];
 			$returns = [];
-			foreach (($selects = $query->getSelects()) as $alias => $schema) {
+			foreach ($query->getSelects() as $alias => $schema) {
 				if ($query->isAttached($alias)) {
 					continue;
 				}
-				$schema = $schemas[$schema];
 				if ($schema->isRelation()) {
 					$from[] = vsprintf('()-[%s: %s]->()', [
 						$returns[] = $this->delimit($alias),
@@ -35,9 +33,9 @@
 				]);
 			}
 			foreach ($query->getAttaches() as $attach) {
-				($relationSchema = $schemas[$selects[$attach->relation]])->checkRelation(
-					$sourceSchema = $schemas[$selects[$attach->attach]],
-					$targetSchema = $schemas[$selects[$attach->to]]
+				($relationSchema = $query->getSchema($attach->relation))->checkRelation(
+					$sourceSchema = $query->getSchema($attach->attach),
+					$targetSchema = $query->getSchema($attach->to)
 				);
 				$from[] = vsprintf('(%s: %s)-[%s: %s]->(%s: %s)', [
 					$returns[] = $this->delimit($attach->attach),

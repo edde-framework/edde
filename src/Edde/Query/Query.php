@@ -2,12 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Query;
 
+	use Edde\Schema\ISchema;
 	use Edde\SimpleObject;
 	use stdClass;
 	use function is_string;
 
 	class Query extends SimpleObject implements IQuery {
-		/** @var string[] */
+		/** @var ISchema[] */
 		protected $selects = [];
 		/** @var stdClass[] */
 		protected $attaches = [];
@@ -21,15 +22,15 @@
 		protected $page;
 		/** @var string[] */
 		protected $returns = [];
-		/** @var string[] */
+		/** @var ISchema[] */
 		protected $schemas;
 		/** @var IParams */
 		protected $params;
 		protected $count = false;
 
 		/** @inheritdoc */
-		public function select(string $schema, string $alias = null): IQuery {
-			$this->selects[$alias ?: $schema] = $schema;
+		public function select(ISchema $schema, string $alias = null): IQuery {
+			$this->selects[$alias ?: $schema->getName()] = $schema;
 			return $this;
 		}
 
@@ -126,7 +127,7 @@
 		}
 
 		/** @inheritdoc */
-		public function getSelect(string $alias): string {
+		public function getSchema(string $alias): ISchema {
 			if (isset($this->selects[$alias]) === false) {
 				throw new QueryException(sprintf('Requested alias [%s] is not available in the query.', $alias));
 			}
@@ -144,8 +145,8 @@
 				return $this->schemas;
 			}
 			$this->schemas = [];
-			foreach (array_unique(array_values($this->getSelects())) as $schema) {
-				$this->schemas[$schema] = $schema;
+			foreach ($this->selects as $schema) {
+				$this->schemas[$schema->getName()] = $schema;
 			}
 			return $this->schemas;
 		}

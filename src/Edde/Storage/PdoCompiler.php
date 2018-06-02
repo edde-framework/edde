@@ -13,11 +13,10 @@
 		/** @inheritdoc */
 		public function compile(IQuery $query): string {
 			$isCount = $query->isCount();
-			$schemas = $this->getSchemas($query->getSchemas());
 			$columns = [];
 			$from = [];
 			foreach (($selects = $query->getSelects()) as $alias => $schema) {
-				foreach ($schemas[$schema]->getAttributes() as $name => $attribute) {
+				foreach ($schema->getAttributes() as $name => $attribute) {
 					$columns[] = $isCount ?
 						vsprintf('COUNT(%s.%s) AS %s', [
 							$this->delimit($alias),
@@ -34,14 +33,14 @@
 					continue;
 				}
 				$from[] = vsprintf('%s %s', [
-					$this->delimit($schemas[$schema]->getRealName()),
+					$this->delimit($schema->getRealName()),
 					$this->delimit($alias),
 				]);
 			}
 			foreach ($query->getAttaches() as $attach) {
-				($relationSchema = $schemas[$selects[$attach->relation]])->checkRelation(
-					$sourceSchema = $schemas[$selects[$attach->attach]],
-					$targetSchema = $schemas[$selects[$attach->to]]
+				($relationSchema = $query->getSchema($attach->relation))->checkRelation(
+					$sourceSchema = $query->getSchema($attach->attach),
+					$targetSchema = $query->getSchema($attach->to)
 				);
 				$from[] = vsprintf("%s %s\n\t\tINNER JOIN %s %s ON %2\$s.%s = %4\$s.%s\n\t\tINNER JOIN %s %s ON %2\$s.%s = %8\$s.%s", [
 					$this->delimit($relationSchema->getRealName()),

@@ -42,13 +42,4 @@
 			}
 			return $this->schemas[$name];
 		}
-
-		/** @inheritdoc */
-		public function getSchemas(array $names): array {
-			$schemas = [];
-			foreach ($names as $name) {
-				$schemas[$name] = $this->getSchema($name);
-			}
-			return $schemas;
-		}
 	}

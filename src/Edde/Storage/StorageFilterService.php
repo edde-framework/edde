@@ -90,10 +90,8 @@
 		/** @inheritdoc */
 		public function params(IQuery $query, array $binds = []): array {
 			$params = [];
-			$schemas = $this->schemaManager->getSchemas($query->getSchemas());
-			$selects = $query->getSelects();
 			foreach ($query->params($binds) as $name => $param) {
-				$attribute = $schemas[$selects[$param->getAlias()]]->getAttribute($param->getProperty());
+				$attribute = $query->getSchema($param->getAlias())->getAttribute($param->getProperty());
 				$params[$hash = $param->getName()] = is_iterable($value = $param->getValue()) ?
 					array_map(function ($value) use ($attribute) {
 						return $this->value($attribute, $value);

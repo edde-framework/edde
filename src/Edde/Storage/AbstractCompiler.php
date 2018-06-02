@@ -7,8 +7,6 @@
 	use Edde\Query\IChains;
 	use Edde\Query\IWhere;
 	use Edde\Query\IWheres;
-	use Edde\Schema\ISchema;
-	use Edde\Schema\SchemaException;
 	use Edde\Service\Schema\SchemaManager;
 
 	abstract class AbstractCompiler extends Edde implements ICompiler {
@@ -46,21 +44,6 @@
 			 */
 			array_shift($fragments);
 			return implode('', $fragments);
-		}
-
-		/**
-		 * @param array $selects
-		 *
-		 * @return ISchema[]
-		 *
-		 * @throws SchemaException
-		 */
-		protected function getSchemas(array $selects): array {
-			$schemas = [];
-			foreach ($selects as $schema) {
-				$schemas[$schema] = $this->schemaManager->getSchema($schema);
-			}
-			return $schemas;
 		}
 
 		abstract public function where(IWhere $where): string;

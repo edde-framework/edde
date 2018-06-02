@@ -27,6 +27,8 @@
 		 * @param string|null $alias
 		 *
 		 * @return ICollection
+		 *
+		 * @throws SchemaException
 		 */
 		public function select(string $schema, string $alias = null): ICollection;
 
@@ -34,6 +36,8 @@
 		 * @param string[] $schemas
 		 *
 		 * @return ICollection
+		 *
+		 * @throws SchemaException
 		 */
 		public function selects(array $schemas): ICollection;
 

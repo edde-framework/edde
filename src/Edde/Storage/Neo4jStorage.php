@@ -69,14 +69,13 @@
 
 		/** @inheritdoc */
 		public function query(IQuery $query, array $binds = []): Generator {
-			$schemas = $this->schemaManager->getSchemas($query->getSchemas());
-			$selects = $query->getSelects();
 			$params = [];
 			foreach ($this->storageFilterService->params($query, $binds) as $param) {
 				$params[$param->getHash()] = $param->getValue();
 			}
+			$selects = $query->getSelects();
 			foreach ($this->fetch($this->compiler->compile($query), $params) as $row) {
-				yield $this->row($row, $schemas, $selects);
+				yield $this->row($row, $selects);
 			}
 		}
 
@@ -207,7 +206,7 @@
 				}
 				foreach ($this->fetch($query, ['primary' => $id]) as $item) {
 					$entity = new Entity($schema);
-					$entity->push($this->row($item, ['schema' => $schema], ['n' => 'schema'])->getItem('n'));
+					$entity->push($this->row($item, ['n' => $schema])->getItem('n'));
 					return $entity;
 				}
 				throw new EntityNotFoundException(sprintf('Cannot load any entity [%s] with id [%s].', $schema->getName(), $id));

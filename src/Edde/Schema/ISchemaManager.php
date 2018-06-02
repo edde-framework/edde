@@ -45,15 +45,4 @@
 		 * @throws SchemaException
 		 */
 		public function getSchema(string $name): ISchema;
-
-		/**
-		 * return schemas by name
-		 *
-		 * @param string[] $names
-		 *
-		 * @return ISchema[]
-		 *
-		 * @throws SchemaException
-		 */
-		public function getSchemas(array $names): array;
 	}

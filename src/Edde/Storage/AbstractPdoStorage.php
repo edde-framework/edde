@@ -51,8 +51,6 @@
 
 		/** @inheritdoc */
 		public function query(IQuery $query, array $binds = []): Generator {
-			$schemas = $this->schemaManager->getSchemas($query->getSchemas());
-			$selects = $query->getSelects();
 			$params = [];
 			foreach ($this->storageFilterService->params($query, $binds) as $param) {
 				$hash = $param->getHash();
@@ -74,7 +72,7 @@
 				 */
 				$this->exec(vsprintf('CREATE TEMPORARY TABLE %s ( item %s )', [
 					$temporary = $this->compiler->delimit($hash),
-					$this->type($schemas[$selects[$param->getAlias()]]->getAttribute($param->getProperty())->getType()),
+					$this->type($query->getSchema($param->getAlias())->getAttribute($param->getProperty())->getType()),
 				]));
 				$statement = $this->pdo->prepare(vsprintf('INSERT INTO %s (item) VALUES (:item)', [
 					$temporary,
@@ -85,8 +83,9 @@
 					]);
 				}
 			}
+			$selects = $query->getSelects();
 			foreach ($this->fetch($this->compiler->compile($query), $params) as $row) {
-				yield $this->row($row, $schemas, $selects);
+				yield $this->row($row, $selects);
 			}
 		}
 
