@@ -74,14 +74,12 @@
 			$params = [];
 			foreach ($query->params($binds) as $name => $param) {
 				$hash = $param->getHash();
-				$schema = $schemas[$selects[$param->getAlias()]];
-				$attribute = $schema->getAttribute($param->getProperty());
 				if (is_iterable($value = $param->getValue()) === false) {
-					$params[$hash] = $this->filterValue($attribute, $param->getValue());
+					$params[$hash] = $param->getValue();
 					continue;
 				}
 				foreach ($value as $v) {
-					$params[$hash][] = $this->filterValue($attribute, $v);
+					$params[$hash][] = $v;
 				}
 			}
 			foreach ($this->fetch($this->compiler->compile($query), $params) as $row) {

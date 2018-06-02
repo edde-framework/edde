@@ -50,6 +50,7 @@
 		 *
 		 * @throws StorageException
 		 * @throws FilterException
+		 * @throws ValidatorException
 		 * @throws QueryException
 		 * @throws SchemaException
 		 */
