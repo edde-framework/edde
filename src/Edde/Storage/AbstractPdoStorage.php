@@ -51,15 +51,15 @@
 
 		/** @inheritdoc */
 		public function query(IQuery $query, array $binds = []): Generator {
-			$schemas = $this->schemaManager->getSchemas($query->getSchemas());
-			$selects = $query->getSelects();
-			$params = [];
-			foreach ($query->params($binds) as $name => $param) {
-				$hash = $param->getHash();
-				if (is_iterable($value = $param->getValue()) === false) {
-					$params[$hash] = $param->getValue();
+			foreach (($params = $this->storageFilterService->params($query, $binds)) as $name => $value) {
+				if (is_iterable($value) === false) {
 					continue;
 				}
+				/**
+				 * because we have temp. table and this parameter is not going to be sent to PDO, it's
+				 * necessary to kill it
+				 */
+				unset($params[$name]);
 				/**
 				 * this is ugly hack, because of some motherfucker who not implement array support for
 				 * WHERE IN clause; so in general it was much more easier to use param name as a temporary
@@ -67,9 +67,8 @@
 				 *
 				 * it's not necessary to thanks me
 				 */
-				$this->exec(vsprintf('CREATE TEMPORARY TABLE %s ( item %s )', [
-					$temporary = $this->compiler->delimit($hash),
-					$this->type($schemas[$selects[$param->getAlias()]]->getAttribute($param->getProperty())->getType()),
+				$this->exec(vsprintf('CREATE TEMPORARY TABLE %s ( item VARCHAR(256) )', [
+					$temporary = $this->compiler->delimit($name),
 				]));
 				$statement = $this->pdo->prepare(vsprintf('INSERT INTO %s (item) VALUES (:item)', [
 					$temporary,
@@ -80,6 +79,8 @@
 					]);
 				}
 			}
+			$schemas = $this->schemaManager->getSchemas($query->getSchemas());
+			$selects = $query->getSelects();
 			foreach ($this->fetch($this->compiler->compile($query), $params) as $row) {
 				yield $this->row($row, $schemas, $selects);
 			}

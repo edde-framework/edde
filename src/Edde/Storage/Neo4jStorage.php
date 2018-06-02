@@ -71,18 +71,7 @@
 		public function query(IQuery $query, array $binds = []): Generator {
 			$schemas = $this->schemaManager->getSchemas($query->getSchemas());
 			$selects = $query->getSelects();
-			$params = [];
-			foreach ($query->params($binds) as $name => $param) {
-				$hash = $param->getHash();
-				if (is_iterable($value = $param->getValue()) === false) {
-					$params[$hash] = $param->getValue();
-					continue;
-				}
-				foreach ($value as $v) {
-					$params[$hash][] = $v;
-				}
-			}
-			foreach ($this->fetch($this->compiler->compile($query), $params) as $row) {
+			foreach ($this->fetch($this->compiler->compile($query), $this->storageFilterService->params($query, $binds)) as $row) {
 				yield $this->row($row, $schemas, $selects);
 			}
 		}

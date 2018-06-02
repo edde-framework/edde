@@ -4,7 +4,10 @@
 
 	use Edde\Config\IConfigurable;
 	use Edde\Filter\FilterException;
+	use Edde\Query\IQuery;
+	use Edde\Query\QueryException;
 	use Edde\Schema\ISchema;
+	use Edde\Schema\SchemaException;
 	use Edde\Validator\ValidatorException;
 	use stdClass;
 
@@ -47,4 +50,18 @@
 		 * @throws ValidatorException
 		 */
 		public function output(ISchema $schema, stdClass $output): stdClass;
+
+		/**
+		 * filter input params for a storage
+		 *
+		 * @param IQuery $query
+		 * @param array  $binds
+		 *
+		 * @return array
+		 *
+		 * @throws QueryException
+		 * @throws SchemaException
+		 * @throws FilterException
+		 */
+		public function params(IQuery $query, array $binds = []): array;
 	}

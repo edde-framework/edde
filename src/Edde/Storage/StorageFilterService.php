@@ -3,14 +3,21 @@
 	namespace Edde\Storage;
 
 	use Edde\Edde;
+	use Edde\Filter\FilterException;
+	use Edde\Query\IQuery;
+	use Edde\Schema\IAttribute;
 	use Edde\Schema\ISchema;
 	use Edde\Service\Filter\FilterManager;
+	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Validator\ValidatorManager;
 	use stdClass;
+	use function array_map;
+	use function iterator_to_array;
 
 	class StorageFilterService extends Edde implements IStorageFilterService {
 		use FilterManager;
 		use ValidatorManager;
+		use SchemaManager;
 		/** @var string */
 		protected $prefix;
 
@@ -35,15 +42,7 @@
 						'required' => $attribute->isRequired(),
 					]);
 				}
-				if ($filter = $attribute->getFilter('type')) {
-					$stdClass->$name = $this->filterManager->getFilter($this->prefix . ':' . $filter)->input($stdClass->$name);
-				}
-				/**
-				 * common filter support; filter name is used for both directions
-				 */
-				if ($filter = $attribute->getFilter('filter')) {
-					$stdClass->$name = $this->filterManager->getFilter($this->prefix . ':' . $filter)->input($stdClass->$name);
-				}
+				$stdClass->$name = $this->value($attribute, $stdClass->$name);
 			}
 			return $stdClass;
 		}
@@ -86,5 +85,42 @@
 				}
 			}
 			return $stdClass;
+		}
+
+		/** @inheritdoc */
+		public function params(IQuery $query, array $binds = []): array {
+			$params = [];
+			$schemas = $this->schemaManager->getSchemas($query->getSchemas());
+			$selects = $query->getSelects();
+			foreach ($query->params($binds) as $name => $param) {
+				$attribute = $schemas[$selects[$param->getAlias()]]->getAttribute($param->getProperty());
+				$params[$hash = $param->getHash()] = is_iterable($value = $param->getValue()) ?
+					array_map(function ($value) use ($attribute) {
+						return $this->value($attribute, $value);
+					}, iterator_to_array($value)) :
+					$this->value($attribute, $value);
+			}
+			return $params;
+		}
+
+		/**
+		 * @param IAttribute $attribute
+		 * @param mixed      $value
+		 *
+		 * @return mixed
+		 *
+		 * @throws FilterException
+		 */
+		protected function value(IAttribute $attribute, $value) {
+			if ($filter = $attribute->getFilter('type')) {
+				$value = $this->filterManager->getFilter($this->prefix . ':' . $filter)->input($value);
+			}
+			/**
+			 * common filter support; filter name is used for both directions
+			 */
+			if ($filter = $attribute->getFilter('filter')) {
+				$value = $this->filterManager->getFilter($this->prefix . ':' . $filter)->input($value);
+			}
+			return $value;
 		}
 	}
