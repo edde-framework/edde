@@ -140,12 +140,11 @@
 					$params[sha1($k)] = $v;
 				}
 				$this->fetch(
-					"INSERT INTO\n\t" .
-					$this->compiler->delimit(($schema = $entity->getSchema())->getRealName()) .
-					" (\n\t" . implode(",\n\t", $columns) .
-					")\n\tVALUES (\n\t:" .
-					implode(",\n\t:", array_keys($params)) .
-					"\n)\n",
+					vsprintf("INSERT INTO %s (\n\t%s\n) VALUES (\n\t:%s\n)", [
+						$this->compiler->delimit(($schema = $entity->getSchema())->getRealName()),
+						implode(",\n\t", $columns),
+						implode(",\n\t:", array_keys($params)),
+					]),
 					$params
 				);
 				$entity->put($this->prepareOutput($schema, $source));
