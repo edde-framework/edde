@@ -96,6 +96,30 @@
 						$this->delimit($stdClass->property),
 						$stdClass->param,
 					]);
+				case 'lesserThan':
+					return vsprintf('%s.%s < $%s', [
+						$this->delimit($stdClass->alias),
+						$this->delimit($stdClass->property),
+						$stdClass->param,
+					]);
+				case 'lesserThanEqual':
+					return vsprintf('%s.%s <= $%s', [
+						$this->delimit($stdClass->alias),
+						$this->delimit($stdClass->property),
+						$stdClass->param,
+					]);
+				case 'greaterThan':
+					return vsprintf('%s.%s > $%s', [
+						$this->delimit($stdClass->alias),
+						$this->delimit($stdClass->property),
+						$stdClass->param,
+					]);
+				case 'greaterThanEqual':
+					return vsprintf('%s.%s >= $%s', [
+						$this->delimit($stdClass->alias),
+						$this->delimit($stdClass->property),
+						$stdClass->param,
+					]);
 				case 'isNull':
 					return vsprintf('%s.%s IS NULL', [
 						$this->delimit($stdClass->alias),
