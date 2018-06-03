@@ -4,6 +4,7 @@
 
 	use Edde\Collection\Entity;
 	use Edde\Collection\EntityNotFoundException;
+	use Edde\Collection\ICollection;
 	use Edde\Collection\IEntity;
 	use Edde\Config\ISection;
 	use Edde\Query\IQuery;
@@ -27,6 +28,8 @@
 		protected $section;
 		/** @var ICompiler */
 		protected $compiler;
+		/** @var ICollection[] */
+		protected $loads = [];
 
 		/**
 		 * @param string $config
@@ -48,15 +51,19 @@
 		/** @inheritdoc */
 		public function load(string $schema, string $id): IEntity {
 			try {
-				$collection = $this->collectionManager->collection();
-				$collection->select($alias = $schema);
-				$schema = $this->schemaManager->getSchema($schema);
-				($wheres = $collection->getQuery()->wheres())->where('primary')->equalTo($alias, $schema->getPrimary()->getName());
-				$wheres->chains()->chain()->where('primary');
-				foreach ($collection->execute(['primary' => $id]) as $record) {
-					return $record->getEntity($alias);
+				if (isset($this->loads[$schema]) === false) {
+					$Schema = $this->schemaManager->getSchema($schema);
+					$this->loads[$schema] = $collection = $this->collectionManager->collection();
+					$collection->select($schema);
+					$wheres = $collection->getQuery()->wheres();
+					$wheres->where('primary')->equalTo($schema, $Schema->getPrimary()->getName());
+					$wheres->chains()->chain()->where('primary');
 				}
-				throw new EntityNotFoundException(sprintf('Cannot load any entity [%s] with id [%s].', $schema->getName(), $id));
+				$collection = $this->loads[$schema];
+				foreach ($collection->execute(['primary' => $id]) as $record) {
+					return $record->getEntity($schema);
+				}
+				throw new EntityNotFoundException(sprintf('Cannot load any entity [%s] with id [%s].', $schema, $id));
 			} catch (EntityNotFoundException $exception) {
 				throw $exception;
 			} catch (Throwable $exception) {
