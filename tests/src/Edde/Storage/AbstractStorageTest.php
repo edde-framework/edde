@@ -307,8 +307,10 @@
 
 		/**
 		 * @throws EntityNotFoundException
+		 * @throws FilterException
 		 * @throws SchemaException
 		 * @throws StorageException
+		 * @throws ValidatorException
 		 */
 		public function testLinkException() {
 			$this->expectException(SchemaException::class);
@@ -473,8 +475,9 @@
 		}
 
 		/**
-		 * @throws StorageException
 		 * @throws QueryException
+		 * @throws SchemaException
+		 * @throws StorageException
 		 */
 		public function testCount() {
 			self::assertEquals(7, $this->collectionManager->collection()->select(ProjectSchema::class)->count(ProjectSchema::class));
