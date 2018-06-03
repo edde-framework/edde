@@ -22,6 +22,42 @@
 		public function equalTo(string $alias, string $property, string $param = null): IWhere;
 
 		/**
+		 * @param string      $alias
+		 * @param string      $property
+		 * @param string|null $param
+		 *
+		 * @return IWhere
+		 */
+		public function lesserThan(string $alias, string $property, string $param = null): IWhere;
+
+		/**
+		 * @param string      $alias
+		 * @param string      $property
+		 * @param string|null $param
+		 *
+		 * @return IWhere
+		 */
+		public function lesserThanEqual(string $alias, string $property, string $param = null): IWhere;
+
+		/**
+		 * @param string      $alias
+		 * @param string      $property
+		 * @param string|null $param
+		 *
+		 * @return IWhere
+		 */
+		public function greaterThan(string $alias, string $property, string $param = null): IWhere;
+
+		/**
+		 * @param string      $alias
+		 * @param string      $property
+		 * @param string|null $param
+		 *
+		 * @return IWhere
+		 */
+		public function greaterThanEqual(string $alias, string $property, string $param = null): IWhere;
+
+		/**
 		 * @param string $alias
 		 * @param string $property
 		 *

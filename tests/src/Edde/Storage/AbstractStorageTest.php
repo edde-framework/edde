@@ -447,6 +447,10 @@
 			// ... 1. prepare individual wheres which could be used
 			$wheres = $query->wheres();
 			$wheres->where('project status in')->in('p', 'status');
+			$wheres->where('project status greater')->greaterThan('p', 'status');
+			$wheres->where('project status greater equal')->greaterThanEqual('p', 'status');
+			$wheres->where('project status lesser')->lesserThan('p', 'status');
+			$wheres->where('project status lesser equal')->lesserThanEqual('p', 'status');
 			$wheres->where('user uuid')->equalTo('u', 'uuid');
 			$wheres->where('is owner')->equalTo('pm', 'owner');
 			$wheres->where('project name')->equalTo('p', 'name');
@@ -456,15 +460,25 @@
 			$chains = $wheres->chains();
 			$chains->chain('da group')->where('user uuid')->and('is owner')->and('project name');
 			$chains->chain('something')->where('project start')->and('project name not null');
-			$chains->chain()->where('project status in')->and('da group')->and('something');
+			$chains->chain('project status gte')->where('project status greater')->and('project status greater equal');
+			$chains->chain('project status lte')->where('project status lesser')->and('project status lesser equal');
+			$chains->chain()->where('project status in')
+			       ->and('da group')
+			       ->and('something')
+			       ->and('project status gte')
+			       ->and('project status lte');
 			// ... 3. set parameters for where based on given or guessed names
 			$bind = [
-				'project status in' => (function () {
+				'project status in'            => (function () {
 					yield from [ProjectSchema::STATUS_CREATED, ProjectSchema::STATUS_STARTED];
 				})(),
-				'user uuid'         => 'on',
-				'is owner'          => true,
-				'project name'      => 'expected project',
+				'project status greater'       => -1,
+				'project status greater equal' => 0,
+				'project status lesser'        => 1,
+				'project status lesser equal'  => 0,
+				'user uuid'                    => 'on',
+				'is owner'                     => true,
+				'project name'                 => 'expected project',
 			];
 			$count = 0;
 			foreach ($collection->execute($bind) as $record) {
