@@ -4,11 +4,10 @@
 
 	use Edde\Collection\Entity;
 	use Edde\Collection\EntityNotFoundException;
-	use Edde\Collection\ICollection;
 	use Edde\Collection\IEntity;
 	use Edde\Config\ISection;
 	use Edde\Query\IQuery;
-	use Edde\Service\Collection\CollectionManager;
+	use Edde\Query\Query;
 	use Edde\Service\Config\ConfigService;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\StorageFilterService;
@@ -21,14 +20,13 @@
 		use SchemaManager;
 		use StringUtils;
 		use StorageFilterService;
-		use CollectionManager;
 		/** @var string */
 		protected $config;
 		/** @var ISection */
 		protected $section;
 		/** @var ICompiler */
 		protected $compiler;
-		/** @var ICollection[] */
+		/** @var IQuery[] */
 		protected $loads = [];
 
 		/**
@@ -53,14 +51,13 @@
 			try {
 				if (isset($this->loads[$schema]) === false) {
 					$chema = $this->schemaManager->getSchema($schema);
-					$this->loads[$schema] = $collection = $this->collectionManager->collection();
-					$collection->select($schema);
-					$wheres = $collection->getQuery()->wheres();
+					$this->loads[$schema] = $query = new Query();
+					$query->select($chema);
+					$wheres = $query->wheres();
 					$wheres->where('primary')->equalTo($schema, $chema->getPrimary()->getName());
 					$wheres->chains()->chain()->where('primary');
 				}
-				$collection = $this->loads[$schema];
-				foreach ($collection->execute(['primary' => $id]) as $record) {
+				foreach ($this->query($this->loads[$schema], ['primary' => $id]) as $record) {
 					return $record->getEntity($schema);
 				}
 				throw new EntityNotFoundException(sprintf('Cannot load any entity [%s] with id [%s].', $schema, $id));
