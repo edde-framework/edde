@@ -450,10 +450,13 @@
 			$wheres->where('user uuid')->equalTo('u', 'uuid');
 			$wheres->where('is owner')->equalTo('pm', 'owner');
 			$wheres->where('project name')->equalTo('p', 'name');
+			$wheres->where('project start')->isNull('p', 'start');
+			$wheres->where('project name not null')->isNotNull('p', 'name');
 			// ... 2. chain them together using operators and groups
 			$chains = $wheres->chains();
 			$chains->chain('da group')->where('user uuid')->and('is owner')->and('project name');
-			$chains->chain()->where('project status in')->and('da group');
+			$chains->chain('something')->where('project start')->and('project name not null');
+			$chains->chain()->where('project status in')->and('da group')->and('something');
 			// ... 3. set parameters for where based on given or guessed names
 			$bind = [
 				'project status in' => (function () {

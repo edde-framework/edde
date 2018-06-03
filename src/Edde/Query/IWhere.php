@@ -22,6 +22,22 @@
 		public function equalTo(string $alias, string $property, string $param = null): IWhere;
 
 		/**
+		 * @param string $alias
+		 * @param string $property
+		 *
+		 * @return IWhere
+		 */
+		public function isNull(string $alias, string $property): IWhere;
+
+		/**
+		 * @param string $alias
+		 * @param string $property
+		 *
+		 * @return IWhere
+		 */
+		public function isNotNull(string $alias, string $property): IWhere;
+
+		/**
 		 * @param string      $alias    schema alias of a property
 		 * @param string      $property property of a source alias
 		 * @param string|null $param    parameter name reference; if not specified, where name should be used

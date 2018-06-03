@@ -100,6 +100,16 @@
 						$this->delimit($stdClass->property),
 						$stdClass->param,
 					]);
+				case 'isNull':
+					return vsprintf('%s.%s IS NULL', [
+						$this->delimit($stdClass->alias),
+						$this->delimit($stdClass->property),
+					]);
+				case 'isNotNull':
+					return vsprintf('%s.%s IS NOT NULL', [
+						$this->delimit($stdClass->alias),
+						$this->delimit($stdClass->property),
+					]);
 				case 'in':
 					return vsprintf('%s.%s IN (SELECT item FROM %s)', [
 						$this->delimit($stdClass->alias),

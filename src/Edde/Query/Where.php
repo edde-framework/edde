@@ -41,6 +41,26 @@
 		}
 
 		/** @inheritdoc */
+		public function isNull(string $alias, string $property): IWhere {
+			$this->where = (object)[
+				'type'     => __FUNCTION__,
+				'alias'    => $alias,
+				'property' => $property,
+			];
+			return $this;
+		}
+
+		/** @inheritdoc */
+		public function isNotNull(string $alias, string $property): IWhere {
+			$this->where = (object)[
+				'type'     => __FUNCTION__,
+				'alias'    => $alias,
+				'property' => $property,
+			];
+			return $this;
+		}
+
+		/** @inheritdoc */
 		public function in(string $alias, string $property, string $param = null): IWhere {
 			$param = new Param($alias, $property, $param ?: $this->name);
 			$this->where = (object)[
