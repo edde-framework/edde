@@ -4,19 +4,13 @@
 
 	use Edde\Edde;
 	use Edde\Query\IQuery;
-	use Edde\Service\Collection\EntityManager;
-	use Edde\Service\Container\Container;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
-	use Edde\Service\Transaction\Transaction;
 	use Generator;
 	use function is_int;
 
 	class Collection extends Edde implements ICollection {
-		use Container;
-		use Transaction;
 		use Storage;
-		use EntityManager;
 		use SchemaManager;
 		/** @var IQuery */
 		protected $query;
@@ -61,22 +55,11 @@
 
 		/** @inheritdoc */
 		public function count(string $alias): int {
-			/**
-			 * ensure that alias is available in a select
-			 */
-			$this->query->getSchema($alias);
-			return (int)$this->storage->count($this->query)[$alias];
+			return (int)$this->storage->count($this->query)->getItem($alias);
 		}
 
 		/** @inheritdoc */
 		public function execute(array $binds = []): Generator {
-			$selects = $this->query->getSelects();
-			foreach ($this->storage->query($this->query, $binds) as $row) {
-				$entities = [];
-				foreach ($row->getItems() as $alias => $item) {
-					$entities[$alias] = $this->entityManager->entity($selects[$alias]->getName(), $item);
-				}
-				yield new Record($row, $entities);
-			}
+			yield from $this->storage->query($this->query, $binds);
 		}
 	}

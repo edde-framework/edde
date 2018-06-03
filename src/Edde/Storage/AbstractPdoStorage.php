@@ -5,6 +5,7 @@
 	use Edde\Collection\IEntity;
 	use Edde\Config\ConfigException;
 	use Edde\Query\IQuery;
+	use Edde\Service\Container\Container;
 	use Edde\Service\Schema\SchemaManager;
 	use Generator;
 	use PDO;
@@ -18,6 +19,7 @@
 
 	abstract class AbstractPdoStorage extends AbstractStorage {
 		use SchemaManager;
+		use Container;
 		/** @var PDO */
 		protected $pdo;
 
@@ -50,6 +52,7 @@
 		/** @inheritdoc */
 		public function query(IQuery $query, array $binds = []): Generator {
 			$params = [];
+			$sql = $this->compiler->compile($query);
 			foreach ($this->storageFilterService->params($query, $binds) as $param) {
 				$hash = $param->getHash();
 				if (is_iterable($value = $param->getValue()) === false) {
@@ -81,8 +84,8 @@
 					]);
 				}
 			}
-			foreach ($this->fetch($this->compiler->compile($query), $params) as $items) {
-				yield new Row($query, $items);
+			foreach ($this->fetch($sql, $params) as $items) {
+				yield $this->container->create(Record::class, [$query, $items], __METHOD__);
 			}
 		}
 

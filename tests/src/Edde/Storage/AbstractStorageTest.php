@@ -3,7 +3,6 @@
 	namespace Edde\Storage;
 
 	use DateTime;
-	use Edde\Collection\CollectionException;
 	use Edde\Collection\EntityNotFoundException;
 	use Edde\Container\ContainerException;
 	use Edde\Filter\FilterException;
@@ -120,7 +119,6 @@
 		}
 
 		/**
-		 * @throws CollectionException
 		 * @throws FilterException
 		 * @throws QueryException
 		 * @throws SchemaException
@@ -132,6 +130,7 @@
 			$entities = [];
 			foreach ($collection->execute() as $record) {
 				$entity = $record->getEntity(LabelSchema::class)->toObject();
+				self::assertSame($record->getEntity(LabelSchema::class), $record->getEntity(LabelSchema::class));
 				unset($entity->uuid);
 				$entities[] = $entity;
 			}
@@ -372,7 +371,6 @@
 		}
 
 		/**
-		 * @throws CollectionException
 		 * @throws FilterException
 		 * @throws QueryException
 		 * @throws SchemaException
@@ -414,7 +412,6 @@
 		}
 
 		/**
-		 * @throws CollectionException
 		 * @throws FilterException
 		 * @throws QueryException
 		 * @throws SchemaException
@@ -485,7 +482,6 @@
 		}
 
 		/**
-		 * @throws CollectionException
 		 * @throws FilterException
 		 * @throws QueryException
 		 * @throws SchemaException
@@ -521,7 +517,6 @@
 		}
 
 		/**
-		 * @throws CollectionException
 		 * @throws FilterException
 		 * @throws QueryException
 		 * @throws SchemaException

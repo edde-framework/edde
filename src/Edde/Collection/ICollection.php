@@ -6,6 +6,7 @@
 	use Edde\Query\IQuery;
 	use Edde\Query\QueryException;
 	use Edde\Schema\SchemaException;
+	use Edde\Storage\IRecord;
 	use Edde\Storage\StorageException;
 	use Generator;
 

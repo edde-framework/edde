@@ -71,7 +71,7 @@
 				$params[$param->getHash()] = $param->getValue();
 			}
 			foreach ($this->fetch($this->compiler->compile($query), $params) as $items) {
-				yield new Row($query, $items);
+				yield $this->container->create(Record::class, [$query, $items], __METHOD__);
 			}
 		}
 

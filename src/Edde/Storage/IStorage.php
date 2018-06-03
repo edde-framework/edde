@@ -46,7 +46,7 @@
 		 * @param IQuery $query
 		 * @param array  $binds
 		 *
-		 * @return Generator|Row[]
+		 * @return Generator|Record[]
 		 *
 		 * @throws StorageException
 		 * @throws FilterException
@@ -200,13 +200,13 @@
 		 *
 		 * @param IQuery $query
 		 *
-		 * @return int[]
+		 * @return IRecord
 		 *
 		 * @throws StorageException
 		 * @throws SchemaException
 		 * @throws QueryException
 		 */
-		public function count(IQuery $query): array;
+		public function count(IQuery $query): IRecord;
 
 		/**
 		 * provides instance of compiler compatible with this storage

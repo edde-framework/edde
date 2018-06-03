@@ -51,7 +51,8 @@
 				$collection = $this->collectionManager->collection();
 				$collection->select($alias = $schema);
 				$schema = $this->schemaManager->getSchema($schema);
-				$collection->getQuery()->wheres()->where('primary')->equalTo($alias, $schema->getPrimary()->getName());
+				($wheres = $collection->getQuery()->wheres())->where('primary')->equalTo($alias, $schema->getPrimary()->getName());
+				$wheres->chains()->chain()->where('primary');
 				foreach ($collection->execute(['primary' => $id]) as $record) {
 					return $record->getEntity($alias);
 				}
@@ -91,28 +92,15 @@
 		}
 
 		/** @inheritdoc */
-		public function count(IQuery $query): array {
+		public function count(IQuery $query): IRecord {
 			try {
-				foreach ($this->fetch($this->compiler->compile($query->count(true))) as $row) {
-					return $row;
+				foreach ($this->fetch($this->compiler->compile($query->count(true))) as $items) {
+					return new Record($query, $items);
 				}
 				throw new StorageException(sprintf('Cannot get counts from a query.'));
 			} finally {
 				$query->count(false);
 			}
-		}
-
-		protected function row(array $row, array $selects): IRow {
-			$items = [];
-			foreach ($row as $k => $v) {
-				[$alias, $property] = explode('.', $k, 2);
-				$items[$alias] = $items[$alias] ?? new stdClass();
-				$items[$alias]->$property = $v;
-			}
-			foreach ($items as $alias => $item) {
-				$items[$alias] = $this->storageFilterService->output($selects[$alias], $item);
-			}
-			return new Row($items);
 		}
 
 		/**
