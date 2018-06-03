@@ -52,11 +52,11 @@
 		public function load(string $schema, string $id): IEntity {
 			try {
 				if (isset($this->loads[$schema]) === false) {
-					$Schema = $this->schemaManager->getSchema($schema);
+					$chema = $this->schemaManager->getSchema($schema);
 					$this->loads[$schema] = $collection = $this->collectionManager->collection();
 					$collection->select($schema);
 					$wheres = $collection->getQuery()->wheres();
-					$wheres->where('primary')->equalTo($schema, $Schema->getPrimary()->getName());
+					$wheres->where('primary')->equalTo($schema, $chema->getPrimary()->getName());
 					$wheres->chains()->chain()->where('primary');
 				}
 				$collection = $this->loads[$schema];
