@@ -5,6 +5,7 @@
 	use Edde\Query\IQuery;
 	use Edde\Query\IWhere;
 	use Edde\Query\QueryException;
+	use function array_unique;
 
 	class Neo4jCompiler extends AbstractCompiler {
 		public function __construct() {
@@ -54,6 +55,7 @@
 					$this->chain($wheres, $chains, $chains->getChain()),
 				]);
 			}
+			$returns = array_unique($returns);
 			if ($isCount) {
 				foreach ($returns as &$return) {
 					$return = sprintf('COUNT(%s) AS %s', $return, $return);
