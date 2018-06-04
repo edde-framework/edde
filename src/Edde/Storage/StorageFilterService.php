@@ -12,6 +12,7 @@
 	use Edde\Service\Validator\ValidatorManager;
 	use stdClass;
 	use function array_map;
+	use function is_array;
 	use function iterator_to_array;
 
 	class StorageFilterService extends Edde implements IStorageFilterService {
@@ -95,7 +96,7 @@
 				$params[$hash = $param->getName()] = is_iterable($value = $param->getValue()) ?
 					array_map(function ($value) use ($attribute) {
 						return $this->value($attribute, $value);
-					}, iterator_to_array($value)) :
+					}, (is_array($value) ? $value : iterator_to_array($value))) :
 					$this->value($attribute, $value);
 			}
 			return $query->params($params);

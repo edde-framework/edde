@@ -138,6 +138,12 @@
 						$this->delimit($stdClass->property),
 						$stdClass->param,
 					]);
+				case 'notIn':
+					return vsprintf('%s.%s NOT IN ($%s)', [
+						$this->delimit($stdClass->alias),
+						$this->delimit($stdClass->property),
+						$stdClass->param,
+					]);
 				case 'literal':
 					return (string)$stdClass->literal;
 				default:

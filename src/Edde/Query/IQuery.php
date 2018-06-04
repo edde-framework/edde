@@ -121,6 +121,11 @@
 		public function returns(array $aliases): IQuery;
 
 		/**
+		 * @return string[]
+		 */
+		public function getReturns(): array;
+
+		/**
 		 * @param string $alias
 		 *
 		 * @return ISchema

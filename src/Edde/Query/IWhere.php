@@ -83,6 +83,15 @@
 		public function in(string $alias, string $property, string $param = null): IWhere;
 
 		/**
+		 * @param string      $alias
+		 * @param string      $property
+		 * @param string|null $param
+		 *
+		 * @return IWhere
+		 */
+		public function notIn(string $alias, string $property, string $param = null): IWhere;
+
+		/**
 		 * @param string $literal
 		 *
 		 * @return IWhere

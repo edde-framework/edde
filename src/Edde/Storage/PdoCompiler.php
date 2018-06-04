@@ -15,8 +15,8 @@
 			$isCount = $query->isCount();
 			$columns = [];
 			$from = [];
-			foreach (($selects = $query->getSelects()) as $alias => $schema) {
-				foreach ($schema->getAttributes() as $name => $attribute) {
+			foreach ($query->getReturns() as $alias) {
+				foreach ($query->getSchema($alias)->getAttributes() as $name => $attribute) {
 					$columns[] = $isCount ?
 						vsprintf('COUNT(%s.%s) AS %s', [
 							$this->delimit($alias),
@@ -29,6 +29,8 @@
 							$this->delimit($alias . '.' . $name),
 						]);
 				}
+			}
+			foreach (($selects = $query->getSelects()) as $alias => $schema) {
 				$from[$alias] = vsprintf('%s %s', [
 					$this->delimit($schema->getRealName()),
 					$this->delimit($alias),
@@ -144,6 +146,12 @@
 					]);
 				case 'in':
 					return vsprintf('%s.%s IN (SELECT item FROM %s)', [
+						$this->delimit($stdClass->alias),
+						$this->delimit($stdClass->property),
+						$this->delimit($stdClass->param),
+					]);
+				case 'notIn':
+					return vsprintf('%s.%s NOT IN (SELECT item FROM %s)', [
 						$this->delimit($stdClass->alias),
 						$this->delimit($stdClass->property),
 						$this->delimit($stdClass->param),

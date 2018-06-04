@@ -5,6 +5,7 @@
 	use Edde\Schema\ISchema;
 	use Edde\SimpleObject;
 	use stdClass;
+	use function array_keys;
 	use function is_string;
 
 	class Query extends SimpleObject implements IQuery {
@@ -120,10 +121,16 @@
 
 		/** @inheritdoc */
 		public function returns(array $aliases): IQuery {
+			$this->returns = [];
 			foreach ($aliases as $alias) {
 				$this->return($alias);
 			}
 			return $this;
+		}
+
+		/** @inheritdoc */
+		public function getReturns(): array {
+			return empty($this->returns) ? array_keys($this->selects) : $this->returns;
 		}
 
 		/** @inheritdoc */

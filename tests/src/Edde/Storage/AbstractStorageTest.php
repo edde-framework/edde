@@ -451,6 +451,7 @@
 			// ... 1. prepare individual wheres which could be used
 			$wheres = $query->wheres();
 			$wheres->where('project status in')->in('p', 'status');
+			$wheres->where('project status not in')->notIn('p', 'status');
 			$wheres->where('project status greater')->greaterThan('p', 'status');
 			$wheres->where('project status greater equal')->greaterThanEqual('p', 'status');
 			$wheres->where('project status lesser')->lesserThan('p', 'status');
@@ -472,7 +473,8 @@
 			       ->and('something')
 			       ->and('project status gte')
 			       ->and('project status lte')
-			       ->and('project status literal');
+			       ->and('project status literal')
+			       ->and('project status not in');
 			// ... 3. set parameters for where based on given or guessed names
 			$bind = [
 				'project status in'            => (function () {
@@ -485,6 +487,7 @@
 				'user uuid'                    => 'on',
 				'is owner'                     => true,
 				'project name'                 => 'expected project',
+				'project status not in'        => [ProjectSchema::STATUS_ARCHIVED],
 			];
 			$count = 0;
 			foreach ($collection->execute($bind) as $record) {
@@ -508,6 +511,7 @@
 		}
 
 		/**
+		 * @throws EntityNotFoundException
 		 * @throws FilterException
 		 * @throws QueryException
 		 * @throws SchemaException
@@ -519,6 +523,11 @@
 				'uuid'     => 'edde',
 				'login'    => 'edde',
 				'password' => 'edde',
+			]);
+			$entities[] = $user2 = $this->entityManager->entity(UserSchema::class, (object)[
+				'uuid'     => 'wanna this one',
+				'login'    => 'boo',
+				'password' => 'boo',
 			]);
 			$entities[] = $project = $this->entityManager->entity(ProjectSchema::class, (object)[
 				'name' => 'relation project',
@@ -533,16 +542,19 @@
 			$relation->set('owner', true);
 			$entities[] = $relation = $this->storage->attach($project2, $user, ProjectMemberSchema::class);
 			$relation->set('owner', true);
+			$entities[] = $relation = $this->storage->attach($project, $this->storage->load(UserSchema::class, 'ja'), ProjectMemberSchema::class);
 			$entities[] = $this->storage->attach($project, $organization, ProjectOrganizationSchema::class);
 			$this->storage->saves($entities);
 			$collection = $this->collectionManager->collection($query = new Query());
 			$collection->selects([
 				'u'  => UserSchema::class,
+				'u2' => UserSchema::class,
 				'p'  => ProjectSchema::class,
 				'o'  => OrganizationSchema::class,
 				'pm' => ProjectMemberSchema::class,
 				'po' => ProjectOrganizationSchema::class,
 			]);
+			$query->returns(['u2']);
 			$collection->attach('p', 'u', 'pm');
 			$collection->attach('p', 'o', 'po');
 			$wheres = $query->wheres();

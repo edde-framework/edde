@@ -126,6 +126,19 @@
 		}
 
 		/** @inheritdoc */
+		public function notIn(string $alias, string $property, string $param = null): IWhere {
+			$param = new Param($alias, $property, $param ?: $this->name);
+			$this->where = (object)[
+				'type'     => __FUNCTION__,
+				'alias'    => $alias,
+				'property' => $property,
+				'param'    => $param->getHash(),
+			];
+			$this->params->param($param);
+			return $this;
+		}
+
+		/** @inheritdoc */
 		public function literal(string $literal): IWhere {
 			$this->where = (object)[
 				'type'    => __FUNCTION__,
