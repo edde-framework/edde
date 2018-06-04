@@ -52,7 +52,7 @@
 			]);
 			if (($chains = ($wheres = $query->wheres())->chains())->hasChains()) {
 				$cypher .= vsprintf("WHERE\n\t%s\n", [
-					$this->chain($wheres, $chains, $chains->getChain()),
+					$this->chain($query, $wheres, $chains, $chains->getChain()),
 				]);
 			}
 			$returns = array_unique($returns);
@@ -84,13 +84,14 @@
 		}
 
 		/**
+		 * @param IQuery $query
 		 * @param IWhere $where
 		 *
 		 * @return string
 		 *
 		 * @throws QueryException
 		 */
-		public function where(IWhere $where): string {
+		public function where(IQuery $query, IWhere $where): string {
 			switch (($stdClass = $where->toObject())->type) {
 				case 'equalTo':
 					return vsprintf('%s.%s = $%s', [

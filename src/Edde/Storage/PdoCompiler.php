@@ -5,7 +5,9 @@
 	use Edde\Query\IQuery;
 	use Edde\Query\IWhere;
 	use Edde\Query\QueryException;
+	use Edde\Schema\SchemaException;
 	use function implode;
+	use function is_object;
 	use function strtoupper;
 	use function vsprintf;
 
@@ -16,6 +18,20 @@
 			$columns = [];
 			$from = [];
 			foreach ($query->getReturns() as $alias) {
+				if (is_object($alias)) {
+					$columns[] = $isCount ?
+						vsprintf('COUNT(%s.%s) AS %s', [
+							$this->delimit($alias->alias),
+							$this->delimit($alias->property),
+							$this->delimit($alias->name),
+						]) :
+						vsprintf('%s.%s AS %s', [
+							$this->delimit($alias->alias),
+							$this->delimit($alias->property),
+							$this->delimit($alias->name),
+						]);
+					continue;
+				}
 				foreach ($query->getSchema($alias)->getAttributes() as $name => $attribute) {
 					$columns[] = $isCount ?
 						vsprintf('COUNT(%s.%s) AS %s', [
@@ -42,7 +58,7 @@
 			]);
 			if (($chains = ($wheres = $query->wheres())->chains())->hasChains()) {
 				$sql .= vsprintf("WHERE\n\t(\n\t\t%s\n\t)", [
-					$this->chain($wheres, $chains, $chains->getChain()),
+					$this->chain($query, $wheres, $chains, $chains->getChain()),
 				]);
 			}
 			if ($query->hasAttaches()) {
@@ -96,13 +112,15 @@
 		}
 
 		/**
+		 * @param IQuery $query
 		 * @param IWhere $where
 		 *
 		 * @return string
 		 *
 		 * @throws QueryException
+		 * @throws SchemaException
 		 */
-		public function where(IWhere $where): string {
+		public function where(IQuery $query, IWhere $where): string {
 			switch (($stdClass = $where->toObject())->type) {
 				case 'equalTo':
 					return vsprintf('%s.%s = :%s', [
@@ -155,6 +173,12 @@
 						$this->delimit($stdClass->alias),
 						$this->delimit($stdClass->property),
 						$this->delimit($stdClass->param),
+					]);
+				case 'notInQuery':
+					return vsprintf("%s.%s NOT IN (\n%s\n)", [
+						$this->delimit($stdClass->alias),
+						$this->delimit($stdClass->property),
+						$this->compile($query->getQuery($stdClass->query)),
 					]);
 				case 'literal':
 					return (string)$stdClass->literal;

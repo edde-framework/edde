@@ -121,6 +121,17 @@
 		public function returns(array $aliases): IQuery;
 
 		/**
+		 * pickup just the given "column" from a query; the result will be just that property
+		 *
+		 * @param string      $alias
+		 * @param string      $property
+		 * @param string|null $name
+		 *
+		 * @return IQuery
+		 */
+		public function just(string $alias, string $property, string $name = null): IQuery;
+
+		/**
 		 * @return string[]
 		 */
 		public function getReturns(): array;
@@ -181,4 +192,22 @@
 		 * @return bool
 		 */
 		public function isCount(): bool;
+
+		/**
+		 * create a new sub-query
+		 *
+		 * @param string $name
+		 *
+		 * @return IQuery
+		 */
+		public function query(string $name): IQuery;
+
+		/**
+		 * @param string $name
+		 *
+		 * @return IQuery
+		 *
+		 * @throws QueryException
+		 */
+		public function getQuery(string $name): IQuery;
 	}

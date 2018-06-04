@@ -551,13 +551,17 @@
 			//
 			$collection = $this->collectionManager->collection($query = new Query());
 			$collection->selects([
+				'u' => UserSchema::class,
+			]);
+			$subCollection = $this->collectionManager->collection($subQuery = $query->query('users on project'));
+			$subCollection->selects([
 				'u'  => UserSchema::class,
 				'p'  => ProjectSchema::class,
 				'pm' => ProjectMemberSchema::class,
 			]);
-			$collection->attach('p', 'u', 'pm');
-			$query->returns(['u']);
-			$wheres = $query->wheres();
+			$subQuery->just('u', 'uuid');
+			$subCollection->attach('p', 'u', 'pm');
+			$wheres = $subQuery->wheres();
 			$wheres->where('project uuid')->equalTo('p', 'uuid');
 			$wheres->chains()->chain()->where('project uuid');
 			$expected = [
@@ -565,28 +569,17 @@
 				'ja',
 			];
 			$actual = [];
-			foreach ($collection->execute(['project uuid' => $project->get('uuid')]) as $record) {
-				$actual[] = $record->getEntity('u')->get('uuid');
+			foreach ($subCollection->execute(['project uuid' => $project->get('uuid')]) as $record) {
+				$actual[] = $record->getItem('u');
 			}
 			sort($expected);
 			sort($actual);
 			self::assertEquals($expected, $actual);
-			$collection = $this->collectionManager->collection($query = new Query());
-			$collection->selects([
-				'u'  => UserSchema::class,
-				'p'  => ProjectSchema::class,
-				'pm' => ProjectMemberSchema::class,
-			]);
-			$query->returns(['u']);
-			$collection->attach('p', 'u', 'pm');
-			$collection->attach('p', 'o', 'po');
 			$wheres = $query->wheres();
-			$wheres->where('is owner')->equalTo('pm', 'owner');
-			$wheres->where('user')->equalTo('u', 'uuid');
-			$wheres->chains()->chain()->where('is owner')->and('user');
+			$wheres->where('users on project')->notInQuery('u', 'uuid');
+			$wheres->chains()->chain()->where('users on project');
 			$binds = [
-				'user'     => $user->get('uuid'),
-				'is owner' => true,
+				'project uuid' => $project->get('uuid'),
 			];
 			foreach ($collection->execute($binds) as $record) {
 			}

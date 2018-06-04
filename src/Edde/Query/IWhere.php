@@ -85,11 +85,29 @@
 		/**
 		 * @param string      $alias
 		 * @param string      $property
+		 * @param string|null $query
+		 *
+		 * @return IWhere
+		 */
+		public function inQuery(string $alias, string $property, string $query = null): IWhere;
+
+		/**
+		 * @param string      $alias
+		 * @param string      $property
 		 * @param string|null $param
 		 *
 		 * @return IWhere
 		 */
 		public function notIn(string $alias, string $property, string $param = null): IWhere;
+
+		/**
+		 * @param string      $alias
+		 * @param string      $property
+		 * @param string|null $query
+		 *
+		 * @return IWhere
+		 */
+		public function notInQuery(string $alias, string $property, string $query = null): IWhere;
 
 		/**
 		 * @param string $literal
