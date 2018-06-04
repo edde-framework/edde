@@ -581,9 +581,18 @@
 			$binds = [
 				'project uuid' => $project->get('uuid'),
 			];
+			$expected = [
+				'on',
+				'two',
+				'wanna this one',
+			];
+			$actual = [];
 			foreach ($collection->execute($binds) as $record) {
+				$actual[] = $record->getEntity('u')->get('uuid');
 			}
-			self::assertTrue(true, 'fake test, oops');
+			sort($expected);
+			sort($actual);
+			self::assertEquals($expected, $actual);
 		}
 
 		/**

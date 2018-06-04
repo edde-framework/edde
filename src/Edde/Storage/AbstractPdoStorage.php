@@ -4,13 +4,17 @@
 
 	use Edde\Collection\IEntity;
 	use Edde\Config\ConfigException;
+	use Edde\Filter\FilterException;
 	use Edde\Query\IQuery;
+	use Edde\Query\QueryException;
+	use Edde\Schema\SchemaException;
 	use Edde\Service\Container\Container;
 	use Edde\Service\Schema\SchemaManager;
 	use Generator;
 	use PDO;
 	use PDOException;
 	use Throwable;
+	use function array_merge;
 	use function implode;
 	use function is_iterable;
 	use function sha1;
@@ -51,8 +55,29 @@
 
 		/** @inheritdoc */
 		public function query(IQuery $query, array $binds = []): Generator {
-			$params = [];
 			$sql = $this->compiler->compile($query);
+			$params = $this->params($query, $binds);
+			foreach ($query->getQueries() as $item) {
+				$params = array_merge($params, $this->params($item, $binds));
+			}
+			foreach ($this->fetch($sql, $params) as $items) {
+				yield $this->container->inject(new Record($query, $items));
+			}
+		}
+
+		/**
+		 * @param IQuery $query
+		 * @param array  $binds
+		 *
+		 * @return array
+		 *
+		 * @throws FilterException
+		 * @throws QueryException
+		 * @throws SchemaException
+		 * @throws StorageException
+		 */
+		protected function params(IQuery $query, array $binds): array {
+			$params = [];
 			foreach ($this->storageFilterService->params($query, $binds) as $param) {
 				$hash = $param->getHash();
 				if (is_iterable($value = $param->getValue()) === false) {
@@ -84,9 +109,7 @@
 					]);
 				}
 			}
-			foreach ($this->fetch($sql, $params) as $items) {
-				yield $this->container->inject(new Record($query, $items));
-			}
+			return $params;
 		}
 
 		/** @inheritdoc */

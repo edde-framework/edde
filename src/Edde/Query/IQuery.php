@@ -210,4 +210,9 @@
 		 * @throws QueryException
 		 */
 		public function getQuery(string $name): IQuery;
+
+		/**
+		 * @return IQuery[]
+		 */
+		public function getQueries(): array;
 	}

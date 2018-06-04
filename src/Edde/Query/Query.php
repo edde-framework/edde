@@ -33,11 +33,8 @@
 		/** @var IQuery[] */
 		protected $queries = [];
 
-		/**
-		 * @param IParams $params
-		 */
-		public function __construct(IParams $params = null) {
-			$this->params = $params ?? new Params();
+		public function __construct() {
+			$this->params = new Params();
 		}
 
 		/** @inheritdoc */
@@ -204,7 +201,7 @@
 
 		/** @inheritdoc */
 		public function query(string $name): IQuery {
-			return $this->queries[$name] = new Query($this->params);
+			return $this->queries[$name] = new Query();
 		}
 
 		/** @inheritdoc */
@@ -213,5 +210,10 @@
 				throw new QueryException(sprintf('Requested unknown sub-query [%s]; available queries are [%s].', $name, implode(', ', array_keys($this->queries))));
 			}
 			return $this->queries[$name];
+		}
+
+		/** @inheritdoc */
+		public function getQueries(): array {
+			return $this->queries;
 		}
 	}
