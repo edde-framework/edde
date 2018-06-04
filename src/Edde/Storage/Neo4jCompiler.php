@@ -136,6 +136,8 @@
 						$this->delimit($stdClass->property),
 						$stdClass->param,
 					]);
+				case 'literal':
+					return (string)$stdClass->literal;
 				default:
 					throw new QueryException(sprintf('Unsupported where type [%s] in [%s].', $stdClass->type, static::class));
 			}

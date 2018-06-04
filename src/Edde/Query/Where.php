@@ -126,6 +126,15 @@
 		}
 
 		/** @inheritdoc */
+		public function literal(string $literal): IWhere {
+			$this->where = (object)[
+				'type'    => __FUNCTION__,
+				'literal' => $literal,
+			];
+			return $this;
+		}
+
+		/** @inheritdoc */
 		public function toObject(): stdClass {
 			return $this->where;
 		}

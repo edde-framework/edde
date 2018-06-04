@@ -451,6 +451,7 @@
 			$wheres->where('project status greater equal')->greaterThanEqual('p', 'status');
 			$wheres->where('project status lesser')->lesserThan('p', 'status');
 			$wheres->where('project status lesser equal')->lesserThanEqual('p', 'status');
+			$wheres->where('project status literal')->literal('p.status IS NOT NULL');
 			$wheres->where('user uuid')->equalTo('u', 'uuid');
 			$wheres->where('is owner')->equalTo('pm', 'owner');
 			$wheres->where('project name')->equalTo('p', 'name');
@@ -466,7 +467,8 @@
 			       ->and('da group')
 			       ->and('something')
 			       ->and('project status gte')
-			       ->and('project status lte');
+			       ->and('project status lte')
+			       ->and('project status literal');
 			// ... 3. set parameters for where based on given or guessed names
 			$bind = [
 				'project status in'            => (function () {

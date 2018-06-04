@@ -159,12 +159,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "23273458016888baf2d2238a1937934b95abb924"
+	            "reference": "cfd694a76182f68ac662f8d60852dd42fd2d0892"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/23273458016888baf2d2238a1937934b95abb924",
-                "reference": "23273458016888baf2d2238a1937934b95abb924",
+	            "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/cfd694a76182f68ac662f8d60852dd42fd2d0892",
+	            "reference": "cfd694a76182f68ac662f8d60852dd42fd2d0892",
                 "shasum": ""
             },
             "require": {
@@ -199,7 +199,7 @@
                 "object",
                 "object graph"
             ],
-            "time": "2018-05-31T19:43:12+00:00"
+	        "time": "2018-06-03T10:06:13+00:00"
         },
         {
             "name": "myclabs/php-enum",
@@ -713,12 +713,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-timer.git",
-                "reference": "0753e54e87486014ef2b77d4bf50ce4f7cf9ce21"
+	            "reference": "9ef9968ba27999219d76ae3cef97aa0fa87bd90f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-timer/zipball/0753e54e87486014ef2b77d4bf50ce4f7cf9ce21",
-                "reference": "0753e54e87486014ef2b77d4bf50ce4f7cf9ce21",
+	            "url": "https://api.github.com/repos/sebastianbergmann/php-timer/zipball/9ef9968ba27999219d76ae3cef97aa0fa87bd90f",
+	            "reference": "9ef9968ba27999219d76ae3cef97aa0fa87bd90f",
                 "shasum": ""
             },
             "require": {
@@ -754,7 +754,7 @@
             "keywords": [
                 "timer"
             ],
-            "time": "2018-05-15T05:50:31+00:00"
+	        "time": "2018-06-04T07:17:52+00:00"
         },
         {
             "name": "phpunit/php-token-stream",
@@ -811,12 +811,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "2629ff118897fc2af5b06338182fbea03bfd98b8"
+	            "reference": "dac2085fc44b5bbc874dc49b304cb6a21de1bf04"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/2629ff118897fc2af5b06338182fbea03bfd98b8",
-                "reference": "2629ff118897fc2af5b06338182fbea03bfd98b8",
+	            "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/dac2085fc44b5bbc874dc49b304cb6a21de1bf04",
+	            "reference": "dac2085fc44b5bbc874dc49b304cb6a21de1bf04",
                 "shasum": ""
             },
             "require": {
@@ -887,7 +887,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-06-01T07:55:36+00:00"
+	        "time": "2018-06-03T09:30:43+00:00"
         },
         {
             "name": "roave/security-advisories",
@@ -1170,12 +1170,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/diff.git",
-                "reference": "aab8edb1590fc9ee9fbc24f35216df943044c977"
+	            "reference": "2a0d4bdbed1e7937f2e8b7a30b6ec5752bb1b0f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/aab8edb1590fc9ee9fbc24f35216df943044c977",
-                "reference": "aab8edb1590fc9ee9fbc24f35216df943044c977",
+	            "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/2a0d4bdbed1e7937f2e8b7a30b6ec5752bb1b0f6",
+	            "reference": "2a0d4bdbed1e7937f2e8b7a30b6ec5752bb1b0f6",
                 "shasum": ""
             },
             "require": {
@@ -1218,7 +1218,7 @@
                 "unidiff",
                 "unified diff"
             ],
-            "time": "2018-06-01T15:03:39+00:00"
+	        "time": "2018-06-02T06:39:54+00:00"
         },
         {
             "name": "sebastian/environment",

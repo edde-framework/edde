@@ -83,6 +83,13 @@
 		public function in(string $alias, string $property, string $param = null): IWhere;
 
 		/**
+		 * @param string $literal
+		 *
+		 * @return IWhere
+		 */
+		public function literal(string $literal): IWhere;
+
+		/**
 		 * return internal where object
 		 *
 		 * @return stdClass
