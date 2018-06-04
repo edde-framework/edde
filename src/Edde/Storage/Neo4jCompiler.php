@@ -5,7 +5,9 @@
 	use Edde\Query\IQuery;
 	use Edde\Query\IWhere;
 	use Edde\Query\QueryException;
-	use function array_unique;
+	use Edde\Schema\SchemaException;
+	use function is_object;
+	use function vsprintf;
 
 	class Neo4jCompiler extends AbstractCompiler {
 		public function __construct() {
@@ -16,20 +18,19 @@
 		public function compile(IQuery $query): string {
 			$isCount = $query->isCount();
 			$from = [];
-			$returns = [];
 			foreach ($query->getSelects() as $alias => $schema) {
 				if ($query->isAttached($alias)) {
 					continue;
 				}
 				if ($schema->isRelation()) {
-					$from[] = vsprintf('()-[%s: %s]->()', [
-						$returns[] = $this->delimit($alias),
+					$from[] = vsprintf('()-[%s:%s]->()', [
+						$this->delimit($alias),
 						$this->delimit($schema->getRealName()),
 					]);
 					continue;
 				}
-				$from[] = vsprintf('(%s: %s)', [
-					$returns[] = $this->delimit($alias),
+				$from[] = vsprintf('(%s:%s)', [
+					$this->delimit($alias),
 					$this->delimit($schema->getRealName()),
 				]);
 			}
@@ -38,12 +39,12 @@
 					$sourceSchema = $query->getSchema($attach->attach),
 					$targetSchema = $query->getSchema($attach->to)
 				);
-				$from[] = vsprintf('(%s: %s)-[%s: %s]->(%s: %s)', [
-					$returns[] = $this->delimit($attach->attach),
+				$from[] = vsprintf('(%s:%s)-[%s:%s]->(%s:%s)', [
+					$this->delimit($attach->attach),
 					$this->delimit($sourceSchema->getRealName()),
-					$returns[] = $this->delimit($attach->relation),
+					$this->delimit($attach->relation),
 					$this->delimit($relationSchema->getRealName()),
-					$returns[] = $this->delimit($attach->to),
+					$this->delimit($attach->to),
 					$this->delimit($targetSchema->getRealName()),
 				]);
 			}
@@ -55,11 +56,23 @@
 					$this->chain($query, $wheres, $chains, $chains->getChain()),
 				]);
 			}
-			$returns = array_unique($returns);
-			if ($isCount) {
-				foreach ($returns as &$return) {
-					$return = sprintf('COUNT(%s) AS %s', $return, $return);
+			$returns = [];
+			foreach ($query->getReturns() as $return) {
+				if (is_object($return)) {
+					$returns[] = vsprintf($isCount ? 'COUNT(%s.%s) AS %s' : '%s.%s AS %s', [
+						$this->delimit($return->alias),
+						$this->delimit($return->property),
+						$this->delimit($return->name),
+					]);
+					continue;
 				}
+				$return = $this->delimit($return);
+				$returns[] = $isCount ?
+					vsprintf('COUNT(%s) AS %s', [
+						$return,
+						$return,
+					]) :
+					$return;
 			}
 			$cypher .= "RETURN\n\t" . implode(',', $returns);
 			if ($isCount === false && $query->hasOrder() && $orders = $query->getOrders()) {
@@ -90,6 +103,7 @@
 		 * @return string
 		 *
 		 * @throws QueryException
+		 * @throws SchemaException
 		 */
 		public function where(IQuery $query, IWhere $where): string {
 			switch (($stdClass = $where->toObject())->type) {
@@ -144,6 +158,12 @@
 						$this->delimit($stdClass->alias),
 						$this->delimit($stdClass->property),
 						$stdClass->param,
+					]);
+				case 'notInQuery':
+					return vsprintf('NOT %s.%s IN (%s)', [
+						$this->delimit($stdClass->alias),
+						$this->delimit($stdClass->property),
+						$this->compile($query->getQuery($stdClass->query)),
 					]);
 				case 'literal':
 					return (string)$stdClass->literal;

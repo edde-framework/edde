@@ -49,6 +49,7 @@
 								continue;
 							}
 							yield [$keys[$index] => $value];
+							continue 2;
 						}
 						yield $item;
 					}
