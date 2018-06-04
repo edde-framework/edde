@@ -139,7 +139,7 @@
 						$stdClass->param,
 					]);
 				case 'notIn':
-					return vsprintf('%s.%s NOT IN ($%s)', [
+					return vsprintf('NOT %s.%s IN ($%s)', [
 						$this->delimit($stdClass->alias),
 						$this->delimit($stdClass->property),
 						$stdClass->param,
