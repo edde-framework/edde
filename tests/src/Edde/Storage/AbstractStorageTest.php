@@ -26,6 +26,7 @@
 	use UserSchema;
 	use VoidSchema;
 	use function shuffle;
+	use function sort;
 
 	abstract class AbstractStorageTest extends TestCase {
 		use SchemaManager;
@@ -545,13 +546,36 @@
 			$entities[] = $relation = $this->storage->attach($project, $this->storage->load(UserSchema::class, 'ja'), ProjectMemberSchema::class);
 			$entities[] = $this->storage->attach($project, $organization, ProjectOrganizationSchema::class);
 			$this->storage->saves($entities);
+			//
+			// ...
+			//
 			$collection = $this->collectionManager->collection($query = new Query());
 			$collection->selects([
 				'u'  => UserSchema::class,
 				'p'  => ProjectSchema::class,
-				'o'  => OrganizationSchema::class,
 				'pm' => ProjectMemberSchema::class,
-				'po' => ProjectOrganizationSchema::class,
+			]);
+			$collection->attach('p', 'u', 'pm');
+			$query->returns(['u']);
+			$wheres = $query->wheres();
+			$wheres->where('project uuid')->equalTo('p', 'uuid');
+			$wheres->chains()->chain()->where('project uuid');
+			$expected = [
+				'edde',
+				'ja',
+			];
+			$actual = [];
+			foreach ($collection->execute(['project uuid' => $project->get('uuid')]) as $record) {
+				$actual[] = $record->getEntity('u')->get('uuid');
+			}
+			sort($expected);
+			sort($actual);
+			self::assertEquals($expected, $actual);
+			$collection = $this->collectionManager->collection($query = new Query());
+			$collection->selects([
+				'u'  => UserSchema::class,
+				'p'  => ProjectSchema::class,
+				'pm' => ProjectMemberSchema::class,
 			]);
 			$query->returns(['u']);
 			$collection->attach('p', 'u', 'pm');
