@@ -14,6 +14,12 @@
 		public function system($default = false): bool;
 	}
 
+	interface OrganizationSchema extends UuidSchema {
+		const alias = true;
+
+		public function name(): string;
+	}
+
 	interface ProjectSchema extends UuidSchema {
 		const alias = true;
 		const STATUS_CREATED = 0;
@@ -30,6 +36,15 @@
 		public function start(): ?DateTime;
 
 		public function end(): ?DateTime;
+	}
+
+	interface ProjectOrganizationSchema extends UuidSchema {
+		const alias = true;
+		const relation = ['project' => 'organization'];
+
+		public function project(): ProjectSchema;
+
+		public function organization(): OrganizationSchema;
 	}
 
 	interface IssueSchema extends UuidSchema {

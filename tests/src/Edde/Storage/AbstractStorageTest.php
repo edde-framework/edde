@@ -17,7 +17,9 @@
 	use Edde\TestCase;
 	use Edde\Validator\ValidatorException;
 	use LabelSchema;
+	use OrganizationSchema;
 	use ProjectMemberSchema;
+	use ProjectOrganizationSchema;
 	use ProjectSchema;
 	use ReflectionException;
 	use ToBeOrdered;
@@ -41,6 +43,8 @@
 				UserSchema::class,
 				ProjectSchema::class,
 				ProjectMemberSchema::class,
+				OrganizationSchema::class,
+				ProjectOrganizationSchema::class,
 				ToBeOrdered::class,
 			];
 			foreach ($schemas as $schema) {
@@ -420,7 +424,7 @@
 		 * @throws StorageException
 		 * @throws ValidatorException
 		 */
-		public function testABitMoreComplexQuery() {
+		public function testBasicQuery() {
 			$entities[] = $user = $this->entityManager->entity(UserSchema::class, (object)[
 				'uuid'     => 'on',
 				'login'    => 'tadaa',
@@ -501,6 +505,56 @@
 		public function testCount() {
 			self::assertEquals(7, $this->collectionManager->collection()->select(ProjectSchema::class)->count(ProjectSchema::class));
 			self::assertEquals(4, $this->collectionManager->collection()->select(ProjectMemberSchema::class)->count(ProjectMemberSchema::class));
+		}
+
+		/**
+		 * @throws FilterException
+		 * @throws QueryException
+		 * @throws SchemaException
+		 * @throws StorageException
+		 * @throws ValidatorException
+		 */
+		public function testChallangeQuery() {
+			$entities[] = $user = $this->entityManager->entity(UserSchema::class, (object)[
+				'uuid'     => 'edde',
+				'login'    => 'edde',
+				'password' => 'edde',
+			]);
+			$entities[] = $project = $this->entityManager->entity(ProjectSchema::class, (object)[
+				'name' => 'relation project',
+			]);
+			$entities[] = $project2 = $this->entityManager->entity(ProjectSchema::class, (object)[
+				'name' => 'relation project 2',
+			]);
+			$entities[] = $organization = $this->entityManager->entity(OrganizationSchema::class, (object)[
+				'name' => 'Da Org, yaay!',
+			]);
+			$entities[] = $relation = $this->storage->attach($project, $user, ProjectMemberSchema::class);
+			$relation->set('owner', true);
+			$entities[] = $relation = $this->storage->attach($project2, $user, ProjectMemberSchema::class);
+			$relation->set('owner', true);
+			$entities[] = $this->storage->attach($project, $organization, ProjectOrganizationSchema::class);
+			$this->storage->saves($entities);
+			$collection = $this->collectionManager->collection($query = new Query());
+			$collection->selects([
+				'u'  => UserSchema::class,
+				'p'  => ProjectSchema::class,
+				'o'  => OrganizationSchema::class,
+				'pm' => ProjectMemberSchema::class,
+				'po' => ProjectOrganizationSchema::class,
+			]);
+			$collection->attach('p', 'u', 'pm');
+			$collection->attach('p', 'o', 'po');
+			$wheres = $query->wheres();
+			$wheres->where('is owner')->equalTo('pm', 'owner');
+			$wheres->where('user')->equalTo('u', 'uuid');
+			$wheres->chains()->chain()->where('is owner')->and('user');
+			$binds = [
+				'user'     => $user->get('uuid'),
+				'is owner' => true,
+			];
+			foreach ($collection->execute($binds) as $record) {
+			}
 		}
 
 		/**
@@ -596,6 +650,8 @@
 				ProjectSchema::class,
 				UserSchema::class,
 				ProjectMemberSchema::class,
+				OrganizationSchema::class,
+				ProjectOrganizationSchema::class,
 				ToBeOrdered::class,
 			]);
 		}

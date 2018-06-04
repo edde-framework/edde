@@ -43,6 +43,15 @@
 		public function selects(array $schemas): ICollection;
 
 		/**
+		 * @param string $attach
+		 * @param string $to
+		 * @param string $relation
+		 *
+		 * @return ICollection
+		 */
+		public function attach(string $attach, string $to, string $relation): ICollection;
+
+		/**
 		 * @param string $alias
 		 * @param string $property
 		 * @param string $order

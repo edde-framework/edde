@@ -42,6 +42,12 @@
 		}
 
 		/** @inheritdoc */
+		public function attach(string $attach, string $to, string $relation): ICollection {
+			$this->query->attach($attach, $to, $relation);
+			return $this;
+		}
+
+		/** @inheritdoc */
 		public function order(string $alias, string $property, string $order = 'asc'): ICollection {
 			$this->query->order($alias, $property, $order);
 			return $this;
