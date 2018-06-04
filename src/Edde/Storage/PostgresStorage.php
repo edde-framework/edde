@@ -35,7 +35,7 @@
 
 		/** @inheritdoc */
 		public function createCompiler(): ICompiler {
-			return $this->compiler ?: $this->compiler = $this->container->create(PdoCompiler::class, ['"'], __METHOD__);
+			return $this->compiler ?: $this->compiler = $this->container->inject(new PdoCompiler('"'));
 		}
 
 		/** @inheritdoc */

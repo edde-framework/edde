@@ -71,7 +71,7 @@
 				$params[$param->getHash()] = $param->getValue();
 			}
 			foreach ($this->fetch($this->compiler->compile($query), $params) as $items) {
-				yield $this->container->create(Record::class, [$query, $items], __METHOD__);
+				yield $this->container->inject(new Record($query, $items));
 			}
 		}
 
@@ -298,7 +298,7 @@
 
 		/** @inheritdoc */
 		public function createCompiler(): ICompiler {
-			return $this->compiler ?: $this->compiler = $this->container->create(Neo4jCompiler::class, [], __METHOD__);
+			return $this->compiler ?: $this->compiler = $this->container->inject(new Neo4jCompiler());
 		}
 
 		protected function exception(Throwable $throwable): Throwable {

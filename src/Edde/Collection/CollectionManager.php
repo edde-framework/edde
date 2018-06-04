@@ -12,6 +12,6 @@
 
 		/** @inheritdoc */
 		public function collection(IQuery $query = null): ICollection {
-			return $this->container->create(Collection::class, [$query ?: new Query()], __METHOD__);
+			return $this->container->inject(new Collection($query ?: new Query()));
 		}
 	}

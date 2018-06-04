@@ -85,7 +85,7 @@
 				}
 			}
 			foreach ($this->fetch($sql, $params) as $items) {
-				yield $this->container->create(Record::class, [$query, $items], __METHOD__);
+				yield $this->container->inject(new Record($query, $items));
 			}
 		}
 

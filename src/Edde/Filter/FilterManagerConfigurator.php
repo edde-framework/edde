@@ -21,7 +21,7 @@
 				'storage:bool'     => $filter,
 				'storage:stamp'    => $filter = new StampFilter(),
 				'bool'             => $filter = new BoolFilter(),
-				'uuid'             => $filter = $this->container->create(UuidFilter::class, [], __METHOD__),
+				'uuid'             => $filter = $this->container->inject(new UuidFilter()),
 				'storage:uuid'     => $filter,
 				'datetime'         => $filter = new DateTimeFilter(),
 				'storage:DateTime' => $filter,
