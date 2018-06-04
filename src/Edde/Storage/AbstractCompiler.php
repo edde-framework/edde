@@ -26,7 +26,7 @@
 			return $this->delimiter . str_replace($this->delimiter, $this->delimiter . $this->delimiter, $delimit) . $this->delimiter;
 		}
 
-		public function chain(IWheres $wheres, IChains $chains, IChain $chain, int $level = 1): string {
+		public function chain(IWheres $wheres, IChains $chains, IChain $chain, int $level = 2): string {
 			$fragments = [];
 			$tabs = str_repeat("\t", $level);
 			foreach ($chain as $stdClass) {

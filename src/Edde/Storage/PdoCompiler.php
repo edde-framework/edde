@@ -29,30 +29,9 @@
 							$this->delimit($alias . '.' . $name),
 						]);
 				}
-				if ($query->isAttached($alias)) {
-					continue;
-				}
-				$from[] = vsprintf('%s %s', [
+				$from[$alias] = vsprintf('%s %s', [
 					$this->delimit($schema->getRealName()),
 					$this->delimit($alias),
-				]);
-			}
-			foreach ($query->getAttaches() as $attach) {
-				($relationSchema = $query->getSchema($attach->relation))->checkRelation(
-					$sourceSchema = $query->getSchema($attach->attach),
-					$targetSchema = $query->getSchema($attach->to)
-				);
-				$from[] = vsprintf("%s %s\n\t\tINNER JOIN %s %s ON %2\$s.%s = %4\$s.%s\n\t\tINNER JOIN %s %s ON %2\$s.%s = %8\$s.%s", [
-					$this->delimit($relationSchema->getRealName()),
-					$this->delimit($attach->relation),
-					$this->delimit($sourceSchema->getRealName()),
-					$this->delimit($attach->attach),
-					$this->delimit($relationSchema->getSource()->getName()),
-					$this->delimit($sourceSchema->getPrimary()->getName()),
-					$this->delimit($targetSchema->getRealName()),
-					$this->delimit($attach->to),
-					$this->delimit($relationSchema->getTarget()->getName()),
-					$this->delimit($targetSchema->getPrimary()->getName()),
 				]);
 			}
 			$sql = vsprintf("SELECT\n\t%s\nFROM\n\t%s\n", [
@@ -60,9 +39,38 @@
 				implode(",\n\t", $from),
 			]);
 			if (($chains = ($wheres = $query->wheres())->chains())->hasChains()) {
-				$sql .= vsprintf("WHERE\n\t%s\n", [
+				$sql .= vsprintf("WHERE\n\t(\n\t\t%s\n\t)", [
 					$this->chain($wheres, $chains, $chains->getChain()),
 				]);
+			}
+			if ($query->hasAttaches()) {
+				$fragment = " AND ";
+				if ($chains->hasChains() === false) {
+					$sql .= "WHERE\n\t";
+					$fragment = null;
+				}
+				$sql .= $fragment . "(\n\t\t";
+				$wheres = [];
+				foreach ($query->getAttaches() as $attach) {
+					($relationSchema = $query->getSchema($attach->relation))->checkRelation(
+						$sourceSchema = $query->getSchema($attach->attach),
+						$targetSchema = $query->getSchema($attach->to)
+					);
+					$wheres[] = vsprintf('%s.%s = %s.%s', [
+						$this->delimit($attach->relation),
+						$this->delimit($relationSchema->getSource()->getName()),
+						$this->delimit($attach->attach),
+						$this->delimit($sourceSchema->getPrimary()->getName()),
+					]);
+					$wheres[] = vsprintf('%s.%s = %s.%s', [
+						$this->delimit($attach->relation),
+						$this->delimit($relationSchema->getTarget()->getName()),
+						$this->delimit($attach->to),
+						$this->delimit($targetSchema->getPrimary()->getName()),
+					]);
+				}
+				$sql .= implode(" AND\n\t\t", $wheres);
+				$sql .= "\n\t)\n";
 			}
 			if ($isCount === false && $query->hasOrder() && $orders = $query->getOrders()) {
 				$sql .= "ORDER BY\n\t";
