@@ -42,4 +42,9 @@
 			}
 			return $this->schemas[$name];
 		}
+
+		/** @inheritdoc */
+		public function getSchemas(): array {
+			return $this->schemas;
+		}
 	}

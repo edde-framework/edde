@@ -45,4 +45,11 @@
 		 * @throws SchemaException
 		 */
 		public function getSchema(string $name): ISchema;
+
+		/**
+		 * return all known schemas
+		 *
+		 * @return ISchema[]
+		 */
+		public function getSchemas(): array;
 	}

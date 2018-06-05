@@ -26,7 +26,7 @@
 				 * ugly hack to convert input string to form of foo°foo-service which could be later
 				 * converted to Foo°FooService and ° could be replaced by "\" leading to Foo\FooService
 				 */
-				$service = $this->container->create(
+				$controller = $this->container->create(
 					str_replace(
 						'°',
 						'\\',
@@ -41,10 +41,10 @@
 					[],
 					__METHOD__
 				);
-				if ($service instanceof IController === false) {
-					throw new ApplicationException(sprintf('Service [%s] is not instance of [%s].', get_class($service), IController::class));
+				if ($controller instanceof IController === false) {
+					throw new ApplicationException(sprintf('Requested controller [%s] is not instance of [%s].', get_class($controller), IController::class));
 				}
-				return is_int($result = $service->{$this->stringUtils->toCamelHump($request->getMethod())}($request)) ? (int)$result : 0;
+				return is_int($result = $controller->{$this->stringUtils->toCamelHump($request->getMethod())}($request)) ? (int)$result : 0;
 			} catch (Throwable $exception) {
 				$this->logService->exception($exception, [
 					'edde',
