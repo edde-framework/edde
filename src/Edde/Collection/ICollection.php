@@ -8,6 +8,7 @@
 	use Edde\Schema\SchemaException;
 	use Edde\Storage\IRecord;
 	use Edde\Storage\StorageException;
+	use Edde\Storage\UnknownTableException;
 	use Generator;
 
 	/**
@@ -92,6 +93,7 @@
 		 * @throws FilterException
 		 * @throws QueryException
 		 * @throws SchemaException
+		 * @throws UnknownTableException
 		 */
 		public function execute(array $binds = []): Generator;
 
@@ -105,6 +107,7 @@
 		 *
 		 * @throws StorageException
 		 * @throws EntityNotFoundException
+		 * @throws UnknownTableException
 		 */
 		public function getEntity(string $alias, array $binds = []): IEntity;
 	}
