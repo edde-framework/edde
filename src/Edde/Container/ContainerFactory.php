@@ -49,7 +49,6 @@
 	use Edde\Storage\MysqlStorage;
 	use Edde\Storage\StorageFilterService;
 	use Edde\Upgrade\IUpgradeManager;
-	use Edde\Upgrade\UpgradeManager;
 	use Edde\Utils\IStringUtils;
 	use Edde\Utils\StringUtils;
 	use Edde\Validator\IValidatorManager;
@@ -62,6 +61,7 @@
 	use ReflectionException;
 	use ReflectionMethod;
 	use stdClass;
+	use function sprintf;
 
 	/**
 	 * A young man and his date were parked on a back road some distance from town.
@@ -306,7 +306,7 @@
 				/**
 				 * an application upgrades support
 				 */
-				IUpgradeManager::class       => UpgradeManager::class,
+				IUpgradeManager::class       => self::exception(sprintf('Please provide UpgradeManager implementation of [%s] interface.', IUpgradeManager::class)),
 				/**
 				 * Xml support
 				 */

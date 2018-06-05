@@ -94,4 +94,17 @@
 		 * @throws SchemaException
 		 */
 		public function execute(array $binds = []): Generator;
+
+		/**
+		 * get exactly one entity
+		 *
+		 * @param string $alias
+		 * @param array  $binds
+		 *
+		 * @return IEntity
+		 *
+		 * @throws StorageException
+		 * @throws EntityNotFoundException
+		 */
+		public function getEntity(string $alias, array $binds = []): IEntity;
 	}

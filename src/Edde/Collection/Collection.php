@@ -6,7 +6,10 @@
 	use Edde\Query\IQuery;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
+	use Edde\Storage\IRecord;
 	use Generator;
+	use function array_keys;
+	use function implode;
 	use function is_int;
 
 	class Collection extends Edde implements ICollection {
@@ -67,5 +70,14 @@
 		/** @inheritdoc */
 		public function execute(array $binds = []): Generator {
 			yield from $this->storage->query($this->query, $binds);
+		}
+
+		/** @inheritdoc */
+		public function getEntity(string $alias, array $binds = []): IEntity {
+			/** @var $record IRecord */
+			foreach ($this->execute($binds) as $record) {
+				return $record->getEntity($alias);
+			}
+			throw new EntityNotFoundException(sprintf('Cannot get any entity [%s] from requested sources [%s].', $alias, implode(', ', array_keys($this->query->getSelects()))));
 		}
 	}

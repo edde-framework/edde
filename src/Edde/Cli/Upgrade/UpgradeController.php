@@ -3,11 +3,12 @@
 	namespace Edde\Cli\Upgrade;
 
 	use Edde\Application\CliController;
+	use Edde\Application\IController;
 	use Edde\Edde;
 	use Edde\Service\Upgrade\UpgradeManager;
 	use Edde\Upgrade\CurrentVersionException;
 
-	class UpgradeController extends Edde {
+	class UpgradeController extends Edde implements IController {
 		use CliController;
 		use UpgradeManager;
 
@@ -21,7 +22,7 @@
 			} catch (CurrentVersionException $exception) {
 				printf("Everything is nice and shiny on version [%s]!\n", $this->upgradeManager->getVersion());
 				echo sprintf("Installed upgrades:\n");
-				foreach ($this->upgradeManager->getCurrentCollection()->orderDesc('u.stamp') as $record) {
+				foreach ($this->upgradeManager->getCurrentCollection()->orderDesc('u.stamp')->exe as $record) {
 					$entity = $record->getEntity('u');
 					echo sprintf("\t - [%s] on [%s]\n", $entity->get('version'), $entity->get('stamp')->format('Y-m-d H:i:s.u'));
 				}
