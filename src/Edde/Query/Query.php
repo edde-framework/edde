@@ -6,7 +6,6 @@
 	use Edde\SimpleObject;
 	use stdClass;
 	use function array_keys;
-	use function implode;
 	use function is_string;
 
 	class Query extends SimpleObject implements IQuery {
@@ -30,8 +29,6 @@
 		protected $schemas;
 		/** @var bool */
 		protected $count = false;
-		/** @var IQuery[] */
-		protected $queries = [];
 
 		public function __construct() {
 			$this->params = new Params();
@@ -197,23 +194,5 @@
 		/** @inheritdoc */
 		public function isCount(): bool {
 			return $this->count;
-		}
-
-		/** @inheritdoc */
-		public function query(string $name): IQuery {
-			return $this->queries[$name] = new Query();
-		}
-
-		/** @inheritdoc */
-		public function getQuery(string $name): IQuery {
-			if (isset($this->queries[$name]) === false) {
-				throw new QueryException(sprintf('Requested unknown sub-query [%s]; available queries are [%s].', $name, implode(', ', array_keys($this->queries))));
-			}
-			return $this->queries[$name];
-		}
-
-		/** @inheritdoc */
-		public function getQueries(): array {
-			return $this->queries;
 		}
 	}

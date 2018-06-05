@@ -457,7 +457,6 @@
 			$wheres->where('project status greater equal')->greaterThanEqual('p', 'status');
 			$wheres->where('project status lesser')->lesserThan('p', 'status');
 			$wheres->where('project status lesser equal')->lesserThanEqual('p', 'status');
-			$wheres->where('project status literal')->literal('p.status IS NOT NULL');
 			$wheres->where('user uuid')->equalTo('u', 'uuid');
 			$wheres->where('is owner')->equalTo('pm', 'owner');
 			$wheres->where('project name')->equalTo('p', 'name');
@@ -474,7 +473,6 @@
 			       ->and('something')
 			       ->and('project status gte')
 			       ->and('project status lte')
-			       ->and('project status literal')
 			       ->and('project status not in');
 			// ... 3. set parameters for where based on given or guessed names
 			$bind = [
@@ -509,90 +507,6 @@
 		public function testCount() {
 			self::assertEquals(7, $this->collectionManager->collection()->select(ProjectSchema::class)->count(ProjectSchema::class));
 			self::assertEquals(4, $this->collectionManager->collection()->select(ProjectMemberSchema::class)->count(ProjectMemberSchema::class));
-		}
-
-		/**
-		 * @throws EntityNotFoundException
-		 * @throws FilterException
-		 * @throws QueryException
-		 * @throws SchemaException
-		 * @throws StorageException
-		 * @throws ValidatorException
-		 */
-		public function testChallangeQuery() {
-			$entities[] = $user = $this->entityManager->entity(UserSchema::class, (object)[
-				'uuid'     => 'edde',
-				'login'    => 'edde',
-				'password' => 'edde',
-			]);
-			$entities[] = $user2 = $this->entityManager->entity(UserSchema::class, (object)[
-				'uuid'     => 'wanna this one',
-				'login'    => 'boo',
-				'password' => 'boo',
-			]);
-			$entities[] = $project = $this->entityManager->entity(ProjectSchema::class, (object)[
-				'name' => 'relation project',
-			]);
-			$entities[] = $project2 = $this->entityManager->entity(ProjectSchema::class, (object)[
-				'name' => 'relation project 2',
-			]);
-			$entities[] = $organization = $this->entityManager->entity(OrganizationSchema::class, (object)[
-				'name' => 'Da Org, yaay!',
-			]);
-			$entities[] = $relation = $this->storage->attach($project, $user, ProjectMemberSchema::class);
-			$relation->set('owner', true);
-			$entities[] = $relation = $this->storage->attach($project2, $user, ProjectMemberSchema::class);
-			$relation->set('owner', true);
-			$entities[] = $relation = $this->storage->attach($project, $this->storage->load(UserSchema::class, 'ja'), ProjectMemberSchema::class);
-			$entities[] = $this->storage->attach($project, $organization, ProjectOrganizationSchema::class);
-			$this->storage->saves($entities);
-			//
-			// ...
-			//
-			$collection = $this->collectionManager->collection($query = new Query());
-			$collection->selects([
-				'u' => UserSchema::class,
-			]);
-			$subCollection = $this->collectionManager->collection($subQuery = $query->query('users on project'));
-			$subCollection->selects([
-				'u'  => UserSchema::class,
-				'p'  => ProjectSchema::class,
-				'pm' => ProjectMemberSchema::class,
-			]);
-			$subQuery->just('u', 'uuid');
-			$subCollection->attach('p', 'u', 'pm');
-			$wheres = $subQuery->wheres();
-			$wheres->where('project uuid')->equalTo('p', 'uuid');
-			$wheres->chains()->chain()->where('project uuid');
-			$expected = [
-				'edde',
-				'ja',
-			];
-			$actual = [];
-			foreach ($subCollection->execute(['project uuid' => $project->get('uuid')]) as $record) {
-				$actual[] = $record->getItem('u');
-			}
-			sort($expected);
-			sort($actual);
-			self::assertEquals($expected, $actual);
-			$wheres = $query->wheres();
-			$wheres->where('users on project')->notInQuery('u', 'uuid');
-			$wheres->chains()->chain()->where('users on project');
-			$binds = [
-				'project uuid' => $project->get('uuid'),
-			];
-			$expected = [
-				'on',
-				'two',
-				'wanna this one',
-			];
-			$actual = [];
-			foreach ($collection->execute($binds) as $record) {
-				$actual[] = $record->getEntity('u')->get('uuid');
-			}
-			sort($expected);
-			sort($actual);
-			self::assertEquals($expected, $actual);
 		}
 
 		/**

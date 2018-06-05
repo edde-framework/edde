@@ -126,17 +126,6 @@
 		}
 
 		/** @inheritdoc */
-		public function inQuery(string $alias, string $property, string $query = null): IWhere {
-			$this->where = (object)[
-				'type'     => __FUNCTION__,
-				'alias'    => $alias,
-				'property' => $property,
-				'query'    => $query ?: $this->name,
-			];
-			return $this;
-		}
-
-		/** @inheritdoc */
 		public function notIn(string $alias, string $property, string $param = null): IWhere {
 			$param = new Param($alias, $property, $param ?: $this->name);
 			$this->where = (object)[
@@ -146,26 +135,6 @@
 				'param'    => $param->getHash(),
 			];
 			$this->params->param($param);
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function notInQuery(string $alias, string $property, string $query = null): IWhere {
-			$this->where = (object)[
-				'type'     => __FUNCTION__,
-				'alias'    => $alias,
-				'property' => $property,
-				'query'    => $query ?: $this->name,
-			];
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function literal(string $literal): IWhere {
-			$this->where = (object)[
-				'type'    => __FUNCTION__,
-				'literal' => $literal,
-			];
 			return $this;
 		}
 

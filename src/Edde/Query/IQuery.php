@@ -192,27 +192,4 @@
 		 * @return bool
 		 */
 		public function isCount(): bool;
-
-		/**
-		 * create a new sub-query
-		 *
-		 * @param string $name
-		 *
-		 * @return IQuery
-		 */
-		public function query(string $name): IQuery;
-
-		/**
-		 * @param string $name
-		 *
-		 * @return IQuery
-		 *
-		 * @throws QueryException
-		 */
-		public function getQuery(string $name): IQuery;
-
-		/**
-		 * @return IQuery[]
-		 */
-		public function getQueries(): array;
 	}

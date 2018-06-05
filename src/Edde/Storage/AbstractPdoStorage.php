@@ -14,7 +14,6 @@
 	use PDO;
 	use PDOException;
 	use Throwable;
-	use function array_merge;
 	use function implode;
 	use function is_iterable;
 	use function sha1;
@@ -55,12 +54,7 @@
 
 		/** @inheritdoc */
 		public function query(IQuery $query, array $binds = []): Generator {
-			$sql = $this->compiler->compile($query);
-			$params = $this->params($query, $binds);
-			foreach ($query->getQueries() as $item) {
-				$params = array_merge($params, $this->params($item, $binds));
-			}
-			foreach ($this->fetch($sql, $params) as $items) {
+			foreach ($this->fetch($this->compiler->compile($query), $this->params($query, $binds)) as $items) {
 				yield $this->container->inject(new Record($query, $items));
 			}
 		}

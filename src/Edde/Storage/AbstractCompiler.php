@@ -5,7 +5,6 @@
 	use Edde\Edde;
 	use Edde\Query\IChain;
 	use Edde\Query\IChains;
-	use Edde\Query\IQuery;
 	use Edde\Query\IWhere;
 	use Edde\Query\IWheres;
 	use Edde\Query\QueryException;
@@ -29,7 +28,6 @@
 		}
 
 		/**
-		 * @param IQuery  $query
 		 * @param IWheres $wheres
 		 * @param IChains $chains
 		 * @param IChain  $chain
@@ -39,18 +37,18 @@
 		 *
 		 * @throws QueryException
 		 */
-		public function chain(IQuery $query, IWheres $wheres, IChains $chains, IChain $chain, int $level = 2): string {
+		public function chain(IWheres $wheres, IChains $chains, IChain $chain, int $level = 2): string {
 			$fragments = [];
 			$tabs = str_repeat("\t", $level);
 			foreach ($chain as $stdClass) {
 				$operator = ' ' . strtoupper($stdClass->operator) . ' ';
 				if ($chains->hasChain($stdClass->name)) {
 					$fragments[] = $operator;
-					$fragments[] = "(\n\t" . $tabs . $this->chain($query, $wheres, $chains, $chains->getChain($stdClass->name), $level + 1) . "\n" . $tabs . ')';
+					$fragments[] = "(\n\t" . $tabs . $this->chain($wheres, $chains, $chains->getChain($stdClass->name), $level + 1) . "\n" . $tabs . ')';
 					continue;
 				}
 				$fragments[] = $operator . "\n" . $tabs;
-				$fragments[] = $this->where($query, $wheres->getWhere($stdClass->name));
+				$fragments[] = $this->where($wheres->getWhere($stdClass->name));
 			}
 			/**
 			 * shift the very first operator as it makes no sense
@@ -59,5 +57,5 @@
 			return implode('', $fragments);
 		}
 
-		abstract public function where(IQuery $query, IWhere $where): string;
+		abstract public function where(IWhere $where): string;
 	}
