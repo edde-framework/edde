@@ -11,16 +11,6 @@
 		/**
 		 * @return string
 		 */
-		public function getUser();
-
-		/**
-		 * @return string
-		 */
-		public function getPassword();
-
-		/**
-		 * @return string
-		 */
 		public function getHost();
 
 		/**
@@ -135,6 +125,8 @@
 		 * @param string $url
 		 *
 		 * @return $this
+		 *
+		 * @throws UrlException
 		 */
 		public function parse(string $url);
 

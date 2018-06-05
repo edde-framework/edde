@@ -8,10 +8,6 @@
 		/** @var string */
 		protected $scheme = '';
 		/** @var string */
-		protected $user = '';
-		/** @var string */
-		protected $password = '';
-		/** @var string */
 		protected $host = '';
 		/** @var int */
 		protected $port;
@@ -38,8 +34,6 @@
 			}
 			static $copy = [
 				'scheme'   => 'setScheme',
-				'user'     => 'setUser',
-				'pass'     => 'setPassword',
 				'host'     => 'setHost',
 				'port'     => 'setPort',
 				'path'     => 'setPath',
@@ -101,13 +95,6 @@
 			if ($scheme !== '') {
 				$url = $scheme . '://';
 			}
-			if (($user = $this->getUser()) !== '') {
-				$url .= $user;
-				if (($password = $this->getPassword()) !== '') {
-					$url .= ':' . $password;
-				}
-				$url .= '@';
-			}
 			$url .= ($host = $this->getHost());
 			if ($host !== '' && ($port = $this->getPort()) !== null) {
 				$url .= ':' . $port;
@@ -131,28 +118,6 @@
 		/** @inheritdoc */
 		public function setScheme($scheme) {
 			$this->scheme = $scheme;
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function getUser() {
-			return $this->user;
-		}
-
-		/** @inheritdoc */
-		public function setUser($user) {
-			$this->user = $user;
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function getPassword() {
-			return $this->password;
-		}
-
-		/** @inheritdoc */
-		public function setPassword($password) {
-			$this->password = $password;
 			return $this;
 		}
 
@@ -242,11 +207,13 @@
 		}
 
 		/**
-		 * create a "clone" of the givne url
+		 * create a "clone" of the given url
 		 *
 		 * @param null $url
 		 *
 		 * @return IUrl|$this
+		 *
+		 * @throws UrlException
 		 */
 		static public function create($url = null) {
 			return new static($url);
