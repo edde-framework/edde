@@ -59,53 +59,6 @@
 			}
 		}
 
-		/**
-		 * @param IQuery $query
-		 * @param array  $binds
-		 *
-		 * @return array
-		 *
-		 * @throws FilterException
-		 * @throws QueryException
-		 * @throws SchemaException
-		 * @throws StorageException
-		 */
-		protected function params(IQuery $query, array $binds): array {
-			$params = [];
-			foreach ($this->storageFilterService->params($query, $binds) as $param) {
-				$hash = $param->getHash();
-				if (is_iterable($value = $param->getValue()) === false) {
-					$params[$hash] = $value;
-					continue;
-				}
-				/**
-				 * because we have temp. table and this parameter is not going to be sent to PDO, it's
-				 * necessary to kill it
-				 */
-				unset($params[$hash]);
-				/**
-				 * this is ugly hack, because of some motherfucker who not implement array support for
-				 * WHERE IN clause; so in general it was much more easier to use param name as a temporary
-				 * table name from which WHERE IN makes sub-query
-				 *
-				 * it's not necessary to thanks me
-				 */
-				$this->exec(vsprintf('CREATE TEMPORARY TABLE %s ( item %s )', [
-					$temporary = $this->compiler->delimit($hash),
-					$this->type($query->getSchema($param->getAlias())->getAttribute($param->getProperty())->getType()),
-				]));
-				$statement = $this->pdo->prepare(vsprintf('INSERT INTO %s (item) VALUES (:item)', [
-					$temporary,
-				]));
-				foreach ($value as $v) {
-					$statement->execute([
-						'item' => $v,
-					]);
-				}
-			}
-			return $params;
-		}
-
 		/** @inheritdoc */
 		public function create(string $name): IStorage {
 			try {
@@ -301,6 +254,53 @@
 			$this->pdo->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_EMPTY_STRING);
 			$this->pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
 			$this->pdo->setAttribute(PDO::ATTR_TIMEOUT, 120);
+		}
+
+		/**
+		 * @param IQuery $query
+		 * @param array  $binds
+		 *
+		 * @return array
+		 *
+		 * @throws FilterException
+		 * @throws QueryException
+		 * @throws SchemaException
+		 * @throws StorageException
+		 */
+		protected function params(IQuery $query, array $binds): array {
+			$params = [];
+			foreach ($this->storageFilterService->params($query, $binds) as $param) {
+				$hash = $param->getHash();
+				if (is_iterable($value = $param->getValue()) === false) {
+					$params[$hash] = $value;
+					continue;
+				}
+				/**
+				 * because we have temp. table and this parameter is not going to be sent to PDO, it's
+				 * necessary to kill it
+				 */
+				unset($params[$hash]);
+				/**
+				 * this is ugly hack, because of some motherfucker who not implement array support for
+				 * WHERE IN clause; so in general it was much more easier to use param name as a temporary
+				 * table name from which WHERE IN makes sub-query
+				 *
+				 * it's not necessary to thanks me
+				 */
+				$this->exec(vsprintf('CREATE TEMPORARY TABLE %s ( item %s )', [
+					$temporary = $this->compiler->delimit($hash),
+					$this->type($query->getSchema($param->getAlias())->getAttribute($param->getProperty())->getType()),
+				]));
+				$statement = $this->pdo->prepare(vsprintf('INSERT INTO %s (item) VALUES (:item)', [
+					$temporary,
+				]));
+				foreach ($value as $v) {
+					$statement->execute([
+						'item' => $v,
+					]);
+				}
+			}
+			return $params;
 		}
 
 		/**
