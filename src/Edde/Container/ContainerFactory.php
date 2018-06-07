@@ -46,7 +46,7 @@
 	use Edde\Storage\IStorage;
 	use Edde\Storage\IStorageFilterService;
 	use Edde\Storage\ITransaction;
-	use Edde\Storage\MysqlStorage;
+	use Edde\Storage\PostgresStorage;
 	use Edde\Storage\StorageFilterService;
 	use Edde\Upgrade\IUpgradeManager;
 	use Edde\Utils\IStringUtils;
@@ -295,7 +295,7 @@
 				 * storage support
 				 */
 				IEntityManager::class        => EntityManager::class,
-				IStorage::class              => MysqlStorage::class,
+				IStorage::class              => PostgresStorage::class,
 				IStorageFilterService::class => StorageFilterService::class,
 				ITransaction::class          => IStorage::class,
 				ICollectionManager::class    => CollectionManager::class,
