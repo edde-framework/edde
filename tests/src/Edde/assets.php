@@ -58,6 +58,8 @@
 	}
 
 	interface IssueProjectSchema extends UuidSchema {
+		const relation = ['issue' => 'project'];
+
 		public function issue(): IssueSchema;
 
 		public function project(): ProjectSchema;
@@ -75,6 +77,7 @@
 	}
 
 	interface ProjectLabelSchema extends UuidSchema {
+		const relation = ['project' => 'label'];
 		const alias = true;
 
 		public function project(): ProjectSchema;

@@ -11,10 +11,9 @@
 
 		/** @inheritdoc */
 		public function start(): ITransaction {
-			if ($this->transactionCount > 0) {
-				$this->transactionCount++;
+			if ($this->transactionCount === 0) {
+				$this->onStart();
 			}
-			$this->onStart();
 			$this->transactionCount++;
 			return $this;
 		}

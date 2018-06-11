@@ -15,8 +15,8 @@ RUN composer global require hirak/prestissimo -q --prefer-dist --no-progress
 RUN composer config --global repo.pacagist composer https://packagist.org
 
 RUN echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
-RUN echo "zend_extension = xdebug.so" > /etc/php7/conf.d/xdebug.ini
 RUN echo "root:1234" | chpasswd
+RUN echo "zend_extension = xdebug.so" > /etc/php7/conf.d/xdebug.ini
 
 COPY .docker/nginx.conf /etc/nginx/nginx.conf
 COPY .docker/php-fpm.conf /etc/php7/php-fpm.d/zz-www.conf

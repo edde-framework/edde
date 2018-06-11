@@ -16,8 +16,11 @@
 	use Edde\Service\Storage\Storage;
 	use Edde\TestCase;
 	use Edde\Validator\ValidatorException;
+	use IssueProjectSchema;
+	use IssueSchema;
 	use LabelSchema;
 	use OrganizationSchema;
+	use ProjectLabelSchema;
 	use ProjectMemberSchema;
 	use ProjectOrganizationSchema;
 	use ProjectSchema;
@@ -46,7 +49,10 @@
 				ProjectMemberSchema::class,
 				OrganizationSchema::class,
 				ProjectOrganizationSchema::class,
+				IssueSchema::class,
 				ToBeOrdered::class,
+				ProjectLabelSchema::class,
+				IssueProjectSchema::class,
 			];
 			foreach ($schemas as $schema) {
 				$this->storage->create($schema);
@@ -605,6 +611,9 @@
 				OrganizationSchema::class,
 				ProjectOrganizationSchema::class,
 				ToBeOrdered::class,
+				IssueSchema::class,
+				IssueProjectSchema::class,
+				ProjectLabelSchema::class,
 			]);
 		}
 	}

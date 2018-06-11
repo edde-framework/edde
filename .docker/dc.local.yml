@@ -13,10 +13,6 @@ services:
                     - "4722:22"
                 networks:
                     - edde-network
-                depends_on:
-                    - neo4j
-                    - postgres
-                    - mysql
 
         neo4j:
                 image: neo4j:3.3-enterprise
