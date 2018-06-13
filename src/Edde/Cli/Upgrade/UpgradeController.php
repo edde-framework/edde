@@ -22,7 +22,7 @@
 			} catch (CurrentVersionException $exception) {
 				printf("Everything is nice and shiny on version [%s]!\n", $this->upgradeManager->getVersion());
 				echo sprintf("Installed upgrades:\n");
-				foreach ($this->upgradeManager->getCurrentCollection()->orderDesc('u.stamp')->exe as $record) {
+				foreach ($this->upgradeManager->getCurrentCollection()->order('u', 'stamp', 'desc')->execute() as $record) {
 					$entity = $record->getEntity('u');
 					echo sprintf("\t - [%s] on [%s]\n", $entity->get('version'), $entity->get('stamp')->format('Y-m-d H:i:s.u'));
 				}
@@ -34,7 +34,7 @@
 		 */
 		public function actionList() {
 			printf("List of currently installed upgrades:\n");
-			foreach ($this->upgradeManager->getCurrentCollection()->orderDesc('u.stamp') as $record) {
+			foreach ($this->upgradeManager->getCurrentCollection()->order('u', 'stamp', 'desc') as $record) {
 				$entity = $record->getEntity('u');
 				printf("\t - version [%s] from [%s]\n", $entity->get('version'), $entity->get('stamp')->format('Y-m-d H:i:s'));
 			}

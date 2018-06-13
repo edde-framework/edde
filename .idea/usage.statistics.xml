@@ -5,34 +5,34 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="Dockerfile" value="5" />
-          <entry key="ini" value="3" />
-          <entry key="php" value="82" />
-          <entry key="sh" value="2" />
-          <entry key="yml" value="7" />
+          <entry key="ini" value="5" />
+          <entry key="php" value="99" />
+          <entry key="sh" value="3" />
+          <entry key="yml" value="8" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Bash" value="2" />
+          <entry key="Bash" value="3" />
           <entry key="Dockerfile" value="5" />
-          <entry key="Ini" value="3" />
-          <entry key="PHP" value="82" />
-          <entry key="YAML" value="7" />
+          <entry key="Ini" value="5" />
+          <entry key="PHP" value="99" />
+          <entry key="YAML" value="8" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Dockerfile" value="17" />
-          <entry key="php" value="1350" />
-          <entry key="txt" value="55" />
+          <entry key="php" value="1398" />
+          <entry key="txt" value="89" />
           <entry key="yml" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Dockerfile" value="17" />
-          <entry key="PHP" value="1350" />
-          <entry key="PLAIN_TEXT" value="55" />
+          <entry key="PHP" value="1398" />
+          <entry key="PLAIN_TEXT" value="89" />
           <entry key="YAML" value="1" />
         </counts>
       </usages-collector>
