@@ -10,7 +10,7 @@
 	use Edde\Service\Filter\FilterManager;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Validator\ValidatorManager;
-	use stdClass;
+	use function array_key_exists;
 	use function array_map;
 	use function is_array;
 	use function iterator_to_array;
@@ -30,62 +30,59 @@
 		}
 
 		/** @inheritdoc */
-		public function input(ISchema $schema, stdClass $input): stdClass {
-			$stdClass = clone $input;
+		public function input(ISchema $schema, array $input): array {
 			foreach ($schema->getAttributes() as $name => $attribute) {
-				if (($generator = $attribute->getFilter('generator')) && $stdClass->$name === null) {
-					$stdClass->$name = $this->filterManager->getFilter($this->prefix . ':' . $generator)->input(null);
+				if (($generator = $attribute->getFilter('generator')) && $input[$name] === null) {
+					$input[$name] = $this->filterManager->getFilter($this->prefix . ':' . $generator)->input(null);
 				}
-				$stdClass->$name = $stdClass->$name ?: $attribute->getDefault();
+				$input[$name] = $input[$name] ?: $attribute->getDefault();
 				if ($validator = $attribute->getValidator()) {
-					$this->validatorManager->validate($this->prefix . ':' . $validator, $stdClass->$name, (object)[
+					$this->validatorManager->validate($this->prefix . ':' . $validator, $input[$name], (object)[
 						'name'     => $schema->getName() . '::' . $name,
 						'required' => $attribute->isRequired(),
 					]);
 				}
-				$stdClass->$name = $this->value($attribute, $stdClass->$name);
+				$input[$name] = $this->value($attribute, $input[$name]);
 			}
-			return $stdClass;
+			return $input;
 		}
 
 		/** @inheritdoc */
-		public function update(ISchema $schema, stdClass $update): stdClass {
-			$stdClass = clone $update;
+		public function update(ISchema $schema, array $update): array {
 			foreach ($schema->getAttributes() as $name => $attribute) {
 				if ($validator = $attribute->getValidator()) {
-					$this->validatorManager->validate($this->prefix . ':' . $validator, $stdClass->$name, (object)[
+					$this->validatorManager->validate($this->prefix . ':' . $validator, $update[$name], (object)[
 						'name'     => $schema->getName() . '::' . $name,
 						'required' => $attribute->isRequired(),
 					]);
 				}
 				if ($filter = $attribute->getFilter('type')) {
-					$stdClass->$name = $this->filterManager->getFilter($this->prefix . ':' . $filter)->input($stdClass->$name);
+					$update[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->input($update[$name]);
 				}
 				/**
 				 * common filter support; filter name is used for both directions
 				 */
 				if ($filter = $attribute->getFilter('filter')) {
-					$stdClass->$name = $this->filterManager->getFilter($this->prefix . ':' . $filter)->input($stdClass->$name);
+					$update[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->input($update[$name]);
 				}
 			}
-			return $stdClass;
+			return $update;
 		}
 
 		/** @inheritdoc */
-		public function output(ISchema $schema, stdClass $output): stdClass {
-			$stdClass = clone $output;
+		public function output(ISchema $schema, array $output): array {
 			foreach ($schema->getAttributes() as $name => $attribute) {
-				if (property_exists($stdClass, $name) === false) {
-					$stdClass->$name = $attribute->getDefault();
+				if (isset($output[$name]) === false && array_key_exists($name, $output) === false) {
+					$output[$name] = $attribute->getDefault();
 				}
 				if ($filter = $attribute->getFilter('type')) {
-					$stdClass->$name = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($stdClass->$name);
+					$output[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($output[$name]);
 				}
 				if ($filter = $attribute->getFilter('filter')) {
-					$stdClass->$name = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($stdClass->$name);
+					$output[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($output[$name]);
 				}
 			}
-			return $stdClass;
+			return $output;
 		}
 
 		/** @inheritdoc */

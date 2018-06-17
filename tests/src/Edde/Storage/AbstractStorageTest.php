@@ -81,7 +81,7 @@
 		public function testValidator() {
 			$this->expectException(ValidatorException::class);
 			$this->expectExceptionMessage('Value [LabelSchema::name] is not string.');
-			$this->storage->insert($this->entityManager->entity(LabelSchema::class, (object)['name' => true]));
+			$this->storage->insert($this->entityManager->entity(LabelSchema::class, ['name' => true]));
 		}
 
 		/**
@@ -91,7 +91,7 @@
 		 * @throws FilterException
 		 */
 		public function testInsert() {
-			$this->storage->insert($entity = $this->entityManager->entity(LabelSchema::class, $object = (object)[
+			$this->storage->insert($entity = $this->entityManager->entity(LabelSchema::class, $object = [
 				'name' => 'this entity is new',
 			]));
 			self::assertNotNull($entity->get('uuid'));
@@ -107,7 +107,7 @@
 		public function testInsertException2() {
 			$this->expectException(ValidatorException::class);
 			$this->expectExceptionMessage('Required value [LabelSchema::name] is null.');
-			$this->storage->insert($this->entityManager->entity(LabelSchema::class, (object)[
+			$this->storage->insert($this->entityManager->entity(LabelSchema::class, [
 				'name' => null,
 			]));
 		}
@@ -120,11 +120,11 @@
 		 */
 		public function testInsertUnique() {
 			$this->expectException(DuplicateEntryException::class);
-			$this->storage->insert($this->entityManager->entity(LabelSchema::class, (object)[
+			$this->storage->insert($this->entityManager->entity(LabelSchema::class, [
 				'name'   => 'unique',
 				'system' => true,
 			]));
-			$this->storage->insert($this->entityManager->entity(LabelSchema::class, (object)[
+			$this->storage->insert($this->entityManager->entity(LabelSchema::class, [
 				'name' => 'unique',
 			]));
 		}
@@ -166,7 +166,7 @@
 		 * @throws ValidatorException
 		 */
 		public function testUpdate() {
-			$this->storage->insert($entity = $this->entityManager->entity(ProjectSchema::class, (object)[
+			$this->storage->insert($entity = $this->entityManager->entity(ProjectSchema::class, [
 				'name'    => 'some-project-here',
 				'created' => new DateTime(),
 				'start'   => new DateTime(),
@@ -187,7 +187,7 @@
 		 * @throws ValidatorException
 		 */
 		public function testSave() {
-			$this->storage->save($entity = $this->entityManager->entity(ProjectSchema::class, (object)[
+			$this->storage->save($entity = $this->entityManager->entity(ProjectSchema::class, [
 				'name'    => 'another-some-project-here',
 				'created' => new DateTime(),
 				'start'   => new DateTime(),
@@ -209,10 +209,10 @@
 		public function testAttachException() {
 			$this->expectException(SchemaException::class);
 			$this->expectExceptionMessage('Invalid relation (!UserSchema)-[ProjectMemberSchema]->(ProjectSchema): Source schema [UserSchema] differs from expected relation [ProjectSchema]; did you swap $source and $target schema?');
-			$project = $this->entityManager->entity(ProjectSchema::class, (object)[
+			$project = $this->entityManager->entity(ProjectSchema::class, [
 				'name' => 'to be linked',
 			]);
-			$user = $this->entityManager->entity(UserSchema::class, (object)[
+			$user = $this->entityManager->entity(UserSchema::class, [
 				'login'    => 'root',
 				'password' => '123',
 			]);
@@ -233,11 +233,11 @@
 		 * @throws ValidatorException
 		 */
 		public function testAttach() {
-			$project = $this->entityManager->entity(ProjectSchema::class, (object)[
+			$project = $this->entityManager->entity(ProjectSchema::class, [
 				'uuid' => 'one',
 				'name' => 'to be linked',
 			]);
-			$user = $this->entityManager->entity(UserSchema::class, (object)[
+			$user = $this->entityManager->entity(UserSchema::class, [
 				'uuid'     => 'two',
 				'login'    => 'root',
 				'password' => '123',
@@ -326,7 +326,7 @@
 		public function testLinkException() {
 			$this->expectException(SchemaException::class);
 			$this->expectExceptionMessage('Invalid relation (!UserSchema)-[ProjectMemberSchema]->(ProjectSchema): Source schema [UserSchema] differs from expected relation [ProjectSchema]; did you swap $source and $target schema?');
-			$project = $this->entityManager->entity(ProjectSchema::class, (object)[
+			$project = $this->entityManager->entity(ProjectSchema::class, [
 				'uuid' => 'two-pi',
 				'name' => 'multilink, yaay',
 			]);
@@ -347,7 +347,7 @@
 		public function testLink() {
 			$this->expectException(EntityNotFoundException::class);
 			$this->expectExceptionMessage('Cannot load any entity [ProjectMemberSchema] with id [original].');
-			$project = $this->entityManager->entity(ProjectSchema::class, (object)[
+			$project = $this->entityManager->entity(ProjectSchema::class, [
 				'uuid' => 'two-pi',
 				'name' => 'multilink, yaay',
 			]);
@@ -374,7 +374,7 @@
 		public function testDelete() {
 			$this->expectException(EntityNotFoundException::class);
 			$this->expectExceptionMessage('Cannot load any entity [ProjectSchema] with id [to-be-deleted].');
-			$project = $this->entityManager->entity(ProjectSchema::class, (object)[
+			$project = $this->entityManager->entity(ProjectSchema::class, [
 				'uuid' => 'to-be-deleted',
 				'name' => 'kill me, bitch!',
 			]);
@@ -391,15 +391,15 @@
 		 * @throws ValidatorException
 		 */
 		public function testQuery() {
-			$entities[] = $user = $this->entityManager->entity(UserSchema::class, (object)[
+			$entities[] = $user = $this->entityManager->entity(UserSchema::class, [
 				'uuid'     => 'ja',
 				'login'    => 'me',
 				'password' => '1234',
 			]);
-			$entities[] = $project = $this->entityManager->entity(ProjectSchema::class, (object)[
+			$entities[] = $project = $this->entityManager->entity(ProjectSchema::class, [
 				'name' => 'project',
 			]);
-			$entities[] = $this->entityManager->entity(LabelSchema::class, (object)[
+			$entities[] = $this->entityManager->entity(LabelSchema::class, [
 				'name' => 'lejbl',
 			]);
 			$entities[] = $relation = $this->storage->attach($project, $user, ProjectMemberSchema::class);
@@ -432,15 +432,15 @@
 		 * @throws ValidatorException
 		 */
 		public function testBasicQuery() {
-			$entities[] = $user = $this->entityManager->entity(UserSchema::class, (object)[
+			$entities[] = $user = $this->entityManager->entity(UserSchema::class, [
 				'uuid'     => 'on',
 				'login'    => 'tadaa',
 				'password' => '1234',
 			]);
-			$entities[] = $project = $this->entityManager->entity(ProjectSchema::class, (object)[
+			$entities[] = $project = $this->entityManager->entity(ProjectSchema::class, [
 				'name' => 'expected project',
 			]);
-			$entities[] = $project2 = $this->entityManager->entity(ProjectSchema::class, (object)[
+			$entities[] = $project2 = $this->entityManager->entity(ProjectSchema::class, [
 				'name' => 'another - less - expected project',
 			]);
 			$entities[] = $relation = $this->storage->attach($project, $user, ProjectMemberSchema::class);
@@ -537,7 +537,7 @@
 			];
 			shuffle($shuffled);
 			foreach ($shuffled as $item) {
-				$this->storage->insert($this->entityManager->entity(ToBeOrdered::class, (object)[
+				$this->storage->insert($this->entityManager->entity(ToBeOrdered::class, [
 					'index' => $item,
 				]));
 			}

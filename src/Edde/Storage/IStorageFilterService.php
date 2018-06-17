@@ -10,47 +10,46 @@
 	use Edde\Schema\ISchema;
 	use Edde\Schema\SchemaException;
 	use Edde\Validator\ValidatorException;
-	use stdClass;
 
 	interface IStorageFilterService extends IConfigurable {
 		/**
 		 * filter input (insert) by input filters (internally could use proprietary filtering algorithm)
 		 *
-		 * @param ISchema  $schema schema of an input
-		 * @param stdClass $input  input should be cloned to prevent side effects
+		 * @param ISchema $schema schema of an input
+		 * @param array   $input
 		 *
-		 * @return stdClass
+		 * @return array
 		 *
 		 * @throws ValidatorException
 		 * @throws FilterException
 		 */
-		public function input(ISchema $schema, stdClass $input): stdClass;
+		public function input(ISchema $schema, array $input): array;
 
 		/**
 		 * prepare for update; the algorithm could slightly differ from an input
 		 *
-		 * @param ISchema  $schema
-		 * @param stdClass $update
+		 * @param ISchema $schema
+		 * @param array   $update
 		 *
-		 * @return stdClass
+		 * @return array
 		 *
 		 * @throws ValidatorException
 		 * @throws FilterException
 		 */
-		public function update(ISchema $schema, stdClass $update): stdClass;
+		public function update(ISchema $schema, array $update): array;
 
 		/**
 		 * prepare an output
 		 *
-		 * @param ISchema  $schema
-		 * @param stdClass $output
+		 * @param ISchema $schema
+		 * @param array   $output
 		 *
-		 * @return stdClass
+		 * @return array
 		 *
 		 * @throws FilterException
 		 * @throws ValidatorException
 		 */
-		public function output(ISchema $schema, stdClass $output): stdClass;
+		public function output(ISchema $schema, array $output): array;
 
 		/**
 		 * filter input params for a storage

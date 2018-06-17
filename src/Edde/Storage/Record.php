@@ -45,8 +45,7 @@
 				}
 				unset($this->items[$k]);
 				[$name, $property] = explode('.', $k, 2);
-				$this->items[$name] = $this->items[$name] ?? new stdClass();
-				$this->items[$name]->$property = $v;
+				$this->items[$name][$property] = $v;
 			}
 			foreach ($this->items as $name => $item) {
 				$this->items[$name] = $this->storageFilterService->output($this->query->getSchema($name), $item);

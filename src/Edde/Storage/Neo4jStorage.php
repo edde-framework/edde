@@ -114,15 +114,15 @@
 			if ($schema->isRelation()) {
 				return $this->relation($entity);
 			}
-			$source = $this->storageFilterService->input($entity->getSchema(), $entity->toObject());
+			$source = $this->storageFilterService->input($entity->getSchema(), (array)$entity->toObject());
 			$this->fetch(
 				vsprintf('CREATE (a: %s {%s: $primary}) SET a = $set', [
 					$this->compiler->delimit($schema->getRealName()),
 					$this->compiler->delimit($primary = $schema->getPrimary()->getName()),
 				]),
 				[
-					'primary' => $source->{$primary},
-					'set'     => (array)$source,
+					'primary' => $source[$primary],
+					'set'     => $source,
 				]
 			);
 			$entity->put($this->storageFilterService->output($schema, $source));
@@ -140,15 +140,15 @@
 			if ($schema->isRelation()) {
 				return $this->relation($entity);
 			}
-			$source = $this->storageFilterService->update($entity->getSchema(), $entity->toObject());
+			$source = $this->storageFilterService->update($entity->getSchema(), (array)$entity->toObject());
 			$this->fetch(
 				vsprintf('MERGE (a: %s {%s: $primary}) SET a = $set', [
 					$this->compiler->delimit($schema->getRealName()),
 					$this->compiler->delimit($primary = $schema->getPrimary()->getName()),
 				]),
 				[
-					'primary' => $source->{$primary},
-					'set'     => (array)$source,
+					'primary' => $source[$primary],
+					'set'     => $source,
 				]
 			);
 			$entity->put($this->storageFilterService->output($schema, $source));
@@ -275,7 +275,7 @@
 				$sourceSchema = $this->schemaManager->getSchema($sourceAttribute->getSchema()),
 				$targetSchema = $this->schemaManager->getSchema($targetAttribute->getSchema())
 			);
-			$source = $this->storageFilterService->input($entity->getSchema(), $entity->toObject());
+			$source = $this->storageFilterService->input($entity->getSchema(), (array)$entity->toObject());
 			$this->fetch(
 				vsprintf('MATCH (a:%s {%s: $a}) MATCH (b:%s {%s: $b}) MERGE (a)-[r:%s {%s: $primary}]->(b) SET r = $set', [
 					$this->compiler->delimit($sourceSchema->getRealName()),
@@ -288,8 +288,8 @@
 				[
 					'a'       => $entity->get($sourceAttribute->getName()),
 					'b'       => $entity->get($targetAttribute->getName()),
-					'primary' => $source->{$primary->getName()},
-					'set'     => (array)$source,
+					'primary' => $source[$primary->getName()],
+					'set'     => $source,
 				]
 			);
 			$entity->put($this->storageFilterService->output($schema, $source));

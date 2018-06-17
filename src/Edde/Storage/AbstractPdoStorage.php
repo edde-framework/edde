@@ -107,7 +107,7 @@
 			try {
 				$columns = [];
 				$params = [];
-				foreach ($source = $this->storageFilterService->input($entity->getSchema(), $entity->toObject()) as $k => $v) {
+				foreach ($source = $this->storageFilterService->input($entity->getSchema(), (array)$entity->toObject()) as $k => $v) {
 					$columns[sha1($k)] = $this->compiler->delimit($k);
 					$params[sha1($k)] = $v;
 				}
@@ -136,7 +136,7 @@
 				$table = $this->compiler->delimit($schema->getRealName());
 				$params = ['primary' => $entity->getPrimary()->get()];
 				$columns = [];
-				foreach ($source = $this->storageFilterService->update($entity->getSchema(), $entity->toObject()) as $k => $v) {
+				foreach ($source = $this->storageFilterService->update($entity->getSchema(), (array)$entity->toObject()) as $k => $v) {
 					$columns[] = $this->compiler->delimit($k) . ' = :' . ($paramId = sha1($k));
 					$params[$paramId] = $v;
 				}

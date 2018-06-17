@@ -56,7 +56,7 @@
 		}
 
 		/** @inheritdoc */
-		public function put(stdClass $source): ICrate {
+		public function put(array $source): ICrate {
 			$this->properties = [];
 			$this->primary = null;
 			foreach ($source as $k => $v) {
@@ -66,7 +66,7 @@
 		}
 
 		/** @inheritdoc */
-		public function push(stdClass $source): ICrate {
+		public function push(array $source): ICrate {
 			foreach ($source as $k => $v) {
 				$this->getProperty($k)->setDefault($v);
 			}

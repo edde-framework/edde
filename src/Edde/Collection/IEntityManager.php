@@ -3,18 +3,17 @@
 	namespace Edde\Collection;
 
 	use Edde\Schema\SchemaException;
-	use stdClass;
 
 	interface IEntityManager {
 		/**
 		 * just create an entity with the given schema
 		 *
-		 * @param string        $schema
-		 * @param stdClass|null $default
+		 * @param string     $schema
+		 * @param array|null $default
 		 *
 		 * @return IEntity
 		 *
 		 * @throws SchemaException
 		 */
-		public function entity(string $schema, stdClass $default = null): IEntity;
+		public function entity(string $schema, array $default = null): IEntity;
 	}

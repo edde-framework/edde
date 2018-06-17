@@ -70,25 +70,25 @@
 		 * update the crate with the given data; the crate could be dirty after; put should
 		 * drop current properties and create new ones
 		 *
-		 * @param stdClass $source
+		 * @param array $source
 		 *
 		 * @return $this
 		 *
 		 * @throws SchemaException
 		 */
-		public function put(stdClass $source): ICrate;
+		public function put(array $source): ICrate;
 
 		/**
 		 * push given data to the crate without making it dirty (if it was already dirty,
 		 * it could be "cleaned")
 		 *
-		 * @param stdClass $source
+		 * @param array $source
 		 *
 		 * @return $this
 		 *
 		 * @throws SchemaException
 		 */
-		public function push(stdClass $source): ICrate;
+		public function push(array $source): ICrate;
 
 		/**
 		 * set all values for properties as "default", thus making crate not dirty
