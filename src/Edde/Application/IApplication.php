@@ -8,10 +8,12 @@
 	 */
 	interface IApplication {
 		/**
-		 * execute an application and return a status code; application should not
-		 * die in hard way (thus internally Throwable should be caught)
+		 * run the application; if there is any kind of exception, it should NOT be caught as
+		 * there could be external logging facility and currently it's considered to be bad practice
 		 *
 		 * @return int
+		 *
+		 * @throws ApplicationException
 		 */
 		public function run(): int;
 	}
