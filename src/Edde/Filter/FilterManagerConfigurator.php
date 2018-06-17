@@ -25,7 +25,7 @@
 				'storage:uuid'     => $filter,
 				'datetime'         => $filter = new DateTimeFilter(),
 				'storage:DateTime' => $filter,
-				'string'           => $filter = new StampFilter(),
+				'string'           => $filter = new StringFilter(),
 				'storage:string'   => $filter,
 				'float'            => $filter = new FloatFilter(),
 				'storage:float'    => $filter,
