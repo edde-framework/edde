@@ -54,7 +54,7 @@
 				$upgrade = null;
 				foreach ($upgrades as $upgrade) {
 					try {
-						$last = $upgrade;
+						($last = $upgrade)->setup();
 						$upgrade->onStart();
 						$upgrade->upgrade();
 						$upgrade->onSuccess();
