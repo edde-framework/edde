@@ -4,7 +4,6 @@
 
 	use Edde\Edde;
 	use Edde\Filter\FilterException;
-	use Edde\Query\IQuery;
 	use Edde\Schema\IAttribute;
 	use Edde\Schema\ISchema;
 	use Edde\Service\Filter\FilterManager;

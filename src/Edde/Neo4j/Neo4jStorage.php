@@ -1,14 +1,22 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Storage;
+	namespace Edde\Neo4j;
 
 	use Edde\Collection\IEntity;
 	use Edde\Config\ConfigException;
 	use Edde\Filter\FilterException;
-	use Edde\Query\IQuery;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Container\Container;
 	use Edde\Service\Schema\SchemaManager;
+	use Edde\Storage\AbstractStorage;
+	use Edde\Storage\DuplicateEntryException;
+	use Edde\Storage\ICompiler;
+	use Edde\Storage\IQuery;
+	use Edde\Storage\IStorage;
+	use Edde\Storage\Neo4jCompiler;
+	use Edde\Storage\Record;
+	use Edde\Storage\RequiredValueException;
+	use Edde\Storage\StorageException;
 	use Edde\Validator\ValidatorException;
 	use Generator;
 	use GraphAware\Bolt\Configuration;
@@ -109,7 +117,7 @@
 		}
 
 		/** @inheritdoc */
-		public function insert(IEntity $entity): IStorage {
+		public function insert(string $schema, array $insert): array {
 			$schema = $entity->getSchema();
 			if ($schema->isRelation()) {
 				return $this->relation($entity);
@@ -157,7 +165,7 @@
 		}
 
 		/** @inheritdoc */
-		public function save(IEntity $entity): IStorage {
+		public function save(string $schema, array $save): array {
 			try {
 				$schema = $entity->getSchema();
 				if ($schema->isRelation()) {

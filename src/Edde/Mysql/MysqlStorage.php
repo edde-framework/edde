@@ -1,8 +1,14 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Storage;
+	namespace Edde\Mysql;
 
 	use Edde\Service\Container\Container;
+	use Edde\Storage\AbstractPdoStorage;
+	use Edde\Storage\DuplicateEntryException;
+	use Edde\Storage\DuplicateTableException;
+	use Edde\Storage\RequiredValueException;
+	use Edde\Storage\StorageException;
+	use Edde\Storage\UnknownTableException;
 	use Throwable;
 
 	class MysqlStorage extends AbstractPdoStorage {
@@ -31,11 +37,6 @@
 					return 'DATETIME(6)';
 			}
 			throw new StorageException(sprintf('Unknown type [%s] in driver [%s]', $type, static::class));
-		}
-
-		/** @inheritdoc */
-		public function createCompiler(): ICompiler {
-			return $this->compiler ?: $this->compiler = $this->container->inject(new PdoCompiler('`'));
 		}
 
 		/** @inheritdoc */

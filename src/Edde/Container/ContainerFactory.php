@@ -30,6 +30,7 @@
 	use Edde\Http\RequestService as HttpRequestService;
 	use Edde\Log\ILogService;
 	use Edde\Log\LogService;
+	use Edde\Postgres\PostgresStorage;
 	use Edde\Router\IRouterService;
 	use Edde\Router\RouterService;
 	use Edde\Router\RouterServiceConfigurator;
@@ -46,7 +47,6 @@
 	use Edde\Storage\IStorage;
 	use Edde\Storage\IStorageFilterService;
 	use Edde\Storage\ITransaction;
-	use Edde\Storage\PostgresStorage;
 	use Edde\Storage\StorageFilterService;
 	use Edde\Upgrade\IUpgradeManager;
 	use Edde\Utils\IStringUtils;

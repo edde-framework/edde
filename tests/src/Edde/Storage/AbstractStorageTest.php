@@ -6,8 +6,6 @@
 	use Edde\Collection\EntityNotFoundException;
 	use Edde\Container\ContainerException;
 	use Edde\Filter\FilterException;
-	use Edde\Query\Query;
-	use Edde\Query\QueryException;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Collection\CollectionManager;
 	use Edde\Service\Collection\EntityManager;
@@ -37,28 +35,6 @@
 		use Storage;
 		use CollectionManager;
 		use EntityManager;
-
-		/**
-		 * @throws StorageException
-		 */
-		public function testCreateSchema() {
-			$schemas = [
-				LabelSchema::class,
-				UserSchema::class,
-				ProjectSchema::class,
-				ProjectMemberSchema::class,
-				OrganizationSchema::class,
-				ProjectOrganizationSchema::class,
-				IssueSchema::class,
-				ToBeOrdered::class,
-				ProjectLabelSchema::class,
-				IssueProjectSchema::class,
-			];
-			foreach ($schemas as $schema) {
-				$this->storage->create($schema);
-			}
-			self::assertTrue(true, 'everything is ok');
-		}
 
 		/**
 		 * @throws SchemaException

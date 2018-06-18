@@ -3,6 +3,7 @@
 	namespace Edde\Storage;
 
 	use Edde\Container\Factory\InstanceFactory;
+	use Edde\Neo4j\Neo4jStorage;
 
 	class Neo4jStorageTest extends AbstractStorageTest {
 		/**

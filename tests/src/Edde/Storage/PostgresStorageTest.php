@@ -4,6 +4,7 @@
 
 	use Edde\Container\ContainerException;
 	use Edde\Container\Factory\InterfaceFactory;
+	use Edde\Postgres\PostgresStorage;
 	use ReflectionException;
 
 	class PostgresStorageTest extends AbstractStorageTest {
