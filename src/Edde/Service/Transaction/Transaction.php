@@ -3,13 +3,13 @@
 	namespace Edde\Service\Transaction;
 
 	trait Transaction {
-		/** @var \Edde\Storage\ITransaction */
+		/** @var \Edde\Transaction\ITransaction */
 		protected $transaction;
 
 		/**
-		 * @param \Edde\Storage\ITransaction $transaction
+		 * @param \Edde\Transaction\ITransaction $transaction
 		 */
-		public function injectTransaction(\Edde\Storage\ITransaction $transaction): void {
+		public function injectTransaction(\Edde\Transaction\ITransaction $transaction): void {
 			$this->transaction = $transaction;
 		}
 	}

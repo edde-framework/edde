@@ -14,7 +14,7 @@
 	use function is_array;
 	use function iterator_to_array;
 
-	class StorageFilterService extends Edde implements IStorageFilterService {
+	class StorageFilterService extends Edde {
 		use FilterManager;
 		use ValidatorManager;
 		use SchemaManager;

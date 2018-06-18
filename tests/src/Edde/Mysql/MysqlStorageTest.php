@@ -1,12 +1,16 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Storage;
+	namespace Edde\Mysql;
 
+	use Edde\Container\ContainerException;
 	use Edde\Container\Factory\InstanceFactory;
-	use Edde\Mysql\MysqlStorage;
+	use Edde\Hydrator\SchemaHydrator;
 	use Edde\Schema\SchemaException;
+	use Edde\Service\Container\Container;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
+	use Edde\Storage\IStorage;
+	use Edde\Storage\StorageException;
 	use Edde\TestCase;
 	use IssueProjectSchema;
 	use IssueSchema;
@@ -16,10 +20,13 @@
 	use ProjectMemberSchema;
 	use ProjectOrganizationSchema;
 	use ProjectSchema;
+	use ReflectionException;
+	use Throwable;
 	use ToBeOrdered;
 	use UserSchema;
 
 	class MysqlStorageTest extends TestCase {
+		use Container;
 		use Storage;
 		use SchemaManager;
 
@@ -35,6 +42,7 @@
 
 		/**
 		 * @throws SchemaException
+		 * @throws Throwable
 		 */
 		public function testCreateSchema() {
 			$schemas = [
@@ -50,19 +58,40 @@
 				IssueProjectSchema::class,
 			];
 			foreach ($schemas as $schema) {
-				(new CreateTableQuery($this->schemaManager->getSchema($schema)))->create($this->storage);
+				$this->container->inject($createTableQuery = new CreateTableQuery($this->schemaManager->getSchema($schema)));
+				$createTableQuery->create($this->storage);
 			}
 			self::assertTrue(true, 'everything is ok');
 		}
 
+		/**
+		 * @throws SchemaException
+		 * @throws StorageException
+		 */
 		public function testCollection() {
-			foreach ($this->storage->collection('SELECT * FROM project', new SimpleHydrator(ProjectSchema::class)) as $record) {
+			foreach ($this->storage->hydrate('SELECT * FROM project', new SchemaHydrator($this->schemaManager->getSchema(ProjectSchema::class))) as $record) {
 			}
 		}
 
-		/** @inheritdoc */
+		/**
+		 * @throws SchemaException
+		 * @throws ContainerException
+		 * @throws ReflectionException
+		 */
 		protected function setUp() {
 			parent::setUp();
+			$this->schemaManager->loads([
+				LabelSchema::class,
+				ProjectSchema::class,
+				UserSchema::class,
+				ProjectMemberSchema::class,
+				OrganizationSchema::class,
+				ProjectOrganizationSchema::class,
+				ToBeOrdered::class,
+				IssueSchema::class,
+				IssueProjectSchema::class,
+				ProjectLabelSchema::class,
+			]);
 			$this->container->registerFactory(new InstanceFactory(IStorage::class, MysqlStorage::class));
 		}
 	}

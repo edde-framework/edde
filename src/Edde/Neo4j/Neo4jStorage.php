@@ -14,8 +14,8 @@
 	use Edde\Storage\IQuery;
 	use Edde\Storage\IStorage;
 	use Edde\Storage\Neo4jCompiler;
+	use Edde\Storage\NullValueException;
 	use Edde\Storage\Record;
-	use Edde\Storage\RequiredValueException;
 	use Edde\Storage\StorageException;
 	use Edde\Validator\ValidatorException;
 	use Generator;
@@ -64,7 +64,7 @@
 				})($this->session->run($query, $params));
 			} catch (Throwable $throwable) {
 				/** @noinspection PhpUnhandledExceptionInspection */
-				throw $this->exception($throwable);
+				throw $this->onException($throwable);
 			}
 		}
 
@@ -112,7 +112,7 @@
 				return $this;
 			} catch (Throwable $exception) {
 				/** @noinspection PhpUnhandledExceptionInspection */
-				throw $this->exception($exception);
+				throw $this->onException($exception);
 			}
 		}
 
@@ -190,7 +190,7 @@
 				return $this->update($entity);
 			} catch (Throwable $exception) {
 				/** @noinspection PhpUnhandledExceptionInspection */
-				throw $this->exception($exception);
+				throw $this->onException($exception);
 			}
 		}
 
@@ -243,7 +243,7 @@
 				$this->transaction->commit();
 				$this->transaction = null;
 			} catch (Throwable $throwable) {
-				$this->exception($throwable);
+				$this->onException($throwable);
 			}
 		}
 
@@ -310,11 +310,11 @@
 			return $this->compiler ?: $this->compiler = $this->container->inject(new Neo4jCompiler());
 		}
 
-		protected function exception(Throwable $throwable): Throwable {
+		protected function onException(Throwable $throwable): Throwable {
 			if (stripos($message = $throwable->getMessage(), 'already exists with label') !== false) {
 				return new DuplicateEntryException($message, 0, $throwable);
 			} else if (stripos($message, 'must have the property') !== false) {
-				return new RequiredValueException($message, 0, $throwable);
+				return new NullValueException($message, 0, $throwable);
 			}
 			return $throwable;
 		}

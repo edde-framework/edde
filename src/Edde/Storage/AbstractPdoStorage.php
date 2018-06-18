@@ -15,28 +15,26 @@
 		protected $pdo;
 
 		/** @inheritdoc */
-		public function fetch($query, array $params = []) {
+		public function fetch(string $query, array $params = []) {
 			try {
 				$statement = $this->pdo->prepare($query);
 				$statement->setFetchMode(PDO::FETCH_ASSOC);
 				$statement->execute($params);
 				return $statement;
 			} catch (PDOException $exception) {
-				/** @noinspection PhpUnhandledExceptionInspection */
-				throw $this->exception($exception);
+				throw $this->resolveException($exception);
 			}
 		}
 
 		/** @inheritdoc */
-		public function exec($query, array $params = []) {
+		public function exec(string $query, array $params = []) {
 			try {
 				if (empty($params)) {
 					return $this->pdo->exec($query);
 				}
 				return $this->pdo->prepare($query)->execute($params);
 			} catch (PDOException $exception) {
-				/** @noinspection PhpUnhandledExceptionInspection */
-				throw $this->exception($exception);
+				throw $this->resolveException($exception);
 			}
 		}
 
@@ -74,13 +72,4 @@
 			$this->pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
 			$this->pdo->setAttribute(PDO::ATTR_TIMEOUT, 120);
 		}
-
-		/**
-		 * @param string $type
-		 *
-		 * @return string
-		 *
-		 * @throws StorageException
-		 */
-		abstract public function type(string $type): string;
 	}

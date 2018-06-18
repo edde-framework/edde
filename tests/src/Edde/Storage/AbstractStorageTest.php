@@ -4,7 +4,6 @@
 
 	use DateTime;
 	use Edde\Collection\EntityNotFoundException;
-	use Edde\Container\ContainerException;
 	use Edde\Filter\FilterException;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Collection\CollectionManager;
@@ -14,15 +13,9 @@
 	use Edde\Service\Storage\Storage;
 	use Edde\TestCase;
 	use Edde\Validator\ValidatorException;
-	use IssueProjectSchema;
-	use IssueSchema;
 	use LabelSchema;
-	use OrganizationSchema;
-	use ProjectLabelSchema;
 	use ProjectMemberSchema;
-	use ProjectOrganizationSchema;
 	use ProjectSchema;
-	use ReflectionException;
 	use ToBeOrdered;
 	use UserSchema;
 	use VoidSchema;
@@ -570,26 +563,5 @@
 				$actual[] = $record->getEntity(ToBeOrdered::class)->get('index');
 			}
 			self::assertEquals($expected, $actual);
-		}
-
-		/**
-		 * @throws SchemaException
-		 * @throws ContainerException
-		 * @throws ReflectionException
-		 */
-		protected function setUp() {
-			parent::setUp();
-			$this->schemaManager->loads([
-				LabelSchema::class,
-				ProjectSchema::class,
-				UserSchema::class,
-				ProjectMemberSchema::class,
-				OrganizationSchema::class,
-				ProjectOrganizationSchema::class,
-				ToBeOrdered::class,
-				IssueSchema::class,
-				IssueProjectSchema::class,
-				ProjectLabelSchema::class,
-			]);
 		}
 	}

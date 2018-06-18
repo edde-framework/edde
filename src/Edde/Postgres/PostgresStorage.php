@@ -2,13 +2,15 @@
 	declare(strict_types=1);
 	namespace Edde\Postgres;
 
+	use Edde\Hydrator\IHydrator;
 	use Edde\Service\Container\Container;
 	use Edde\Storage\AbstractPdoStorage;
 	use Edde\Storage\DuplicateEntryException;
 	use Edde\Storage\DuplicateTableException;
-	use Edde\Storage\RequiredValueException;
+	use Edde\Storage\NullValueException;
 	use Edde\Storage\StorageException;
 	use Edde\Storage\UnknownTableException;
+	use Generator;
 	use Throwable;
 
 	class PostgresStorage extends AbstractPdoStorage {
@@ -16,6 +18,15 @@
 
 		public function __construct(string $config = 'postgres') {
 			parent::__construct($config);
+		}
+
+		/** @inheritdoc */
+		public function hydrate(string $query, IHydrator $hydrator, array $params = []): Generator {
+		}
+
+		/** @inheritdoc */
+		public function delimit(string $string): string {
+			return '"' . str_replace('"', '"' . '"', $string) . '"';
 		}
 
 		/** @inheritdoc */
@@ -40,11 +51,11 @@
 		}
 
 		/** @inheritdoc */
-		protected function exception(Throwable $throwable): Throwable {
+		public function resolveException(Throwable $throwable): Throwable {
 			if (stripos($message = $throwable->getMessage(), 'unique') !== false) {
 				return new DuplicateEntryException($message, 0, $throwable);
 			} else if (stripos($message, 'not null') !== false) {
-				return new RequiredValueException($message, 0, $throwable);
+				return new NullValueException($message, 0, $throwable);
 			} else if (stripos($message, 'duplicate table') !== false) {
 				return new DuplicateTableException($message, 0, $throwable);
 			} else if (stripos($message, 'undefined table') !== false) {

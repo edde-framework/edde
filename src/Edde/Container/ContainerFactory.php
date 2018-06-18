@@ -4,10 +4,6 @@
 
 	use Edde\Application\Application;
 	use Edde\Application\IApplication;
-	use Edde\Collection\CollectionManager;
-	use Edde\Collection\EntityManager;
-	use Edde\Collection\ICollectionManager;
-	use Edde\Collection\IEntityManager;
 	use Edde\Config\ConfigLoader;
 	use Edde\Config\ConfigService;
 	use Edde\Config\IConfigLoader;
@@ -46,8 +42,8 @@
 	use Edde\Security\RandomService;
 	use Edde\Storage\IStorage;
 	use Edde\Storage\IStorageFilterService;
-	use Edde\Storage\ITransaction;
 	use Edde\Storage\StorageFilterService;
+	use Edde\Transaction\ITransaction;
 	use Edde\Upgrade\IUpgradeManager;
 	use Edde\Utils\IStringUtils;
 	use Edde\Utils\StringUtils;
@@ -294,11 +290,9 @@
 				/**
 				 * storage support
 				 */
-				IEntityManager::class        => EntityManager::class,
 				IStorage::class              => PostgresStorage::class,
 				IStorageFilterService::class => StorageFilterService::class,
 				ITransaction::class          => IStorage::class,
-				ICollectionManager::class    => CollectionManager::class,
 				/**
 				 * general filtering (data conversion) support
 				 */

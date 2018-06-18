@@ -4,6 +4,7 @@
 
 	use Edde\Config\ISection;
 	use Edde\Service\Config\ConfigService;
+	use Edde\Transaction\AbstractTransaction;
 	use Throwable;
 
 	abstract class AbstractStorage extends AbstractTransaction implements IStorage {
@@ -25,7 +26,7 @@
 		 *
 		 * @return Throwable
 		 */
-		protected function exception(Throwable $throwable): Throwable {
+		public function resolveException(Throwable $throwable): Throwable {
 			return $throwable;
 		}
 

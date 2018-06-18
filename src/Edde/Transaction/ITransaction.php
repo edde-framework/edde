@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Storage;
+	namespace Edde\Transaction;
 
 	/**
 	 * This should be used as a service, just to keep connection and
@@ -19,7 +19,7 @@
 		 *
 		 * @return ITransaction
 		 *
-		 * @throws StorageException
+		 * @throws TransactionException
 		 */
 		public function commit(): ITransaction;
 
@@ -28,7 +28,7 @@
 		 *
 		 * @return ITransaction
 		 *
-		 * @throws StorageException
+		 * @throws TransactionException
 		 */
 		public function rollback(): ITransaction;
 
@@ -39,7 +39,7 @@
 		 *
 		 * @return mixed
 		 *
-		 * @throws StorageException
+		 * @throws TransactionException
 		 */
 		public function transaction(callable $callback);
 	}
