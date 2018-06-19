@@ -8,6 +8,9 @@
 	use PDO;
 	use PDOException;
 	use Throwable;
+	use function key;
+	use function reset;
+	use function vsprintf;
 
 	abstract class AbstractPdoStorage extends AbstractStorage {
 		use SchemaManager;
@@ -130,6 +133,33 @@
 				/** @noinspection PhpUnhandledExceptionInspection */
 				throw $this->exception($exception);
 			}
+		}
+
+		/** @inheritdoc */
+		public function attach(array $source, array $target, string $relation): array {
+			($relationSchema = $this->schemaManager->getSchema($relation))->checkRelation(
+				$sourceSchema = $this->schemaManager->getSchema(key($source)),
+				$targetSchema = $this->schemaManager->getSchema(key($target))
+			);
+			$query = vsprintf('SELECT (SELECT COUNT(*) FROM %s WHERE %s = :source LIMIT 1)+(SELECT COUNT(*) FROM %s WHERE %s = :target LIMIT 1)', [
+				$this->delimit($sourceSchema->getRealName()),
+				$this->delimit($sourceSchema->getPrimary()->getName()),
+				$this->delimit($targetSchema->getRealName()),
+				$this->delimit($targetSchema->getPrimary()->getName()),
+			]);
+			$sourceUuid = reset($source);
+			$targetUuid = reset($target);
+			$item = 0;
+			foreach ($this->value($query, ['source' => $sourceUuid, 'target' => $targetUuid]) as $item) {
+				break;
+			}
+			if ($item !== 2) {
+				throw new StorageException(sprintf('Source [%s] uuid [%s], target [%s] uuid [%s] or both are not saved.', $sourceSchema->getName(), $sourceUuid, $targetSchema->getName(), $targetUuid));
+			}
+			return [
+				$relationSchema->getSource()->getName() => $sourceUuid,
+				$relationSchema->getTarget()->getName() => $targetUuid,
+			];
 		}
 
 		/** @inheritdoc */

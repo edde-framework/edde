@@ -3,6 +3,7 @@
 	namespace Edde\Storage;
 
 	use Edde\Hydrator\IHydrator;
+	use Edde\Schema\SchemaException;
 	use Edde\Transaction\ITransaction;
 	use Edde\Transaction\TransactionException;
 	use Generator;
@@ -124,6 +125,20 @@
 		 * @throws StorageException
 		 */
 		public function save(string $name, array $save, IHydrator $hydrator = null): array;
+
+		/**
+		 * create a new relation
+		 *
+		 * @param array  $source   exactly one key => value; (<schema name> => <uuid>)
+		 * @param array  $target   exactly one key => value; (<schema name> => <uuid>)
+		 * @param string $relation name of relation schema
+		 *
+		 * @return array relation (not saved yet)
+		 *
+		 * @throws StorageException
+		 * @throws SchemaException
+		 */
+		public function attach(array $source, array $target, string $relation): array;
 
 		/**
 		 * load exactly one item or throw an exception

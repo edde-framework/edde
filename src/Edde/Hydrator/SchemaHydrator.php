@@ -64,19 +64,19 @@
 			$schema = $this->schemaManager->getSchema($name);
 			foreach ($schema->getAttributes() as $name => $attribute) {
 				if ($validator = $attribute->getValidator()) {
-					$this->validatorManager->validate($this->prefix . ':' . $validator, $update[$name], (object)[
+					$this->validatorManager->validate($this->prefix . ':' . $validator, $update[$name] ?? null, (object)[
 						'name'     => $schema->getName() . '::' . $name,
 						'required' => $attribute->isRequired(),
 					]);
 				}
 				if ($filter = $attribute->getFilter('type')) {
-					$update[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->input($update[$name]);
+					$update[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->input($update[$name] ?? null);
 				}
 				/**
 				 * common filter support; filter name is used for both directions
 				 */
 				if ($filter = $attribute->getFilter('filter')) {
-					$update[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->input($update[$name]);
+					$update[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->input($update[$name] ?? null);
 				}
 			}
 			return $update;

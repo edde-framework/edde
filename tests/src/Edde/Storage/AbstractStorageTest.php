@@ -235,6 +235,27 @@
 		}
 
 		/**
+		 * @throws SchemaException
+		 * @throws StorageException
+		 */
+		public function testAttachNotSavedException() {
+			$this->expectException(StorageException::class);
+			$this->expectExceptionMessage('Source [ProjectSchema] uuid [yaay], target [UserSchema] uuid [nope] or both are not saved.');
+			$project = $this->storage->save(ProjectSchema::class, [
+				'name' => 'to be linked',
+				'uuid' => 'yaay',
+			]);
+			$relation = $this->storage->attach(
+				[ProjectSchema::class => $project['uuid']],
+				[UserSchema::class => 'nope'],
+				ProjectMemberSchema::class
+			);
+			$relation['owner'] = true;
+			$this->storage->save(ProjectMemberSchema::class, $relation);
+		}
+
+		/**
+		 * @throws SchemaException
 		 * @throws StorageException
 		 */
 		public function testAttachException() {
@@ -252,10 +273,8 @@
 				[ProjectSchema::class => $project['uuid']],
 				ProjectMemberSchema::class
 			);
-			$relation[ProjectMemberSchema::class]['owner'] = true;
-			$this->storage->save(UserSchema::class, $relation[UserSchema::class]);
-			$this->storage->save(ProjectMemberSchema::class, $relation[ProjectMemberSchema::class]);
-			$this->storage->save(ProjectSchema::class, $relation[ProjectSchema::class]);
+			$relation['owner'] = true;
+			$this->storage->save(ProjectMemberSchema::class, $relation);
 		}
 
 		/**
@@ -284,7 +303,9 @@
 		}
 
 		/**
+		 * @throws SchemaException
 		 * @throws StorageException
+		 * @throws UnknownUuidException
 		 */
 		public function testAttachInsertUpdate() {
 			$relation = $this->storage->attach(
