@@ -235,24 +235,27 @@
 		}
 
 		/**
+		 * @throws StorageException
 		 */
 		public function testAttachException() {
 			$this->expectException(SchemaException::class);
 			$this->expectExceptionMessage('Invalid relation (!UserSchema)-[ProjectMemberSchema]->(ProjectSchema): Source schema [UserSchema] differs from expected relation [ProjectSchema]; did you swap $source and $target schema?');
-			$project = $this->entityManager->entity(ProjectSchema::class, [
-				'name' => 'to be linked',
-			]);
-			$user = $this->entityManager->entity(UserSchema::class, [
+			$user = $this->storage->save(UserSchema::class, [
 				'login'    => 'root',
 				'password' => '123',
 			]);
-			$relation = $this->storage->attach($user, $project, ProjectMemberSchema::class);
-			$relation->set('owner', true);
-			$this->storage->saves([
-				$project,
-				$user,
-				$relation,
+			$project = $this->storage->save(ProjectSchema::class, [
+				'name' => 'to be linked',
 			]);
+			$relation = $this->storage->attach(
+				[UserSchema::class => $user['uuid']],
+				[ProjectSchema::class => $project['uuid']],
+				ProjectMemberSchema::class
+			);
+			$relation[ProjectMemberSchema::class]['owner'] = true;
+			$this->storage->save(UserSchema::class, $relation[UserSchema::class]);
+			$this->storage->save(ProjectMemberSchema::class, $relation[ProjectMemberSchema::class]);
+			$this->storage->save(ProjectSchema::class, $relation[ProjectSchema::class]);
 		}
 
 		/**
