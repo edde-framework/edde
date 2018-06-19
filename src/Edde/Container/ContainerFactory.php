@@ -41,8 +41,6 @@
 	use Edde\Security\PasswordService;
 	use Edde\Security\RandomService;
 	use Edde\Storage\IStorage;
-	use Edde\Storage\IStorageFilterService;
-	use Edde\Storage\StorageFilterService;
 	use Edde\Transaction\ITransaction;
 	use Edde\Upgrade\IUpgradeManager;
 	use Edde\Utils\IStringUtils;
@@ -251,75 +249,74 @@
 				/**
 				 * utils
 				 */
-				IHttpUtils::class            => HttpUtils::class,
-				IStringUtils::class          => StringUtils::class,
+				IHttpUtils::class          => HttpUtils::class,
+				IStringUtils::class        => StringUtils::class,
 				/**
 				 * container implementation
 				 */
-				IContainer::class            => Container::class,
+				IContainer::class          => Container::class,
 				/**
 				 * runtime info provider
 				 */
-				IRuntime::class              => Runtime::class,
+				IRuntime::class            => Runtime::class,
 				/**
 				 * log support
 				 */
-				ILogService::class           => LogService::class,
+				ILogService::class         => LogService::class,
 				/**
 				 * user request into protocol element translation
 				 */
-				IRouterService::class        => RouterService::class,
+				IRouterService::class      => RouterService::class,
 				/**
 				 * general service for http request/response
 				 */
-				IHttpRequestService::class   => HttpRequestService::class,
+				IHttpRequestService::class => HttpRequestService::class,
 				/**
 				 * schema support
 				 */
-				ISchemaManager::class        => SchemaManager::class,
-				ISchemaLoader::class         => SchemaReflectionLoader::class,
+				ISchemaManager::class      => SchemaManager::class,
+				ISchemaLoader::class       => SchemaReflectionLoader::class,
 				/**
 				 * validation support
 				 */
-				IValidatorManager::class     => ValidatorManager::class,
+				IValidatorManager::class   => ValidatorManager::class,
 				/**
 				 * random & security support
 				 */
-				IRandomService::class        => RandomService::class,
-				IPasswordService::class      => PasswordService::class,
+				IRandomService::class      => RandomService::class,
+				IPasswordService::class    => PasswordService::class,
 				/**
 				 * storage support
 				 */
-				IStorage::class              => PostgresStorage::class,
-				IStorageFilterService::class => StorageFilterService::class,
-				ITransaction::class          => IStorage::class,
+				IStorage::class            => PostgresStorage::class,
+				ITransaction::class        => IStorage::class,
 				/**
 				 * general filtering (data conversion) support
 				 */
-				IFilterManager::class        => FilterManager::class,
+				IFilterManager::class      => FilterManager::class,
 				/**
 				 * an application upgrades support
 				 */
-				IUpgradeManager::class       => self::exception(sprintf('Please provide UpgradeManager implementation of [%s] interface.', IUpgradeManager::class)),
+				IUpgradeManager::class     => self::exception(sprintf('Please provide UpgradeManager implementation of [%s] interface.', IUpgradeManager::class)),
 				/**
 				 * Xml support
 				 */
-				IXmlExportService::class     => XmlExportService::class,
-				IXmlParserService::class     => XmlParserService::class,
+				IXmlExportService::class   => XmlExportService::class,
+				IXmlParserService::class   => XmlParserService::class,
 				/**
 				 * simple scalar configuration support (should not be used
 				 * for any complex config as it's considered to be anti-pattern)
 				 */
-				IConfigService::class        => ConfigService::class,
-				IConfigLoader::class         => ConfigLoader::class,
+				IConfigService::class      => ConfigService::class,
+				IConfigLoader::class       => ConfigLoader::class,
 				/**
 				 * an application handles lifecycle workflow
 				 */
-				IApplication::class          => Application::class,
+				IApplication::class        => Application::class,
 				/**
 				 * magical factory for an application execution
 				 */
-				'application'                => IApplication::class . '::run',
+				'application'              => IApplication::class . '::run',
 			];
 		}
 

@@ -4,8 +4,11 @@
 
 	use Edde\Container\ContainerException;
 	use Edde\Container\Factory\InterfaceFactory;
+	use Edde\Hydrator\ValueHydrator;
+	use Edde\Query\InsertQuery;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Schema\SchemaManager;
+	use Edde\Service\Security\RandomService;
 	use Edde\Service\Storage\Storage;
 	use Edde\Storage\IStorage;
 	use Edde\Storage\StorageException;
@@ -26,6 +29,7 @@
 	class PostgresStorageTest extends TestCase {
 		use Storage;
 		use SchemaManager;
+		use RandomService;
 
 		/**
 		 * @throws StorageException
@@ -58,14 +62,19 @@
 			self::assertTrue(true, 'everything is ok');
 		}
 
-//		/**
-//		 * @throws StorageException
-//		 */
-//		public function testCollectionSimpleValue() {
-//			foreach ($this->storage->hydrate('SELECT COUNT(*) FROM project', new ValueHydrator()) as $record) {
-//			}
-//		}
-//
+		/**
+		 * @throws ContainerException
+		 * @throws StorageException
+		 */
+		public function testCollectionSimpleValue() {
+			$this->container->inject($insertQuery = new InsertQuery());
+			$insertQuery->insert(ProjectSchema::class, [
+				'name' => 'project-01',
+			]);
+			foreach ($this->storage->hydrate('SELECT COUNT(*) FROM project', new ValueHydrator()) as $record) {
+			}
+		}
+
 //		/**
 //		 * @throws SchemaException
 //		 * @throws StorageException
