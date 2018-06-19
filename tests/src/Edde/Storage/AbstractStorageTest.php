@@ -215,19 +215,23 @@
 		}
 
 		/**
+		 * @throws StorageException
+		 * @throws UnknownUuidException
 		 */
 		public function testSave() {
-			$this->storage->save($entity = $this->entityManager->entity(ProjectSchema::class, [
+			$save = $this->storage->save(ProjectSchema::class, [
 				'name'    => 'another-some-project-here',
 				'created' => new DateTime(),
 				'start'   => new DateTime(),
 				'end'     => new DateTime(),
-			]));
-			$entity->set('end', null);
-			$this->storage->save($entity);
-			$actual = $this->storage->load(ProjectSchema::class, $entity->getPrimary()->get());
-			self::assertNull($actual->get('end'));
-			self::assertInstanceOf(DateTime::class, $actual->get('start'));
+			]);
+			$save['end'] = null;
+			$this->storage->save(ProjectSchema::class, $save);
+			$actual = $this->storage->load(ProjectSchema::class, $save['uuid']);
+			self::assertArrayHasKey('end', $actual);
+			self::assertEmpty($actual['end']);
+			self::assertArrayHasKey('start', $actual);
+			self::assertInstanceOf(DateTime::class, $actual['start']);
 		}
 
 		/**

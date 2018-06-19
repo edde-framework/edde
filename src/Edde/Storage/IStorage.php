@@ -113,6 +113,19 @@
 		public function update(string $name, array $update, IHydrator $hydrator = null): array;
 
 		/**
+		 * save the given item (upsert)
+		 *
+		 * @param string         $name
+		 * @param array          $save
+		 * @param IHydrator|null $hydrator
+		 *
+		 * @return array
+		 *
+		 * @throws StorageException
+		 */
+		public function save(string $name, array $save, IHydrator $hydrator = null): array;
+
+		/**
 		 * load exactly one item or throw an exception
 		 *
 		 * @param string $name

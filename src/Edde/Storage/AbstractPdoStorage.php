@@ -106,6 +106,33 @@
 		}
 
 		/** @inheritdoc */
+		public function save(string $name, array $save, IHydrator $hydrator = null): array {
+			try {
+				$schema = $this->schemaManager->getSchema($name);
+				$primary = $schema->getPrimary();
+				if (isset($save[$primaryName = $primary->getName()]) === false) {
+					return $this->insert($name, $save, $hydrator);
+				}
+				$params = [
+					$this->delimit($primaryName),
+					$this->delimit($schema->getRealName()),
+					$this->delimit($primaryName),
+				];
+				$count = 0;
+				foreach ($this->value(vsprintf('SELECT COUNT(%s) AS count FROM %s WHERE %s = :primary', $params), ['primary' => $save[$primaryName]]) as $count) {
+					break;
+				}
+				if ($count === 0) {
+					return $this->insert($name, $save, $hydrator);
+				}
+				return $this->update($name, $save, $hydrator);
+			} catch (Throwable $exception) {
+				/** @noinspection PhpUnhandledExceptionInspection */
+				throw $this->exception($exception);
+			}
+		}
+
+		/** @inheritdoc */
 		public function load(string $name, string $uuid): array {
 			$schema = $this->schemaManager->getSchema($name);
 			foreach ($this->schema($name, sprintf('SELECT * FROM %s WHERE %s = :uuid', $this->delimit($schema->getRealName()), $schema->getPrimary()->getName()), ['uuid' => $uuid]) as $item) {
