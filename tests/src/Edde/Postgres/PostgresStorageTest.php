@@ -5,15 +5,16 @@
 	use Edde\Container\ContainerException;
 	use Edde\Container\Factory\InterfaceFactory;
 	use Edde\Hydrator\SchemaHydrator;
-	use Edde\Hydrator\ValueHydrator;
 	use Edde\Query\InsertQuery;
 	use Edde\Schema\SchemaException;
+	use Edde\Service\Hydrator\HydrateManager;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Security\RandomService;
 	use Edde\Service\Storage\Storage;
 	use Edde\Storage\IStorage;
 	use Edde\Storage\StorageException;
 	use Edde\TestCase;
+	use Edde\Transaction\TransactionException;
 	use IssueProjectSchema;
 	use IssueSchema;
 	use LabelSchema;
@@ -31,6 +32,7 @@
 		use Storage;
 		use SchemaManager;
 		use RandomService;
+		use HydrateManager;
 
 		/**
 		 * @throws StorageException
@@ -66,7 +68,7 @@
 		/**
 		 * @throws ContainerException
 		 * @throws StorageException
-		 * @throws Throwable
+		 * @throws TransactionException
 		 */
 		public function testCollectionSimpleValue() {
 			$this->container->inject($insertQuery = new InsertQuery($this->container->inject(new SchemaHydrator())));
@@ -79,20 +81,37 @@
 				],
 			]);
 			$record = null;
-			foreach ($this->storage->hydrate('SELECT COUNT(*) FROM project', new ValueHydrator()) as $record) {
+			foreach ($this->hydrateManager->value('SELECT COUNT(*) FROM project') as $record) {
 				break;
 			}
 			self::assertEquals(2, $record);
 		}
 
-//		/**
-//		 * @throws SchemaException
-//		 * @throws StorageException
-//		 */
-//		public function testCollection() {
-//			foreach ($this->storage->hydrate('SELECT * FROM project', new SchemaHydrator($this->schemaManager->getSchema(ProjectSchema::class))) as $record) {
-//			}
-//		}
+		/**
+		 * @throws StorageException
+		 */
+		public function testCollection() {
+			$actual = [];
+			foreach ($this->hydrateManager->schema(ProjectSchema::class, 'SELECT * FROM project ORDER BY name') as $record) {
+				unset($record['uuid'], $record['created']);
+				$actual[] = $record;
+			}
+			self::assertSame([
+				[
+					'name'   => 'project-01',
+					'status' => 0,
+					'start'  => null,
+					'end'    => null,
+				],
+				[
+					'name'   => 'project-02',
+					'status' => 0,
+					'start'  => null,
+					'end'    => null,
+				],
+			], $actual);
+		}
+
 		/**
 		 * @inheritdoc
 		 *

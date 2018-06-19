@@ -22,6 +22,7 @@
 
 		/** @inheritdoc */
 		public function hydrate(array $source) {
+			return $source;
 		}
 
 		/** @inheritdoc */
