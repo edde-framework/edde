@@ -4,8 +4,6 @@
 
 	use Edde\Container\ContainerException;
 	use Edde\Container\Factory\InterfaceFactory;
-	use Edde\Hydrator\SchemaHydrator;
-	use Edde\Hydrator\ValueHydrator;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
@@ -62,22 +60,22 @@
 			self::assertTrue(true, 'everything is ok');
 		}
 
-		/**
-		 * @throws StorageException
-		 */
-		public function testCollectionSimpleValue() {
-			foreach ($this->storage->hydrate('SELECT COUNT(*) FROM project', new ValueHydrator()) as $record) {
-			}
-		}
-
-		/**
-		 * @throws SchemaException
-		 * @throws StorageException
-		 */
-		public function testCollection() {
-			foreach ($this->storage->hydrate('SELECT * FROM project', new SchemaHydrator($this->schemaManager->getSchema(ProjectSchema::class))) as $record) {
-			}
-		}
+//		/**
+//		 * @throws StorageException
+//		 */
+//		public function testCollectionSimpleValue() {
+//			foreach ($this->storage->hydrate('SELECT COUNT(*) FROM project', new ValueHydrator()) as $record) {
+//			}
+//		}
+//
+//		/**
+//		 * @throws SchemaException
+//		 * @throws StorageException
+//		 */
+//		public function testCollection() {
+//			foreach ($this->storage->hydrate('SELECT * FROM project', new SchemaHydrator($this->schemaManager->getSchema(ProjectSchema::class))) as $record) {
+//			}
+//		}
 
 		/**
 		 * @inheritdoc
