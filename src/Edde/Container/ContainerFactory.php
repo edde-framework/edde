@@ -24,8 +24,8 @@
 	use Edde\Http\IHttpUtils;
 	use Edde\Http\IRequestService as IHttpRequestService;
 	use Edde\Http\RequestService as HttpRequestService;
-	use Edde\Hydrator\HydrateManager;
-	use Edde\Hydrator\IHydrateManager;
+	use Edde\Hydrator\HydratorManager;
+	use Edde\Hydrator\IHydratorManager;
 	use Edde\Log\ILogService;
 	use Edde\Log\LogService;
 	use Edde\Router\IRouterService;
@@ -292,7 +292,7 @@
 				 */
 				IStorage::class          => PostgresStorage::class,
 				ITransaction::class      => IStorage::class,
-				IHydrateManager::class   => HydrateManager::class,
+				IHydratorManager::class  => HydratorManager::class,
 				/**
 				 * general filtering (data conversion) support
 				 */

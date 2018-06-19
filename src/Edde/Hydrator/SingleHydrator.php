@@ -4,7 +4,7 @@
 
 	use function reset;
 
-	class ValueHydrator extends AbstractHydrator {
+	class SingleHydrator extends AbstractHydrator {
 		/** @inheritdoc */
 		public function hydrate(array $source) {
 			return reset($source);

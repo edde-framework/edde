@@ -4,6 +4,7 @@
 
 	use Edde\Hydrator\IHydrator;
 	use Edde\Transaction\ITransaction;
+	use Edde\Transaction\TransactionException;
 	use Generator;
 	use Throwable;
 
@@ -36,6 +37,8 @@
 		public function exec(string $query, array $params = []);
 
 		/**
+		 * hydrate output with the given hydrator
+		 *
 		 * @param string    $query
 		 * @param IHydrator $hydrator
 		 * @param array     $params
@@ -45,6 +48,58 @@
 		 * @throws StorageException
 		 */
 		public function hydrate(string $query, IHydrator $hydrator, array $params = []): Generator;
+
+		/**
+		 * hydrate a single value from the query
+		 *
+		 * @param string $query
+		 * @param array  $params
+		 *
+		 * @return Generator|mixed
+		 *
+		 * @throws StorageException
+		 */
+		public function value(string $query, array $params = []): Generator;
+
+		/**
+		 * hydrate the given schema from a query
+		 *
+		 * @param string $name
+		 * @param string $query
+		 * @param array  $params
+		 *
+		 * @return Generator|array
+		 *
+		 * @throws StorageException
+		 */
+		public function schema(string $name, string $query, array $params = []): Generator;
+
+		/**
+		 * insert a new item into storage ($name is schema name)
+		 *
+		 * @param string         $name
+		 * @param array          $insert
+		 * @param IHydrator|null $hydrator
+		 *
+		 * @return array
+		 *
+		 * @throws StorageException
+		 */
+		public function insert(string $name, array $insert, IHydrator $hydrator = null): array;
+
+		/**
+		 * insert multiple entities in a transaction
+		 *
+		 * @param string         $name
+		 * @param iterable       $inserts
+		 * @param IHydrator|null $hydrator
+		 *
+		 * @return IStorage
+		 *
+		 * @throws StorageException
+		 * @throws TransactionException
+		 */
+		public function inserts(string $name, iterable $inserts, IHydrator $hydrator = null): IStorage;
 
 		/**
 		 * @param string $string

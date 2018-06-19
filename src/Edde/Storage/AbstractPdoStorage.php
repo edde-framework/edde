@@ -3,14 +3,14 @@
 	namespace Edde\Storage;
 
 	use Edde\Config\ConfigException;
-	use Edde\Service\Container\Container;
+	use Edde\Hydrator\IHydrator;
 	use Edde\Service\Schema\SchemaManager;
 	use PDO;
 	use PDOException;
+	use Throwable;
 
 	abstract class AbstractPdoStorage extends AbstractStorage {
 		use SchemaManager;
-		use Container;
 		/** @var PDO */
 		protected $pdo;
 
@@ -33,6 +33,45 @@
 			} catch (PDOException $exception) {
 				throw $this->exception($exception);
 			}
+		}
+
+		/** @inheritdoc */
+		public function insert(string $name, array $insert, IHydrator $hydrator = null): array {
+			try {
+				$hydrator = $hydrator ?: $this->hydratorManager->schema($name);
+				$schema = $this->schemaManager->getSchema($name);
+				$columns = [];
+				$params = [];
+				foreach ($source = $hydrator->input($name, $insert) as $k => $v) {
+					$columns[sha1($k)] = $this->delimit($k);
+					$params[sha1($k)] = $v;
+				}
+				if (empty($params)) {
+					return [];
+				}
+				$this->fetch(
+					vsprintf('INSERT INTO %s (%s) VALUES (:%s)', [
+						$this->delimit($schema->getRealName()),
+						implode(',', $columns),
+						implode(',:', array_keys($params)),
+					]),
+					$params
+				);
+				return $hydrator->output($name, $source);
+			} catch (Throwable $exception) {
+				/** @noinspection PhpUnhandledExceptionInspection */
+				throw $this->exception($exception);
+			}
+		}
+
+		/** @inheritdoc */
+		public function inserts(string $name, iterable $inserts, IHydrator $hydrator = null): IStorage {
+			$this->transaction(function () use ($name, $inserts, $hydrator) {
+				foreach ($inserts as $insert) {
+					$this->insert($name, $insert, $hydrator);
+				}
+			});
+			return $this;
 		}
 
 		/** @inheritdoc */

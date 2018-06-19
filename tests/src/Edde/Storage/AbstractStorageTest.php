@@ -4,15 +4,12 @@
 
 	use DateTime;
 	use Edde\Container\ContainerException;
-	use Edde\Filter\FilterException;
-	use Edde\Hydrator\SchemaHydrator;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Container\Container;
-	use Edde\Service\Hydrator\HydrateManager;
+	use Edde\Service\Hydrator\HydratorManager;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
 	use Edde\Sql\CreateTableQuery;
-	use Edde\Sql\InsertQuery;
 	use Edde\TestCase;
 	use Edde\Transaction\TransactionException;
 	use Edde\Validator\ValidatorException;
@@ -36,7 +33,7 @@
 		use SchemaManager;
 		use Container;
 		use Storage;
-		use HydrateManager;
+		use HydratorManager;
 
 		/**
 		 * @throws ContainerException
@@ -61,22 +58,21 @@
 		}
 
 		/**
-		 * @throws ContainerException
 		 * @throws StorageException
 		 * @throws TransactionException
 		 */
 		public function testCollectionSimpleValue() {
-			$this->container->inject($insertQuery = new InsertQuery($this->container->inject(new SchemaHydrator())));
-			$insertQuery->inserts(ProjectSchema::class, [
+			$this->storage->inserts(ProjectSchema::class, [
 				[
 					'name' => 'project-01',
 				],
 				[
-					'name' => 'project-02',
+					'name'   => 'project-02',
+					'status' => 1,
 				],
 			]);
 			$record = null;
-			foreach ($this->hydrateManager->value('SELECT COUNT(*) FROM project') as $record) {
+			foreach ($this->storage->value('SELECT COUNT(*) FROM project') as $record) {
 				break;
 			}
 			self::assertEquals(2, $record);
@@ -84,7 +80,7 @@
 
 		public function testSimpleCollection() {
 			$actual = [];
-			foreach ($this->hydrateManager->schema(ProjectSchema::class, 'SELECT * FROM project ORDER BY name') as $record) {
+			foreach ($this->storage->schema(ProjectSchema::class, 'SELECT * FROM project ORDER BY name') as $record) {
 				unset($record['uuid'], $record['created']);
 				$actual[] = $record;
 			}
@@ -97,7 +93,7 @@
 				],
 				[
 					'name'   => 'project-02',
-					'status' => 0,
+					'status' => 1,
 					'start'  => null,
 					'end'    => null,
 				],
@@ -107,95 +103,76 @@
 		/**
 		 * @throws SchemaException
 		 * @throws StorageException
-		 * @throws ValidatorException
-		 * @throws FilterException
 		 */
 		public function testInsertNoTable() {
 			self::expectException(UnknownTableException::class);
 			$this->schemaManager->load(VoidSchema::class);
-			$this->storage->insert($this->entityManager->entity(VoidSchema::class));
+			$this->storage->insert(VoidSchema::class, []);
 		}
 
 		/**
-		 * @throws SchemaException
 		 * @throws StorageException
-		 * @throws ValidatorException
-		 * @throws FilterException
 		 */
 		public function testValidator() {
 			$this->expectException(ValidatorException::class);
 			$this->expectExceptionMessage('Value [LabelSchema::name] is not string.');
-			$this->storage->insert($this->entityManager->entity(LabelSchema::class, ['name' => true]));
+			$this->storage->insert(LabelSchema::class, ['name' => true]);
 		}
 
 		/**
-		 * @throws SchemaException
 		 * @throws StorageException
-		 * @throws ValidatorException
-		 * @throws FilterException
 		 */
 		public function testInsert() {
-			$this->storage->insert($entity = $this->entityManager->entity(LabelSchema::class, $object = [
+			$insert = $this->storage->insert(LabelSchema::class, [
 				'name' => 'this entity is new',
-			]));
-			self::assertNotNull($entity->get('uuid'));
-			self::assertFalse($entity->get('system'));
+			]);
+			self::assertArrayHasKey('uuid', $insert);
+			self::assertArrayHasKey('system', $insert);
+			self::assertNotNull($insert['uuid']);
+			self::assertFalse($insert['system']);
 		}
 
 		/**
-		 * @throws SchemaException
 		 * @throws StorageException
-		 * @throws ValidatorException
-		 * @throws FilterException
 		 */
 		public function testInsertException2() {
 			$this->expectException(ValidatorException::class);
 			$this->expectExceptionMessage('Required value [LabelSchema::name] is null.');
-			$this->storage->insert($this->entityManager->entity(LabelSchema::class, [
+			$this->storage->insert(LabelSchema::class, [
 				'name' => null,
-			]));
+			]);
 		}
 
 		/**
-		 * @throws SchemaException
 		 * @throws StorageException
-		 * @throws ValidatorException
-		 * @throws FilterException
 		 */
 		public function testInsertUnique() {
 			$this->expectException(DuplicateEntryException::class);
-			$this->storage->insert($this->entityManager->entity(LabelSchema::class, [
+			$this->storage->insert(LabelSchema::class, [
 				'name'   => 'unique',
 				'system' => true,
-			]));
-			$this->storage->insert($this->entityManager->entity(LabelSchema::class, [
+			]);
+			$this->storage->insert(LabelSchema::class, [
 				'name' => 'unique',
-			]));
+			]);
 		}
 
 		/**
-		 * @throws FilterException
-		 * @throws QueryException
-		 * @throws SchemaException
 		 * @throws StorageException
 		 */
 		public function testCollection() {
-			$collection = $this->collectionManager->collection();
-			$collection->select(LabelSchema::class);
 			$entities = [];
-			foreach ($collection->execute() as $record) {
-				$entity = $record->getEntity(LabelSchema::class)->toObject();
-				self::assertSame($record->getEntity(LabelSchema::class), $record->getEntity(LabelSchema::class));
-				unset($entity->uuid);
-				$entities[] = $entity;
+			foreach ($this->storage->schema(LabelSchema::class, 'select * from label') as $record) {
+				unset($record['uuid']);
+				$entities[] = $record;
 			}
 			sort($entities);
 			self::assertEquals([
-				(object)[
+				[
 					'name'   => 'this entity is new',
 					'system' => false,
 				],
-				(object)[
+				[
 					'name'   => 'unique',
 					'system' => true,
 				],
@@ -203,11 +180,7 @@
 		}
 
 		/**
-		 * @throws EntityNotFoundException
-		 * @throws FilterException
-		 * @throws SchemaException
 		 * @throws StorageException
-		 * @throws ValidatorException
 		 */
 		public function testUpdate() {
 			$this->storage->insert($entity = $this->entityManager->entity(ProjectSchema::class, [
@@ -224,11 +197,6 @@
 		}
 
 		/**
-		 * @throws EntityNotFoundException
-		 * @throws FilterException
-		 * @throws SchemaException
-		 * @throws StorageException
-		 * @throws ValidatorException
 		 */
 		public function testSave() {
 			$this->storage->save($entity = $this->entityManager->entity(ProjectSchema::class, [
@@ -245,10 +213,6 @@
 		}
 
 		/**
-		 * @throws FilterException
-		 * @throws SchemaException
-		 * @throws StorageException
-		 * @throws ValidatorException
 		 */
 		public function testAttachException() {
 			$this->expectException(SchemaException::class);
@@ -270,11 +234,6 @@
 		}
 
 		/**
-		 * @throws EntityNotFoundException
-		 * @throws FilterException
-		 * @throws SchemaException
-		 * @throws StorageException
-		 * @throws ValidatorException
 		 */
 		public function testAttach() {
 			$project = $this->entityManager->entity(ProjectSchema::class, [
@@ -300,11 +259,7 @@
 		}
 
 		/**
-		 * @throws EntityNotFoundException
-		 * @throws FilterException
-		 * @throws SchemaException
 		 * @throws StorageException
-		 * @throws ValidatorException
 		 */
 		public function testAttachInsertUpdate() {
 			$relation = $this->storage->attach(
@@ -330,9 +285,6 @@
 		}
 
 		/**
-		 * @throws EntityNotFoundException
-		 * @throws SchemaException
-		 * @throws StorageException
 		 */
 		public function testUnlinkException() {
 			$this->expectException(SchemaException::class);
@@ -345,9 +297,6 @@
 		}
 
 		/**
-		 * @throws EntityNotFoundException
-		 * @throws SchemaException
-		 * @throws StorageException
 		 */
 		public function testUnlink() {
 			$this->expectException(EntityNotFoundException::class);
@@ -361,11 +310,6 @@
 		}
 
 		/**
-		 * @throws EntityNotFoundException
-		 * @throws FilterException
-		 * @throws SchemaException
-		 * @throws StorageException
-		 * @throws ValidatorException
 		 */
 		public function testLinkException() {
 			$this->expectException(SchemaException::class);
@@ -382,11 +326,6 @@
 		}
 
 		/**
-		 * @throws EntityNotFoundException
-		 * @throws FilterException
-		 * @throws SchemaException
-		 * @throws StorageException
-		 * @throws ValidatorException
 		 */
 		public function testLink() {
 			$this->expectException(EntityNotFoundException::class);
@@ -409,11 +348,6 @@
 		}
 
 		/**
-		 * @throws EntityNotFoundException
-		 * @throws FilterException
-		 * @throws SchemaException
-		 * @throws StorageException
-		 * @throws ValidatorException
 		 */
 		public function testDelete() {
 			$this->expectException(EntityNotFoundException::class);
@@ -428,11 +362,6 @@
 		}
 
 		/**
-		 * @throws FilterException
-		 * @throws QueryException
-		 * @throws SchemaException
-		 * @throws StorageException
-		 * @throws ValidatorException
 		 */
 		public function testQuery() {
 			$entities[] = $user = $this->entityManager->entity(UserSchema::class, [
@@ -469,11 +398,6 @@
 		}
 
 		/**
-		 * @throws FilterException
-		 * @throws QueryException
-		 * @throws SchemaException
-		 * @throws StorageException
-		 * @throws ValidatorException
 		 */
 		public function testBasicQuery() {
 			$entities[] = $user = $this->entityManager->entity(UserSchema::class, [
@@ -550,9 +474,6 @@
 		}
 
 		/**
-		 * @throws QueryException
-		 * @throws SchemaException
-		 * @throws StorageException
 		 */
 		public function testCount() {
 			self::assertEquals(7, $this->collectionManager->collection()->select(ProjectSchema::class)->count(ProjectSchema::class));
@@ -560,11 +481,7 @@
 		}
 
 		/**
-		 * @throws FilterException
-		 * @throws QueryException
-		 * @throws SchemaException
 		 * @throws StorageException
-		 * @throws ValidatorException
 		 */
 		public function testOrder() {
 			$collection = $this->collectionManager->collection();
@@ -595,10 +512,6 @@
 		}
 
 		/**
-		 * @throws FilterException
-		 * @throws QueryException
-		 * @throws SchemaException
-		 * @throws StorageException
 		 */
 		public function testPaging() {
 			$collection = $this->collectionManager->collection();

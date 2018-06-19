@@ -9,6 +9,8 @@
 	}
 
 	interface LabelSchema extends UuidSchema {
+		const alias = true;
+
 		public function name($unique): string;
 
 		public function system($default = false): bool;

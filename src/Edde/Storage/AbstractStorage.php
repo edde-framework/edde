@@ -5,12 +5,14 @@
 	use Edde\Config\ISection;
 	use Edde\Hydrator\IHydrator;
 	use Edde\Service\Config\ConfigService;
+	use Edde\Service\Hydrator\HydratorManager;
 	use Edde\Transaction\AbstractTransaction;
 	use Generator;
 	use Throwable;
 
 	abstract class AbstractStorage extends AbstractTransaction implements IStorage {
 		use ConfigService;
+		use HydratorManager;
 		/** @var string */
 		protected $config;
 		/** @var ISection */
@@ -28,6 +30,16 @@
 			foreach ($this->fetch($query, $params) as $item) {
 				yield $hydrator->hydrate($item);
 			}
+		}
+
+		/** @inheritdoc */
+		public function value(string $query, array $params = []): Generator {
+			return $this->hydrate($query, $this->hydratorManager->single(), $params);
+		}
+
+		/** @inheritdoc */
+		public function schema(string $name, string $query, array $params = []): Generator {
+			return $this->hydrate($query, $this->hydratorManager->schema($name), $params);
 		}
 
 		/**

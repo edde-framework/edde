@@ -10,18 +10,25 @@
 		use SchemaManager;
 		use FilterManager;
 		use ValidatorManager;
+		/** @var string|null */
+		protected $name;
 		/** @var string */
 		protected $prefix;
 
 		/**
-		 * @param string $prefix
+		 * @param string|null $name
+		 * @param string      $prefix
 		 */
-		public function __construct(string $prefix = 'storage') {
+		public function __construct(string $name = null, string $prefix = 'storage') {
+			$this->name = $name;
 			$this->prefix = $prefix;
 		}
 
 		/** @inheritdoc */
 		public function hydrate(array $source) {
+			if ($this->name) {
+				return $this->output($this->name, $source);
+			}
 			return $source;
 		}
 

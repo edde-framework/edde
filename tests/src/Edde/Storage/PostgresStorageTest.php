@@ -5,7 +5,7 @@
 	use Edde\Container\ContainerException;
 	use Edde\Container\Factory\InterfaceFactory;
 	use Edde\Schema\SchemaException;
-	use Edde\Service\Hydrator\HydrateManager;
+	use Edde\Service\Hydrator\HydratorManager;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Security\RandomService;
 	use Edde\Service\Storage\Storage;
@@ -15,7 +15,7 @@
 		use Storage;
 		use SchemaManager;
 		use RandomService;
-		use HydrateManager;
+		use HydratorManager;
 
 		/**
 		 * @throws StorageException
