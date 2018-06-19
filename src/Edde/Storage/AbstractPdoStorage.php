@@ -163,12 +163,56 @@
 		}
 
 		/** @inheritdoc */
+		public function link(array $source, array $target, string $relation): array {
+			$this->unlink($source, $target, $relation);
+			return $this->attach($source, $target, $relation);
+		}
+
+		/** @inheritdoc */
+		public function unlink(array $source, array $target, string $relation): IStorage {
+			($relationSchema = $this->schemaManager->getSchema($relation))->checkRelation(
+				$sourceSchema = $this->schemaManager->getSchema(key($source)),
+				$targetSchema = $this->schemaManager->getSchema(key($target))
+			);
+			$sourceUuid = reset($source);
+			$targetUuid = reset($target);
+			$this->fetch(
+				vsprintf('DELETE FROM %s WHERE %s = :a AND %s = :b', [
+					$this->delimit($relationSchema->getRealName()),
+					$this->delimit($relationSchema->getSource()->getName()),
+					$this->delimit($relationSchema->getTarget()->getName()),
+				]),
+				[
+					'a' => $sourceUuid,
+					'b' => $targetUuid,
+				]
+			);
+			return $this;
+		}
+
+		/** @inheritdoc */
 		public function load(string $name, string $uuid): array {
 			$schema = $this->schemaManager->getSchema($name);
 			foreach ($this->schema($name, sprintf('SELECT * FROM %s WHERE %s = :uuid', $this->delimit($schema->getRealName()), $schema->getPrimary()->getName()), ['uuid' => $uuid]) as $item) {
 				return $item;
 			}
-			throw new UnknownUuidException(sprintf('Requested unknown UUID [%s] of [%s].', $uuid, $name));
+			throw new UnknownUuidException(sprintf('Requested unknown uuid [%s] of [%s].', $uuid, $name));
+		}
+
+		/** @inheritdoc */
+		public function delete(string $name, string $uuid): IStorage {
+			$schema = $this->schemaManager->getSchema($name);
+			$primary = $schema->getPrimary();
+			$this->fetch(
+				vsprintf('DELETE FROM %s WHERE %s = :primary', [
+					$this->delimit($schema->getRealName()),
+					$this->delimit($primary->getName()),
+				]),
+				[
+					'primary' => $uuid,
+				]
+			);
+			return $this;
 		}
 
 		/** @inheritdoc */

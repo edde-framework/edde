@@ -141,6 +141,34 @@
 		public function attach(array $source, array $target, string $relation): array;
 
 		/**
+		 * create a new 1:n relation
+		 *
+		 * @param array  $source   exactly one key => value; (<schema name> => <uuid>)
+		 * @param array  $target   exactly one key => value; (<schema name> => <uuid>)
+		 * @param string $relation name of relation schema
+		 *
+		 * @return array relation (not saved yet)
+		 *
+		 * @throws StorageException
+		 * @throws SchemaException
+		 */
+		public function link(array $source, array $target, string $relation): array;
+
+		/**
+		 * remove all relations between the given schemas
+		 *
+		 * @param array  $source   exactly one key => value; (<schema name> => <uuid>)
+		 * @param array  $target   exactly one key => value; (<schema name> => <uuid>)
+		 * @param string $relation name of relation schema
+		 *
+		 * @return IStorage
+		 *
+		 * @throws StorageException
+		 * @throws SchemaException
+		 */
+		public function unlink(array $source, array $target, string $relation): IStorage;
+
+		/**
 		 * load exactly one item or throw an exception
 		 *
 		 * @param string $name
@@ -152,6 +180,17 @@
 		 * @throws UnknownUuidException
 		 */
 		public function load(string $name, string $uuid): array;
+
+		/**
+		 * @param string $name
+		 * @param string $uuid
+		 *
+		 * @return IStorage
+		 *
+		 * @throws StorageException
+		 * @throws SchemaException
+		 */
+		public function delete(string $name, string $uuid): IStorage;
 
 		/**
 		 * @param string $string
