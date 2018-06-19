@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Neo4j;
 
-	use Edde\Collection\IEntity;
 	use Edde\Config\ConfigException;
 	use Edde\Filter\FilterException;
 	use Edde\Schema\SchemaException;
@@ -10,15 +9,10 @@
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Storage\AbstractStorage;
 	use Edde\Storage\DuplicateEntryException;
-	use Edde\Storage\ICompiler;
-	use Edde\Storage\IQuery;
 	use Edde\Storage\IStorage;
-	use Edde\Storage\Neo4jCompiler;
 	use Edde\Storage\NullValueException;
-	use Edde\Storage\Record;
 	use Edde\Storage\StorageException;
 	use Edde\Validator\ValidatorException;
-	use Generator;
 	use GraphAware\Bolt\Configuration;
 	use GraphAware\Bolt\Exception\MessageFailureException;
 	use GraphAware\Bolt\GraphDatabase;
@@ -42,7 +36,7 @@
 		}
 
 		/** @inheritdoc */
-		public function fetch($query, array $params = []) {
+		public function fetch(string $query, array $params = []) {
 			try {
 				return (function (Result $result) {
 					foreach ($result->getRecords() as $record) {
@@ -69,19 +63,8 @@
 		}
 
 		/** @inheritdoc */
-		public function exec($query, array $params = []) {
+		public function exec(string $query, array $params = []) {
 			return $this->fetch($query, $params);
-		}
-
-		/** @inheritdoc */
-		public function query(IQuery $query, array $binds = []): Generator {
-			$params = [];
-			foreach ($this->storageFilterService->params($query, $binds) as $param) {
-				$params[$param->getHash()] = $param->getValue();
-			}
-			foreach ($this->fetch($this->compiler->compile($query), $params) as $items) {
-				yield $this->container->inject(new Record($query, $items));
-			}
 		}
 
 		/** @inheritdoc */
@@ -305,11 +288,6 @@
 			return $this;
 		}
 
-		/** @inheritdoc */
-		public function createCompiler(): ICompiler {
-			return $this->compiler ?: $this->compiler = $this->container->inject(new Neo4jCompiler());
-		}
-
 		protected function onException(Throwable $throwable): Throwable {
 			if (stripos($message = $throwable->getMessage(), 'already exists with label') !== false) {
 				return new DuplicateEntryException($message, 0, $throwable);
@@ -317,6 +295,11 @@
 				return new NullValueException($message, 0, $throwable);
 			}
 			return $throwable;
+		}
+
+		/** @inheritdoc */
+		public function delimit(string $string): string {
+			return '`' . str_replace('`', '`' . '`', $string) . '`';
 		}
 
 		/**

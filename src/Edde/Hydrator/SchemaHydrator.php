@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Hydrator;
 
-	use Edde\Schema\ISchema;
 	use Edde\Service\Filter\FilterManager;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Validator\ValidatorManager;
@@ -11,17 +10,13 @@
 		use SchemaManager;
 		use FilterManager;
 		use ValidatorManager;
-		/** @var ISchema */
-		protected $schema;
 		/** @var string */
 		protected $prefix;
 
 		/**
-		 * @param ISchema $schema
-		 * @param string  $prefix
+		 * @param string $prefix
 		 */
-		public function __construct(ISchema $schema, string $prefix = 'storage') {
-			$this->schema = $schema;
+		public function __construct(string $prefix = 'storage') {
 			$this->prefix = $prefix;
 		}
 
@@ -33,10 +28,10 @@
 		public function input(string $name, array $input): array {
 			$schema = $this->schemaManager->getSchema($name);
 			foreach ($schema->getAttributes() as $name => $attribute) {
-				if (($generator = $attribute->getFilter('generator')) && $input[$name] === null) {
+				if (($generator = $attribute->getFilter('generator')) && isset($input[$name]) === false) {
 					$input[$name] = $this->filterManager->getFilter($this->prefix . ':' . $generator)->input(null);
 				}
-				$input[$name] = $input[$name] ?: $attribute->getDefault();
+				$input[$name] = $input[$name] ?? $attribute->getDefault();
 				if ($validator = $attribute->getValidator()) {
 					$this->validatorManager->validate($this->prefix . ':' . $validator, $input[$name], (object)[
 						'name'     => $schema->getName() . '::' . $name,

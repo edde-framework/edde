@@ -40,7 +40,7 @@
 		}
 
 		/**
-		 * @throws SchemaException
+		 * @throws ContainerException
 		 * @throws Throwable
 		 */
 		public function testCreateSchema() {
@@ -56,10 +56,8 @@
 				ProjectLabelSchema::class,
 				IssueProjectSchema::class,
 			];
-			foreach ($schemas as $schema) {
-				$this->container->inject($createTableQuery = new CreateTableQuery($this->schemaManager->getSchema($schema)));
-				$createTableQuery->create($this->storage);
-			}
+			$this->container->inject($createTableQuery = new CreateTableQuery());
+			$createTableQuery->creates($schemas);
 			self::assertTrue(true, 'everything is ok');
 		}
 

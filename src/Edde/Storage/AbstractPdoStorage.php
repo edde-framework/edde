@@ -29,10 +29,7 @@
 		/** @inheritdoc */
 		public function exec(string $query, array $params = []) {
 			try {
-				if (empty($params)) {
-					return $this->pdo->exec($query);
-				}
-				return $this->pdo->prepare($query)->execute($params);
+				return $this->pdo->exec($query);
 			} catch (PDOException $exception) {
 				throw $this->exception($exception);
 			}

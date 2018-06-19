@@ -2,13 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Query;
 
-	use Edde\Filter\FilterException;
-	use Edde\Schema\ISchema;
+	use Edde\Hydrator\IHydrator;
 	use Edde\Service\Filter\FilterManager;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
 	use Edde\Service\Validator\ValidatorManager;
-	use Edde\Validator\ValidatorException;
+	use Edde\Transaction\TransactionException;
 	use Throwable;
 
 	class InsertQuery extends AbstractQuery {
@@ -16,13 +15,17 @@
 		use SchemaManager;
 		use FilterManager;
 		use ValidatorManager;
+		/** @var IHydrator */
+		protected $hydrator;
 		/** @var string */
 		protected $prefix;
 
 		/**
-		 * @param string $prefix
+		 * @param IHydrator $hydrator
+		 * @param string    $prefix
 		 */
-		public function __construct(string $prefix = 'storage') {
+		public function __construct(IHydrator $hydrator, string $prefix = 'storage') {
+			$this->hydrator = $hydrator;
 			$this->prefix = $prefix;
 		}
 
@@ -39,14 +42,14 @@
 				$schema = $this->schemaManager->getSchema($name);
 				$columns = [];
 				$params = [];
-				foreach ($source = $this->input($schema, $insert) as $k => $v) {
+				foreach ($source = $this->hydrator->input($name, $insert) as $k => $v) {
 					$columns[sha1($k)] = $this->storage->delimit($k);
 					$params[sha1($k)] = $v;
 				}
 				if (empty($params)) {
 					return [];
 				}
-				$this->storage->exec(
+				$this->storage->fetch(
 					vsprintf('INSERT INTO %s (%s) VALUES (:%s)', [
 						$this->storage->delimit($schema->getRealName()),
 						implode(',', $columns),
@@ -54,7 +57,7 @@
 					]),
 					$params
 				);
-				return $this->storageFilterService->output($schema, $source);
+				return $this->hydrator->output($name, $source);
 			} catch (Throwable $exception) {
 				/** @noinspection PhpUnhandledExceptionInspection */
 				throw $this->storage->exception($exception);
@@ -62,28 +65,16 @@
 		}
 
 		/**
-		 * @param ISchema $schema
-		 * @param array   $input
+		 * @param string $name
+		 * @param array  $inserts
 		 *
-		 * @return array
-		 *
-		 * @throws FilterException
-		 * @throws ValidatorException
+		 * @throws TransactionException
 		 */
-		public function input(ISchema $schema, array $input): array {
-			foreach ($schema->getAttributes() as $name => $attribute) {
-				if (($generator = $attribute->getFilter('generator')) && $input[$name] === null) {
-					$input[$name] = $this->filterManager->getFilter($this->prefix . ':' . $generator)->input(null);
+		public function inserts(string $name, array $inserts): void {
+			$this->storage->transaction(function () use ($name, $inserts) {
+				foreach ($inserts as $insert) {
+					$this->insert($name, $insert);
 				}
-				$input[$name] = $input[$name] ?: $attribute->getDefault();
-				if ($validator = $attribute->getValidator()) {
-					$this->validatorManager->validate($this->prefix . ':' . $validator, $input[$name], (object)[
-						'name'     => $schema->getName() . '::' . $name,
-						'required' => $attribute->isRequired(),
-					]);
-				}
-				$input[$name] = $this->value($attribute, $input[$name]);
-			}
-			return $input;
+			});
 		}
 	}

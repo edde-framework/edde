@@ -4,6 +4,7 @@
 
 	use Edde\Container\ContainerException;
 	use Edde\Container\Factory\InterfaceFactory;
+	use Edde\Hydrator\SchemaHydrator;
 	use Edde\Hydrator\ValueHydrator;
 	use Edde\Query\InsertQuery;
 	use Edde\Schema\SchemaException;
@@ -65,14 +66,23 @@
 		/**
 		 * @throws ContainerException
 		 * @throws StorageException
+		 * @throws Throwable
 		 */
 		public function testCollectionSimpleValue() {
-			$this->container->inject($insertQuery = new InsertQuery());
-			$insertQuery->insert(ProjectSchema::class, [
-				'name' => 'project-01',
+			$this->container->inject($insertQuery = new InsertQuery($this->container->inject(new SchemaHydrator())));
+			$insertQuery->inserts(ProjectSchema::class, [
+				[
+					'name' => 'project-01',
+				],
+				[
+					'name' => 'project-02',
+				],
 			]);
+			$record = null;
 			foreach ($this->storage->hydrate('SELECT COUNT(*) FROM project', new ValueHydrator()) as $record) {
+				break;
 			}
+			self::assertEquals(2, $record);
 		}
 
 //		/**

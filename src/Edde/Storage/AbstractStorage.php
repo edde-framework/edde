@@ -25,7 +25,7 @@
 
 		/** @inheritdoc */
 		public function hydrate(string $query, IHydrator $hydrator, array $params = []): Generator {
-			foreach ($this->exec($query, $params) as $item) {
+			foreach ($this->fetch($query, $params) as $item) {
 				yield $hydrator->hydrate($item);
 			}
 		}
