@@ -3,18 +3,29 @@
 	namespace Edde\Storage;
 
 	use DateTime;
+	use Edde\Container\ContainerException;
 	use Edde\Filter\FilterException;
+	use Edde\Hydrator\SchemaHydrator;
 	use Edde\Schema\SchemaException;
-	use Edde\Service\Collection\CollectionManager;
-	use Edde\Service\Collection\EntityManager;
 	use Edde\Service\Container\Container;
+	use Edde\Service\Hydrator\HydrateManager;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
+	use Edde\Sql\CreateTableQuery;
+	use Edde\Sql\InsertQuery;
 	use Edde\TestCase;
+	use Edde\Transaction\TransactionException;
 	use Edde\Validator\ValidatorException;
+	use IssueProjectSchema;
+	use IssueSchema;
 	use LabelSchema;
+	use OrganizationSchema;
+	use ProjectLabelSchema;
 	use ProjectMemberSchema;
+	use ProjectOrganizationSchema;
 	use ProjectSchema;
+	use ReflectionException;
+	use Throwable;
 	use ToBeOrdered;
 	use UserSchema;
 	use VoidSchema;
@@ -25,8 +36,73 @@
 		use SchemaManager;
 		use Container;
 		use Storage;
-		use CollectionManager;
-		use EntityManager;
+		use HydrateManager;
+
+		/**
+		 * @throws ContainerException
+		 * @throws Throwable
+		 */
+		public function testCreateSchema() {
+			$schemas = [
+				LabelSchema::class,
+				UserSchema::class,
+				ProjectSchema::class,
+				ProjectMemberSchema::class,
+				OrganizationSchema::class,
+				ProjectOrganizationSchema::class,
+				IssueSchema::class,
+				ToBeOrdered::class,
+				ProjectLabelSchema::class,
+				IssueProjectSchema::class,
+			];
+			$this->container->inject($createTableQuery = new CreateTableQuery($this->storage::TYPES));
+			$createTableQuery->creates($schemas);
+			self::assertTrue(true, 'everything is ok');
+		}
+
+		/**
+		 * @throws ContainerException
+		 * @throws StorageException
+		 * @throws TransactionException
+		 */
+		public function testCollectionSimpleValue() {
+			$this->container->inject($insertQuery = new InsertQuery($this->container->inject(new SchemaHydrator())));
+			$insertQuery->inserts(ProjectSchema::class, [
+				[
+					'name' => 'project-01',
+				],
+				[
+					'name' => 'project-02',
+				],
+			]);
+			$record = null;
+			foreach ($this->hydrateManager->value('SELECT COUNT(*) FROM project') as $record) {
+				break;
+			}
+			self::assertEquals(2, $record);
+		}
+
+		public function testSimpleCollection() {
+			$actual = [];
+			foreach ($this->hydrateManager->schema(ProjectSchema::class, 'SELECT * FROM project ORDER BY name') as $record) {
+				unset($record['uuid'], $record['created']);
+				$actual[] = $record;
+			}
+			self::assertSame([
+				[
+					'name'   => 'project-01',
+					'status' => 0,
+					'start'  => null,
+					'end'    => null,
+				],
+				[
+					'name'   => 'project-02',
+					'status' => 0,
+					'start'  => null,
+					'end'    => null,
+				],
+			], $actual);
+		}
 
 		/**
 		 * @throws SchemaException
@@ -562,5 +638,26 @@
 				$actual[] = $record->getEntity(ToBeOrdered::class)->get('index');
 			}
 			self::assertEquals($expected, $actual);
+		}
+
+		/**
+		 * @throws ContainerException
+		 * @throws SchemaException
+		 * @throws ReflectionException
+		 */
+		protected function setUp() {
+			parent::setUp();
+			$this->schemaManager->loads([
+				LabelSchema::class,
+				ProjectSchema::class,
+				UserSchema::class,
+				ProjectMemberSchema::class,
+				OrganizationSchema::class,
+				ProjectOrganizationSchema::class,
+				ToBeOrdered::class,
+				IssueSchema::class,
+				IssueProjectSchema::class,
+				ProjectLabelSchema::class,
+			]);
 		}
 	}

@@ -1,17 +1,21 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Postgres;
+	namespace Edde\Storage;
 
 	use Edde\Service\Container\Container;
-	use Edde\Storage\AbstractPdoStorage;
-	use Edde\Storage\DuplicateEntryException;
-	use Edde\Storage\DuplicateTableException;
-	use Edde\Storage\NullValueException;
-	use Edde\Storage\UnknownTableException;
 	use Throwable;
 
 	class PostgresStorage extends AbstractPdoStorage {
 		use Container;
+		const TYPES = [
+			'string'   => 'CHARACTER VARYING(1024)',
+			'text'     => 'TEXT',
+			'binary'   => 'BYTEA',
+			'int'      => 'INTEGER',
+			'float'    => 'DOUBLE PRECISION',
+			'bool'     => 'SMALLINT',
+			'datetime' => 'TIMESTAMP(6)',
+		];
 
 		public function __construct(string $config = 'postgres') {
 			parent::__construct($config);

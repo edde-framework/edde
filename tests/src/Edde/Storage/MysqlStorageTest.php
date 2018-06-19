@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Mysql;
+	namespace Edde\Storage;
 
 	use Edde\Container\ContainerException;
 	use Edde\Container\Factory\InstanceFactory;
@@ -8,8 +8,7 @@
 	use Edde\Service\Container\Container;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
-	use Edde\Storage\IStorage;
-	use Edde\Storage\StorageException;
+	use Edde\Sql\CreateTableQuery;
 	use Edde\TestCase;
 	use IssueProjectSchema;
 	use IssueSchema;
@@ -56,7 +55,7 @@
 				ProjectLabelSchema::class,
 				IssueProjectSchema::class,
 			];
-			$this->container->inject($createTableQuery = new CreateTableQuery());
+			$this->container->inject($createTableQuery = new CreateTableQuery(MysqlStorage::TYPES));
 			$createTableQuery->creates($schemas);
 			self::assertTrue(true, 'everything is ok');
 		}

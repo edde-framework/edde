@@ -28,7 +28,6 @@
 	use Edde\Hydrator\IHydrateManager;
 	use Edde\Log\ILogService;
 	use Edde\Log\LogService;
-	use Edde\Postgres\PostgresStorage;
 	use Edde\Router\IRouterService;
 	use Edde\Router\RouterService;
 	use Edde\Router\RouterServiceConfigurator;
@@ -43,6 +42,7 @@
 	use Edde\Security\PasswordService;
 	use Edde\Security\RandomService;
 	use Edde\Storage\IStorage;
+	use Edde\Storage\PostgresStorage;
 	use Edde\Transaction\ITransaction;
 	use Edde\Upgrade\IUpgradeManager;
 	use Edde\Utils\IStringUtils;

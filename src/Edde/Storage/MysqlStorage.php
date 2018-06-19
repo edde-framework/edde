@@ -1,17 +1,21 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Mysql;
+	namespace Edde\Storage;
 
 	use Edde\Service\Container\Container;
-	use Edde\Storage\AbstractPdoStorage;
-	use Edde\Storage\DuplicateEntryException;
-	use Edde\Storage\DuplicateTableException;
-	use Edde\Storage\NullValueException;
-	use Edde\Storage\UnknownTableException;
 	use Throwable;
 
 	class MysqlStorage extends AbstractPdoStorage {
 		use Container;
+		const TYPES = [
+			'string'   => 'CHARACTER VARYING(1024)',
+			'text'     => 'LONGTEXT',
+			'binary'   => 'LONGBLOB',
+			'int'      => 'INTEGER',
+			'float'    => 'DOUBLE PRECISION',
+			'bool'     => 'TINYINT',
+			'datetime' => 'DATETIME(6)',
+		];
 
 		public function __construct(string $config = 'mysql') {
 			parent::__construct($config);

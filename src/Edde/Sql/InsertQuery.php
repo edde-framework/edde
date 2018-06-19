@@ -1,8 +1,9 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Query;
+	namespace Edde\Sql;
 
 	use Edde\Hydrator\IHydrator;
+	use Edde\Query\AbstractQuery;
 	use Edde\Service\Filter\FilterManager;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;

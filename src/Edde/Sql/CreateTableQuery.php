@@ -1,12 +1,14 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Query;
+	namespace Edde\Sql;
 
+	use Edde\Query\AbstractQuery;
+	use Edde\Query\QueryException;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
 	use Throwable;
 
-	abstract class AbstractCreateTableQuery extends AbstractQuery {
+	class CreateTableQuery extends AbstractQuery {
 		use Storage;
 		use SchemaManager;
 		/** @var string[] */
