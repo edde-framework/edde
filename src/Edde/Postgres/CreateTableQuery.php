@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Mysql;
+	namespace Edde\Postgres;
 
 	use Edde\Edde;
 	use Edde\Query\IQuery;
@@ -78,17 +78,17 @@
 				case 'string':
 					return 'CHARACTER VARYING(1024)';
 				case 'text':
-					return 'LONGTEXT';
+					return 'TEXT';
 				case 'binary':
-					return 'LONGBLOB';
+					return 'BYTEA';
 				case 'int':
 					return 'INTEGER';
 				case 'float':
 					return 'DOUBLE PRECISION';
 				case 'bool':
-					return 'TINYINT';
+					return 'SMALLINT';
 				case 'datetime':
-					return 'DATETIME(6)';
+					return 'TIMESTAMP(6)';
 			}
 			throw new QueryException(sprintf('Unknown type [%s] ', $type, static::class));
 		}

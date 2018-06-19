@@ -22,7 +22,7 @@
 				$statement->execute($params);
 				return $statement;
 			} catch (PDOException $exception) {
-				throw $this->resolveException($exception);
+				throw $this->exception($exception);
 			}
 		}
 
@@ -34,7 +34,7 @@
 				}
 				return $this->pdo->prepare($query)->execute($params);
 			} catch (PDOException $exception) {
-				throw $this->resolveException($exception);
+				throw $this->exception($exception);
 			}
 		}
 

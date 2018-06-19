@@ -60,5 +60,5 @@
 		 *
 		 * @return Throwable
 		 */
-		public function resolveException(Throwable $throwable): Throwable;
+		public function exception(Throwable $throwable): Throwable;
 	}

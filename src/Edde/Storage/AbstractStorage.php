@@ -3,8 +3,10 @@
 	namespace Edde\Storage;
 
 	use Edde\Config\ISection;
+	use Edde\Hydrator\IHydrator;
 	use Edde\Service\Config\ConfigService;
 	use Edde\Transaction\AbstractTransaction;
+	use Generator;
 	use Throwable;
 
 	abstract class AbstractStorage extends AbstractTransaction implements IStorage {
@@ -21,12 +23,19 @@
 			$this->config = $config;
 		}
 
+		/** @inheritdoc */
+		public function hydrate(string $query, IHydrator $hydrator, array $params = []): Generator {
+			foreach ($this->exec($query, $params) as $item) {
+				yield $hydrator->hydrate($item);
+			}
+		}
+
 		/**
 		 * @param Throwable $throwable
 		 *
 		 * @return Throwable
 		 */
-		public function resolveException(Throwable $throwable): Throwable {
+		public function exception(Throwable $throwable): Throwable {
 			return $throwable;
 		}
 

@@ -3,7 +3,6 @@
 	namespace Edde\Storage;
 
 	use DateTime;
-	use Edde\Collection\EntityNotFoundException;
 	use Edde\Filter\FilterException;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Collection\CollectionManager;
