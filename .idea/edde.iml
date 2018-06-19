@@ -10,11 +10,8 @@
       <excludeFolder url="file://$MODULE_DIR$/lib/blackfire/php-sdk" />
       <excludeFolder url="file://$MODULE_DIR$/lib/composer" />
       <excludeFolder url="file://$MODULE_DIR$/lib/doctrine/instantiator" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/graphaware/neo4j-bolt" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/graphaware/neo4j-common" />
       <excludeFolder url="file://$MODULE_DIR$/lib/michelf/php-markdown" />
       <excludeFolder url="file://$MODULE_DIR$/lib/myclabs/deep-copy" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/myclabs/php-enum" />
       <excludeFolder url="file://$MODULE_DIR$/lib/nikic/php-parser" />
       <excludeFolder url="file://$MODULE_DIR$/lib/phar-io/manifest" />
       <excludeFolder url="file://$MODULE_DIR$/lib/phar-io/version" />
@@ -43,14 +40,6 @@
       <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/recursion-context" />
       <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/resource-operations" />
       <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/version" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/symfony/console" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/symfony/debug" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/symfony/event-dispatcher" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/symfony/filesystem" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/symfony/finder" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/symfony/polyfill-mbstring" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/symfony/process" />
-      <excludeFolder url="file://$MODULE_DIR$/lib/symfony/yaml" />
       <excludeFolder url="file://$MODULE_DIR$/lib/theseer/tokenizer" />
       <excludeFolder url="file://$MODULE_DIR$/lib/tracy/tracy" />
       <excludeFolder url="file://$MODULE_DIR$/lib/twig/twig" />

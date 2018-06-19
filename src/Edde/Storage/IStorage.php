@@ -102,6 +102,30 @@
 		public function inserts(string $name, iterable $inserts, IHydrator $hydrator = null): IStorage;
 
 		/**
+		 * @param string         $name
+		 * @param array          $update
+		 * @param IHydrator|null $hydrator
+		 *
+		 * @return array
+		 *
+		 * @throws StorageException
+		 */
+		public function update(string $name, array $update, IHydrator $hydrator = null): array;
+
+		/**
+		 * load exactly one item or throw an exception
+		 *
+		 * @param string $name
+		 * @param string $uuid
+		 *
+		 * @return array
+		 *
+		 * @throws StorageException
+		 * @throws UnknownUuidException
+		 */
+		public function load(string $name, string $uuid): array;
+
+		/**
 		 * @param string $string
 		 *
 		 * @return string

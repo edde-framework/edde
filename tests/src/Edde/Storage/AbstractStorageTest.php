@@ -182,18 +182,36 @@
 		/**
 		 * @throws StorageException
 		 */
-		public function testUpdate() {
-			$this->storage->insert($entity = $this->entityManager->entity(ProjectSchema::class, [
+		public function testUpdateException() {
+			$this->expectException(StorageException::class);
+			$this->expectExceptionMessage('Missing primary key [uuid] for update!');
+			$insert = $this->storage->insert(ProjectSchema::class, [
 				'name'    => 'some-project-here',
 				'created' => new DateTime(),
 				'start'   => new DateTime(),
 				'end'     => new DateTime(),
-			]));
-			$entity->set('end', null);
-			$this->storage->update($entity);
-			$actual = $this->storage->load(ProjectSchema::class, $entity->getPrimary()->get());
-			self::assertNull($actual->get('end'));
-			self::assertInstanceOf(DateTime::class, $actual->get('start'));
+			]);
+			unset($insert['uuid']);
+			$this->storage->update(ProjectSchema::class, $insert);
+		}
+
+		/**
+		 * @throws StorageException
+		 */
+		public function testUpdate() {
+			$insert = $this->storage->insert(ProjectSchema::class, [
+				'name'    => 'some-project-here',
+				'created' => new DateTime(),
+				'start'   => new DateTime(),
+				'end'     => new DateTime(),
+			]);
+			$insert['end'] = null;
+			$this->storage->update(ProjectSchema::class, $insert);
+			$actual = $this->storage->load(ProjectSchema::class, $insert['uuid']);
+			self::assertArrayHasKey('end', $actual);
+			self::assertEmpty($actual['end']);
+			self::assertArrayHasKey('start', $actual);
+			self::assertInstanceOf(DateTime::class, $actual['start']);
 		}
 
 		/**

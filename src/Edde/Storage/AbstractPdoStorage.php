@@ -75,6 +75,46 @@
 		}
 
 		/** @inheritdoc */
+		public function update(string $name, array $update, IHydrator $hydrator = null): array {
+			try {
+				$hydrator = $hydrator ?: $this->hydratorManager->schema($name);
+				$schema = $this->schemaManager->getSchema($name);
+				$primary = $schema->getPrimary();
+				$table = $this->delimit($schema->getRealName());
+				if (isset($update[$primary->getName()]) === false) {
+					throw new StorageException(sprintf('Missing primary key [%s] for update!', $primary->getName()));
+				}
+				$params = ['primary' => $update[$primary->getName()]];
+				$columns = [];
+				foreach ($source = $hydrator->update($name, $update) as $k => $v) {
+					$columns[] = $this->delimit($k) . ' = :' . ($paramId = sha1($k));
+					$params[$paramId] = $v;
+				}
+				$this->fetch(
+					vsprintf('UPDATE %s SET %s WHERE %s = :primary', [
+						$table,
+						implode(', ', $columns),
+						$this->delimit($primary->getName()),
+					]),
+					$params
+				);
+				return $hydrator->output($name, $source);
+			} catch (Throwable $exception) {
+				/** @noinspection PhpUnhandledExceptionInspection */
+				throw $this->exception($exception);
+			}
+		}
+
+		/** @inheritdoc */
+		public function load(string $name, string $uuid): array {
+			$schema = $this->schemaManager->getSchema($name);
+			foreach ($this->schema($name, sprintf('SELECT * FROM %s WHERE %s = :uuid', $this->delimit($schema->getRealName()), $schema->getPrimary()->getName()), ['uuid' => $uuid]) as $item) {
+				return $item;
+			}
+			throw new UnknownUuidException(sprintf('Requested unknown UUID [%s] of [%s].', $uuid, $name));
+		}
+
+		/** @inheritdoc */
 		public function onStart(): void {
 			$this->pdo->beginTransaction();
 		}
