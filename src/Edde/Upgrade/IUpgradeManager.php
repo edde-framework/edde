@@ -2,9 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Upgrade;
 
-	use Edde\Collection\ICollection;
 	use Edde\Config\IConfigurable;
-	use Edde\Storage\IRecord;
+	use Generator;
 
 	interface IUpgradeManager extends IConfigurable {
 		/**
@@ -50,7 +49,7 @@
 		/**
 		 * get current list of installed upgrades
 		 *
-		 * @return ICollection|IRecord[]
+		 * @return Generator|array
 		 */
-		public function getCurrentCollection(): ICollection;
+		public function getCurrentCollection(): Generator;
 	}
