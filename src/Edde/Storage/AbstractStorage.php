@@ -56,6 +56,10 @@
 				}
 				$query = str_replace($matches[0][$index], $this->delimit($this->schemaManager->getSchema($schemas[$alias])->getRealName()), $query);
 			}
+			preg_match_all('~([a-zA-Z0-9]+):delimit~', $query, $matches);
+			foreach ($matches[1] as $index => $alias) {
+				$query = str_replace($matches[0][$index], $this->delimit($matches[1][$index]), $query);
+			}
 			return $query;
 		}
 

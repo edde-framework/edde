@@ -438,7 +438,7 @@
 				SELECT
 					COUNT(*) 
 				FROM 
-					u:schema u, 
+					u:schema u:delimit, 
 					p:schema p, 
 					pm:schema pm
 				WHERE
