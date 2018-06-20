@@ -434,20 +434,20 @@
 			$relation = $this->storage->attach([ProjectSchema::class => $project['uuid']], [UserSchema::class => $user['uuid']], ProjectMemberSchema::class);
 			$relation['owner'] = true;
 			$this->storage->save(ProjectMemberSchema::class, $relation);
-			$query = vsprintf("
+			$query = $this->storage->query('
 				SELECT
 					COUNT(*) 
 				FROM 
-					%s u, 
-					%s p, 
-					%s pm
+					u:schema u, 
+					p:schema p, 
+					pm:schema pm
 				WHERE
 					pm.project = p.uuid AND
 					pm.user = u.uuid
-			", [
-				$this->storage->delimit(UserSchema::class),
-				$this->storage->delimit($this->schemaManager->getSchema(ProjectSchema::class)->getRealName()),
-				$this->storage->delimit($this->schemaManager->getSchema(ProjectMemberSchema::class)->getRealName()),
+			', [
+				'u'  => UserSchema::class,
+				'p'  => ProjectSchema::class,
+				'pm' => ProjectMemberSchema::class,
 			]);
 			$count = 0;
 			foreach ($this->storage->value($query, []) as $count) {

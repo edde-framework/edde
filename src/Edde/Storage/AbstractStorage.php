@@ -6,13 +6,17 @@
 	use Edde\Hydrator\IHydrator;
 	use Edde\Service\Config\ConfigService;
 	use Edde\Service\Hydrator\HydratorManager;
+	use Edde\Service\Schema\SchemaManager;
 	use Edde\Transaction\AbstractTransaction;
 	use Generator;
 	use Throwable;
+	use function preg_match_all;
+	use function str_replace;
 
 	abstract class AbstractStorage extends AbstractTransaction implements IStorage {
 		use ConfigService;
 		use HydratorManager;
+		use SchemaManager;
 		/** @var string */
 		protected $config;
 		/** @var ISection */
@@ -40,6 +44,19 @@
 		/** @inheritdoc */
 		public function schema(string $name, string $query, array $params = []): Generator {
 			return $this->hydrate($query, $this->hydratorManager->schema($name), $params);
+		}
+
+		/** @inheritdoc */
+		public function query(string $query, array $schemas): string {
+			$matches = null;
+			preg_match_all('~([a-zA-Z0-9]+):schema~', $query, $matches);
+			foreach ($matches[1] as $index => $alias) {
+				if (isset($schemas[$alias]) === false) {
+					throw new StorageException(sprintf('Cannot translate unknown alias [%s] to schema name.', $alias));
+				}
+				$query = str_replace($matches[0][$index], $this->delimit($this->schemaManager->getSchema($schemas[$alias])->getRealName()), $query);
+			}
+			return $query;
 		}
 
 		/**

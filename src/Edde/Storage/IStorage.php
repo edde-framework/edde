@@ -76,6 +76,18 @@
 		public function schema(string $name, string $query, array $params = []): Generator;
 
 		/**
+		 * assisted (general) query
+		 *
+		 * @param string $query
+		 * @param array  $schemas
+		 *
+		 * @return string
+		 *
+		 * @throws StorageException
+		 */
+		public function query(string $query, array $schemas): string;
+
+		/**
 		 * insert a new item into storage ($name is schema name)
 		 *
 		 * @param string         $name
