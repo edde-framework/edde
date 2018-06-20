@@ -4,6 +4,7 @@
 
 	use Edde\Content\GeneratorContent;
 	use Edde\Content\HtmlContent;
+	use Edde\Content\IContent;
 	use Edde\Content\JsonContent;
 	use Edde\Content\NoContent;
 	use Edde\Content\TextContent;
@@ -12,14 +13,14 @@
 	use Edde\Http\Response;
 	use Edde\Io\IFile;
 	use Edde\Service\Http\RequestService;
-	use Edde\Service\Schema\SchemaManager;
+	use stdClass;
+	use function json_decode;
 
 	/**
 	 * Http control provides helpers for a http response style.
 	 */
 	trait HttpController {
 		use RequestService;
-		use SchemaManager;
 
 		public function __call(string $name, $arguments) {
 			$response = new Response();
@@ -28,14 +29,28 @@
 		}
 
 		/**
-		 * @param string $type
+		 * @param string $expected
 		 *
-		 * @return mixed
+		 * @return IContent
 		 *
+		 * @throws ApplicationException
 		 * @throws EmptyBodyException
 		 */
-		protected function getContent(string $type = 'array') {
-			return $this->requestService->getContent([$type]);
+		protected function getContent(string $expected): IContent {
+			if (($content = $this->requestService->getContent())->getType() !== 'application/json') {
+				throw new ApplicationException(sprintf('Content mismatch: expected [%s], got [%s]', $expected, $content->getType()));
+			}
+			return $content;
+		}
+
+		/**
+		 * @return stdClass
+		 *
+		 * @throws ApplicationException
+		 * @throws EmptyBodyException
+		 */
+		protected function jsonRequest(): stdClass {
+			return json_decode($this->getContent('application/json'));
 		}
 
 		/**
@@ -46,7 +61,7 @@
 		 *
 		 * @return IResponse
 		 */
-		public function json($content, int $code = IResponse::R200_OK): IResponse {
+		protected function jsonResponse($content, int $code = IResponse::R200_OK): IResponse {
 			return $this->response(new Response(new JsonContent(json_encode($content))), $code);
 		}
 
@@ -58,7 +73,7 @@
 		 *
 		 * @return IResponse
 		 */
-		public function html($content, int $code = IResponse::R200_OK): IResponse {
+		protected function htmlResponse($content, int $code = IResponse::R200_OK): IResponse {
 			return $this->response(new Response(new HtmlContent($content)), $code);
 		}
 
@@ -70,14 +85,14 @@
 		 *
 		 * @return IResponse
 		 */
-		public function text($content, int $code = IResponse::R200_OK): IResponse {
+		protected function textResponse($content, int $code = IResponse::R200_OK): IResponse {
 			return $this->response(new Response(new TextContent($content)), $code);
 		}
 
 		/**
 		 * return no-content response
 		 */
-		public function sendNoContent(): void {
+		protected function sendNoContent(): void {
 			$this->response(
 				new Response(new NoContent()),
 				IResponse::R200_NO_CONTENT
@@ -87,7 +102,7 @@
 		/**
 		 * return empty created response
 		 */
-		public function sendCreated(): void {
+		protected function sendCreated(): void {
 			$this->response(
 				new Response(new NoContent()),
 				IResponse::R200_OK_CREATED
@@ -101,7 +116,7 @@
 		 *
 		 * @return IResponse
 		 */
-		public function generator(callable $generator, string $type = 'text/plain', int $code = IResponse::R200_OK): IResponse {
+		protected function generatorResponse(callable $generator, string $type = 'text/plain', int $code = IResponse::R200_OK): IResponse {
 			return $this->response(
 				new Response(new GeneratorContent($generator, $type)),
 				$code
@@ -116,7 +131,7 @@
 		 *
 		 * @return IResponse
 		 */
-		public function response(IResponse $response, int $code = IResponse::R200_OK) {
+		protected function response(IResponse $response, int $code = IResponse::R200_OK) {
 			$response->header('X-Powered-By', 'Edde Framework "' . self::$codename . '" ' . self::$framework);
 			$response->header('Access-Control-Allow-Origin', '*');
 			$response->header('Access-Control-Expose-Headers', '*');

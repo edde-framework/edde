@@ -2,13 +2,13 @@
 	declare(strict_types=1);
 	namespace Edde\Http;
 
+	use Edde\Content\IContent;
 	use Edde\Content\InputContent;
 	use Edde\Content\PostContent;
 	use Edde\Edde;
 	use Edde\Service\Http\HttpUtils;
 	use Edde\Url\IUrl;
 	use Edde\Url\Url;
-	use Exception;
 
 	class RequestService extends Edde implements IRequestService {
 		use HttpUtils;
@@ -46,11 +46,11 @@
 		}
 
 		/** @inheritdoc */
-		public function getContent(array $targets = ['array']) {
+		public function getContent(): IContent {
 			if (($content = $this->getRequest()->getContent()) === null) {
 				throw new EmptyBodyException('Current request has no content.');
 			}
-			throw new Exception('Not implemented Yet');
+			return $content;
 		}
 
 		/** @inheritdoc */

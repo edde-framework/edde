@@ -3,6 +3,7 @@
 	namespace Edde\Http;
 
 	use Edde\Config\IConfigurable;
+	use Edde\Content\IContent;
 	use Edde\Url\IUrl;
 
 	interface IRequestService extends IConfigurable {
@@ -14,15 +15,13 @@
 		public function getRequest(): IRequest;
 
 		/**
-		 * try to get content with the acceptable list of targets (like array, object, ...)
+		 * return content from a request
 		 *
-		 * @param array ...$targets
-		 *
-		 * @return mixed
+		 * @return IContent
 		 *
 		 * @throws EmptyBodyException
 		 */
-		public function getContent(array $targets = ['array']);
+		public function getContent(): IContent;
 
 		/**
 		 * get current request url
