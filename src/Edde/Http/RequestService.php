@@ -38,7 +38,7 @@
 					$contentType = $headers->getContentType();
 					$mime = $contentType->getMime();
 				}
-				$content = new InputContent('stream://' . $mime);
+				$content = new InputContent($mime);
 			}
 			fclose($input);
 			$this->request->setContent($content);
