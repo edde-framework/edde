@@ -2,10 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Application;
 
-	use Edde\Content\Content;
 	use Edde\Content\GeneratorContent;
 	use Edde\Content\HtmlContent;
 	use Edde\Content\JsonContent;
+	use Edde\Content\NoContent;
 	use Edde\Content\TextContent;
 	use Edde\Http\EmptyBodyException;
 	use Edde\Http\IResponse;
@@ -35,7 +35,7 @@
 		 * @throws EmptyBodyException
 		 */
 		protected function getContent(string $type = 'array') {
-			return $this->requestService->getContent($type);
+			return $this->requestService->getContent([$type]);
 		}
 
 		/**
@@ -79,7 +79,7 @@
 		 */
 		public function sendNoContent(): void {
 			$this->response(
-				new Response(new Content('', 'text/plain')),
+				new Response(new NoContent()),
 				IResponse::R200_NO_CONTENT
 			)->execute();
 		}
@@ -89,7 +89,7 @@
 		 */
 		public function sendCreated(): void {
 			$this->response(
-				new Response(new Content('', 'text/plain')),
+				new Response(new NoContent()),
 				IResponse::R200_OK_CREATED
 			)->execute();
 		}

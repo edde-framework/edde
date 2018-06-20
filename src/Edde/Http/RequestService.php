@@ -46,7 +46,7 @@
 		}
 
 		/** @inheritdoc */
-		public function getContent(...$targets) {
+		public function getContent(array $targets = ['array']) {
 			if (($content = $this->getRequest()->getContent()) === null) {
 				throw new EmptyBodyException('Current request has no content.');
 			}
