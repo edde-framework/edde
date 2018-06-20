@@ -40,6 +40,26 @@
 		public function exec(string $query, array $params = []);
 
 		/**
+		 * create schema with the given name
+		 *
+		 * @param string $name
+		 *
+		 * @return IStorage
+		 *
+		 * @throws StorageException
+		 */
+		public function create(string $name): IStorage;
+
+		/**
+		 * @param array $names
+		 *
+		 * @return IStorage
+		 *
+		 * @throws StorageException
+		 */
+		public function creates(array $names): IStorage;
+
+		/**
 		 * hydrate output with the given hydrator
 		 *
 		 * @param string    $query

@@ -21,7 +21,6 @@
 	use ProjectOrganizationSchema;
 	use ProjectSchema;
 	use ReflectionException;
-	use Throwable;
 	use ToBeOrdered;
 	use UserSchema;
 	use VoidSchema;
@@ -34,11 +33,10 @@
 		use SchemaManager;
 
 		/**
-		 * @throws ContainerException
-		 * @throws Throwable
+		 * @throws StorageException
 		 */
 		public function testCreateSchema() {
-			$schemas = [
+			$this->storage->creates([
 				LabelSchema::class,
 				UserSchema::class,
 				ProjectSchema::class,
@@ -49,9 +47,7 @@
 				ToBeOrdered::class,
 				ProjectLabelSchema::class,
 				IssueProjectSchema::class,
-			];
-			$this->container->inject($createTableQuery = new CreateTableQuery($this->storage::TYPES));
-			$createTableQuery->creates($schemas);
+			]);
 			self::assertTrue(true, 'everything is ok');
 		}
 

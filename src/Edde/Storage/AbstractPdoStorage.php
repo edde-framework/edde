@@ -14,6 +14,7 @@
 
 	abstract class AbstractPdoStorage extends AbstractStorage {
 		use SchemaManager;
+		const TYPES = [];
 		/** @var PDO */
 		protected $pdo;
 
@@ -36,6 +37,58 @@
 			} catch (PDOException $exception) {
 				throw $this->exception($exception);
 			}
+		}
+
+		/** @inheritdoc */
+		public function create(string $name): IStorage {
+			try {
+				$schema = $this->schemaManager->getSchema($name);
+				$table = $schema->getRealName();
+				$columns = [];
+				$primary = null;
+				foreach ($schema->getAttributes() as $attribute) {
+					$column = vsprintf('%s %s', [
+						$fragment = $this->delimit($attribute->getName()),
+						$this->type(
+							$attribute->hasSchema() ?
+								$this->schemaManager->getSchema($attribute->getSchema())->getPrimary()->getType() :
+								$attribute->getType()
+						),
+					]);
+					if ($attribute->isPrimary()) {
+						$primary = $fragment;
+					} else if ($attribute->isUnique()) {
+						$column .= ' UNIQUE';
+					}
+					if ($attribute->isRequired()) {
+						$column .= ' NOT NULL';
+					}
+					$columns[] = $column;
+				}
+				if ($primary) {
+					$columns[] = vsprintf('CONSTRAINT %s PRIMARY KEY (%s)', [
+						$this->delimit(sha1($table . '.primary.' . $primary)),
+						$primary,
+					]);
+				}
+				$this->exec(vsprintf("CREATE TABLE %s (\n\t%s\n)", [
+					$this->delimit($table),
+					implode(",\n\t", $columns),
+				]));
+			} catch (Throwable $exception) {
+				throw $this->exception($exception);
+			}
+			return $this;
+		}
+
+		/** @inheritdoc */
+		public function creates(array $names): IStorage {
+			$this->transaction(function () use ($names) {
+				foreach ($names as $name) {
+					$this->create($name);
+				}
+			});
+			return $this;
 		}
 
 		/** @inheritdoc */
@@ -248,5 +301,19 @@
 			$this->pdo->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_EMPTY_STRING);
 			$this->pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
 			$this->pdo->setAttribute(PDO::ATTR_TIMEOUT, 120);
+		}
+
+		/**
+		 * @param string $type
+		 *
+		 * @return string
+		 *
+		 * @throws StorageException
+		 */
+		protected function type(string $type): string {
+			if (isset(static::TYPES[$type = strtolower($type)])) {
+				return static::TYPES[$type];
+			}
+			throw new StorageException(sprintf('Unknown type [%s] ', $type, static::class));
 		}
 	}
