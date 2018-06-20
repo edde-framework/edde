@@ -108,8 +108,11 @@
 							case 'default':
 								$attributeBuilder->default($parameter->getDefaultValue());
 								break;
+							case 'required':
+								$attributeBuilder->required($parameter->getDefaultValue());
+								break;
 							default:
-								throw new SchemaException(sprintf('Unknown schema directive [%s::%s].', $schema, $propertyName));
+								throw new SchemaException(sprintf('Unknown schema [%s::%s] directive [%s].', $schema, $propertyName, $propertyName));
 						}
 					}
 					switch ($propertyType) {
