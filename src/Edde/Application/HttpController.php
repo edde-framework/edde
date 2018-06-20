@@ -4,7 +4,6 @@
 
 	use Edde\Content\GeneratorContent;
 	use Edde\Content\HtmlContent;
-	use Edde\Content\IContent;
 	use Edde\Content\JsonContent;
 	use Edde\Content\NoContent;
 	use Edde\Content\TextContent;
@@ -31,16 +30,16 @@
 		/**
 		 * @param string $expected
 		 *
-		 * @return IContent
+		 * @return mixed
 		 *
 		 * @throws ApplicationException
 		 * @throws EmptyBodyException
 		 */
-		protected function getContent(string $expected): IContent {
+		protected function getContent(string $expected) {
 			if (($content = $this->requestService->getContent())->getType() !== 'application/json') {
 				throw new ApplicationException(sprintf('Content mismatch: expected [%s], got [%s]', $expected, $content->getType()));
 			}
-			return $content;
+			return $content->getContent();
 		}
 
 		/**
