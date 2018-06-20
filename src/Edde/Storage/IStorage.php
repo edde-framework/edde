@@ -22,6 +22,7 @@
 		 * @return mixed
 		 *
 		 * @throws StorageException
+		 * @throws UnknownTableException
 		 */
 		public function fetch(string $query, array $params = []);
 
@@ -34,6 +35,7 @@
 		 * @return mixed
 		 *
 		 * @throws StorageException
+		 * @throws UnknownTableException
 		 */
 		public function exec(string $query, array $params = []);
 
@@ -47,6 +49,7 @@
 		 * @return Generator generator or proprietary hydrator value
 		 *
 		 * @throws StorageException
+		 * @throws UnknownTableException
 		 */
 		public function hydrate(string $query, IHydrator $hydrator, array $params = []): Generator;
 
@@ -59,6 +62,7 @@
 		 * @return Generator|mixed
 		 *
 		 * @throws StorageException
+		 * @throws UnknownTableException
 		 */
 		public function value(string $query, array $params = []): Generator;
 
@@ -72,6 +76,7 @@
 		 * @return Generator|array
 		 *
 		 * @throws StorageException
+		 * @throws UnknownTableException
 		 */
 		public function schema(string $name, string $query, array $params = []): Generator;
 
