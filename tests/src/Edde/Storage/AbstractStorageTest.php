@@ -430,7 +430,7 @@
 			$relation = $this->storage->attach([ProjectSchema::class => $project['uuid']], [UserSchema::class => $user['uuid']], ProjectMemberSchema::class);
 			$relation['owner'] = true;
 			$this->storage->save(ProjectMemberSchema::class, $relation);
-			$query = $this->storage->query('
+			$query = '
 				SELECT
 					COUNT(*) 
 				FROM 
@@ -440,13 +440,16 @@
 				WHERE
 					pm.project = p.uuid AND
 					pm.user = u.uuid
-			', [
-				'u'  => UserSchema::class,
-				'p'  => ProjectSchema::class,
-				'pm' => ProjectMemberSchema::class,
-			]);
+			';
+			$params = [
+				'$query' => [
+					'u'  => UserSchema::class,
+					'p'  => ProjectSchema::class,
+					'pm' => ProjectMemberSchema::class,
+				],
+			];
 			$count = 0;
-			foreach ($this->storage->value($query, []) as $count) {
+			foreach ($this->storage->value($query, $params) as $count) {
 				break;
 			}
 			self::assertSame(2, $count);
