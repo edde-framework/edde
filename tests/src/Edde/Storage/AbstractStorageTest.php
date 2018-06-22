@@ -443,16 +443,16 @@
 				FROM 
 					u:schema u:delimit, 
 					p:schema p, 
-					pm:schema pm
+					up:schema pu:delimit
 				WHERE
-					pm.project = p.uuid AND
-					pm.user = u.uuid
+					pu.project = p.uuid AND
+					pu.user = u.uuid
 			';
 			$params = [
 				'$query' => [
 					'u'  => UserSchema::class,
 					'p'  => ProjectSchema::class,
-					'pm' => ProjectMemberSchema::class,
+					'up' => ProjectMemberSchema::class,
 				],
 			];
 			$count = 0;

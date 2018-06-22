@@ -12,6 +12,7 @@
 	use Throwable;
 	use function preg_match_all;
 	use function str_replace;
+	use function uasort;
 
 	abstract class AbstractStorage extends AbstractTransaction implements IStorage {
 		use ConfigService;
@@ -56,15 +57,21 @@
 		public function query(string $query, array $schemas): string {
 			$matches = null;
 			preg_match_all('~([a-zA-Z0-9]+):schema~', $query, $matches);
-			foreach ($matches[1] as $index => $alias) {
-				if (isset($schemas[$alias]) === false) {
+			uasort($matches[0], function ($a, $b) {
+				return strlen($b) <=> strlen($a);
+			});
+			foreach ($matches[0] as $index => $replace) {
+				if (isset($schemas[$alias = $matches[1][$index]]) === false) {
 					throw new StorageException(sprintf('Cannot translate unknown alias [%s] to schema name.', $alias));
 				}
-				$query = str_replace($matches[0][$index], $this->delimit($this->schemaManager->getSchema($schemas[$alias])->getRealName()), $query);
+				$query = str_replace($replace, $this->delimit($this->schemaManager->getSchema($schemas[$alias])->getRealName()), $query);
 			}
 			preg_match_all('~([a-zA-Z0-9]+):delimit~', $query, $matches);
-			foreach ($matches[1] as $index => $alias) {
-				$query = str_replace($matches[0][$index], $this->delimit($matches[1][$index]), $query);
+			uasort($matches[0], function ($a, $b) {
+				return strlen($b) <=> strlen($a);
+			});
+			foreach ($matches[0] as $index => $replace) {
+				$query = str_replace($replace, $this->delimit($matches[1][$index]), $query);
 			}
 			return $query;
 		}

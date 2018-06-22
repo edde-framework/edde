@@ -14,18 +14,7 @@ services:
                 networks:
                     - edde-network
 
-#        neo4j:
-#                image: neo4j:3.3-enterprise
-#                environment:
-#                    - NEO4J_AUTH=neo4j/eeQFXk7kkqSm
-#                    - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
-#                ports:
-#                    - "7474:7474"
-#                    - "7687:7687"
-#                networks:
-#                    - edde-network
-
-        postgres:
+        edde-postgres:
             image: postgres:latest
             environment:
                 - POSTGRES_USER=edde
@@ -35,7 +24,7 @@ services:
             networks:
                 - edde-network
 
-        mysql:
+        edde-mysql:
             image: mariadb:latest
             environment:
                 - MYSQL_ROOT_PASSWORD=enPUxu8SRctV
