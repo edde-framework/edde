@@ -47,7 +47,9 @@
 
 		/** @inheritdoc */
 		public function schema(string $name, string $query, array $params = []): Generator {
-			return $this->hydrate($query, $this->hydratorManager->schema($name), $params);
+			foreach ($this->hydrate($query, $this->hydratorManager->schema($name), $params) as $item) {
+				yield new Entity($name, $item);
+			}
 		}
 
 		/** @inheritdoc */

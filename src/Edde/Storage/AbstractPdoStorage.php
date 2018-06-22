@@ -8,8 +8,6 @@
 	use PDO;
 	use PDOException;
 	use Throwable;
-	use function key;
-	use function reset;
 	use function vsprintf;
 
 	abstract class AbstractPdoStorage extends AbstractStorage {
@@ -83,17 +81,17 @@
 
 		/** @inheritdoc */
 		public function creates(array $names): IStorage {
-			$this->transaction(function () use ($names) {
-				foreach ($names as $name) {
-					$this->create($name);
-				}
-			});
+			foreach ($names as $name) {
+				$this->create($name);
+			}
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function insert(string $name, array $insert, IHydrator $hydrator = null): array {
+		public function insert(IEntity $entity, IHydrator $hydrator = null): IEntity {
 			try {
+				$name = $entity->getSchema();
+				$insert = $entity->toArray();
 				$hydrator = $hydrator ?: $this->hydratorManager->schema($name);
 				$schema = $this->schemaManager->getSchema($name);
 				$columns = [];
@@ -103,7 +101,7 @@
 					$params[sha1($k)] = $v;
 				}
 				if (empty($params)) {
-					return [];
+					throw new StorageException(sprintf('Cannot insert entity [%s] with no data.', $name));
 				}
 				$this->fetch(
 					vsprintf('INSERT INTO %s (%s) VALUES (:%s)', [
@@ -113,7 +111,7 @@
 					]),
 					$params
 				);
-				return $hydrator->output($name, $source);
+				return new Entity($name, $hydrator->output($name, $source));
 			} catch (Throwable $exception) {
 				/** @noinspection PhpUnhandledExceptionInspection */
 				throw $this->exception($exception);
@@ -121,18 +119,18 @@
 		}
 
 		/** @inheritdoc */
-		public function inserts(string $name, iterable $inserts, IHydrator $hydrator = null): IStorage {
-			$this->transaction(function () use ($name, $inserts, $hydrator) {
-				foreach ($inserts as $insert) {
-					$this->insert($name, $insert, $hydrator);
-				}
-			});
+		public function inserts(iterable $inserts, IHydrator $hydrator = null): IStorage {
+			foreach ($inserts as $insert) {
+				$this->insert($insert, $hydrator);
+			}
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function update(string $name, array $update, IHydrator $hydrator = null): array {
+		public function update(IEntity $entity, IHydrator $hydrator = null): IEntity {
 			try {
+				$name = $entity->getSchema();
+				$update = $entity->toArray();
 				$hydrator = $hydrator ?: $this->hydratorManager->schema($name);
 				$schema = $this->schemaManager->getSchema($name);
 				$primary = $schema->getPrimary();
@@ -154,7 +152,7 @@
 					]),
 					$params
 				);
-				return $hydrator->output($name, $source);
+				return new Entity($name, $hydrator->output($name, $source));
 			} catch (Throwable $exception) {
 				/** @noinspection PhpUnhandledExceptionInspection */
 				throw $this->exception($exception);
@@ -162,12 +160,14 @@
 		}
 
 		/** @inheritdoc */
-		public function save(string $name, array $save, IHydrator $hydrator = null): array {
+		public function save(IEntity $entity, IHydrator $hydrator = null): IEntity {
 			try {
+				$name = $entity->getSchema();
+				$save = $entity->toArray();
 				$schema = $this->schemaManager->getSchema($name);
 				$primary = $schema->getPrimary();
 				if (isset($save[$primaryName = $primary->getName()]) === false) {
-					return $this->insert($name, $save, $hydrator);
+					return $this->insert($entity, $hydrator);
 				}
 				$params = [
 					$this->delimit($primaryName),
@@ -179,9 +179,9 @@
 					break;
 				}
 				if ($count === 0) {
-					return $this->insert($name, $save, $hydrator);
+					return $this->insert($entity, $hydrator);
 				}
-				return $this->update($name, $save, $hydrator);
+				return $this->update($entity, $hydrator);
 			} catch (Throwable $exception) {
 				/** @noinspection PhpUnhandledExceptionInspection */
 				throw $this->exception($exception);
@@ -189,10 +189,10 @@
 		}
 
 		/** @inheritdoc */
-		public function attach(array $source, array $target, string $relation): array {
+		public function attach(IEntity $source, IEntity $target, string $relation): IEntity {
 			($relationSchema = $this->schemaManager->getSchema($relation))->checkRelation(
-				$sourceSchema = $this->schemaManager->getSchema(key($source)),
-				$targetSchema = $this->schemaManager->getSchema(key($target))
+				$sourceSchema = $this->schemaManager->getSchema($source->getSchema()),
+				$targetSchema = $this->schemaManager->getSchema($target->getSchema())
 			);
 			$query = vsprintf('SELECT (SELECT COUNT(*) FROM %s WHERE %s = :source LIMIT 1)+(SELECT COUNT(*) FROM %s WHERE %s = :target LIMIT 1)', [
 				$this->delimit($sourceSchema->getRealName()),
@@ -200,8 +200,8 @@
 				$this->delimit($targetSchema->getRealName()),
 				$this->delimit($targetSchema->getPrimary()->getName()),
 			]);
-			$sourceUuid = reset($source);
-			$targetUuid = reset($target);
+			$sourceUuid = $source[$sourceSchema->getPrimary()->getName()];
+			$targetUuid = $target[$targetSchema->getPrimary()->getName()];
 			$item = 0;
 			foreach ($this->value($query, ['source' => $sourceUuid, 'target' => $targetUuid]) as $item) {
 				break;
@@ -209,26 +209,26 @@
 			if ($item !== 2) {
 				throw new StorageException(sprintf('Source [%s] uuid [%s], target [%s] uuid [%s] or both are not saved.', $sourceSchema->getName(), $sourceUuid, $targetSchema->getName(), $targetUuid));
 			}
-			return [
+			return new Entity($relation, [
 				$relationSchema->getSource()->getName() => $sourceUuid,
 				$relationSchema->getTarget()->getName() => $targetUuid,
-			];
+			]);
 		}
 
 		/** @inheritdoc */
-		public function link(array $source, array $target, string $relation): array {
+		public function link(IEntity $source, IEntity $target, string $relation): IEntity {
 			$this->unlink($source, $target, $relation);
 			return $this->attach($source, $target, $relation);
 		}
 
 		/** @inheritdoc */
-		public function unlink(array $source, array $target, string $relation): IStorage {
+		public function unlink(IEntity $source, IEntity $target, string $relation): IStorage {
 			($relationSchema = $this->schemaManager->getSchema($relation))->checkRelation(
-				$sourceSchema = $this->schemaManager->getSchema(key($source)),
-				$targetSchema = $this->schemaManager->getSchema(key($target))
+				$sourceSchema = $this->schemaManager->getSchema($source->getSchema()),
+				$targetSchema = $this->schemaManager->getSchema($target->getSchema())
 			);
-			$sourceUuid = reset($source);
-			$targetUuid = reset($target);
+			$sourceUuid = $source[$sourceSchema->getPrimary()->getName()];
+			$targetUuid = $target[$targetSchema->getPrimary()->getName()];
 			$this->fetch(
 				vsprintf('DELETE FROM %s WHERE %s = :a AND %s = :b', [
 					$this->delimit($relationSchema->getRealName()),
@@ -244,17 +244,17 @@
 		}
 
 		/** @inheritdoc */
-		public function load(string $name, string $uuid): array {
+		public function load(string $name, string $uuid): IEntity {
 			$schema = $this->schemaManager->getSchema($name);
-			foreach ($this->schema($name, sprintf('SELECT * FROM %s WHERE %s = :uuid', $this->delimit($schema->getRealName()), $schema->getPrimary()->getName()), ['uuid' => $uuid]) as $item) {
-				return $item;
+			foreach ($this->schema($name, sprintf('SELECT * FROM %s WHERE %s = :uuid', $this->delimit($schema->getRealName()), $schema->getPrimary()->getName()), ['uuid' => $uuid]) as $entity) {
+				return $entity;
 			}
 			throw new UnknownUuidException(sprintf('Requested unknown uuid [%s] of [%s].', $uuid, $name));
 		}
 
 		/** @inheritdoc */
-		public function delete(string $name, string $uuid): IStorage {
-			$schema = $this->schemaManager->getSchema($name);
+		public function delete(IEntity $entity): IStorage {
+			$schema = $this->schemaManager->getSchema($entity->getSchema());
 			$primary = $schema->getPrimary();
 			$this->fetch(
 				vsprintf('DELETE FROM %s WHERE %s = :primary', [
@@ -262,7 +262,7 @@
 					$this->delimit($primary->getName()),
 				]),
 				[
-					'primary' => $uuid,
+					'primary' => $entity->toArray()[$primary->getName()],
 				]
 			);
 			return $this;

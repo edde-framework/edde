@@ -5,7 +5,6 @@
 	use Edde\Hydrator\IHydrator;
 	use Edde\Schema\SchemaException;
 	use Edde\Transaction\ITransaction;
-	use Edde\Transaction\TransactionException;
 	use Generator;
 	use Throwable;
 
@@ -51,6 +50,8 @@
 		public function create(string $name): IStorage;
 
 		/**
+		 * create all the given schemas (out of transaction)
+		 *
 		 * @param array $names
 		 *
 		 * @return IStorage
@@ -93,7 +94,7 @@
 		 * @param string $query
 		 * @param array  $params
 		 *
-		 * @return Generator|array
+		 * @return Generator|IEntity[]
 		 *
 		 * @throws StorageException
 		 * @throws UnknownTableException
@@ -115,95 +116,90 @@
 		/**
 		 * insert a new item into storage ($name is schema name)
 		 *
-		 * @param string         $name
-		 * @param array          $insert
+		 * @param IEntity        $entity
 		 * @param IHydrator|null $hydrator
 		 *
-		 * @return array
+		 * @return IEntity
 		 *
 		 * @throws StorageException
 		 */
-		public function insert(string $name, array $insert, IHydrator $hydrator = null): array;
+		public function insert(IEntity $entity, IHydrator $hydrator = null): IEntity;
 
 		/**
-		 * insert multiple entities in a transaction
+		 * insert multiple entities (out of transaction)
 		 *
-		 * @param string         $name
-		 * @param iterable       $inserts
-		 * @param IHydrator|null $hydrator
+		 * @param iterable|IEntity[] $inserts
+		 * @param IHydrator|null     $hydrator
 		 *
 		 * @return IStorage
 		 *
 		 * @throws StorageException
-		 * @throws TransactionException
 		 */
-		public function inserts(string $name, iterable $inserts, IHydrator $hydrator = null): IStorage;
+		public function inserts(iterable $inserts, IHydrator $hydrator = null): IStorage;
 
 		/**
-		 * @param string         $name
-		 * @param array          $update
+		 * @param IEntity        $entity
 		 * @param IHydrator|null $hydrator
 		 *
-		 * @return array
+		 * @return IEntity
 		 *
 		 * @throws StorageException
 		 */
-		public function update(string $name, array $update, IHydrator $hydrator = null): array;
+		public function update(IEntity $entity, IHydrator $hydrator = null): IEntity;
 
 		/**
 		 * save the given item (upsert)
 		 *
-		 * @param string         $name
-		 * @param array          $save
+		 * @param IEntity        $entity
 		 * @param IHydrator|null $hydrator
 		 *
-		 * @return array
+		 * @return IEntity
 		 *
 		 * @throws StorageException
 		 */
-		public function save(string $name, array $save, IHydrator $hydrator = null): array;
+		public function save(IEntity $entity, IHydrator $hydrator = null): IEntity;
 
 		/**
 		 * create a new relation
 		 *
-		 * @param array  $source   exactly one key => value; (<schema name> => <uuid>)
-		 * @param array  $target   exactly one key => value; (<schema name> => <uuid>)
-		 * @param string $relation name of relation schema
+		 * @param IEntity $source   entity could contain just unique value
+		 * @param IEntity $target   entity could contain just unique value
+		 * @param string  $relation name of relation schema
 		 *
-		 * @return array relation (not saved yet)
+		 * @return IEntity relation (not saved yet)
 		 *
 		 * @throws StorageException
 		 * @throws SchemaException
 		 */
-		public function attach(array $source, array $target, string $relation): array;
+		public function attach(IEntity $source, IEntity $target, string $relation): IEntity;
 
 		/**
 		 * create a new 1:n relation
 		 *
-		 * @param array  $source   exactly one key => value; (<schema name> => <uuid>)
-		 * @param array  $target   exactly one key => value; (<schema name> => <uuid>)
-		 * @param string $relation name of relation schema
+		 * @param IEntity $source   entity could contain just unique value
+		 * @param IEntity $target   entity could contain just unique value
+		 * @param string  $relation name of relation schema
 		 *
-		 * @return array relation (not saved yet)
+		 * @return IEntity relation (not saved yet)
 		 *
 		 * @throws StorageException
 		 * @throws SchemaException
 		 */
-		public function link(array $source, array $target, string $relation): array;
+		public function link(IEntity $source, IEntity $target, string $relation): IEntity;
 
 		/**
 		 * remove all relations between the given schemas
 		 *
-		 * @param array  $source   exactly one key => value; (<schema name> => <uuid>)
-		 * @param array  $target   exactly one key => value; (<schema name> => <uuid>)
-		 * @param string $relation name of relation schema
+		 * @param IEntity $source   entity could contain just unique value
+		 * @param IEntity $target   entity could contain just unique value
+		 * @param string  $relation name of relation schema
 		 *
 		 * @return IStorage
 		 *
 		 * @throws StorageException
 		 * @throws SchemaException
 		 */
-		public function unlink(array $source, array $target, string $relation): IStorage;
+		public function unlink(IEntity $source, IEntity $target, string $relation): IStorage;
 
 		/**
 		 * load exactly one item or throw an exception
@@ -211,23 +207,22 @@
 		 * @param string $name
 		 * @param string $uuid
 		 *
-		 * @return array
+		 * @return IEntity
 		 *
 		 * @throws StorageException
 		 * @throws UnknownUuidException
 		 */
-		public function load(string $name, string $uuid): array;
+		public function load(string $name, string $uuid): IEntity;
 
 		/**
-		 * @param string $name
-		 * @param string $uuid
+		 * @param IEntity $entity
 		 *
 		 * @return IStorage
 		 *
 		 * @throws StorageException
 		 * @throws SchemaException
 		 */
-		public function delete(string $name, string $uuid): IStorage;
+		public function delete(IEntity $entity): IStorage;
 
 		/**
 		 * @param string $string
