@@ -3,11 +3,10 @@
 	namespace Edde\Filter;
 
 	use DateTime;
-	use stdClass;
 
 	class StampFilter extends AbstractFilter {
 		/** @inheritdoc */
-		public function input($value, ?stdClass $options = null) {
+		public function input($value, ?array $options = null) {
 			if (empty($value) === false) {
 				return $value;
 			}
@@ -15,7 +14,7 @@
 		}
 
 		/** @inheritdoc */
-		public function output($value, ?stdClass $options = null) {
+		public function output($value, ?array $options = null) {
 			return $value;
 		}
 	}

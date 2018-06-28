@@ -3,11 +3,10 @@
 	namespace Edde\Filter;
 
 	use DateTime;
-	use stdClass;
 
 	class DateTimeFilter extends AbstractFilter {
 		/** @inheritdoc */
-		public function input($value, ?stdClass $options = null) {
+		public function input($value, ?array $options = null) {
 			if ($value && $value instanceof DateTime === false) {
 				$value = new DateTime($value);
 			}
@@ -15,7 +14,7 @@
 		}
 
 		/** @inheritdoc */
-		public function output($value, ?stdClass $options = null) {
+		public function output($value, ?array $options = null) {
 			if ($value instanceof DateTime) {
 				return $value;
 			} else if ($value) {

@@ -12,6 +12,6 @@
 
 		/** @inheritdoc */
 		public function getContent() {
-			return file_get_contents('php://input');
+			return file_get_contents($this->content);
 		}
 	}

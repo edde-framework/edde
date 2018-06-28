@@ -2,16 +2,14 @@
 	declare(strict_types=1);
 	namespace Edde\Filter;
 
-	use stdClass;
-
 	class StringFilter extends AbstractFilter {
 		/** @inheritdoc */
-		public function input($value, ?stdClass $options = null) {
+		public function input($value, ?array $options = null) {
 			return (string)$value;
 		}
 
 		/** @inheritdoc */
-		public function output($value, ?stdClass $options = null) {
+		public function output($value, ?array $options = null) {
 			return (string)$value;
 		}
 	}

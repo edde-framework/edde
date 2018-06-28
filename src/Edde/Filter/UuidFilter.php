@@ -3,21 +3,20 @@
 	namespace Edde\Filter;
 
 	use Edde\Service\Security\RandomService;
-	use stdClass;
 
 	class UuidFilter extends AbstractFilter {
 		use RandomService;
 
 		/** @inheritdoc */
-		public function input($value, ?stdClass $options = null) {
+		public function input($value, ?array $options = null) {
 			if (empty($value) === false) {
 				return $value;
 			}
-			return $this->randomService->uuid();
+			return $this->randomService->uuid($options['seed'] ?? null);
 		}
 
 		/** @inheritdoc */
-		public function output($value, ?stdClass $options = null) {
+		public function output($value, ?array $options = null) {
 			return $value;
 		}
 	}
