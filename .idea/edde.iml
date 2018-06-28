@@ -5,7 +5,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/tests/src" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/.coverage" />
-      <excludeFolder url="file://$MODULE_DIR$/.docker" />
       <excludeFolder url="file://$MODULE_DIR$/bin" />
       <excludeFolder url="file://$MODULE_DIR$/lib/blackfire/php-sdk" />
       <excludeFolder url="file://$MODULE_DIR$/lib/composer" />
