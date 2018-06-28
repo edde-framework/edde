@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Runtime;
 
-	use Edde\Edde;
+	use Edde\SimpleObject;
 
-	class Runtime extends Edde implements IRuntime {
+	class Runtime extends SimpleObject implements IRuntime {
 		/** @var array */
 		protected $args;
 

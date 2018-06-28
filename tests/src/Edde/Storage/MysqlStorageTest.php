@@ -4,6 +4,7 @@
 
 	use Edde\Container\ContainerException;
 	use Edde\Factory\InstanceFactory;
+	use Edde\Factory\InterfaceFactory;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Container\Container;
 	use Edde\Service\Storage\Storage;
@@ -30,6 +31,6 @@
 		 */
 		protected function setUp() {
 			parent::setUp();
-			$this->container->registerFactory(new InstanceFactory(IStorage::class, MysqlStorage::class));
+			$this->container->registerFactory(new InterfaceFactory(IStorage::class, MysqlStorage::class));
 		}
 	}

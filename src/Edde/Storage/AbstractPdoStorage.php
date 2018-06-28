@@ -100,9 +100,6 @@
 					$columns[sha1($k)] = $this->delimit($k);
 					$params[sha1($k)] = $v;
 				}
-				if (empty($params)) {
-					throw new StorageException(sprintf('Cannot insert entity [%s] with no data.', $name));
-				}
 				$this->fetch(
 					vsprintf('INSERT INTO %s (%s) VALUES (:%s)', [
 						$this->delimit($schema->getRealName()),

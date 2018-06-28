@@ -13,7 +13,6 @@
 	use Edde\Factory\ClassFactory;
 	use Edde\Factory\ExceptionFactory;
 	use Edde\Factory\IFactory;
-	use Edde\Factory\InstanceFactory;
 	use Edde\Factory\InterfaceFactory;
 	use Edde\Factory\LinkFactory;
 	use Edde\Filter\FilterManager;
@@ -83,6 +82,13 @@
 		}
 
 		/**
+		 * drop current instance of container (in a static context)
+		 */
+		static public function dropContainer(): void {
+			self::$instance = null;
+		}
+
+		/**
 		 * @param array $factories
 		 *
 		 * @return IFactory[]
@@ -95,9 +101,6 @@
 				$current = null;
 				if ($factory instanceof stdClass) {
 					switch ($factory->type) {
-						case 'instance':
-							$current = new InstanceFactory($name, $factory->class, $factory->params, null, $factory->cloneable);
-							break;
 						case 'exception':
 							$current = new ExceptionFactory($name, $factory->class, $factory->message);
 							break;
@@ -117,24 +120,6 @@
 				$instances[$name] = $current;
 			}
 			return $instances;
-		}
-
-		/**
-		 * create instance factory
-		 *
-		 * @param string $class
-		 * @param array  $params
-		 * @param bool   $cloneable
-		 *
-		 * @return stdClass
-		 */
-		static public function instance(string $class, array $params, bool $cloneable = false): stdClass {
-			return (object)[
-				'type'      => __FUNCTION__,
-				'class'     => $class,
-				'params'    => $params,
-				'cloneable' => $cloneable,
-			];
 		}
 
 		/**

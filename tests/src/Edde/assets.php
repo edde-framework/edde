@@ -99,5 +99,9 @@
 		public function index(): float;
 	}
 
+	interface ShittyTypeSchema extends UuidSchema {
+		public function item($type = 'this-type-does-not-exists');
+	}
+
 	interface VoidSchema extends UuidSchema {
 	}

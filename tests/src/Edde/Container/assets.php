@@ -4,17 +4,6 @@
 
 	use Edde\Edde;
 
-	/**
-	 * just fake function
-	 *
-	 * @param FooObject $fooObject
-	 *
-	 * @return FooObject
-	 */
-	function foo(FooObject $fooObject): FooObject {
-		return $fooObject;
-	}
-
 	class FooObject extends Edde {
 		public $foo = 'foo';
 

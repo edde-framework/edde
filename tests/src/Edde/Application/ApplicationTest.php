@@ -17,6 +17,9 @@
 		use Application;
 		use LogService;
 
+		/**
+		 * @throws ApplicationException
+		 */
 		public function testRunException() {
 			$this->expectException(RouterException::class);
 			$this->expectExceptionMessage('Cannot handle current request.');
@@ -29,6 +32,7 @@
 		}
 
 		/**
+		 * @throws ApplicationException
 		 * @throws ContainerException
 		 */
 		public function testRun() {
@@ -47,6 +51,7 @@
 		}
 
 		/**
+		 * @throws ApplicationException
 		 * @throws ContainerException
 		 */
 		public function testRunResponse() {

@@ -3,11 +3,10 @@
 	namespace Edde\Container;
 
 	use Edde\EddeException;
-	use Edde\Factory\CallbackFactory;
 	use Edde\Factory\ExceptionFactory;
 	use Edde\Factory\InstanceFactory;
+	use Edde\Factory\InterfaceFactory;
 	use Edde\Factory\LinkFactory;
-	use Edde\Factory\ProxyFactory;
 	use Edde\Service\Container\Container;
 	use Edde\Test\AutowireDependencyObject;
 	use Edde\Test\BarObject;
@@ -19,6 +18,34 @@
 
 	class ContainerTest extends TestCase {
 		use Container;
+
+		public function testCanHandle() {
+			self::assertFalse($this->container->canHandle('nope'));
+			self::assertTrue($this->container->canHandle(FooObject::class));
+			self::assertTrue($this->container->canHandle(IContainer::class));
+		}
+
+		public function testInvalidFactory() {
+			$this->expectException(ContainerException::class);
+			$this->expectExceptionMessage('Unsupported factory definition [integer; prd].');
+			ContainerFactory::createFactories([
+				'prd',
+			]);
+		}
+
+		public function testDropContainer() {
+			$this->expectException(ContainerException::class);
+			$this->expectExceptionMessage('No Container is available; please use some factory method of [Edde\Container\ContainerFactory] to create a container.');
+			ContainerFactory::dropContainer();
+			ContainerFactory::getContainer();
+		}
+
+		/**
+		 * @throws ContainerException
+		 */
+		public function testContainerFactoryInstance() {
+			self::assertSame($this->container, ContainerFactory::getContainer());
+		}
 
 		/**
 		 * @throws ContainerException
@@ -82,14 +109,6 @@
 		/**
 		 * @throws ContainerException
 		 */
-		public function testInstanceCloneFactory() {
-			self::assertInstanceOf(FooObject::class, $fooObject = $this->container->create('instance-clone'));
-			self::assertNotSame($fooObject, $this->container->create('instance-clone'));
-		}
-
-		/**
-		 * @throws ContainerException
-		 */
 		public function testInstancedFactory() {
 			self::assertInstanceOf(FooObject::class, $fooObject = $this->container->create('instanced'));
 			self::assertSame($fooObject, $this->container->create('instanced'));
@@ -134,9 +153,8 @@
 		 */
 		protected function setUp() {
 			parent::setUp();
-			$this->container->registerFactory(new InstanceFactory('instance', FooObject::class));
-			$this->container->registerFactory(new InstanceFactory('instanced', FooObject::class, [], new FooObject()));
-			$this->container->registerFactory(new InstanceFactory('instance-clone', FooObject::class, [], null, true));
+			$this->container->registerFactory(new InterfaceFactory('instance', FooObject::class));
+			$this->container->registerFactory(new InterfaceFactory('instanced', FooObject::class));
 			$this->container->registerFactory(new LinkFactory('get-moo', 'instance'));
 			$this->container->registerFactory(new ExceptionFactory('boom', EddeException::class, 'kaboom'));
 		}

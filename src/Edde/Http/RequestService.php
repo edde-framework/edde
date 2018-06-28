@@ -2,9 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Http;
 
+	use Edde\Content\Content;
 	use Edde\Content\IContent;
 	use Edde\Content\InputContent;
-	use Edde\Content\PostContent;
 	use Edde\Edde;
 	use Edde\Url\IUrl;
 	use Edde\Url\Url;
@@ -25,11 +25,12 @@
 			);
 			$input = fopen('php://input', 'rb');
 			$content = null;
+			$headers = $this->request->getHeaders();
+			$mime = $headers->get('Content-Type', 'application/octet-stream');
 			if (empty($_POST) === false) {
-				$content = new PostContent($_POST);
+				$content = new Content($_POST, $mime);
 			} else if (fgetc($input) !== false) {
-				$headers = $this->request->getHeaders();
-				$content = new InputContent($headers->get('Content-Type', 'application/octet-stream'));
+				$content = new InputContent($mime);
 			}
 			fclose($input);
 			$this->request->setContent($content);

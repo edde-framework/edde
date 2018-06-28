@@ -64,6 +64,8 @@
 				],
 				$this->configService->require('foo')->toObject()
 			);
+			self::assertSame($this->configService->require('foo'), $this->configService->require('foo'));
+			self::assertSame('foo', $this->configService->require('foo')->getName());
 			self::assertEquals(
 				(object)[
 					'integer' => 42,

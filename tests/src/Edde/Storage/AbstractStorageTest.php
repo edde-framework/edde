@@ -9,6 +9,7 @@
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
 	use Edde\TestCase;
+	use Edde\Transaction\TransactionException;
 	use Edde\Validator\ValidatorException;
 	use IssueProjectSchema;
 	use IssueSchema;
@@ -19,6 +20,8 @@
 	use ProjectOrganizationSchema;
 	use ProjectSchema;
 	use ReflectionException;
+	use ShittyTypeSchema;
+	use Throwable;
 	use ToBeOrdered;
 	use UserSchema;
 	use VoidSchema;
@@ -30,8 +33,13 @@
 		use Storage;
 		use SchemaManager;
 
+		public function testPrepareDatabase() {
+		}
+
 		/**
 		 * @throws StorageException
+		 *
+		 * @depends testPrepareDatabase
 		 */
 		public function testCreateSchema() {
 			$this->storage->creates([
@@ -49,9 +57,27 @@
 			self::assertTrue(true, 'everything is ok');
 		}
 
+		public function testInvalidSchemaType() {
+			$this->expectException(StorageException::class);
+			$this->expectExceptionMessage('Unknown type [this-type-does-not-exists]');
+			$this->storage->create(ShittyTypeSchema::class);
+		}
+
+		/**
+		 * @throws StorageException
+		 *
+		 * @depends testCreateSchema
+		 */
+		public function testDuplicateSchema() {
+			$this->expectException(DuplicateTableException::class);
+			$this->storage->create(LabelSchema::class);
+		}
+
 		/**
 		 * @throws StorageException
 		 * @throws UnknownTableException
+		 *
+		 * @depends testDuplicateSchema
 		 */
 		public function testCollectionSimpleValue() {
 			$this->storage->inserts([
@@ -117,16 +143,18 @@
 		}
 
 		/**
-		 * @throws StorageException
+		 * @throws TransactionException
 		 */
 		public function testInsert() {
-			$insert = $this->storage->insert(new Entity(LabelSchema::class, [
-				'name' => 'this entity is new',
-			]));
-			self::assertArrayHasKey('uuid', $insert);
-			self::assertArrayHasKey('system', $insert);
-			self::assertNotNull($insert['uuid']);
-			self::assertFalse($insert['system']);
+			$this->storage->transaction(function () {
+				$insert = $this->storage->insert(new Entity(LabelSchema::class, [
+					'name' => 'this entity is new',
+				]));
+				self::assertArrayHasKey('uuid', $insert);
+				self::assertArrayHasKey('system', $insert);
+				self::assertNotNull($insert['uuid']);
+				self::assertFalse($insert['system']);
+			});
 		}
 
 		/**
@@ -154,6 +182,26 @@
 					'name' => 'unique',
 				]),
 			]);
+		}
+
+		/**
+		 * @throws Throwable
+		 */
+		public function testSaveUnique() {
+			$this->expectException(DuplicateEntryException::class);
+			try {
+				$this->storage->transaction(function () {
+					$this->storage->save(new Entity(LabelSchema::class, [
+						'name'   => 'unique2',
+						'system' => true,
+					]));
+					$this->storage->save(new Entity(LabelSchema::class, [
+						'name' => 'unique2',
+					]));
+				});
+			} catch (Throwable $exception) {
+				throw $exception->getPrevious();
+			}
 		}
 
 		/**
@@ -480,6 +528,7 @@
 				IssueSchema::class,
 				IssueProjectSchema::class,
 				ProjectLabelSchema::class,
+				ShittyTypeSchema::class,
 			]);
 		}
 	}
