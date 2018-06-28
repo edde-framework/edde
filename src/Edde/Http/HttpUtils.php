@@ -164,12 +164,9 @@
 			$headers = new Headers();
 			if (isset($headerList[0])) {
 				try {
-					$headers->add('http-request', $this->requestHeader($headerList[0]));
+					$headers->add('http-response', $this->responseHeader($headerList[0]));
 				} catch (HttpException $e) {
-					try {
-						$headers->add('http-response', $this->responseHeader($headerList[0]));
-					} catch (HttpException $e) {
-					}
+					$headers->add('http-request', $headerList[0]);
 				}
 			}
 			foreach ($headerList as $header) {
@@ -195,14 +192,6 @@
 				$headers->add($name, $value);
 			}
 			return $headers;
-		}
-
-		/** @inheritdoc */
-		public function requestHeader(string $http): IRequestHeader {
-			if ($match = $this->stringUtils->match($http, '~(?<method>[A-Z]+)\s+(?<path>.*?)\s+HTTP/(?<version>[0-9.]+)~', true)) {
-				return new RequestHeader($match['method'], $match['path'], $match['version']);
-			}
-			throw new HttpException(sprintf('Cannot parse http request header [%s].', $http));
 		}
 
 		/** @inheritdoc */

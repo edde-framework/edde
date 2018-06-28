@@ -60,17 +60,6 @@
 		public function headers(array $headerList): IHeaders;
 
 		/**
-		 * parse http request header
-		 *
-		 * @param string $http
-		 *
-		 * @return IRequestHeader
-		 *
-		 * @throws HttpException
-		 */
-		public function requestHeader(string $http): IRequestHeader;
-
-		/**
 		 * parse http response header
 		 *
 		 * @param string $http

@@ -4,7 +4,6 @@
 
 	use Edde\Http\ContentType;
 	use Edde\Http\HttpException;
-	use Edde\Http\RequestHeader;
 	use Edde\Service\Http\HttpUtils;
 	use Edde\TestCase;
 	use Edde\Url\Url;
@@ -45,19 +44,6 @@
 		/**
 		 * @throws HttpException
 		 */
-		public function testRequestHeader() {
-			$requestHeader = $this->httpUtils->requestHeader($header = 'GET /edde-framework/edde-framework HTTP/1.1');
-			self::assertEquals([
-				'method'  => 'GET',
-				'path'    => '/edde-framework/edde-framework',
-				'version' => '1.1',
-			], $requestHeader->toArray());
-			self::assertSame($header, (string)$requestHeader);
-		}
-
-		/**
-		 * @throws HttpException
-		 */
 		public function testResponseHeader() {
 			$responseHeader = $this->httpUtils->responseHeader($header = 'HTTP/1.1 301 Moved Permanently');
 			self::assertEquals([
@@ -85,7 +71,7 @@ Referer: https://github.com/edde-framework/edde-framework
 Accept-Encoding: gzip, deflate, br
 Accept-Language: cs,en;q=0.8');
 			self::assertEquals([
-				'http-request'              => new RequestHeader('GET', '/edde-framework/edde-framework', '1.1'),
+				'http-request'              => 'GET /edde-framework/edde-framework HTTP/1.1',
 				'Host'                      => Url::create('github.com'),
 				'Connection'                => 'keep-alive',
 				'Cache-Control'             => 'max-age=0',
