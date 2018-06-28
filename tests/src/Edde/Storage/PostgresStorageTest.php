@@ -3,7 +3,7 @@
 	namespace Edde\Storage;
 
 	use Edde\Container\ContainerException;
-	use Edde\Container\Factory\InterfaceFactory;
+	use Edde\Factory\InterfaceFactory;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Hydrator\HydratorManager;
 	use Edde\Service\Schema\SchemaManager;

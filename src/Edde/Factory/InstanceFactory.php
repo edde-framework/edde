@@ -1,10 +1,8 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Container\Factory;
+	namespace Edde\Factory;
 
 	use Edde\Container\IContainer;
-	use Edde\Container\IReflection;
-	use Edde\Container\Reflection;
 
 	/**
 	 * This factory will create singleton instance of the given class.

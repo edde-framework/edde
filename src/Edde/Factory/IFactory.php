@@ -1,6 +1,9 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Container;
+	namespace Edde\Factory;
+
+	use Edde\Container\ContainerException;
+	use Edde\Container\IContainer;
 
 	/**
 	 * Factory is general way how to build a dependency with the final set of parameters/dependencies.

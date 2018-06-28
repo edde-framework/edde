@@ -4,6 +4,8 @@
 
 	use Edde\Configurable\IConfigurable;
 	use Edde\Configurable\IConfigurator;
+	use Edde\Factory\IFactory;
+	use Edde\Factory\IReflection;
 
 	/**
 	 * Implementation of Dependency Injection Container.

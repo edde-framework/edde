@@ -1,10 +1,10 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Container;
+	namespace Edde\Factory;
 
-	use Edde\Edde;
+	use Edde\SimpleObject;
 
-	class Parameter extends Edde implements IParameter {
+	class Parameter extends SimpleObject implements IParameter {
 		/** @var string */
 		protected $name;
 		/** @var bool */

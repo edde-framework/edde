@@ -1,11 +1,9 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Container\Factory;
+	namespace Edde\Factory;
 
 	use Edde\Container\ContainerException;
 	use Edde\Container\IContainer;
-	use Edde\Container\IFactory;
-	use Edde\Container\IReflection;
 	use Edde\Edde;
 
 	/**

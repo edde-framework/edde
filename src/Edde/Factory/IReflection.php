@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Container;
+	namespace Edde\Factory;
 
 	/**
 	 * Container dependency reflection: holds mandatory parameters description, inject

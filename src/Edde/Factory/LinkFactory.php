@@ -1,11 +1,8 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Container\Factory;
+	namespace Edde\Factory;
 
 	use Edde\Container\IContainer;
-	use Edde\Container\IFactory;
-	use Edde\Container\IReflection;
-	use Edde\Container\Reflection;
 
 	/**
 	 * Translate the given factory into another one.

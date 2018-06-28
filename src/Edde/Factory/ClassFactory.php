@@ -1,17 +1,24 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Container\Factory;
+	namespace Edde\Factory;
 
-	use Edde\Container\ContainerException;
 	use Edde\Container\IAutowire;
 	use Edde\Container\IContainer;
-	use Edde\Container\IReflection;
-	use Edde\Container\Parameter;
-	use Edde\Container\Reflection;
 	use ReflectionClass;
 	use ReflectionFunction;
 	use ReflectionMethod;
 
+	/**
+	 * A bus full of Nuns falls of a cliff and they all die.
+	 * They arrive at the gates of heaven and meet St. Peter. St. Peter says to them "Sisters, welcome to Heaven. In a moment I will let you all though the pearly gates, but before I may do that, I must ask each of you a single question. Please form a single-file line." And they do so.
+	 * St. Peter turns to the first Nun in the line and asks her "Sister, have you ever touched a penis?"
+	 * The Sister Responds "Well... there was this one time... that I kinda sorta... touched one with the tip of my pinky finger..."
+	 * St. Peter says "Alright Sister, now dip the tip of your pinky finger in the Holy Water, and you may be admitted." and she did so.
+	 * St. Peter now turns to the second nun and says "Sister, have you ever touched a penis?" "Well.... There was this one time... that I held one for a moment..."
+	 * "Alright Sister, now just wash your hands in the Holy Water, and you may be admitted" and she does so.
+	 * Now at this, there is a noise, a jostling in the line. It seems that one nun is trying to cut in front of another! St. Peter sees this and asks the Nun "Sister Susan, what is this? There is no rush!"
+	 * Sister Susan responds "Well if I'm going to have to gargle this stuff, I'd rather do it before Sister Mary sticks her ass in it!"
+	 */
 	class ClassFactory extends AbstractFactory {
 		/** @var IReflection[] */
 		static protected $reflectionCache = [];
@@ -66,19 +73,19 @@
 		 *
 		 * @return array
 		 *
-		 * @throws ContainerException
+		 * @throws FactoryException
 		 */
 		protected function getParams(ReflectionClass $reflectionClass, ReflectionMethod $reflectionMethod, string $method) {
 			$params = [];
 			if (strlen($name = $reflectionMethod->getName()) > strlen($method) && strpos($name, $method, 0) === 0) {
 				if ($reflectionMethod->isPublic() === false) {
-					throw new ContainerException(sprintf('Method [%s::%s()] must be public.', $reflectionClass->getName(), $reflectionMethod->getName()));
+					throw new FactoryException(sprintf('Method [%s::%s()] must be public.', $reflectionClass->getName(), $reflectionMethod->getName()));
 				}
 				foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
 					if ($reflectionClass->hasProperty($name = $reflectionParameter->getName()) === false) {
-						throw new ContainerException(sprintf('Class [%s] must have property [$%s] of the same name as parameter in method [%s::%s(..., %s$%s, ...)].', $reflectionClass->getName(), $name, $reflectionClass->getName(), $reflectionMethod->getName(), ($class = $reflectionParameter->getClass()) ? $class->getName() . ' ' : null, $name));
+						throw new FactoryException(sprintf('Class [%s] must have property [$%s] of the same name as parameter in method [%s::%s(..., %s$%s, ...)].', $reflectionClass->getName(), $name, $reflectionClass->getName(), $reflectionMethod->getName(), ($class = $reflectionParameter->getClass()) ? $class->getName() . ' ' : null, $name));
 					} else if (($class = $reflectionParameter->getClass()) === null) {
-						throw new ContainerException(sprintf('Class [%s] must have property [$%s] with class type hint in method [%s::%s(..., %s$%s, ...)].', $reflectionClass->getName(), $name, $reflectionClass->getName(), $reflectionMethod->getName(), ($class = $reflectionParameter->getClass()) ? $class->getName() . ' ' : null, $name));
+						throw new FactoryException(sprintf('Class [%s] must have property [$%s] with class type hint in method [%s::%s(..., %s$%s, ...)].', $reflectionClass->getName(), $name, $reflectionClass->getName(), $reflectionMethod->getName(), ($class = $reflectionParameter->getClass()) ? $class->getName() . ' ' : null, $name));
 					}
 					$reflectionProperty = $reflectionClass->getProperty($name);
 					$reflectionProperty->setAccessible(true);

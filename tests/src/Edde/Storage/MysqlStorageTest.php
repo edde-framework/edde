@@ -3,7 +3,7 @@
 	namespace Edde\Storage;
 
 	use Edde\Container\ContainerException;
-	use Edde\Container\Factory\InstanceFactory;
+	use Edde\Factory\InstanceFactory;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Container\Container;
 	use Edde\Service\Storage\Storage;

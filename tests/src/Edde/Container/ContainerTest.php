@@ -2,12 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Container;
 
-	use Edde\Container\Factory\CallbackFactory;
-	use Edde\Container\Factory\ExceptionFactory;
-	use Edde\Container\Factory\InstanceFactory;
-	use Edde\Container\Factory\LinkFactory;
-	use Edde\Container\Factory\ProxyFactory;
 	use Edde\EddeException;
+	use Edde\Factory\CallbackFactory;
+	use Edde\Factory\ExceptionFactory;
+	use Edde\Factory\InstanceFactory;
+	use Edde\Factory\LinkFactory;
+	use Edde\Factory\ProxyFactory;
 	use Edde\Service\Container\Container;
 	use Edde\Test\AutowireDependencyObject;
 	use Edde\Test\BarObject;

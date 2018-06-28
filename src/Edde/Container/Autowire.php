@@ -4,6 +4,7 @@
 
 	use Closure;
 	use Edde\Configurable\IConfigurable;
+	use Edde\Factory\IParameter;
 	use Edde\ObjectException;
 
 	trait Autowire {

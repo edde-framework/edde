@@ -2,6 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Container;
 
+	use Edde\Factory\IParameter;
+
 	/**
 	 * This is a formal interface for classes supporting autowiring. The specification
 	 * forces container to respect this interface, thus inject all dependencies based on

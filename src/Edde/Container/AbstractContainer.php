@@ -4,6 +4,7 @@
 
 	use Edde\Configurable\IConfigurator;
 	use Edde\Edde;
+	use Edde\Factory\IFactory;
 
 	abstract class AbstractContainer extends Edde implements IContainer {
 		/** @var IFactory[] */

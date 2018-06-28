@@ -1,9 +1,8 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Container\Factory;
+	namespace Edde\Factory;
 
 	use Edde\Container\IContainer;
-	use Edde\Container\IReflection;
 
 	/**
 	 * A young guy from Nebraska moves to Florida and goes to a big "everything under one roof" department store looking for a job.

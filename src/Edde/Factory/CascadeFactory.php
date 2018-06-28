@@ -1,9 +1,8 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Container\Factory;
+	namespace Edde\Factory;
 
 	use Edde\Container\IContainer;
-	use Edde\Container\IReflection;
 
 	class CascadeFactory extends ClassFactory {
 		/** @var string[] */

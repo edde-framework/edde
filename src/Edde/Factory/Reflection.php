@@ -1,10 +1,10 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Container;
+	namespace Edde\Factory;
 
-	use Edde\Edde;
+	use Edde\SimpleObject;
 
-	class Reflection extends Edde implements IReflection {
+	class Reflection extends SimpleObject implements IReflection {
 		protected $params;
 		protected $injects;
 		protected $configurators;

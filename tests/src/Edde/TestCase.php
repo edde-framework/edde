@@ -7,8 +7,8 @@
 	use Edde\Container\Autowire;
 	use Edde\Container\ContainerException;
 	use Edde\Container\ContainerFactory;
-	use Edde\Container\Factory\ClassFactory;
 	use Edde\Container\IAutowire;
+	use Edde\Factory\ClassFactory;
 	use Edde\Service\Container\Container;
 	use PHPUnit\Framework\TestCase as PhpUnitTestCase;
 	use ReflectionException;

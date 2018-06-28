@@ -3,7 +3,9 @@
 	namespace Edde\Container;
 
 	use Edde\Configurable\IConfigurable;
-	use Edde\Container\Factory\ClassFactory;
+	use Edde\Factory\ClassFactory;
+	use Edde\Factory\IFactory;
+	use Edde\Factory\IReflection;
 	use SplStack;
 
 	/**
