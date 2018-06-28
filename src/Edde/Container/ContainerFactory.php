@@ -19,8 +19,6 @@
 	use Edde\Filter\FilterManager;
 	use Edde\Filter\FilterManagerConfigurator;
 	use Edde\Filter\IFilterManager;
-	use Edde\Http\HttpUtils;
-	use Edde\Http\IHttpUtils;
 	use Edde\Http\IRequestService as IHttpRequestService;
 	use Edde\Http\RequestService as HttpRequestService;
 	use Edde\Hydrator\HydratorManager;
@@ -200,7 +198,6 @@
 				/**
 				 * utils
 				 */
-				IHttpUtils::class          => HttpUtils::class,
 				IStringUtils::class        => StringUtils::class,
 				/**
 				 * container implementation
@@ -234,22 +231,22 @@
 				/**
 				 * random & security support
 				 */
-				IRandomService::class    => RandomService::class,
-				IPasswordService::class  => PasswordService::class,
+				IRandomService::class      => RandomService::class,
+				IPasswordService::class    => PasswordService::class,
 				/**
 				 * storage support
 				 */
-				IStorage::class          => PostgresStorage::class,
-				ITransaction::class      => IStorage::class,
-				IHydratorManager::class  => HydratorManager::class,
+				IStorage::class            => PostgresStorage::class,
+				ITransaction::class        => IStorage::class,
+				IHydratorManager::class    => HydratorManager::class,
 				/**
 				 * general filtering (data conversion) support
 				 */
-				IFilterManager::class    => FilterManager::class,
+				IFilterManager::class      => FilterManager::class,
 				/**
 				 * an application upgrades support
 				 */
-				IUpgradeManager::class   => (object)[
+				IUpgradeManager::class     => (object)[
 					'type'    => 'exception',
 					'message' => sprintf('Please provide UpgradeManager implementation of [%s] interface.', IUpgradeManager::class),
 					'class'   => EddeException::class,
@@ -257,18 +254,18 @@
 				/**
 				 * Xml support
 				 */
-				IXmlExportService::class => XmlExportService::class,
-				IXmlParserService::class => XmlParserService::class,
+				IXmlExportService::class   => XmlExportService::class,
+				IXmlParserService::class   => XmlParserService::class,
 				/**
 				 * simple scalar configuration support (should not be used
 				 * for any complex config as it's considered to be anti-pattern)
 				 */
-				IConfigService::class    => ConfigService::class,
-				IConfigLoader::class     => ConfigLoader::class,
+				IConfigService::class      => ConfigService::class,
+				IConfigLoader::class       => ConfigLoader::class,
 				/**
 				 * an application handles lifecycle workflow
 				 */
-				IApplication::class      => Application::class,
+				IApplication::class        => Application::class,
 			];
 		}
 

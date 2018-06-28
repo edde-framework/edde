@@ -6,12 +6,10 @@
 	use Edde\Content\InputContent;
 	use Edde\Content\PostContent;
 	use Edde\Edde;
-	use Edde\Service\Http\HttpUtils;
 	use Edde\Url\IUrl;
 	use Edde\Url\Url;
 
 	class RequestService extends Edde implements IRequestService {
-		use HttpUtils;
 		/** @var IRequest */
 		protected $request;
 
@@ -23,7 +21,6 @@
 			$this->request = new Request(
 				Url::create((isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']),
 				strtoupper($_SERVER['REQUEST_METHOD']),
-				$_SERVER['REMOTE_ADDR'] ?? null,
 				$this->createHeaders()
 			);
 			$input = fopen('php://input', 'rb');
@@ -32,12 +29,7 @@
 				$content = new PostContent($_POST);
 			} else if (fgetc($input) !== false) {
 				$headers = $this->request->getHeaders();
-				$mime = 'application/octet-stream';
-				if ($headers->has('Content-Type')) {
-					$contentType = $headers->getContentType();
-					$mime = $contentType->getMime();
-				}
-				$content = new InputContent($mime);
+				$content = new InputContent($headers->get('Content-Type', 'application/octet-stream'));
 			}
 			fclose($input);
 			$this->request->setContent($content);
@@ -67,14 +59,9 @@
 			return $this->getRequest()->getHeaders();
 		}
 
-		/** @inheritdoc */
-		public function getContentType(): ?IContentType {
-			return $this->getHeaders()->getContentType();
-		}
-
 		protected function createHeaders(): IHeaders {
-			$headers = [];
-			$mysticList = [
+			$headers = new Headers();
+			$mystics = [
 				'CONTENT_TYPE'   => 'Content-Type',
 				'CONTENT_LENGTH' => 'Content-Length',
 				'CONTENT_MD5'    => 'Content-Md5',
@@ -85,14 +72,14 @@
 				}
 				if (strpos($key, 'HTTP_') === 0) {
 					$key = substr($key, 5);
-					if (isset($mysticList[$key]) === false || isset($_SERVER[$key]) === false) {
+					if (isset($mystics[$key]) === false || isset($_SERVER[$key]) === false) {
 						$key = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', $key))));
-						$headers[] = $key . ':' . $value;
+						$headers->add($key, $value);
 					}
-				} else if (isset($mysticList[$key])) {
-					$headers[] = $mysticList[$key] . ':' . $value;
+				} else if (isset($mystics[$key])) {
+					$headers->add($mystics[$key], $value);
 				}
 			}
-			return $this->httpUtils->headers($headers);
+			return $headers;
 		}
 	}

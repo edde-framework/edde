@@ -9,29 +9,12 @@
 	 */
 	interface IRequest extends IHttp {
 		/**
-		 * @return string
-		 */
-		public function getMethod(): string;
-
-		/**
-		 * @param string $method
-		 *
-		 * @return bool
-		 */
-		public function isMethod(string $method): bool;
-
-		/**
-		 * @return null|string
-		 */
-		public function getRemoteAddress(): ?string;
-
-		/**
 		 * @return IUrl
 		 */
 		public function getUrl(): IUrl;
 
 		/**
-		 * @return bool
+		 * @return string
 		 */
-		public function isSecured(): bool;
+		public function getMethod(): string;
 	}

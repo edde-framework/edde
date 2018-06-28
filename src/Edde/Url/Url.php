@@ -100,7 +100,7 @@
 				$url .= ':' . $port;
 			}
 			$url .= '/' . ltrim($this->getPath(false), '/');
-			$query = $this->getParameterList();
+			$query = $this->getParams();
 			if (empty($query) === false) {
 				$url .= '?' . http_build_query($query);
 			}
@@ -167,7 +167,7 @@
 		}
 
 		/** @inheritdoc */
-		public function getParameterList(): array {
+		public function getParams(): array {
 			return $this->params;
 		}
 

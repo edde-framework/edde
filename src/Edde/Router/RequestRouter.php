@@ -46,9 +46,9 @@
 		 */
 		protected function createHttpRequest(): IRequest {
 			if ($match = $this->stringUtils->match($path = ($requestUrl = $this->requestService->getUrl())->getPath(false), self::PREG_REST, true, true)) {
-				return $this->factory($match['class'], strtolower($this->requestService->getMethod()), 'Rest', $requestUrl->getParameterList());
+				return $this->factory($match['class'], strtolower($this->requestService->getMethod()), 'Rest', $requestUrl->getParams());
 			} else if ($match = $this->stringUtils->match($path, self::PREG_CONTROLLER, true, true)) {
-				return $this->factory($match['class'], $match['method'], 'Http', $requestUrl->getParameterList());
+				return $this->factory($match['class'], $match['method'], 'Http', $requestUrl->getParams());
 			}
 			throw new RouterException('Cannot handle current HTTP request.');
 		}

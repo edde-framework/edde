@@ -47,20 +47,4 @@
 		 * @return IContent|null
 		 */
 		public function getContent(): ?IContent;
-
-		/**
-		 * set content type of the response
-		 *
-		 * @param IContentType $contentType
-		 *
-		 * @return $this
-		 */
-		public function setContentType(IContentType $contentType): IHttp;
-
-		/**
-		 * return current content type; defaults to text/plain
-		 *
-		 * @return IContentType
-		 */
-		public function getContentType(): ?IContentType;
 	}

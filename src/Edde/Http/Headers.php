@@ -58,22 +58,6 @@
 		}
 
 		/** @inheritdoc */
-		public function setContentType(IContentType $contentType): IHeaders {
-			$this->set('Content-Type', $contentType);
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function getContentType(): ?IContentType {
-			return $this->get('Content-Type');
-		}
-
-		/** @inheritdoc */
-		public function getAccepts(): array {
-			return $this->get('Accept', []);
-		}
-
-		/** @inheritdoc */
 		public function toArray(): array {
 			return $this->headers;
 		}

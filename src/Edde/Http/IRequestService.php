@@ -43,11 +43,4 @@
 		 * @return IHeaders
 		 */
 		public function getHeaders(): IHeaders;
-
-		/**
-		 * return current content type if it's known
-		 *
-		 * @return IContentType|null
-		 */
-		public function getContentType(): ?IContentType;
 	}

@@ -45,15 +45,4 @@
 		public function getContent(): ?IContent {
 			return $this->content;
 		}
-
-		/** @inheritdoc */
-		public function setContentType(IContentType $contentType): IHttp {
-			$this->headers->setContentType($contentType);
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function getContentType(): ?IContentType {
-			return $this->headers->getContentType();
-		}
 	}

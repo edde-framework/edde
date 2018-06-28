@@ -29,7 +29,7 @@
 		public function execute(): IResponse {
 			http_response_code($this->code);
 			if ($this->content && $this->headers->has('Content-Type') === false) {
-				$this->headers->setContentType(new ContentType($this->content->getType()));
+				$this->headers->add('Content-Type', $this->content->getType());
 			}
 			foreach ($this->headers as $name => $header) {
 				header("$name: $header", false);

@@ -60,29 +60,6 @@
 		public function get(string $name, $default = null);
 
 		/**
-		 * set content type of current header set
-		 *
-		 * @param IContentType $contentType
-		 *
-		 * @return IHeaders
-		 */
-		public function setContentType(IContentType $contentType): IHeaders;
-
-		/**
-		 * return a content type object if the content type is available
-		 *
-		 * @return IContentType|null
-		 */
-		public function getContentType(): ?IContentType;
-
-		/**
-		 * return an array with accept mime types or an empty array if not available
-		 *
-		 * @return string[]
-		 */
-		public function getAccepts(): array;
-
-		/**
 		 * return a simple array with headers; if there is more values per one headers,
 		 * they would added to sub array
 		 *

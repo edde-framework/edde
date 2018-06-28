@@ -77,7 +77,7 @@
 		/**
 		 * @return array
 		 */
-		public function getParameterList(): array;
+		public function getParams(): array;
 
 		/**
 		 * @param array $params

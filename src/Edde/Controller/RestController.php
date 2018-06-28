@@ -38,14 +38,14 @@
 		 * @throws ReflectionException
 		 */
 		protected function getAllowedMethods(): array {
-			$allowedList = [];
+			$allowed = [];
 			$reflectionClass = new ReflectionClass($this);
 			foreach ($reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC) as $reflectionMethod) {
 				if (strpos($name = $reflectionMethod->getName(), 'action') === 0 && strlen($name) > 6) {
-					$allowedList[] = strtoupper(substr($name, 6));
+					$allowed[] = strtoupper(substr($name, 6));
 				}
 			}
-			return $allowedList;
+			return $allowed;
 		}
 
 		/**

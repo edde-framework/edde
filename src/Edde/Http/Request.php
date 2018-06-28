@@ -22,24 +22,16 @@
 		protected $url;
 		/** @var string */
 		protected $method;
-		/** @var string|null */
-		protected $remoteAddress;
-		/** @var string|null */
-		protected $remoteHost;
-		/** @var IUrl */
-		protected $referer;
 
 		/**
 		 * @param IUrl     $url
 		 * @param string   $method
-		 * @param string   $remoteAddress
 		 * @param IHeaders $headers
 		 */
-		public function __construct(IUrl $url, string $method, ?string $remoteAddress, IHeaders $headers) {
+		public function __construct(IUrl $url, string $method, IHeaders $headers) {
 			parent::__construct($headers);
 			$this->url = $url;
 			$this->method = $method;
-			$this->remoteAddress = $remoteAddress;
 		}
 
 		/** @inheritdoc */
@@ -48,22 +40,7 @@
 		}
 
 		/** @inheritdoc */
-		public function isMethod(string $method): bool {
-			return strcasecmp($this->getMethod(), $method) === 0;
-		}
-
-		/** @inheritdoc */
-		public function getRemoteAddress(): ?string {
-			return $this->remoteAddress;
-		}
-
-		/** @inheritdoc */
 		public function getUrl(): IUrl {
 			return $this->url;
-		}
-
-		/** @inheritdoc */
-		public function isSecured(): bool {
-			return $this->url->getScheme() === 'https';
 		}
 	}
