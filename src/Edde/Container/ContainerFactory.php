@@ -8,13 +8,11 @@
 	use Edde\Config\ConfigService;
 	use Edde\Config\IConfigLoader;
 	use Edde\Config\IConfigService;
-	use Edde\Container\Factory\CallbackFactory;
 	use Edde\Container\Factory\ClassFactory;
 	use Edde\Container\Factory\ExceptionFactory;
 	use Edde\Container\Factory\InstanceFactory;
 	use Edde\Container\Factory\InterfaceFactory;
 	use Edde\Container\Factory\LinkFactory;
-	use Edde\Container\Factory\ProxyFactory;
 	use Edde\Edde;
 	use Edde\EddeException;
 	use Edde\Filter\FilterManager;
@@ -54,8 +52,6 @@
 	use Edde\Xml\IXmlParserService;
 	use Edde\Xml\XmlExportService;
 	use Edde\Xml\XmlParserService;
-	use ReflectionException;
-	use ReflectionMethod;
 	use stdClass;
 	use function sprintf;
 
@@ -93,7 +89,6 @@
 		 * @return IFactory[]
 		 *
 		 * @throws ContainerException
-		 * @throws ReflectionException
 		 */
 		static public function createFactories(array $factories): array {
 			$instances = [];
@@ -107,16 +102,6 @@
 						case 'exception':
 							$current = new ExceptionFactory($name, $factory->class, $factory->message);
 							break;
-						case 'proxy':
-							$current = new ProxyFactory($name, $factory->factory, $factory->method, $factory->params);
-							break;
-					}
-				} else if (is_string($factory) && strpos($factory, '::') !== false) {
-					[$target, $method] = explode('::', $factory);
-					$reflectionMethod = new ReflectionMethod($target, $method);
-					$current = new ProxyFactory($name, $target, $method);
-					if ($reflectionMethod->isStatic()) {
-						$current = new CallbackFactory($factory, $name);
 					}
 				} else if (is_string($name) && is_string($factory) && (interface_exists($factory) || class_exists($factory))) {
 					if (class_exists($factory)) {
@@ -126,8 +111,6 @@
 					}
 				} else if ($factory instanceof IFactory) {
 					$current = $factory;
-				} else if (is_callable($factory)) {
-					$current = new CallbackFactory($factory, $name);
 				}
 				if ($current === null) {
 					throw new ContainerException(sprintf('Unsupported factory definition [%s; %s].', is_string($name) ? $name : (is_object($name) ? get_class($name) : gettype($name)), is_string($factory) ? $factory : (is_object($factory) ? get_class($factory) : gettype($factory))));
@@ -156,40 +139,6 @@
 		}
 
 		/**
-		 * special kind of factory which will thrown an exception of the given message; it's useful for say which internal dependencies are not met
-		 *
-		 * @param string      $message
-		 * @param string|null $class
-		 *
-		 * @return stdClass
-		 */
-		static public function exception(string $message, string $class = null): stdClass {
-			return (object)[
-				'type'    => __FUNCTION__,
-				'message' => $message,
-				'class'   => $class ?: EddeException::class,
-			];
-		}
-
-		/**
-		 * create proxy call factory
-		 *
-		 * @param string $factory
-		 * @param string $method
-		 * @param array  $params
-		 *
-		 * @return stdClass
-		 */
-		static public function proxy(string $factory, string $method, array $params): stdClass {
-			return (object)[
-				'type'    => __FUNCTION__,
-				'factory' => $factory,
-				'method'  => $method,
-				'params'  => $params,
-			];
-		}
-
-		/**
 		 * pure way how to simple create a system container
 		 *
 		 * @param array    $factories
@@ -198,7 +147,6 @@
 		 * @return IContainer
 		 *
 		 * @throws ContainerException
-		 * @throws ReflectionException
 		 */
 		static public function create(array $factories = [], array $configurators = []): IContainer {
 			/**
@@ -224,7 +172,6 @@
 		 * @return IContainer
 		 *
 		 * @throws ContainerException
-		 * @throws ReflectionException
 		 */
 		static public function container(array $factories = [], array $configurators = []): IContainer {
 			return self::create(array_merge(self::getDefaultFactories(), $factories), array_filter(array_merge(self::getDefaultConfigurators(), $configurators)));
@@ -240,7 +187,6 @@
 		 * @return IContainer
 		 *
 		 * @throws ContainerException
-		 * @throws ReflectionException
 		 */
 		static public function inject($instance, array $factories = [], array $configurators = []): IContainer {
 			$container = self::container(empty($factories) ? [new ClassFactory()] : $factories, $configurators);
@@ -287,41 +233,41 @@
 				/**
 				 * random & security support
 				 */
-				IRandomService::class      => RandomService::class,
-				IPasswordService::class    => PasswordService::class,
+				IRandomService::class    => RandomService::class,
+				IPasswordService::class  => PasswordService::class,
 				/**
 				 * storage support
 				 */
-				IStorage::class            => PostgresStorage::class,
-				ITransaction::class        => IStorage::class,
-				IHydratorManager::class    => HydratorManager::class,
+				IStorage::class          => PostgresStorage::class,
+				ITransaction::class      => IStorage::class,
+				IHydratorManager::class  => HydratorManager::class,
 				/**
 				 * general filtering (data conversion) support
 				 */
-				IFilterManager::class      => FilterManager::class,
+				IFilterManager::class    => FilterManager::class,
 				/**
 				 * an application upgrades support
 				 */
-				IUpgradeManager::class     => self::exception(sprintf('Please provide UpgradeManager implementation of [%s] interface.', IUpgradeManager::class)),
+				IUpgradeManager::class   => (object)[
+					'type'    => 'exception',
+					'message' => sprintf('Please provide UpgradeManager implementation of [%s] interface.', IUpgradeManager::class),
+					'class'   => EddeException::class,
+				],
 				/**
 				 * Xml support
 				 */
-				IXmlExportService::class   => XmlExportService::class,
-				IXmlParserService::class   => XmlParserService::class,
+				IXmlExportService::class => XmlExportService::class,
+				IXmlParserService::class => XmlParserService::class,
 				/**
 				 * simple scalar configuration support (should not be used
 				 * for any complex config as it's considered to be anti-pattern)
 				 */
-				IConfigService::class      => ConfigService::class,
-				IConfigLoader::class       => ConfigLoader::class,
+				IConfigService::class    => ConfigService::class,
+				IConfigLoader::class     => ConfigLoader::class,
 				/**
 				 * an application handles lifecycle workflow
 				 */
-				IApplication::class        => Application::class,
-				/**
-				 * magical factory for an application execution
-				 */
-				'application'              => IApplication::class . '::run',
+				IApplication::class      => Application::class,
 			];
 		}
 

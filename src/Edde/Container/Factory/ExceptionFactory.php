@@ -23,7 +23,6 @@
 	 *
 	 * The boss said, "A guy came in here to buy a fish hook and you sold him a BOAT and a TRUCK?"
 	 * The kid said, "No, the guy came in here to buy Tampons for his wife, and I said, 'Dude, your weekend's shot, you should go fishing.'"
-	 * Vote: Joke has 87.26 % from
 	 */
 	class ExceptionFactory extends AbstractFactory {
 		/** @var string */

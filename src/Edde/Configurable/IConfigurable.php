@@ -3,7 +3,7 @@
 	namespace Edde\Configurable;
 
 	/**
-	 * Marker interface for classes supporting external configuration.
+	 * Marker interface for classes supporting external configuration (by a Configurator interface).
 	 */
 	interface IConfigurable {
 		/**
