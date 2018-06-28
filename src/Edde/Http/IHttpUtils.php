@@ -42,15 +42,6 @@
 		public function contentType(string $contentType): IContentType;
 
 		/**
-		 * parse cookie and return simple cookie object
-		 *
-		 * @param string $cookie
-		 *
-		 * @return ICookie
-		 */
-		public function cookie(string $cookie): ICookie;
-
-		/**
 		 * process input headers as a header implementation getting all known structures as parsed helper classes
 		 *
 		 * @param string $headers

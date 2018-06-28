@@ -14,11 +14,6 @@
 		public function getHeaders(): IHeaders;
 
 		/**
-		 * @return ICookies|ICookie[]
-		 */
-		public function getCookies(): ICookies;
-
-		/**
 		 * shortcut to header list; this will add a new header (not replace)
 		 *
 		 * @param string $header

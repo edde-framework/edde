@@ -3,10 +3,12 @@
 	namespace Edde\Utils;
 
 	use Edde\Http\ContentType;
+	use Edde\Http\HttpException;
 	use Edde\Http\RequestHeader;
 	use Edde\Service\Http\HttpUtils;
 	use Edde\TestCase;
 	use Edde\Url\Url;
+	use Edde\Url\UrlException;
 
 	class HttpUtilsTest extends TestCase {
 		use HttpUtils;
@@ -40,27 +42,9 @@
 			], $contentType->getParameters());
 		}
 
-		public function testCookie() {
-			self::assertEquals([
-				'name'     => '_gh_sess',
-				'value'    => 'eyJsYXN0MiLCJsabd2a61',
-				'path'     => '/',
-				'secure'   => true,
-				'httpOnly' => true,
-				'expire'   => 0,
-				'domain'   => null,
-			], $this->httpUtils->cookie('_gh_sess=eyJsYXN0MiLCJsabd2a61; path=/; secure; HttpOnly')->toArray());
-			self::assertEquals([
-				'name'     => '__Host-user_session_same_site',
-				'value'    => 'nhTbc44ff4l3Lwxj',
-				'path'     => '/',
-				'secure'   => true,
-				'httpOnly' => true,
-				'expire'   => 1507282883,
-				'domain'   => null,
-			], $this->httpUtils->cookie('__Host-user_session_same_site=nhTbc44ff4l3Lwxj; path=/; expires=Fri, 06 Oct 2017 09:41:23 -0000; secure; HttpOnly')->toArray());
-		}
-
+		/**
+		 * @throws HttpException
+		 */
 		public function testRequestHeader() {
 			$requestHeader = $this->httpUtils->requestHeader($header = 'GET /edde-framework/edde-framework HTTP/1.1');
 			self::assertEquals([
@@ -71,6 +55,9 @@
 			self::assertSame($header, (string)$requestHeader);
 		}
 
+		/**
+		 * @throws HttpException
+		 */
 		public function testResponseHeader() {
 			$responseHeader = $this->httpUtils->responseHeader($header = 'HTTP/1.1 301 Moved Permanently');
 			self::assertEquals([
@@ -81,6 +68,9 @@
 			self::assertSame($header, (string)$responseHeader);
 		}
 
+		/**
+		 * @throws UrlException
+		 */
 		public function testHeaders() {
 			$headers = str_replace("\n", "\r\n", 'GET /edde-framework/edde-framework HTTP/1.1
 Host: github.com

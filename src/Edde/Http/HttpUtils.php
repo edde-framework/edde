@@ -155,26 +155,6 @@
 		}
 
 		/** @inheritdoc */
-		public function cookie(string $cookie): ICookie {
-			$cookie = $this->stringUtils->match($cookie, '~(?<name>[^\s()<>@,;:\"/\\[\\]?={}]+)=(?<value>[^=;\s]+)\s*(?<misc>.*)?~', true);
-			if (isset($cookie['misc'])) {
-				if ($match = $this->stringUtils->match($cookie['misc'], '~path=(?<path>[a-z0-9/._-]+);?~i', true)) {
-					$cookie['path'] = $match['path'];
-				}
-				if ($match = $this->stringUtils->match($cookie['misc'], '~domain=(?<domain>[a-z0-9._-]+);?~i', true)) {
-					$cookie['domain'] = $match['domain'];
-				}
-				if ($match = $this->stringUtils->match($cookie['misc'], '~expires=(?<expires>[a-z0-9:\s,-]+);?~i', true)) {
-					$cookie['expires'] = $match['expires'];
-				}
-			}
-			$misc = $cookie['misc'];
-			$cookie['expires'] = strtotime($cookie['expires'] ?? '1.1.1970');
-			unset($cookie['misc']);
-			return new Cookie($cookie['name'], $cookie['value'], $cookie['expires'], $cookie['path'] ?? '/', $cookie['domain'] ?? null, strpos($misc, 'secure') !== false, stripos($misc, 'httponly') !== false);
-		}
-
-		/** @inheritdoc */
 		public function parseHeaders(string $headers): IHeaders {
 			return $this->headers(explode("\r\n", $headers));
 		}

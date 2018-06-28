@@ -24,8 +24,7 @@
 				Url::create((isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']),
 				strtoupper($_SERVER['REQUEST_METHOD']),
 				$_SERVER['REMOTE_ADDR'] ?? null,
-				$this->createHeaders(),
-				$this->createCookies()
+				$this->createHeaders()
 			);
 			$input = fopen('php://input', 'rb');
 			$content = null;
@@ -95,13 +94,5 @@
 				}
 			}
 			return $this->httpUtils->headers($headers);
-		}
-
-		protected function createCookies(): ICookies {
-			$cookies = new Cookies();
-			foreach ($_COOKIE as $name => $value) {
-				$cookies->add(new Cookie($name, $value));
-			}
-			return $cookies;
 		}
 	}

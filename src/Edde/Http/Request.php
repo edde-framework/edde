@@ -34,10 +34,9 @@
 		 * @param string   $method
 		 * @param string   $remoteAddress
 		 * @param IHeaders $headers
-		 * @param ICookies $cookies
 		 */
-		public function __construct(IUrl $url, string $method, ?string $remoteAddress, IHeaders $headers, ICookies $cookies) {
-			parent::__construct($headers, $cookies);
+		public function __construct(IUrl $url, string $method, ?string $remoteAddress, IHeaders $headers) {
+			parent::__construct($headers);
 			$this->url = $url;
 			$this->method = $method;
 			$this->remoteAddress = $remoteAddress;

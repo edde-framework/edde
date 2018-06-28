@@ -9,7 +9,7 @@
 		protected $code;
 
 		public function __construct(IContent $content = null) {
-			parent::__construct(new Headers(), new Cookies());
+			parent::__construct(new Headers());
 			$this->content = $content;
 			$this->code = self::R200_OK;
 		}

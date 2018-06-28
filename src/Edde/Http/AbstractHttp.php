@@ -8,28 +8,19 @@
 	abstract class AbstractHttp extends Edde implements IHttp {
 		/** @var IHeaders */
 		protected $headers;
-		/** @var ICookies */
-		protected $cookies;
 		/** @var IContent|null */
 		protected $content;
 
 		/**
 		 * @param IHeaders $headers
-		 * @param ICookies $cookies
 		 */
-		public function __construct(IHeaders $headers, ICookies $cookies) {
+		public function __construct(IHeaders $headers) {
 			$this->headers = $headers;
-			$this->cookies = $cookies;
 		}
 
 		/** @inheritdoc */
 		public function getHeaders(): IHeaders {
 			return $this->headers;
-		}
-
-		/** @inheritdoc */
-		public function getCookies(): ICookies {
-			return $this->cookies;
 		}
 
 		/** @inheritdoc */
