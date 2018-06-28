@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Container;
 
-	use Edde\Config\IConfigurable;
-	use Edde\Config\IConfigurator;
+	use Edde\Configurable\IConfigurable;
+	use Edde\Configurable\IConfigurator;
 
 	/**
 	 * Implementation of Dependency Injection Container.

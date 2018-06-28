@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde;
 
-	use Edde\Config\Configurable;
-	use Edde\Config\IConfigurable;
+	use Edde\Configurable\Configurable;
+	use Edde\Configurable\IConfigurable;
 	use Edde\Container\Autowire;
 	use Edde\Container\IAutowire;
 
@@ -33,7 +33,7 @@
 		 * @var string
 		 */
 		static public $framework = '5.0';
-		static public $codename = 'Flying Rock';
+		static public $codename = 'Full Balls';
 
 		/**
 		 * because PHP has some cool shit things like it cannot call

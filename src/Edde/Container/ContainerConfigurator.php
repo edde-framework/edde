@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Container;
 
-	use Edde\Config\AbstractConfigurator;
-	use Edde\Config\IConfigurator;
+	use Edde\Configurable\AbstractConfigurator;
+	use Edde\Configurable\IConfigurator;
 
 	class ContainerConfigurator extends AbstractConfigurator {
 		/** @var IFactory[] */

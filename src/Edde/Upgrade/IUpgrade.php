@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Upgrade;
 
-	use Edde\Config\IConfigurable;
+	use Edde\Configurable\IConfigurable;
 	use Exception;
 	use Throwable;
 

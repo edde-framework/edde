@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Config;
 
+	use Edde\Configurable\IConfigurable;
 	use stdClass;
 
 	interface IConfigLoader extends IConfigurable {

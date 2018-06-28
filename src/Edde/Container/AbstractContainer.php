@@ -2,18 +2,18 @@
 	declare(strict_types=1);
 	namespace Edde\Container;
 
-	use Edde\Config\IConfigurator;
+	use Edde\Configurable\IConfigurator;
 	use Edde\Edde;
 
 	abstract class AbstractContainer extends Edde implements IContainer {
 		/** @var IFactory[] */
 		protected $factories;
-		/** @var IConfigurator[][] */
+		/** @var \Edde\Configurable\IConfigurator[][] */
 		protected $configurators;
 
 		/**
-		 * @param IFactory[]      $factories
-		 * @param IConfigurator[] $configurators
+		 * @param IFactory[]                         $factories
+		 * @param \Edde\Configurable\IConfigurator[] $configurators
 		 */
 		public function __construct(array $factories = [], array $configurators = []) {
 			$this->factories = $factories;

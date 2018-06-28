@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Hydrator;
 
-	use Edde\Config\IConfigurable;
+	use Edde\Configurable\IConfigurable;
 
 	interface IHydratorManager extends IConfigurable {
 		/**

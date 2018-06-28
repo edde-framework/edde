@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde;
 
-	use Edde\Config\IConfigurable;
+	use Edde\Configurable\IConfigurable;
 	use Edde\Container\IAutowire;
 	use Edde\Test\BarObject;
 	use Edde\Test\FooBarObject;

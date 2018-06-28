@@ -3,7 +3,7 @@
 	namespace Edde\Router;
 
 	use Edde\Application\IRequest;
-	use Edde\Config\IConfigurable;
+	use Edde\Configurable\IConfigurable;
 
 	/**
 	 * Router is class responsible for handling current application

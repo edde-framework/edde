@@ -1,18 +1,12 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Config;
+	namespace Edde\Configurable;
 
 	trait Configurable {
 		/** @var IConfigurator[] */
 		protected $tConfigurators = [];
 		/** @var bool */
 		protected $tState = 0;
-
-		/** @inheritdoc */
-		public function addConfigurator(IConfigurator $configurator) {
-			$this->tConfigurators[] = $configurator;
-			return $this;
-		}
 
 		/** @inheritdoc */
 		public function setConfigurators(array $configurators) {
@@ -25,8 +19,8 @@
 			if ($this->tState > 0) {
 				return $this;
 			}
-			$this->tState++;
 			$this->handleInit();
+			$this->tState++;
 			return $this;
 		}
 
@@ -35,12 +29,12 @@
 			if ($this->tState > 1) {
 				return $this;
 			}
-			$this->tState++;
 			$this->init();
 			foreach ($this->tConfigurators as $configHandler) {
 				$configHandler->configure($this);
 			}
 			$this->handleSetup();
+			$this->tState++;
 			return $this;
 		}
 

@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
-	use Edde\Config\ConfigException;
+	use Edde\Configurable\ConfigurableException;
 	use Edde\Hydrator\IHydrator;
 	use Edde\Service\Schema\SchemaManager;
 	use PDO;
@@ -286,7 +286,7 @@
 		/**
 		 * @inheritdoc
 		 *
-		 * @throws ConfigException
+		 * @throws ConfigurableException
 		 */
 		public function handleSetup(): void {
 			parent::handleSetup();

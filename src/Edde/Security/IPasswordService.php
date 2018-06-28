@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Security;
 
-	use Edde\Config\IConfigurable;
+	use Edde\Configurable\IConfigurable;
 
 	interface IPasswordService extends IConfigurable {
 		/**

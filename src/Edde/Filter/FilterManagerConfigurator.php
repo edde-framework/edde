@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Filter;
 
-	use Edde\Config\AbstractConfigurator;
+	use Edde\Configurable\AbstractConfigurator;
 	use Edde\Container\ContainerException;
 	use Edde\Service\Container\Container;
 

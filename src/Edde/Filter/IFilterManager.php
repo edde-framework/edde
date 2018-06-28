@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Filter;
 
-	use Edde\Config\IConfigurable;
+	use Edde\Configurable\IConfigurable;
 
 	interface IFilterManager extends IConfigurable {
 		/**

@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Config;
+	namespace Edde\Configurable;
 
 	use Edde\Edde;
 

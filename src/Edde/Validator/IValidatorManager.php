@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Validator;
 
-	use Edde\Config\IConfigurable;
+	use Edde\Configurable\IConfigurable;
 	use stdClass;
 
 	interface IValidatorManager extends IConfigurable {

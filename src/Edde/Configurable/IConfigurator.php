@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Config;
+	namespace Edde\Configurable;
 
 	/**
 	 * This interface is general way how to implement service configuration (or configuration of almost anything).

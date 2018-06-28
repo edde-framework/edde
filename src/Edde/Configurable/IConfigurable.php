@@ -1,20 +1,11 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Config;
+	namespace Edde\Configurable;
 
 	/**
 	 * Marker interface for classes supporting external configuration.
 	 */
 	interface IConfigurable {
-		/**
-		 * register configurator
-		 *
-		 * @param IConfigurator $configurator
-		 *
-		 * @return $this
-		 */
-		public function addConfigurator(IConfigurator $configurator);
-
 		/**
 		 * register set of config handlers
 		 *

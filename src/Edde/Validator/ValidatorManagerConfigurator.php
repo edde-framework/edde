@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Validator;
 
-	use Edde\Config\AbstractConfigurator;
+	use Edde\Configurable\AbstractConfigurator;
 
 	class ValidatorManagerConfigurator extends AbstractConfigurator {
 		/**

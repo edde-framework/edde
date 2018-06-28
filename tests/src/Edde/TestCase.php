@@ -2,8 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde;
 
-	use Edde\Config\AbstractConfigurator;
 	use Edde\Config\IConfigLoader;
+	use Edde\Configurable\AbstractConfigurator;
 	use Edde\Container\Autowire;
 	use Edde\Container\ContainerException;
 	use Edde\Container\ContainerFactory;

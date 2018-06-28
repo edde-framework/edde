@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Http;
 
-	use Edde\Config\IConfigurable;
+	use Edde\Configurable\IConfigurable;
 	use Edde\Content\IContent;
 	use Edde\Url\IUrl;
 

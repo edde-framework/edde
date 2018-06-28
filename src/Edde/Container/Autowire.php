@@ -3,7 +3,7 @@
 	namespace Edde\Container;
 
 	use Closure;
-	use Edde\Config\IConfigurable;
+	use Edde\Configurable\IConfigurable;
 	use Edde\ObjectException;
 
 	trait Autowire {
@@ -28,7 +28,7 @@
 		/**
 		 * @param string $name
 		 *
-		 * @return IConfigurable
+		 * @return \Edde\Configurable\IConfigurable
 		 *
 		 * @throws ContainerException
 		 * @throws ObjectException
@@ -37,7 +37,7 @@
 			if (isset($this->tAutowires[$name])) {
 				/** @var $container IContainer */
 				[$container, $dependency] = $this->tAutowires[$name];
-				/** @var $instance IConfigurable */
+				/** @var $instance \Edde\Configurable\IConfigurable */
 				if (($instance = $this->{$name} = $container->create($dependency, [], static::class)) instanceof IConfigurable && $instance->isSetup() === false) {
 					$instance->setup();
 				}
