@@ -4,11 +4,9 @@
 
 	use Edde\Application\IRequest;
 	use Edde\Edde;
-	use Edde\Service\Log\LogService;
 	use Exception;
 
 	class RouterService extends Edde implements IRouterService {
-		use LogService;
 		/** @var IRouter[] */
 		protected $routers = [];
 		/** @var IRouter */
@@ -45,12 +43,8 @@
 			try {
 				return ($this->router = $this->getRouter()) !== null;
 			} catch (Exception $exception) {
-				$this->logService->exception($exception, [
-					'edde',
-					'router-service',
-				]);
+				return false;
 			}
-			return false;
 		}
 
 		/** @inheritdoc */
