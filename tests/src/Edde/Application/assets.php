@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Application;
 
+	use Edde\Controller\IController;
 	use Edde\Edde;
 	use Edde\Router\AbstractRouter;
 

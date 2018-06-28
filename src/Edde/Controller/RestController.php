@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Application;
+	namespace Edde\Controller;
 
 	use Edde\Content\JsonContent;
 	use Edde\Http\IResponse;
@@ -13,8 +13,7 @@
 	/**
 	 * Provides helpful methods around implementing REST service.
 	 */
-	trait RestController {
-		use HttpController;
+	class RestController extends HttpController {
 		use StringUtils;
 
 		/**

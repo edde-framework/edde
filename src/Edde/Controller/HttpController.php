@@ -1,7 +1,8 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Application;
+	namespace Edde\Controller;
 
+	use Edde\Application\ApplicationException;
 	use Edde\Content\GeneratorContent;
 	use Edde\Content\HtmlContent;
 	use Edde\Content\JsonContent;
@@ -18,7 +19,7 @@
 	/**
 	 * Http control provides helpers for a http response style.
 	 */
-	trait HttpController {
+	class HttpController extends AbstractController {
 		use RequestService;
 
 		public function __call(string $name, $arguments) {

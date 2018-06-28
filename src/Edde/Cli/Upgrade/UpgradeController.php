@@ -2,19 +2,19 @@
 	declare(strict_types=1);
 	namespace Edde\Cli\Upgrade;
 
-	use Edde\Application\CliController;
-	use Edde\Application\IController;
-	use Edde\Edde;
+	use Edde\Controller\CliController;
 	use Edde\Service\Upgrade\UpgradeManager;
 	use Edde\Upgrade\CurrentVersionException;
+	use Edde\Upgrade\UpgradeException;
 
-	class UpgradeController extends Edde implements IController {
-		use CliController;
+	class UpgradeController extends CliController {
 		use UpgradeManager;
 
 		/**
 		 * @help run an upgrade to the given version or do full upgrade to the latest available version
 		 * @help [--version] <version name>: select target upgrade
+		 *
+		 * @throws UpgradeException
 		 */
 		public function actionUpgrade() {
 			try {

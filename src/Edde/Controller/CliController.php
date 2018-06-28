@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Application;
+	namespace Edde\Controller;
 
 	use Edde\Service\Utils\StringUtils;
 	use ReflectionClass;
@@ -9,7 +9,7 @@
 	/**
 	 * Control used for a command line content rendering.
 	 */
-	trait CliController {
+	abstract class CliController extends AbstractController {
 		use StringUtils;
 
 		/**
