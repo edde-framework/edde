@@ -217,7 +217,7 @@
 
 		/**
 		 * @throws StorageException
-		 * @throws UnknownUuidException
+		 * @throws EmptyEntityException
 		 */
 		public function testSave() {
 			$save = $this->storage->save(new Entity(ProjectSchema::class, [
@@ -281,7 +281,7 @@
 		/**
 		 * @throws SchemaException
 		 * @throws StorageException
-		 * @throws UnknownUuidException
+		 * @throws EmptyEntityException
 		 */
 		public function testAttach() {
 			$project = $this->storage->save(new Entity(ProjectSchema::class, [
@@ -309,7 +309,7 @@
 		/**
 		 * @throws SchemaException
 		 * @throws StorageException
-		 * @throws UnknownUuidException
+		 * @throws EmptyEntityException
 		 */
 		public function testAttachInsertUpdate() {
 			$relation = $this->storage->attach(
@@ -351,10 +351,10 @@
 		/**
 		 * @throws SchemaException
 		 * @throws StorageException
-		 * @throws UnknownUuidException
+		 * @throws EmptyEntityException
 		 */
 		public function testUnlink() {
-			$this->expectException(UnknownUuidException::class);
+			$this->expectException(EmptyEntityException::class);
 			$this->expectExceptionMessage('Requested unknown uuid [relation] of [ProjectMemberSchema].');
 			$this->storage->unlink(
 				new Entity(ProjectSchema::class, ['uuid' => 'one']),
@@ -381,10 +381,10 @@
 		/**
 		 * @throws SchemaException
 		 * @throws StorageException
-		 * @throws UnknownUuidException
+		 * @throws EmptyEntityException
 		 */
 		public function testLink() {
-			$this->expectException(UnknownUuidException::class);
+			$this->expectException(EmptyEntityException::class);
 			$this->expectExceptionMessage('Requested unknown uuid [original] of [ProjectMemberSchema].');
 			$project = $this->storage->save(new Entity(ProjectSchema::class, [
 				'uuid' => 'two-pi',
@@ -405,10 +405,10 @@
 		/**
 		 * @throws SchemaException
 		 * @throws StorageException
-		 * @throws UnknownUuidException
+		 * @throws EmptyEntityException
 		 */
 		public function testDelete() {
-			$this->expectException(UnknownUuidException::class);
+			$this->expectException(EmptyEntityException::class);
 			$this->expectExceptionMessage('Requested unknown uuid [to-be-deleted] of [ProjectSchema].');
 			$project = $this->storage->save(new Entity(ProjectSchema::class, [
 				'uuid' => 'to-be-deleted',

@@ -210,7 +210,7 @@
 		 * @return IEntity
 		 *
 		 * @throws StorageException
-		 * @throws UnknownUuidException
+		 * @throws EmptyEntityException
 		 */
 		public function load(string $name, string $uuid): IEntity;
 

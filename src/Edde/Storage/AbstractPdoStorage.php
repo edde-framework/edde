@@ -249,7 +249,7 @@
 			foreach ($this->schema($name, sprintf('SELECT * FROM %s WHERE %s = :uuid', $this->delimit($schema->getRealName()), $schema->getPrimary()->getName()), ['uuid' => $uuid]) as $entity) {
 				return $entity;
 			}
-			throw new UnknownUuidException(sprintf('Requested unknown uuid [%s] of [%s].', $uuid, $name));
+			throw new EmptyEntityException(sprintf('Requested unknown uuid [%s] of [%s].', $uuid, $name));
 		}
 
 		/** @inheritdoc */
