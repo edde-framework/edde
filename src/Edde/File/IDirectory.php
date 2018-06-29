@@ -3,6 +3,7 @@
 	namespace Edde\File;
 
 	use IteratorAggregate;
+	use SplFileInfo;
 
 	interface IDirectory extends IteratorAggregate {
 		/**
@@ -22,30 +23,9 @@
 		/**
 		 * return iterator over file list in the current directory
 		 *
-		 * @return string[]
+		 * @return SplFileInfo[]
 		 */
 		public function getFiles();
-
-		/**
-		 * @return IDirectory[]
-		 */
-		public function getDirectories();
-
-		/**
-		 * normalize directory path
-		 *
-		 * @return IDirectory
-		 */
-		public function normalize(): IDirectory;
-
-		/**
-		 * execute realpath on directory to check if everything is correct (directory must exists)
-		 *
-		 * @return IDirectory
-		 *
-		 * @throws RealPathException
-		 */
-		public function realpath(): IDirectory;
 
 		/**
 		 * create a file with the given name in this directory
@@ -89,11 +69,11 @@
 		public function create(int $chmod = 0777): IDirectory;
 
 		/**
-		 * @return mixed
+		 * @return int
 		 *
 		 * @throws FileException
 		 */
-		public function getPermission();
+		public function getPermission(): int;
 
 		/**
 		 * recreate directory in place effectively clean all it's contents
@@ -122,11 +102,10 @@
 		 * return directory based on a current path
 		 *
 		 * @param string $directory
-		 * @param string $class directory class; sometimes it's useful return non default IDirectory interface
 		 *
 		 * @return IDirectory
 		 */
-		public function directory(string $directory, string $class = null): IDirectory;
+		public function directory(string $directory): IDirectory;
 
 		/**
 		 * return parent directory
@@ -134,13 +113,6 @@
 		 * @return IDirectory
 		 */
 		public function parent(): IDirectory;
-
-		/**
-		 * a bit more talkative iterator
-		 *
-		 * @return IFile[]
-		 */
-		public function files();
 
 		/**
 		 * @return IFile[]

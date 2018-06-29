@@ -9,10 +9,6 @@
 	<testsuite name="edde">
 		<directory suffix=".php">tests/src</directory>
 	</testsuite>
-	<logging>
-		<log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
-		<log type="coverage-html" target=".coverage"/>
-	</logging>
 	<filter>
 		<whitelist processUncoveredFilesFromWhitelist="true">
 			<directory suffix=".php">src/Edde</directory>

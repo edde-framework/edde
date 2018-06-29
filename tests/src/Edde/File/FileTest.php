@@ -12,6 +12,12 @@
 			self::assertSame($name, $file->getFile());
 		}
 
+		public function testGetDirectory() {
+			$file = new File(__DIR__ . '/assets/text-file.txt');
+			$directory = $file->getDirectory();
+			self::assertEquals(new Directory(__DIR__ . '/assets'), $directory);
+		}
+
 		/**
 		 * @throws FileException
 		 */
@@ -80,7 +86,6 @@
 		 */
 		public function testSave() {
 			$file = new File(__DIR__ . '/temp/file');
-			$file->getDirectory()->create();
 			$file->save('foo');
 			self::assertTrue($file->exists(), 'file is not available');
 		}
@@ -121,8 +126,6 @@
 
 		/**
 		 * @throws FileException
-		 *
-		 * @depends testSave
 		 */
 		public function testRenameException() {
 			$this->expectException(FileException::class);

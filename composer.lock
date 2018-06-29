@@ -115,18 +115,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phar-io/manifest.git",
-                "reference": "014feadb268809af7c8e2f7ccd396b8494901f58"
+	            "reference": "29654cc208939d684071d5725dd1ad1f3e5d1733"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phar-io/manifest/zipball/014feadb268809af7c8e2f7ccd396b8494901f58",
-                "reference": "014feadb268809af7c8e2f7ccd396b8494901f58",
+	            "url": "https://api.github.com/repos/phar-io/manifest/zipball/29654cc208939d684071d5725dd1ad1f3e5d1733",
+	            "reference": "29654cc208939d684071d5725dd1ad1f3e5d1733",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "ext-phar": "*",
-                "phar-io/version": "^1.0.1",
+	            "phar-io/version": "2.0.0",
                 "php": "^5.6 || ^7.0"
             },
             "type": "library",
@@ -162,20 +162,20 @@
                 }
             ],
             "description": "Component for reading phar.io manifest information from a PHP Archive (PHAR)",
-            "time": "2017-04-07T07:07:10+00:00"
+	        "time": "2018-06-23T10:38:44+00:00"
         },
         {
             "name": "phar-io/version",
-            "version": "1.0.1",
+	        "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phar-io/version.git",
-                "reference": "a70c0ced4be299a63d32fa96d9281d03e94041df"
+	            "reference": "872340c7caa93bc4a2ce20d267498f8e578c856b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phar-io/version/zipball/a70c0ced4be299a63d32fa96d9281d03e94041df",
-                "reference": "a70c0ced4be299a63d32fa96d9281d03e94041df",
+	            "url": "https://api.github.com/repos/phar-io/version/zipball/872340c7caa93bc4a2ce20d267498f8e578c856b",
+	            "reference": "872340c7caa93bc4a2ce20d267498f8e578c856b",
                 "shasum": ""
             },
             "require": {
@@ -209,7 +209,7 @@
                 }
             ],
             "description": "Library for handling version information and constraints",
-            "time": "2017-03-05T17:38:23+00:00"
+	        "time": "2018-06-23T10:30:07+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -675,12 +675,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "ef4c3474b1b4042a4cb61b3dcdaae080f6a082bf"
+	            "reference": "11d92ae06224f98e406bcb626787fe56a41a874b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ef4c3474b1b4042a4cb61b3dcdaae080f6a082bf",
-                "reference": "ef4c3474b1b4042a4cb61b3dcdaae080f6a082bf",
+	            "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/11d92ae06224f98e406bcb626787fe56a41a874b",
+	            "reference": "11d92ae06224f98e406bcb626787fe56a41a874b",
                 "shasum": ""
             },
             "require": {
@@ -691,8 +691,8 @@
                 "ext-mbstring": "*",
                 "ext-xml": "*",
                 "myclabs/deep-copy": "^1.7",
-                "phar-io/manifest": "^1.0.1",
-                "phar-io/version": "^1.0",
+	            "phar-io/manifest": "^1.0.2",
+	            "phar-io/version": "^2.0",
                 "php": "^7.1",
                 "phpspec/prophecy": "^1.7",
                 "phpunit/php-code-coverage": "^6.0.7",
@@ -751,7 +751,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-06-18T16:58:43+00:00"
+	        "time": "2018-06-25T11:48:41+00:00"
         },
         {
             "name": "roave/security-advisories",
@@ -1141,12 +1141,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/exporter.git",
-                "reference": "20962714658cf74b1d293a98a30ec108e2e81ca9"
+	            "reference": "c8c4f196e32858e4448bc285e542b61a4c40d9dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/20962714658cf74b1d293a98a30ec108e2e81ca9",
-                "reference": "20962714658cf74b1d293a98a30ec108e2e81ca9",
+	            "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/c8c4f196e32858e4448bc285e542b61a4c40d9dc",
+	            "reference": "c8c4f196e32858e4448bc285e542b61a4c40d9dc",
                 "shasum": ""
             },
             "require": {
@@ -1200,7 +1200,7 @@
                 "export",
                 "exporter"
             ],
-            "time": "2018-05-15T05:51:07+00:00"
+	        "time": "2018-06-28T14:22:04+00:00"
         },
         {
             "name": "sebastian/global-state",
