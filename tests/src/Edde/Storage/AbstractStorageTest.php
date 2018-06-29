@@ -57,6 +57,24 @@
 			self::assertTrue(true, 'everything is ok');
 		}
 
+		/**
+		 * @throws TransactionException
+		 */
+		public function testCommitTransactionException() {
+			$this->expectException(TransactionException::class);
+			$this->expectExceptionMessage('Cannot commit a transaction - there is no one running!');
+			$this->storage->commit();
+		}
+
+		/**
+		 * @throws TransactionException
+		 */
+		public function testRollbackTransactionException() {
+			$this->expectException(TransactionException::class);
+			$this->expectExceptionMessage('Cannot rollback a transaction - there is no one running!');
+			$this->storage->rollback();
+		}
+
 		public function testInvalidSchemaType() {
 			$this->expectException(StorageException::class);
 			$this->expectExceptionMessage('Unknown type [this-type-does-not-exists]');
