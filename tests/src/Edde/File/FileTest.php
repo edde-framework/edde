@@ -27,14 +27,19 @@
 			self::assertTrue((new File(__DIR__ . '/temp/file2'))->exists());
 		}
 
+		/**
+		 * @throws IoException
+		 */
 		public function testFileIterator() {
-			$file = File::create(__DIR__ . '/assets/text-file.txt');
+			$file = new File(__DIR__ . '/assets/text-file.txt');
 			self::assertFalse($file->isOpen(), 'file is new, but it is already opened!');
+			$file->open('r');
 			self::assertSame([
 				"abc\n",
 				"cde\n",
 				"fgh\n",
 			], iterator_to_array($file));
+			$file->close();
 			self::assertFalse($file->isOpen(), 'file is still opened!');
 		}
 	}

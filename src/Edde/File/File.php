@@ -3,10 +3,10 @@
 	namespace Edde\File;
 
 	use Edde\SimpleObject;
-	use Edde\Url\Url;
 	use function basename;
 	use function dirname;
 	use function file_exists;
+	use function file_get_contents;
 
 	/**
 	 * File class; this is just file. Simple good old classic file. Really.
@@ -38,6 +38,11 @@
 		}
 
 		/** @inheritdoc */
+		public function getDirectory(): IDirectory {
+			return $this->directory;
+		}
+
+		/** @inheritdoc */
 		public function exists(): bool {
 			return file_exists($this->file);
 		}
@@ -50,8 +55,8 @@
 				}
 				throw new IoException(sprintf('Current file [%s] is already opened.', $this->file));
 			}
-			if (($this->handle = @fopen($path = $this->directory->getPath(), $mode)) === false) {
-				throw new IoException(sprintf('Cannot open file [%s (%s)].', $path, $mode));
+			if (($this->handle = @fopen($this->file, $mode)) === false) {
+				throw new IoException(sprintf('Cannot open file [%s (%s)].', $this->file, $mode));
 			}
 			return $this;
 		}
@@ -69,7 +74,7 @@
 		/** @inheritdoc */
 		public function write($write, int $length = null): IFile {
 			if (($count = $length ? fwrite($this->getHandle(), $write, $length) : fwrite($this->getHandle(), $write)) !== ($length = strlen($write))) {
-				throw new IoException(sprintf('Failed to write into file [%s]: expected %d bytes, %d has been written.', $this->directory->getPath(), $length, $count));
+				throw new IoException(sprintf('Failed to write into file [%s]: expected %d bytes, %d has been written.', $this->file, $length, $count));
 			}
 			return $this;
 		}
@@ -83,7 +88,7 @@
 		/** @inheritdoc */
 		public function getHandle() {
 			if ($this->isOpen() === false) {
-				throw new IoException(sprintf('Current file [%s] is not opened or has been already closed.', $this->directory->getPath()));
+				throw new IoException(sprintf('Current file [%s] is not opened or has been already closed.', $this->file));
 			}
 			return $this->handle;
 		}
@@ -101,23 +106,14 @@
 			if ($this->isOpen()) {
 				$this->close();
 			}
-			unlink($this->directory->getPath());
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function save(string $content): IFile {
-			if ($this->isOpen()) {
-				throw new IoException(sprintf('Cannot write (save) content to already opened file [%s].', $this->directory->getPath()));
-			}
-			file_put_contents($this->file, $content);
+			unlink($this->file);
 			return $this;
 		}
 
 		/** @inheritdoc */
 		public function rename(string $rename): IFile {
 			if ($this->isOpen()) {
-				throw new IoException(sprintf('Cannot rename already opened file [%s].', $this->directory->getPath()));
+				throw new IoException(sprintf('Cannot rename already opened file [%s].', $this->file));
 			}
 			if (@rename($src = $this->file, $dst = ($this->directory->getPath() . '/' . $rename)) === false) {
 				throw new IoException("Unable to rename file [$src] to [$dst].");
@@ -127,14 +123,23 @@
 		}
 
 		/** @inheritdoc */
-		public function touch(): IFile {
-			touch($this->directory->getPath());
+		public function save(string $content): IFile {
+			if ($this->isOpen()) {
+				throw new IoException(sprintf('Cannot write (save) content to already opened file [%s].', $this->file));
+			}
+			file_put_contents($this->file, $content);
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function getDirectory(): IDirectory {
-			return $this->directory ?: $this->directory = new Directory(dirname($this->directory->getPath()));
+		public function load(): string {
+			return file_get_contents($this->file);
+		}
+
+		/** @inheritdoc */
+		public function touch(): IFile {
+			touch($this->file);
+			return $this;
 		}
 
 		/** @inheritdoc */
@@ -144,9 +149,5 @@
 			while ($line = $this->read()) {
 				yield $count++ => $line;
 			}
-		}
-
-		static public function create(string $file): IFile {
-			return new static(Url::create('file:///' . ltrim($file, '/')));
 		}
 	}

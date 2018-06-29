@@ -51,7 +51,7 @@
 
 		/** @inheritdoc */
 		public function export(Iterator $iterator, IFile $file): IFile {
-			$file->openForWrite();
+			$file->open('w');
 			$file->write($this->string($iterator));
 			$file->close();
 			return $file;

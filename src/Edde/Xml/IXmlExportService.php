@@ -13,7 +13,7 @@
 		 * @param Iterator|INode[] $iterator
 		 * @param IFile            $file
 		 *
-		 * @return \Edde\File\IFile
+		 * @return IFile
 		 */
 		public function export(Iterator $iterator, IFile $file): IFile;
 

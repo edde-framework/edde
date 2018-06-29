@@ -32,7 +32,7 @@
 
 		/** @inheritdoc */
 		public function file(string $file, IXmlHandler $xmlHandler): IXmlParserService {
-			return $this->parse(File::create($file), $xmlHandler);
+			return $this->parse(new File($file), $xmlHandler);
 		}
 
 		/** @inheritdoc */

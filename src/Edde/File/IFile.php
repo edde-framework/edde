@@ -128,6 +128,13 @@
 		public function save(string $content): IFile;
 
 		/**
+		 * return whole content of a file; be careful as this involves memory limit
+		 *
+		 * @return string
+		 */
+		public function load(): string;
+
+		/**
 		 * only creates an empty file
 		 *
 		 * @return IFile
