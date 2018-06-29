@@ -191,6 +191,12 @@
 		protected function setUp() {
 			parent::setUp();
 			$temp = new Directory(__DIR__ . '/temp');
-			$temp->purge();
+			$temp->create();
+		}
+
+		protected function tearDown() {
+			parent::tearDown();
+			$temp = new Directory(__DIR__ . '/temp');
+			$temp->delete();
 		}
 	}

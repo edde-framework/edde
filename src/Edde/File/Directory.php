@@ -8,6 +8,8 @@
 	use RecursiveIteratorIterator;
 	use SplFileInfo;
 	use function dirname;
+	use function is_dir;
+	use function sprintf;
 	use function unlink;
 
 	/**
@@ -83,13 +85,19 @@
 			if (file_exists($this->directory)) {
 				$permissions = $this->getPermission();
 			}
-			$this->delete();
+			try {
+				$this->delete();
+			} catch (FileException $_) {
+			}
 			$this->create($permissions);
 			return $this;
 		}
 
 		/** @inheritdoc */
 		public function delete(): IDirectory {
+			if (is_dir($this->directory) === false) {
+				throw new FileException(sprintf('Directory [%s] is not directory or does not exists.', $this->directory));
+			}
 			/** @var $splFileInfo SplFileInfo */
 			foreach (new FilesystemIterator($this->directory) as $splFileInfo) {
 				$path = $splFileInfo->getRealPath();

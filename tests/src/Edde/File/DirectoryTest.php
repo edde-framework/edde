@@ -100,4 +100,16 @@
 			($directory = new Directory(__DIR__ . '/some'))->delete();
 			self::assertFalse($directory->exists(), 'root directory has not been deleted!');
 		}
+
+		protected function setUp() {
+			parent::setUp();
+			$temp = new Directory(__DIR__ . '/temp');
+			$temp->create();
+		}
+
+		protected function tearDown() {
+			parent::tearDown();
+			$temp = new Directory(__DIR__ . '/temp');
+			$temp->delete();
+		}
 	}
