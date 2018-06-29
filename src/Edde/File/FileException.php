@@ -4,5 +4,5 @@
 
 	use Edde\EddeException;
 
-	class IoException extends EddeException {
+	class FileException extends EddeException {
 	}

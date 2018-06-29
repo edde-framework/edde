@@ -11,7 +11,7 @@
 		}
 
 		/**
-		 * @throws IoException
+		 * @throws FileException
 		 */
 		public function testCreate() {
 			$directory = new Directory(__DIR__ . '/some/directory/here');

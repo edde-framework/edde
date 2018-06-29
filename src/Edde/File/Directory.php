@@ -90,7 +90,7 @@
 		/** @inheritdoc */
 		public function create(int $chmod = 0777): IDirectory {
 			if (is_dir($this->directory) === false && @mkdir($this->directory, $chmod, true) && is_dir($this->directory) === false) {
-				throw new IoException(sprintf('Cannot create directory [%s].', $this->directory));
+				throw new FileException(sprintf('Cannot create directory [%s].', $this->directory));
 			}
 			$this->realpath();
 			return $this;
@@ -126,14 +126,14 @@
 						if (is_file($path) || is_link($path)) {
 							$func = DIRECTORY_SEPARATOR === '\\' && is_dir($path) ? 'rmdir' : 'unlink';
 							if (@$func($path) === false) {
-								throw new IoException("Unable to delete [$path].");
+								throw new FileException("Unable to delete [$path].");
 							}
 						} else if (is_dir($path)) {
 							foreach (new FilesystemIterator($path) as $item) {
 								($realpath = $item->getRealPath()) ? (new Directory($realpath))->delete() : null;
 							}
 							if (@rmdir($path) === false) {
-								throw new IoException("Unable to delete directory [$path].");
+								throw new FileException("Unable to delete directory [$path].");
 							}
 						}
 						break;

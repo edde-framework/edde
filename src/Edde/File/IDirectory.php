@@ -55,7 +55,7 @@
 		 *
 		 * @return IFile
 		 *
-		 * @throws IoException
+		 * @throws FileException
 		 */
 		public function save(string $file, string $content): IFile;
 
@@ -84,14 +84,14 @@
 		 *
 		 * @return IDirectory
 		 *
-		 * @throws IoException
+		 * @throws FileException
 		 */
 		public function create(int $chmod = 0777): IDirectory;
 
 		/**
 		 * @return mixed
 		 *
-		 * @throws IoException
+		 * @throws FileException
 		 */
 		public function getPermission();
 
@@ -100,7 +100,7 @@
 		 *
 		 * @return IDirectory
 		 *
-		 * @throws IoException
+		 * @throws FileException
 		 */
 		public function purge(): IDirectory;
 
@@ -109,7 +109,7 @@
 		 *
 		 * @return IDirectory
 		 *
-		 * @throws IoException
+		 * @throws FileException
 		 */
 		public function delete(): IDirectory;
 

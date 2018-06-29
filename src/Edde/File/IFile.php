@@ -37,13 +37,12 @@
 		 * create file handle; if the file is not available, exception should be thrown
 		 *
 		 * @param string $mode
-		 * @param bool   $exclusive if the file is already opened, exception should be thrown
 		 *
 		 * @return IFile
 		 *
-		 * @throws IoException
+		 * @throws FileException
 		 */
-		public function open(string $mode, bool $exclusive = false): IFile;
+		public function open(string $mode): IFile;
 
 		/**
 		 * @return bool
@@ -55,9 +54,9 @@
 		 *
 		 * @param int $length
 		 *
-		 * @return mixed
+		 * @return bool|string
 		 *
-		 * @throws IoException
+		 * @throws FileException
 		 */
 		public function read(int $length = null);
 
@@ -67,16 +66,16 @@
 		 * @param mixed $write
 		 * @param int   $length
 		 *
-		 * @return IFile
+		 * @return bool|int
 		 *
-		 * @throws IoException
+		 * @throws FileException
 		 */
-		public function write($write, int $length = null): IFile;
+		public function write($write, int $length = null);
 
 		/**
 		 * @return IFile
 		 *
-		 * @throws IoException
+		 * @throws FileException
 		 */
 		public function rewind(): IFile;
 
@@ -85,7 +84,7 @@
 		 *
 		 * @return resource
 		 *
-		 * @throws IoException
+		 * @throws FileException
 		 */
 		public function getHandle();
 
@@ -94,14 +93,14 @@
 		 *
 		 * @return IFile
 		 *
-		 * @throws IoException
+		 * @throws FileException
 		 */
 		public function close(): IFile;
 
 		/**
 		 * @return IFile
 		 *
-		 * @throws IoException
+		 * @throws FileException
 		 */
 		public function delete(): IFile;
 
@@ -112,7 +111,7 @@
 		 *
 		 * @return IFile
 		 *
-		 * @throws IoException
+		 * @throws FileException
 		 */
 		public function rename(string $rename): IFile;
 
@@ -123,7 +122,7 @@
 		 *
 		 * @return IFile
 		 *
-		 * @throws IoException
+		 * @throws FileException
 		 */
 		public function save(string $content): IFile;
 
@@ -138,6 +137,8 @@
 		 * only creates an empty file
 		 *
 		 * @return IFile
+		 *
+		 * @throws FileException
 		 */
 		public function touch(): IFile;
 	}

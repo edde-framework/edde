@@ -7,6 +7,7 @@
 	use function dirname;
 	use function file_exists;
 	use function file_get_contents;
+	use function sprintf;
 
 	/**
 	 * File class; this is just file. Simple good old classic file. Really.
@@ -18,6 +19,8 @@
 		protected $directory;
 		/** @var resource */
 		protected $handle;
+		/** @var string */
+		protected $mode;
 
 		/**
 		 * @param $file
@@ -48,16 +51,17 @@
 		}
 
 		/** @inheritdoc */
-		public function open(string $mode, bool $exclusive = false): IFile {
+		public function open(string $mode): IFile {
 			if ($this->isOpen()) {
-				if ($exclusive === false) {
+				if ($mode === $this->mode) {
 					return $this;
 				}
-				throw new IoException(sprintf('Current file [%s] is already opened.', $this->file));
+				throw new FileException(sprintf('Current file [%s] is already opened in different mode [%s].', $this->file, $this->mode));
 			}
 			if (($this->handle = @fopen($this->file, $mode)) === false) {
-				throw new IoException(sprintf('Cannot open file [%s (%s)].', $this->file, $mode));
+				throw new FileException(sprintf('Cannot open file [%s (%s)].', $this->file, $mode));
 			}
+			$this->mode = $mode;
 			return $this;
 		}
 
@@ -72,11 +76,8 @@
 		}
 
 		/** @inheritdoc */
-		public function write($write, int $length = null): IFile {
-			if (($count = $length ? fwrite($this->getHandle(), $write, $length) : fwrite($this->getHandle(), $write)) !== ($length = strlen($write))) {
-				throw new IoException(sprintf('Failed to write into file [%s]: expected %d bytes, %d has been written.', $this->file, $length, $count));
-			}
-			return $this;
+		public function write($write, int $length = null) {
+			return $length ? fwrite($this->getHandle(), $write, $length) : fwrite($this->getHandle(), $write);
 		}
 
 		/** @inheritdoc */
@@ -88,7 +89,7 @@
 		/** @inheritdoc */
 		public function getHandle() {
 			if ($this->isOpen() === false) {
-				throw new IoException(sprintf('Current file [%s] is not opened or has been already closed.', $this->file));
+				throw new FileException(sprintf('Current file [%s] is not opened or has been already closed.', $this->file));
 			}
 			return $this->handle;
 		}
@@ -98,13 +99,14 @@
 			fflush($handle = $this->getHandle());
 			fclose($handle);
 			$this->handle = null;
+			$this->mode = null;
 			return $this;
 		}
 
 		/** @inheritdoc */
 		public function delete(): IFile {
 			if ($this->isOpen()) {
-				$this->close();
+				throw new FileException(sprintf('Cannot delete opened [%s] file [%s].', $this->mode, $this->file));
 			}
 			unlink($this->file);
 			return $this;
@@ -113,10 +115,10 @@
 		/** @inheritdoc */
 		public function rename(string $rename): IFile {
 			if ($this->isOpen()) {
-				throw new IoException(sprintf('Cannot rename already opened file [%s].', $this->file));
+				throw new FileException(sprintf('Cannot rename opened [%s] file [%s] to [%s].', $this->mode, $this->file, $rename));
 			}
 			if (@rename($src = $this->file, $dst = ($this->directory->getPath() . '/' . $rename)) === false) {
-				throw new IoException("Unable to rename file [$src] to [$dst].");
+				throw new FileException("Unable to rename file [$src] to [$dst].");
 			}
 			$this->file = $dst;
 			return $this;
@@ -125,7 +127,7 @@
 		/** @inheritdoc */
 		public function save(string $content): IFile {
 			if ($this->isOpen()) {
-				throw new IoException(sprintf('Cannot write (save) content to already opened file [%s].', $this->file));
+				throw new FileException(sprintf('Cannot save content to already opened [%s] file [%s].', $this->mode, $this->file));
 			}
 			file_put_contents($this->file, $content);
 			return $this;
@@ -138,7 +140,12 @@
 
 		/** @inheritdoc */
 		public function touch(): IFile {
-			touch($this->file);
+			if ($this->isOpen()) {
+				throw new FileException(sprintf('Cannot touch already opened [%s] file [%s].', $this->mode, $this->file));
+			}
+			if (@touch($this->file) === false) {
+				throw new FileException(sprintf('Cannot touch file [%s].', $this->file));
+			}
 			return $this;
 		}
 
