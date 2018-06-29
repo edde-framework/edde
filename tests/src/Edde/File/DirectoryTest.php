@@ -3,6 +3,7 @@
 	namespace Edde\File;
 
 	use Edde\TestCase;
+	use function sort;
 
 	class DirectoryTest extends TestCase {
 		public function testGetPath() {
@@ -52,6 +53,8 @@
 			foreach ($directory->getFiles() as $splFileInfo) {
 				$actual[] = $splFileInfo->getRealPath();
 			}
+			sort($expect);
+			sort($actual);
 			self::assertSame($expect, $actual);
 		}
 
@@ -67,6 +70,8 @@
 			foreach ($directory as $file) {
 				$actual[] = $file;
 			}
+			sort($expect);
+			sort($actual);
 			self::assertEquals($expect, $actual);
 		}
 
