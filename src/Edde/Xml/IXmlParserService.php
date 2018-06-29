@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Xml;
 
-	use Edde\Io\IFile;
+	use Edde\File\IFile;
 
 	/**
 	 * Event based xml parser.

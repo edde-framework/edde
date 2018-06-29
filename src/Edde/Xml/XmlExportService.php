@@ -3,7 +3,7 @@
 	namespace Edde\Xml;
 
 	use Edde\Edde;
-	use Edde\Io\IFile;
+	use Edde\File\IFile;
 	use Edde\Node\INode;
 	use Iterator;
 	use SplStack;

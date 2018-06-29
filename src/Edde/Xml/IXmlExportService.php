@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Xml;
 
-	use Edde\Io\IFile;
+	use Edde\File\IFile;
 	use Edde\Node\INode;
 	use Iterator;
 
@@ -13,7 +13,7 @@
 		 * @param Iterator|INode[] $iterator
 		 * @param IFile            $file
 		 *
-		 * @return \Edde\Io\IFile
+		 * @return \Edde\File\IFile
 		 */
 		public function export(Iterator $iterator, IFile $file): IFile;
 

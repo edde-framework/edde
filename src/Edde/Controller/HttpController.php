@@ -8,10 +8,10 @@
 	use Edde\Content\JsonContent;
 	use Edde\Content\NoContent;
 	use Edde\Content\TextContent;
+	use Edde\File\IFile;
 	use Edde\Http\EmptyBodyException;
 	use Edde\Http\IResponse;
 	use Edde\Http\Response;
-	use Edde\Io\IFile;
 	use Edde\Service\Http\RequestService;
 	use stdClass;
 	use function json_decode;

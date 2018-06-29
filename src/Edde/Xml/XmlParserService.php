@@ -3,8 +3,8 @@
 	namespace Edde\Xml;
 
 	use Edde\Edde;
-	use Edde\Io\File;
-	use Edde\Io\IFile;
+	use Edde\File\File;
+	use Edde\File\IFile;
 	use Edde\Service\Utils\StringUtils;
 	use Iterator;
 
