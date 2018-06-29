@@ -2,7 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Xml;
 
-	use Edde\Io\IResource;
+	use Edde\Io\IFile;
 
 	/**
 	 * Event based xml parser.
@@ -35,12 +35,12 @@
 		/**
 		 * parse the input stream and emit events to the given xml handler
 		 *
-		 * @param IResource   $resource
+		 * @param IFile       $file
 		 * @param IXmlHandler $xmlHandler
 		 *
 		 * @return IXmlParserService
 		 *
 		 * @throws XmlException
 		 */
-		public function parse(IResource $resource, IXmlHandler $xmlHandler): IXmlParserService;
+		public function parse(IFile $file, IXmlHandler $xmlHandler): IXmlParserService;
 	}

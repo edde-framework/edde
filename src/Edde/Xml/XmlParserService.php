@@ -4,7 +4,7 @@
 
 	use Edde\Edde;
 	use Edde\Io\File;
-	use Edde\Io\IResource;
+	use Edde\Io\IFile;
 	use Edde\Service\Utils\StringUtils;
 	use Iterator;
 
@@ -26,26 +26,31 @@
 		protected const XML_TYPE_CLOSE_HEADER = 512;
 
 		/** @inheritdoc */
-		public function file(string $file, IXmlHandler $xmlHandler): IXmlParserService {
-			return $this->parse(File::create($file), $xmlHandler);
-		}
-
-		/** @inheritdoc */
 		public function string(string $string, IXmlHandler $xmlHandler): IXmlParserService {
 			return $this->iterate($this->stringUtils->createIterator($string), $xmlHandler);
 		}
 
 		/** @inheritdoc */
-		public function parse(IResource $resource, IXmlHandler $xmlHandler): IXmlParserService {
+		public function file(string $file, IXmlHandler $xmlHandler): IXmlParserService {
+			return $this->parse(File::create($file), $xmlHandler);
+		}
+
+		/** @inheritdoc */
+		public function parse(IFile $file, IXmlHandler $xmlHandler): IXmlParserService {
 			/**
 			 * this interesting piece of things is reading line based data from $resource and
 			 * streaming character per character to the iterator
 			 */
-			$this->iterate((function (IResource $resource) {
-				foreach ($resource as $line) {
-					yield from $this->stringUtils->createIterator($line);
-				}
-			})($resource), $xmlHandler);
+			try {
+				$file->open('r');
+				$this->iterate((function (IFile $file) {
+					foreach ($file as $line) {
+						yield from $this->stringUtils->createIterator($line);
+					}
+				})($file), $xmlHandler);
+			} finally {
+				$file->close();
+			}
 			return $this;
 		}
 

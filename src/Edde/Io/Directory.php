@@ -69,11 +69,11 @@
 
 		/** @inheritdoc */
 		public function filename(string $file): string {
-			return $this->getDirectory() . '/' . $file;
+			return $this->getPath() . '/' . $file;
 		}
 
 		/** @inheritdoc */
-		public function getDirectory(): string {
+		public function getPath(): string {
 			return $this->directory;
 		}
 
@@ -162,7 +162,7 @@
 
 		/** @inheritdoc */
 		public function parent(): IDirectory {
-			return new Directory($this->getDirectory() . '/..');
+			return new Directory($this->getPath() . '/..');
 		}
 
 		/** @inheritdoc */
@@ -178,6 +178,6 @@
 		}
 
 		public function __toString() {
-			return $this->getDirectory();
+			return $this->getPath();
 		}
 	}

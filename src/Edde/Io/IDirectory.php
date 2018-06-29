@@ -10,7 +10,7 @@
 		 *
 		 * @return string
 		 */
-		public function getDirectory(): string;
+		public function getPath(): string;
 
 		/**
 		 * return directory name

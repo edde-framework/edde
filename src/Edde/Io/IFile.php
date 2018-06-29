@@ -2,7 +2,37 @@
 	declare(strict_types=1);
 	namespace Edde\Io;
 
-	interface IFile extends IResource {
+	use IteratorAggregate;
+
+	interface IFile extends IteratorAggregate {
+		/**
+		 * return full path with filename
+		 *
+		 * @return string
+		 */
+		public function getFile(): string;
+
+		/**
+		 * return just filename
+		 *
+		 * @return string
+		 */
+		public function getName(): string;
+
+		/**
+		 * return directory of this file
+		 *
+		 * @return IDirectory
+		 */
+		public function getDirectory(): IDirectory;
+
+		/**
+		 * tells if file exists
+		 *
+		 * @return bool
+		 */
+		public function exists(): bool;
+
 		/**
 		 * create file handle; if the file is not available, exception should be thrown
 		 *
@@ -14,33 +44,6 @@
 		 * @throws IoException
 		 */
 		public function open(string $mode, bool $exclusive = false): IFile;
-
-		/**
-		 * @param bool $exclusive
-		 *
-		 * @return IFile
-		 *
-		 * @throws IoException
-		 */
-		public function openForRead(bool $exclusive = false): IFile;
-
-		/**
-		 * @param bool $exclusive
-		 *
-		 * @return IFile
-		 *
-		 * @throws IoException
-		 */
-		public function openForWrite(bool $exclusive = false): IFile;
-
-		/**
-		 * @param bool $exclusive
-		 *
-		 * @return IFile
-		 *
-		 * @throws IoException
-		 */
-		public function openForAppend(bool $exclusive = false): IFile;
 
 		/**
 		 * @return bool
@@ -103,7 +106,7 @@
 		public function delete(): IFile;
 
 		/**
-		 * rename a file
+		 * rename a file (in current directory, this does NOT move a file)
 		 *
 		 * @param string $rename
 		 *
@@ -125,50 +128,9 @@
 		public function save(string $content): IFile;
 
 		/**
-		 * create a file and do an exclusive lock or lock an existing file; if lock cannot be acquired, exception should be thrown
-		 *
-		 * @param bool $exclusive
-		 * @param bool $block
-		 *
-		 * @return IFile
-		 *
-		 * @throws FileLockException
-		 * @throws IoException
-		 */
-		public function lock(bool $exclusive = true, bool $block = true): IFile;
-
-		/**
-		 * blocking lock is by default exclusive
-		 *
-		 * @return IFile
-		 */
-		public function blockingLock(): IFile;
-
-		/**
-		 * non blocking lock is be default exclusive
-		 *
-		 * @return IFile
-		 */
-		public function nonBlockingLock(): IFile;
-
-		/**
-		 * unlock the file or throw an exception if file is not locked
-		 *
-		 * @return IFile
-		 */
-		public function unlock(): IFile;
-
-		/**
 		 * only creates an empty file
 		 *
 		 * @return IFile
 		 */
 		public function touch(): IFile;
-
-		/**
-		 * return directory of this file
-		 *
-		 * @return IDirectory
-		 */
-		public function getDirectory(): IDirectory;
 	}

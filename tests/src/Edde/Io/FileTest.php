@@ -8,14 +8,23 @@
 		/**
 		 * @throws IoException
 		 */
-		public function testFile() {
-			$file = File::create(__DIR__ . '/temp/file');
+		public function testSave() {
+			$file = new File(__DIR__ . '/temp/file');
+			$file->getDirectory()->create();
 			$file->save('foo');
-			self::assertTrue($file->isAvailable(), 'file is not available');
-			$directory = $file->getDirectory();
-			$directory->create();
-			$directory->delete();
-			self::assertFalse($directory->exists(), 'directory has not been deleted!');
+			self::assertTrue($file->exists(), 'file is not available');
+		}
+
+		/**
+		 * @throws IoException
+		 *
+		 * @depends testSave
+		 */
+		public function testRename() {
+			$file = new File(__DIR__ . '/temp/file');
+			$file->rename('file2');
+			self::assertSame('file2', $file->getName());
+			self::assertTrue((new File(__DIR__ . '/temp/file2'))->exists());
 		}
 
 		public function testFileIterator() {

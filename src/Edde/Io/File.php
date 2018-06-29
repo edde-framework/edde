@@ -2,16 +2,45 @@
 	declare(strict_types=1);
 	namespace Edde\Io;
 
+	use Edde\SimpleObject;
 	use Edde\Url\Url;
+	use function basename;
+	use function dirname;
+	use function file_exists;
 
 	/**
 	 * File class; this is just file. Simple good old classic file. Really.
 	 */
-	class File extends Resource implements IFile {
+	class File extends SimpleObject implements IFile {
+		/** string */
+		protected $file;
 		/** @var IDirectory */
 		protected $directory;
 		/** @var resource */
 		protected $handle;
+
+		/**
+		 * @param $file
+		 */
+		public function __construct($file) {
+			$this->file = $file;
+			$this->directory = new Directory(dirname($this->file));
+		}
+
+		/** @inheritdoc */
+		public function getFile(): string {
+			return $this->file;
+		}
+
+		/** @inheritdoc */
+		public function getName(): string {
+			return basename($this->file);
+		}
+
+		/** @inheritdoc */
+		public function exists(): bool {
+			return file_exists($this->file);
+		}
 
 		/** @inheritdoc */
 		public function open(string $mode, bool $exclusive = false): IFile {
@@ -19,29 +48,11 @@
 				if ($exclusive === false) {
 					return $this;
 				}
-				throw new IoException(sprintf('Current file [%s] is already opened.', $this->getUrl()));
+				throw new IoException(sprintf('Current file [%s] is already opened.', $this->file));
 			}
-			if (($this->handle = @fopen($path = $this->getPath(), $mode)) === false) {
+			if (($this->handle = @fopen($path = $this->directory->getPath(), $mode)) === false) {
 				throw new IoException(sprintf('Cannot open file [%s (%s)].', $path, $mode));
 			}
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function openForRead(bool $exclusive = false): IFile {
-			$this->open('rb+', $exclusive);
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function openForWrite(bool $exclusive = false): IFile {
-			$this->open('wb+', $exclusive);
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function openForAppend(bool $exclusive = false): IFile {
-			$this->open('a', $exclusive);
 			return $this;
 		}
 
@@ -52,19 +63,13 @@
 
 		/** @inheritdoc */
 		public function read(int $length = null) {
-			if (($line = ($length ? fgets($this->getHandle(), $length) : fgets($this->getHandle()))) === false) {
-				$this->close();
-			}
-			return $line;
+			return ($length ? fgets($this->getHandle(), $length) : fgets($this->getHandle()));
 		}
 
 		/** @inheritdoc */
 		public function write($write, int $length = null): IFile {
-			if ($this->isOpen() === false) {
-				$this->openForWrite();
-			}
 			if (($count = $length ? fwrite($this->getHandle(), $write, $length) : fwrite($this->getHandle(), $write)) !== ($length = strlen($write))) {
-				throw new IoException(sprintf('Failed to write into file [%s]: expected %d bytes, %d has been written.', $this->getPath(), $length, $count));
+				throw new IoException(sprintf('Failed to write into file [%s]: expected %d bytes, %d has been written.', $this->directory->getPath(), $length, $count));
 			}
 			return $this;
 		}
@@ -78,7 +83,7 @@
 		/** @inheritdoc */
 		public function getHandle() {
 			if ($this->isOpen() === false) {
-				throw new IoException(sprintf('Current file [%s] is not opened or has been already closed.', $this->getPath()));
+				throw new IoException(sprintf('Current file [%s] is not opened or has been already closed.', $this->directory->getPath()));
 			}
 			return $this->handle;
 		}
@@ -96,76 +101,44 @@
 			if ($this->isOpen()) {
 				$this->close();
 			}
-			unlink($this->getPath());
+			unlink($this->directory->getPath());
 			return $this;
 		}
 
 		/** @inheritdoc */
 		public function save(string $content): IFile {
 			if ($this->isOpen()) {
-				throw new IoException(sprintf('Cannot write (save) content to already opened file [%s].', $this->getPath()));
+				throw new IoException(sprintf('Cannot write (save) content to already opened file [%s].', $this->directory->getPath()));
 			}
-			$this->getDirectory()->create();
-			file_put_contents($this->getPath(), $content);
+			file_put_contents($this->file, $content);
 			return $this;
 		}
 
 		/** @inheritdoc */
 		public function rename(string $rename): IFile {
 			if ($this->isOpen()) {
-				throw new IoException(sprintf('Cannot rename already opened file [%s].', $this->getPath()));
+				throw new IoException(sprintf('Cannot rename already opened file [%s].', $this->directory->getPath()));
 			}
-			if (@rename($src = $this->getPath(), $dst = ($this->getUrl()->getBasePath() . '/' . $rename)) === false) {
-				throw new IoException("Unable to rename file or directory [$src] to [$dst].");
+			if (@rename($src = $this->file, $dst = ($this->directory->getPath() . '/' . $rename)) === false) {
+				throw new IoException("Unable to rename file [$src] to [$dst].");
 			}
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function lock(bool $exclusive = true, bool $block = true): IFile {
-			if ($this->isOpen()) {
-				throw new FileLockException(sprintf('File being lock must not be opened.'));
-			}
-			$exclusive ? $this->openForWrite() : $this->openForRead();
-			if (flock($this->getHandle(), $exclusive ? (LOCK_EX | ($block ? 0 : LOCK_NB)) : LOCK_SH) === false) {
-				throw new FileLockException(sprintf('Cannot execute lock on file [%s].', $this->getPath()));
-			}
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function blockingLock(): IFile {
-			return $this->lock(true, true);
-		}
-
-		/** @inheritdoc */
-		public function nonBlockingLock(): IFile {
-			return $this->lock(true, false);
-		}
-
-		/** @inheritdoc */
-		public function unlock(): IFile {
-			fflush($handle = $this->getHandle());
-			flock($handle, LOCK_UN);
+			$this->file = $dst;
 			return $this;
 		}
 
 		/** @inheritdoc */
 		public function touch(): IFile {
-			touch($this->getPath());
+			touch($this->directory->getPath());
 			return $this;
 		}
 
 		/** @inheritdoc */
 		public function getDirectory(): IDirectory {
-			return $this->directory ?: $this->directory = new Directory(dirname($this->getPath()));
+			return $this->directory ?: $this->directory = new Directory(dirname($this->directory->getPath()));
 		}
 
 		/** @inheritdoc */
 		public function getIterator() {
-			if ($this->isOpen() === false) {
-				$this->openForRead();
-			}
 			$this->rewind();
 			$count = 0;
 			while ($line = $this->read()) {
