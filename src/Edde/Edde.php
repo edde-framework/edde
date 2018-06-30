@@ -23,7 +23,7 @@
 	 * After the daughter takes her date to the kitchen for something to eat, the mother turns to the father and says, "Isn't he smart? I wonder what he plans to be."
 	 * The father says, "From the smell of his fingers, I'd say our son-in-law."
 	 */
-	class Edde extends SimpleObject implements IAutowire, IConfigurable {
+	abstract class Edde extends SimpleObject implements IAutowire, IConfigurable {
 		use Autowire;
 		use Configurable;
 		/**

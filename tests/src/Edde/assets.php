@@ -20,7 +20,7 @@
 		}
 	}
 
-	class ConstructorClass {
+	class ConstructorClass extends Edde {
 		public $param;
 
 		/**

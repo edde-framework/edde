@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde;
 
+	use ConstructorClass;
 	use Edde\Configurable\IConfigurable;
 	use Edde\Container\IAutowire;
 	use Edde\Test\BarObject;
@@ -42,10 +43,21 @@
 			self::assertTrue(isset($this->fooObject->foo));
 		}
 
+		public function testClone() {
+			$class = new ConstructorClass('boo');
+			self::assertFalse($class->isSetup());
+			$class->setup();
+			self::assertTrue($class->isSetup());
+			$clone = clone $class;
+			self::assertFalse($clone->isSetup());
+		}
+
 		/**
 		 * @codeCoverageIgnore
 		 */
 		protected function setUp() {
-			$this->fooBarObject = new FooBarObject($this->fooObject = new FooObject(), $this->barObject = new BarObject($this->fooObject));
+			$this->fooBarObject = new FooBarObject();
+			$this->fooBarObject->injectFooObject($this->fooObject = new FooObject());
+			$this->fooBarObject->injectBarObject($this->barObject = new BarObject());
 		}
 	}
