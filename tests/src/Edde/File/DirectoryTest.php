@@ -106,6 +106,45 @@
 			self::assertFalse($directory->exists(), 'root directory has not been deleted!');
 		}
 
+		/**
+		 * @throws FileException
+		 */
+		public function testPurge() {
+			/** @var $directory IDirectory */
+			$directory = new Directory(__DIR__ . '/temp/dir');
+			$directory->create();
+			$directory->save('boo', 'yep');
+			$actual = [];
+			$expect = [
+				'/edde/tests/src/Edde/File/temp/dir/boo',
+			];
+			foreach ($directory->getFiles() as $splFileInfo) {
+				$actual[] = $splFileInfo->getRealPath();
+			}
+			self::assertEquals($expect, $actual);
+			$directory->purge();
+			$actual = [];
+			foreach ($directory->getFiles() as $splFileInfo) {
+				$actual[] = $splFileInfo->getRealPath();
+			}
+			self::assertEmpty($actual);
+		}
+
+		/**
+		 * @throws FileException
+		 */
+		public function testPurgeNotExist() {
+			/** @var $directory IDirectory */
+			$directory = new Directory(__DIR__ . '/temp/dir2');
+			$directory->purge();
+			$actual = [];
+			foreach ($directory->getFiles() as $splFileInfo) {
+				$actual[] = $splFileInfo->getRealPath();
+			}
+			self::assertTrue($directory->exists());
+			self::assertEmpty($actual);
+		}
+
 		protected function setUp() {
 			parent::setUp();
 			$temp = new Directory(__DIR__ . '/temp');
