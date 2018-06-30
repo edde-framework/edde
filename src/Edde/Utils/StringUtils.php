@@ -3,6 +3,7 @@
 	namespace Edde\Utils;
 
 	use Edde\Edde;
+	use function is_array;
 
 	class StringUtils extends Edde implements IStringUtils {
 		const SEPARATOR_LIST = [
@@ -57,10 +58,10 @@
 		}
 
 		/** @inheritdoc */
-		public function match(string $string, string $pattern, bool $named = false, bool $trim = false): ?array {
+		public function match(string $string, string $pattern, bool $named = false, $trim = false): ?array {
 			$match = null;
 			if (($match = preg_match($pattern, $string, $match) ? $match : null) === null) {
-				return null;
+				return is_array($trim) ? $trim : null;
 			}
 			if ($named && is_array($match)) {
 				foreach ($match as $k => $v) {
@@ -79,7 +80,7 @@
 		public function matchAll(string $string, string $pattern, bool $named = false, $trim = false): array {
 			$match = null;
 			if (($match = preg_match_all($pattern, $string, $match) ? $match : null) === null) {
-				return [];
+				return is_array($trim) ? $trim : [];
 			}
 			if ($named) {
 				/** @noinspection ForeachSourceInspection */

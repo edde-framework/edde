@@ -86,20 +86,20 @@
 		/**
 		 * preg_match on steroids
 		 *
-		 * @param string $string
-		 * @param string $pattern
-		 * @param bool   $named
-		 * @param bool   $trim
+		 * @param string     $string
+		 * @param string     $pattern
+		 * @param bool       $named
+		 * @param bool|array $trim
 		 *
 		 * @return array|null
 		 */
-		public function match(string $string, string $pattern, bool $named = false, bool $trim = false): ?array;
+		public function match(string $string, string $pattern, bool $named = false, $trim = false): ?array;
 
 		/**
-		 * @param string $string
-		 * @param string $pattern
-		 * @param bool   $named
-		 * @param bool   $trim
+		 * @param string     $string
+		 * @param string     $pattern
+		 * @param bool       $named
+		 * @param bool|array $trim
 		 *
 		 * @return array
 		 */

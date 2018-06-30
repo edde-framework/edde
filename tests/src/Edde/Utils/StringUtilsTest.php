@@ -4,6 +4,7 @@
 
 	use Edde\Service\Utils\StringUtils;
 	use Edde\TestCase;
+	use function is_array;
 
 	class StringUtilsTest extends TestCase {
 		use StringUtils;
@@ -41,5 +42,59 @@
 
 		public function testNormalize() {
 			self::assertEquals("Bl\na", $this->stringUtils->normalize("Bl\ra"));
+		}
+
+		public function testMatchNope() {
+			$match = $this->stringUtils->match('nope', '~[0-9]~', false, $trim = ['a' => 1, 'b' => 2]);
+			self::assertEquals($trim, $match);
+		}
+
+		public function testMatchTrim() {
+			$match = $this->stringUtils->match('nope123', '~[0-9]+~', false, $trim = ['a' => 1, 'b' => 2]);
+			$trim[0] = '123';
+			self::assertEquals($trim, $match);
+		}
+
+		public function testMatchAll() {
+			$string = '
+/**
+ * @help run an upgrade to the given version or do full upgrade to the latest available version
+ * @help [--version] <version name>: select target upgrade
+ */
+			';
+			$result = $this->stringUtils->matchAll($string, '~@help\s+(?<help>.*)~', true);
+			self::assertEquals([
+				'help' => [
+					'run an upgrade to the given version or do full upgrade to the latest available version',
+					'[--version] <version name>: select target upgrade',
+				],
+			], $result);
+		}
+
+		public function testMatchAll2() {
+			$string = '
+/**
+ * @help run an upgrade to the given version or do full upgrade to the latest available version
+ * @help [--version] <version name>: select target upgrade
+ */
+			';
+			$result = $this->stringUtils->matchAll($string, '~nope~', true);
+			self::assertTrue(is_array($result));
+			self::assertEmpty($result);
+		}
+
+		public function testMatchAllTrim() {
+			$string = '
+/**
+ * @help run an upgrade to the given version or do full upgrade to the latest available version
+ * @help [--version] <version name>: select target upgrade
+ */
+			';
+			$result = $this->stringUtils->matchAll($string, '~@help\s+(?<help>.*)~', true, $trim = ['a' => true, 'b' => 'yep']);
+			$trim['help'] = [
+				'run an upgrade to the given version or do full upgrade to the latest available version',
+				'[--version] <version name>: select target upgrade',
+			];
+			self::assertEquals($trim, $result);
 		}
 	}
