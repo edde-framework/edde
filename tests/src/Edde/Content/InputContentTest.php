@@ -3,16 +3,13 @@
 	namespace Edde\Content;
 
 	use Edde\TestCase;
+	use function iterator_to_array;
 
 	class InputContentTest extends TestCase {
 		public function testInputContent() {
 			$content = new InputContent('application/json');
 			self::assertEmpty($content->getContent());
 			self::assertSame('application/json', $content->getType());
-			$chunks = [];
-			foreach ($content as $chunk) {
-				$chunks[] = $chunk;
-			}
-			self::assertEmpty($chunks);
+			self::assertEmpty(iterator_to_array($content));
 		}
 	}
