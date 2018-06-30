@@ -2,16 +2,14 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
-	use Edde\Configurable\ConfigurableException;
+	use Edde\Config\ConfigException;
 	use Edde\Hydrator\IHydrator;
-	use Edde\Service\Schema\SchemaManager;
 	use PDO;
 	use PDOException;
 	use Throwable;
 	use function vsprintf;
 
 	abstract class AbstractPdoStorage extends AbstractStorage {
-		use SchemaManager;
 		const TYPES = [];
 		/** @var PDO */
 		protected $pdo;
@@ -283,7 +281,7 @@
 		/**
 		 * @inheritdoc
 		 *
-		 * @throws ConfigurableException
+		 * @throws ConfigException
 		 */
 		public function handleSetup(): void {
 			parent::handleSetup();

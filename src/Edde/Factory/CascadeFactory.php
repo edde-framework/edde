@@ -36,6 +36,18 @@
 		}
 
 		/** @inheritdoc */
+		public function discover(string $name = null): array {
+			if ($name === null) {
+				return $this->cascades;
+			}
+			$names = [];
+			foreach ($this->cascades as $cascade) {
+				$names[] = $cascade . '\\' . $name;
+			}
+			return $names;
+		}
+
+		/** @inheritdoc */
 		protected function search(string $name = null) {
 			if (isset($this->names[$name]) || array_key_exists($name, $this->names)) {
 				return $this->names[$name];
@@ -46,17 +58,5 @@
 				}
 			}
 			return $this->names[$name] = null;
-		}
-
-		/** @inheritdoc */
-		protected function discover(string $name = null): array {
-			if ($name === null) {
-				return $this->cascades;
-			}
-			$names = [];
-			foreach ($this->cascades as $cascade) {
-				$names[] = $cascade . '\\' . $name;
-			}
-			return $names;
 		}
 	}
