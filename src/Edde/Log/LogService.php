@@ -2,35 +2,26 @@
 	declare(strict_types=1);
 	namespace Edde\Log;
 
+	use function array_unique;
+
 	/**
 	 * Default implementation of log service.
 	 */
-	class LogService extends AbstractLog implements ILogService {
-		/** @var ILog[] */
-		protected $logs = [];
+	class LogService extends AbstractLogger implements ILogService {
+		/** @var ILogger[] */
+		protected $loggers = [];
 
 		/** @inheritdoc */
-		public function registerLog(ILog $log, array $tags = null): ILogService {
-			$tags = $tags ?: [null];
-			foreach ($tags as $tag) {
-				$this->logs[$tag] = $log;
-			}
+		public function registerLogger(ILogger $logger): ILogService {
+			$this->loggers[] = $logger;
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function record(ILogRecord $logRecord): ILog {
-			$tags = array_unique(($tags = $logRecord->getTags()) ? $tags : [null]);
-			/**
-			 * second run because all filter has been applied
-			 */
-			foreach ($tags as $tag) {
-				if (isset($this->logs[$tag]) === false) {
-					continue;
-				}
-				$log = $this->logs[$tag];
-				$log->setup();
-				$log->record($logRecord);
+		public function record(ILog $log, array $tags = null): ILogger {
+			$tags = array_unique($tags ?: []);
+			foreach ($this->loggers as $logger) {
+				$logger->record($log, $tags);
 			}
 			return $this;
 		}

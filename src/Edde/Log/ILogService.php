@@ -5,14 +5,13 @@
 	/**
 	 * Implementation of a log service.
 	 */
-	interface ILogService extends ILog {
+	interface ILogService extends ILogger {
 		/**
 		 * register the given log to the given set of tags
 		 *
-		 * @param ILog  $log
-		 * @param array $tags
+		 * @param ILogger $logger
 		 *
 		 * @return ILogService
 		 */
-		public function registerLog(ILog $log, array $tags = null): ILogService;
+		public function registerLogger(ILogger $logger): ILogService;
 	}

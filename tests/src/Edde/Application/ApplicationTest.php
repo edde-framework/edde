@@ -4,7 +4,7 @@
 
 	use Edde\Configurable\AbstractConfigurator;
 	use Edde\Container\ContainerException;
-	use Edde\Log\ILogRecord;
+	use Edde\Log\ILog;
 	use Edde\Log\SimpleLog;
 	use Edde\Router\IRouterService;
 	use Edde\Router\RouterException;
@@ -25,10 +25,10 @@
 		public function testRunException() {
 			$this->expectException(RouterException::class);
 			$this->expectExceptionMessage('Cannot handle current request.');
-			$this->logService->registerLog($log = new SimpleLog(), ['exception']);
+			$this->logService->registerLogger($log = new SimpleLog(), ['exception']);
 			$this->application->run();
-			/** @var $logs ILogRecord[] */
-			self::assertNotEmpty($logs = $log->getLogRecords());
+			/** @var $logs ILog[] */
+			self::assertNotEmpty($logs = $log->getLogs());
 			[$record] = $logs;
 			throw $record->getLog();
 		}

@@ -7,15 +7,9 @@
 	/**
 	 * Simple log record; holds record without any modifications.
 	 */
-	class LogRecord extends Edde implements ILogRecord {
-		/**
-		 * @var string
-		 */
+	class Log extends Edde implements ILog {
+		/** @var string */
 		protected $log;
-		/**
-		 * @var array
-		 */
-		protected $tags;
 
 		/**
 		 * A blonde rings up an airline.
@@ -24,24 +18,13 @@
 		 * The blonde says, "Thanks!" and hangs up the phone.
 		 *
 		 * @param string $log
-		 * @param array  $tags
 		 */
-		public function __construct($log, array $tags = null) {
+		public function __construct($log) {
 			$this->log = $log;
-			$this->tags = $tags;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getLog() {
 			return $this->log;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getTags(): ?array {
-			return $this->tags;
 		}
 	}

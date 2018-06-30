@@ -6,17 +6,17 @@
 	 * Do basically nothing but collecting log records; this should be used
 	 * carefully as it could simply run out of memory.
 	 */
-	class SimpleLog extends AbstractLog {
-		/** @var ILogRecord[] */
-		protected $logRecords = [];
+	class SimpleLog extends AbstractLogger {
+		/** @var ILog[] */
+		protected $logs = [];
 
 		/** @inheritdoc */
-		public function record(ILogRecord $logRecord): ILog {
-			$this->logRecords[] = $logRecord;
+		public function record(ILog $log, array $tags = null): ILogger {
+			$this->logs[] = $log;
 			return $this;
 		}
 
-		public function getLogRecords(): array {
-			return $this->logRecords;
+		public function getLogs(): array {
+			return $this->logs;
 		}
 	}

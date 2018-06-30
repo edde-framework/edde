@@ -2,77 +2,14 @@
 	declare(strict_types=1);
 	namespace Edde\Log;
 
-	use Edde\Configurable\IConfigurable;
-	use Throwable;
-
 	/**
-	 * Physical log storage (destination).
+	 * Every log record must implement this interface.
 	 */
-	interface ILog extends IConfigurable {
+	interface ILog {
 		/**
-		 * shortcut for record();
+		 * compute target log item
 		 *
-		 * @param mixed $log
-		 * @param array $tags
-		 *
-		 * @return ILog
+		 * @return mixed
 		 */
-		public function log($log, array $tags = null): ILog;
-
-		/**
-		 * @param ILogRecord $logRecord
-		 *
-		 * @return ILog
-		 */
-		public function record(ILogRecord $logRecord): ILog;
-
-		/**
-		 * adds informative tag
-		 *
-		 * @param string $log
-		 * @param array  $tags
-		 *
-		 * @return ILog
-		 */
-		public function info(string $log, array $tags = null): ILog;
-
-		/**
-		 * adds warning tag
-		 *
-		 * @param string $log
-		 * @param array  $tags
-		 *
-		 * @return ILog
-		 */
-		public function warning(string $log, array $tags = null): ILog;
-
-		/**
-		 * adds error tag
-		 *
-		 * @param string $log
-		 * @param array  $tags
-		 *
-		 * @return ILog
-		 */
-		public function error(string $log, array $tags = null): ILog;
-
-		/**
-		 * adds critical tag
-		 *
-		 * @param string $log
-		 * @param array  $tags
-		 *
-		 * @return ILog
-		 */
-		public function critical(string $log, array $tags = null): ILog;
-
-		/**
-		 * log an exception
-		 *
-		 * @param Throwable  $exception
-		 * @param array|null $tags
-		 *
-		 * @return ILog
-		 */
-		public function exception(Throwable $exception, array $tags = null): ILog;
+		public function getLog();
 	}
