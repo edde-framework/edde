@@ -15,6 +15,7 @@
 			<exclude>
 				<directory suffix=".php">src/Edde/Cli</directory>
 				<directory suffix=".php">src/Edde/Controller</directory>
+				<directory suffix=".php">src/Edde/Service</directory>
 			</exclude>
 		</whitelist>
 	</filter>
