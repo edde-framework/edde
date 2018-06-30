@@ -44,7 +44,7 @@
 				 */
 				public function configure($instance) {
 					parent::configure($instance);
-					$instance->registerRouter($this->container->create(TestRouter::class, ['noResponse']));
+					$instance->registerRouter($this->container->inject(new TestRouter('noResponse')));
 				}
 			}));
 			self::assertEquals(0, $this->application->run());
@@ -84,7 +84,7 @@
 				 */
 				public function configure($instance) {
 					parent::configure($instance);
-					$instance->registerRouter($this->container->create(TestRouter::class, ['response']));
+					$instance->registerRouter($this->container->inject(new TestRouter('response')));
 				}
 			}));
 			self::assertEquals(123, $this->application->run());

@@ -19,6 +19,8 @@
 			/**
 			 * RequestRouter is able to make route for CLI and for HTTP requests
 			 */
-			$instance->registerRouter($this->container->inject(new RequestRouter()));
+			$instance->registerRouters([
+				$this->container->inject(new RequestRouter()),
+			]);
 		}
 	}
