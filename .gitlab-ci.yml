@@ -1,7 +1,7 @@
 image: docker:latest
 
 variables:
-    IMAGE: $CI_REGISTRY_IMAGE/edde:$CI_COMMIT_REF_NAME
+    IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
     PROJECT: edde
 
 before_script:

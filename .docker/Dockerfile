@@ -33,6 +33,7 @@ COPY composer.json .
 COPY composer.lock .
 COPY loader.php .
 COPY phpunit.xml .
+ADD docs docs
 ADD src src
 ADD tests tests
 
