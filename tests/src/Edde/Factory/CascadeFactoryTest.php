@@ -9,7 +9,6 @@
 	use Edde\Schema\ISchemaManager;
 	use Edde\Storage\MysqlStorage;
 	use Edde\TestCase;
-	use ReflectionException;
 
 	class CascadeFactoryTest extends TestCase {
 		public function testCanHandle() {
@@ -24,7 +23,6 @@
 
 		/**
 		 * @throws FactoryException
-		 * @throws ReflectionException
 		 */
 		public function testGetReflection() {
 			$factory = new CascadeFactory();
@@ -35,10 +33,10 @@
 			$factory->getReflection($this->container, 'Storage\\MysqlStorage');
 			$reflection = $factory->getReflection($this->container, 'Storage\\MysqlStorage');
 			self::assertEquals([
-				new Parameter('configService', false, IConfigService::class),
-				new Parameter('hydratorManager', false, IHydratorManager::class),
-				new Parameter('schemaManager', false, ISchemaManager::class),
-				new Parameter('container', false, IContainer::class),
+				new Parameter('configService', IConfigService::class),
+				new Parameter('hydratorManager', IHydratorManager::class),
+				new Parameter('schemaManager', ISchemaManager::class),
+				new Parameter('container', IContainer::class),
 			], $reflection->getInjects());
 			self::assertEquals([
 				'Edde\Storage\IStorage',
@@ -50,9 +48,8 @@
 		}
 
 		/**
-		 * @throws FactoryException
-		 * @throws ReflectionException
 		 * @throws ContainerException
+		 * @throws FactoryException
 		 */
 		public function testFactory() {
 			$factory = new CascadeFactory();

@@ -5,8 +5,9 @@
 	use Edde\SimpleObject;
 
 	class Reflection extends SimpleObject implements IReflection {
-		protected $params;
+		/** @var IParameter[] */
 		protected $injects;
+		/** @var string[] */
 		protected $configurators;
 
 		/**
@@ -17,19 +18,12 @@
 		 * She hears the little boy continue, "For those of you just boarding, we ask you to stow all of your hand luggage under your seat. Remember, there is no smoking on the train. We hope you will have a pleasant and relaxing journey with us today."
 		 * As the mother began to smile, the child added, "For those of you who are pissed off about the TWO HOUR delay, please see the b*tch in the kitchen."
 		 *
-		 * @param IParameter[] $params
 		 * @param IParameter[] $injects
 		 * @param string[]     $configurators
 		 */
-		public function __construct(array $params = [], array $injects = [], array $configurators = []) {
-			$this->params = $params;
+		public function __construct(array $injects = [], array $configurators = []) {
 			$this->injects = $injects;
 			$this->configurators = $configurators;
-		}
-
-		/** @inheritdoc */
-		public function getParams(): array {
-			return $this->params;
 		}
 
 		/** @inheritdoc */

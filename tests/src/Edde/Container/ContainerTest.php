@@ -4,17 +4,15 @@
 
 	use Edde\EddeException;
 	use Edde\Factory\ExceptionFactory;
-	use Edde\Factory\InstanceFactory;
+	use Edde\Factory\FactoryException;
 	use Edde\Factory\InterfaceFactory;
 	use Edde\Factory\LinkFactory;
 	use Edde\Service\Container\Container;
 	use Edde\Test\AutowireDependencyObject;
 	use Edde\Test\BarObject;
-	use Edde\Test\ConstructorDependencyObject;
 	use Edde\Test\FooObject;
 	use Edde\Test\InjectDependencyObject;
 	use Edde\TestCase;
-	use ReflectionException;
 
 	class ContainerTest extends TestCase {
 		use Container;
@@ -56,20 +54,6 @@
 			$this->container->create('unknown', [], 'source');
 		}
 
-		/**'
-		 * @throws ContainerException
-		 */
-		public function testConstructorDependency() {
-			/** @var $constructorDependencyObject ConstructorDependencyObject */
-			$constructorDependencyObject = $this->container->create(ConstructorDependencyObject::class);
-			self::assertNotEmpty($constructorDependencyObject->fooObject);
-			self::assertNotEmpty($constructorDependencyObject->barObject);
-			self::assertInstanceOf(FooObject::class, $constructorDependencyObject->fooObject);
-			self::assertInstanceOf(BarObject::class, $constructorDependencyObject->barObject);
-			self::assertInstanceOf(FooObject::class, $constructorDependencyObject->barObject->fooObject);
-			self::assertNotSame($constructorDependencyObject->fooObject, $constructorDependencyObject->barObject->fooObject);
-		}
-
 		/**
 		 * @throws ContainerException
 		 */
@@ -108,6 +92,7 @@
 
 		/**
 		 * @throws ContainerException
+		 * @throws FactoryException
 		 */
 		public function testInstancedFactory() {
 			self::assertInstanceOf(FooObject::class, $fooObject = $this->container->create('instanced'));
@@ -117,17 +102,16 @@
 			 */
 			$dependency = $this->container->getFactory('instanced')->getReflection($this->container, 'instanced');
 			self::assertEmpty($dependency->getInjects());
-			self::assertEmpty($dependency->getParams());
 			self::assertEmpty($dependency->getConfigurators());
 		}
 
 		/**
 		 * @throws ContainerException
+		 * @throws FactoryException
 		 */
 		public function testInterfaceDependencyFactory() {
 			$dependency = $this->container->getFactory(IContainer::class)->getReflection($this->container, IContainer::class);
 			self::assertEmpty($dependency->getInjects());
-			self::assertEmpty($dependency->getParams());
 			self::assertEmpty($dependency->getConfigurators());
 		}
 
@@ -149,7 +133,6 @@
 
 		/**
 		 * @throws ContainerException
-		 * @throws ReflectionException
 		 */
 		protected function setUp() {
 			parent::setUp();

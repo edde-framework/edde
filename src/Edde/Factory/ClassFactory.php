@@ -5,7 +5,6 @@
 	use Edde\Container\IAutowire;
 	use Edde\Container\IContainer;
 	use ReflectionClass;
-	use ReflectionFunction;
 	use ReflectionMethod;
 
 	/**
@@ -34,7 +33,6 @@
 				return self::$reflectionCache[$dependency];
 			}
 			$injects = [];
-			$configurators = [];
 			$reflectionClass = new ReflectionClass($dependency);
 			foreach ($reflectionClass->getMethods() as $reflectionMethod) {
 				$parameterReflectionClass = $reflectionMethod->getDeclaringClass();
@@ -42,24 +40,14 @@
 					$injects = array_merge($injects, $this->getParams($parameterReflectionClass, $reflectionMethod, 'inject'));
 				}
 			}
-			$params = [];
-			$constructor = $reflectionClass->getConstructor() ?: new ReflectionFunction(function () {
-			});
-			foreach ($constructor->getParameters() as $reflectionParameter) {
-				if (($parameterReflectionClass = $reflectionParameter->getClass()) === null) {
-					break;
-				}
-				$params[] = new Parameter($reflectionParameter->getName(), $reflectionParameter->isOptional(), $parameterReflectionClass->getName());
-			}
-			if ($dependency !== null) {
-				$configurators = array_reverse(array_merge([$dependency], (new ReflectionClass($dependency))->getInterfaceNames()));
-			}
-			return self::$reflectionCache[$dependency] = new Reflection($params, $injects, $configurators);
+			return self::$reflectionCache[$dependency] = new Reflection(
+				$injects,
+				array_reverse(array_merge([$dependency], (new ReflectionClass($dependency))->getInterfaceNames()))
+			);
 		}
 
 		/** @inheritdoc */
 		public function factory(IContainer $container, array $params, IReflection $dependency, string $name = null) {
-			$params = $this->params($container, $params, $dependency);
 			if (empty($params)) {
 				return new $name();
 			}
@@ -89,7 +77,7 @@
 					}
 					$reflectionProperty = $reflectionClass->getProperty($name);
 					$reflectionProperty->setAccessible(true);
-					$params[] = new Parameter($reflectionProperty->getName(), false, $class->getName());
+					$params[] = new Parameter($reflectionProperty->getName(), $class->getName());
 				}
 			}
 			return $params;

@@ -8,13 +8,6 @@
 	 */
 	interface IReflection {
 		/**
-		 * get list of mandatory parameters
-		 *
-		 * @return IParameter[]
-		 */
-		public function getParams(): array;
-
-		/**
 		 * get list of lazy properties
 		 *
 		 * @return IParameter[]

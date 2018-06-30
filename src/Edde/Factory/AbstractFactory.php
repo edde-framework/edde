@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Factory;
 
-	use Edde\Container\ContainerException;
 	use Edde\Container\IContainer;
 	use Edde\Edde;
 
@@ -27,27 +26,5 @@
 		/** @inheritdoc */
 		public function push(IContainer $container, $instance) {
 			return $instance;
-		}
-
-		/**
-		 * @param IContainer  $container
-		 * @param array       $params
-		 * @param IReflection $reflection
-		 * @param string|null $name
-		 *
-		 * @return array
-		 *
-		 * @throws ContainerException
-		 */
-		protected function params(IContainer $container, array $params, IReflection $reflection, string $name = null) {
-			$grab = count($params);
-			$dependencyList = [];
-			foreach ($reflection->getParams() as $parameter) {
-				if (--$grab >= 0 || $parameter->isOptional()) {
-					continue;
-				}
-				$dependencyList[] = $container->factory($container->getFactory($class = $parameter->getClass(), $name), $class, [], $name);
-			}
-			return array_merge($params, $dependencyList);
 		}
 	}

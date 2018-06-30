@@ -16,7 +16,7 @@
 		public $bar = 'bar';
 		public $fooObject;
 
-		public function __construct(FooObject $fooObject) {
+		public function injectFooObject(FooObject $fooObject) {
 			$this->fooObject = $fooObject;
 		}
 	}
@@ -31,8 +31,11 @@
 		 */
 		public $barObject;
 
-		public function __construct(FooObject $fooObject, BarObject $barObject) {
+		public function injectFooObject(FooObject $fooObject) {
 			$this->fooObject = $fooObject;
+		}
+
+		public function injectBarObject(BarObject $barObject) {
 			$this->barObject = $barObject;
 		}
 	}
@@ -46,13 +49,6 @@
 		 * @var BarObject
 		 */
 		public $barObject;
-	}
-
-	class ConstructorDependencyObject extends AbstractDependencyObject {
-		public function __construct(FooObject $fooObject, BarObject $barObject) {
-			$this->fooObject = $fooObject;
-			$this->barObject = $barObject;
-		}
 	}
 
 	class InjectDependencyObject extends AbstractDependencyObject {

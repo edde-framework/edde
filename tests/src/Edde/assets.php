@@ -1,6 +1,24 @@
 <?php
 	declare(strict_types=1);
+	use Edde\Edde;
 	use Edde\Schema\UuidSchema;
+
+	class ShittyInjectClass extends Edde {
+		public function injectSomething(UserSchema $userSchema) {
+		}
+	}
+
+	class ShittyInjectVisibilityClass extends Edde {
+		protected function injectSomething(UserSchema $userSchema) {
+		}
+	}
+
+	class ShittyInjectTypehintClass extends Edde {
+		protected $userSchema;
+
+		public function injectSomething($userSchema) {
+		}
+	}
 
 	interface UserSchema extends UuidSchema {
 		public function login($unique = true): string;

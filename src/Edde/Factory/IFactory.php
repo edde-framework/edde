@@ -33,6 +33,8 @@
 		 * @param string     $dependency
 		 *
 		 * @return IReflection
+		 *
+		 * @throws FactoryException
 		 */
 		public function getReflection(IContainer $container, string $dependency): IReflection;
 
