@@ -9,8 +9,8 @@ before_script:
 
 stages:
     - test
-    - publish
     - deploy
+    - publish
 
 test:
     stage: test
@@ -23,20 +23,6 @@ test:
     after_script:
         - docker-compose -f .docker/dc.test.yml down --volumes >/dev/null 2>&1
 
-github sync:
-    stage: publish
-    variables:
-        GIT_STRATEGY: none
-    script:
-        - apk add -U git >/dev/null 2>&1
-        - git clone --mirror $CI_REPOSITORY_URL edde.git
-        - cd edde.git
-        - git push --mirror https://$GITHUB_TOKEN@github.com/edde-framework/edde.git
-    only:
-        - master
-        - tags
-        - /^v.*$/
-
 deploy web:
     stage: deploy
     variables:
@@ -48,3 +34,17 @@ deploy web:
     environment:
         name: production
         url: https://edde-framework.org
+
+github sync:
+    stage: publish
+    variables:
+        GIT_STRATEGY: none
+    script:
+    - apk add -U git >/dev/null 2>&1
+    - git clone --mirror $CI_REPOSITORY_URL edde.git
+    - cd edde.git
+    - git push --mirror https://$GITHUB_TOKEN@github.com/edde-framework/edde.git
+    only:
+    - master
+    - tags
+    - /^v.*$/
