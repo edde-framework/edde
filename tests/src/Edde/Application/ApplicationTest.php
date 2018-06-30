@@ -11,11 +11,13 @@
 	use Edde\Service\Application\Application;
 	use Edde\Service\Container\Container;
 	use Edde\Service\Log\LogService;
+	use Edde\Service\Router\RouterService;
 	use Edde\TestCase;
 
 	class ApplicationTest extends TestCase {
 		use Application;
 		use LogService;
+		use RouterService;
 
 		/**
 		 * @throws ApplicationException
@@ -74,6 +76,7 @@
 		/**
 		 * @throws ApplicationException
 		 * @throws ContainerException
+		 * @throws RouterException
 		 */
 		public function testRunResponse() {
 			$this->container->registerConfigurator(IRouterService::class, $this->container->inject(new class() extends AbstractConfigurator {
@@ -88,5 +91,6 @@
 				}
 			}));
 			self::assertEquals(123, $this->application->run());
+			self::assertSame($this->routerService->createRequest(), $this->routerService->createRequest());
 		}
 	}

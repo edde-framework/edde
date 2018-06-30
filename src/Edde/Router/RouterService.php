@@ -4,7 +4,6 @@
 
 	use Edde\Application\IRequest;
 	use Edde\Edde;
-	use Exception;
 
 	class RouterService extends Edde implements IRouterService {
 		/** @var IRouter[] */
@@ -40,11 +39,7 @@
 
 		/** @inheritdoc */
 		public function canHandle(): bool {
-			try {
-				return ($this->router = $this->getRouter()) !== null;
-			} catch (Exception $exception) {
-				return false;
-			}
+			return ($this->router = $this->getRouter()) !== null;
 		}
 
 		/** @inheritdoc */

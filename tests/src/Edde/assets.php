@@ -20,6 +20,17 @@
 		}
 	}
 
+	class ConstructorClass {
+		public $param;
+
+		/**
+		 * @param $param
+		 */
+		public function __construct($param) {
+			$this->param = $param;
+		}
+	}
+
 	interface UserSchema extends UuidSchema {
 		public function login($unique = true): string;
 
