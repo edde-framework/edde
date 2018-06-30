@@ -64,6 +64,9 @@ don't do any dangerous operations there.
 	use Edde\Service\Storage\Storage;
 	use Generator;
 	
+	/**
+     * abstract has already all necessary stuff (like required interface) 
+	 */
 	class UpgradeManager extends AbstractUpgradeManager {
 		use Storage;
 		
@@ -102,7 +105,7 @@ don't do any dangerous operations there.
 	}
 ```
 
-## Configuration
+## Configurator
 
 This is a bit magical part: Create a Configurator responsible for setting up `UpgradeManager` you just created and register it for setup.
 
@@ -132,6 +135,37 @@ This is a bit magical part: Create a Configurator responsible for setting up `Up
 			}
 		}
 	}
+```
+
+Now it's time to see `loader.php`:
+
+```php
+<?php
+	declare(strict_types=1);
+	
+	use Edde\Container\ContainerFactory;
+	use Edde\Upgrade\IUpgradeManager;
+	use Fooplication\Upgrade\UpgradeManager;
+	
+	// ... shortened...
+	
+	return ContainerFactory::container([
+		/** interface => implementation bindings... */
+		// ... 
+		/** register you new nice and shiny upgrade manager */
+		IUpgradeManager::class => UpgradeManager::class,
+		// ... 
+	], [
+		/** configurator bindings */
+		// ...
+		/**
+         * register configurator for your upgrade manager; when somebody touch it, configurator will be executed and prepare
+         * upgrade manager for use  
+         */
+		IUpgradeManager::class => UpgradeManagerConfigurator::class,
+		// ...
+	]);
+
 ```
 
 ## Example of Upgrade class
