@@ -3,30 +3,28 @@
 	namespace Edde\Validator;
 
 	use Edde\SimpleObject;
-	use stdClass;
-	use function property_exists;
 	use function sprintf;
 
 	abstract class AbstractValidator extends SimpleObject implements IValidator {
 		/**
-		 * @param null|stdClass $options
+		 * @param array $options
 		 *
 		 * @return string
 		 */
-		protected function getValueName(?stdClass $options): string {
-			return $options && property_exists($options, 'name') ? (string)$options->name : '<unknown value name, use name in validator $options to set name>';
+		protected function getValueName(array $options = null): string {
+			return $options['name'] ?? '<unknown value name, use name in validator $options to set name>';
 		}
 
 		/**
-		 * @param mixed         $value
-		 * @param null|stdClass $options
+		 * @param mixed $value
+		 * @param array $options
 		 *
 		 * @return bool true means value is available (!==null)
 		 *
 		 * @throws ValidatorException
 		 */
-		protected function checkRequired($value, ?stdClass $options): bool {
-			if ($value === null && ($options->required ?? true) === true) {
+		protected function checkRequired($value, array $options = null): bool {
+			if ($value === null && ($options['required'] ?? true) === true) {
 				throw new ValidatorException(sprintf('Required value [%s] is null.', $this->getValueName($options)));
 			}
 			return $value !== null;

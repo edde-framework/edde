@@ -3,7 +3,6 @@
 	namespace Edde\Validator;
 
 	use Edde\Configurable\IConfigurable;
-	use stdClass;
 
 	interface IValidatorManager extends IConfigurable {
 		/**
@@ -27,11 +26,11 @@
 		public function registerValidators(array $validators): IValidatorManager;
 
 		/**
-		 * @param string        $name
-		 * @param mixed         $value
-		 * @param stdClass|null $options
+		 * @param string $name
+		 * @param mixed  $value
+		 * @param array  $options
 		 *
 		 * @throws ValidatorException
 		 */
-		public function validate(string $name, $value, ?stdClass $options = null): void;
+		public function validate(string $name, $value, array $options = null): void;
 	}

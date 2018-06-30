@@ -3,11 +3,10 @@
 	namespace Edde\Validator;
 
 	use DateTime;
-	use stdClass;
 
 	class DateTimeValidator extends AbstractValidator {
 		/** @inheritdoc */
-		public function validate($value, ?stdClass $options = null): void {
+		public function validate($value, array $options = null): void {
 			if ($this->checkRequired($value, $options) && $value instanceof DateTime === false) {
 				throw new ValidatorException(sprintf('Value [%s] is not instanceof DateTime.', $this->getValueName($options)));
 			}

@@ -2,16 +2,14 @@
 	declare(strict_types=1);
 	namespace Edde\Validator;
 
-	use stdClass;
-
 	interface IValidator {
 		/**
 		 * validate the given input
 		 *
-		 * @param mixed         $value
-		 * @param stdClass|null $options
+		 * @param mixed $value
+		 * @param array $options
 		 *
 		 * @throws ValidatorException
 		 */
-		public function validate($value, ?stdClass $options = null): void;
+		public function validate($value, array $options = null): void;
 	}

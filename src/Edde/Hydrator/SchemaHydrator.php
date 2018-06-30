@@ -41,7 +41,7 @@
 				}
 				$input[$name] = $input[$name] ?? $attribute->getDefault();
 				if ($validator = $attribute->getValidator()) {
-					$this->validatorManager->validate($this->prefix . ':' . $validator, $input[$name], (object)[
+					$this->validatorManager->validate($this->prefix . ':' . $validator, $input[$name], [
 						'name'     => $schema->getName() . '::' . $name,
 						'required' => $attribute->isRequired(),
 					]);
@@ -64,7 +64,7 @@
 			$schema = $this->schemaManager->getSchema($name);
 			foreach ($schema->getAttributes() as $name => $attribute) {
 				if ($validator = $attribute->getValidator()) {
-					$this->validatorManager->validate($this->prefix . ':' . $validator, $update[$name] ?? null, (object)[
+					$this->validatorManager->validate($this->prefix . ':' . $validator, $update[$name] ?? null, [
 						'name'     => $schema->getName() . '::' . $name,
 						'required' => $attribute->isRequired(),
 					]);
