@@ -1,8 +1,16 @@
 image: docker:latest
 
+variables:
+    IMAGE: $CI_REGISTRY_IMAGE/yennefer:$CI_COMMIT_REF_NAME
+    PROJECT: edde
+
+before_script:
+- echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin $CI_REGISTRY
+
 stages:
     - test
     - publish
+    - deploy
 
 test:
     stage: test
@@ -28,3 +36,13 @@ github sync:
         - master
         - tags
         - /^v.*$/
+
+deploy web:
+    stage: deploy
+    variables:
+        FQDN: edde-framework.org
+    script:
+    - docker stack deploy --with-registry-auth --prune -c ./.docker/dc.production.yml $PROJECT-production
+    environment:
+        name: production
+        url: https://edde-framework.org

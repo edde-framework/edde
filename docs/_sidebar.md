@@ -1,5 +1,7 @@
 * [Home](/)
 * [Getting Started](getting-started)
-* Components
+* [Docker](docker)
+* [Components](/edde/index)
 	* [Controllers](/edde/controllers)
 	* [Container](/edde/container)
+	* [Exceptions](/edde/exceptions)

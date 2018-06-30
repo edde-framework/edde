@@ -129,6 +129,10 @@ password = "${DATABASE_PASSWORD}"
 
 ## First steps
 
+### Docker
+
+It's strongly recommended to start with a Docker image, you can simply build you own, some docs about it [here](/docker.md).
+
 ### Source directory
 
 It's time to create http controller to handle incoming requests. More how this magic works [here](/edde/controllers.md).
