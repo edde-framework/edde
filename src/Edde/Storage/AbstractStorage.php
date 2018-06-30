@@ -9,7 +9,6 @@
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Transaction\AbstractTransaction;
 	use Generator;
-	use Throwable;
 	use function preg_match_all;
 	use function str_replace;
 	use function uasort;
@@ -74,15 +73,6 @@
 				$query = str_replace($replace, $this->delimit($matches[1][$index]), $query);
 			}
 			return $query;
-		}
-
-		/**
-		 * @param Throwable $throwable
-		 *
-		 * @return Throwable
-		 */
-		public function exception(Throwable $throwable): Throwable {
-			return $throwable;
 		}
 
 		/** @inheritdoc */

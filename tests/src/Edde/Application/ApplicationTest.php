@@ -54,6 +54,27 @@
 		 * @throws ApplicationException
 		 * @throws ContainerException
 		 */
+		public function testRunControllerException() {
+			$this->expectException(ApplicationException::class);
+			$this->expectExceptionMessage('Requested controller [Edde\Application\SomeService] is not instance of [Edde\Controller\IController].');
+			$this->container->registerConfigurator(IRouterService::class, $this->container->inject(new class() extends AbstractConfigurator {
+				use Container;
+
+				/**
+				 * @param $instance IRouterService
+				 */
+				public function configure($instance) {
+					parent::configure($instance);
+					$instance->registerRouter($this->container->inject(new TestWrongControllerRouter()));
+				}
+			}));
+			$this->application->run();
+		}
+
+		/**
+		 * @throws ApplicationException
+		 * @throws ContainerException
+		 */
 		public function testRunResponse() {
 			$this->container->registerConfigurator(IRouterService::class, $this->container->inject(new class() extends AbstractConfigurator {
 				use Container;

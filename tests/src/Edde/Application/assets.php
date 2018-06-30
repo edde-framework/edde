@@ -15,6 +15,21 @@
 		}
 	}
 
+	class SomeService extends Edde {
+	}
+
+	class TestWrongControllerRouter extends AbstractRouter {
+		/** @inheritdoc */
+		public function canHandle(): bool {
+			return true;
+		}
+
+		/** @inheritdoc */
+		public function createRequest(): IRequest {
+			return new Request(SomeService::class, 'nope');
+		}
+	}
+
 	class TestRouter extends AbstractRouter {
 		protected $method;
 
