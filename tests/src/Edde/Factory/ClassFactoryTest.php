@@ -21,20 +21,20 @@
 		/**
 		 * @throws FactoryException
 		 */
-		public function testBadInject2Exception() {
-			$this->expectException(FactoryException::class);
-			$this->expectExceptionMessage('Method [ShittyInjectVisibilityClass::injectSomething()] must be public.');
-			$factory = new ClassFactory();
-			$factory->getReflection($this->container, ShittyInjectVisibilityClass::class);
-		}
-
-		/**
-		 * @throws FactoryException
-		 */
 		public function testBadInject3Exception() {
 			$this->expectException(FactoryException::class);
 			$this->expectExceptionMessage('Class [ShittyInjectTypehintClass] must have property [$userSchema] with class type hint in method [ShittyInjectTypehintClass::injectSomething(..., $userSchema, ...)].');
 			$factory = new ClassFactory();
 			$factory->getReflection($this->container, ShittyInjectTypehintClass::class);
+		}
+
+		/**
+		 * @throws FactoryException
+		 */
+		public function testBadInject2Exception() {
+			$this->expectException(FactoryException::class);
+			$this->expectExceptionMessage('Method [ShittyInjectVisibilityClass::injectSomething()] must be public.');
+			$factory = new ClassFactory();
+			$factory->getReflection($this->container, ShittyInjectVisibilityClass::class);
 		}
 	}
