@@ -1,17 +1,23 @@
 FROM alpine:edge
 
-WORKDIR /edde
-
 ENV LANG="en_US.UTF-8" \
     LANGUAGE="en_US:en" \
     LC_ALL="en_US.UTF-8"
 
 RUN apk update && apk upgrade apk-tools && apk add \
-	nginx git curl ca-certificates unzip bash openssh \
+	runit nginx git curl ca-certificates unzip bash openssh nodejs npm \
 	php7 php7-fpm php7-pdo_sqlite php7-xdebug php7-gd php7-pdo_pgsql \
 	php7-redis php7-pdo_mysql php7-bcmath php7-xml php7-curl php7-intl \
 	php7-mbstring php7-xml php7-zip php7-zlib php7-openssl php7-json php7-phar \
 	php7-fileinfo php7-tokenizer php7-dom php7-xmlwriter php7-xmlreader php7-ctype
+
+COPY .docker/rootfs /
+
+# init scripts must be executable
+RUN ["chmod", "0750", "-R", "/etc/service"]
+RUN ["chmod", "0750", "-R", "/etc/bootstrap"]
+# setup executable on boot script
+RUN ["chmod", "+x", "/bootstrap.sh"]
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 RUN composer global require hirak/prestissimo -q --prefer-dist --no-progress
@@ -21,14 +27,7 @@ RUN echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
 RUN echo "root:1234" | chpasswd
 RUN echo "zend_extension = xdebug.so" > /etc/php7/conf.d/xdebug.ini
 
-COPY .docker/nginx.conf /etc/nginx/nginx.conf
-COPY .docker/php-fpm.conf /etc/php7/php-fpm.d/zz-www.conf
-
-COPY .docker/start.sh /edde/.docker/start.sh
-RUN chmod +x /edde/.docker/start.sh
-
-COPY .docker/ssh/* /etc/ssh/
-RUN chmod 600 -R /etc/ssh
+WORKDIR /edde
 
 COPY composer.json .
 COPY composer.lock .
@@ -42,8 +41,6 @@ RUN chmod +x test.sh
 
 RUN composer install --prefer-dist --no-progress
 
-RUN ln -sf /dev/stdout /var/log/nginx/access.log && ln -sf /dev/stderr /var/log/nginx/error.log && ln -sf /dev/stdout /var/log/php-fpm-access.log && ln -sf /dev/stderr /var/log/php-fpm-error.log
-
-ENTRYPOINT ["/edde/.docker/start.sh"]
+ENTRYPOINT ["/bootstrap.sh"]
 
 EXPOSE 80 22

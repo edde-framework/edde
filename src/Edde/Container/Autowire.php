@@ -29,7 +29,7 @@
 		/**
 		 * @param string $name
 		 *
-		 * @return \Edde\Configurable\IConfigurable
+		 * @return IConfigurable
 		 *
 		 * @throws ContainerException
 		 * @throws ObjectException
@@ -38,7 +38,7 @@
 			if (isset($this->tAutowires[$name])) {
 				/** @var $container IContainer */
 				[$container, $dependency] = $this->tAutowires[$name];
-				/** @var $instance \Edde\Configurable\IConfigurable */
+				/** @var $instance IConfigurable */
 				if (($instance = $this->{$name} = $container->create($dependency, [], static::class)) instanceof IConfigurable && $instance->isSetup() === false) {
 					$instance->setup();
 				}

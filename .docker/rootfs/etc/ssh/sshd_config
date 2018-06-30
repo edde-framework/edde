@@ -1,0 +1,3 @@
+UseDNS no
+PermitRootLogin yes
+Subsystem sftp /usr/lib/ssh/sftp-server

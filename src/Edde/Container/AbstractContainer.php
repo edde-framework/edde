@@ -9,12 +9,12 @@
 	abstract class AbstractContainer extends Edde implements IContainer {
 		/** @var IFactory[] */
 		protected $factories;
-		/** @var \Edde\Configurable\IConfigurator[][] */
+		/** @var IConfigurator[] */
 		protected $configurators;
 
 		/**
-		 * @param IFactory[]                         $factories
-		 * @param \Edde\Configurable\IConfigurator[] $configurators
+		 * @param IFactory[]      $factories
+		 * @param IConfigurator[] $configurators
 		 */
 		public function __construct(array $factories = [], array $configurators = []) {
 			$this->factories = $factories;
