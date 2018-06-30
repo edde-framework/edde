@@ -8,7 +8,6 @@ services:
                     - PHP_IDE_CONFIG=serverName=edde
                 volumes:
                     - ../:/edde
-                    - ./xdebug.ini:/etc/php7/conf.d/xdebug.ini
                 ports:
                     - "4722:22"
                 networks:
@@ -19,8 +18,6 @@ services:
             environment:
                 - POSTGRES_USER=edde
                 - POSTGRES_PASSWORD=PBXxSgEWY3LT
-            ports:
-                - "5432:5432"
             networks:
                 - edde-network
 
@@ -31,8 +28,6 @@ services:
                 - MYSQL_DATABASE=edde
                 - MYSQL_USER=edde
                 - MYSQL_PASSWORD=enPUxu8SRctV
-            ports:
-                - "3306:3306"
             networks:
                 - edde-network
 
