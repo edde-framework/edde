@@ -139,7 +139,7 @@ It's strongly recommended to start with a Docker image, you can simply build you
 
 It's time to create http controller to handle incoming requests. More how this magic works [here](/edde/controllers.md).
 
-?> src\Fooplication\Http\Hello\HelloController.php 
+?> **src\Fooplication\Http\Hello\HelloController.php** 
 
 ```php
 <?php
