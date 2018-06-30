@@ -4,6 +4,7 @@
 
 	use DateTime;
 	use Edde\Container\ContainerException;
+	use Edde\Hydrator\AbstractHydrator;
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Container\Container;
 	use Edde\Service\Schema\SchemaManager;
@@ -58,6 +59,15 @@
 		}
 
 		/**
+		 * @throws StorageException
+		 */
+		public function testQueryException() {
+			$this->expectException(StorageException::class);
+			$this->expectExceptionMessage('Cannot translate unknown alias [kaboom] to schema name.');
+			$this->storage->query('SELECT kaboom:schema FROM this-will-explode', []);
+		}
+
+		/**
 		 * @throws TransactionException
 		 */
 		public function testCommitTransactionException() {
@@ -75,6 +85,9 @@
 			$this->storage->rollback();
 		}
 
+		/**
+		 * @throws StorageException
+		 */
 		public function testInvalidSchemaType() {
 			$this->expectException(StorageException::class);
 			$this->expectExceptionMessage('Unknown type [this-type-does-not-exists]');
@@ -89,6 +102,18 @@
 		public function testDuplicateSchema() {
 			$this->expectException(DuplicateTableException::class);
 			$this->storage->create(LabelSchema::class);
+		}
+
+		/**
+		 * @throws StorageException
+		 */
+		public function testNullValueException() {
+			$this->expectException(NullValueException::class);
+			$this->storage->insert(new Entity(LabelSchema::class, ['uuid' => 'kaboom']), new class() extends AbstractHydrator {
+				public function hydrate(array $source) {
+					return $source;
+				}
+			});
 		}
 
 		/**
