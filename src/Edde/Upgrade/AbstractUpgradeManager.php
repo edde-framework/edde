@@ -48,9 +48,6 @@
 				if (isset($index) && $index >= count($this->upgrades)) {
 					throw new CurrentVersionException(sprintf('Version [%s] is current; no upgrades has been run.', $current));
 				}
-				if (empty($upgrades)) {
-					throw new UpgradeException(sprintf('There are no upgrades available for the version [%s].', $version));
-				}
 				$upgrade = null;
 				foreach ($upgrades as $upgrade) {
 					try {

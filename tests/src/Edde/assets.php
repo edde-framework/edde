@@ -1,7 +1,102 @@
 <?php
 	declare(strict_types=1);
+	use Edde\Configurable\AbstractConfigurator;
+	use Edde\Container\ContainerException;
 	use Edde\Edde;
 	use Edde\Schema\UuidSchema;
+	use Edde\Service\Container\Container;
+	use Edde\Service\Storage\Storage;
+	use Edde\Storage\Entity;
+	use Edde\Storage\UnknownTableException;
+	use Edde\Upgrade\AbstractUpgrade;
+	use Edde\Upgrade\AbstractUpgradeManager;
+	use Edde\Upgrade\IUpgrade;
+	use Edde\Upgrade\IUpgradeManager;
+	use Edde\Upgrade\UpgradeException;
+
+	class UpgradeTestManager extends AbstractUpgradeManager {
+		use Storage;
+
+		/** @inheritdoc */
+		public function getVersion(): ?string {
+			try {
+				try {
+					foreach ($this->storage->value('SELECT version FROM u:schema ORDER BY stamp DESC', ['$query' => ['u' => TestUpgradeSchema::class]]) as $version) {
+						return $version;
+					}
+					return null;
+				} catch (UnknownTableException $exception) {
+					$this->storage->create(TestUpgradeSchema::class);
+					return null;
+				}
+			} catch (Throwable $exception) {
+				throw new UpgradeException(sprintf('Cannot retrieve current version: %s', $exception->getMessage()), 0, $exception);
+			}
+		}
+
+		/** @inheritdoc */
+		public function getCurrentCollection(): Generator {
+			return $this->storage->schema(TestUpgradeSchema::class, 'SELECT * FROM u:schema ORDER BY stamp DESC', ['$query' => ['u' => TestUpgradeSchema::class]]);
+		}
+
+		/** @inheritdoc */
+		protected function onUpgrade(IUpgrade $upgrade): void {
+			$this->storage->insert(new Entity(TestUpgradeSchema::class, [
+				'version' => $upgrade->getVersion(),
+			]));
+		}
+	}
+
+	class UpgradeConfigurator extends AbstractConfigurator {
+		use Container;
+
+		/**
+		 * @param IUpgradeManager $instance
+		 *
+		 * @throws ContainerException
+		 */
+		public function configure($instance) {
+			parent::configure($instance);
+			$instance->registerUpgrades([
+				$this->container->inject(new SomeUpgrade()),
+				$this->container->inject(new AnotherSomeUpgrade()),
+				$this->container->inject(new GenerationJumpUpgrade()),
+			]);
+		}
+	}
+
+	interface TestUpgradeSchema extends UuidSchema {
+		public function version($unique);
+
+		public function stamp($generator = 'stamp'): DateTime;
+	}
+
+	class SomeUpgrade extends AbstractUpgrade {
+		public function getVersion(): string {
+			return '1.0';
+		}
+
+		public function upgrade(): void {
+		}
+	}
+
+	class AnotherSomeUpgrade extends AbstractUpgrade {
+		public function getVersion(): string {
+			return '1.5';
+		}
+
+		public function upgrade(): void {
+		}
+	}
+
+	class GenerationJumpUpgrade extends AbstractUpgrade {
+		public function getVersion(): string {
+			return '2.0';
+		}
+
+		public function upgrade(): void {
+		}
+	}
 
 	class ShittyInjectClass extends Edde {
 		public function injectSomething(UserSchema $userSchema) {
