@@ -2,6 +2,8 @@
 
 ## Before start
 
+?> It's good to get acquainted with [concepts and ideas](/ideas.md) behind the framework to prevent some surprises.
+
 Edde does not enforce any directory structure unlike others do; in general it's recommended
 to put you sources into `src` dir and tests to `tests` directory. Your application is basically
 kind of "library" put inside some "blackbox" (in this case Edde); it's not necessary to mess
