@@ -20,7 +20,6 @@
 	use ProjectMemberSchema;
 	use ProjectOrganizationSchema;
 	use ProjectSchema;
-	use ReflectionException;
 	use ShittyTypeSchema;
 	use Throwable;
 	use ToBeOrdered;
@@ -329,7 +328,7 @@
 			$save = $this->storage->save(new Entity(ProjectSchema::class, [
 				'name'    => 'another-some-project-here',
 				'created' => new DateTime(),
-				'start'   => new DateTime(),
+				'start'   => new DateTime($start = '2016-05-24T14:43:11'),
 				'end'     => new DateTime(),
 			]));
 			$save['end'] = null;
@@ -339,6 +338,7 @@
 			self::assertEmpty($actual['end']);
 			self::assertArrayHasKey('start', $actual);
 			self::assertInstanceOf(DateTime::class, $actual['start']);
+			self::assertEquals('2016-05-24T14:43:11.000000', $actual['start']->format('Y-m-d\TH:i:s.u'));
 		}
 
 		/**
@@ -571,7 +571,6 @@
 		/**
 		 * @throws ContainerException
 		 * @throws SchemaException
-		 * @throws ReflectionException
 		 */
 		protected function setUp() {
 			parent::setUp();

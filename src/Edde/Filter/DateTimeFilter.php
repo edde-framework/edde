@@ -10,7 +10,7 @@
 			if ($value && $value instanceof DateTime === false) {
 				$value = new DateTime($value);
 			}
-			return $value ? $value->format('Y-m-d H:i:s.u') : null;
+			return $value ? $value->format('Y-m-d\TH:i:s.u') : null;
 		}
 
 		/** @inheritdoc */
