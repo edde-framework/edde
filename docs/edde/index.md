@@ -9,7 +9,10 @@ why part exists or not.
 
 ## What we have here
 
-* [Dependency Container](/edde/container): Core feature of (basically any) framework; it provides
+* [Configurators](/edde/configurators): Quite unique and nice feature of Edde - simple way how
+to setup services in deferred way.
+
+* [Container](/edde/container): Core feature of (basically any) framework; it provides
 quite strong and complex dependency container built for real-world usage (do not search for
 strange features).
 
@@ -18,3 +21,13 @@ an application request; quite simple stuff with one incredibly annoying exceptio
 
 * [Exceptions](/edde/exceptions): Edde is using simple exception model; in general no body cares
 about exceptions, but it could make development a bit easier.
+
+* [Logging](/edde/logging): Every application needs to keep logs. Not on filesystem though ;).
+
+* [ORM](/edde/orm): A little surprise here - story about the question if ORM is useful or not.
+
+* [Schema](/edde/schema): Another nice piece of code useful for data format description to keep
+entities and data format separated.
+
+* [Storage](/edde/storage): That interesting part for everybody; how to save and retrieve you 
+valuable data!
