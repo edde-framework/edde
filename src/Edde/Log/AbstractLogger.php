@@ -10,37 +10,37 @@
 	 */
 	abstract class AbstractLogger extends Edde implements ILogger {
 		/** @inheritdoc */
-		public function log($log, array $tags = null): ILogger {
-			return $this->record(new Log($log, $tags));
+		public function log($log, array $tags = []): void {
+			$this->record(new Log($log), $tags);
 		}
 
 		/** @inheritdoc */
-		public function info(string $log, array $tags = null): ILogger {
+		public function info(string $log, array $tags = []): void {
 			$tags[] = __FUNCTION__;
-			return $this->log($log, $tags);
+			$this->log($log, $tags);
 		}
 
 		/** @inheritdoc */
-		public function warning(string $log, array $tags = null): ILogger {
+		public function warning(string $log, array $tags = []): void {
 			$tags[] = __FUNCTION__;
-			return $this->log($log, $tags);
+			$this->log($log, $tags);
 		}
 
 		/** @inheritdoc */
-		public function error(string $log, array $tags = null): ILogger {
+		public function error(string $log, array $tags = []): void {
 			$tags[] = __FUNCTION__;
-			return $this->log($log, $tags);
+			$this->log($log, $tags);
 		}
 
 		/** @inheritdoc */
-		public function critical(string $log, array $tags = null): ILogger {
+		public function critical(string $log, array $tags = []): void {
 			$tags[] = __FUNCTION__;
-			return $this->log($log, $tags);
+			$this->log($log, $tags);
 		}
 
 		/** @inheritdoc */
-		public function exception(Throwable $exception, array $tags = null): ILogger {
+		public function exception(Throwable $exception, array $tags = []): void {
 			$tags[] = __FUNCTION__;
-			return $this->log($exception, $tags);
+			$this->log($exception, $tags);
 		}
 	}

@@ -14,4 +14,24 @@
 		 * @return ILogService
 		 */
 		public function registerLogger(ILogger $logger): ILogService;
+
+		/**
+		 * do log to stdout (should use logger with proper tag)
+		 *
+		 * @param string $log
+		 * @param array  $tags
+		 *
+		 * @return ILogService
+		 */
+		public function stdout(string $log, array $tags = []): ILogService;
+
+		/**
+		 * do log to stderr (should use logger with proper tag)
+		 *
+		 * @param string $log
+		 * @param array  $tags
+		 *
+		 * @return ILogService
+		 */
+		public function stderr(string $log, array $tags = []): ILogService;
 	}

@@ -24,6 +24,7 @@
 	use Edde\Hydrator\IHydratorManager;
 	use Edde\Log\ILogService;
 	use Edde\Log\LogService;
+	use Edde\Log\LogServiceConfigurator;
 	use Edde\Router\IRouterService;
 	use Edde\Router\RouterService;
 	use Edde\Router\RouterServiceConfigurator;
@@ -259,6 +260,7 @@
 				IRouterService::class    => RouterServiceConfigurator::class,
 				IFilterManager::class    => FilterManagerConfigurator::class,
 				IValidatorManager::class => ValidatorManagerConfigurator::class,
+				ILogService::class       => LogServiceConfigurator::class,
 			];
 		}
 	}

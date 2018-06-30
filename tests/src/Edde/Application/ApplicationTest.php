@@ -4,8 +4,8 @@
 
 	use Edde\Configurable\AbstractConfigurator;
 	use Edde\Container\ContainerException;
+	use Edde\Log\AbstractLogger;
 	use Edde\Log\ILog;
-	use Edde\Log\SimpleLog;
 	use Edde\Router\IRouterService;
 	use Edde\Router\RouterException;
 	use Edde\Service\Application\Application;
@@ -13,6 +13,7 @@
 	use Edde\Service\Log\LogService;
 	use Edde\Service\Router\RouterService;
 	use Edde\TestCase;
+	use function in_array;
 
 	class ApplicationTest extends TestCase {
 		use Application;
@@ -25,10 +26,18 @@
 		public function testRunException() {
 			$this->expectException(RouterException::class);
 			$this->expectExceptionMessage('Cannot handle current request.');
-			$this->logService->registerLogger($log = new SimpleLog(), ['exception']);
+			$this->logService->registerLogger($logger = new class() extends AbstractLogger {
+				public $logs = [];
+
+				public function record(ILog $log, array $tags = []): void {
+					if (in_array('exception', $tags)) {
+						$logs[] = $log;
+					}
+				}
+			});
 			$this->application->run();
 			/** @var $logs ILog[] */
-			self::assertNotEmpty($logs = $log->getLogs());
+			self::assertNotEmpty($logs = $logger->logs);
 			[$record] = $logs;
 			throw $record->getLog();
 		}

@@ -14,66 +14,52 @@
 		 *
 		 * @param mixed $log
 		 * @param array $tags
-		 *
-		 * @return ILogger
 		 */
-		public function log($log, array $tags = null): ILogger;
+		public function log($log, array $tags = []): void;
 
 		/**
 		 * @param ILog       $log
 		 * @param array|null $tags
-		 *
-		 * @return ILogger
 		 */
-		public function record(ILog $log, array $tags = null): ILogger;
+		public function record(ILog $log, array $tags = []): void;
 
 		/**
 		 * adds informative tag
 		 *
 		 * @param string $log
 		 * @param array  $tags
-		 *
-		 * @return ILogger
 		 */
-		public function info(string $log, array $tags = null): ILogger;
+		public function info(string $log, array $tags = []): void;
 
 		/**
 		 * adds warning tag
 		 *
 		 * @param string $log
 		 * @param array  $tags
-		 *
-		 * @return ILogger
 		 */
-		public function warning(string $log, array $tags = null): ILogger;
+		public function warning(string $log, array $tags = []): void;
 
 		/**
 		 * adds error tag
 		 *
 		 * @param string $log
 		 * @param array  $tags
-		 *
-		 * @return ILogger
 		 */
-		public function error(string $log, array $tags = null): ILogger;
+		public function error(string $log, array $tags = []): void;
 
 		/**
 		 * adds critical tag
 		 *
 		 * @param string $log
 		 * @param array  $tags
-		 *
-		 * @return ILogger
 		 */
-		public function critical(string $log, array $tags = null): ILogger;
+		public function critical(string $log, array $tags = []): void;
 
 		/**
 		 * log an exception
 		 *
 		 * @param Throwable  $exception
 		 * @param array|null $tags
-		 *
-		 * @return ILogger
 		 */
-		public function exception(Throwable $exception, array $tags = null): ILogger;
+		public function exception(Throwable $exception, array $tags = []): void;
 	}

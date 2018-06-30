@@ -18,11 +18,24 @@
 		}
 
 		/** @inheritdoc */
-		public function record(ILog $log, array $tags = null): ILogger {
+		public function stdout(string $log, array $tags = []): ILogService {
+			$tags[] = __FUNCTION__;
+			$this->log($log, $tags);
+			return $this;
+		}
+
+		/** @inheritdoc */
+		public function stderr(string $log, array $tags = []): ILogService {
+			$tags[] = __FUNCTION__;
+			$this->log($log, $tags);
+			return $this;
+		}
+
+		/** @inheritdoc */
+		public function record(ILog $log, array $tags = []): void {
 			$tags = array_unique($tags ?: []);
 			foreach ($this->loggers as $logger) {
 				$logger->record($log, $tags);
 			}
-			return $this;
 		}
 	}
