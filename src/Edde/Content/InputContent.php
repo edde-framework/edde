@@ -2,6 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Content;
 
+	use Edde\File\File;
+
 	/**
 	 * Input content represent's php input stream.
 	 */
@@ -13,5 +15,16 @@
 		/** @inheritdoc */
 		public function getContent() {
 			return file_get_contents($this->content);
+		}
+
+		/** @inheritdoc */
+		public function getIterator() {
+			$file = new File($this->content);
+			try {
+				$file->open('r');
+				yield from $file;
+			} finally {
+				$file->close();
+			}
 		}
 	}

@@ -11,7 +11,6 @@
 	use Edde\Factory\ClassFactory;
 	use Edde\Service\Container\Container;
 	use PHPUnit\Framework\TestCase as PhpUnitTestCase;
-	use ReflectionException;
 
 	abstract class TestCase extends PhpUnitTestCase implements IAutowire {
 		use Autowire;
@@ -21,7 +20,6 @@
 		 * @inheritdoc
 		 *
 		 * @throws ContainerException
-		 * @throws ReflectionException
 		 */
 		protected function setUp() {
 			ContainerFactory::inject($this, [
