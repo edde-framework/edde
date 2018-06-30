@@ -31,3 +31,5 @@ entities and data format separated.
 
 * [Storage](/edde/storage): That interesting part for everybody; how to save and retrieve you 
 valuable data!
+
+* [Upgrades](/edde/upgrades): Migrations made easy. One simple class rule them all!

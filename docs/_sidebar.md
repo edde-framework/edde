@@ -11,4 +11,6 @@
 	* [ORM](/edde/orm)
 	* [Schema](/edde/schema)
 	* [Storage](/edde/storage)
+	* [Upgrades](/edde/upgrades)
 * [Examples](/examples/index)
+	* [Upgrade Manager](/examples/upgrade-manager)

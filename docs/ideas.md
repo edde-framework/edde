@@ -56,3 +56,9 @@ That means Edde will **never** implement any kind of Control or template or anot
 generation) to provide server-side rendering.
 
 Yo, no session support too.
+
+## No Schemas
+
+Sometimes framework tend to force users to use their's internal Entities, schemas, whatever to implement some piece of functionality.
+This was quite hard to solve, but Edde in general doesn't do this. Even it's really simple to create [Schema](/edde/schema) and extend it,
+Edde does not provide any; better is good quality documentation than some strangely prepared schemas.  
