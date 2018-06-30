@@ -9,6 +9,7 @@ services:
                 volumes:
                     - ../:/edde
                 ports:
+                    - "5480:80"
                     - "4722:22"
                 networks:
                     - edde-network
