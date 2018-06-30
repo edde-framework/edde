@@ -2,6 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Factory;
 
+	use ConstructorClass;
+	use Edde\Container\ContainerException;
 	use Edde\TestCase;
 	use ShittyInjectClass;
 	use ShittyInjectTypehintClass;
@@ -36,5 +38,15 @@
 			$this->expectExceptionMessage('Method [ShittyInjectVisibilityClass::injectSomething()] must be public.');
 			$factory = new ClassFactory();
 			$factory->getReflection($this->container, ShittyInjectVisibilityClass::class);
+		}
+
+		/**
+		 * @throws ContainerException
+		 */
+		public function testExternalParams() {
+			$factory = new ClassFactory();
+			$instance = $factory->factory($this->container, ['yep'], new Reflection(), ConstructorClass::class);
+			self::assertInstanceOf(ConstructorClass::class, $instance);
+			self::assertSame('yep', $instance->param);
 		}
 	}
