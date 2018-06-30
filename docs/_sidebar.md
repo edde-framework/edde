@@ -11,3 +11,4 @@
 	* [ORM](/edde/orm)
 	* [Schema](/edde/schema)
 	* [Storage](/edde/storage)
+* [Examples](/examples/index)

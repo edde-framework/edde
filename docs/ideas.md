@@ -44,3 +44,15 @@ Main reason was to use one service through whole application and choose logger o
 you decide you want to disable this logger, it's enough to disable individual logger handling this type of `tag`. Such you
 can do logging to database, file or any kind of storage and simply enable/disable this logger in any environment without touching
 code. 
+
+## Backend Only
+
+There are plenty of [template](https://twig.symfony.com/) [engines](https://latte.nette.org/en/) around the world; it's not
+necessary to create another one to build huge piece of crap on server side solving client related problems; in general
+Edde is using concept far away from traditional way how to build oldschool application - you application should be just backend
+for another piece of software making UI for it.
+
+That means Edde will **never** implement any kind of Control or template or another piece of thing again (yes, there was in some older
+generation) to provide server-side rendering.
+
+Yo, no session support too.
