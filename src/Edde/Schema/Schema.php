@@ -49,7 +49,7 @@
 
 		/** @inheritdoc */
 		public function getMeta(string $name, $default = null) {
-			return $this->source->meta ?? $default;
+			return $this->source->meta[$name] ?? $default;
 		}
 
 		/** @inheritdoc */
@@ -102,8 +102,6 @@
 
 		/** @inheritdoc */
 		public function checkRelation(ISchema $source, ISchema $target): void {
-			$sourceAttribute = $this->getSource();
-			$targetAttribute = $this->getTarget();
 			if ($this->isRelation() === false) {
 				throw new SchemaException(vsprintf('Invalid relation (%s)-[!%s]->(%s): Relation schema [%s] is not a relation.', [
 					$source->getName(),
@@ -111,7 +109,10 @@
 					$target->getName(),
 					$this->getName(),
 				]));
-			} else if (($expectedSchemaName = $sourceAttribute->getSchema()) !== $source->getName()) {
+			}
+			$sourceAttribute = $this->getSource();
+			$targetAttribute = $this->getTarget();
+			if (($expectedSchemaName = $sourceAttribute->getSchema()) !== $source->getName()) {
 				throw new SchemaException(vsprintf('Invalid relation (!%s)-[%s]->(%s): Source schema [%s] differs from expected relation [%s]; did you swap $source and $target schema?.', [
 					$source->getName(),
 					$this->getName(),
@@ -119,7 +120,8 @@
 					$source->getName(),
 					$expectedSchemaName,
 				]));
-			} else if (($expectedSchemaName = $targetAttribute->getSchema()) !== $target->getName()) {
+			}
+			if (($expectedSchemaName = $targetAttribute->getSchema()) !== $target->getName()) {
 				throw new SchemaException(vsprintf('Invalid relation (%s)-[%s]->(!%s): Target schema [%s] differs from expected relation [%s]; did you swap $source and $target schema?.', [
 					$source->getName(),
 					$this->getName(),
@@ -128,10 +130,5 @@
 					$expectedSchemaName,
 				]));
 			}
-		}
-
-		/** @inheritdoc */
-		public function __toString(): string {
-			return $this->getName();
 		}
 	}

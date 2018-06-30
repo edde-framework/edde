@@ -5,6 +5,7 @@
 	use DateTime;
 	use Edde\Service\Utils\StringUtils;
 	use ReflectionClass;
+	use ReflectionException;
 	use Throwable;
 	use function is_array;
 	use function is_string;
@@ -81,26 +82,46 @@
 								$attributeBuilder->unique();
 								break;
 							case 'generator':
-								if (($generator = $parameter->getDefaultValue()) === null || is_string($generator) === false) {
-									throw new SchemaException(sprintf('Parameter [%s::%s($generator)] must have default a string value as a generator name.', $schema, $propertyName));
+								try {
+									$generator = $parameter->getDefaultValue();
+									if (is_string($generator) === false) {
+										throw new ReflectionException('Generator name is not a string value.');
+									}
+								} catch (ReflectionException $exception) {
+									throw new SchemaException(sprintf('Parameter [%s::%s($generator)] must have a default string value as a generator name.', $schema, $propertyName), 0, $exception);
 								}
 								$attributeBuilder->filter($parameterName, $generator);
 								break;
 							case 'filter':
-								if (($filter = $parameter->getDefaultValue()) === null || is_string($filter) === false) {
-									throw new SchemaException(sprintf('Parameter [%s::%s($filter)] must have a default string value as a filter name.', $schema, $propertyName));
+								try {
+									$filter = $parameter->getDefaultValue();
+									if (is_string($filter) === false) {
+										throw new ReflectionException('Filter name is not a string value.');
+									}
+								} catch (ReflectionException $exception) {
+									throw new SchemaException(sprintf('Parameter [%s::%s($filter)] must have a default string value as a filter name.', $schema, $propertyName), 0, $exception);
 								}
 								$attributeBuilder->filter($parameterName, $filter);
 								break;
 							case 'validator':
-								if (($validator = $parameter->getDefaultValue()) === null || is_string($validator) === false) {
-									throw new SchemaException(sprintf('Parameter [%s::%s($validator)] must have a default string value as a validator name.', $schema, $propertyName));
+								try {
+									$validator = $parameter->getDefaultValue();
+									if (is_string($validator) === false) {
+										throw new ReflectionException('Validator name is not a string value.');
+									}
+								} catch (ReflectionException $exception) {
+									throw new SchemaException(sprintf('Parameter [%s::%s($validator)] must have a default string value as a validator name.', $schema, $propertyName), 0, $exception);
 								}
 								$attributeBuilder->validator($validator);
 								break;
 							case 'type':
-								if (($type = $parameter->getDefaultValue()) === null || is_string($type) === false) {
-									throw new SchemaException(sprintf('Parameter [%s::%s($type)] must have a default string value as a type name.', $schema, $propertyName));
+								try {
+									$type = $parameter->getDefaultValue();
+									if (is_string($type) === false) {
+										throw new ReflectionException('Type name is not a string value.');
+									}
+								} catch (ReflectionException $exception) {
+									throw new SchemaException(sprintf('Parameter [%s::%s($type)] must have a default string value as a type name.', $schema, $propertyName), 0, $exception);
 								}
 								$attributeBuilder->type($type);
 								$attributeBuilder->required($parameter->isOptional());

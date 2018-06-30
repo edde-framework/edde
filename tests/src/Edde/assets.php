@@ -53,6 +53,7 @@
 
 	interface ProjectSchema extends UuidSchema {
 		const alias = true;
+		const meta = ['some-meta' => true];
 		const STATUS_CREATED = 0;
 		const STATUS_STARTED = 1;
 		const STATUS_ENDED = 2;
@@ -133,4 +134,37 @@
 	}
 
 	interface VoidSchema extends UuidSchema {
+	}
+
+	interface InvalidMetaSchema extends UuidSchema {
+		const meta = false;
+	}
+
+	interface NoPrimaryKeySchema {
+	}
+
+	interface InvalidGeneratorSchema extends UuidSchema {
+		public function mrdka($generator = 1);
+	}
+
+	interface InvalidFilterSchema extends UuidSchema {
+		public function mrdka($filter = 1);
+	}
+
+	interface InvalidValidatorSchema extends UuidSchema {
+		public function mrdka($validator = 1);
+	}
+
+	interface InvalidTypeSchema extends UuidSchema {
+		public function mrdka($type = 1);
+	}
+
+	interface InvalidRelationSchema extends UuidSchema {
+		const relation = ['foo' => 'bar'];
+
+		public function mrdka($required = true, $filter = 'foo', $validator = 'bar');
+	}
+
+	interface InvalidPrimarySchema {
+		const primary = 'blabla';
 	}

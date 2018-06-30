@@ -103,9 +103,4 @@
 		 * @throws SchemaException
 		 */
 		public function checkRelation(ISchema $source, ISchema $target): void;
-
-		/**
-		 * @return string
-		 */
-		public function __toString(): string;
 	}
