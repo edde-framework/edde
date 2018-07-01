@@ -2,7 +2,7 @@
 
 Edde is built around key set of concepts more than relying on repeating code found all over the internet.
 This article explains some decisions made to keep life a bit easier despite it could be strange on the first
-look. It itsn't :)!
+look. It itsn't :blush: !
 
 ## Environments
 
@@ -39,9 +39,9 @@ on request.
 
 ## Logger
 
-`LogService` is done in a bit different way in Edde way incompatible with that strange [PSR](https://github.com/php-fig/log) thing out there.
-Main reason was to use one service through whole application and choose logger on fly. For example you can simply log to `stderr` and if
-you decide you want to disable this logger, it's enough to disable individual logger handling this type of `tag`. Such you
+`LogService` is done in a bit different way in Edde way incompatible with that strange :astonished: [PSR](https://github.com/php-fig/log)
+thing out there. Main reason was to use one service through whole application and choose logger on fly. For example you can simply log to
+`stderr` and if you decide you want to disable this logger, it's enough to disable individual logger handling this type of `tag`. Such you
 can do logging to database, file or any kind of storage and simply enable/disable this logger in any environment without touching
 code. 
 
@@ -62,3 +62,14 @@ Yo, no session support too.
 Sometimes framework tend to force users to use their's internal Entities, schemas, whatever to implement some piece of functionality.
 This was quite hard to solve, but Edde in general doesn't do this. Even it's really simple to create [Schema](/edde/schema) and extend it,
 Edde does not provide any; better is good quality documentation than some strangely prepared schemas.  
+
+## No PSR Support
+
+In general I think that whole [PSR Group](https://www.php-fig.org/psr/) is wrong in principle, because they're trying to solve
+fragmentation of frameworks split into smaller packages, solve interoperability between them and all problems of the world in
+general. There are a lot of things which are not done in good way or it's ended in the half way.
+
+This opinion is maybe a bit outside of PHP world mainstream, but prefer to have clean API than some kind of pseudo compatibility
+leading to some crappy code around.  
+
+Concrete arguments could be found [here](/psr).

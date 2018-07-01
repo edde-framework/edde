@@ -9,8 +9,8 @@ because of love and precise craftsmanship put into building the codebase.
 A lot of things has many iterations behind, the code itself is not much more like "just another framework" as it stands for
 ideas which it could simply argue about.  
 
-So that's the core: Concepts and Ideas. A lot of things are done in different way or are generally "incompatible" with current
-state of PHP scene, but I believe in my work and in the effort put in to make the things work :) !. 
+So that's the core: [Concepts and Ideas](/ideas). A lot of things are done in different way or are generally "incompatible" with current
+state of PHP scene, but I believe in my work and in the effort put in to make the things work :wink: !. 
 
 # Important Notes
 
