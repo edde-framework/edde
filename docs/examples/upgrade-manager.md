@@ -201,3 +201,17 @@ data manipulation within one transaction, thus it's better to keep smaller upgra
         }
 	}
 ```
+
+## How to use the magic
+
+Edde contains default CLI implementation for an upgrade manager:
+
+```bash
+# run upgrade up to current version available in the application
+$ cli upgrade.upgrade/upgrade
+
+# see current version of the application
+$ cli upgrade.upgrade/version
+```
+
+!> To make this work, you have to have registered `CascadeFactory()` in you `loader.php`!
