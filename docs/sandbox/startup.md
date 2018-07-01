@@ -35,26 +35,15 @@ Because all of this you are doing because you want to use Edde, it's good to ins
 !> Be careful as this will install `master` version of Edde, thus latest version; in general it's quite safe to use it, but it's better
 to stick to a particular version.
 
-## First Controller
-
-It would be nice after all to see, if the things is working, so let's create http controller. More about the stuff [here](/edde/controllers).
-
-?> **backend/src/Sandbox/Http/Hello/WorldController.php**
-
-```php
-<?php
-	declare(strict_types=1);
-	namespace Sandbox\Http\Hello;
-
-	use Edde\Controller\HttpController;
-
-	class WorldController extends HttpController {
-		public function actionCheers() {
-			$this->textResponse('cheers!')->execute();
-		}
-	}	
-```
+## Check your running application
 
 Go to browser on `http://{localhost | docker-ip}:2680/hello.world/cheers` and you'll get `cheers!`.
+
+Also you can test CLI controller:
+
+```
+/sandbox/backend # ./cli hello.world/cheers
+yep!
+```
 
 **Previous**: [Backend](/sandbox/backend)

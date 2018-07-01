@@ -165,4 +165,46 @@ Real loader; this way is used to prevent deep jumps in directory structure even 
 	Autoloader::register(__NAMESPACE__, __DIR__);
 ```
 
+## Http Controller
+
+Let's prepare http controller. More about the stuff [here](/edde/controllers).
+
+> There are more things to do, your IDE will probably cry about missing dependencies.
+
+?> **backend/src/Sandbox/Http/Hello/WorldController.php**
+
+```php
+<?php
+	declare(strict_types=1);
+	namespace Sandbox\Http\Hello;
+
+	use Edde\Controller\HttpController;
+
+	class WorldController extends HttpController {
+		public function actionCheers() {
+			$this->textResponse('cheers!')->execute();
+		}
+	}	
+```
+
+## Cli Controller
+
+Just for fun we can create CLI controller too to see how the thing works.
+
+?> **backend/src/Sandbox/Cli/Hello/WorldController.php**
+
+```php
+<?php
+	declare(strict_types=1);
+	namespace Sandbox\Cli\Hello;
+
+	use Edde\Controller\CliController;
+
+	class WorldController extends CliController {
+		public function actionCheers() {
+			echo "yep!\n";
+		}
+	}	
+```
+
 **Previous**: [Bin](/sandbox/bin) | **Next**: [Startup](/sandbox/startup)
