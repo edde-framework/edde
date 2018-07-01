@@ -6,6 +6,8 @@
 
 !> Are you familiar with [Docker](/docker)? If not, read some [docs](https://docs.docker.com/) about it :wink: ! 
 
+> [Sandbox](/sandbox/index) is full featured tutorial on how to build whole application using Docker from scratch. **Batteries included**.
+
 Edde does not enforce any directory structure unlike others do; in general it's recommended
 to put you sources into `src` dir and tests to `tests` directory. Your application is basically
 kind of "library" put inside some "blackbox" (in this case Edde); it's not necessary to mess
