@@ -16,21 +16,26 @@ don't do any dangerous operations there.
 <?php
 	declare(strict_types=1);
 	namespace Sandbox\Upgrade;
-	
+
+	use Edde\Storage\Entity;
+	use Edde\Storage\UnknownTableException;
 	use Edde\Upgrade\AbstractUpgradeManager;
 	use Edde\Service\Storage\Storage;
+	use Edde\Upgrade\IUpgrade;
+	use Edde\Upgrade\UpgradeException;
 	use Generator;
-	
+	use Throwable;
+
 	/**
-     * abstract has already all necessary stuff (like required interface) 
+	 * abstract has already all necessary stuff (like required interface)
 	 */
 	class UpgradeManager extends AbstractUpgradeManager {
 		use Storage;
-		
+
 		/**
 		 * this usually needs access to database (storage), thus it's up to you
-         * to provide actual version of an application 
-         */
+		 * to provide actual version of an application
+		 */
 		public function getVersion(): ?string {
 			try {
 				try {
@@ -45,8 +50,8 @@ don't do any dangerous operations there.
 			} catch (Throwable $exception) {
 				throw new UpgradeException(sprintf('Cannot retrieve current version: %s', $exception->getMessage()), 0, $exception);
 			}
-        }
-        
+		}
+
 
 		/** @inheritdoc */
 		public function getCurrentCollection(): Generator {
@@ -60,6 +65,7 @@ don't do any dangerous operations there.
 			]));
 		}
 	}
+
 ```
 
 **Previous**: [Schema](/examples/upgrades/schema) | **Next**: [Configurator](/examples/upgrades/configurator)
