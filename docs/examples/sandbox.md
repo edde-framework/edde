@@ -162,7 +162,7 @@ chown -R nginx:www-data .
 
 There are plenty ways, how to configure nginx, this is one of them.
 
-?> **.docker/etc/nginx/nginx.conf**
+?> **.docker/rootfs/etc/nginx/nginx.conf**
 
 ```
 user                nginx www-data;
@@ -210,7 +210,7 @@ http {
 
 Yet another way how to configure PHP-FPM
 
-?> **.docker/etc/php7/php-fpm.conf**
+?> **.docker/rootfs/etc/php7/php-fpm.conf**
 
 ```ini
 [global]
@@ -269,7 +269,7 @@ php_value[max_execution_time] = 0
 
 Startup script for nginx; script must stay alive or `runit` service try to restart script again and again. 
 
-?> **.docker/etc/service/nginx/run**
+?> **.docker/rootfs/etc/service/nginx/run**
 
 ```bash
 #!/usr/bin/env sh
@@ -281,6 +281,8 @@ exec /usr/sbin/nginx
 ### php-fpm/run
 
 Startup script for php-fpm; same for nginx - script must stay alive or `runit` will try to restart the service. 
+
+?> **.docker/rootfs/etc/service/php-fpm/run**
 
 ```bash
 #!/usr/bin/env sh
