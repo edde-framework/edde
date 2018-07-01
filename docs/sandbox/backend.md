@@ -53,6 +53,8 @@ When you need to execute something on cli.
 
 This file is responsible for actual application execution.
 
+> Your editor will cry about missing dependencies, don't worry, this will be fixed later.
+
 ?> **backend/runtime.php**
 
 ```php
@@ -74,6 +76,8 @@ This file is responsible for actual application execution.
 Probably most important file composing parts of you application together; other frameworks are using different approach of
 `Container` configuration, Edde is trying to keep as close to PHP as possible, thus whole configuration is done here and
 programmatically.
+
+> Your editor will cry about missing dependencies, don't worry, this will be fixed later.
 
 ?> **backend/loader.php**
 
