@@ -67,7 +67,7 @@ RUN composer global require hirak/prestissimo --prefer-dist --no-progress
 RUN rm -rf /var/cache/apk/*
 
 WORKDIR /sandbox/bin
-COPY bin/healthcheck healthcheck
+COPY healthcheck healthcheck
 RUN chmod +x healthcheck
 
 # sandbox manager configuration
@@ -154,7 +154,7 @@ Fix permissions to bound them to `nginx` and `www-data`.
 #!/usr/bin/env sh
 set -e
 
-cd /backend/backend
+cd /sandbox/backend
 chown -R nginx:www-data .
 ```
 
@@ -296,7 +296,7 @@ exec /usr/sbin/php-fpm7 -F
 
 Simple healthcheck script to keep some info about the container.
 
-?> **bin/healtcheck**
+?> **bin/healthcheck**
 
 ```php
 #!/usr/bin/env php
@@ -458,15 +458,15 @@ services:
             - ROOT_PASSWORD=root:1234
         ports:
             # map SSH port outside of a container
-            - "5622:22"
+            - "2622:22"
             # backend port
-            - "5680:80"
+            - "2680:80"
         volumes:
             # this is generally necessary
             - ../backend:/sandbox/backend
             # enable SSH daemon
-            - ./docker.local/etc/ssh:/etc/ssh
-            - ./docker.local/etc/service/sshd:/etc/service/sshd
+            - ./localfs/etc/ssh:/etc/ssh
+            - ./localfs/etc/service/sshd:/etc/service/sshd
             # control php stuff needed for local development
             - ./localfs/etc/php7/conf.d/00_opcache.ini:/etc/php7/conf.d/00_opcache.ini
             - ./localfs/etc/php7/conf.d/xdebug.ini:/etc/php7/conf.d/xdebug.ini
@@ -493,4 +493,44 @@ services:
 
 networks:
         sandbox-network:
+```
+
+## Helper scripts
+
+Some little pieces to startup the whole thing. 
+
+### bin/local.sh
+
+Starts local environment and login to shell; when you `exit`, container will stop.
+
+?> **bin/local.sh**
+
+```bash
+#!/usr/bin/env sh
+set -e
+
+# even it's much slower to use pull, it's much safer when production comes in as on
+# local there is a same environment as on production
+docker build --pull -f .docker/Dockerfile -t sandbox:local .
+docker-compose -f .docker/docker.local.yml up -d
+docker exec -it sandbox ash
+docker-compose -f .docker/docker.local.yml stop
+```
+
+## Backend
+
+Things neede to prepare basic stuff on backend.
+
+### config.ini.template
+
+There is a little magic translating environment variables into this file which is quite useful
+as it's much more reliable than to depend on env.
+
+?> **backend/config.ini.template**
+
+```ini
+[postgres]
+dsn = "pgsql:dbname=sandbox;user=${SANDBOX_DATABASE_USER};host=${SANDBOX_DATABASE_HOST};port=5432"
+user = "${SANDBOX_DATABASE_USER}"
+password = "${SANDBOX_DATABASE_PASSWORD}"
 ```
