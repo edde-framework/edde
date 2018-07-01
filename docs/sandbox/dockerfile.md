@@ -7,7 +7,7 @@ To prevent [zombie processes](https://en.wikipedia.org/wiki/Zombie_process) in t
 
 > `.docker` folder will hide all Docker related stuff to keep things clear.
 
-?> **src/.docker/Dockerfile**
+?> **.docker/Dockerfile**
 
 ```dockerfile
 FROM alpine:edge
