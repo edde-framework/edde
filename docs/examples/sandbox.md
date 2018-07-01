@@ -267,3 +267,28 @@ request_terminate_timeout = 0
 php_value[memory_limit] = 128M
 php_value[max_execution_time] = 0
 ```
+
+### nginx/run
+
+Startup script for nginx; script must stay alive or `runit` service try to restart script again and again. 
+
+?> **.docker/etc/service/nginx/run**
+
+```bash
+#!/usr/bin/env sh
+set -e
+
+exec /usr/sbin/nginx
+```
+
+### php-fpm/run
+
+Startup script for php-fpm; same for nginx - script must stay alive or `runit` will try to restart the service. 
+
+```bash
+#!/usr/bin/env sh
+set -e
+
+# -F is foreground
+exec /usr/sbin/php-fpm7 -F
+```
