@@ -5,6 +5,11 @@
 ?> To keep log rotate complex and not maintainable, everything is redirected to `stderr` and `stdout`, thus you can use
 any service to hook on `docker log` and process logs if needed.
 
+?> Any port used by this application is prefixed with 26, for example SSH port is published as `2622`, http as `2680` and so on.
+
+!> Please follow same convention as mentioned here, use **Sandbox** as a default name; when everything will be working, you
+can do whatever you want, but as the process is quite complex, it's simple to make mistake.
+
 ## Dockerfile
 
 We need Dockerfile which will define all the interesting stuff in the image.
@@ -489,7 +494,7 @@ services:
             - sandbox-network
         ports:
             # map adminer port
-            - "5600:8080"
+            - "2600:8080"
 
 networks:
         sandbox-network:
@@ -534,3 +539,184 @@ dsn = "pgsql:dbname=sandbox;user=${SANDBOX_DATABASE_USER};host=${SANDBOX_DATABAS
 user = "${SANDBOX_DATABASE_USER}"
 password = "${SANDBOX_DATABASE_PASSWORD}"
 ```
+
+## Run the Container
+
+Now everything is prepared for execution, it's time to say hello to you new and shiny container.
+
+!> You need [docker-compose](https://docs.docker.com/compose/) on your system to run an application. 
+
+### Startup
+
+Use `./bin/local.sh` to startup your container; it will take some time when everything is done, you will be in your
+container.
+
+```
+# Starting point where you can start to do any magic you want: 
+/sandbox/backend #
+```
+
+### Prepare composer
+
+Composer is available from Docker image, so you can start your project by `composer.json` creation followed by dependencies. 
+
+```
+# init composer, follow instructions on screen 
+/sandbox/backend # composer init
+```
+
+### Edde Time
+
+Because all of this you are doing because you want to use Edde, it's good to install it :wink: 
+
+```
+# init composer, follow instructions on screen 
+/sandbox/backend # composer require edde-framework/edde
+```
+
+!> Be careful as this will install master of Edde, thus latest version; in general it's quite safe to use it, but it's better
+to stick to a particular version.
+
+### index.php
+
+?> **backend/index.php**
+
+```php
+<?php
+	declare(strict_types=1);
+
+    require_once __DIR__ . '/runtime.php';
+```
+
+### runtime.php
+
+This file is responsible for an application execution.
+
+?> **backend/runtime.php**
+
+```php
+<?php
+	declare(strict_types=1);
+	use Edde\Application\IApplication;
+	use Edde\Container\IContainer;
+
+	// loader should create container instance (without any side effects)
+	/** @var $container IContainer */
+	$container = require_once __DIR__ . '/loader.php';
+	// Edde specifies simple interface for an application lifecycle; exit is here to
+	// report exit status of CLI applications (http don't care)
+	exit($container->create(IApplication::class)->run());
+```
+
+### loader.php
+
+Probably most important file composing parts of you application together; other frameworks are using different approach of
+`Container` configuration, Edde is trying to keep as close to PHP as possible, thus whole configuration is done here and
+programmatically.
+
+?> **backend/loader.php**
+
+```php
+<?php
+	declare(strict_types=1);
+	use Edde\Config\IConfigLoader;
+	use Edde\Configurable\AbstractConfigurator;
+	use Edde\Container\ContainerFactory;
+	use Edde\Factory\CascadeFactory;
+	use Edde\Factory\ClassFactory;
+
+	// load composer dependencies
+	require_once __DIR__ . '/vendor/autoload.php';
+	// prepare autoloader of you application
+	require_once __DIR__ . '/src/loader.php';
+	
+	/**
+	 * Container factory is the simplest way how to create dependency container; in this particular case container is also
+	 * configured to get "default" set of services defined in Edde.
+	 *
+	 * There is also option to create only container itself without any internal dependencies (not so much recommended except
+	 * you are heavy masochist).
+	 */
+	return ContainerFactory::container([
+		new CascadeFactory(
+			[
+				// here you should you you root namespace; you can keep Edde here if you want to get
+				// some support from the framework 
+				'Sandbox',
+				'Edde',
+			]),
+		/**
+		 * This stranger here must (should be) be last, because it's canHandle method is able to kill a lot of dependencies and
+		 * create not so much nice surprises. Thus, it must be last as kind of dependency fallback.
+		 */
+		new ClassFactory(),
+	], [
+		/**
+		 * if you remember something about config.ini.template file, here we will prepare it for usage; configurator is responsible
+         * for setting up class it's bound to (in this case ConfigLoader)
+		 *
+		 * it's quite hacky way, how to do this, but it's because of config file name specification and to keep things simpler 
+		 */
+		IConfigLoader::class   => new class() extends AbstractConfigurator {
+			/**
+			 * @param $instance IConfigLoader
+			 */
+			public function configure($instance) {
+				parent::configure($instance);
+				$instance->require(__DIR__ . '/config.ini');
+			}
+		},
+	]);
+```
+
+### src/loader.php
+
+If you will follow some simple rules, it's enough to have one class loader in an application.
+
+?> **backend/src/loader.php**
+
+```php
+<?php
+	declare(strict_types=1);
+	require_once __DIR__ . '/Sandbox/loader.php';
+```
+
+### src/Sandbox/loader.php
+
+Real loader; this way is used to prevent deep jumps in directory structure even it's a bit "more" files.
+
+?> **backend/src/Sandbox/loader.php**
+
+```php
+<?php
+	declare(strict_types=1);
+	namespace Sandbox;
+
+	use Edde\Autoloader;
+
+	Autoloader::register(__NAMESPACE__, __DIR__);
+```
+
+## First Controller
+
+It would be nice after all to see, if the things is working, so let's create http controller. More about the stuff [here](/edde/controllers).
+
+?> **backend/src/Sandbox/Http/Hello/WorldController.php**
+
+```php
+<?php
+	declare(strict_types=1);
+	namespace Sandbox\Http\Hello;
+
+	use Edde\Controller\HttpController;
+
+	class WorldController extends HttpController {
+		public function actionCheers() {
+			$this->textResponse('cheers!')->execute();
+		}
+	}	
+```
+
+Go to browser on `http://{localhost | docker-ip}:2680/hello.world/cheers` and you'll get
+
+`cheers!`
