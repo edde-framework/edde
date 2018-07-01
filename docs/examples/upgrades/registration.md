@@ -4,6 +4,8 @@
 
 > `loader.php` is shortened just for this example 
 
+?> **backend/loader.php**
+
 ```php
 <?php
 	declare(strict_types=1);
