@@ -1,3 +1,0 @@
-# Stack
-
-Article about creating default backend stuff based on docker...

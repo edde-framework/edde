@@ -15,7 +15,7 @@
 	* [Upgrades](/edde/upgrades)
 * [Versioning](/versioning)
 * [Examples](/examples/index)
-	* [Stack](/examples/stack)
+	* [Sandbox](/examples/sandbox)
 	* [Upgrade Manager](/examples/upgrade-manager)
 * [Story](/story)
 * [FAQ](/faq)
