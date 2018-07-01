@@ -2,6 +2,9 @@
 
 ?> This is one way, how you can build production ready Docker container with your application.
 
+?> To keep log rotate complex and not maintainable, everything is redirected to `stderr` and `stdout`, thus you can use
+any service to hook on `docker log` and process logs if needed.
+
 ## Dockerfile
 
 We need Dockerfile which will define all the interesting stuff in the image.
@@ -156,4 +159,111 @@ set -e
 
 cd /backend/backend
 chown -R nginx:www-data .
+```
+
+### nginx.conf
+
+There are plenty ways, how to configure nginx, this is one of them.
+
+?> **.docker/etc/nginx/nginx.conf**
+
+```
+user                nginx www-data;
+worker_processes    1;
+pid                 /var/run/nginx.pid;
+daemon              off;
+error_log           /dev/stdout info;
+
+events {
+	worker_connections  1024;
+}
+
+http {
+    include             /etc/nginx/mime.types;
+    default_type        application/octet-stream;
+    access_log          /dev/stdout;
+	server_tokens       off;
+	sendfile            on;
+    keepalive_timeout   65;
+    gzip                off;
+
+	# where PHP server(s) lives; example, how to run more upstream
+	# servers
+	upstream sandbox {
+		server unix:/var/run/php7-fpm-01.sock;
+		server unix:/var/run/php7-fpm-02.sock;
+    }
+
+	server {
+	    listen 80;
+
+		location / {
+			client_max_body_size    0;
+			client_body_buffer_size 128k;
+			include                 fastcgi_params;
+			fastcgi_param           SCRIPT_FILENAME /sandbox/backend/index.php;
+	        fastcgi_pass            sandbox;
+	        fastcgi_read_timeout    1d;
+		}
+	}
+}
+```
+
+### php-fpm.conf
+
+Yet another way how to configure PHP-FPM
+
+?> **.docker/etc/php7/php-fpm.conf**
+
+```ini
+[global]
+pid = /run/php-fpm.pid
+error_log = /dev/stderr
+emergency_restart_threshold = 10
+emergency_restart_interval = 1m
+process_control_timeout = 10s
+
+[sandbox-01]
+listen = /var/run/php7-fpm-01.sock
+listen.backlog = -1
+listen.owner = nginx
+listen.group = www-data
+listen.mode = 0660
+access.log = /proc/self/fd/2
+chdir = /sandbox/backend
+catch_workers_output = no
+clear_env = no
+user = nginx
+group = www-data
+pm = dynamic
+pm.max_children = 6
+pm.start_servers = 3
+pm.min_spare_servers = 3
+pm.max_spare_servers = 5
+pm.max_requests = 500
+request_terminate_timeout = 0
+php_value[memory_limit] = 128M
+php_value[max_execution_time] = 0
+
+[sandbox-02]
+listen = /var/run/php7-fpm-02.sock
+listen.backlog = -1
+listen.owner = nginx
+listen.group = www-data
+listen.mode = 0660
+access.log = /proc/self/fd/2
+chdir = /sandbox/backend
+catch_workers_output = no
+clear_env = no
+user = nginx
+group = www-data
+pm = dynamic
+pm.max_children = 6
+pm.start_servers = 3
+pm.min_spare_servers = 3
+pm.max_spare_servers = 5
+pm.max_requests = 500
+request_terminate_timeout = 0
+php_value[memory_limit] = 128M
+php_value[max_execution_time] = 0
 ```
