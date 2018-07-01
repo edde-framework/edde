@@ -4,12 +4,20 @@ Edde is built around key set of concepts more than relying on repeating code fou
 This article explains some decisions made to keep life a bit easier despite it could be strange on the first
 look. It itsn't :blush: !
 
+?> Important note about concepts: Edde is trying to use some pieces of design patterns, but also it makes some
+choices between them based on good practices or just on experience. Despite it's quite high quality, Edde is
+not **the best** framework ever as there are plenty of things continually evolving and improving.
+
 ## Environments
 
 There is nothing like "production", "development" and other shits complicating development of an application. Not
 in a traditional way. Usually it's enough to use environment variables to provides values for you application during
 build or startup of [Docker](/docker) as it's much simpler, than to fight with different files on different platforms and 
 stages.
+
+?> **Recommendation**: If you are not familiar with [Docker](/docker), please read the piece of docs here or see
+[official documentation](https://docs.docker.com/) as Docker is simplest way how to run any kind of application and
+it will be used through this documentation. 
 
 ## Configuration
 

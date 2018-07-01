@@ -7,7 +7,7 @@ packages for a framework.
 Sections of describes behavior and ideas of individual parts of framework and reasons
 why part exists or not. 
 
-## What we have here
+## What we have here {docsify-ignore}
 
 * [Configurators](/edde/configurators): Quite unique and nice feature of Edde - simple way how
 to setup services in deferred way.
