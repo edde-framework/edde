@@ -46,4 +46,6 @@ Also you can test CLI controller:
 yep!
 ```
 
+> You can simply `exit`, it will stop running stack.
+
 **Previous**: [Backend](/sandbox/backend)
