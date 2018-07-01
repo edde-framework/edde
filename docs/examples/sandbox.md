@@ -291,3 +291,42 @@ set -e
 # -F is foreground
 exec /usr/sbin/php-fpm7 -F
 ```
+
+### healthcheck
+
+Simple healthcheck script to keep some info about the container.
+
+?> **bin/healtcheck**
+
+```php
+#!/usr/bin/env php
+<?php
+	declare(strict_types=1);
+	try {
+		// it's good to use some address which required database access (or create proprietary healthcheck url)
+		if (file_get_contents('http://0.0.0.0/upgrade.upgrade/version') === false) {
+			throw new RuntimeException('Backend is not available!');
+		}
+		exit(0);
+	} catch (Throwable $exception) {
+		echo $exception->getMessage() . "\n";
+		exit(1);
+	}
+```
+
+## Local Filesystem
+
+Because there is a little difference between local development and production environment, modification are made on container
+level.
+
+?> This is a bit more painful as docker-compose file is used; basic idea is to turn off `opcache` and enable `xdebug`. 
+
+### 00_opcache.ini
+
+Disable opcache by emptying it's config file.
+
+?> **.docker/localfs/etc/php7/conf.d/00_opcache.ini**
+
+```ini
+# just this empty file
+```
