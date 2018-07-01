@@ -56,7 +56,7 @@ RUN composer global require hirak/prestissimo --prefer-dist --no-progress
 RUN rm -rf /var/cache/apk/*
 
 WORKDIR /sandbox/bin
-COPY healthcheck healthcheck
+COPY bin/healthcheck healthcheck
 RUN chmod +x healthcheck
 
 # sandbox manager configuration
