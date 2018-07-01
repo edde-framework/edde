@@ -14,7 +14,7 @@ state of PHP scene, but I believe in my work and in the effort put in to make th
 
 # Important Notes
 
-!> **Huge note on begining** I think SemVer has some major flaws, mainly related to hiding how big a change in code base is (for example 1.2 with
+!> **Huge note at the beginning** I think SemVer has some major flaws, mainly related to hiding how big a change in code base is (for example 1.2 with
 small api breaking change should be 2.0 same as completely rewritten library); thus I do **not** follow SemVer much more like **BrainVer**. Major
 version is generation jump (a lot of work to move to a new version) and minor versions marking API breaks.
 
