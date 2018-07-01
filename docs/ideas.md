@@ -36,14 +36,22 @@ container build/startup. Config should provide just basic scalar values in secti
 ## Dependencies
 
 A more can be found in article about [Container](/edde/container) but in short Edde does **not** support other
-than inject by a method. This is prevention of constructor hell and also inject method could be simply moved
+than injects by a method. This is prevention of constructor hell and also inject method could be simply moved
 to a trait and than reused by one line of code.
+
+?> To keep things clear and simple, it's useful to create trait per service you use in you application which will contain
+property and inject method; this has initial drawback as for one service it's necessary to create interface, implementation,
+register it to `loader.php` and make a trait, but it will lead to much more clear code.
 
 ## Configurators
 
 General article is available [here](/edde/configurators); Edde is using deferred creation of all services, which means also
 deferred time of service configuration. That's reason for `Configurators` which are responsible for service configuration
 on request.
+
+?> This mechanism is useful when you want to create one service, but it's not necessary to create and setup whole tree of
+services: for example, you have service working with `Storage`, but creation of that service will not make a connection to
+database before you actually "touch" storage. 
 
 ## Logger
 
@@ -52,6 +60,9 @@ thing out there. Main reason was to use one service through whole application an
 `stderr` and if you decide you want to disable this logger, it's enough to disable individual logger handling this type of `tag`. Such you
 can do logging to database, file or any kind of storage and simply enable/disable this logger in any environment without touching
 code. 
+
+?> Even it could be similar to other products, simple log service through whole application based on tags is quite powerful
+as it's not necessary to mess up with container to provide individual loggers to different parts of the application.
 
 ## Backend Only
 
@@ -65,11 +76,18 @@ generation) to provide server-side rendering.
 
 Yo, no session support too.
 
+?> Hard decision made by experience in the field: frontend stuff does not belong to backend, a lot of things is much more easier
+without messing with them on backend.
+
 ## No Schemas
 
 Sometimes framework tend to force users to use their's internal Entities, schemas, whatever to implement some piece of functionality.
 This was quite hard to solve, but Edde in general doesn't do this. Even it's really simple to create [Schema](/edde/schema) and extend it,
 Edde does not provide any; better is good quality documentation than some strangely prepared schemas.  
+
+?> The original attempts to use Entities or Schemas defined by framework leaded to some edge situations forced user to copy-paste
+original entity and made some modification breaking whole concept. That's reason for this decision - user should provide his own
+implementation of data model. 
 
 ## No PSR Support
 
@@ -81,3 +99,6 @@ This opinion is maybe a bit outside of PHP world mainstream, but prefer to have 
 leading to some crappy code around.  
 
 Concrete arguments could be found [here](/psr).
+
+?> Even it could be considered as a nice attempt to make some stuff around PHP and create some compatibility layer, dependency on
+some kind of "authority" with some people defining theirs stuff based on different experience and requirements is not a good idea.
