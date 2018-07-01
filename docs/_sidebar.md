@@ -9,7 +9,6 @@
 	* [Bin](/sandbox/bin)
 	* [Backend](/sandbox/backend)
 	* [Startup](/sandbox/startup)
-* [Docker](/docker)
 * [PSR](/psr)
 * [Components](/edde/index)
 	* [Configurators](/edde/configurators)
