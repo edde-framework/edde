@@ -214,4 +214,4 @@ $ cli upgrade.upgrade/upgrade
 $ cli upgrade.upgrade/version
 ```
 
-!> To make this work, you have to have registered `CascadeFactory()` in you `loader.php`!
+!> To make this work, you have to have registered `CascadeFactory()` in your `loader.php`!

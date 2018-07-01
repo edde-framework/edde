@@ -17,3 +17,5 @@
 * [Examples](/examples/index)
 	* [Stack](/examples/stack)
 	* [Upgrade Manager](/examples/upgrade-manager)
+* [Story](/story)
+* [FAQ](/faq)
