@@ -18,5 +18,5 @@ state of PHP scene, but I believe in my work and in the effort put in to make th
 small api breaking change should be 2.0 same as completely rewritten library); thus I do **not** follow SemVer much more like **BrainVer**. Major
 version is generation jump (a lot of work to move to a new version) and minor versions marking API breaks.
 
-!> **Backward compatibility** and maintenance does not exists in this project: versions are archived in branches and they're available. If you find
+!> **Backward compatibility** and maintenance does not exist in this project: versions are archived in branches and they're available. If you find
 some critical bug or you want some feature, it will not be solved in older versions than the current generation.
