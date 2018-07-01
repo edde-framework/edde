@@ -11,6 +11,7 @@
 	* [Backend](/sandbox/backend)
 	* [Startup](/sandbox/startup)
 * [Examples](/examples/index)
+	* [Schema](/examples/schema/index)
 	* [Upgrades](/examples/upgrades/index)
 * [Components](/edde/index)
 	* [Configurators](/edde/configurators)

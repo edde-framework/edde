@@ -8,6 +8,8 @@ how upgrade table looks like.
 ?> Because schemas are defined as PHP interfaces, you can use inheritance to move common stuff
 to parent interface (like `primary` and  `uuid` property).
 
+!> When a new schema is created, it must be loaded to [SchemaManager](/examples/schema/index).
+
 ?> **backend/src/Sandbox/Upgrade/UpgradeSchema.php**
 
 ```php

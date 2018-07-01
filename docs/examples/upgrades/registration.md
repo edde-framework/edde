@@ -12,7 +12,8 @@
 	
 	use Edde\Container\ContainerFactory;
 	use Edde\Upgrade\IUpgradeManager;
-	use Fooplication\Upgrade\UpgradeManager;
+	use Sandbox\Configurators\UpgradeManagerConfigurator;
+	use Sandbox\Upgrade\UpgradeManager;
 	
 	// ... shortened...
 	
@@ -32,7 +33,6 @@
 		IUpgradeManager::class => UpgradeManagerConfigurator::class,
 		// ...
 	]);
-
 ```
 
 **Previous**: [Configurator](/examples/upgrades/configurator) | **Next**: [Upgrade](/examples/upgrades/upgrade)

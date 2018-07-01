@@ -5,12 +5,12 @@
 
 This is a bit magical part: Create a Configurator responsible for setting up `UpgradeManager` you just created and register it for setup.
 
-?> **backend/src/Sandbox/Configurators/UpgradeManagerConfigurator.php**
+?> **backend/src/Sandbox/Configurator/UpgradeManagerConfigurator.php**
 
 ```php
 <?php
 	declare(strict_types=1);
-	namespace Sandbox\Configurators;
+	namespace Sandbox\Configurator;
 	
 	use Edde\Configurable\AbstractConfigurator;
 	use Edde\Service\Container\Container;
