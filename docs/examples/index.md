@@ -3,5 +3,8 @@
 There are many usecases, so here you can find, how Edde can help you develop another
 awesome application!
 
-* [Upgrade Manager](/examples/upgrade-manager): How to create upgrade manager and make migrations
+?> Examples are just way, how to point you to some direction, to get you an idea; do not treat
+them as the only way how to do the things.
+
+* [Upgrades](/examples/upgrades/index): How to create upgrade manager and make migrations
 in you application work!
