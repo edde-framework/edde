@@ -717,6 +717,8 @@ It would be nice after all to see, if the things is working, so let's create htt
 	}	
 ```
 
-Go to browser on `http://{localhost | docker-ip}:2680/hello.world/cheers` and you'll get
+Go to browser on `http://{localhost | docker-ip}:2680/hello.world/cheers` and you'll get `cheers!`.
 
-`cheers!`
+## Epilog
+
+Everything is now nice and shiny, prepared for further development! You can make experiments or even debug this application.
