@@ -121,7 +121,6 @@ A bit of magic providing env variables into an application in a safe way.
 
 ```bash
 #!/usr/bin/env sh
-
 set -e
 
 cd /sandbox/backend
@@ -137,7 +136,6 @@ Execute composer and install production dependencies.
 
 ```bash
 #!/usr/bin/env sh
-
 set -e
 
 cd /sandbox/backend
@@ -154,7 +152,6 @@ Fix permissions to bound them to `nginx` and `www-data`.
 
 ```bash
 #!/usr/bin/env sh
-
 set -e
 
 cd /backend/backend
