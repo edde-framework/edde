@@ -1,6 +1,7 @@
 * [Home](/)
 * [Core Ideas](/ideas)
 * [Getting Started](/getting-started)
+* [Features](/features)
 * [Sandbox](/sandbox/index)
 	* [Dockerfile](sandbox/dockerfile)
 	* [Root Filesystem](sandbox/rootfs)
