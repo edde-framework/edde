@@ -1,7 +1,8 @@
+![logo](_media/logo.png)
+
 # Edde Framework
 
-The Ultimate PHP Framework with focus on simple backend development without
-messing with unnecessary features making framework much more heavy.
+> The Ultimate Lightweight PHP Framework for Backend
 
 [GitHub](https://github.com/edde-framework/edde)
 [Getting Started](/getting-started)

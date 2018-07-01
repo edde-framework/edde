@@ -21,4 +21,21 @@ docker exec -it sandbox ash
 docker-compose -f .docker/docker.local.yml stop
 ```
 
+## bin/prdel.sh
+
+Starts local production environment; thus `opcache` is enabled, `xdebug` disabled; you can see
+epic performance of the application.
+
+?> **bin/prdel.sh**
+
+```bash
+#!/usr/bin/env sh
+set -e
+
+docker build --pull -f .docker/Dockerfile -t sandbox:prdel .
+docker-compose -f .docker/docker.prdel.yml up -d
+docker exec -it sandbox ash
+docker-compose -f .docker/docker.local.yml stop
+```
+
 **Previous**: [Docker Compose](/sandbox/docker-compose) | **Next**: [Backend](/sandbox/backend)
