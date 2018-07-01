@@ -145,7 +145,7 @@ fi
 
 ### 10-fixperms.sh
 
-Fix permissions to bound them to `nginx and `www-data`.
+Fix permissions to bound them to `nginx` and `www-data`.
 
 ?> **.docker/rootfs/etc/bootstrap/10-fixperms.sh**
 
