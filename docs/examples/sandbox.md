@@ -330,3 +330,90 @@ Disable opcache by emptying it's config file.
 ```ini
 # just this empty file
 ```
+
+### xdebug.ini
+
+Enable xdebug by this ini file.
+
+?> **.docker/localfs/etc/php7/conf.d/xdebug.ini**
+
+```ini
+zend_extension = xdebug.so
+xdebug.remote_enable = 1
+xdebug.remote_autostart = 1
+xdebug.remote_host = ${XDEBUG_IP}
+```
+
+### ssh/run
+
+It's useful to have access to container through ssh as it's much simpler to execute tests in this way.
+
+?> **.docker/localfs/etc/service/sshd/run**
+
+```bash
+#!/usr/bin/env sh
+set -e
+
+# install ssh server
+apk add openssh
+# fix permissions as without this ssh damon won't start 
+chmod 600 -R /etc/ssh
+# setup root password from env. variable; it's good enough to use some fuckin' simple password
+# something like "root:1234" as the container will be available just for you
+echo "${ROOT_PASSWORD}" | chpasswd
+# start the deamon
+exec /usr/sbin/sshd -D >/dev/null 2>&1
+```
+
+### sshd_config
+
+SSH server setup.
+
+?> **.docker/localfs/etc/ssh/sshd_config**
+
+```
+# to speed up things a bit
+UseDNS no
+# yes, in this case we want enable root user
+PermitRootLogin yes
+# important to enable remote access for example from PHPStorm
+Subsystem sftp /usr/lib/ssh/sftp-server
+```
+
+### ssh_host_rsa_key
+
+It's good to use one private key to prevent questions about SSH connection to unknown host.
+
+!> These keys are just for local use, NEVER use them on production as these are private keys.
+
+?> **.docker/localfs/etc/ssh/ssh_host_rsa_key**
+
+```
+-----BEGIN RSA PRIVATE KEY-----
+MIIEpQIBAAKCAQEAsyryreglP/NCVLo+Asent3BaKDHU1ZwgiASvyFDW2o/f4dQ+
+IChYxV/TxUeNEvV0r3E0gGEzxp4E3R4JLVzV2ryVvl/c+fpDqx3t6x7DOcLzL/mj
+3VC9d/3b6ayRaIqRNgieHyS3FHbdcK7fgd9fOQjxSgCQTIElc6H3EZsGt8OL1iWB
+IwUbohD7gyv1fybaX8iunCpruSIZvYKiiKaAeMx0wNaTZ9A15TkqvSQFlVcisT8o
+HgBZgwwDW8nDFFik1grRM/jLHxH6xNTJK2Mjm24rKqqzjO8hCr5NZSGPk/7BuKGs
+OHhtXUAQd+r0XdL1IE+D4GFqVhpNUqvQMPvV8wIDAQABAoIBAGMV2Wg7/n3DdmeN
+KEY5TJOyWunnxSDtW0Bd9yj9LBVrhBFMY589MPrW6DMuQuK9RG7SWIq3Nv8c3Ou8
+dK7VrJ9vtBC4y2ij81BrGOzy8ly7Z+qcUPdQc7gseLZebXw3Rd9wHKJ0l5uFsSlk
+TM9yTSMpwud+ME9fDOtKI21lIu31FjpSwEUUz6wcoFnjhObrkg19MJZ69N442wyp
+bNhkiW/kvlXlEb2s7y1v54JNrXfBquyJc23Liz2of7GZA5B0h9XIFWBAjZJMTu1B
+Mfjt/YZb/sRz7HardWBy5LDyC8Lu55db73T2YTTIzEL8cf5w0t39UNSdKLx4ngl9
+Llld8sECgYEA1lroUEYhlKikMD8nL5B+KIJqC3LaJZFDSnUv2gSVRo1xy9tkdFNx
+xNyCus1EF81HdlkJfhhpBZNrUUAzVpsK3TBSdU8hWrFO0sfdEjTcj3pbQSyZp5oh
+kMRP913LTNtrqDohp3Jj4LSjQP3chuB46NTqNCzsVFaZ2rvwDE+QSmsCgYEA1fn5
+kDCCh4+k0Pu4Yr9Ggkd+PNwZ+fo6ytYJbY6KFFcCv8M1GPxc/p7/IBtY/o25mIYP
+v7m2ANXrW9YxfvgaN1fbCAIuyM/mWcl9acLLeGHgG3XP1RdVqGAjp8s5PWcLx0MW
+Y6QM/Zdy52iXTmtVsBXTrPqHGg4SGiRmN2ONFJkCgYEAsAPwFdKwynh8cl25WLZm
+0e7dE0+ZUBXrUp3N0FHJHikRk5sw7tCCcGu+MZRSYNUg5E6Sm+eBfaGjExIL1gb0
+MdL3MvrqYaWNG0og/01G+842Vts/xT+sZkq9e1uakB7xVS9+6RfmaeMK11heGKcE
+wfPr6TImUc7XAaUnpYRD8McCgYEA1V2skzEsF40O5iz7Ucw1vNcZdApuBKyWT4ha
+YlqOKXYSEbHPkpijCmr1L8jVVw9vkD2uGppOeErXo/3T4S34xlLe3/99M1TL96BJ
+ZFqPlfzTAc7abTwVeA5Vv42QCEBmqE2nV7hQE9cfBs1ugw3Ypfs91fEDIuIA/vxo
+yLaGCZECgYEAg/olGfSjymY/1EHwojSPhw9SZ/PHgAsRdlS3GcrY4w9NCpLVLUbn
++oVcQWcMQvA6JkK7OjLAdYnCphFVquOo7gRqvYI1VcEJsB7bnb0O4REK9tSaUVj8
+eRaCqDMfhyOs+q8jfO5zbkz0YPP0Lu5ys8fC2koPFg4wXAZD0z+QEX4=
+-----END RSA PRIVATE KEY-----
+```
