@@ -3,7 +3,7 @@ services:
     edde:
         image: ${IMAGE}
         networks:
-                - proxy
+            - proxy
         deploy:
             labels:
                 - com.df.notify=true

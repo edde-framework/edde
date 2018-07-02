@@ -3,14 +3,14 @@ services:
     edde:
         image: ${IMAGE}
         networks:
-        - proxy
+            - proxy
         deploy:
             labels:
-            - com.df.notify=true
-            - com.df.distribute=true
-            - com.df.serviceDomain=$FQDN
-            - com.df.servicePath=/
-            - com.df.port=80
+                - com.df.notify=true
+                - com.df.distribute=true
+                - com.df.serviceDomain=$FQDN
+                - com.df.servicePath=/
+                - com.df.port=80
 
 networks:
     proxy:

@@ -1,13 +1,10 @@
 version: '2'
 services:
         edde:
-                image: $CI_COMMIT_REF_NAME
-                container_name: $CI_COMMIT_REF_NAME
-                environment:
-                    - XDEBUG_IP=$XDEBUG_IP
-                    - PHP_IDE_CONFIG=serverName=edde
-                networks:
-                    - edde-network
+            image: ${IMAGE}
+            container_name: ${CI_COMMIT_REF_NAME}
+            networks:
+                - edde-network
 
         edde-postgres:
             image: postgres:latest

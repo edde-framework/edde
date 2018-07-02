@@ -1,17 +1,17 @@
 version: '2'
 services:
         edde:
-                image: edde
-                container_name: edde
-                environment:
-                    - XDEBUG_IP=$XDEBUG_IP
-                    - PHP_IDE_CONFIG=serverName=edde
-                volumes:
-                    - ../:/edde
-                ports:
-                    - "5480:80"
-                    - "4722:22"
-                networks:
+            image: edde
+            container_name: edde
+            environment:
+                - XDEBUG_IP=$XDEBUG_IP
+                - PHP_IDE_CONFIG=serverName=edde
+            volumes:
+                - ../:/edde
+            ports:
+                - "5480:80"
+                - "4722:22"
+            networks:
                     - edde-network
 
         edde-postgres:
