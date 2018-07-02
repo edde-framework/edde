@@ -67,6 +67,8 @@ deploy web:
     environment:
         name: production
         url: https://edde-framework.org
+    only:
+        - master
 
 github sync:
     stage: publish
