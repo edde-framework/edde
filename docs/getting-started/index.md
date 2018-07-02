@@ -1,6 +1,6 @@
 # Getting Started
 
-This is quite huge tutorial on how to build whole application using [Docker](https://docs.docker.com/),
+This is quite big tutorial how to build whole application using [Docker](https://docs.docker.com/),
 [Docker Compose](https://docs.docker.com/compose/) and Edde. At  the end there will be production ready
 image on which you can build you future application.
 

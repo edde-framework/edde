@@ -15,6 +15,6 @@ execute upgrades from webserver.
 /sandbox/backend # ./cli upgrade.upgrade/version
 ```
 
-?> **That's it!** Now you know, how to create migrations in you application!
+?> **That's it!** Now you know how to create migrations in the application!
 
 **Previous**: [Upgrade](/examples/upgrades/upgrade)
