@@ -9,6 +9,7 @@ before_script:
 
 stages:
     - test
+    - review
     - deploy
     - publish
 
@@ -22,6 +23,38 @@ test:
         - docker exec $CI_COMMIT_REF_NAME ./test.sh
     after_script:
         - docker-compose -f .docker/dc.test.yml down --volumes >/dev/null 2>&1
+
+start review:
+    stage: review
+    variables:
+        FQDN: ${CI_ENVIRONMENT_SLUG}.edde-framework.org
+    script:
+        - docker stack deploy --with-registry-auth --prune -c ./.docker/dc.review.yml $PROJECT-$CI_ENVIRONMENT_SLUG
+    environment:
+        name: review/$CI_COMMIT_REF_NAME
+        url: http://${CI_ENVIRONMENT_SLUG}.edde-framework.org
+        on_stop: stop review
+    only:
+        - branches
+    except:
+        - master
+
+stop review:
+    stage: review
+    variables:
+        FQDN: ${CI_ENVIRONMENT_SLUG}.edde-framework.org
+        GIT_STRATEGY: none
+    script:
+        - docker stack rm $PROJECT-$CI_ENVIRONMENT_SLUG
+    environment:
+        name: review/$CI_COMMIT_REF_NAME
+        url: http://${CI_ENVIRONMENT_SLUG}.edde-framework.org
+        action: stop
+    when: manual
+    only:
+        - branches
+    except:
+        - master
 
 deploy web:
     stage: deploy
