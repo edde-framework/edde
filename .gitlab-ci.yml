@@ -18,7 +18,7 @@ build:
     stage: build
     script:
         - docker build --pull -t ${IMAGE} -f ./.docker/Dockerfile . >/dev/null 2>&1
-        - docker push ${IMAGE}
+        - docker push ${IMAGE} >/dev/null 2>&1
 
 test:
     stage: test
