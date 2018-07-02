@@ -230,4 +230,4 @@ Simple healthcheck script to keep some info about the container.
 	}
 ```
 
-**Previous**: [Dockerfile](/sandbox/dockerfile) | **Next**: [Local Filesystem](/sandbox/localfs)
+**Previous**: [Dockerfile](/getting-started/dockerfile) | **Next**: [Local Filesystem](/getting-started/localfs)

@@ -48,4 +48,4 @@ yep!
 
 > You can simply `exit`, it will stop running stack.
 
-**Previous**: [Backend](/sandbox/backend) | **Next**: [Examples](/examples/index)
+**Previous**: [Backend](/getting-started/backend) | **Next**: [Examples](/examples/index)

@@ -207,4 +207,4 @@ Just for fun we can create CLI controller too to see how the thing works.
 	}	
 ```
 
-**Previous**: [Bin](/sandbox/bin) | **Next**: [Startup](/sandbox/startup)
+**Previous**: [Bin](/getting-started/bin) | **Next**: [Startup](/getting-started/startup)

@@ -102,4 +102,4 @@ eRaCqDMfhyOs+q8jfO5zbkz0YPP0Lu5ys8fC2koPFg4wXAZD0z+QEX4=
 -----END RSA PRIVATE KEY-----
 ```
 
-**Previous**: [Root Filesystem](/sandbox/rootfs) | **Next**: [Docker Compose](/sandbox/docker-compose)
+**Previous**: [Root Filesystem](/getting-started/rootfs) | **Next**: [Docker Compose](/getting-started/docker-compose)

@@ -1,4 +1,4 @@
-# Docker Compose Files
+# Docker Compose
 
 This is set of useful docker-compose files used for various situations. They can be improved, but
 in general it's enough. 
@@ -78,4 +78,4 @@ networks:
         sandbox-network:
 ```
 
-**Previous**: [Local Filesystem](/sandbox/localfs) | **Next**: [Bin](/sandbox/bin)
+**Previous**: [Local Filesystem](/getting-started/localfs) | **Next**: [Bin](/getting-started/bin)

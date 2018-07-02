@@ -38,4 +38,4 @@ docker exec -it sandbox ash
 docker-compose -f .docker/docker.local.yml stop
 ```
 
-**Previous**: [Docker Compose](/sandbox/docker-compose) | **Next**: [Backend](/sandbox/backend)
+**Previous**: [Docker Compose](/getting-started/docker-compose) | **Next**: [Backend](/getting-started/backend)
