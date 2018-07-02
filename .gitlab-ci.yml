@@ -73,11 +73,11 @@ github sync:
     variables:
         GIT_STRATEGY: none
     script:
-    - apk add -U git >/dev/null 2>&1
-    - git clone --mirror $CI_REPOSITORY_URL edde.git
-    - cd edde.git
-    - git push --mirror https://$GITHUB_TOKEN@github.com/edde-framework/edde.git
+        - apk add -U git >/dev/null 2>&1
+        - git clone --mirror $CI_REPOSITORY_URL edde.git
+        - cd edde.git
+        - git push --mirror https://$GITHUB_TOKEN@github.com/edde-framework/edde.git
     only:
-    - master
-    - tags
-    - /^v.*$/
+        - master
+        - tags
+        - /^v.*$/
