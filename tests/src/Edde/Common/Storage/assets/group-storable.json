@@ -1,0 +1,17 @@
+{
+	"name": "Group",
+	"property-list": [
+		{
+			"name": "guid",
+			"identifier": true,
+			"unique": true
+		},
+		{
+			"name": "name",
+			"unique": true
+		}
+	],
+	"meta-list": {
+		"storable": true
+	}
+}

@@ -1,0 +1,14 @@
+.error {
+	font-family: Arial, serif;
+	font-size: 2em;
+	text-align: center;
+	padding: 1.2em 2em;
+	margin: 0 auto;
+	color: #555;
+}
+
+.error .sub {
+	padding-top: 0.6em;
+	font-size: 0.6em;
+	color: #888;
+}

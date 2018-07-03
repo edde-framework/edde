@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/7.2/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/5.4/phpunit.xsd"
+         bootstrap="src/loader.php"
+         backupGlobals="false"
          beStrictAboutCoversAnnotation="true"
          beStrictAboutOutputDuringTests="true"
+         beStrictAboutTestsThatDoNotTestAnything="true"
          beStrictAboutTodoAnnotatedTests="true"
-         bootstrap="tests/src/loader.php"
->
-	<testsuite name="edde">
+         verbose="false">
+	<testsuite>
 		<directory suffix=".php">tests/src</directory>
 	</testsuite>
+
 	<filter>
 		<whitelist processUncoveredFilesFromWhitelist="true">
-			<directory suffix=".php">src/Edde</directory>
-			<exclude>
-				<directory suffix=".php">src/Edde/Cli</directory>
-				<directory suffix=".php">src/Edde/Controller</directory>
-				<directory suffix=".php">src/Edde/Service</directory>
-			</exclude>
+			<directory suffix=".php">src/Edde/Common</directory>
+			<directory suffix=".php">src/Edde/Ext</directory>
 		</whitelist>
 	</filter>
 </phpunit>

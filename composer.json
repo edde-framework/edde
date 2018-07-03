@@ -1,32 +1,29 @@
 {
-	"name": "edde-framework/edde",
-	"homepage": "https://edde-framework.org",
-	"license": "Apache-2.0",
+	"name": "edde-framework/edde-framework",
 	"type": "library",
-	"description": "The Ultimate PHP Framework",
+	"description": "Fast and full featured modern PHP framework.",
 	"keywords": [
 		"php",
 		"framework"
 	],
 	"authors": [
 		{
-			"name": "Marek Hanzal",
-			"email": "marek.hanzal@x32.cz"
+			"name": "Marek Hanzal"
 		}
 	],
 	"config": {
-		"optimize-autoloader": true,
-		"vendor-dir": "lib"
+		"optimize-autoloader": true
 	},
 	"autoload": {
-		"classmap": [
-			"src/"
+		"files": [
+			"src/loader.php"
 		]
 	},
-	"minimum-stability": "dev",
 	"require": {
-		"php": ">=7.2",
-		"roave/security-advisories": "dev-master",
-		"phpunit/phpunit": "^7.1.5"
+		"php": ">=7.0",
+		"ext-mbstring": "*",
+		"paragonie/constant_time_encoding": "^2.0",
+		"defuse/php-encryption": "^2.0",
+		"roave/security-advisories": "dev-master"
 	}
 }

@@ -1,0 +1,5 @@
+<control>
+	<div t:block="deep-block" class="really-deep-div-here">
+		<div class="deepness-of-a-deep" value="foo" something=":root-method-call()"/>
+	</div>
+</control>

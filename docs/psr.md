@@ -1,3 +1,0 @@
-# Long Story About PSR
-
-...

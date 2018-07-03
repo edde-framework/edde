@@ -1,0 +1,10 @@
+<control title="500 - Server Error">
+	<css src="css/style.css"/>
+
+	<div class="error">
+		<div>
+			The God has killed one cute kitten, because there is Server Error!
+		</div>
+		<div class="sub">500 - Server Error</div>
+	</div>
+</control>

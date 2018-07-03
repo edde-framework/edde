@@ -1,7 +1,7 @@
-# edde
+# Edde Framework
 
-[![pipeline status](https://git.x32.cz/edde/edde/badges/master/pipeline.svg)](https://git.x32.cz/edde/edde/commits/master)
-[![coverage report](https://git.x32.cz/edde/edde/badges/master/coverage.svg)](https://git.x32.cz/edde/edde/commits/master)
+[![build status](https://edde-framework.org/edde/edde-framework/badges/master/build.svg)](https://edde-framework.org/edde/edde-framework/commits/master)
+[![coverage report](https://edde-framework.org/edde/edde-framework/badges/master/coverage.svg)](https://edde-framework.org/edde/edde-framework/commits/master)
 
-This is a new repository updated to use Docker as the base platform and holding all the cool stuff as
-the initial homepage, documentation and generated api.
+
+PR will be created after the first release :).

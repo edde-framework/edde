@@ -1,0 +1,9 @@
+<control>
+	<block id="moo">
+		<div>foo</div>
+		<div>bar</div>
+	</block>
+	<include src="moo"/>
+	<div t:block="foobar"/>
+	<include src="./included.xml"/>
+</control>

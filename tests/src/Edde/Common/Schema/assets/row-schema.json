@@ -1,0 +1,28 @@
+{
+	"name": "Row",
+	"namespace": "Foo\\Bar",
+	"property-list": [
+		{
+			"name": "guid",
+			"unique": "true",
+			"identifier": "true",
+			"required": "true"
+		},
+		{
+			"name": "header",
+			"required": "true"
+		}
+	],
+	"link": [
+		{
+			"name": "header",
+			"attribute-list": {
+				"schema": "Foo\\Bar\\Header",
+				"property": "guid"
+			}
+		}
+	],
+	"meta-list": {
+		"some": "meta-data"
+	}
+}

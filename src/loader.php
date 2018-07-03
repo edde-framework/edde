@@ -1,6 +1,4 @@
 <?php
-	declare(strict_types=1);
-	use Edde\Autoloader;
+	declare(strict_types = 1);
 
-	require_once __DIR__ . '/Edde/Autoloader.php';
-	Autoloader::register(__NAMESPACE__, __DIR__, false);
+	require_once __DIR__ . '/Edde/loader.php';

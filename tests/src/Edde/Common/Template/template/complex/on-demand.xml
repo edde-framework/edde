@@ -1,0 +1,7 @@
+<control>
+	<span class="Hey, I'm alive!"/>
+	<div t:block="whoo-whaa">
+		<div class="hello there!"/>
+	</div>
+	<include src="./include-foo.xml"/>
+</control>

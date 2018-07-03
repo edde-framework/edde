@@ -1,0 +1,203 @@
+<control foo="@current-method-call()" title="foo" t:translator="foo">
+	<div t:fill="someTargetProperty"/>
+
+	<load src="./this-has-block-in-root.xml"/>
+
+	<use src="this-should-not-fail"/>
+
+	<include src="./this-is-magical-switch.xml"/>
+
+	<div t:block="overkill-block" t:loop=":loop-from-root()" t:pass=":overkill-block()">
+		<div value="$#" class="$:"/>
+		<button action="$:"/>
+	</div>
+
+	<dictionary src="./dictionary.csv"/>
+	<dictionary src="./dictionary.csv" scope=""/>
+
+	<include src="./pass-include.xml"/>
+
+	<css src="./foo/bar/boo.css"/>
+	<div class="foo" t:schema="Bar\Foo\Fart\Poo foo">
+		<div t:property="property-here"/>
+		<div t:property="foo.property-here"/>
+		<schema schema="Bar\Foo\Fart\Moo">
+			<div t:property="moo-perty"/>
+		</schema>
+		<div t:property="another-poo"/>
+	</div>
+
+	<div value="this will be translated|translate"/>
+	<div>this will also be translated|translate</div>
+
+	<div t:include="./switched.xml" t:switch=":gimme-a-switch()"/>
+
+	<switch src=":gimme-a-switch()">
+		<case name="foo">
+			<div class="foo-case"/>
+		</case>
+		<case name="foo">
+			<div class="foo-case2"/>
+		</case>
+		<case name="bar">
+			<div class="foo-case3"/>
+		</case>
+	</switch>
+	<div class="inline-switch" t:switch=":gimme-a-switch()">
+		<div class="foo-case" t:case="foo"/>
+		<div class="foo-case2" t:case="foo"/>
+		<div class="foo-case3" t:case="poo"/>
+	</div>
+	<span class="double-include" t:include="./double-pass-include.xml"/>
+	<!--<span class="pass-child 01" t:include="./pass-include.xml" t:pass-child=":pass-child()"/>-->
+	<!--<span class="pass-child 02" t:include="./double-pass-include.xml" t:pass-child=":pass-child2()"/>-->
+	<span class="pass-child 03" t:pass-child=":pass-child3()">
+		<div class="child-01"/>
+		<div class="child-02"/>
+		<div class="child-03"/>
+	</span>
+
+	<span class="I'll see this one" t:if=":true-variable-reference">
+		<div class="foo"/>
+	</span>
+	<span class="This one will not pass" t:if=":false-variable-reference"/>
+
+	<span class="I'll see this one()" t:if=":true-method()">
+		<div class="foo"/>
+	</span>
+	<span class="This one will not pass()" t:if=":false-method()"/>
+
+	<div class="strange-if-usecase" t:if=":gimme-some-iterator()">
+		<span t:loop="?:" class="$:"/>
+	</div>
+
+	<span class="included-variable" t:include="./pass-include.xml" t:pass=":included-variable"/>
+
+	<span class="foo" t:pass=":span-method-call()"/>
+
+	<div class="this-will-be-loaded-on-demand" t:pass=":some-variable">
+		<!--
+			load will load the given template on demand; it supports
+			relative file reference (./ prefix) and "absolute" path reference from
+			application root (/ prefix)
+
+			the template will be executed on root snippet call (a snippet without a name)
+		-->
+		<load src="./on-demand.xml"/>
+	</div>
+	<div class="this-will-be-loaded-on-demand" t:snippet="beast-on-demand">
+		<!--
+			load will load the given template on demand; it supports
+			relative file reference (./ prefix) and "absolute" path reference from
+			application root (/ prefix)
+
+			the template will be executed on root snippet call (a snippet without a name)
+		-->
+		<load src="./on-demand.xml"/>
+	</div>
+	<snippet id="beast-on-demand2">
+		<div class="this-will-be-loaded-on-demand">
+			<load src="./on-demand.xml"/>
+		</div>
+		<use src="deep-block"/>
+	</snippet>
+
+	<div class="this-will-use-use" t:use="deep-block"/>
+
+	<use src="deep-block"/>
+	<use src="whoo-whaa"/>
+	<use src="block-from-imported-template"/>
+
+	<call method="\SomeService\From\Container::call()"/>
+	<call method="#middle-local-method-call()"/>
+	<call method=".middle-root-method-call()"/>
+
+	<div value=".root-method-call()"/>
+	<h1 value=".root-method-call()"/>
+
+	<div t:block="hello-world">
+		<div class="first">
+			<div class="hidden div"/>
+		</div>
+		<div class="second"/>
+		<div class="third">
+			<div class="inner-one"/>
+			<div class="inner-two"/>
+			<div class="inner-three"/>
+			<div class="inner-four">
+				<div class="deep-one"/>
+			</div>
+		</div>
+	</div>
+
+	<!--
+		import macro executes the given template but do not modify the current node tree;
+		this is useful for loading external block definitions (t:block macros)
+	-->
+	<import src="./block-foo.xml"/>
+
+	<!--
+		t:include macro will include the given source in the current node tree, so node tree
+		will be modified and executed in compile time
+	-->
+	<include src="deep-block"/>
+	<include src="deep-block"/>
+
+	<!-- use include as in place expansion of the given template -->
+	<include src="./include-foo.xml"/>
+
+	<include src="block-from-imported-template"/>
+
+	<js src="./some/javascript.js"/>
+
+	<css src="edde://css/foundation.min.css"/>
+
+	<button action=".action-on-the-root()"/>
+	<button action="@action-on-the-current-contol()"/>
+	<button action=":action-on-the-current-contol()"/>
+	<button class="just-useless-button-here"/>
+
+	<placeholder id="foo"/>
+
+	<div class="thie-piece-will-not-be-visible" t:snippet="the-name-of-this-snippet">
+		<div class="foo"/>
+	</div>
+
+	<h1 value="foo1"/>
+	<h2 value="foo2"/>
+	<h3 class="foo3-with-class" value="foo3"/>
+	<h4 value="foo4"/>
+	<h5 value="foo5" class=".root-method-call()"/>
+	<h6 value="foo6"/>
+
+	<loop src=".loop-from-root()">
+		<div class="$:">
+			<include src="deep-block"/>
+		</div>
+	</loop>
+	<loop src=".loop-over-loop-from-root()">
+		<div class="$#" empty-attribute=""/>
+		<div class="wrap">
+			<loop src="$:">
+				<div class="$#" some-attribute="$#1" root-key="$#.">
+					<include src="deep-block"/>
+				</div>
+			</loop>
+		</div>
+		<!-- root reference -->
+		<div class="$#." value="foo"/>
+		<!-- nearest root reference -->
+		<div class="$#$" value="foo"/>
+		<!-- jump reference -->
+		<div class="$#0" value="foo"/>
+	</loop>
+	<custom-control>
+		<loop src="@loop-from-local-control()">
+			<loop src="@loop-from-local-control()">
+				<div class="$:->get-class()" root="$:.->get-class()" super-root="$:1->get-class()">
+					<include src="./include-foo.xml"/>
+				</div>
+			</loop>
+		</loop>
+	</custom-control>
+</control>

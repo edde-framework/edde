@@ -1,0 +1,19 @@
+{
+	"methodCalls": [
+		{
+			"class": "\\Edde\\Common\\Html\\AbstractHtmlControl",
+			"method": "createControl",
+			"position": 0
+		},
+		{
+			"class": "\\Edde\\Api\\Container\\IContainer",
+			"method": "create",
+			"position": 0
+		},
+		{
+			"class": "\\Edde\\Api\\Crate\\ICrateFactory",
+			"method": "crate",
+			"position": 0
+		}
+	]
+}

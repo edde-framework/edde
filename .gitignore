@@ -1,4 +1,5 @@
-.coverage
-.idea/workspace.xml
-lib
-temp
+/vendor/
+/doc/
+/.idea/workspace.xml
+*.log
+*.sqlite

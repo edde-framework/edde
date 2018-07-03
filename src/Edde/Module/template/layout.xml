@@ -1,0 +1,33 @@
+<control>
+	<css src="edde://css/foundation.min.css"/>
+	<css src="edde://css/edde-framework.css"/>
+	<css src="./css/style.css"/>
+	<js src="edde://js/jquery.js"/>
+	<js src="edde://js/edde-framework.js"/>
+
+	<div id="message" class="callout" t:snippet="message" t:pass=":message"/>
+
+	<div class="row">
+		<div class="large-12" value="&nbsp;"/>
+	</div>
+	<div class="row">
+		<div class="large-12">
+			<placeholder id="message"/>
+		</div>
+	</div>
+	<div class="row">
+		<div class="large-12 columns">
+			<h1 value="Edde Framework Setup Control"/>
+		</div>
+	</div>
+	<div class="row">
+		<div class="large-12 columns">
+			<h5 value=".get-version()"/>
+		</div>
+	</div>
+	<div class="row">
+		<div class="large-12 columns">
+			<use src="content"/>
+		</div>
+	</div>
+</control>

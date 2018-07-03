@@ -1,0 +1,8 @@
+<control title="404 - Not Found">
+	<css src="css/style.css"/>
+
+	<div class="error">
+		<div>Something is wrong - requested content was not found :(.</div>
+		<div class="sub">404 - Not Found</div>
+	</div>
+</control>

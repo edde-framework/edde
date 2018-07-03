@@ -1,0 +1,17 @@
+{
+	"name": "Identity",
+	"property-list": [
+		{
+			"name": "guid",
+			"identifier": true,
+			"unique": true
+		},
+		{
+			"name": "name",
+			"unique": true
+		}
+	],
+	"meta-list": {
+		"storable": true
+	}
+}

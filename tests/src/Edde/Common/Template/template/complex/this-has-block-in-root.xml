@@ -1,0 +1,3 @@
+<control t:block="this-should-not-fail">
+	<div class="hello!"/>
+</control>
