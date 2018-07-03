@@ -7,7 +7,8 @@ if you are not heavily experienced in [DevOps](https://en.wikipedia.org/wiki/Dev
 environment build on Docker Swarm. 
 
 > Usually it's necessary to use some proxy for production deployment, for example [Docker Flow](https://proxy.dockerflow.com/) which
-will be used in this tutorial; it's also able to **automagically** generate certificates from [Let's Encrypt](https://letsencrypt.org/).
+will be used in this tutorial; there is also a [tool](http://proxy-letsencrypt.dockerflow.com/) which is able to **automagically**
+generate certificates from [Let's Encrypt](https://letsencrypt.org/).
 
 !> Be careful about Let's Encrypt as you can get certificates only for domains you own, thus it **deos not work** for a local
 development!
