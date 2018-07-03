@@ -1,9 +1,12 @@
 # Dockerfile
 
-Basic idea is to build fresh image on [Alpine Linux](https://alpinelinux.org/about/) to keep things small; there are plenty of images
-which are quite complex; custom image is a bit better as you have everything under control and it's not hard to maintain this kind of image.
+Basic idea is to build a fresh image based on [Alpine Linux](https://alpinelinux.org/about/) to keep things small; there are plenty of images
+which are good, but quite complex; custom image is a bit better as you have everything under control and it's not hard to maintain this kind of image.
 
-To prevent [zombie processes](https://en.wikipedia.org/wiki/Zombie_process) in the image, we have to run proper [init system](http://smarden.org/runit/).
+Also it's simpler use custom image to solve some common problems in Docker
+like [PID 1](https://blog.phusion.nl/2015/01/20/docker-and-the-pid-1-zombie-reaping-problem/). To prevent [zombie processes](https://en.wikipedia.org/wiki/Zombie_process)
+in the image, we have to run proper [init system](http://smarden.org/runit/). Even there are images solving this problem, it's a bit cleaner to
+use existing system and understand, how the container works.
 
 > `.docker` folder will hide all Docker related stuff to keep things clear.
 
@@ -71,4 +74,4 @@ HEALTHCHECK --timeout=3s --start-period=10s --interval=5s CMD ["/sandbox/bin/hea
 EXPOSE 80
 ```
 
-**Previous**: [Index](/getting-started/index) | **Next**: [Root Filesystem](/getting-started/rootfs)
+**Previous**: [Environment](/getting-started/environment) | **Next**: [Root Filesystem](/getting-started/rootfs)
