@@ -43,3 +43,16 @@ some skill: but it leads to general problem - no system configuration.
 Fedora se a good host (if you're masochist, there is also Atomic Host optimized for Docker).
 General recommendation is not for Fedora; Docker installation is also doing some strange
 things with filesystem making maintenance much harder then for others.
+
+## Alpine Linux
+
+**Yep**: Simple, small, secure - nothing more, no pains inside. Only things which could
+complicate things for oldschool admins are `BusyBox` and default `Ash` instead of Bash. This
+distribution is incredibly lightweight able to take from 25MB - ~100MB of ram when running
+(yes, without any services as it's intended).
+
+?> Yes, this distribution is still close to the others by terms of usage (package system),
+but it does not have it's drawbacks; also upgrades are simple and edge runners has ability
+to simply switch to latest branches.   
+
+## RancherOS
