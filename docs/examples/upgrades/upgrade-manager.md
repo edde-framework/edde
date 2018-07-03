@@ -1,6 +1,6 @@
 # Upgrade Manager
 
-**Related**: [Upgrades](/edde/upgrades)
+**Related**: [Upgrades](/components/upgrades)
 
 Next it's necessary to provide custom `UpgradeManager` implementation. Basic idea is to provide current version, if there is no table yet, create it, and
 provide access to all current versions.

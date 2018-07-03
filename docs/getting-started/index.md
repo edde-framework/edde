@@ -13,7 +13,6 @@ be working, you can do whatever you want, but as the process is quite complex, i
 > Any port used by this application is prefixed with 26, for example SSH port is published as `2622`, http as
 `2680` and so on.
 
-* [Environment](/getting-started/environment): Some notes about environment where the container could run.
 * [Dockerfile](/getting-started/dockerfile): Let's start with Dockerfile, the base for all the magic around there.
 * [Root Filesystem](/getting-started/rootfs): We need a lot of files to build base filesystem.
 * [Local Filesystem](/getting-started/localfs): Part of filesystem needed for local development.

@@ -1,10 +1,10 @@
 # Schema
 
-**Related**: [Schema](/edde/schema), [Configurators](/edde/configurators)
+**Related**: [Schema](/components/schema), [Configurators](/components/configurators)
 
 Tutorial about Schema Manager and how to create a Configurator for it.
 
-?> It's recommended to read [concept](/edde/schema) behind Schema to know how the thing is working.
+?> It's recommended to read [concept](/components/schema) behind Schema to know how the thing is working.
 
 * [Configurator](/examples/schema/configurator): As one of few services, Schema Manager needs to be
 configured.

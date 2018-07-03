@@ -1,6 +1,6 @@
 # Execution
 
-**Related**: [Controllers](/edde/controllers)
+**Related**: [Controllers](/components/controllers)
 
 You can execute upgrade from CLI or if you want, it's simple to implement http controller to
 execute upgrades from webserver.

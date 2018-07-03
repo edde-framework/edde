@@ -167,7 +167,7 @@ Real loader; this way is used to prevent deep jumps in directory structure even 
 
 ## Http Controller
 
-Let's prepare http controller. More about the stuff [here](/edde/controllers).
+Let's prepare http controller. More about the stuff [here](/components/controllers).
 
 > There are more things to do, your IDE will probably cry about missing dependencies.
 

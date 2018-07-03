@@ -17,7 +17,7 @@ Minor bumps are meant to track smaller, usually incompatible changes, thus `5.1`
 work after upgrade, but it should be much more easier to do the upgrade than in major version.
 
 > When there is minor version change, things will still probably work, but there could be some changes on API level,
-concepts should be fine; for example [ORM](/edde/orm) removal caused generation jump as it was huge change of a concept. 
+concepts should be fine; for example [ORM](/components/orm) removal caused generation jump as it was huge change of a concept. 
 
 ## Patch level
 

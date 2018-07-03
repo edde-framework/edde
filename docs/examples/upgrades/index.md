@@ -1,6 +1,6 @@
 # Upgrades
 
-**Related**: [Upgrades](/edde/upgrades), [Configurators](/edde/configurators)
+**Related**: [Upgrades](/components/upgrades), [Configurators](/components/configurators)
 
 This is tutorial how to implement Upgrade Manager (migration support). 
 

@@ -1,6 +1,6 @@
 # Configurator
 
-**Related**: [Schema](/edde/schema), [Configurators](/edde/configurators)
+**Related**: [Schema](/components/schema), [Configurators](/components/configurators)
 
 When Schema Manager is used, it should know about all available schemas as in general there
 are "few" of them.

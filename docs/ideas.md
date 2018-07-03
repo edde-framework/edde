@@ -37,7 +37,7 @@ it will be used through this documentation.
 This file is intended to provide full configuration of you application; it's not necessary to move code configuration
 to any yaml, neon, json, whatever format: it's PHP, let's use PHP with all it's powers. 
 
-This file contains interface to implementation bindings (if necessary) and [configurators](/edde/configurators) for some services.
+This file contains interface to implementation bindings (if necessary) and [configurators](/components/configurators) for some services.
 
 ### config.ini(.template)
 
@@ -46,7 +46,7 @@ container build/startup. Config should provide just basic scalar values in secti
 
 ## Dependencies
 
-A more can be found in article about [Container](/edde/container) but in short Edde does **not** support other
+A more can be found in article about [Container](/components/container) but in short Edde does **not** support other
 than injects by a method. This is prevention of constructor hell and also inject method could be simply moved
 to a trait and than reused by one line of code.
 
@@ -56,7 +56,7 @@ register it to `loader.php` and make a trait, but it will lead to much more clea
 
 ## Configurators
 
-General article is available [here](/edde/configurators); Edde is using deferred creation of all services, which means also
+General article is available [here](/components/configurators); Edde is using deferred creation of all services, which means also
 deferred time of service configuration. That's reason for `Configurators` which are responsible for service configuration
 on request.
 
@@ -93,7 +93,7 @@ without messing with them on backend.
 ## No Schemas
 
 Sometimes framework tend to force users to use their's internal Entities, schemas, whatever to implement some piece of functionality.
-This was quite hard to solve, but Edde in general doesn't do this. Even it's really simple to create [Schema](/edde/schema) and extend it,
+This was quite hard to solve, but Edde in general doesn't do this. Even it's really simple to create [Schema](/components/schema) and extend it,
 Edde does not provide any; better is good quality documentation than some strangely prepared schemas.  
 
 > The original attempts to use Entities or Schemas defined by framework leaded to some edge situations forced user to copy-paste

@@ -1,6 +1,6 @@
 # Example of Upgrade
 
-**Related**: [Upgrades](/edde/upgrades)
+**Related**: [Upgrades](/components/upgrades)
 
 Each upgrade should do one kind of action, for example create tables and than do migrations; some engines do not support schema changes and
 data manipulation within one transaction, thus it's better to keep smaller upgrades to make higher success rate.

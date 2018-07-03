@@ -1,8 +1,8 @@
 # Schema
 
-**Related**: [Schema](/edde/schema)
+**Related**: [Schema](/components/schema)
 
-Upgrades are tracked in database ([Storage](/edde/storage)) thus it needs schema to describe,
+Upgrades are tracked in database ([Storage](/components/storage)) thus it needs schema to describe,
 how upgrade table looks like.
 
 ?> Because schemas are defined as PHP interfaces, you can use inheritance to move common stuff

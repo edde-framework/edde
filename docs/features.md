@@ -18,7 +18,7 @@ See [Story](/story) how long Edde is here, it's quite long reading because for n
 
 Edde is not yet another implementation of existing parts of another libraries or frameworks; it has it's own ideas,
 it's own concepts. And because of concepts whole framework is simple and clear; a lot of wrong decisions was
-already made (for example no package splitting or no [ORM](/edde/orm) implementation). Also formally code
+already made (for example no package splitting or no [ORM](/components/orm) implementation). Also formally code
 has quite high grade based on different tools with code insight.
 
 > For more talk about concepts framework is using, you can see [Concepts](/ideas) and [Principles](/principles).
@@ -30,4 +30,4 @@ bugs and flaws and growing into much more stable and clear framework. There is n
 nice enough, don't touch it".
 
 A little story in short: there was a new ORM for 5th generation of Edde which was... ripped of before release
-as there was major conceptual flaw. More [here](/edde/orm).
+as there was major conceptual flaw. More [here](/components/orm).

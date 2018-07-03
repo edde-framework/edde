@@ -74,4 +74,4 @@ HEALTHCHECK --timeout=3s --start-period=10s --interval=5s CMD ["/sandbox/bin/hea
 EXPOSE 80
 ```
 
-**Previous**: [Environment](/getting-started/environment) | **Next**: [Root Filesystem](/getting-started/rootfs)
+**Previous**: [Index](/getting-started/index) | **Next**: [Root Filesystem](/getting-started/rootfs)
