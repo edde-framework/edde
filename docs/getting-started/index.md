@@ -22,3 +22,5 @@ various environments.
 to startup the application.
 * [Backend](/getting-started/backend): Some files required to make backend stuff working. 
 * [Startup](/getting-started/startup): After all, we are able to run the thing!
+
+> After all it's recommended to read some DevOps tutorials; at least they're interesting :blush:.

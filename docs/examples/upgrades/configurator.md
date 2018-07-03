@@ -2,7 +2,6 @@
 
 **Related**: [Configurators](/components/configurators)
 
-
 This is a bit magical part: Create a Configurator responsible for setting up `UpgradeManager` you just created and register it for setup.
 
 ?> **backend/src/Sandbox/Configurator/UpgradeManagerConfigurator.php**
