@@ -39,12 +39,4 @@
 			$this->storage = [];
 			return $this;
 		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function __sleep() {
-			$this->storage = [];
-			return parent::__sleep();
-		}
 	}

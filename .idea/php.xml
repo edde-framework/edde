@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PhpAnalysisConfiguration" call_tree_analysis_depth="3" />
   <component name="PhpIncludePathManager">
     <include_path>
       <path value="$PROJECT_DIR$/lib/composer" />
@@ -55,11 +54,6 @@
       <path value="$PROJECT_DIR$/lib/phar-io/version" />
       <path value="$PROJECT_DIR$/lib/padraic/humbug_get_contents" />
     </include_path>
-  </component>
-  <component name="PhpProjectServersManager">
-    <servers>
-      <server host="docker" id="4740c493-4821-4990-b19e-1758bef2d2f2" name="edde" use_path_mappings="true" />
-    </servers>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7" />
   <component name="PhpStepFilterConfiguration" skip_constructors="true">

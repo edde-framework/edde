@@ -5,7 +5,6 @@
 
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Database\DriverException;
-	use Edde\Api\Database\IDatabaseStorage;
 	use Edde\Api\Database\LazyDriverTrait;
 	use Edde\Api\Node\INodeQuery;
 	use Edde\Api\Query\IQuery;
@@ -22,7 +21,7 @@
 	/**
 	 * Database (persistant) storage implementation.
 	 */
-	class DatabaseStorage extends AbstractStorage implements IDatabaseStorage {
+	class DatabaseStorage extends AbstractStorage {
 		use LazyDriverTrait;
 		/**
 		 * @var INodeQuery

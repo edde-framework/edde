@@ -18,48 +18,12 @@
     <orderEntry type="module-library">
       <library name="PHARS">
         <CLASSES>
-          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/build/badkey.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/build/badsig.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.1.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/twig/twig/test/Twig/Tests/Loader/Fixtures/phar/phar-sample.phar/" />
-          <root url="phar://$MODULE_DIR$/.runtime/bin/composer.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/phar-io/manifest/tests/_fixture/test.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/build/new.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/test.phar/" />
           <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/build/old.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/test-nopubkey.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/build/nosig.phar/" />
+          <root url="phar://$MODULE_DIR$/.runtime/bin/composer.phar/" />
         </CLASSES>
         <SOURCES>
-          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/build/badkey.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/build/badsig.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.1.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/twig/twig/test/Twig/Tests/Loader/Fixtures/phar/phar-sample.phar/" />
-          <root url="phar://$MODULE_DIR$/.runtime/bin/composer.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/phar-io/manifest/tests/_fixture/test.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/build/new.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/test.phar/" />
           <root url="phar://$MODULE_DIR$/bin/composer.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/build/old.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/test-nopubkey.phar/" />
-          <root url="phar://$MODULE_DIR$/lib/padraic/phar-updater/tests/Humbug/Test/SelfUpdate/_files/build/nosig.phar/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="PHP" type="php">
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/lib/composer" />
-          <root url="file://$MODULE_DIR$/lib/defuse/php-encryption" />
-          <root url="file://$MODULE_DIR$/lib/paragonie/constant_time_encoding" />
-          <root url="file://$MODULE_DIR$/lib/paragonie/random_compat" />
-        </CLASSES>
-        <SOURCES>
-          <root url="file://$MODULE_DIR$/lib/composer" />
-          <root url="file://$MODULE_DIR$/lib/defuse/php-encryption" />
-          <root url="file://$MODULE_DIR$/lib/paragonie/constant_time_encoding" />
-          <root url="file://$MODULE_DIR$/lib/paragonie/random_compat" />
+          <root url="phar://$MODULE_DIR$/.runtime/bin/composer.phar/" />
         </SOURCES>
       </library>
     </orderEntry>
