@@ -1,5 +1,4 @@
 * [Home](/)
-* [Changelog](/changelog)
 * [Getting Started](/getting-started/index)
 	* [Dockerfile](getting-started/dockerfile)
 	* [Root Filesystem](getting-started/rootfs)
@@ -26,5 +25,6 @@
 	* [Upgrades](/edde/upgrades)
 * [Versioning](/versioning)
 * [PSR](/psr)
+* [Changelog](/changelog)
 * [Story](/story)
 * [FAQ](/faq)
