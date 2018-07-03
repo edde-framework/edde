@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Cache;
 
@@ -12,7 +12,6 @@
 		 * @var \Redis
 		 */
 		protected $redis;
-
 		protected $server;
 
 		public function setServer(string $host, int $port): ICacheStorage {
@@ -24,7 +23,6 @@
 		}
 
 		public function save(string $id, $save) {
-			$this->use();
 			if ($save === null) {
 				$this->redis->delete($id);
 				return $save;
@@ -36,7 +34,6 @@
 		}
 
 		public function load($id) {
-			$this->use();
 			if ($this->redis->exists($id) === false) {
 				return null;
 			}
@@ -44,11 +41,11 @@
 		}
 
 		public function invalidate() {
-			$this->use();
 			$this->redis->flushDB();
 		}
 
-		protected function prepare() {
+		protected function handleSetup() {
+			parent::handleSetup();
 			if (extension_loaded('redis') === false) {
 				throw new CacheStorageException(sprintf("Redis module is not loaded. Yes, I'm telling truth, believe me!"));
 			}

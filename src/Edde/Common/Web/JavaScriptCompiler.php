@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Web;
 
@@ -18,14 +18,14 @@
 		 * @inheritdoc
 		 */
 		public function compile(IResourceList $resourceList = null): IFile {
-			$this->use();
-			$resourceList = $resourceList ?: $this;
 			$content = [];
-			if (($file = $this->cache->load($cacheId = $resourceList->getResourceName())) === null) {
+			$resourceList = $resourceList ?: $this;
+			$cache = $this->cache();
+			if (($file = $cache->load($cacheId = $resourceList->getResourceName())) === null) {
 				foreach ($resourceList as $resource) {
 					$content[] = $this->filter($resource->get());
 				}
-				$this->cache->save($cacheId, $file = $this->assetStorage->store($this->tempDirectory->save($resourceList->getResourceName() . '.js', implode(";\n", $content))));
+				$cache->save($cacheId, $file = $this->assetStorage->store($this->tempDirectory->save($resourceList->getResourceName() . '.js', implode(";\n", $content))));
 			}
 			return $file;
 		}

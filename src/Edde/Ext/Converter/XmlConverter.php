@@ -1,21 +1,28 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Converter;
 
 	use Edde\Api\Converter\ConverterException;
+	use Edde\Api\Converter\IContent;
+	use Edde\Api\Converter\LazyConverterManagerTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResource;
+	use Edde\Api\Xml\LazyXmlExportTrait;
 	use Edde\Api\Xml\LazyXmlParserTrait;
 	use Edde\Api\Xml\XmlParserException;
 	use Edde\Common\Converter\AbstractConverter;
+	use Edde\Common\Converter\Content;
+	use Edde\Common\Node\NodeIterator;
 	use Edde\Common\Xml\XmlNodeHandler;
 
 	/**
 	 * Xml string sourece to "something" converter.
 	 */
 	class XmlConverter extends AbstractConverter {
+		use LazyConverterManagerTrait;
 		use LazyXmlParserTrait;
+		use LazyXmlExportTrait;
 
 		/**
 		 * Only 3 things that are infinite
@@ -26,34 +33,65 @@
 		public function __construct() {
 			$this->register([
 				'text/xml',
-				'applicaiton/xml',
+				'application/xml',
+				'application/xhtml+xml',
 				'xml',
+				'string',
 			], INode::class);
+			$this->register([
+				'text/xml',
+				'application/xml',
+				'application/xhtml+xml',
+				'xml',
+				'string',
+			], [
+				'*/*',
+				'text/xml',
+			]);
+			$this->register(\stdClass::class, [
+				'text/xml',
+				'application/xml',
+			]);
+			$this->register(INode::class, [
+				'text/xml',
+				'application/xml',
+			]);
 		}
 
-		/** @noinspection PhpInconsistentReturnPointsInspection */
 		/**
 		 * @inheritdoc
 		 * @throws XmlParserException
 		 * @throws ConverterException
 		 */
-		public function convert($convert, string $source, string $target, string $mime) {
-			$this->unsupported($convert, $target, $convert instanceof IResource || is_string($convert));
+		public function convert($content, string $mime, string $target = null): IContent {
+			$this->unsupported($content, $target, $content instanceof IResource || is_string($content) || $content instanceof \stdClass || $content instanceof INode);
 			try {
-				switch ($target) {
+				switch ($mime) {
+					case \stdClass::class:
+						return new Content($this->xmlExport->string(NodeIterator::recursive($this->converterManager->convert($content, \stdClass::class, [INode::class])->convert()->getContent(), true)), $target);
+						break;
 					case INode::class:
-						$parse = is_string($convert) ? 'string' : 'parse';
-						$this->xmlParser->{$parse}($convert, $handler = new XmlNodeHandler());
-						return $handler->getNode();
+						return new Content($this->xmlExport->string(NodeIterator::recursive($content, true)), $target);
+						break;
+					default:
+						switch ($target) {
+							case INode::class:
+								$this->xmlParser->{is_string($content) ? 'string' : 'parse'}($content, $handler = new XmlNodeHandler());
+								return new Content($handler->getNode(), INode::class);
+							case 'application/xml':
+							case 'text/xml':
+							case '*/*':
+								return new Content($content, 'application/xml');
+						}
 				}
 			} catch (XmlParserException $e) {
-				throw new XmlParserException(sprintf('Cannot handle resource [%s]: %s', (string)$convert->getUrl(), $e->getMessage()), 0, $e);
+				throw new XmlParserException(sprintf('Cannot handle resource [%s]: %s', (string)$content->getUrl(), $e->getMessage()), 0, $e);
 			}
-			$this->exception($source, $target);
+			return $this->exception($mime, $target);
 		}
 
 		/**
-		 * @param IResource $resource
+		 * @param IResource  $resource
 		 * @param INode|null $root
 		 *
 		 * @return INode

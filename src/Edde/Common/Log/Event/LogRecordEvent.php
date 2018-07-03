@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Log\Event;
 
@@ -29,6 +29,7 @@
 		 * @param ILogRecord $logRecord
 		 */
 		public function __construct(ILogRecord $logRecord) {
+			parent::__construct();
 			$this->logRecord = $logRecord;
 		}
 

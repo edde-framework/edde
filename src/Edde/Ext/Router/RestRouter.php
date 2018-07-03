@@ -1,31 +1,27 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Router;
 
 	use Edde\Api\Application\LazyResponseManagerTrait;
-	use Edde\Api\Crate\ICrateFactory;
-	use Edde\Api\Http\LazyHeaderListTrait;
+	use Edde\Api\Config\IConfigurable;
+	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Http\LazyHttpRequestTrait;
 	use Edde\Api\Http\LazyHttpResponseTrait;
-	use Edde\Api\Http\LazyRequestUrlTrait;
 	use Edde\Api\Link\ILinkGenerator;
 	use Edde\Api\Rest\IService;
 	use Edde\Api\Runtime\LazyRuntimeTrait;
-	use Edde\Common\Application\Request;
+	use Edde\Common\Application\HttpResponseHandler;
+	use Edde\Common\Protocol\Request\Message;
 	use Edde\Common\Router\AbstractRouter;
+	use Edde\Common\Strings\StringUtils;
 
-	class RestRouter extends AbstractRouter implements ILinkGenerator {
-		use LazyResponseManagerTrait;
-		use LazyRequestUrlTrait;
-		use LazyHeaderListTrait;
+	class RestRouter extends AbstractRouter implements IConfigurable, ILinkGenerator {
+		use LazyContainerTrait;
 		use LazyHttpRequestTrait;
 		use LazyHttpResponseTrait;
 		use LazyRuntimeTrait;
-		/**
-		 * @var ICrateFactory
-		 */
-		protected $crateFactory;
+		use LazyResponseManagerTrait;
 		/**
 		 * @var IService[]
 		 */
@@ -43,28 +39,30 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function createRequest() {
-			$this->use();
-			if ($this->runtime->isConsoleMode()) {
+			if ($this->runtime->isConsoleMode() || empty($this->serviceList)) {
 				return null;
 			}
-			$mime = $this->headerList->getContentType()
-				->getMime($this->headerList->getAccept());
+			$requestUrl = $this->httpRequest->getRequestUrl();
 			foreach ($this->serviceList as $service) {
-				if ($service->match($this->requestUrl)) {
-					$this->httpResponse->setContentType($mime);
-					$this->responseManager->setMime($mime = ('http+' . $mime));
-					return (new Request($mime, $this->requestUrl->getQuery()))->registerActionHandler(get_class($service), $this->httpRequest->getMethod());
+				if ($service->match($requestUrl)) {
+					$this->responseManager->setResponseHandler($this->container->create(HttpResponseHandler::class));
+					return (new Message(get_class($service) . '::action' . StringUtils::capitalize($this->httpRequest->getMethod())))->data($requestUrl->getParameterList())->setValue($this->httpRequest->getContent());
 				}
 			}
 			return null;
 		}
 
-		public function link($generate, ...$parameterList) {
-			$this->use();
+		/**
+		 * @inheritdoc
+		 */
+		public function link($generate, array $parameterList = []) {
 			if (is_string($generate) === false || isset($this->serviceList[$generate]) === false) {
 				return null;
 			}
-			return $this->serviceList[$generate]->link($generate, ...$parameterList);
+			return $this->serviceList[$generate]->link($generate, $parameterList);
 		}
 	}

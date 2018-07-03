@@ -1,30 +1,30 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Web;
 
 	use Edde\Api\Asset\LazyAssetStorageTrait;
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Filter\IFilter;
+	use Edde\Api\Session\LazyFingerprintTrait;
 	use Edde\Api\Web\ICompiler;
 	use Edde\Common\Cache\CacheTrait;
-	use Edde\Common\Deffered\DefferedTrait;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Resource\ResourceList;
 
 	/**
 	 * Base class for all compilers (js/css).
 	 */
-	abstract class AbstractCompiler extends ResourceList implements ICompiler, ILazyInject {
+	abstract class AbstractCompiler extends ResourceList implements ICompiler {
 		use LazyAssetStorageTrait;
+		use LazyFingerprintTrait;
 		use CacheTrait;
-		use DefferedTrait;
+		use ConfigurableTrait;
 		/**
 		 * filters applied during compilation (or after)
 		 *
 		 * @var IFilter[]
 		 */
 		protected $filterList = [];
-		protected $namespace = '';
 
 		/**
 		 * @inheritdoc
@@ -37,15 +37,6 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function setNamespace(string $namespace): ICompiler {
-			$this->namespace = $namespace;
-			return $this;
-		}
-
-		/** @noinspection PhpMissingParentCallCommonInspection */
-		/**
-		 * @inheritdoc
-		 */
 		public function getPathList(): array {
 			$pathList = [];
 			foreach ($this->resourceList as $resource) {
@@ -54,8 +45,6 @@
 			}
 			return $pathList;
 		}
-
-		/** @noinspection PhpMissingParentCallCommonInspection */
 
 		/**
 		 * filter input content with current set of filters
@@ -66,13 +55,9 @@
 		 */
 		protected function filter(string $content): string {
 			foreach ($this->filterList as $filter) {
+				$filter->setup();
 				$content = $filter->filter($content);
 			}
 			return $content;
-		}
-
-		protected function prepare() {
-			$this->cache();
-			$this->cache->setNamespace($this->namespace);
 		}
 	}

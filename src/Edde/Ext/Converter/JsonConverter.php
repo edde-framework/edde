@@ -1,23 +1,21 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Converter;
 
 	use Edde\Api\Converter\ConverterException;
+	use Edde\Api\Converter\IContent;
 	use Edde\Api\File\IFile;
-	use Edde\Api\Http\LazyHttpResponseTrait;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
 	use Edde\Common\Converter\AbstractConverter;
-	use Edde\Common\Node\Node;
+	use Edde\Common\Converter\Content;
 	use Edde\Common\Node\NodeUtils;
 
 	/**
 	 * Json converter from json encoded string to "something".
 	 */
 	class JsonConverter extends AbstractConverter {
-		use LazyHttpResponseTrait;
-
 		/**
 		 * Objective: shoot yourself in the foot using a computer language.
 		 *
@@ -51,58 +49,73 @@
 		 * Assembler: You try to shoot yourself in the foot, only to discover you must first invent the gun, the bullet, the trigger, and your foot.
 		 */
 		public function __construct() {
-			$this->register('array', [
+			$this->register([
 				'json',
-				'http+json',
+				'array',
+				'object',
+				\stdClass::class,
+				'text/plain',
+			], [
+				'json',
 				'application/json',
-				'http+application/json',
+				'text/json',
+				'*/*',
+				'text/html',
 			]);
 			$this->register([
 				'application/json',
-				'json',
+				'text/json',
+				'stream+application/json',
 			], [
 				'array',
 				'object',
+				\stdClass::class,
 				'node',
 				INode::class,
 			]);
 		}
 
-		/** @noinspection PhpInconsistentReturnPointsInspection */
 		/**
 		 * @inheritdoc
 		 * @throws ConverterException
 		 * @throws NodeException
 		 */
-		public function convert($convert, string $source, string $target, string $mime) {
-			switch ($source) {
+		public function convert($content, string $mime, string $target = null): IContent {
+			switch ($mime) {
+				/** @noinspection PhpMissingBreakStatementInspection */
+				case 'stream+application/json':
+					$content = file_get_contents($content);
 				case 'application/json':
-				case 'json':
-					$this->unsupported($convert, $target, $convert instanceof IFile || is_string($convert));
-					$convert = $convert instanceof IFile ? $convert->get() : $convert;
+				case 'text/json':
+					$this->unsupported($content, $target, $content instanceof IFile || is_string($content));
+					$content = $content instanceof IFile ? $content->get() : $content;
 					switch ($target) {
 						case 'array':
-							return json_decode($convert, true);
+							return new Content(json_decode($content, true), 'array');
 						case 'object':
-							return json_decode($convert);
+						case \stdClass::class:
+							return new Content(json_decode($content), \stdClass::class);
 						case 'node':
 						case INode::class:
-							return NodeUtils::node(new Node(), json_decode($convert));
+							return new Content(NodeUtils::toNode(json_decode($content)), INode::class);
 					}
 					break;
+				case 'json':
 				case 'array':
+				case 'object':
+				case \stdClass::class:
+				case 'text/plain':
 					switch ($target) {
-						case 'http+json':
-						case 'http+application/json':
-							$this->httpResponse->send();
-							echo $json = json_encode($convert);
-							return $json;
 						case 'json':
 						case 'application/json':
-							return json_encode($convert);
+						case 'text/json':
+						case '*/*':
+							return new Content(json_encode($content), 'application/json');
+						case 'text/html':
+							return new Content($content, 'text/html');
 					}
 					break;
 			}
-			$this->exception($source, $target);
+			return $this->exception($mime, $target);
 		}
 	}

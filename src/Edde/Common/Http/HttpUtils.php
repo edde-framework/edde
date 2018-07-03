@@ -1,17 +1,17 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Http;
 
 	use Edde\Api\Http\ICookie;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Strings\StringException;
 	use Edde\Common\Strings\StringUtils;
 
 	/**
 	 * Static set of helper functions around http protocol.
 	 */
-	class HttpUtils extends AbstractObject {
+	class HttpUtils extends Object {
 		/**
 		 * parse accept header and return an ordered array with accept mime types
 		 *
@@ -35,7 +35,7 @@
 					continue;
 				}
 				$accepts[] = [
-					'mime' => $match['mime'],
+					'mime'   => $match['mime'],
 					'weight' => $weight,
 				];
 			}
@@ -92,7 +92,7 @@
 					continue;
 				}
 				$langs[] = [
-					'lang' => $match['lang'],
+					'lang'   => $match['lang'],
 					'weight' => $weight,
 				];
 			}
@@ -121,7 +121,7 @@
 				}
 				$charsets[] = [
 					'charset' => $match['charset'],
-					'weight' => $weight,
+					'weight'  => $weight,
 				];
 			}
 			usort($charsets, function ($alpha, $beta) {
@@ -211,7 +211,7 @@
 			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
 			$headers = explode("\r\n", $headers);
 			$headerList = [];
-			if (stripos($headers[0], 'http') !== false) {
+			if (stripos($headers[0], 'http') === 0) {
 				$headerList['http'] = array_shift($headers);
 			}
 			foreach ($headers as $header) {
@@ -229,7 +229,7 @@
 					self::class,
 					'contentType',
 				],
-				'http' => [
+				'http'         => [
 					self::class,
 					'http',
 				],

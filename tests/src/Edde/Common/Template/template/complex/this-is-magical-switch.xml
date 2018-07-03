@@ -1,1 +1,0 @@
-<control t:include="./switched.xml" t:switch=":gimme-a-switch()"/>

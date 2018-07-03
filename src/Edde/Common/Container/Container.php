@@ -1,197 +1,138 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Container;
 
-	use Edde\Api\Cache\ICache;
-	use Edde\Api\Cache\ICacheManager;
-	use Edde\Api\Callback\IParameter;
-	use Edde\Api\Container\ContainerException;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Container\FactoryException;
-	use Edde\Api\Container\IContainer;
+	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IFactory;
-	use Edde\Api\Container\IFactoryManager;
 	use Edde\Api\Container\ILazyInject;
-	use Edde\Common\Container\Factory\FactoryFactory;
-	use Edde\Common\Deffered\AbstractDeffered;
-	use Edde\Common\Strings\StringUtils;
+	use Edde\Common\Container\Factory\ClassFactory;
 
 	/**
 	 * Default implementation of a dependency container.
 	 */
-	class Container extends AbstractDeffered implements IContainer {
-		/**
-		 * @var IFactoryManager
-		 */
-		protected $factoryManager;
-		/**
-		 * @var ICacheManager
-		 */
-		protected $cacheManager;
-		/**
-		 * @var ICache
-		 */
-		protected $cache;
+	class Container extends AbstractContainer {
 		/**
 		 * @var \SplStack
 		 */
-		protected $dependencyStack;
-		protected $dependencyList = [];
+		protected $stack;
+		/**
+		 * @var IFactory[]
+		 */
+		protected $factoryMap = [];
+		/**
+		 * @var IDependency
+		 */
+		protected $autowireList = [];
 
 		/**
-		 * @param IFactoryManager $factoryManager
-		 * @param ICacheManager $cacheManager
+		 * One day, Little Johnny saw his grandpa smoking his cigarettes. Little Johnny asked,
+		 * "Grandpa, can I smoke some of your cigarettes?" His grandpa replied,
+		 * "Can your penis reach your asshole?"
+		 * "No", said Little Johnny.
+		 * His grandpa replied,
+		 * "Then you're not old enough."
+		 *
+		 * The next day, Little Johnny saw his grandpa drinking beer. He asked,
+		 * "Grandpa, can I drink some of your beer?"
+		 * His grandpa replied,
+		 * "Can your penis reach your asshole?"
+		 * "No" said Little Johhny.
+		 * "Then you're not old enough." his grandpa replied.
+		 *
+		 * The next day, Little Johnny was eating cookies.
+		 * His grandpa asked, "Can I have some of your cookies?"
+		 * Little Johnny replied, "Can your penis reach your asshole?"
+		 * His grandpa replied, "It most certainly can!"
+		 * Little Johnny replied, "Then go fuck yourself.
 		 */
-		public function __construct(IFactoryManager $factoryManager, ICacheManager $cacheManager) {
-			$this->factoryManager = $factoryManager;
-			$this->cacheManager = $cacheManager;
+		public function __construct() {
+			$this->stack = new \SplStack();
+		}
+
+		/**
+		 * @inheritdoc
+		 * @throws FactoryException
+		 */
+		public function getFactory(string $dependency, string $source = null): IFactory {
+			if (isset($this->factoryMap[$dependency])) {
+				return $this->factoryMap[$dependency];
+			}
+			foreach ($this->factoryList as $id => $factory) {
+				if ($factory->canHandle($this, $dependency)) {
+					return $this->factoryMap[$dependency] = $factory->getFactory($this);
+				}
+			}
+			throw new UnknownFactoryException(sprintf('Unknown factory [%s] for dependency [%s]%s.', $dependency, $source ?: 'unknown source', $this->stack->isEmpty() ? '' : '; dependency chain [' . implode('→', array_reverse(iterator_to_array($this->stack))) . ']'));
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function registerFactory(string $name, IFactory $factory): IContainer {
-			$this->factoryManager->registerFactory($name, $factory);
-			return $this;
+		public function factory(IFactory $factory, array $parameterList = [], string $name = null, string $source = null) {
+			try {
+				$this->stack->push($name ?: '[anonymous]');
+				if (($instance = $factory->fetch($this, $fetchId = (get_class($factory) . count($parameterList) . $name . $source))) !== null) {
+					return $instance;
+				}
+				return $factory->push($this, $fetchId, $this->dependency($instance = $factory->execute($this, $parameterList, $dependency = $factory->createDependency($this, $name), $name), $dependency));
+			} finally {
+				$this->stack->pop();
+			}
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function registerFactoryList(array $factoryList): IContainer {
-			$this->factoryManager->registerFactoryList($factoryList);
-			return $this;
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function has(string $name) {
-			return $this->factoryManager->hasFactory($name);
-		}
-
-		/**
-		 * @inheritdoc
-		 * @throws ContainerException
-		 */
-		public function inject($instance) {
+		public function autowire($instance, bool $force = false) {
 			if (is_object($instance) === false) {
 				return $instance;
 			}
-			$this->use();
-			$cacheId = ('reflection/' . get_class($instance));
-			if ($this->cache === null || ($reflection = $this->cache->load($cacheId)) === null) {
-				$reflectionClass = new \ReflectionClass($instance);
-				$methodList = [];
-				$injectList = [];
-				foreach ($reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $reflectionMethod) {
-					$name = $reflectionMethod->getName();
-					if ($reflectionMethod->getNumberOfParameters() > 0) {
-						if (strpos($name, 'inject') !== false && strlen($name) > 6) {
-							$methodList[$name] = $name;
-						}
-						if (strpos($name, 'lazy') !== false && strlen($name) > 4) {
-							$parameterList = [];
-							foreach ($reflectionMethod->getParameters() as $parameter) {
-								if ($reflectionClass->hasProperty($parameter->getName()) === false) {
-									throw new ContainerException(vsprintf("Lazy inject mismatch: parameter [$%s] of method [%s::%s()] must have a property [%s::$%s] with the same name as the parameter (for example protected \$%s).", [
-										$parameter->getName(),
-										$reflectionClass->getName(),
-										$reflectionMethod->getName(),
-										$reflectionClass->getName(),
-										$parameter->getName(),
-										$parameter->getName(),
-									]));
-								}
-								$parameterList[$parameter->getName()] = $parameter->getClass()
-									->getName();
-							}
-							$injectList[$name] = $parameterList;
-						}
+			return $this->dependency($instance, $this->autowireList[$class = get_class($instance)] ?? $this->autowireList[$class] = (new ClassFactory())->createDependency($this, $class), $force !== true);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function dependency($instance, IDependency $dependency, bool $lazy = true) {
+			if (is_object($instance) === false) {
+				return $instance;
+			}
+			$class = get_class($instance);
+			/** @var $instance ILazyInject */
+			foreach ($dependency->getInjectList() as $reflectionParameter) {
+				$instance->inject($reflectionParameter->getName(), $this->create($reflectionParameter->getClass(), [], $class));
+			}
+			foreach ($dependency->getLazyList() as $reflectionParameter) {
+				if ($lazy) {
+					$instance->lazy($reflectionParameter->getName(), $this, $reflectionParameter->getClass());
+					continue;
+				}
+				$instance->inject($reflectionParameter->getName(), $this->create($reflectionParameter->getClass(), [], $class));
+			}
+			if ($instance instanceof IConfigurable) {
+				/** @var $instance IConfigurable */
+				$configuratorList = [];
+				foreach ($dependency->getConfiguratorList() as $configurator) {
+					if (isset($this->configuratorList[$configurator])) {
+						$configuratorList = array_merge($configuratorList, $this->configuratorList[$configurator]);
 					}
 				}
-				if (in_array(ILazyInject::class, $reflectionClass->getInterfaceNames(), true) === false) {
-					$injectList = [];
-				}
-				$reflection = [
-					'method-list' => $methodList,
-					'lazy-inject' => $injectList,
-				];
-				$this->cache && $this->cache->save($cacheId, $reflection);
-			}
-			/** @noinspection ForeachSourceInspection */
-			/** @var $instance ILazyInject */
-			foreach ($reflection['lazy-inject'] as $method) {
-				/** @noinspection ForeachSourceInspection */
-				foreach ($method as $property => $class) {
-					$instance->lazy($property, function () use ($class) {
-						return $this->create($class);
-					});
-				}
-			}
-			/** @noinspection ForeachSourceInspection */
-			foreach ($reflection['method-list'] as $method) {
-				$this->call([
-					$instance,
-					$method,
-				]);
+				$instance->setConfiguratorList($configuratorList);
+				$instance->init();
 			}
 			return $instance;
 		}
 
 		/**
 		 * @inheritdoc
-		 * @throws FactoryException
-		 * @throws ContainerException
 		 */
-		public function create(string $name, ...$parameterList) {
-			$this->use();
-			return $this->factory($this->factoryManager->getFactory($name), $name, $parameterList);
-		}
-
-		/**
-		 * @inheritdoc
-		 * @throws FactoryException
-		 * @throws ContainerException
-		 */
-		public function call(callable $callable, ...$parameterList) {
-			$this->use();
-			return $this->factory(FactoryFactory::create('', $callable), null, $parameterList);
-		}
-
-		/**
-		 * @inheritdoc
-		 * @throws ContainerException
-		 */
-		public function factory(IFactory $factory, string $name = null, array $parameterList = []) {
-			$this->dependencyStack->push($name = $factory->getName($name));
-			if (empty($name) === false && isset($this->dependencyList[$name])) {
-//				throw new DependencyException(sprintf('Detected recursive dependency [%s] in stack [%s].', $name, implode(', ', iterator_to_array($this->dependencyStack))));
+		protected function handleSetup() {
+			parent::handleSetup();
+			foreach ($this->factoryList as $factory) {
+				$this->autowire($factory);
 			}
-			$this->dependencyList[$name] = true;
-			/** @var $parameters IParameter[] */
-			$grab = count($parameters = $factory->getParameterList($name)) - count($parameterList);
-			$dependencyList = [];
-			foreach ($parameters as $parameter) {
-				/** @noinspection NotOptimalIfConditionsInspection */
-				if ($grab-- <= 0 || $parameter->isOptional() || (($class = $parameter->getClass()) === null || $this->factoryManager->hasFactory($class) === false) && ($this->factoryManager->hasFactory($class = StringUtils::recamel($parameter->getName())) === false)) {
-					break;
-				}
-				$dependencyList[] = $this->factory($this->factoryManager->getFactory($class), $class);
-			}
-			try {
-				return $factory->create($name, array_merge($dependencyList, $parameterList), $this);
-			} finally {
-				unset($this->dependencyList[$name]);
-				$this->dependencyStack->pop();
-			}
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		protected function prepare() {
-			$this->dependencyStack = new \SplStack();
-			$this->cache = $this->cacheManager->cache(self::class);
 		}
 	}

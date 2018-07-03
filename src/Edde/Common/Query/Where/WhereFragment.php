@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Query\Where;
 
@@ -14,7 +14,7 @@
 		protected $whereExpressionFragment;
 
 		/**
-		 * @param INode $whereNode
+		 * @param INode                   $whereNode
 		 * @param WhereExpressionFragment $whereExpressionFragment
 		 */
 		public function __construct(INode $whereNode, WhereExpressionFragment $whereExpressionFragment) {
@@ -25,7 +25,7 @@
 		/**
 		 * select property of a schema; it's something similar to a column
 		 *
-		 * @param string $property
+		 * @param string      $property
 		 * @param string|null $prefix
 		 * @param string|null $alias
 		 *
@@ -33,7 +33,7 @@
 		 */
 		public function property($property, $prefix = null, $alias = null) {
 			$this->node->addNode(new Node('property', $property, [
-				'alias' => $alias,
+				'alias'  => $alias,
 				'prefix' => $prefix,
 			]));
 			return $this;
@@ -42,7 +42,7 @@
 		/**
 		 * input is parameter; parameters can be extracted and used for bound (in case of RDBMS supporting parameter binding)
 		 *
-		 * @param mixed $parameter
+		 * @param mixed       $parameter
 		 * @param string|null $name
 		 *
 		 * @return $this

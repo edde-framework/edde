@@ -1,40 +1,41 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Schema;
+
+	use Edde\Api\Config\IConfigurable;
+	use Edde\Api\Node\INode;
 
 	/**
 	 * General way how to handle schemas.
 	 */
-	interface ISchemaManager {
+	interface ISchemaManager extends IConfigurable {
 		/**
-		 * register a new schema to this manager; if there is schema with schema name, it is silently replaced
+		 * register schema loader
 		 *
-		 * @param ISchema $schema
+		 * @param ISchemaLoader $schemaLoader
 		 *
 		 * @return ISchemaManager
 		 */
-		public function addSchema(ISchema $schema): ISchemaManager;
+		public function registerSchemaLoader(ISchemaLoader $schemaLoader): ISchemaManager;
 
 		/**
-		 * is there schema with this name? - name must be full schema name including namespace
+		 * create schema from the given node
 		 *
-		 * @param string $schema
-		 *
-		 * @return bool
-		 */
-		public function hasSchema(string $schema): bool;
-
-		/**
-		 * return schema by name; name must be full schema name
-		 *
-		 * @param string $schema
+		 * @param INode $node
 		 *
 		 * @return ISchema
-		 *
-		 * @throws SchemaException
 		 */
-		public function getSchema(string $schema): ISchema;
+		public function createSchema(INode $node): ISchema;
+
+		/**
+		 * retrieve schema based on the name
+		 *
+		 * @param string $name
+		 *
+		 * @return ISchema
+		 */
+		public function getSchema(string $name): ISchema;
 
 		/**
 		 * return list of all available schemas

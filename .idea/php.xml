@@ -1,15 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="PhpAnalysisConfiguration" call_tree_analysis_depth="3" />
+  <component name="PhpIncludePathManager">
+    <include_path>
+      <path value="$PROJECT_DIR$/lib/composer" />
+      <path value="$PROJECT_DIR$/lib/defuse/php-encryption" />
+      <path value="$PROJECT_DIR$/lib/paragonie/constant_time_encoding" />
+      <path value="$PROJECT_DIR$/lib/paragonie/random_compat" />
+      <path value="$PROJECT_DIR$/lib/myclabs/deep-copy" />
+      <path value="$PROJECT_DIR$/lib/michelf/php-markdown" />
+      <path value="$PROJECT_DIR$/lib/pimple/pimple" />
+      <path value="$PROJECT_DIR$/lib/guzzle/guzzle" />
+      <path value="$PROJECT_DIR$/lib/nikic/php-parser" />
+      <path value="$PROJECT_DIR$/lib/phar-io/manifest" />
+      <path value="$PROJECT_DIR$/lib/twig/twig" />
+      <path value="$PROJECT_DIR$/lib/phpunit/phpunit" />
+      <path value="$PROJECT_DIR$/lib/padraic/phar-updater" />
+      <path value="$PROJECT_DIR$/lib/sami/sami" />
+      <path value="$PROJECT_DIR$/lib/phpdocumentor/reflection-docblock" />
+      <path value="$PROJECT_DIR$/lib/codeclimate/php-test-reporter" />
+      <path value="$PROJECT_DIR$/lib/sebastian/version" />
+      <path value="$PROJECT_DIR$/lib/sebastian/diff" />
+      <path value="$PROJECT_DIR$/lib/sebastian/code-unit-reverse-lookup" />
+      <path value="$PROJECT_DIR$/lib/sebastian/resource-operations" />
+      <path value="$PROJECT_DIR$/lib/sebastian/object-reflector" />
+      <path value="$PROJECT_DIR$/lib/sebastian/object-enumerator" />
+      <path value="$PROJECT_DIR$/lib/sebastian/recursion-context" />
+      <path value="$PROJECT_DIR$/lib/sebastian/exporter" />
+      <path value="$PROJECT_DIR$/lib/sebastian/environment" />
+      <path value="$PROJECT_DIR$/lib/sebastian/comparator" />
+      <path value="$PROJECT_DIR$/lib/sebastian/global-state" />
+      <path value="$PROJECT_DIR$/lib/blackfire/php-sdk" />
+      <path value="$PROJECT_DIR$/lib/satooshi/php-coveralls" />
+      <path value="$PROJECT_DIR$/lib/psr/log" />
+      <path value="$PROJECT_DIR$/lib/doctrine/instantiator" />
+      <path value="$PROJECT_DIR$/lib/theseer/tokenizer" />
+      <path value="$PROJECT_DIR$/lib/symfony/yaml" />
+      <path value="$PROJECT_DIR$/lib/symfony/finder" />
+      <path value="$PROJECT_DIR$/lib/symfony/stopwatch" />
+      <path value="$PROJECT_DIR$/lib/symfony/filesystem" />
+      <path value="$PROJECT_DIR$/lib/symfony/config" />
+      <path value="$PROJECT_DIR$/lib/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/lib/symfony/event-dispatcher" />
+      <path value="$PROJECT_DIR$/lib/symfony/debug" />
+      <path value="$PROJECT_DIR$/lib/symfony/process" />
+      <path value="$PROJECT_DIR$/lib/symfony/console" />
+      <path value="$PROJECT_DIR$/lib/phpunit/php-code-coverage" />
+      <path value="$PROJECT_DIR$/lib/phpunit/phpunit-mock-objects" />
+      <path value="$PROJECT_DIR$/lib/phpunit/php-token-stream" />
+      <path value="$PROJECT_DIR$/lib/phpunit/php-text-template" />
+      <path value="$PROJECT_DIR$/lib/phpunit/php-timer" />
+      <path value="$PROJECT_DIR$/lib/phpunit/php-file-iterator" />
+      <path value="$PROJECT_DIR$/lib/phpspec/prophecy" />
+      <path value="$PROJECT_DIR$/lib/phar-io/version" />
+      <path value="$PROJECT_DIR$/lib/padraic/humbug_get_contents" />
+    </include_path>
+  </component>
   <component name="PhpProjectServersManager">
     <servers>
       <server host="docker" id="4740c493-4821-4990-b19e-1758bef2d2f2" name="edde" use_path_mappings="true" />
     </servers>
   </component>
-  <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
+  <component name="PhpProjectSharedConfiguration" php_language_level="7" />
+  <component name="PhpStepFilterConfiguration" skip_constructors="true">
+    <option name="skippedFunctions">
+      <list>
+        <option value="Edde\Common\Autoloader::Edde\Common\{closure}" />
+      </list>
+    </option>
+  </component>
   <component name="PhpUnit">
     <phpunit_settings>
-      <PhpUnitSettings load_method="PHPUNIT_PHAR" bootstrap_file_path="$PROJECT_DIR$/src/loader.php" configuration_file_path="$PROJECT_DIR$/phpunit.xml" custom_loader_path="$PROJECT_DIR$/vendor/autoload.php" phpunit_phar_path="$PROJECT_DIR$/bin/phpunit.phar" use_bootstrap_file="true" use_configuration_file="true" />
+      <PhpUnitSettings load_method="CUSTOM_LOADER" bootstrap_file_path="C:/projects/edde-framework/edde-framework/loader.php" configuration_file_path="C:/projects/edde-framework/edde-framework/phpunit.xml" custom_loader_path="C:/projects/edde-framework/edde-framework/lib/autoload.php" phpunit_phar_path="C:/projects/edde-framework/edde-framework/bin/phpunit.phar" use_bootstrap_file="true" use_configuration_file="true" />
     </phpunit_settings>
   </component>
 </project>

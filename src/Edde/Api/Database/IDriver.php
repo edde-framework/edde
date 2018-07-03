@@ -1,9 +1,9 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Database;
 
-	use Edde\Api\Deffered\IDeffered;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQuery;
 	use PDOStatement;
@@ -11,7 +11,7 @@
 	/**
 	 * Custom driver per database engine.
 	 */
-	interface IDriver extends IDeffered {
+	interface IDriver extends IConfigurable {
 		/**
 		 * start a transaction
 		 *

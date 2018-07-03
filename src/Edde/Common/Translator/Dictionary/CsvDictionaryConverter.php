@@ -1,14 +1,16 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Translator\Dictionary;
 
 	use Edde\Api\Container\LazyContainerTrait;
 	use Edde\Api\Converter\ConverterException;
+	use Edde\Api\Converter\IContent;
 	use Edde\Api\File\FileException;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Translator\IDictionary;
 	use Edde\Common\Converter\AbstractConverter;
+	use Edde\Common\Converter\Content;
 
 	/**
 	 * Csv file support.
@@ -32,21 +34,21 @@
 			], IDictionary::class);
 		}
 
-		/** @noinspection PhpInconsistentReturnPointsInspection */
 		/**
 		 * @inheritdoc
 		 * @throws ConverterException
 		 * @throws FileException
 		 */
-		public function convert($convert, string $source, string $target, string $mime) {
-			/** @var $convert IFile */
-			$this->unsupported($convert, $target, $convert instanceof IFile);
+		public function convert($content, string $mime, string $target = null): IContent {
+			/** @var $content IFile */
+			$this->unsupported($content, $target, $content instanceof IFile);
 			switch ($target) {
 				case IDictionary::class:
-					$csvDictionary = $this->container->create(CsvDictionary::class);
-					$csvDictionary->addFile($convert->getPath());
-					return $csvDictionary;
+					/** @var $csvDictionary CsvDictionary */
+					$csvDictionary = $this->container->create(CsvDictionary::class, [], __METHOD__);
+					$csvDictionary->addFile($content->getPath());
+					return new Content($csvDictionary, IDictionary::class);
 			}
-			$this->exception($source, $target);
+			return $this->exception($mime, $target);
 		}
 	}

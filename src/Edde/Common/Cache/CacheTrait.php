@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Cache;
 
@@ -16,9 +16,11 @@
 		 */
 		protected $cache;
 
-		protected function cache() {
-			$this->lazy('cache', function () {
-				return $this->cacheManager->cache(static::class);
-			});
+		protected function cache(): ICache {
+			if ($this->cache === null) {
+				$this->cacheManager->setup();
+				$this->cache = $this->cacheManager->createCache(static::class);
+			}
+			return $this->cache;
 		}
 	}

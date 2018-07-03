@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Crate;
 
@@ -40,7 +40,7 @@
 		 * add the given value to this property set
 		 *
 		 * @param IProperty $property
-		 * @param bool $force
+		 * @param bool      $force
 		 *
 		 * @return ICrate
 		 */
@@ -68,7 +68,7 @@
 		 * set value of the given property; if does not exists exception is thrown
 		 *
 		 * @param string $name
-		 * @param mixed $value
+		 * @param mixed  $value
 		 *
 		 * @return ICrate
 		 *
@@ -79,8 +79,8 @@
 		/**
 		 * add scalar value to an array
 		 *
-		 * @param string $name
-		 * @param $value
+		 * @param string          $name
+		 * @param                 $value
 		 * @param string|int|null $key
 		 *
 		 * @return ICrate
@@ -91,7 +91,7 @@
 		 * put (set) array of values to this crate; this can change state to dirty
 		 *
 		 * @param array $put
-		 * @param bool $strict
+		 * @param bool  $strict
 		 *
 		 * @return ICrate
 		 */
@@ -103,7 +103,7 @@
 		 * note: this will not make crate dirty
 		 *
 		 * @param array $push
-		 * @param bool $strict
+		 * @param bool  $strict
 		 *
 		 * @return ICrate
 		 */
@@ -121,7 +121,7 @@
 		/**
 		 * return value of the given property; if property does not exist, exception is thrown
 		 *
-		 * @param string $name
+		 * @param string     $name
 		 * @param mixed|null $default
 		 *
 		 * @return mixed
@@ -155,7 +155,7 @@
 		/**
 		 * set crate proxy (when getLink($name), callback will be executed)
 		 *
-		 * @param string $name
+		 * @param string   $name
 		 * @param callable $crate
 		 *
 		 * @return ICrate
@@ -192,7 +192,7 @@
 		/**
 		 * set the given collection to a crate
 		 *
-		 * @param string $name
+		 * @param string      $name
 		 * @param ICollection $collection
 		 *
 		 * @return ICrate

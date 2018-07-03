@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Query\Select;
 
@@ -8,7 +8,7 @@
 
 	class JoinFragment extends AbstractFragment {
 		/**
-		 * @param string $source
+		 * @param string      $source
 		 * @param string|null $alias
 		 *
 		 * @return JoinOnFragment

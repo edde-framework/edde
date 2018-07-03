@@ -1,23 +1,23 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Crate;
 
 	use Edde\Api\Crate\CrateException;
 	use Edde\Api\Crate\IProperty;
-	use Edde\Api\Schema\ISchemaProperty;
-	use Edde\Common\AbstractObject;
+	use Edde\Api\Schema\IProperty as ISchemaProperty;
+	use Edde\Common\Object;
 
 	/**
 	 * Crate property implementation.
 	 */
-	class Property extends AbstractObject implements IProperty {
+	class Property extends Object implements IProperty {
 		/**
 		 * property definition of this value
 		 *
 		 * @var ISchemaProperty
 		 */
-		protected $schemaProperty;
+		protected $property;
 		/**
 		 * the original value of this property
 		 *
@@ -40,11 +40,11 @@
 		/**
 		 * My wife’s cooking is so bad we usually pray after our food.
 		 *
-		 * @param ISchemaProperty $schemaProperty
-		 * @param mixed|null $value
+		 * @param ISchemaProperty $property
+		 * @param mixed|null      $value
 		 */
-		public function __construct(ISchemaProperty $schemaProperty = null, $value = null) {
-			$this->schemaProperty = $schemaProperty;
+		public function __construct(ISchemaProperty $property = null, $value = null) {
+			$this->property = $property;
 			$this->value = $value;
 			$this->dirty = false;
 		}
@@ -54,10 +54,10 @@
 		 * @throws CrateException
 		 */
 		public function getSchemaProperty(): ISchemaProperty {
-			if ($this->schemaProperty === null) {
+			if ($this->property === null) {
 				throw new CrateException(sprintf('Property [%s] has no schema property definition.', static::class));
 			}
-			return $this->schemaProperty;
+			return $this->property;
 		}
 
 		/**
@@ -75,24 +75,24 @@
 		 */
 		public function get($default = null) {
 			if ($this->current === null && $this->value === null) {
-				$this->set($value = $default ? (is_callable($default) ? call_user_func($default) : $default) : ($this->schemaProperty->hasGenerator() ? $this->schemaProperty->generator() : null));
-				return $this->schemaProperty->getterFilter($this->schemaProperty->filter($value));
+				$this->set($value = $default ? (is_callable($default) ? call_user_func($default) : $default) : ($this->property->hasGenerator() ? $this->property->generator() : null));
+				return $this->property->getterFilter($this->property->filter($value));
 			}
 			$value = $this->value;
 			if ($this->dirty) {
 				$value = $this->current;
 			}
-			return $this->schemaProperty->getterFilter($this->schemaProperty->filter($value));
+			return $this->property->getterFilter($this->property->filter($value));
 		}
 
 		/**
 		 * @inheritdoc
 		 */
 		public function set($value): IProperty {
-			$value = $this->schemaProperty->setterFilter($this->schemaProperty->filter($value));
+			$value = $this->property->setterFilter($this->property->filter($value));
 			$this->dirty = false;
 			$this->current = null;
-			if ($this->schemaProperty->isDirty($this->value, $value)) {
+			if ($this->property->isDirty($this->value, $value)) {
 				$this->dirty = true;
 				$this->current = $value;
 			}

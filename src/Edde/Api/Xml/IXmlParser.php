@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Xml;
 
@@ -12,7 +12,7 @@
 		/**
 		 * parse the given string
 		 *
-		 * @param string $string
+		 * @param string      $string
 		 * @param IXmlHandler $xmlHandler
 		 *
 		 * @return IXmlParser
@@ -22,7 +22,7 @@
 		/**
 		 * shorthand for usage with files
 		 *
-		 * @param string $file
+		 * @param string      $file
 		 * @param IXmlHandler $xmlHandler
 		 *
 		 * @return IXmlParser
@@ -32,7 +32,7 @@
 		/**
 		 * parse the input stream and emit events to the given xml handler
 		 *
-		 * @param IResource $resource
+		 * @param IResource   $resource
 		 * @param IXmlHandler $xmlHandler
 		 *
 		 * @return IXmlParser

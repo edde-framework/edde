@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\File;
 
@@ -18,7 +18,7 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function read() {
+		public function read(int $length = null) {
 			if (($line = fgetcsv($this->getHandle(), 0, $this->delimiter)) === false && $this->isAutoClose()) {
 				$this->close();
 			}

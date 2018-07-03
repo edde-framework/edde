@@ -1,16 +1,16 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Schema;
 
+	use Edde\Api\Schema\ICollection;
+	use Edde\Api\Schema\ILink;
+	use Edde\Api\Schema\IProperty;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Api\Schema\ISchemaCollection;
-	use Edde\Api\Schema\ISchemaLink;
-	use Edde\Api\Schema\ISchemaProperty;
 	use Edde\Api\Schema\SchemaException;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Object;
 
-	class Schema extends AbstractDeffered implements ISchema {
+	class Schema extends Object implements ISchema {
 		/**
 		 * @var string
 		 */
@@ -24,15 +24,15 @@
 		 */
 		protected $schemaName;
 		/**
-		 * @var ISchemaProperty[]
+		 * @var IProperty[]
 		 */
 		protected $propertyList = [];
 		/**
-		 * @var ISchemaLink[]
+		 * @var ILink[]
 		 */
 		protected $linkList = [];
 		/**
-		 * @var ISchemaCollection[]
+		 * @var ICollection[]
 		 */
 		protected $collectionList = [];
 		/**
@@ -67,8 +67,7 @@
 			return $this->namespace;
 		}
 
-		public function getProperty(string $name): ISchemaProperty {
-			$this->use();
+		public function getProperty(string $name): IProperty {
 			if ($this->hasProperty($name) === false) {
 				throw new SchemaException(sprintf('Requested unknown property [%s] in schema [%s].', $name, $this->getSchemaName()));
 			}
@@ -76,7 +75,6 @@
 		}
 
 		public function hasProperty(string $name): bool {
-			$this->use();
 			return isset($this->propertyList[$name]);
 		}
 
@@ -88,7 +86,6 @@
 		}
 
 		public function getPropertyList(): array {
-			$this->use();
 			return $this->propertyList;
 		}
 
@@ -99,7 +96,7 @@
 			return $this;
 		}
 
-		public function addProperty(ISchemaProperty $schemaProperty, bool $force = false): ISchema {
+		public function addProperty(IProperty $schemaProperty, bool $force = false): ISchema {
 			$propertyName = $schemaProperty->getName();
 			if ($schemaProperty->getSchema() !== $this) {
 				throw new SchemaException(sprintf('Cannot add foreign property [%s] to schema [%s].', $propertyName, $this->getSchemaName()));
@@ -115,7 +112,7 @@
 			return isset($this->linkList[$name]);
 		}
 
-		public function getLink(string $name): ISchemaLink {
+		public function getLink(string $name): ILink {
 			if (isset($this->linkList[$name]) === false) {
 				throw new SchemaException(sprintf('Requested unknown link [%s] in schema [%s].', $name, $this->getSchemaName()));
 			}
@@ -126,11 +123,11 @@
 			return $this->linkList;
 		}
 
-		public function collection(string $name, ISchemaProperty $source, ISchemaProperty $target, bool $force = false): ISchema {
+		public function collection(string $name, IProperty $source, IProperty $target, bool $force = false): ISchema {
 			if (isset($this->collectionList[$name]) && $force === false) {
 				throw new SchemaException(sprintf('Schema [%s] already has collection named [%s].', $this->getSchemaName(), $name));
 			}
-			$this->collectionList[$name] = new SchemaCollection($name, $source, $target);
+			$this->collectionList[$name] = new Collection($name, $source, $target);
 			return $this;
 		}
 
@@ -138,7 +135,7 @@
 			return isset($this->collectionList[$name]);
 		}
 
-		public function getCollection(string $name): ISchemaCollection {
+		public function getCollection(string $name): ICollection {
 			if (isset($this->collectionList[$name]) === false) {
 				throw new SchemaException(sprintf('Requested unknown collection [%s] in schema [%s].', $name, $this->getSchemaName()));
 			}
@@ -149,31 +146,28 @@
 			return $this->collectionList;
 		}
 
-		public function linkTo(string $link, string $collection, ISchemaProperty $source, ISchemaProperty $target): ISchema {
+		public function linkTo(string $link, string $collection, IProperty $source, IProperty $target): ISchema {
 			if ($source->getSchema() !== $this) {
 				throw new SchemaException(sprintf('Source property [%s] is not part of the current schema [%s].', $source->getPropertyName(), $this->getSchemaName()));
 			}
 			$this->link($link, $source, $target);
-			$target->getSchema()
-				->collection($collection, $target, $source);
+			$target->getSchema()->collection($collection, $target, $source);
 			return $this;
 		}
 
-		public function link(string $name, ISchemaProperty $source, ISchemaProperty $target, bool $force = false): ISchema {
+		public function link(string $name, IProperty $source, IProperty $target, bool $force = false): ISchema {
 			if (isset($this->linkList[$name]) && $force === false) {
 				throw new SchemaException(sprintf('Schema [%s] already contains link named [%s].', $this->getSchemaName(), $name));
 			}
-			$this->linkList[$name] = new SchemaLink($name, $source, $target);
+			$this->linkList[$name] = new Link($name, $source, $target);
 			return $this;
 		}
 
 		public function getMeta(string $name, $default = null) {
-			$this->use();
 			return $this->metaList[$name] ?? $default;
 		}
 
 		public function getMetaList(): array {
-			$this->use();
 			return $this->metaList;
 		}
 
@@ -183,7 +177,6 @@
 		}
 
 		public function hasMeta(string $name): bool {
-			$this->use();
 			return isset($this->metaList[$name]) || array_key_exists($name, $this->metaList);
 		}
 	}

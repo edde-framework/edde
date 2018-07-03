@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Node;
 
@@ -16,7 +16,7 @@
 				 * select node based on more attributes
 				 */
 				'/**/[footribute][bootribute]' => function (array $nodeList, $query) {
-					self::assertCount(1, $nodeList, sprintf('Node count missmatch for (%s)', $query));
+					self::assertCount(1, $nodeList, sprintf('Node count mismatch for (%s)', $query));
 					$node = reset($nodeList);
 					self::assertEquals('big-poo', $node->getName());
 				},
@@ -35,7 +35,8 @@
 					self::assertCount(1, $nodeList, sprintf('Node count missmatch for (%s)', $query));
 					$node = reset($nodeList);
 					self::assertEquals('big-poo', $node->getName());
-					self::assertTrue(array_key_exists('footribute', $node->getAttributeList()));
+					self::assertTrue(array_key_exists('footribute', $node->getAttributeList()
+						->array()));
 				},
 				/**
 				 * skipping path and waiting for a node
@@ -50,7 +51,7 @@
 				 * skipping one level of a path
 				 */
 				'/root/*/catch-me' => function (array $nodeList, $query) {
-					self::assertCount(3, $nodeList, sprintf('Node count missmatch for (%s)', $query));
+					self::assertCount(3, $nodeList, sprintf('Node count mismatch for (%s)', $query));
 					foreach ($nodeList as $node) {
 						self::assertEquals('catch-me', $node->getName());
 					}
@@ -77,7 +78,7 @@
 				 * return only the given matching node (can be more than one)
 				 */
 				'/root/going-deeper' => function (array $nodeList, $query) {
-					self::assertCount(1, $nodeList, sprintf('Node count missmatch for (%s)', $query));
+					self::assertCount(1, $nodeList, sprintf('Node count mismatch for (%s)', $query));
 					$node = reset($nodeList);
 					self::assertEquals('going-deeper', $node->getName());
 				},
@@ -88,7 +89,8 @@
 					self::assertCount(1, $nodeList, sprintf('Node count missmatch for (%s)', $query));
 					$node = reset($nodeList);
 					self::assertEquals('going-deeper', $node->getName());
-					self::assertContains('fobar', array_keys($node->getAttributeList()));
+					self::assertContains('fobar', array_keys($node->getAttributeList()
+						->array()));
 				},
 				/**
 				 * return all nodes under the given path
@@ -148,14 +150,16 @@
 						202,
 					];
 					$testList = [];
+					/**@var $node INode */
 					foreach ($nodeList as $node) {
 						self::assertEquals('catch', $node->getName());
-						self::assertEquals('banana', $node->getAttribute('fruit'));
+						self::assertEquals('banana', $node->getAttributeList()
+							->get('fruit'));
 						$testList[] = $node->getValue();
 					}
 					sort($valueList);
 					sort($testList);
-					self::assertEquals($valueList, $testList, 'Missmatched node values (probably bad matches)');
+					self::assertEquals($valueList, $testList, 'Mismatched node values (probably bad matches)');
 				},
 				/**
 				 * optional path skip
@@ -336,28 +340,32 @@
 			$node = new Node('foo');
 			$barNode = new Node('bar');
 			$foobarNode = new Node('foobar');
+			$barNode->addNode(new Node('bump'));
 			$barNode->addNode($foobarNode);
 			$node->addNode($barNode);
 			self::assertEquals('/foo', $node->getPath());
-			self::assertEquals('/foo/bar', $barNode->getPath());
-			self::assertEquals('/foo/bar/foobar', $foobarNode->getPath());
+			self::assertEquals('/foo/bar:0', $barNode->getPath());
+			self::assertEquals('/foo/bar:0/foobar:1', $foobarNode->getPath());
 		}
 
 		public function testGetPathMetatribute() {
 			$node = new Node('foo');
-			$node->setMeta('meta', false);
+			$metaList = $node->getMetaList();
+			$metaList->set('meta', false);
 			$barNode = new Node('bar');
 			$foobarNode = new Node('foobar');
-			$foobarNode->setAttribute('attr', false);
-			$foobarNode->setAttribute('another', false);
-			$foobarNode->setMeta('meta', true);
+			$attributeList = $foobarNode->getAttributeList();
+			$attributeList->set('attr', false);
+			$attributeList->set('another', false);
+			$metaList = $foobarNode->getMetaList();
+			$metaList->set('meta', true);
 			$barNode->addNode($foobarNode);
 			$node->addNode($barNode);
 			self::assertEquals('/foo', $node->getPath());
-			self::assertEquals('/foo/bar', $barNode->getPath());
-			self::assertEquals('/foo/bar/foobar', $foobarNode->getPath());
-			self::assertEquals('/foo/bar/foobar[attr][another]', $foobarNode->getPath(true));
-			self::assertEquals('/foo(meta)/bar/foobar[attr][another](meta)', $foobarNode->getPath(true, true));
+			self::assertEquals('/foo/bar:0', $barNode->getPath());
+			self::assertEquals('/foo/bar:0/foobar:0', $foobarNode->getPath());
+			self::assertEquals('/foo/bar:0/foobar[attr][another]:0', $foobarNode->getPath(true));
+			self::assertEquals('/foo(meta)/bar:0/foobar[attr][another](meta):0', $foobarNode->getPath(true, true));
 		}
 
 		public function testSetValue() {
@@ -372,42 +380,46 @@
 				'attr' => false,
 				'foo' => null,
 			]);
-			self::assertTrue($node->hasAttribute('attr'));
-			self::assertTrue($node->hasAttribute('foo'));
-			self::assertFalse($node->hasAttribute('bar'));
+			$attributeList = $node->getAttributeList();
+			self::assertTrue($attributeList->has('attr'));
+			self::assertTrue($attributeList->has('foo'));
+			self::assertFalse($attributeList->has('bar'));
 		}
 
 		public function testAttributeList() {
 			$node = new Node();
-			self::assertEmpty($node->getAttributeList());
-			$node->setAttributeList($attributeList = [
+			$attributeList = $node->getAttributeList();
+			self::assertEmpty($attributeList->array());
+			$attributeList->put($attributes = [
 				'foo' => 'bar',
 				'bar' => 'foo',
 			]);
-			self::assertSame($attributeList, $node->getAttributeList());
+			self::assertSame($attributes, $attributeList->array());
 		}
 
 		public function testHasMeta() {
 			$node = new Node('node', 'value');
-			$node->setMetaList([
+			$metaList = $node->getMetaList();
+			$metaList->put([
 				'meta' => false,
 				'foo' => null,
 			]);
-			self::assertTrue($node->hasMeta('meta'));
-			self::assertTrue($node->hasMeta('foo'));
-			self::assertFalse($node->hasMeta('bar'));
+			self::assertTrue($metaList->has('meta'));
+			self::assertTrue($metaList->has('foo'));
+			self::assertFalse($metaList->has('bar'));
 		}
 
 		public function testMetaList() {
 			$node = new Node();
-			self::assertEmpty($node->getMetaList());
-			$node->setMetaList($metaList = [
+			$metaList = $node->getMetaList();
+			self::assertEmpty($metaList->array());
+			$metaList->put($metas = [
 				'foo' => 'bar',
 				'bar' => 'foo',
 			]);
-			self::assertSame($metaList, $node->getMetaList());
-			self::assertEquals('bar', $node->getMeta('foo'));
-			self::assertTrue($node->getMeta('nothing', true));
+			self::assertSame($metas, $metaList->array());
+			self::assertEquals('bar', $metaList->get('foo'));
+			self::assertTrue($metaList->get('nothing', true));
 		}
 
 		public function testGetRoot() {
@@ -489,17 +501,17 @@
 		public function testGetTreeHeight() {
 			$node = new Node();
 			self::assertEquals(0, $node->getTreeHeight());
-			$node->addNode((new Node)->addNode((new Node)->addNode(new Node)));
+			$node->addNode((new Node())->addNode((new Node())->addNode(new Node())));
 			self::assertEquals(3, $node->getTreeHeight());
 		}
 
 		public function testGetTreeSize() {
 			$node = new Node();
 			self::assertEquals(1, $node->getTreeSize());
-			$node->addNode((new Node)->addNodeList([
-				(new Node)->addNode(new Node),
-				(new Node)->addNode(new Node),
-				(new Node)->addNode(new Node),
+			$node->addNode((new Node())->addNodeList([
+				(new Node())->addNode(new Node()),
+				(new Node())->addNode(new Node()),
+				(new Node())->addNode(new Node()),
 			]));
 			self::assertEquals(8, $node->getTreeSize());
 		}
@@ -585,9 +597,10 @@
 
 		public function testSetAttribute() {
 			$node = new Node();
-			$node->setAttribute('attr', 1);
-			self::assertEquals(1, $node->getAttribute('attr'));
-			self::assertTrue($node->getAttribute('dummy', true));
+			$attributeList = $node->getAttributeList();
+			$attributeList->set('attr', 1);
+			self::assertEquals(1, $attributeList->get('attr'));
+			self::assertTrue($attributeList->get('dummy', true));
 		}
 
 		public function testRecursiveIterator() {
@@ -676,26 +689,38 @@
 		public function testAttributeNamespace() {
 			$node = new Node(null, null, [
 				'foo' => 'bar',
-				'a:foo' => 'bar',
-				'a:too' => 'oot',
-				'b:foo' => 'foo',
+				'a'   => new AttributeList([
+					'foo' => 'bar',
+					'too' => 'oot',
+				]),
+				'b'   => new AttributeList([
+					'foo' => 'foo',
+				]),
 			]);
+			$attributeList = $node->getAttributeList();
 			self::assertEquals([
 				'foo' => 'bar',
 				'too' => 'oot',
-			], $node->getAttributeList('a'));
+			], $attributeList->get('a')
+				->array());
 			self::assertEquals([
 				'foo' => 'foo',
-			], $node->getAttributeList('b'));
+			], $attributeList->get('b')
+				->array());
 			self::assertEquals([
 				'foo' => 'bar',
-				'a:foo' => 'bar',
-				'a:too' => 'oot',
-				'b:foo' => 'foo',
-			], $node->getAttributeList());
-			self::assertTrue($node->hasAttributeList('a'));
-			self::assertTrue($node->hasAttributeList('b'));
-			self::assertFalse($node->hasAttributeList('poo'));
+				'a'   => [
+					'foo' => 'bar',
+					'too' => 'oot',
+				],
+				'b'   => [
+					'foo' => 'foo',
+				],
+			], $node->getAttributeList()
+				->array());
+			self::assertTrue($attributeList->hasAttributeList('a'));
+			self::assertTrue($attributeList->hasAttributeList('b'));
+			self::assertFalse($attributeList->hasAttributeList('poo'));
 		}
 
 		public function testSwitch() {
@@ -704,18 +729,18 @@
 			$poo = new Node('poo');
 
 			$foo->addNode($bar->addNode($poo));
-			self::assertEquals('/foo/bar/poo', $poo->getPath());
+			self::assertEquals('/foo/bar:0/poo:0', $poo->getPath());
 			self::assertSame($foo, $bar->getParent());
 			self::assertSame($bar, $poo->getParent());
 			$bar->switch($poo);
-			self::assertEquals('/foo/poo', $poo->getPath());
-			self::assertEquals('/foo/poo/bar', $bar->getPath());
+			self::assertEquals('/foo/poo:0', $poo->getPath());
+			self::assertEquals('/foo/poo:0/bar:0', $bar->getPath());
 			self::assertSame($foo, $poo->getParent());
 			self::assertSame($poo, $bar->getParent());
 
 			$foo->switch($bar);
 			self::assertTrue($bar->isRoot());
 			self::assertFalse($foo->isRoot());
-			self::assertEquals('/bar/foo/poo', $poo->getPath());
+			self::assertEquals('/bar/foo:1/poo:0', $poo->getPath());
 		}
 	}

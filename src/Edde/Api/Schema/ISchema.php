@@ -1,11 +1,9 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Schema;
 
-	use Edde\Api\Deffered\IDeffered;
-
-	interface ISchema extends IDeffered {
+	interface ISchema {
 		/**
 		 * return only the name of this schema without namespace
 		 *
@@ -41,30 +39,30 @@
 		 *
 		 * @param string $name
 		 *
-		 * @return ISchemaProperty
+		 * @return IProperty
 		 *
 		 * @throws SchemaException
 		 */
-		public function getProperty(string $name): ISchemaProperty;
+		public function getProperty(string $name): IProperty;
 
 		/**
 		 * return set of properties of this Schema
 		 *
-		 * @return ISchemaProperty[]
+		 * @return IProperty[]
 		 */
 		public function getPropertyList(): array;
 
 		/**
 		 * make a link between the given source and destination property (1:1); if the name is present and force === false, exception should be thrown
 		 *
-		 * @param string $name
-		 * @param ISchemaProperty $source
-		 * @param ISchemaProperty $target
-		 * @param bool $force
+		 * @param string    $name
+		 * @param IProperty $source
+		 * @param IProperty $target
+		 * @param bool      $force
 		 *
 		 * @return ISchema
 		 */
-		public function link(string $name, ISchemaProperty $source, ISchemaProperty $target, bool $force = false): ISchema;
+		public function link(string $name, IProperty $source, IProperty $target, bool $force = false): ISchema;
 
 		/**
 		 * is there link with the given name?
@@ -80,28 +78,28 @@
 		 *
 		 * @param string $name
 		 *
-		 * @return ISchemaLink
+		 * @return ILink
 		 */
-		public function getLink(string $name): ISchemaLink;
+		public function getLink(string $name): ILink;
 
 		/**
 		 * return all known links in this schema
 		 *
-		 * @return ISchemaLink[]
+		 * @return ILink[]
 		 */
 		public function getLinkList(): array;
 
 		/**
 		 * connect the given source property to the target property as 1:n collection
 		 *
-		 * @param string $name
-		 * @param ISchemaProperty $source
-		 * @param ISchemaProperty $target
-		 * @param bool $force
+		 * @param string    $name
+		 * @param IProperty $source
+		 * @param IProperty $target
+		 * @param bool      $force
 		 *
 		 * @return ISchema
 		 */
-		public function collection(string $name, ISchemaProperty $source, ISchemaProperty $target, bool $force = false): ISchema;
+		public function collection(string $name, IProperty $source, IProperty $target, bool $force = false): ISchema;
 
 		/**
 		 * @param string $name
@@ -113,31 +111,31 @@
 		/**
 		 * @param string $name
 		 *
-		 * @return ISchemaCollection
+		 * @return ICollection
 		 */
-		public function getCollection(string $name): ISchemaCollection;
+		public function getCollection(string $name): ICollection;
 
 		/**
-		 * @return ISchemaCollection[]
+		 * @return ICollection[]
 		 */
 		public function getCollectionList(): array;
 
 		/**
 		 * link the given source property to the given target property in both directions (link + collection in reverse); this is only shorthand for link(source, target) + collection(target, source)
 		 *
-		 * @param string $link
-		 * @param string $collection
-		 * @param ISchemaProperty $source
-		 * @param ISchemaProperty $target
+		 * @param string    $link
+		 * @param string    $collection
+		 * @param IProperty $source
+		 * @param IProperty $target
 		 *
 		 * @return ISchema
 		 */
-		public function linkTo(string $link, string $collection, ISchemaProperty $source, ISchemaProperty $target): ISchema;
+		public function linkTo(string $link, string $collection, IProperty $source, IProperty $target): ISchema;
 
 		/**
 		 * retrieve named metadata
 		 *
-		 * @param string $name
+		 * @param string     $name
 		 * @param mixed|null $default
 		 *
 		 * @return mixed

@@ -1,5 +1,0 @@
-<control>
-	<div class="foo-bar"/>
-	<span value="hello world!"/>
-	<div class="bar-foo"/>
-</control>

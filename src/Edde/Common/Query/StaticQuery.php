@@ -1,12 +1,12 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Query;
 
 	use Edde\Api\Query\IStaticQuery;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class StaticQuery extends AbstractObject implements IStaticQuery {
+	class StaticQuery extends Object implements IStaticQuery {
 		/**
 		 * @var mixed
 		 */

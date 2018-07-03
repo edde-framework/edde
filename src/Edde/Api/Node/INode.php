@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Node;
 
@@ -13,27 +13,12 @@
 		 *
 		 * @return $this
 		 */
-		public function setName($name);
+		public function setName(string $name);
 
 		/**
 		 * @return string
 		 */
 		public function getName();
-
-		/**
-		 * generate materialized path from node names
-		 *
-		 * @return INode
-		 */
-		public function getParent();
-
-		/**
-		 * @param bool $attributes include attribute names (e.g. [foo][bar], ....)
-		 * @param bool $meta include meta names (e.g. (foo)(bar)
-		 *
-		 * @return string
-		 */
-		public function getPath($attributes = false, $meta = false);
 
 		/**
 		 * @param mixed $value
@@ -50,114 +35,94 @@
 		public function getValue($default = null);
 
 		/**
-		 * @param string $name
-		 * @param mixed $value
+		 * return list of attributes for this node
 		 *
-		 * @return $this
+		 * @return IAttributeList
 		 */
-		public function setAttribute($name, $value);
+		public function getAttributeList(): IAttributeList;
 
 		/**
+		 * is the given attribute name present?
+		 *
 		 * @param string $name
 		 *
 		 * @return bool
 		 */
-		public function hasAttribute($name);
+		public function hasAttribute(string $name): bool;
 
 		/**
-		 * @param string $name
-		 * @param mixed|null $default
+		 * return attribute
 		 *
-		 * @return mixed
+		 * @param string $name
+		 * @param null   $default
+		 *
+		 * @return IAttributeList|string|mixed
 		 */
-		public function getAttribute($name, $default = null);
+		public function getAttribute(string $name, $default = null);
 
 		/**
-		 * remove the given attribute from list
+		 * set attribute value or attribute list as a namespaced attribute
 		 *
-		 * @param string $name
+		 * @param string               $name
+		 * @param IAttributeList|mixed $value
 		 *
 		 * @return INode
 		 */
-		public function removeAttribute(string $name): INode;
+		public function setAttribute(string $name, $value): INode;
 
 		/**
-		 * replace current attribute list by the given one
-		 *
 		 * @param array $attributeList
 		 *
-		 * @return $this
+		 * @return INode
 		 */
-		public function setAttributeList(array $attributeList);
+		public function putAttribute(array $attributeList): INode;
 
 		/**
-		 * add the given attribute list to the current one (overriding same keys)
+		 * return list of meta data
 		 *
-		 * @param array $attributeList
-		 *
-		 * @return $this
+		 * @return IAttributeList
 		 */
-		public function addAttributeList(array $attributeList);
+		public function getMetaList(): IAttributeList;
 
 		/**
-		 * has this node attributes with a given namespace
+		 * get meta from node
 		 *
-		 * @param string $namespace
+		 * @param string $name
+		 * @param null   $default
 		 *
-		 * @return bool
+		 * @return IAttributeList|string|int|mixed
 		 */
-		public function hasAttributeList(string $namespace): bool;
+		public function getMeta(string $name, $default = null);
 
 		/**
-		 * @param string $namespace
+		 * @param string               $name
+		 * @param IAttributeList|mixed $value
 		 *
-		 * @return array
+		 * @return INode
 		 */
-		public function getAttributeList(string $namespace = null): array;
-
-		public function removeAttributeList(string $namespace): INode;
+		public function setMeta(string $name, $value): INode;
 
 		/**
 		 * @param array $metaList
 		 *
-		 * @return $this
+		 * @return INode
 		 */
-		public function setMetaList(array $metaList);
+		public function putMeta(array $metaList): INode;
 
 		/**
-		 * @param array $metaList
+		 * generate materialized path from node names
 		 *
-		 * @return $this
+		 * @return INode|null
 		 */
-		public function addMetaList(array $metaList);
+		public function getParent();
 
 		/**
-		 * @param string $name
-		 * @param mixed $value
+		 * @param bool $attributes include attribute names (e.g. [foo][bar], ....)
+		 * @param bool $meta       include meta names (e.g. (foo)(bar)
 		 *
-		 * @return $this
+		 * @return string
 		 */
-		public function setMeta($name, $value);
-
-		/**
-		 * @param string $name
-		 *
-		 * @return bool
-		 */
-		public function hasMeta($name);
-
-		/**
-		 * @param string $name
-		 * @param mixed|null $default
-		 *
-		 * @return mixed
-		 */
-		public function getMeta($name, $default = null);
-
-		/**
-		 * @return array
-		 */
-		public function getMetaList();
+		public function getPath($attributes = false, $meta = false);
 
 		/**
 		 * @return INode[]

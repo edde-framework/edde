@@ -1,62 +1,52 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Router;
 
+	use Edde\Api\Application\LazyContextTrait;
+	use Edde\Api\Application\LazyResponseManagerTrait;
+	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Http\LazyHttpRequestTrait;
+	use Edde\Api\Runtime\LazyRuntimeTrait;
+	use Edde\Common\Application\HttpResponseHandler;
+	use Edde\Common\Protocol\Request\Message;
+	use Edde\Common\Router\AbstractRouter;
 	use Edde\Common\Strings\StringUtils;
 
-	class SimpleHttpRouter extends HttpRouter {
-		/**
-		 * @var string[]
-		 */
-		protected $namespaceList;
+	class SimpleHttpRouter extends AbstractRouter {
+		use LazyHttpRequestTrait;
+		use LazyResponseManagerTrait;
+		use LazyContainerTrait;
+		use LazyRuntimeTrait;
+		use LazyContextTrait;
 
 		/**
-		 * One day a blond walks into a doctors office with both of her ears burnt.
-		 * The doctor askes her what had happened.
-		 * She says, "well... when I was ironing my work suit the phone rang and I mistakanly picked up the iron instead of the phone."
-		 * "Well that explains one ear, but what about the other."
-		 * "The bastard called again"
-		 *
-		 * @param array $namespaceList
+		 * @inheritdoc
 		 */
-		public function __construct(array $namespaceList) {
-			$this->namespaceList = $namespaceList;
-		}
-
 		public function createRequest() {
-			$this->use();
 			if ($this->runtime->isConsoleMode()) {
 				return null;
 			}
-			$pathList = $this->requestUrl->getPathList();
-			if (empty($pathList)) {
+			$requestUrl = $this->httpRequest->getRequestUrl();
+			if (empty($pathList = $requestUrl->getPathList())) {
 				return null;
 			}
-			$path = explode('.', array_shift($pathList));
-			if (count($path) !== 2) {
+			if (count($pathList) !== 2) {
 				return null;
 			}
-			list($control, $action) = $path;
-			$name = StringUtils::toCamelCase($control);
-			$parameterList = $this->requestUrl->getQuery();
-			foreach ($this->namespaceList as $namespace) {
-				$classList = [
-					sprintf('%s\\%s\\%sView', $namespace, $name, $name),
-					sprintf('%s\\%s\\%sControl', $namespace, $name, $name),
-				];
-				foreach ($classList as $class) {
-					if (class_exists($class)) {
-						$this->requestUrl->setPath('');
-						$parameterList['action'] = $class . '.' . $action;
-						break 2;
-					}
+			list($control, $action) = $pathList;
+			$partList = [];
+			foreach (explode('.', $control) as $part) {
+				$partList[] = StringUtils::toCamelCase($part);
+			}
+			$name = implode('\\', $partList);
+			$parameterList = $requestUrl->getParameterList();
+			foreach ($this->context->cascade('\\', $name) as $class) {
+				if (class_exists($class)) {
+					$this->responseManager->setResponseHandler($this->container->create(HttpResponseHandler::class));
+					return (new Message($class . '::action' . StringUtils::toCamelCase($action)))->data($parameterList)->setValue($this->httpRequest->getContent());
 				}
 			}
-			if (isset($parameterList['action']) === false && isset($parameterList['handle']) === false) {
-				return null;
-			}
-			$this->requestUrl->setQuery($parameterList);
-			return parent::createRequest();
+			return null;
 		}
 	}

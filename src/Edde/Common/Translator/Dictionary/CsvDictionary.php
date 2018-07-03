@@ -3,8 +3,6 @@
 
 	namespace Edde\Common\Translator\Dictionary;
 
-	use Edde\Api\Container\ILazyInject;
-	use Edde\Api\File\DirectoryException;
 	use Edde\Api\File\FileException;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Resource\LazyResourceManagerTrait;
@@ -15,17 +13,13 @@
 	/**
 	 * Csv file support.
 	 */
-	class CsvDictionary extends AbstractDictionary implements ILazyInject {
+	class CsvDictionary extends AbstractDictionary {
 		use LazyResourceManagerTrait;
 		use CacheTrait;
 		/**
 		 * @var IFile[]
 		 */
 		protected $fileList = [];
-		/**
-		 * @var string[]
-		 */
-		protected $dictionary;
 
 		/**
 		 * register a file to csv dictionary as a source
@@ -40,10 +34,10 @@
 			return $this;
 		}
 
-		protected function prepare() {
-			parent::prepare();
-			$this->cache();
-			if (($this->translationList = $this->cache->load($cacheId = implode(',', array_keys($this->fileList)))) === null) {
+		protected function handleSetup() {
+			parent::handleSetup();
+			$cache = $this->cache();
+			if (($this->translationList = $cache->load($cacheId = implode(',', array_keys($this->fileList)))) === null) {
 				foreach ($this->fileList as $file) {
 					$file->open('r');
 					/** @var $langList array */
@@ -55,15 +49,12 @@
 					while ($iterator->valid() && $line = $iterator->current()) {
 						$id = array_shift($line);
 						foreach ($langList as $i => $lang) {
-							if (isset($line[$i]) === false) {
-								throw new DirectoryException(sprintf('Malformed dictionary [%s] for id [%s, lang = %s, index = %s].', $file->getPath(), $id, $lang, $i));
-							}
 							$this->translationList[$lang][$id] = $line[$i];
 						}
 						$iterator->next();
 					}
 				}
-				$this->cache->save($cacheId, $this->translationList);
+				$cache->save($cacheId, $this->translationList);
 			}
 		}
 	}

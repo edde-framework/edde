@@ -1,14 +1,14 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde;
 
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * Information about framework hidden in this class.
 	 */
-	class Framework extends AbstractObject {
+	class Framework extends Object {
 		/**
 		 * return full version string
 		 *
@@ -24,7 +24,7 @@
 		 * @return string
 		 */
 		public function getVersion() {
-			return '2.6.0.86';
+			return '3.0.1.597';
 		}
 
 		/**
@@ -33,6 +33,10 @@
 		 * @return string
 		 */
 		public function getCodename() {
-			return 'The Blueprint';
+			return 'The Unepic Epicness';
+		}
+
+		public function __toString() {
+			return $this->getVersionString();
 		}
 	}

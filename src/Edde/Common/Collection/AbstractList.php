@@ -1,21 +1,30 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Collection;
 
 	use ArrayIterator;
 	use Edde\Api\Collection\IList;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * This list implementation is abstract because it should be not possible to use
 	 * untyped lists accross an application.
 	 */
-	abstract class AbstractList extends AbstractObject implements IList {
+	abstract class AbstractList extends Object implements IList {
 		/**
-		 * @var string[]
+		 * @var array
 		 */
 		protected $list = [];
+
+		/**
+		 * AbstractList constructor.
+		 *
+		 * @param array $list
+		 */
+		public function __construct(array $list = []) {
+			$this->list = $list;
+		}
 
 		/**
 		 * @inheritdoc
@@ -43,6 +52,18 @@
 		/**
 		 * @inheritdoc
 		 */
+		public function add(string $name, $value, $key = null): IList {
+			if ($key) {
+				$this->list[$name][$key] = $value;
+				return $this;
+			}
+			$this->list[$name][] = $value;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function get(string $name, $default = null) {
 			if ($this->has($name) === false) {
 				return is_callable($default) ? call_user_func($default) : $default;
@@ -61,7 +82,11 @@
 		 * @inheritdoc
 		 */
 		public function array(): array {
-			return $this->list;
+			$array = [];
+			foreach ($this->list as $k => $v) {
+				$array[$k] = $v instanceof IList ? $v->array() : $v;
+			}
+			return $array;
 		}
 
 		/**
@@ -69,6 +94,14 @@
 		 */
 		public function remove(string $name): IList {
 			unset($this->list[$name]);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function clear(): IList {
+			$this->list = [];
 			return $this;
 		}
 

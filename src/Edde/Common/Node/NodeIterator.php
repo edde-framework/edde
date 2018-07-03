@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Node;
 
@@ -7,14 +7,14 @@
 	use Edde\Api\Node\IAbstractNode;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use RecursiveIterator;
 	use RecursiveIteratorIterator;
 
 	/**
 	 * Iterator over nodes support with helper classes for recursive iterator, ...
 	 */
-	class NodeIterator extends AbstractObject implements RecursiveIterator {
+	class NodeIterator extends Object implements RecursiveIterator {
 		/**
 		 * @var IAbstractNode
 		 */
@@ -38,7 +38,7 @@
 
 		/**
 		 * @param IAbstractNode $abstractNode
-		 * @param bool $root
+		 * @param bool          $root
 		 *
 		 * @return RecursiveIteratorIterator|INode[]
 		 * @throws NodeException
@@ -49,7 +49,9 @@
 				$rootNode->pushNode($abstractNode);
 				$abstractNode = $rootNode;
 			}
-			return new RecursiveIteratorIterator(new self($abstractNode), RecursiveIteratorIterator::SELF_FIRST);
+			$iterator = new RecursiveIteratorIterator(new self($abstractNode), RecursiveIteratorIterator::SELF_FIRST);
+			$iterator->rewind();
+			return $iterator;
 		}
 
 		/**

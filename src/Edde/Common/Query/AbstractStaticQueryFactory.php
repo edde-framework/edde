@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Query;
 
@@ -9,8 +9,9 @@
 	use Edde\Api\Query\IStaticQuery;
 	use Edde\Api\Query\IStaticQueryFactory;
 	use Edde\Api\Query\StaticQueryException;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Node\NodeQuery;
+	use Edde\Common\Object;
 	use Edde\Common\Strings\StringUtils;
 	use ReflectionClass;
 	use ReflectionMethod;
@@ -18,7 +19,8 @@
 	/**
 	 * Helper class for IQL to string building.
 	 */
-	abstract class AbstractStaticQueryFactory extends AbstractDeffered implements IStaticQueryFactory {
+	abstract class AbstractStaticQueryFactory extends Object implements IStaticQueryFactory {
+		use ConfigurableTrait;
 		/**
 		 * @var array
 		 */
@@ -57,7 +59,6 @@
 		 * @throws StaticQueryException
 		 */
 		public function create(IQuery $query) {
-			$this->use();
 			return $this->fragment($query->getNode());
 		}
 
@@ -66,36 +67,10 @@
 		 * @throws StaticQueryException
 		 */
 		public function fragment(INode $node) {
-			$this->use();
 			if (isset($this->factoryList[$node->getName()]) === false) {
 				throw new StaticQueryException(sprintf('Unsuported fragment type [%s].', $node->getName()));
 			}
 			return $this->factoryList[$node->getName()]($node);
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		protected function prepare() {
-			$reflectionClass = new ReflectionClass($this);
-			foreach ($reflectionClass->getMethods(ReflectionMethod::IS_PROTECTED) as $reflectionMethod) {
-				if (strpos($reflectionMethod->getName(), 'format') === false) {
-					continue;
-				}
-				$name = StringUtils::recamel(str_replace('format', null, $reflectionMethod->getName()));
-				$this->factoryList[$name] = [
-					$this,
-					$reflectionMethod->getName(),
-				];
-			}
-			$this->selectNodeQuery = new NodeQuery('/select-query/select/*');
-			$this->fromNodeQuery = new NodeQuery('/select-query/from/*');
-			$this->whereNodeQuery = new NodeQuery('/select-query/where/*');
-			$this->orderNodeQuery = new NodeQuery('/select-query/order/*');
-
-			$this->createSchemaNodeQuery = new NodeQuery('/create-schema-query/*');
-			$this->updateQueryNodeQuery = new NodeQuery('/update-query/update/*');
-			$this->updateQueryWhereNodeQuery = new NodeQuery('/update-query/where/*');
 		}
 
 		/**
@@ -104,7 +79,6 @@
 		 * @return StaticQuery
 		 */
 		protected function formatDeleteQuery(INode $node) {
-			$this->use();
 			$sql = 'DELETE FROM ' . $this->delimite($node->getValue());
 			return new StaticQuery($sql, []);
 		}
@@ -122,7 +96,6 @@
 		 * @return StaticQuery
 		 */
 		protected function formatInsertQuery(INode $node) {
-			$this->use();
 			$parameterList = [];
 			$nameList = [];
 			$columnList = [];
@@ -143,7 +116,6 @@
 		 * @throws StaticQueryException
 		 */
 		protected function formatUpdateQuery(INode $node) {
-			$this->use();
 			$parameterList = [];
 			$updateQuery[] = 'UPDATE ' . $this->delimite($node->getValue()) . ' SET';
 			$updateList = [];
@@ -162,7 +134,7 @@
 		}
 
 		/**
-		 * @param INode $node
+		 * @param INode      $node
 		 * @param INodeQuery $nodeQuery
 		 *
 		 * @return IStaticQuery
@@ -175,7 +147,7 @@
 
 		/**
 		 * @param \Iterator|\Traversable|array $iterator
-		 * @param bool $group
+		 * @param bool                         $group
 		 *
 		 * @return StaticQuery
 		 * @throws StaticQueryException
@@ -208,7 +180,6 @@
 		 * @return StaticQuery
 		 */
 		protected function formatCreateSchemaQuery(INode $node) {
-			$this->use();
 			$sql = 'CREATE TABLE IF NOT EXISTS ' . $this->delimite($node->getValue()) . ' (';
 			$columnList = [];
 			foreach ($this->createSchemaNodeQuery->filter($node) as $propertyNode) {
@@ -227,20 +198,12 @@
 		}
 
 		/**
-		 * @param string $type
-		 *
-		 * @return string
-		 */
-		abstract protected function type(string $type): string;
-
-		/**
 		 * @param INode $node
 		 *
 		 * @return StaticQuery
 		 * @throws StaticQueryException
 		 */
 		protected function formatSelectQuery(INode $node) {
-			$this->use();
 			$selectList = $this->formatSelect($node);
 			$parameterList = [];
 			$selectQuery[] = 'SELECT';
@@ -398,8 +361,8 @@
 		}
 
 		/**
-		 * @param INode $node
-		 * @param $operator
+		 * @param INode  $node
+		 * @param string $operator
 		 *
 		 * @return StaticQuery
 		 * @throws StaticQueryException
@@ -513,9 +476,41 @@
 		}
 
 		/**
+		 * @inheritdoc
+		 */
+		protected function handleInit() {
+			$reflectionClass = new ReflectionClass($this);
+			foreach ($reflectionClass->getMethods(ReflectionMethod::IS_PROTECTED) as $reflectionMethod) {
+				if (strpos($reflectionMethod->getName(), 'format') === false) {
+					continue;
+				}
+				$name = StringUtils::recamel(str_replace('format', null, $reflectionMethod->getName()));
+				$this->factoryList[$name] = [
+					$this,
+					$reflectionMethod->getName(),
+				];
+			}
+			$this->selectNodeQuery = new NodeQuery('/select-query/select/*');
+			$this->fromNodeQuery = new NodeQuery('/select-query/from/*');
+			$this->whereNodeQuery = new NodeQuery('/select-query/where/*');
+			$this->orderNodeQuery = new NodeQuery('/select-query/order/*');
+
+			$this->createSchemaNodeQuery = new NodeQuery('/create-schema-query/*');
+			$this->updateQueryNodeQuery = new NodeQuery('/update-query/update/*');
+			$this->updateQueryWhereNodeQuery = new NodeQuery('/update-query/where/*');
+		}
+
+		/**
 		 * @param string $quote
 		 *
 		 * @return string
 		 */
 		abstract protected function quote(string $quote): string;
+
+		/**
+		 * @param string $type
+		 *
+		 * @return string
+		 */
+		abstract protected function type(string $type): string;
 	}

@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Storage;
 
@@ -12,7 +12,7 @@
 		/**
 		 * bind query to the given storage
 		 *
-		 * @param IQuery $query
+		 * @param IQuery   $query
 		 * @param IStorage $storage
 		 *
 		 * @return IBoundQuery

@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Collection;
 
@@ -25,11 +25,22 @@
 
 		/**
 		 * @param string $name
-		 * @param string $value
+		 * @param mixed  $value
 		 *
 		 * @return IList
 		 */
 		public function set(string $name, $value): IList;
+
+		/**
+		 * add a value as an array value
+		 *
+		 * @param string     $name
+		 * @param mixed      $value
+		 * @param mixed|null $key
+		 *
+		 * @return IList
+		 */
+		public function add(string $name, $value, $key = null): IList;
 
 		/**
 		 * return true if the given name is set (present) even with null value
@@ -41,10 +52,10 @@
 		public function has(string $name): bool;
 
 		/**
-		 * @param string $name
+		 * @param string               $name
 		 * @param string|callable|null $default
 		 *
-		 * @return mixed
+		 * @return mixed|IList
 		 */
 		public function get(string $name, $default = null);
 
@@ -59,4 +70,9 @@
 		 * @return IList
 		 */
 		public function remove(string $name): IList;
+
+		/**
+		 * @return IList
+		 */
+		public function clear(): IList;
 	}

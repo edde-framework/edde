@@ -1,92 +1,72 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Container;
 
-	use Edde\Api\Container\ContainerException;
+	use Edde\Api\Cache\ICache;
+	use Edde\Api\Cache\ICacheDirectory;
+	use Edde\Api\Cache\ICacheManager;
+	use Edde\Api\Cache\ICacheStorage;
 	use Edde\Api\Container\IContainer;
-	use Edde\Common\Container\Factory\CascadeFactory;
-	use Edde\Common\ContainerTest\AlphaDependencyClass;
-	use Edde\Common\ContainerTest\BetaDependencyClass;
-	use Edde\Common\ContainerTest\LazyInjectTraitClass;
-	use Edde\Common\ContainerTest\LazyMissmatch;
-	use Edde\Common\ContainerTest\OnlySomeString;
-	use Edde\Common\ContainerTest\SimpleClass;
-	use Edde\Common\ContainerTest\SimpleDependency;
-	use Edde\Common\ContainerTest\SimpleUnknownDependency;
-	use Edde\Common\Strings\StringUtils;
+	use Edde\Common\Cache\CacheDirectory;
+	use Edde\Ext\Cache\FlatFileCacheStorage;
 	use Edde\Ext\Container\ContainerFactory;
-	use Fallback\Foo\Bar\FooBar;
-	use Fallback\Foo\Bar\IFooBar;
-	use phpunit\framework\TestCase;
+	use PHPUnit\Framework\TestCase;
 
-	require_once __DIR__ . '/assets.php';
+	require_once __DIR__ . '/assets/assets.php';
 
-	/**
-	 * Tests related to dependency container.
-	 */
 	class ContainerTest extends TestCase {
 		/**
 		 * @var IContainer
 		 */
 		protected $container;
+		protected $factoryList;
+		protected $configList;
 
-		public function testCommon() {
-			/**
-			 * this is testing ability to include external parameter of a unknown (unregistered) class
-			 */
-			self::assertInstanceOf(SimpleClass::class, $this->container->create(SimpleClass::class, new SimpleUnknownDependency(), 1));
+		public function testContainer() {
+			self::assertSame($this->container, $this->container->create(IContainer::class));
+			self::assertInstanceOf(ICache::class, $this->container->create(ICache::class));
+			self::assertInstanceOf(ICacheManager::class, $cache = $this->container->create(ICache::class));
+			self::assertInstanceOf(ICacheManager::class, $cacheManager = $this->container->create(ICacheManager::class));
+			self::assertSame($cache, $cacheManager);
+			/** @var $instance \Something */
+			self::assertNotSame($instance = $this->container->create(\ISomething::class, ['fill-me-up']), $this->container->create(\Something::class, ['flush-me-out']));
+			self::assertSame($this->container->create(\ISomething::class, ['fill-me-up']), $instance);
+			$instance->config();
+			self::assertNotEmpty($instance->somethingList);
+			self::assertEquals([
+				'bar',
+				'boo',
+			], $instance->somethingList);
+			self::assertEquals('fill-me-up', $instance->someParameter);
+			self::assertInstanceOf(\AnotherSomething::class, $instance->anotherSomething);
+			self::assertInstanceOf(\InjectedSomething::class, $instance->injectedSomething);
+			self::assertInstanceOf(\LazySomething::class, $instance->lazySomething);
+			self::assertInstanceOf(\AnotherAnotherSomething::class, $instance->anotherAnotherSomething);
+			self::assertInstanceOf(\ThisIsProductOfCleverManager::class, $this->container->create(\ThisIsProductOfCleverManager::class));
+
+			self::assertInstanceOf(\AnotherSomething::class, $instance = $this->container->create('boo'));
+			self::assertSame($instance, $this->container->create('boo'));
 		}
 
-		public function testCache() {
-			self::assertInstanceOf(SimpleClass::class, $this->container->create(SimpleClass::class, new SimpleUnknownDependency(), 1));
-			self::assertInstanceOf(SimpleClass::class, $this->container->create(SimpleClass::class, new SimpleUnknownDependency(), 1));
-		}
-
-		public function testLazyInject() {
-			$lazyClass = $this->container->create(LazyInjectTraitClass::class);
-			self::assertInstanceOf(BetaDependencyClass::class, $lazyClass->foo());
-			self::assertInstanceOf(AlphaDependencyClass::class, $lazyClass->bar());
-		}
-
-		public function testLazyMissmatch() {
-			$this->expectException(ContainerException::class);
-			$this->expectExceptionMessage('Lazy inject mismatch: parameter [$betaDependencyClass] of method [Edde\Common\ContainerTest\LazyMissmatch::lazyDependency()] must have a property [Edde\Common\ContainerTest\LazyMissmatch::$betaDependencyClass] with the same name as the parameter (for example protected $betaDependencyClass).');
-			$this->container->create(LazyMissmatch::class);
-		}
-
-		public function testCascade() {
-			$this->container->registerFactory(IFooBar::class, $this->container->inject(new CascadeFactory(function (OnlySomeString $onlySomeString, string $name) {
-				if (interface_exists($name)) {
-					$name = substr(StringUtils::extract($name, '\\', -1), 1);
-				}
-				$foo = $onlySomeString->gimmeString();
-				return [
-					"Fallback\\$foo\\Bar\\$name",
-					"Fallback\\$foo\\Bar\\{$name}Service",
-					"Fallback\\$foo\\$name",
-					"Fallback\\$foo\\{$name}Service",
-				];
-			})));
-			self::assertInstanceOf(FooBar::class, $instance = $this->container->create(IFooBar::class));
-		}
-
-		public function testScalar() {
-			self::assertEquals('bar', $this->container->create('foo-bar'));
-			self::assertEquals('bar', $this->container->call(function ($fooBar) {
-				return $fooBar;
-			}));
-		}
-
+		/**
+		 * @codeCoverageIgnore
+		 */
 		protected function setUp() {
-			$this->container = ContainerFactory::create([
-				SimpleClass::class,
-				SimpleDependency::class,
-				LazyInjectTraitClass::class,
-				BetaDependencyClass::class,
-				'foo-bar' => function () {
-					return 'bar';
-				},
+			$cacheDirectory = new CacheDirectory($cacheDir = __DIR__ . '/cache');
+			$cacheDirectory->purge();
+			$this->container = ContainerFactory::container($this->factoryList = [
+				'boo'                                => ContainerFactory::instance(\AnotherSomething::class, []),
+				\ISomething::class                   => \Something::class,
+				ICacheDirectory::class               => ContainerFactory::instance(CacheDirectory::class, [$cacheDir]),
+				ICacheStorage::class                 => FlatFileCacheStorage::class,
+				\ThisIsProductOfCleverManager::class => \ThisIsCleverManager::class . '::createCleverProduct',
+				new Factory\ClassFactory(),
+			], $this->configList = [
+				\ISomething::class => [
+					\FirstSomethingSetup::class,
+					\AnotherSomethingSetup::class,
+				],
 			]);
 		}
 	}

@@ -1,33 +1,21 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Http;
 
+	use Edde\Api\Converter\IContent;
+
 	/**
-	 * "Abstract" interface holding common stuff between request and repsonse.
+	 * "Abstract" interface holding common stuff between request and response.
 	 */
 	interface IHttp {
-		/**
-		 * @param IHeaderList $headerList
-		 *
-		 * @return $this
-		 */
-		public function setHeaderList(IHeaderList $headerList);
-
 		/**
 		 * @return IHeaderList
 		 */
 		public function getHeaderList(): IHeaderList;
 
 		/**
-		 * @param ICookieList $cookieList
-		 *
-		 * @return $this
-		 */
-		public function setCookieList(ICookieList $cookieList);
-
-		/**
-		 * @return ICookieList
+		 * @return ICookieList|ICookie[]
 		 */
 		public function getCookieList(): ICookieList;
 
@@ -37,28 +25,23 @@
 		 * @param string $header
 		 * @param string $value
 		 *
-		 * @return $this
+		 * @return IHttp
 		 */
-		public function header(string $header, string $value);
+		public function header(string $header, string $value): IHttp;
 
 		/**
-		 * set a content type
+		 * set content of the request/response
 		 *
-		 * @param string $contentType
+		 * @param IContent|null $content
 		 *
-		 * @return $this
+		 * @return IHttp
 		 */
-		public function setContentType(string $contentType);
+		public function setContent(IContent $content = null): IHttp;
 
 		/**
-		 * @param IBody|null $body
+		 * retrieve current content
 		 *
-		 * @return $this
+		 * @return IContent|null
 		 */
-		public function setBody(IBody $body = null);
-
-		/**
-		 * @return IBody|null
-		 */
-		public function getBody();
+		public function getContent();
 	}

@@ -1,21 +1,18 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Log;
 
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Log\ILog;
 	use Edde\Api\Log\ILogRecord;
 	use Edde\Api\Log\LazyLogDirectoryTrait;
-	use Edde\Common\Deffered\DefferedTrait;
 
 	/**
 	 * Default file based log.
 	 */
-	class FileLog extends AbstractLog implements ILazyInject {
+	class FileLog extends AbstractLog {
 		use LazyLogDirectoryTrait;
-		use DefferedTrait;
 		/**
 		 * @var string
 		 */
@@ -51,12 +48,12 @@
 		 * @return ILog
 		 */
 		public function record(ILogRecord $logRecord): ILog {
-			$this->use();
 			$this->file->write(sprintf("[%s] %s\n", date('Y-m-d H:i:s'), $logRecord->getLog()));
 			return $this;
 		}
 
-		protected function prepare() {
+		protected function handleInit() {
+			parent::handleInit();
 			$this->logDirectory->create();
 			$this->file = $this->logDirectory->file(date('Y-m-d-') . $this->name . '.log');
 			$this->file->openForAppend();

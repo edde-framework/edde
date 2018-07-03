@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Http;
 
@@ -12,9 +12,9 @@
 		/**
 		 * return content type from header
 		 *
-		 * @return IContentType
+		 * @return IContentType|null
 		 */
-		public function getContentType(): IContentType;
+		public function getContentType();
 
 		/**
 		 * return user agent
@@ -23,14 +23,7 @@
 		 *
 		 * @return string
 		 */
-		public function getUserAgent(string $default = ''): string;
-
-		/**
-		 * return prioritized accept mime
-		 *
-		 * @return string
-		 */
-		public function getAccept(): string;
+		public function getUserAgent(string $default = null);
 
 		/**
 		 * return an ordered array of accepted mime types

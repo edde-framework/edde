@@ -1,12 +1,12 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Callback;
 
 	use Edde\Api\Callback\IParameter;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class Parameter extends AbstractObject implements IParameter {
+	class Parameter extends Object implements IParameter {
 		/**
 		 * @var string
 		 */
@@ -23,7 +23,7 @@
 		/**
 		 * @param string $name
 		 * @param string $class
-		 * @param bool $optional
+		 * @param bool   $optional
 		 */
 		public function __construct($name, $class, $optional) {
 			$this->name = $name;

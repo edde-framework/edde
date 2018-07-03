@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Storage;
 
@@ -33,7 +33,7 @@
 		 * create the given query (through container)
 		 *
 		 * @param string $query
-		 * @param array $parameterList
+		 * @param array  $parameterList
 		 *
 		 * @return IBoundQuery
 		 */

@@ -1,198 +1,139 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Template;
 
-	use Edde\Api\Container\ILazyInject;
 	use Edde\Api\Node\INode;
+	use Edde\Api\Node\ITreeTraversal;
 	use Edde\Api\Template\ICompiler;
-	use Edde\Api\Template\IHelperSet;
 	use Edde\Api\Template\IMacro;
 	use Edde\Api\Template\MacroException;
-	use Edde\Common\AbstractObject;
-	use Edde\Common\Deffered\DefferedTrait;
-	use Edde\Common\Node\Node;
+	use Edde\Common\Node\AbstractTreeTraversal;
+	use Edde\Common\Strings\StringUtils;
 
-	/**
-	 * Base macro for all template macros.
-	 */
-	abstract class AbstractMacro extends AbstractObject implements IMacro, ILazyInject {
-		use DefferedTrait;
+	abstract class AbstractMacro extends AbstractTreeTraversal implements IMacro {
+		const EVENT_PRE_ENTER = 0;
+		const EVENT_POST_ENTER = 1;
+		const EVENT_PRE_NODE = 2;
+		const EVENT_POST_NODE = 3;
+		const EVENT_PRE_LEAVE = 4;
+		const EVENT_POST_LEAVE = 5;
 		/**
-		 * @var string
+		 * @var callable[]
 		 */
-		protected $name;
-		/**
-		 * @var IHelperSet
-		 */
-		protected $helperSet;
+		protected $eventList = [];
+		protected $level = 0;
 
 		/**
-		 * A master was explaining the nature of Tao to one of his novices. "The Tao is embodied in all software--regardless of how insignificant," said the master.
-		 *
-		 * "Is the Tao in the Unix command line?" asked the novice.
-		 *
-		 * "It is difficult to find, young one, but it is certainly there." came the reply.
-		 *
-		 * "Is Tao in a hand-held calculator?" asked the novice.
-		 *
-		 * "It is," came the reply.
-		 *
-		 * "Is the Tao in a video game?" continued the novice.
-		 *
-		 * "It is even in a video game," said the master.
-		 *
-		 * "What about MS-DOS?"
-		 *
-		 * The master coughed and shifted his position slightly. "The lesson is over for today," he said.
-		 *
-		 * @param string $name
-		 *
-		 * @internal param bool $compile
+		 * @inheritdoc
 		 */
-		public function __construct(string $name) {
-			$this->name = $name;
+		public function getNameList(): array {
+			return [StringUtils::recamel(str_replace('Macro', '', StringUtils::extract(static::class, '\\', -1)))];
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function hasHelperSet(): bool {
-			$this->use();
-			return $this->helperSet !== null;
+		public function inline(IMacro $source, ICompiler $compiler, \Iterator $iterator, INode $node, string $name, $value = null) {
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function getHelperSet(): IHelperSet {
-			$this->use();
-			return $this->helperSet;
+		public function on($event, callable $callback): IMacro {
+			$this->eventList[$this->level][$event][] = $callback;
+			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
-		public function inline(INode $macro, ICompiler $compiler) {
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function compile(INode $macro, ICompiler $compiler) {
-			foreach ($macro->getNodeList() as $node) {
-				$compiler->compile($node);
+		protected function event($event) {
+			foreach ($this->eventList[$this->level][$event] ?? [] as $callable) {
+				$callable();
 			}
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function macro(INode $macro, ICompiler $compiler) {
-			foreach ($macro->getNodeList() as $node) {
-				$compiler->macro($node);
-			}
-		}
-
-		/**
-		 * include node when root, otherwise switch node
-		 *
-		 * @param INode $macro
-		 * @param string $attribute
-		 *
-		 * @return INode|Node
-		 */
-		protected function switchlude(INode $macro, string $attribute) {
-			if ($macro->isRoot()) {
-				return $this->insert($macro, $attribute);
-			}
-			return $this->switchNode($macro, $attribute);
-		}
-
-		/**
-		 * insert node under the given macro
-		 *
-		 * @param INode $macro
-		 * @param string $attribute
-		 *
-		 * @return Node
-		 */
-		protected function insert(INode $macro, string $attribute) {
-			$macro->insert($node = new Node($this->getName(), null, [$attribute => $this->extract($macro, 't:' . $this->getName())]));
-			return $node;
+		public function select(INode $node, ...$parameters): ITreeTraversal {
+			/** @var $compiler ICompiler */
+			list($compiler) = $parameters;
+			return $compiler->getMacro($node->getName(), $node);
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function getName(): string {
-			return $this->name;
-		}
-
-		/**
-		 * extract an attribute and remove it from attribute list
-		 *
-		 * @param INode $macro
-		 * @param string $name
-		 * @param null $default
-		 *
-		 * @return mixed|null|string
-		 */
-		public function extract(INode $macro, string $name = null, $default = null) {
-			$name = $name ?: $this->getName();
-			$attribute = $macro->getAttribute($name, $default);
-			$macro->removeAttribute($name);
-			return $attribute;
-		}
-
-		/**
-		 * switch macro and node and extract attribute from macro node
-		 *
-		 * @param INode $macro
-		 * @param string $attribute
-		 *
-		 * @return INode
-		 */
-		protected function switchNode(INode $macro, string $attribute): INode {
-			$macro->switch($node = new Node($this->getName(), null, [$attribute => $this->extract($macro, 't:' . $this->getName())]));
-			return $node;
-		}
-
-		/**
-		 * return attribute from the given macro; throws exception if the attribute is not present
-		 *
-		 * @param INode $macro
-		 * @param ICompiler $compiler
-		 * @param string|null $name
-		 * @param bool $helper
-		 *
-		 * @return mixed
-		 * @throws MacroException
-		 */
-		protected function attribute(INode $macro, ICompiler $compiler, string $name = null, bool $helper = true) {
-			$name = $name ?: $this->getName();
-			if (($attribute = $macro->getAttribute($name)) === null) {
-				throw new MacroException(sprintf('Missing attribute [%s] in macro node [%s].', $name, $macro->getPath()));
+		public function enter(INode $node, \Iterator $iterator, ...$parameters) {
+			$this->level++;
+			/** @var $compiler ICompiler */
+			list($compiler) = $parameters;
+			$attributeList = $node->getAttributeList();
+			$inlineList = $attributeList->get('t', []);
+			$attributeList->remove('t');
+			foreach ($inlineList as $name => $value) {
+				$macro = $compiler->getMacro($name, $node);
+				$macro->inline($this, $compiler, $iterator, $node, $name, $value);
 			}
-			return ($helper && $filter = $compiler->helper($macro, $attribute)) ? $filter : $attribute;
+			$this->event(self::EVENT_PRE_ENTER);
+			$this->onEnter($node, $iterator, ...$parameters);
+			$this->event(self::EVENT_POST_ENTER);
 		}
 
 		/**
-		 * return attribute list
-		 *
-		 * @param INode $macro
-		 * @param ICompiler $compiler
-		 * @param callable|null $default
-		 *
-		 * @return array
+		 * @inheritdoc
 		 */
-		protected function getAttributeList(INode $macro, ICompiler $compiler, callable $default = null): array {
-			$attributeList = [];
-			foreach ($macro->getAttributeList() as $k => &$v) {
-				$v = ($value = $compiler->helper($macro, $v)) !== null ? $value : ($default ? $default($v) : $v);
-				$attributeList[$k] = $v;
+		public function node(INode $node, \Iterator $iterator, ...$parameters) {
+			$this->event(self::EVENT_PRE_NODE);
+			$this->onNode($node, $iterator, ...$parameters);
+			$this->event(self::EVENT_POST_NODE);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function leave(INode $node, \Iterator $iterator, ...$parameters) {
+			$this->event(self::EVENT_PRE_LEAVE);
+			$this->onLeave($node, $iterator, ...$parameters);
+			$this->event(self::EVENT_POST_LEAVE);
+			$this->eventList[$this->level] = [];
+			$this->level--;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function register(ICompiler $compiler): IMacro {
+			foreach ($this->getNameList() as $name) {
+				$compiler->registerMacro($name, $this);
 			}
-			unset($v);
-			return $attributeList;
+			return $this;
+		}
+
+		protected function onEnter(INode $node, \Iterator $iterator, ...$parameters) {
+		}
+
+		protected function onNode(INode $node, \Iterator $iterator, ...$parameters) {
+			parent::node($node, $iterator, ...$parameters);
+		}
+
+		protected function onLeave(INode $node, \Iterator $iterator, ...$parameters) {
+		}
+
+		protected function attribute(INode $node, string $attribute, bool $literal = false) {
+			$this->checkAttribute($node, $attribute);
+			return $this->delimite($node->getAttribute($attribute), $literal);
+		}
+
+		protected function checkAttribute(INode $node, string $attribute) {
+			if ($node->hasAttribute($attribute) === false) {
+				throw new MacroException(sprintf('Missing attribute <%s (%s=...)> in node [%s].', $node->getName(), $attribute, $node->getPath()));
+			}
+		}
+
+		protected function delimite($value, bool $literal = false) {
+			if ($value && ($method = StringUtils::match($value, '~^((?<context>[a-zA-Z0-9_\$-]+))?:(?<method>[a-zA-Z0-9_-]+)\((?<parameters>.*?)\)$~', true, true)) !== null) {
+				return '$context[' . (isset($method['context']) ? "'" . $method['context'] . "'" : 'null') . ']->' . StringUtils::toCamelHump($method['method']) . '(' . ($method['parameters'] ?? '') . ')';
+			}
+			return $literal || $value[0] === '$' ? $value : var_export($value, true);
 		}
 	}

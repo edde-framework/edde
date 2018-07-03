@@ -1,19 +1,11 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Template;
 
-	use Edde\Api\Deffered\IDeffered;
-
-	/**
-	 * General template implementation support.
-	 */
-	interface ITemplateManager extends IDeffered {
+	interface ITemplateManager {
 		/**
-		 * @param string $template
-		 * @param array $importList compile time templates
-		 *
-		 * @return mixed
+		 * @return ITemplate
 		 */
-		public function template(string $template, array $importList = []);
+		public function template(): ITemplate;
 	}

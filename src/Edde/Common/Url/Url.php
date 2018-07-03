@@ -1,13 +1,14 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Url;
 
 	use Edde\Api\Url\IUrl;
 	use Edde\Api\Url\UrlException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
+	use Edde\Common\Strings\StringUtils;
 
-	class Url extends AbstractObject implements IUrl {
+	class Url extends Object implements IUrl {
 		/**
 		 * @var string
 		 */
@@ -33,41 +34,39 @@
 		 */
 		protected $path = '';
 		/**
-		 * @var array
+		 * @var string
 		 */
-		protected $query = [];
+		protected $query;
+		protected $parameterList = [];
 		/**
 		 * @var string
 		 */
 		protected $fragment = '';
 
-		static public function create($url = null): IUrl {
-			if ($url instanceof IUrl) {
-				return $url;
-			}
-			$self = new static();
-			if ($url !== null) {
-				$self->build($url);
-			}
-			return $self;
+		public function __construct($url = null) {
+			$url ? $this->parse((string)$url) : null;
 		}
 
-		public function build($url) {
+		/**
+		 * @inheritdoc
+		 */
+		public function parse(string $url) {
 			if (($parsed = parse_url($url)) === false) {
 				throw new UrlException(sprintf('Malformed URL [%s].', $url));
 			}
 			if (isset($parsed['query'])) {
-				parse_str($parsed['query'], $parsed['query']);
+				parse_str($parsed['query'], $parsed['parameter-list']);
 			}
 			static $copy = [
-				'scheme' => 'setScheme',
-				'user' => 'setUser',
-				'pass' => 'setPassword',
-				'host' => 'setHost',
-				'port' => 'setPort',
-				'path' => 'setPath',
-				'query' => 'setQuery',
-				'fragment' => 'setFragment',
+				'scheme'         => 'setScheme',
+				'user'           => 'setUser',
+				'pass'           => 'setPassword',
+				'host'           => 'setHost',
+				'port'           => 'setPort',
+				'path'           => 'setPath',
+				'query'          => 'setQuery',
+				'parameter-list' => 'setParameterList',
+				'fragment'       => 'setFragment',
 			];
 			foreach ($copy as $item => $func) {
 				if (isset($parsed[$item])) {
@@ -77,21 +76,33 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getResourceName() {
 			$pathList = $this->getPathList();
 			return end($pathList);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getPathList() {
 			return explode('/', ltrim($this->path, '/'));
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getBasePath(): string {
 			$pathList = $this->getPathList();
 			array_pop($pathList);
 			return implode('/', $pathList);
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getExtension() {
 			$path = $this->getPath();
 			$subpath = substr($path, strrpos($path, '/'));
@@ -101,8 +112,11 @@
 			return substr($subpath, $index + 1);
 		}
 
-		public function getPath() {
-			return $this->path;
+		/**
+		 * @inheritdoc
+		 */
+		public function getPath(bool $query = true) {
+			return $this->path . ($query && empty($this->parameterList) === false ? '?' . http_build_query($this->parameterList) : '');
 		}
 
 		/**
@@ -113,10 +127,9 @@
 			return $this;
 		}
 
-		public function __toString() {
-			return $this->getAbsoluteUrl();
-		}
-
+		/**
+		 * @inheritdoc
+		 */
 		public function getAbsoluteUrl(): string {
 			$scheme = $this->getScheme();
 			$url = '';
@@ -134,10 +147,10 @@
 			if ($host !== '' && ($port = $this->getPort()) !== null) {
 				$url .= ':' . $port;
 			}
-			$url .= '/' . ltrim($this->getPath(), '/');
-			$query = $this->getQuery();
+			$url .= '/' . ltrim($this->getPath(false), '/');
+			$query = $this->getParameterList();
 			if (empty($query) === false) {
-				$url .= '?' . http_build_query($this->getQuery());
+				$url .= '?' . http_build_query($query);
 			}
 			if (($fragment = $this->getFragment()) !== '') {
 				$url .= '#' . $fragment;
@@ -145,6 +158,9 @@
 			return $url;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getScheme() {
 			return $this->scheme;
 		}
@@ -154,6 +170,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getUser() {
 			return $this->user;
 		}
@@ -163,6 +182,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getPassword() {
 			return $this->password;
 		}
@@ -172,6 +194,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getHost() {
 			return $this->host;
 		}
@@ -181,6 +206,9 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getPort() {
 			return $this->port;
 		}
@@ -190,15 +218,55 @@
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getQuery() {
 			return $this->query;
 		}
 
-		public function setQuery(array $query): IUrl {
+		/**
+		 * @inheritdoc
+		 */
+		public function setQuery(string $query): IUrl {
 			$this->query = $query;
 			return $this;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
+		public function setParameterList(array $parameterList): IUrl {
+			$this->parameterList = $parameterList;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function addParameterList(array $parameterList): IUrl {
+			$this->parameterList = array_merge($this->parameterList, $parameterList);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function getParameterList(): array {
+			return $this->parameterList;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function setParameter(string $name, $value): IUrl {
+			$this->parameterList[$name] = $value;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
 		public function getFragment() {
 			return $this->fragment;
 		}
@@ -208,10 +276,44 @@
 			return $this;
 		}
 
-		public function getParameter($name, $default = null) {
-			if (isset($this->query[$name]) === false) {
+		/**
+		 * @inheritdoc
+		 */
+		public function getParameter(string $name, $default = null) {
+			if (isset($this->parameterList[$name]) === false) {
 				return $default;
 			}
-			return $this->query[$name];
+			return $this->parameterList[$name];
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function match(string $match, bool $path = true) {
+			return StringUtils::match($path ? $this->getPath(false) : $this->getAbsoluteUrl(), $match);
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function __toString() {
+			return $this->getAbsoluteUrl();
+		}
+
+		/**
+		 * @param null $url
+		 *
+		 * @return IUrl|$this
+		 * @throws UrlException
+		 */
+		static public function create($url = null) {
+			if ($url instanceof IUrl) {
+				return $url;
+			}
+			$self = new static();
+			if ($url !== null) {
+				$self->parse((string)$url);
+			}
+			return $self;
 		}
 	}

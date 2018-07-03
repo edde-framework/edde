@@ -1,16 +1,16 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Asset;
 
-	use Edde\Api\Deffered\IDeffered;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Resource\IResource;
 
 	/**
 	 * General storage for saving application data.
 	 */
-	interface IAssetStorage extends IDeffered {
+	interface IAssetStorage extends IConfigurable {
 		/**
 		 * save the given resource to the file storage and return a new resource (local resource file)
 		 *

@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Xml;
 
@@ -9,16 +9,16 @@
 	use Edde\Api\Xml\IXmlHandler;
 	use Edde\Api\Xml\IXmlParser;
 	use Edde\Api\Xml\XmlParserException;
-	use Edde\Common\AbstractObject;
 	use Edde\Common\File\File;
 	use Edde\Common\Iterator\ChunkIterator;
 	use Edde\Common\Iterator\Iterator;
+	use Edde\Common\Object;
 	use Edde\Common\Strings\StringUtils;
 
 	/**
 	 * Simple and fast event based xml parser.
 	 */
-	class XmlParser extends AbstractObject implements IXmlParser {
+	class XmlParser extends Object implements IXmlParser {
 		const XML_TYPE_WARP = null;
 		const XML_TYPE_OPENTAG = 1;
 		const XML_TYPE_CLOSETAG = 2;
@@ -53,7 +53,7 @@
 		 * @throws XmlParserException
 		 */
 		public function parse(IResource $resource, IXmlHandler $xmlHandler): IXmlParser {
-			$this->iterate($iterator = new Iterator(new ChunkIterator([
+			$this->iterate(new Iterator(new ChunkIterator([
 				StringUtils::class,
 				'createIterator',
 			], $resource->getIterator())), $xmlHandler);
@@ -61,7 +61,7 @@
 		}
 
 		/**
-		 * @param IIterator $iterator
+		 * @param IIterator   $iterator
 		 * @param IXmlHandler $xmlHandler
 		 *
 		 * @return $this
@@ -87,7 +87,7 @@
 		}
 
 		/**
-		 * @param IIterator $iterator
+		 * @param IIterator   $iterator
 		 * @param IXmlHandler $xmlHandler
 		 *
 		 * @throws XmlParserException
@@ -119,7 +119,6 @@
 							throw new XmlParserException(sprintf('Unexpected token [%s] while reading open tag.', $char));
 						}
 						$type = self::XML_TYPE_HEADER;
-						$name .= $char;
 						break;
 					case '-':
 						switch ($type) {

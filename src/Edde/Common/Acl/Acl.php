@@ -1,13 +1,13 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Acl;
 
 	use Edde\Api\Acl\AclException;
 	use Edde\Api\Acl\IAcl;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class Acl extends AbstractObject implements IAcl {
+	class Acl extends Object implements IAcl {
 		/**
 		 * @var array[]
 		 */
@@ -45,5 +45,13 @@
 				$can = $grant;
 			}
 			return $can;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function reset(): IAcl {
+			$this->aclList = [];
+			return $this;
 		}
 	}

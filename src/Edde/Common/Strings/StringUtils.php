@@ -1,15 +1,15 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Strings;
 
-	use Edde\Common\AbstractObject;
 	use Edde\Common\Callback\CallbackUtils;
+	use Edde\Common\Object;
 
 	/**
 	 * StringsUtils are set of independent methods for UTF-8 string manipulation.
 	 */
-	class StringUtils extends AbstractObject {
+	class StringUtils extends Object {
 		private static $SEPARATOR_LIST = [
 			'|',
 			':',
@@ -17,6 +17,7 @@
 			'-',
 			'_',
 			'/',
+			' ',
 		];
 
 		/**
@@ -33,8 +34,8 @@
 		/**
 		 * compare two strings
 		 *
-		 * @param string $left
-		 * @param string $right
+		 * @param string   $left
+		 * @param string   $right
 		 * @param int|null $length
 		 *
 		 * @return bool
@@ -50,8 +51,8 @@
 		/**
 		 * return subset of the given string
 		 *
-		 * @param string $string
-		 * @param int $start
+		 * @param string   $string
+		 * @param int      $start
 		 * @param int|null $length
 		 *
 		 * @return string
@@ -152,7 +153,7 @@
 		 *
 		 * @param string $string
 		 * @param string $glue
-		 * @param int $index
+		 * @param int    $index
 		 *
 		 * @return string
 		 */
@@ -165,7 +166,7 @@
 		 * split the given string by capital letters (e.g. FooBar will became [Foo, Bar])
 		 *
 		 * @param string $string
-		 * @param int $index
+		 * @param int    $index
 		 *
 		 * @return array
 		 */
@@ -213,9 +214,9 @@
 		/**
 		 * remove invalid character from an "url" string
 		 *
-		 * @param string $string
+		 * @param string      $string
 		 * @param string|null $charlist
-		 * @param bool $lower
+		 * @param bool        $lower
 		 *
 		 * @return string
 		 */
@@ -272,10 +273,10 @@
 		/**
 		 * preg_match
 		 *
-		 * @param string $string
-		 * @param string $pattern
-		 * @param bool|false $named return only named parameters from token
-		 * @param array|bool|false $trim if array is provided, its used for named parameters defaults
+		 * @param string           $string
+		 * @param string           $pattern
+		 * @param bool|false       $named return only named parameters from token
+		 * @param array|bool|false $trim  if array is provided, its used for named parameters defaults
 		 *
 		 * @return array|null
 		 * @throws StringException
@@ -313,11 +314,11 @@
 		 */
 		static private function pcre($func, $args) {
 			static $messages = [
-				PREG_INTERNAL_ERROR => 'Internal error',
+				PREG_INTERNAL_ERROR        => 'Internal error',
 				PREG_BACKTRACK_LIMIT_ERROR => 'Backtrack limit was exhausted',
 				PREG_RECURSION_LIMIT_ERROR => 'Recursion limit was exhausted',
-				PREG_BAD_UTF8_ERROR => 'Malformed UTF-8 data',
-				5 => 'Offset didn\'t correspond to the begin of a valid UTF-8 code point',
+				PREG_BAD_UTF8_ERROR        => 'Malformed UTF-8 data',
+				5                          => 'Offset didn\'t correspond to the begin of a valid UTF-8 code point',
 				// PREG_BAD_UTF8_OFFSET_ERROR
 			];
 			/** @noinspection ExceptionsAnnotatingAndHandlingInspection */
@@ -330,18 +331,17 @@
 						'preg_filter',
 						'preg_replace_callback',
 						'preg_replace',
-					], true) === false)
-			) {
+					], true) === false)) {
 				throw new StringException(($messages[$code] ?? 'Unknown error') . ' (pattern: ' . implode(' or ', (array)$args[0]) . ')', $code);
 			}
 			return $res;
 		}
 
 		/**
-		 * @param string $string
-		 * @param string $pattern
-		 * @param bool|false $named return only named parameters from token
-		 * @param array|bool|false $trim if array is provided, its used for named parameters defaults
+		 * @param string           $string
+		 * @param string           $pattern
+		 * @param bool|false       $named return only named parameters from token
+		 * @param array|bool|false $trim  if array is provided, its used for named parameters defaults
 		 *
 		 * @return array|null
 		 * @throws StringException
@@ -373,10 +373,10 @@
 		/**
 		 * preg_replace
 		 *
-		 * @param string $subject
-		 * @param string $pattern
+		 * @param string      $subject
+		 * @param string      $pattern
 		 * @param string|null $replacement
-		 * @param int $limit
+		 * @param int         $limit
 		 *
 		 * @return string
 		 * @throws StringException
@@ -395,7 +395,7 @@
 		 *
 		 * @param string $subject
 		 * @param string $pattern
-		 * @param int $flags
+		 * @param int    $flags
 		 *
 		 * @return array
 		 * @throws StringException
@@ -481,12 +481,21 @@
 		 *
 		 * @param string $source
 		 * @param string $separator
-		 * @param int $index
+		 * @param int    $index
 		 *
 		 * @return string
 		 */
 		static public function extract(string $source, string $separator = '\\', int $index = -1): string {
 			$sourceList = explode($separator, $source);
 			return isset($sourceList[$index = $index < 0 ? count($sourceList) + $index : $index]) ? $sourceList[$index] : '';
+		}
+
+		/**
+		 * @param string $string
+		 *
+		 * @return int
+		 */
+		static public function length(string $string): int {
+			return mb_strlen($string);
 		}
 	}

@@ -1,13 +1,13 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Cache;
 
 	use Edde\Api\Cache\ICache;
 	use Edde\Api\Cache\ICacheStorage;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	abstract class AbstractCache extends AbstractObject implements ICache {
+	abstract class AbstractCache extends Object implements ICache {
 		/**
 		 * @var ICacheStorage
 		 */
@@ -39,39 +39,20 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function callback(string $name, callable $callback, ...$parameterList) {
-			if (($result = $this->load($name)) !== null) {
-				return $result;
-			}
-			return $this->save($name, call_user_func_array($callback, $parameterList));
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function load(string $id, $default = null) {
-			if (($value = $this->cacheStorage->load($this->cacheId($id))) === null) {
+		public function load(string $name, $default = null) {
+			$this->cacheStorage->setup();
+			if (($value = $this->cacheStorage->load($this->cacheId($name))) === null) {
 				return is_callable($default) ? call_user_func($default) : $default;
 			}
 			return $value;
 		}
 
 		/**
-		 * generate cacheid
-		 *
-		 * @param string $id
-		 *
-		 * @return string
-		 */
-		protected function cacheId(string $id): string {
-			return sha1($this->namespace . '/' . $id);
-		}
-
-		/**
 		 * @inheritdoc
 		 */
-		public function save(string $id, $source) {
-			$this->cacheStorage->save($this->cacheId($id), $source);
+		public function save(string $name, $source) {
+			$this->cacheStorage->setup();
+			$this->cacheStorage->save($this->cacheId($name), $source);
 			return $source;
 		}
 
@@ -79,7 +60,19 @@
 		 * @inheritdoc
 		 */
 		public function invalidate(): ICache {
+			$this->cacheStorage->setup();
 			$this->cacheStorage->invalidate();
 			return $this;
+		}
+
+		/**
+		 * generate cache id
+		 *
+		 * @param string $name
+		 *
+		 * @return string
+		 */
+		protected function cacheId(string $name): string {
+			return sha1($this->namespace . '/' . $name);
 		}
 	}

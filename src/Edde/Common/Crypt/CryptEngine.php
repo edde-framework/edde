@@ -1,24 +1,24 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Crypt;
 
 	use Edde\Api\Crypt\ICryptEngine;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use ParagonIE\ConstantTime\Encoding;
 
 	/**
 	 * Default (safe) cryptographic engine implementation.
 	 */
-	class CryptEngine extends AbstractObject implements ICryptEngine {
+	class CryptEngine extends Object implements ICryptEngine {
 		/**
 		 * @inheritdoc
 		 */
-		public function generate(int $length = 10, string $charlist = '0-9a-z'): string {
-			$charlist = str_shuffle(preg_replace_callback('#.-.#', function ($m) {
+		public function generate(int $length = 10, string $charList = '0-9a-z'): string {
+			$charList = str_shuffle(preg_replace_callback('#.-.#', function ($m) {
 				return implode('', range($m[0][0], $m[0][2]));
-			}, $charlist));
-			$charlistLength = strlen($charlist);
+			}, $charList));
+			$charListLength = strlen($charList);
 			$string = '';
 			$rand0 = null;
 			$rand1 = null;
@@ -28,8 +28,8 @@
 					list($rand0, $rand1) = explode(' ', microtime());
 					$rand0 += lcg_value();
 				}
-				$rand0 *= $charlistLength;
-				$string .= $charlist[($rand0 + $rand1 + ord($rand2[$i % strlen($rand2)])) % $charlistLength];
+				$rand0 *= $charListLength;
+				$string .= $charList[($rand0 + $rand1 + ord($rand2[$i % strlen($rand2)])) % $charListLength];
 				$rand0 -= (int)$rand0;
 			}
 			return $string;

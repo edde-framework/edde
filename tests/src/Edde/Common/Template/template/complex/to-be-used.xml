@@ -1,3 +1,0 @@
-<control>
-	<div t:block="block-from-imported-template" class="used-div-here"/>
-</control>

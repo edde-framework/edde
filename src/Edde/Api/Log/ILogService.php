@@ -1,19 +1,18 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Log;
 
-	use Edde\Api\Deffered\IDeffered;
 	use Edde\Api\Filter\IFilter;
 
 	/**
 	 * Implementation of a log service.
 	 */
-	interface ILogService extends ILog, IDeffered {
+	interface ILogService extends ILog {
 		/**
 		 * bind the given filter on the tag list; this can be useful for hiding/masking confidental data (passwords, ...)
 		 *
-		 * @param array $tagList
+		 * @param array   $tagList
 		 * @param IFilter $filter
 		 *
 		 * @return ILogService
@@ -23,7 +22,7 @@
 		/**
 		 * register the given log to the given set of tags
 		 *
-		 * @param ILog $log
+		 * @param ILog  $log
 		 * @param array $tagList
 		 *
 		 * @return ILogService

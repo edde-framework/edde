@@ -1,15 +1,17 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Cache;
 
 	use Edde\Api\Cache\ICacheStorage;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Config\ConfigurableTrait;
+	use Edde\Common\Object;
 
 	/**
 	 * Common stuff for cache storage implementation.
 	 */
-	abstract class AbstractCacheStorage extends AbstractDeffered implements ICacheStorage {
+	abstract class AbstractCacheStorage extends Object implements ICacheStorage {
+		use ConfigurableTrait;
 		/**
 		 * how many cache hits was done on this storage
 		 *
@@ -29,14 +31,23 @@
 		 */
 		protected $write = 0;
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getHitCount(): int {
 			return $this->hit;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getMissCount(): int {
 			return $this->miss;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getWriteCount(): int {
 			return $this->write;
 		}

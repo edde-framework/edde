@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Storage;
 
@@ -9,10 +9,10 @@
 	use Edde\Api\Storage\IBoundQuery;
 	use Edde\Api\Storage\IRepository;
 	use Edde\Api\Storage\LazyStorageTrait;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Edde\Common\Query\Select\SelectQuery;
 
-	abstract class AbstractRepository extends AbstractObject implements IRepository {
+	abstract class AbstractRepository extends Object implements IRepository {
 		use LazyContainerTrait;
 		use LazyStorageTrait;
 		/**
@@ -31,7 +31,7 @@
 		}
 
 		public function bound(string $query, ...$parameterList): IBoundQuery {
-			return (new BoundQuery())->bind($this->container->create($query, ...$parameterList), $this->storage);
+			return (new BoundQuery())->bind($this->container->create($query, $parameterList, __METHOD__), $this->storage);
 		}
 
 		public function query(): IBoundQuery {

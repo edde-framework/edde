@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Node;
 
@@ -11,8 +11,8 @@
 	interface IAbstractNode {
 		/**
 		 * @param IAbstractNode $abstractNode
-		 * @param bool $move change $node's parent to $this
-		 * @param bool $soft
+		 * @param bool          $move change $node's parent to $this
+		 * @param bool          $soft
 		 *
 		 * @return IAbstractNode
 		 */
@@ -22,7 +22,7 @@
 		 * prepend the given node to the current node list
 		 *
 		 * @param IAbstractNode $abstractNode
-		 * @param bool $move
+		 * @param bool          $move
 		 *
 		 * @return IAbstractNode
 		 */
@@ -41,7 +41,7 @@
 		 * add list of given nodes to the current node
 		 *
 		 * @param Traversable|IAbstractNode[] $nodeList
-		 * @param bool $move change parent of children to the current node
+		 * @param bool                        $move change parent of children to the current node
 		 *
 		 * @return $this
 		 */
@@ -51,7 +51,7 @@
 		 * replace current list of children by the given node list
 		 *
 		 * @param Traversable|IAbstractNode[] $nodeList
-		 * @param bool|false $move
+		 * @param bool|false                  $move
 		 *
 		 * @return IAbstractNode
 		 */
@@ -61,7 +61,7 @@
 		 * move set of nodes to current node; if $move is true, parent of moved nodes is changed
 		 *
 		 * @param IAbstractNode $sourceNode children of this node will be moved
-		 * @param bool|false $move === true, parent of children will changed to the current node
+		 * @param bool|false    $move       === true, parent of children will changed to the current node
 		 *
 		 * @return IAbstractNode
 		 */
@@ -71,7 +71,7 @@
 		 * remove the given node from the list of this node; if node is not found (by object comparsion), exception is thrown
 		 *
 		 * @param IAbstractNode $abstractNode
-		 * @param bool $soft
+		 * @param bool          $soft
 		 *
 		 * @return IAbstractNode
 		 */
@@ -182,7 +182,7 @@
 
 		/**
 		 * @param IAbstractNode $abstractNode
-		 * @param bool $soft
+		 * @param bool          $soft
 		 *
 		 * @return IAbstractNode return newly switched node
 		 */
@@ -192,8 +192,8 @@
 		 * replace the given child node by the list of nodes
 		 *
 		 * @param IAbstractNode $abstractNode
-		 * @param array $nodeList
-		 * @param bool $soft
+		 * @param array         $nodeList
+		 * @param bool          $soft
 		 *
 		 * @return IAbstractNode
 		 */

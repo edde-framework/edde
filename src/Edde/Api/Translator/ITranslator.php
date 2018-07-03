@@ -1,19 +1,19 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Translator;
 
-	use Edde\Api\Deffered\IDeffered;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\File\IFile;
 
 	/**
 	 * Implementation of a translator.
 	 */
-	interface ITranslator extends IDeffered {
+	interface ITranslator extends IConfigurable {
 		/**
 		 * register source to translator; this will be convertet via converter to target dictionary (and registered with register
 		 *
-		 * @param IFile $source
+		 * @param IFile       $source
 		 * @param string|null $scope
 		 *
 		 * @return ITranslator
@@ -24,7 +24,7 @@
 		 * register source of words
 		 *
 		 * @param IDictionary $dictionary
-		 * @param string $scope
+		 * @param string      $scope
 		 *
 		 * @return ITranslator
 		 */
@@ -58,11 +58,11 @@
 		/**
 		 * try to translate a string
 		 *
-		 * @param string $id
-		 * @param string $scope override current scope
+		 * @param string      $name
+		 * @param string      $scope override current scope
 		 * @param string|null $language
 		 *
 		 * @return string
 		 */
-		public function translate(string $id, string $scope = null, string $language = null): string;
+		public function translate(string $name, string $scope = null, string $language = null): string;
 	}

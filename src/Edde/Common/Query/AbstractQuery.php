@@ -1,20 +1,21 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Query;
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Query\IQuery;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Config\ConfigurableTrait;
+	use Edde\Common\Object;
 
-	abstract class AbstractQuery extends AbstractDeffered implements IQuery {
+	abstract class AbstractQuery extends Object implements IQuery {
+		use ConfigurableTrait;
 		/**
 		 * @var INode
 		 */
 		protected $node;
 
 		public function getNode() {
-			$this->use();
 			return $this->node;
 		}
 

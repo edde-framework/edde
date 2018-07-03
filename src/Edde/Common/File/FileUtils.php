@@ -3,17 +3,20 @@
 
 	namespace Edde\Common\File;
 
+	use Edde\Api\File\DirectoryException;
 	use Edde\Api\File\FileException;
 	use Edde\Api\Url\IUrl;
-	use Edde\Common\AbstractObject;
+	use Edde\Api\Url\UrlException;
+	use Edde\Common\Object;
 	use Edde\Common\Url\Url;
 
-	class FileUtils extends AbstractObject {
+	class FileUtils extends Object {
 		static protected $mimeTypeList = [
-			'xml' => 'text/xml',
-			'json' => 'application/json',
-			'csv' => 'text/csv',
-			'php' => 'text/x-php',
+			'xml'   => 'text/xml',
+			'xhtml' => 'application/xhtml+xml',
+			'json'  => 'application/json',
+			'csv'   => 'text/csv',
+			'php'   => 'text/x-php',
 		];
 
 		/**
@@ -38,6 +41,7 @@
 		 *
 		 * @return string
 		 * @throws FileException
+		 * @throws UrlException
 		 */
 		static public function mime(string $file) {
 			if (is_file($file) === false) {
@@ -119,7 +123,7 @@
 						}
 					} else if (is_dir($path)) {
 						foreach (new \FilesystemIterator($path) as $item) {
-							static::delete($item->getRealPath());
+							($realpath = $item->getRealPath()) ? static::delete($realpath) : null;
 						}
 						/** @noinspection PhpUsageOfSilenceOperatorInspection */
 						if (@rmdir($path) === false) {
@@ -147,7 +151,7 @@
 		static public function createDir($dir, $mode = 0777) {
 			/** @noinspection PhpUsageOfSilenceOperatorInspection */
 			if (is_dir($dir) === false && @mkdir($dir, $mode, true) === false && is_dir($dir) === false) { // intentionally @; not atomic
-				throw new FileException("Unable to create directory [$dir].");
+				throw new DirectoryException("Unable to create directory [$dir].");
 			}
 		}
 
@@ -231,8 +235,9 @@
 		 *
 		 * @return IUrl
 		 * @throws FileException
+		 * @throws UrlException
 		 */
-		static public function url($file) {
+		static public function url(string $file) {
 			if (strpos($file, 'file:///') === false) {
 				$file = 'file:///' . ltrim(self::realpath($file, false), '/');
 			}

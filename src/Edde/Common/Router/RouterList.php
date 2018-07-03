@@ -1,16 +1,18 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Router;
 
 	use Edde\Api\Router\IRouter;
 	use Edde\Api\Router\IRouterList;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Config\ConfigurableTrait;
+	use Edde\Common\Object;
 
 	/**
 	 * Default implementation of a router list.
 	 */
-	class RouterList extends AbstractDeffered implements IRouterList {
+	class RouterList extends Object implements IRouterList {
+		use ConfigurableTrait;
 		/**
 		 * @var IRouter[]
 		 */

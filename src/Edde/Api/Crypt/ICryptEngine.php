@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Crypt;
 
@@ -19,7 +19,7 @@
 		/**
 		 * generate random string with given character set (e.g. password)
 		 *
-		 * @param int $length
+		 * @param int    $length
 		 * @param string $charlist
 		 *
 		 * @return string

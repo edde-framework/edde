@@ -1,64 +1,42 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Converter;
 
 	use Edde\Api\Converter\ConverterException;
-	use Edde\Api\Converter\IConverterManager;
-	use Edde\Api\Node\INode;
-	use Edde\Common\Node\NodeQuery;
+	use Edde\Api\Converter\LazyConverterManagerTrait;
+	use Edde\Api\File\IRootDirectory;
+	use Edde\Common\Container\Factory\ClassFactory;
+	use Edde\Common\File\RootDirectory;
 	use Edde\Ext\Container\ContainerFactory;
-	use Edde\Ext\Converter\NodeConverter;
-	use phpunit\framework\TestCase;
+	use Edde\Ext\Test\TestCase;
 
-	require_once __DIR__ . '/assets/assets.php';
-
-	/**
-	 * Converter manager related tests.
-	 */
 	class ConverterManagerTest extends TestCase {
-		/**
-		 * @var IConverterManager
-		 */
-		protected $converterManager;
+		use LazyConverterManagerTrait;
 
-		public function testUnknownConverter() {
+		public function testTargetArray() {
+			$content = $this->converterManager->convert($source = ['foo'], 'array', [
+				'string',
+				'text/plain',
+				'json',
+			])->convert();
+			self::assertEquals(json_encode($source), $content->getContent());
+			self::assertEquals('application/json', $content->getMime());
+		}
+
+		public function testKaboom() {
 			$this->expectException(ConverterException::class);
-			$this->expectExceptionMessage('Cannot convert unknown source mime [unknown source] to [json].');
-			$this->converterManager->convert('something here', 'unknown source', 'json');
-		}
-
-		public function testConflictException() {
-			$this->expectException(ConverterException::class);
-			$this->expectExceptionMessage('Converter [DummyConverter] has conflict with converter [DummyConverter] on mime [foo|bar].');
-			$this->converterManager->registerConverter((new \DummyConverter())->register('foo', 'bar'));
-			$this->converterManager->registerConverter((new \DummyConverter())->register('foo', 'bar'));
-		}
-
-		public function testDummyConverter() {
-			self::assertEquals($expect = 'this will be null on output', $this->converterManager->convert($expect, 'boo', 'something'));
-		}
-
-		public function testObjectConverter() {
-			$node = $this->converterManager->convert((object)[
-				'foo' => [
-					'bar' => (object)[
-						'moo' => 'foo',
-					],
-				],
-			], \stdClass::class, INode::class);
-			self::assertInstanceOf(INode::class, $node);
-			self::assertInstanceOf(INode::class, $first = NodeQuery::first($node, '//foo/bar'));
-			self::assertEquals('foo', $first->getAttribute('moo'));
-			self::assertTrue($first->isLeaf(), 'Selected node is not a leaf!');
+			$this->expectExceptionMessage('Cannot convert unknown/unsupported source mime [array] to any of [string, text/plain].');
+			self::assertEquals(json_encode($source = ['foo']), $this->converterManager->convert($source, 'array', [
+				'string',
+				'text/plain',
+			])->convert());
 		}
 
 		protected function setUp() {
-			$container = ContainerFactory::create([
-				IConverterManager::class => ConverterManager::class,
+			ContainerFactory::autowire($this, [
+				IRootDirectory::class => ContainerFactory::instance(RootDirectory::class, [__DIR__]),
+				new ClassFactory(),
 			]);
-			$this->converterManager = $container->create(IConverterManager::class);
-			$this->converterManager->registerConverter((new \DummyConverter())->register('boo', 'something'));
-			$this->converterManager->registerConverter(new NodeConverter());
 		}
 	}

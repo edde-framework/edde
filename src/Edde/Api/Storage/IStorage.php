@@ -1,17 +1,17 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Storage;
 
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Crate\ICrate;
-	use Edde\Api\Deffered\IDeffered;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQuery;
 
 	/**
 	 * This is abstracted way how to store (serialize) almost any object; storage can be arbitrary technology with ability to understand Edde's IQL.
 	 */
-	interface IStorage extends IDeffered {
+	interface IStorage extends IConfigurable {
 		/**
 		 * start a transaction
 		 *
@@ -56,13 +56,13 @@
 		/**
 		 * return collection based on the input query; if storage doesn't understand the queery, exception should be thrown
 		 *
-		 * @param string $crate of Crate
-		 * @param IQuery $query
 		 * @param string $schema
+		 * @param IQuery $query
+		 * @param string $crate of Crate
 		 *
 		 * @return ICrate[]|ICollection
 		 */
-		public function collection(string $crate, IQuery $query = null, string $schema = null): ICollection;
+		public function collection(string $schema, IQuery $query = null, string $crate = null): ICollection;
 
 		/**
 		 * helper method for a m:n crate collection
@@ -89,13 +89,13 @@
 		/**
 		 * retrieve crate by the given query; it should formally go through a collection method; if there is no such crate, exception should be thrown
 		 *
-		 * @param string $crate
-		 * @param IQuery $query
 		 * @param string $schema
+		 * @param IQuery $query
+		 * @param string $crate
 		 *
 		 * @return ICrate
 		 */
-		public function load(string $crate, IQuery $query, string $schema = null): ICrate;
+		public function load(string $schema, IQuery $query, string $crate = null): ICrate;
 
 		/**
 		 * load crate by the given link name

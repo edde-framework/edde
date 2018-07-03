@@ -1,6 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="compile.php" type="PhpLocalRunConfigurationType" factoryName="PHP Console" singleton="true" path="$PROJECT_DIR$/bin/compile.php">
-    <CommandLine parameters="-d phar.readonly=off" />
-    <method />
-  </configuration>
-</component>

@@ -1,174 +1,51 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Template;
 
-	use Edde\Api\Container\ILazyInject;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
+	use Edde\Api\Node\ITreeTraversal;
+	use Edde\Api\Resource\IResource;
 
-	interface ICompiler extends ILazyInject {
+	/**
+	 * So Little Johnny's teacher is warned at the beginning of the school year not to ever make a bet with Johnny unless she is absolutely sure she will win it.
+	 * One day in class, Johnny raises his hand and says "teacher, I'll bet you $50 I can guess what color your underwear is."
+	 * She replies, "okay, meet me after class and we'll settle it." But beforeclass ends, she goes to the restroom and removes her panties.
+	 * After class is over and the studentsclear out, Johnny makes his guess.
+	 * "Blue."
+	 * "Nope. You got it wrong," she says as she lifts her skirt to reveal she isn't wearing any underwear.
+	 * "Well come with me out to my dads car, he's waiting for me, and I'll get you the money." She follows him out.
+	 * When they get to the car she informs his dad that he got the bet wrong and that she showed Johnny that she wasn't wearing any underwear.
+	 * His dad exclaims: "That mother fucker! He bet me $100 this morning that he'd see your pussy before the end of the day!"
+	 */
+	interface ICompiler extends IConfigurable, ITreeTraversal {
 		/**
-		 * use the given macroset
-		 *
-		 * @param IMacroSet $macroSet
-		 *
-		 * @return ICompiler
-		 */
-		public function registerMacroSet(IMacroSet $macroSet): ICompiler;
-
-		/**
-		 * register the given helper set
-		 *
-		 * @param IHelperSet $helperSet
-		 *
-		 * @return ICompiler
-		 */
-		public function registerHelperSet(IHelperSet $helperSet): ICompiler;
-
-		/**
-		 * "runtime macro" - those should generate runtime
-		 *
+		 * @param string $name
 		 * @param IMacro $macro
 		 *
 		 * @return ICompiler
 		 */
-		public function registerMacro(IMacro $macro): ICompiler;
+		public function registerMacro(string $name, IMacro $macro): ICompiler;
 
 		/**
-		 * process inline macros first (may modify macro node tree)
+		 * return macro or throw an exception
 		 *
-		 * @param INode $macro
+		 * @param string $name
+		 * @param INode  $source
 		 *
-		 * @return ICompiler
+		 * @return IMacro
 		 */
-		public function inline(INode $macro): ICompiler;
+		public function getMacro(string $name, INode $source): IMacro;
 
 		/**
-		 * execute compile macro
+		 * execute template compilation
 		 *
-		 * @param INode $macro
-		 *
-		 * @return
-		 * @internal param INode $root
-		 *
-		 */
-		public function compile(INode $macro);
-
-		/**
-		 * execute macro in "runtime"
-		 *
-		 * @param INode $macro
-		 */
-		public function macro(INode $macro);
-
-		/**
-		 * compile source into node; node is the final result
-		 *
-		 * @param IFile $file
-		 *
-		 * @return INode
-		 * @internal param INode $root
-		 */
-		public function file(IFile $file): INode;
-
-		/**
-		 * return the original source file
+		 * @param string    $name
+		 * @param IResource $resource
 		 *
 		 * @return IFile
 		 */
-		public function getSource(): IFile;
-
-		/**
-		 * return has of currently used files (same per file set including imports)
-		 *
-		 * @return string
-		 */
-		public function getHash(): string;
-
-		/**
-		 * return array of current import list
-		 *
-		 * @return string[]
-		 */
-		public function getImportList(): array;
-
-		/**
-		 * if there are embedded templates, this method return current template file
-		 *
-		 * @return IFile
-		 */
-		public function getCurrent(): IFile;
-
-		/**
-		 * layout is the root (first file - getSource() === getCurrent())
-		 *
-		 * @return bool
-		 */
-		public function isLayout(): bool;
-
-		/**
-		 * build a final template; import list can contain additional set of templates (loaded before the main one)
-		 *
-		 * @param IFile[] $importList
-		 *
-		 * @return mixed
-		 */
-		public function template(array $importList = []);
-
-		/**
-		 * add a value to compiler context
-		 *
-		 * @param string $name
-		 * @param mixed $value
-		 *
-		 * @return ICompiler
-		 */
-		public function setVariable(string $name, $value): ICompiler;
-
-		/**
-		 * retrieve the given value from compiler's context
-		 *
-		 * @param string $name
-		 * @param null $default
-		 *
-		 * @return mixed
-		 */
-		public function getVariable(string $name, $default = null);
-
-		/**
-		 * execute all available helpers agains the given value of attribute
-		 *
-		 * @param INode $macro
-		 * @param string $value
-		 *
-		 * @return null|string
-		 */
-		public function helper(INode $macro, $value);
-
-		/**
-		 * block under the given id
-		 *
-		 * @param string $name
-		 * @param INode $block
-		 *
-		 * @return ICompiler
-		 */
-		public function block(string $name, INode $block): ICompiler;
-
-		/**
-		 * return list of nodes by the given block name
-		 *
-		 * @param string $name
-		 *
-		 * @return INode
-		 */
-		public function getBlock(string $name): INode;
-
-		/**
-		 * retrieve list of registered blocks
-		 *
-		 * @return INode[]
-		 */
-		public function getBlockList(): array;
+		public function compile(string $name, IResource $resource): IFile;
 	}

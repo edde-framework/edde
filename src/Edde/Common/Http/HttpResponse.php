@@ -1,49 +1,37 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Http;
 
-	use Edde\Api\Http\IBody;
+	use Edde\Api\Http\ICookie;
 	use Edde\Api\Http\IHttpResponse;
 
-	class HttpResponse extends AbstractHttp implements IHttpResponse {
+	class HttpResponse extends Response implements IHttpResponse {
+		static protected $httpResponse;
+
 		/**
-		 * @var int
+		 * @inheritdoc
 		 */
-		protected $code;
-
-		public function __construct(IBody $body = null) {
-			parent::__construct(new HeaderList(), new CookieList());
-			$this->code = 200;
-			$this->body = $body;
-		}
-
 		public function send(): IHttpResponse {
 			http_response_code($this->getCode());
 			foreach ($this->getHeaderList() as $header => $value) {
 				header("$header: $value");
 			}
+			/** @var $cookie ICookie */
 			foreach ($this->getCookieList() as $cookie) {
 				setcookie($cookie->getName(), $cookie->getValue(), $cookie->getExpire(), $cookie->getPath(), $cookie->getDomain(), $cookie->isSecure(), $cookie->isHttpOnly());
+			}
+			if ($this->content) {
+				$this->headerList->has('Content-Type') ? null : header('Content-Type: ' . $this->content->getMime());
+				ob_start();
+				echo $this->content->getContent();
+				header('Content-Length: ' . ob_get_length());
+				ob_end_flush();
 			}
 			return $this;
 		}
 
-		public function getCode(): int {
-			return $this->code;
-		}
-
-		public function setCode(int $code): IHttpResponse {
-			$this->code = $code;
-			return $this;
-		}
-
-		public function redirect(string $redirect): IHttpResponse {
-			$this->headerList->set('location', $redirect);
-			return $this;
-		}
-
-		public function body(string $target, $mime = null) {
-			return $this->body->convert($target, $mime);
+		static public function createHttpResponse(): IHttpResponse {
+			return self::$httpResponse ?: self::$httpResponse = new self(200, new HeaderList(), new CookieList());
 		}
 	}

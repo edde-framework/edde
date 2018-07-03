@@ -1,18 +1,18 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Identity;
 
 	use Edde\Api\Acl\IAcl;
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Crate\ICrate;
-	use Edde\Api\Deffered\IDeffered;
 
 	/**
 	 * Identity is (usualy) mutable interface holding current state of an identity (user, cron, ...) in an application.
 	 */
-	interface IIdentity extends IDeffered {
+	interface IIdentity extends IConfigurable {
 		/**
-		 * identity can have optionaly additional data (for example user's row from database)
+		 * identity can have optional additional data (for example user's row from database)
 		 *
 		 * @param ICrate $crate
 		 *
@@ -44,10 +44,18 @@
 		public function setMetaList(array $metaList): IIdentity;
 
 		/**
+		 * @param string $name
+		 * @param        $value
+		 *
+		 * @return IIdentity
+		 */
+		public function setMeta(string $name, $value): IIdentity;
+
+		/**
 		 * return particular meta data from identity
 		 *
 		 * @param string $name
-		 * @param mixed $default
+		 * @param mixed  $default
 		 *
 		 * @return mixed
 		 */
@@ -102,7 +110,7 @@
 		public function setAcl(IAcl $acl): IIdentity;
 
 		/**
-		 * return current acl set
+		 * return current update set
 		 *
 		 * @return IAcl
 		 */
@@ -111,10 +119,12 @@
 		/**
 		 * can this identity access the given resource?
 		 *
-		 * @param string $resource
+		 * @param string         $resource
 		 * @param \DateTime|null $dateTime optionally datetime can be specified; null will NOT disable time checks
 		 *
 		 * @return bool
 		 */
 		public function can(string $resource, \DateTime $dateTime = null): bool;
+
+		public function reset(): IIdentity;
 	}

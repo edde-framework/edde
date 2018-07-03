@@ -1,15 +1,18 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Query\Select;
 
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Query\QueryException;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Query\AbstractQuery;
 	use Edde\Common\Query\Where\WhereExpressionFragment;
 
-	class SelectQuery extends AbstractQuery {
+	class SelectQuery extends AbstractQuery implements IConfigurable {
+		use ConfigurableTrait;
 		/**
 		 * @var INode
 		 */
@@ -35,7 +38,6 @@
 		 * @return SelectFragment
 		 */
 		public function select() {
-			$this->use();
 			return $this->selectPropertyFragment;
 		}
 
@@ -43,7 +45,6 @@
 		 * @return FromFragment
 		 */
 		public function from() {
-			$this->use();
 			return $this->fromPropertyFragment;
 		}
 
@@ -51,7 +52,6 @@
 		 * @return WhereExpressionFragment
 		 */
 		public function where() {
-			$this->use();
 			return $this->whereExpressionFragment;
 		}
 
@@ -59,7 +59,6 @@
 		 * @return OrderFragment
 		 */
 		public function order() {
-			$this->use();
 			return $this->orderFragment;
 		}
 
@@ -70,7 +69,7 @@
 		 */
 		public function getNode() {
 			/**
-			 * missing parent call is intentionall, including $this->use();
+			 * missing parent call is intentional
 			 */
 			if ($this->selectNode === null) {
 				throw new QueryException(sprintf('Empty select query has no sense; please start with %s::select() method.', self::class));
@@ -78,7 +77,8 @@
 			return $this->selectNode;
 		}
 
-		protected function prepare() {
+		protected function handleInit() {
+			parent::handleInit();
 			$this->selectNode = new Node('select-query');
 			$this->selectNode->addNodeList([
 				$selectListNode = new Node('select'),

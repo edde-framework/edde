@@ -3,7 +3,6 @@
 
 	namespace Edde\Api\File;
 
-	use Brick\Math\BigInteger;
 	use Edde\Api\Resource\IResource;
 
 	interface IFile extends IResource {
@@ -22,7 +21,7 @@
 		public function getPath(): string;
 
 		/**
-		 * @return string
+		 * @return string|null
 		 */
 		public function getExtension();
 
@@ -51,10 +50,32 @@
 		 * create file handle; if the file is not availble, exceptio nshould be thrown
 		 *
 		 * @param string $mode
+		 * @param bool   $exclusive if the file is already opened, exception should be thrown
 		 *
 		 * @return IFile
 		 */
-		public function open(string $mode): IFile;
+		public function open(string $mode, bool $exclusive = false): IFile;
+
+		/**
+		 * @param bool $exclusive
+		 *
+		 * @return IFile
+		 */
+		public function openForRead(bool $exclusive = false): IFile;
+
+		/**
+		 * @param bool $exclusive
+		 *
+		 * @return IFile
+		 */
+		public function openForWrite(bool $exclusive = false): IFile;
+
+		/**
+		 * @param bool $exclusive
+		 *
+		 * @return IFile
+		 */
+		public function openForAppend(bool $exclusive = false): IFile;
 
 		/**
 		 * @return bool
@@ -76,35 +97,23 @@
 		public function close(): IFile;
 
 		/**
-		 * @return IFile
-		 */
-		public function openForRead(): IFile;
-
-		/**
-		 * @return IFile
-		 */
-		public function openForWrite(): IFile;
-
-		/**
-		 * @return IFile
-		 */
-		public function openForAppend(): IFile;
-
-		/**
 		 * read bunch of data
+		 *
+		 * @param int $length
 		 *
 		 * @return mixed
 		 */
-		public function read();
+		public function read(int $length = null);
 
 		/**
 		 * write bunch of data
 		 *
 		 * @param mixed $write
+		 * @param int   $length
 		 *
 		 * @return IFile
 		 */
-		public function write($write): IFile;
+		public function write($write, int $length = null): IFile;
 
 		/**
 		 * override current file with the given content
@@ -114,15 +123,6 @@
 		 * @return IFile
 		 */
 		public function save(string $content): IFile;
-
-		/**
-		 * enable write cache; write is performed after number of calls or on file close; disabled (=== 0) by default
-		 *
-		 * @param int $count
-		 *
-		 * @return IFile
-		 */
-		public function enableWriteCache($count = 8): IFile;
 
 		/**
 		 * @return IFile
@@ -140,6 +140,16 @@
 		 * @return float
 		 */
 		public function getSize(): float;
+
+		/**
+		 * run regexp against file path
+		 *
+		 * @param string $match
+		 * @param bool   $filename
+		 *
+		 * @return mixed
+		 */
+		public function match(string $match, bool $filename = true);
 
 		/**
 		 * create a file and do an exclusive lock or lock an existing file; if lock cannot be acquired, exception should be thrown
@@ -171,4 +181,11 @@
 		 * @return IFile
 		 */
 		public function unlock(): IFile;
+
+		/**
+		 * only creates an empty file
+		 *
+		 * @return IFile
+		 */
+		public function touch(): IFile;
 	}

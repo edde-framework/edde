@@ -1,33 +1,40 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Upgrade;
 
-	use Edde\Api\Deffered\IDeffered;
-	use Edde\Api\Event\IEventBus;
+	use Edde\Api\Config\IConfigurable;
+	use Edde\Api\Crate\ICrate;
 
 	/**
 	 * This class is responsible for proper application upgrades.
 	 */
-	interface IUpgradeManager extends IDeffered, IEventBus {
+	interface IUpgradeManager extends IConfigurable {
 		/**
 		 * register the given upgrade under it's version; exception should be thrown if version is already present
 		 *
 		 * @param IUpgrade $upgrade
-		 * @param bool $force if true, upgrade is registered regardless of version
+		 * @param bool     $force if true, upgrade is registered regardless of version
 		 *
 		 * @return IUpgradeManager
 		 */
 		public function registerUpgrade(IUpgrade $upgrade, bool $force = false): IUpgradeManager;
 
 		/**
-		 * set current application version; if ommitted, upgrade will run from the first upgrade
+		 * retrieve current application version; if null, application is still virgin
 		 *
-		 * @param string $currentVersion
-		 *
-		 * @return IUpgradeManager
+		 * @return string|null
 		 */
-		public function setCurrentVersion(string $currentVersion = null): IUpgradeManager;
+		public function getCurrentVersion();
+
+		/**
+		 * factory method for upgrade storables; internally should use IUpgradeStorable
+		 *
+		 * @param array $load
+		 *
+		 * @return ICrate
+		 */
+		public function createUpgradeStorable(array $load = null): ICrate;
 
 		/**
 		 * return current list of upgrades

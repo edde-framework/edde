@@ -1,12 +1,12 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Log\Event;
 
-	use Edde\Common\Event\AbstractEvent;
+	use Edde\Common\Protocol\Event\Event;
 
 	/**
 	 * Basic class for log based events
 	 */
-	class LogEvent extends AbstractEvent {
+	class LogEvent extends Event {
 	}

@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Http;
 
@@ -16,7 +16,7 @@
 		 *
 		 * @return string
 		 */
-		public function getMime(string $default = ''): string;
+		public function getMime(string $default = null);
 
 		/**
 		 * return charset parameter of this mime type

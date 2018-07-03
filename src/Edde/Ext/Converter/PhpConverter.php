@@ -1,13 +1,15 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Converter;
 
 	use Edde\Api\Converter\ConverterException;
+	use Edde\Api\Converter\IContent;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
 	use Edde\Api\Resource\IResource;
 	use Edde\Common\Converter\AbstractConverter;
+	use Edde\Common\Converter\Content;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Node\NodeUtils;
 
@@ -30,28 +32,24 @@
 			]);
 		}
 
-		/** @noinspection PhpInconsistentReturnPointsInspection */
 		/**
 		 * @inheritdoc
 		 * @throws ConverterException
 		 * @throws NodeException
 		 */
-		public function convert($convert, string $source, string $target, string $mime) {
-			$this->unsupported($convert, $target, $convert instanceof IResource);
+		public function convert($content, string $mime, string $target = null): IContent {
+			$this->unsupported($content, $target, $content instanceof IResource);
 			switch ($target) {
 				case INode::class:
-					/** @noinspection UnnecessaryParenthesesInspection */
-					return (function (IResource $resource, string $source, string $mime) {
-						NodeUtils::node($root = new Node(), $this->convert($resource, $source, 'array', $mime));
-						return $root;
-					})($convert, $source, $mime);
+					return new Content((function (IResource $resource, string $source) {
+						return NodeUtils::node(new Node(), $this->convert($resource, $source, 'array')->getContent());
+					})($content, $mime), INode::class);
 				case 'array':
-					/** @noinspection UsingInclusionReturnValueInspection */
-					if (is_array($include = require (string)$convert->getUrl()) === false) {
-						throw new ConverterException(sprintf('Convertion to [%s] failed: php file [%s] has not returned array.', $target, (string)$convert->getUrl()));
+					if (is_array($include = require (string)$content->getUrl()) === false) {
+						throw new ConverterException(sprintf('Conversion to [%s] failed: php file [%s] has not returned array.', $target, (string)$content->getUrl()));
 					}
-					return $include;
+					return new Content($include, 'array');
 			}
-			$this->exception($source, $target);
+			return $this->exception($mime, $target);
 		}
 	}

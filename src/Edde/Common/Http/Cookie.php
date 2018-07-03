@@ -1,12 +1,12 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Http;
 
 	use Edde\Api\Http\ICookie;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
-	class Cookie extends AbstractObject implements ICookie {
+	class Cookie extends Object implements ICookie {
 		/**
 		 * @var string
 		 */
@@ -39,11 +39,11 @@
 		/**
 		 * @param string $name
 		 * @param string $value
-		 * @param int $expire
+		 * @param int    $expire
 		 * @param string $path
 		 * @param string $domain
-		 * @param bool $secure
-		 * @param bool $httpOnly
+		 * @param bool   $secure
+		 * @param bool   $httpOnly
 		 */
 		public function __construct($name, $value, $expire, $path, $domain, $secure = false, $httpOnly = false) {
 			$this->name = $name;

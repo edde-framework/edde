@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Ext\Cache;
 
@@ -10,16 +10,13 @@
 	 */
 	class DevNullCacheStorage extends AbstractCacheStorage {
 		public function save(string $id, $save) {
-			$this->use();
 			return $save;
 		}
 
 		public function load($id) {
-			$this->use();
 		}
 
 		public function invalidate() {
-			$this->use();
 			return $this;
 		}
 	}

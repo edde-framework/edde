@@ -1,9 +1,0 @@
-<control>
-	<case name="foo">
-		<div class="foo-case"/>
-	</case>
-	<div t:case="foo" class="foo-case2"/>
-	<case name="bar">
-		<div class="foo-case3"/>
-	</case>
-</control>

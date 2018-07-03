@@ -1,54 +1,47 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Template;
 
 	use Edde\Api\Node\INode;
+	use Edde\Api\Node\ITreeTraversal;
 
-	/**
-	 * HtmlMacro is operating over whole Node.
-	 */
-	interface IMacro {
+	interface IMacro extends ITreeTraversal {
 		/**
-		 * @return string
-		 */
-		public function getName(): string;
-
-		/**
-		 * @return bool
-		 */
-		public function hasHelperSet(): bool;
-
-		/**
-		 * @return IHelperSet
-		 */
-		public function getHelperSet(): IHelperSet;
-
-		/**
-		 * pre-compile preparation of node tree; may return the same or a new macro which will be used as a new root
+		 * register to the template all supported "names" related to this macro
 		 *
-		 * @param INode $macro
 		 * @param ICompiler $compiler
 		 *
-		 * @return INode|null
+		 * @return IMacro
 		 */
-		public function inline(INode $macro, ICompiler $compiler);
+		public function register(ICompiler $compiler): IMacro;
 
 		/**
-		 * executed in compile time
+		 * return list of names to register
 		 *
-		 * @param INode $macro
-		 * @param ICompiler $compiler
-		 *
-		 * @return mixed
+		 * @return string[]
 		 */
-		public function compile(INode $macro, ICompiler $compiler);
+		public function getNameList(): array;
 
 		/**
-		 * executed in runtime phase
+		 * when there is inline node detected over the macro
 		 *
-		 * @param INode $macro
-		 * @param ICompiler $compiler
+		 * @param IMacro     $source
+		 * @param ICompiler  $compiler
+		 * @param \Iterator  $iterator
+		 * @param INode      $node
+		 * @param string     $name
+		 * @param mixed|null $value
 		 */
-		public function macro(INode $macro, ICompiler $compiler);
+		public function inline(IMacro $source, ICompiler $compiler, \Iterator $iterator, INode $node, string $name, $value = null);
+
+		/**
+		 * register macro event around enter/node/leave
+		 *
+		 * @param mixed    $event
+		 * @param callable $callback
+		 *
+		 * @return IMacro
+		 */
+		public function on($event, callable $callback): IMacro;
 	}

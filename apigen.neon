@@ -1,9 +1,0 @@
-source:
-	- src/Edde
-title: Edde Framework
-destination: doc
-annotationGroups:
-	- deprecated
-download: true
-templateTheme: bootstrap
-noSourceCode: true

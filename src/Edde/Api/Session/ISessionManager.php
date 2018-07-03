@@ -1,16 +1,16 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Api\Session;
 
-	use Edde\Api\Deffered\IDeffered;
+	use Edde\Api\Config\IConfigurable;
 
 	/**
 	 * Session manager is responsible for updating session state (starting, modifying, closing, ...).
 	 */
-	interface ISessionManager extends IDeffered {
+	interface ISessionManager extends IConfigurable {
 		/**
-		 * excplicitly open a session
+		 * explicitly open a session
 		 *
 		 * @return ISessionManager
 		 */
@@ -33,15 +33,6 @@
 		public function getSession(string $name): ISession;
 
 		/**
-		 * return reference to the current session root ($_SESSION superglobal)
-		 *
-		 * @param string $name
-		 *
-		 * @return array
-		 */
-		public function &session(string $name): array;
-
-		/**
 		 * clear the current session
 		 *
 		 * @return ISessionManager
@@ -54,4 +45,18 @@
 		 * @return ISessionManager
 		 */
 		public function close(): ISessionManager;
+
+		/**
+		 * return session name; commonly PHPSESSID
+		 *
+		 * @return string
+		 */
+		public function getName(): string;
+
+		/**
+		 * return current session ID
+		 *
+		 * @return string
+		 */
+		public function getSessionId(): string;
 	}

@@ -1,14 +1,14 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Node;
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\INodeQuery;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 	use Iterator;
 
-	class NodeQuery extends AbstractObject implements INodeQuery {
+	class NodeQuery extends Object implements INodeQuery {
 		/**
 		 * @var string
 		 */
@@ -25,8 +25,8 @@
 		/**
 		 * return first result of a query or null
 		 *
-		 * @param INode $root
-		 * @param string $query
+		 * @param INode               $root
+		 * @param string              $query
 		 * @param mixed|callable|null $default
 		 *
 		 * @return INode|null|mixed
@@ -41,14 +41,13 @@
 		}
 
 		/**
-		 * @param INode $node
+		 * @param INode  $node
 		 * @param string $query
 		 *
 		 * @return INode[]
 		 */
 		static public function node(INode $node, $query) {
-			return self::create($query)
-				->filter($node);
+			return self::create($query)->filter($node);
 		}
 
 		/**
@@ -63,8 +62,8 @@
 		/**
 		 * return last result of a query or null
 		 *
-		 * @param INode $node
-		 * @param string $query
+		 * @param INode               $node
+		 * @param string              $query
 		 * @param mixed|callable|null $default
 		 *
 		 * @return INode|null|mixed
@@ -100,10 +99,8 @@
 				if ($this->filter->fixed && $level !== $this->filter->level) {
 					continue;
 				}
-				if ($this->filter->static && $this->filter->attributes === false && $this->filter->metas === false && $node->getPath() !== $this->query) {
-					continue;
-				}
-				if (preg_match($this->filter->preg, $node->getPath($this->filter->attributes, $this->filter->metas)) !== 1) {
+				$path = $node->getPath($this->filter->attributes, $this->filter->metas);
+				if (preg_match($this->filter->preg, $path) !== 1) {
 					continue;
 				}
 				yield $node;
@@ -140,7 +137,7 @@
 					$preg .= '(.*?/)?';
 					continue;
 				} else if ($fragment === '*') {
-					$preg .= '[' . $name . ']*(\\[.*?\\])*(\\(.*?\\))*/';
+					$preg .= '[' . $name . ']*(\\[.*?\\])*(\\(.*?\\))*(:\d+)?/';
 					continue;
 				}
 				$fragment = str_replace([
@@ -160,7 +157,7 @@
 				if (preg_match('~^[' . $name . ']+$~', $fragment)) {
 					$fragment .= '(\\[.*?\\])*(\\(.*?\\))*';
 				}
-				$preg .= $fragment . '/';
+				$preg .= $fragment . '(:\d+)?/';
 			}
 
 			$filter->preg = '~^/' . rtrim($preg, '/') . '$~';

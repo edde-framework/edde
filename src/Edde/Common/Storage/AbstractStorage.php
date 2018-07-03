@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Storage;
 
@@ -13,20 +13,22 @@
 	use Edde\Api\Storage\IBoundQuery;
 	use Edde\Api\Storage\ICollection;
 	use Edde\Api\Storage\IStorage;
+	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Crate\Crate;
-	use Edde\Common\Deffered\AbstractDeffered;
+	use Edde\Common\Object;
 	use Edde\Common\Query\Select\SelectQuery;
 
 	/**
 	 * Base for all storage implementations.
 	 */
-	abstract class AbstractStorage extends AbstractDeffered implements IStorage {
+	abstract class AbstractStorage extends Object implements IStorage {
 		use LazySchemaManagerTrait;
 		use LazyCrateFactoryTrait;
 		use LazyContainerTrait;
+		use ConfigurableTrait;
 
 		public function bound(string $query, ...$parameterList): IBoundQuery {
-			return (new BoundQuery())->bind($this->container->create($query, ...$parameterList), $this);
+			return (new BoundQuery())->bind($this->container->create($query, $parameterList, __METHOD__), $this);
 		}
 
 		public function query(): IBoundQuery {
@@ -41,47 +43,29 @@
 			$relationSchema = $this->schemaManager->getSchema($relation);
 			$sourceLink = $relationSchema->getLink($source);
 			$targetLink = $relationSchema->getLink($target);
-			$targetSchema = $targetLink->getTarget()
-				->getSchema();
+			$targetSchema = $targetLink->getTarget()->getSchema();
 			$targetSchemaName = $targetSchema->getSchemaName();
 			$selectQuery = new SelectQuery();
+			$selectQuery->init();
 			$relationAlias = sha1(random_bytes(64));
 			$targetAlias = sha1(random_bytes(64));
 			foreach ($targetSchema->getPropertyList() as $schemaProperty) {
-				$selectQuery->select()
-					->property($schemaProperty->getName(), $targetAlias);
+				$selectQuery->select()->property($schemaProperty->getName(), $targetAlias);
 			}
-			$selectQuery->from()
-				->source($relationSchema->getSchemaName(), $relationAlias)
-				->source($targetSchemaName, $targetAlias)
-				->where()
-				->eq()
-				->property($sourceLink->getSource()
-					->getName(), $relationAlias)
-				->parameter($crate->get($sourceLink->getTarget()
-					->getName()))
-				->and()
-				->eq()
-				->property($targetLink->getSource()
-					->getName(), $relationAlias)
-				->property($targetLink->getTarget()
-					->getName(), $targetAlias);
-			return $this->collection($crateTo ?: $targetSchemaName, $selectQuery, $targetSchemaName);
+			$selectQuery->from()->source($relationSchema->getSchemaName(), $relationAlias)->source($targetSchemaName, $targetAlias)->where()->eq()->property($sourceLink->getSource()->getName(), $relationAlias)->parameter($crate->get($sourceLink->getTarget()->getName()))->and()->eq()->property($targetLink->getSource()->getName(), $relationAlias)->property($targetLink->getTarget()->getName(), $targetAlias);
+			return $this->collection($targetSchemaName, $selectQuery, $crateTo ?: $targetSchemaName);
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function collection(string $crate, IQuery $query = null, string $schema = null): ICollection {
-			$schema = $schema ?: $crate;
+		public function collection(string $schema, IQuery $query = null, string $crate = null): ICollection {
 			if ($query === null) {
 				$query = new SelectQuery();
-				$query->select()
-					->all()
-					->from()
-					->source($schema);
+				$query->init();
+				$query->select()->all()->from()->source($schema);
 			}
-			return new Collection($crate, $this, $this->crateFactory, $query, $schema);
+			return new Collection($schema, $this, $this->crateFactory, $query, $crate);
 		}
 
 		/**
@@ -89,23 +73,12 @@
 		 * @throws EmptyResultException
 		 */
 		public function getLink(ICrate $crate, string $name): ICrate {
-			$link = $crate->getSchema()
-				->getLink($name);
+			$link = $crate->getSchema()->getLink($name);
 			$selectQuery = new SelectQuery();
-			$targetSchemaName = $link->getTarget()
-				->getSchema()
-				->getSchemaName();
-			$selectQuery->select()
-				->all()
-				->from()
-				->source($targetSchemaName)
-				->where()
-				->eq()
-				->property($link->getTarget()
-					->getName())
-				->parameter($crate->get($link->getSource()
-					->getName()));
-			$crate->link($link->getName(), $link = $this->load($this->crateFactory->hasCrate($targetSchemaName) ? $targetSchemaName : Crate::class, $selectQuery, $targetSchemaName));
+			$selectQuery->init();
+			$targetSchemaName = $link->getTarget()->getSchema()->getSchemaName();
+			$selectQuery->select()->all()->from()->source($targetSchemaName)->where()->eq()->property($link->getTarget()->getName())->parameter($crate->get($link->getSource()->getName()));
+			$crate->link($link->getName(), $link = $this->load($targetSchemaName, $selectQuery, $this->crateFactory->hasCrate($targetSchemaName) ? $targetSchemaName : Crate::class));
 			return $link;
 		}
 
@@ -113,11 +86,11 @@
 		 * @inheritdoc
 		 * @throws EmptyResultException
 		 */
-		public function load(string $crate, IQuery $query, string $schema = null): ICrate {
+		public function load(string $schema, IQuery $query, string $crate = null): ICrate {
 			/** @noinspection LoopWhichDoesNotLoopInspection */
-			foreach ($this->collection($crate, $query, $schema) as $item) {
+			foreach ($this->collection($schema, $query, $crate) as $item) {
 				return $item;
 			}
-			throw new EmptyResultException(sprintf('Cannot retrieve any crate [%s] by the given query.', $crate));
+			throw new EmptyResultException(sprintf('Cannot retrieve any crate [%s] by the given query.', $schema));
 		}
 	}

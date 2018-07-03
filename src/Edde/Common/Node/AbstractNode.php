@@ -1,16 +1,16 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Node;
 
 	use Edde\Api\Node\IAbstractNode;
 	use Edde\Api\Node\NodeException;
-	use Edde\Common\AbstractObject;
+	use Edde\Common\Object;
 
 	/**
 	 * Pure node tree implementation; this class holds all common methods for node manipulation.
 	 */
-	abstract class AbstractNode extends AbstractObject implements IAbstractNode {
+	abstract class AbstractNode extends Object implements IAbstractNode {
 		/**
 		 * @var IAbstractNode
 		 */
@@ -90,7 +90,7 @@
 		 */
 		public function addNodeList($nodeList, bool $move = false) {
 			foreach ($nodeList as $node) {
-				$this->addNode($node, $move);
+				$this->addNode($node, $move, true);
 			}
 			return $this;
 		}
@@ -242,8 +242,7 @@
 			if ($this->isRoot()) {
 				throw new NodeException(sprintf('Cannot check last flag of root node.'));
 			}
-			$nodeList = $this->getParent()
-				->getNodeList();
+			$nodeList = $this->getParent()->getNodeList();
 			return end($nodeList) === $this;
 		}
 
@@ -337,6 +336,7 @@
 		}
 
 		public function __clone() {
+			parent::__clone();
 			foreach ($this->nodeList as &$node) {
 				$node = clone $node;
 			}

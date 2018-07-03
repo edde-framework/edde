@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common\Web;
 
@@ -7,10 +7,13 @@
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\LazyTempDirectoryTrait;
 	use Edde\Api\Resource\IResourceList;
+	use Edde\Api\Resource\LazyResourceProviderTrait;
 	use Edde\Api\Web\IStyleSheetCompiler;
 	use Edde\Api\Web\WebException;
 	use Edde\Common\File\File;
 	use Edde\Common\File\FileUtils;
+	use Edde\Common\File\RealPathException;
+	use Edde\Common\Resource\UnknownResourceException;
 	use Edde\Common\Strings\StringException;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Url\Url;
@@ -20,6 +23,7 @@
 	 */
 	class StyleSheetCompiler extends AbstractCompiler implements IStyleSheetCompiler {
 		use LazyTempDirectoryTrait;
+		use LazyResourceProviderTrait;
 		/**
 		 * ignored url schemes
 		 *
@@ -36,19 +40,19 @@
 		 * @throws FileException
 		 */
 		public function compile(IResourceList $resourceList = null): IFile {
-			$this->use();
-			$resourceList = $resourceList ?: $this;
 			$content = [];
 			$pathList = [];
-			if (($file = $this->cache->load($cacheId = $resourceList->getResourceName())) === null) {
+			$resourceList = $resourceList ?: $this;
+			$cache = $this->cache();
+			$this->resourceProvider->setup();
+			if (($file = $cache->load($cacheId = $resourceList->getResourceName())) === null) {
 				foreach ($resourceList as $resource) {
 					if ($resource->isAvailable() === false) {
 						throw new WebException(sprintf('Cannot compile stylesheets: resource [%s] is not available (does not exists?).', (string)$resource->getUrl()));
 					}
 					$current = $this->filter($resource->get());
-					$urlList = StringUtils::matchAll($current, "~url\\((?<url>['\"].*?['\"])\\)~", true);
-					$resourcePath = $source = $resource->getUrl()
-						->getPath();
+					$urlList = StringUtils::matchAll($current, "~url\\(['\"](?<url>.*?)['\"]\\)~", true);
+					$resourcePath = $source = $resource->getUrl()->getPath();
 					$resourcePath = dirname($resourcePath);
 					foreach (empty($urlList) ? [] : array_unique($urlList['url']) as $item) {
 						$url = Url::create($file = str_replace([
@@ -63,16 +67,20 @@
 							continue;
 						}
 						try {
-							file_exists($file) === false && ($file = FileUtils::realpath($resourcePath . '/' . $path)) === false;
-						} catch (FileException $exception) {
-							throw new WebException(sprintf('Cannot locate css [%s] resource [%s] on the filesystem.', $source, $url), 0, $exception);
+							$file = $this->resourceProvider->getResource($file);
+						} catch (UnknownResourceException $exception) {
+							try {
+								$file = new File(FileUtils::realpath($resourcePath . '/' . $path));
+							} catch (RealPathException $exception) {
+								throw new WebException(sprintf('Stylesheet [%s] requested resource [%s] which is not available.', $source, $file), 0, $exception);
+							}
 						}
-						$current = str_replace($item, '"' . ($pathList[$path] = $this->assetStorage->store(new File($file))
-								->getRelativePath()) . '"', $current);
+						$assetFile = $this->assetStorage->store($file);
+						$current = str_replace($item, ($pathList[$path] = $assetFile->getRelativePath()), $current);
 					}
 					$content[] = $current;
 				}
-				$this->cache->save($cacheId, $file = $this->assetStorage->store($this->tempDirectory->save($resourceList->getResourceName() . '.css', implode("\n", $content))));
+				$cache->save($cacheId, $file = $this->assetStorage->store($this->tempDirectory->save($resourceList->getResourceName() . '.css', implode("\n", $content))));
 			}
 			return $file;
 		}

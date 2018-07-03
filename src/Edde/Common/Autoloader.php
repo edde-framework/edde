@@ -1,5 +1,5 @@
 <?php
-	declare(strict_types = 1);
+	declare(strict_types=1);
 
 	namespace Edde\Common;
 
@@ -12,7 +12,9 @@
 		 *
 		 * @param string $namespace
 		 * @param string $path
-		 * @param bool $root loader is in the root of autoloaded sources
+		 * @param bool   $root loader is in the root of autoloaded sources
+		 *
+		 * @return callable
 		 */
 		static public function register($namespace, $path, $root = true): callable {
 			$namespace .= '\\';
@@ -35,7 +37,7 @@
 				/** @noinspection PhpIncludeInspection */
 				include_once $file;
 				return true;
-			}, true);
+			}, true, true);
 			return $loader;
 		}
 	}
