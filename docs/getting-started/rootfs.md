@@ -4,6 +4,22 @@ To keep things simple and small, we'll copy all necessary stuff by a one command
 
 ?> Order of files in `bootstrap` folder is important.
 
+## repositories
+
+Because in the time of writing [Alpine Linux](https://alpinelinux.org/about/) does not have
+version `3.8` available on [DockerHub](https://hub.docker.com/_/alpine/), it's possbile to
+upgrade system from `3.7` to `3.8` as a workaround. 
+
+!> You can choose whatever [mirror](https://git.alpinelinux.org/cgit/aports/tree/main/alpine-mirrors/mirrors.yaml)
+you want with version `3.8`.
+
+?> **.docker/rootfs/etc/apk/repositories**
+
+```
+http://repository.fit.cvut.cz/mirrors/alpine/v3.8/main
+http://repository.fit.cvut.cz/mirrors/alpine/v3.8/community
+```
+
 ## bootstrap.sh
 
 Bootstrap is simple bash script responsible for bootstrapping the container.

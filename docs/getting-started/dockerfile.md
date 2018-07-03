@@ -13,11 +13,14 @@ use existing system and understand, how the container works.
 ?> **.docker/Dockerfile**
 
 ```dockerfile
-FROM alpine:edge
+FROM alpine:3.7
 
 ENV LANG="en_US.UTF-8" \
     LANGUAGE="en_US:en" \
     LC_ALL="en_US.UTF-8"
+
+# prepare the base filesystem
+COPY .docker/rootfs /
 
 RUN apk --update upgrade && apk add --no-cache \
 	# proper init system; prevents zombie processes
@@ -42,9 +45,6 @@ RUN apk --update upgrade && apk add --no-cache \
 	php7-tokenizer php7-dom php7-xmlwriter php7-xmlreader php7-ctype php7-phar \
 	# yes, both of them as they're updated in prod/local environemnts
 	php7-opcache php7-xdebug
-
-# prepare the base filesystem
-COPY .docker/rootfs /
 
 # init scripts must be executable
 RUN chmod 0750 -R /etc/service

@@ -115,18 +115,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phar-io/manifest.git",
-	            "reference": "29654cc208939d684071d5725dd1ad1f3e5d1733"
+                "reference": "29654cc208939d684071d5725dd1ad1f3e5d1733"
             },
             "dist": {
                 "type": "zip",
-	            "url": "https://api.github.com/repos/phar-io/manifest/zipball/29654cc208939d684071d5725dd1ad1f3e5d1733",
-	            "reference": "29654cc208939d684071d5725dd1ad1f3e5d1733",
+                "url": "https://api.github.com/repos/phar-io/manifest/zipball/29654cc208939d684071d5725dd1ad1f3e5d1733",
+                "reference": "29654cc208939d684071d5725dd1ad1f3e5d1733",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "ext-phar": "*",
-	            "phar-io/version": "2.0.0",
+                "phar-io/version": "2.0.0",
                 "php": "^5.6 || ^7.0"
             },
             "type": "library",
@@ -162,20 +162,20 @@
                 }
             ],
             "description": "Component for reading phar.io manifest information from a PHP Archive (PHAR)",
-	        "time": "2018-06-23T10:38:44+00:00"
+            "time": "2018-06-23T10:38:44+00:00"
         },
         {
             "name": "phar-io/version",
-	        "version": "2.0.0",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phar-io/version.git",
-	            "reference": "872340c7caa93bc4a2ce20d267498f8e578c856b"
+                "reference": "872340c7caa93bc4a2ce20d267498f8e578c856b"
             },
             "dist": {
                 "type": "zip",
-	            "url": "https://api.github.com/repos/phar-io/version/zipball/872340c7caa93bc4a2ce20d267498f8e578c856b",
-	            "reference": "872340c7caa93bc4a2ce20d267498f8e578c856b",
+                "url": "https://api.github.com/repos/phar-io/version/zipball/872340c7caa93bc4a2ce20d267498f8e578c856b",
+                "reference": "872340c7caa93bc4a2ce20d267498f8e578c856b",
                 "shasum": ""
             },
             "require": {
@@ -209,7 +209,7 @@
                 }
             ],
             "description": "Library for handling version information and constraints",
-	        "time": "2018-06-23T10:30:07+00:00"
+            "time": "2018-06-23T10:30:07+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -318,12 +318,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/TypeResolver.git",
-                "reference": "6e17163fca40eaa8ca76dee8be8f3856a3d40bb7"
+                "reference": "6d8a0d18db8fcdcf900e84e9d4c40836e9096a38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/6e17163fca40eaa8ca76dee8be8f3856a3d40bb7",
-                "reference": "6e17163fca40eaa8ca76dee8be8f3856a3d40bb7",
+                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/6d8a0d18db8fcdcf900e84e9d4c40836e9096a38",
+                "reference": "6d8a0d18db8fcdcf900e84e9d4c40836e9096a38",
                 "shasum": ""
             },
             "require": {
@@ -355,7 +355,8 @@
                     "email": "me@mikevanriel.com"
                 }
             ],
-            "time": "2018-06-14T16:15:07+00:00"
+            "description": "A PSR-5 based resolver of Class names, Types and Structural Element Names",
+            "time": "2018-07-02T19:36:08+00:00"
         },
         {
             "name": "phpspec/prophecy",
@@ -675,12 +676,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-	            "reference": "11d92ae06224f98e406bcb626787fe56a41a874b"
+                "reference": "274218518ae6f02cb1f778d05083973dc15cf39c"
             },
             "dist": {
                 "type": "zip",
-	            "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/11d92ae06224f98e406bcb626787fe56a41a874b",
-	            "reference": "11d92ae06224f98e406bcb626787fe56a41a874b",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/274218518ae6f02cb1f778d05083973dc15cf39c",
+                "reference": "274218518ae6f02cb1f778d05083973dc15cf39c",
                 "shasum": ""
             },
             "require": {
@@ -691,8 +692,8 @@
                 "ext-mbstring": "*",
                 "ext-xml": "*",
                 "myclabs/deep-copy": "^1.7",
-	            "phar-io/manifest": "^1.0.2",
-	            "phar-io/version": "^2.0",
+                "phar-io/manifest": "^1.0.2",
+                "phar-io/version": "^2.0",
                 "php": "^7.1",
                 "phpspec/prophecy": "^1.7",
                 "phpunit/php-code-coverage": "^6.0.7",
@@ -751,7 +752,7 @@
                 "testing",
                 "xunit"
             ],
-	        "time": "2018-06-25T11:48:41+00:00"
+            "time": "2018-07-03T06:42:17+00:00"
         },
         {
             "name": "roave/security-advisories",
@@ -1141,12 +1142,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/exporter.git",
-	            "reference": "c8c4f196e32858e4448bc285e542b61a4c40d9dc"
+                "reference": "c8c4f196e32858e4448bc285e542b61a4c40d9dc"
             },
             "dist": {
                 "type": "zip",
-	            "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/c8c4f196e32858e4448bc285e542b61a4c40d9dc",
-	            "reference": "c8c4f196e32858e4448bc285e542b61a4c40d9dc",
+                "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/c8c4f196e32858e4448bc285e542b61a4c40d9dc",
+                "reference": "c8c4f196e32858e4448bc285e542b61a4c40d9dc",
                 "shasum": ""
             },
             "require": {
@@ -1200,7 +1201,7 @@
                 "export",
                 "exporter"
             ],
-	        "time": "2018-06-28T14:22:04+00:00"
+            "time": "2018-06-28T14:22:04+00:00"
         },
         {
             "name": "sebastian/global-state",
