@@ -11,3 +11,6 @@ them as the only way how to do the things.
 * [Schema](/examples/schema/index): How to work with Schema Manager.
 * [Upgrades](/examples/upgrades/index): How to create upgrade manager and make migrations
 in you application work!
+* [Workflow](/examples/workflow/index): One way how to organize your project and take control
+over git, continuous integration (testing, code review) and continuous delivery (staging, production
+release).

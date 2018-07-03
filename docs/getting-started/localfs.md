@@ -68,7 +68,7 @@ Subsystem sftp /usr/lib/ssh/sftp-server
 
 It's good to use one private key to prevent questions about SSH connection to unknown host.
 
-!> These keys are just for local use, NEVER use them on production as these are private keys.
+!> These keys are just for **local** use, **NEVER** use them on production as this is a private key.
 
 ?> **.docker/localfs/etc/ssh/ssh_host_rsa_key**
 

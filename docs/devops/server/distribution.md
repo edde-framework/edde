@@ -1,9 +1,9 @@
-# Distribution
+# Distribution {docsify-ignore-all}
 
 This question could became brutal flame, but I'll take some general stuff related to
 Docker as the starting point, which distribution could be useful for Docker host.
 
-**Some requirments are**:
+**Some key requirements are**:
 * **lightweight**: basically no configuration after (during) installation as it's not
 desirable to make some changes in the target system 
 * **modern**: because Docker sometimes could cause quite big pain in the ass, it's good
@@ -46,7 +46,7 @@ things with filesystem making maintenance much harder then for others.
 
 ## Alpine Linux
 
-**Yep**: Simple, small, secure - nothing more, no pains inside. Only things which could
+**Yep**: Simple, small, secure - nothing more, no pains included. Only things which could
 complicate things for oldschool admins are `BusyBox` and default `Ash` instead of Bash. This
 distribution is incredibly lightweight able to take from 25MB - ~100MB of ram when running
 (yes, without any services as it's intended).
@@ -56,3 +56,21 @@ but it does not have it's drawbacks; also upgrades are simple and edge runners h
 to simply switch to latest branches.   
 
 ## RancherOS
+
+**Dude, gimme that!**: If you want true Docker experience and you want to get some more
+experience setting things up, this could be a great choice. Throw away any experience from
+the original DevOps world as this is quite different system. The original idea is to have
+the system configuration less in runtime. There is one file called
+[cloud-config](https://rancher.com/docs/os/v1.2/en/configuration/) responsible for all the
+magic you need: IP address, ssh keys. Some other stuff too.
+
+So when you reinstall the system, it's enough to keep your data save, take this config file
+and you have won.
+
+You can choose different [consoles](https://rancher.com/docs/os/v1.2/en/configuration/switching-consoles/)
+(aka distro) when running, so you can even have one of previously mentioned system used.
+
+?> Using this distribution on production system could be considered a bit experimental in
+terms of experience you may need to take control over this system. In general it's recommended.
+
+**Previous**: [Index](/devops/server/index) | **Next**: [Docker Swarm](/devops/server/docker-swarm)
