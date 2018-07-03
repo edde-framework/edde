@@ -1,4 +1,5 @@
 * [Home](/)
+* [Changelog](/changelog)
 * [Getting Started](/getting-started/index)
 	* [Dockerfile](getting-started/dockerfile)
 	* [Root Filesystem](getting-started/rootfs)

@@ -24,4 +24,6 @@ is quite good host (use ).
 $ docker swarm init
 ```
 
+## Proxy network
+
 **Previous**: [Index](/getting-started/index) | **Next**: [Dockerfile](/getting-started/dockerfile)

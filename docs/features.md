@@ -21,6 +21,8 @@ it's own concepts. And because of concepts whole framework is simple and clear; 
 already made (for example no package splitting or no [ORM](/edde/orm) implementation). Also formally code
 has quite high grade based on different tools with code insight.
 
+> For more talk about concepts framework is using, you can see [Concepts](/ideas) and [Principles](/principles).
+
 ## Iterations
 
 Because there is basically no backward-compatibility contract, Edde is usually learning from it's conceptual

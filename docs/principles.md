@@ -1,5 +1,7 @@
 # Principles
 
+**Related**: [Concepts](/ideas)
+
 There are several principles used in Edde to keep framework in some shape. They're selected by experience,
 you can use different approach but ones described here are in line with philosophy of Edde.
 

@@ -1,5 +1,7 @@
 # Concepts
 
+**Related**: [Principles](/principles)
+
 Edde is built around key set of concepts more than relying on repeating code found all over the internet.
 This article explains some decisions made to keep life a bit easier despite it could be strange on the first
 look. It itsn't :blush: !
