@@ -4,9 +4,18 @@ Edde is built around key set of concepts more than relying on repeating code fou
 This article explains some decisions made to keep life a bit easier despite it could be strange on the first
 look. It itsn't :blush: !
 
-?> Important note about concepts: Edde is trying to use some pieces of design patterns, but also it makes some
+> Important note about concepts: Edde is trying to use some pieces of design patterns, but also it makes some
 choices between them based on good practices or just on experience. Despite it's quite high quality, Edde is
 not **the best** framework ever as there are plenty of things continually evolving and improving.
+
+## Read-first Code
+
+Even sometimes there are some pieces of code which are a bit less readable (the kind of "hacky code"), codebase in
+general aims to be clear for reading without any strange rules like `80` or `120` character limit as this involves
+a lot of strange pieces of code making reading much harder.
+
+> There are some arguments for code-reviews and other tools, but who cares in the age of wide-screens to cut source
+code to some synthetic limit of A4 paper. In general you'll see code much longer than any diff or code review.
 
 ## Environments
 
@@ -15,7 +24,7 @@ in a traditional way. Usually it's enough to use environment variables to provid
 build or startup of [Docker](/docker) as it's much simpler, than to fight with different files on different platforms and 
 stages.
 
-?> **Recommendation**: If you are not familiar with [Docker](/docker), please read the piece of docs here or see
+> **Recommendation**: If you are not familiar with [Docker](/docker), please read the piece of docs here or see
 [official documentation](https://docs.docker.com/) as Docker is simplest way how to run any kind of application and
 it will be used through this documentation. 
 
@@ -39,7 +48,7 @@ A more can be found in article about [Container](/edde/container) but in short E
 than injects by a method. This is prevention of constructor hell and also inject method could be simply moved
 to a trait and than reused by one line of code.
 
-?> To keep things clear and simple, it's useful to create trait per service you use in you application which will contain
+> To keep things clear and simple, it's useful to create trait per service you use in you application which will contain
 property and inject method; this has initial drawback as for one service it's necessary to create interface, implementation,
 register it to `loader.php` and make a trait, but it will lead to much more clear code.
 
@@ -49,7 +58,7 @@ General article is available [here](/edde/configurators); Edde is using deferred
 deferred time of service configuration. That's reason for `Configurators` which are responsible for service configuration
 on request.
 
-?> This mechanism is useful when you want to create one service, but it's not necessary to create and setup whole tree of
+> This mechanism is useful when you want to create one service, but it's not necessary to create and setup whole tree of
 services: for example, you have service working with `Storage`, but creation of that service will not make a connection to
 database before you actually "touch" storage. 
 
@@ -61,7 +70,7 @@ thing out there. Main reason was to use one service through whole application an
 can do logging to database, file or any kind of storage and simply enable/disable this logger in any environment without touching
 code. 
 
-?> Even it could be similar to other products, simple log service through whole application based on tags is quite powerful
+> Even it could be similar to other products, simple log service through whole application based on tags is quite powerful
 as it's not necessary to mess up with container to provide individual loggers to different parts of the application.
 
 ## Backend Only
@@ -76,7 +85,7 @@ generation) to provide server-side rendering.
 
 Yo, no session support too.
 
-?> Hard decision made by experience in the field: frontend stuff does not belong to backend, a lot of things is much more easier
+> Hard decision made by experience in the field: frontend stuff does not belong to backend, a lot of things is much more easier
 without messing with them on backend.
 
 ## No Schemas
@@ -85,7 +94,7 @@ Sometimes framework tend to force users to use their's internal Entities, schema
 This was quite hard to solve, but Edde in general doesn't do this. Even it's really simple to create [Schema](/edde/schema) and extend it,
 Edde does not provide any; better is good quality documentation than some strangely prepared schemas.  
 
-?> The original attempts to use Entities or Schemas defined by framework leaded to some edge situations forced user to copy-paste
+> The original attempts to use Entities or Schemas defined by framework leaded to some edge situations forced user to copy-paste
 original entity and made some modification breaking whole concept. That's reason for this decision - user should provide his own
 implementation of data model. 
 
@@ -100,5 +109,5 @@ leading to some crappy code around.
 
 Concrete arguments could be found [here](/psr).
 
-?> Even it could be considered as a nice attempt to make some stuff around PHP and create some compatibility layer, dependency on
+> Even it could be considered as a nice attempt to make some stuff around PHP and create some compatibility layer, dependency on
 some kind of "authority" with some people defining theirs stuff based on different experience and requirements is not a good idea.
