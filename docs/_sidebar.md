@@ -8,6 +8,7 @@
 	* [Backend](/getting-started/backend)
 	* [Startup](/getting-started/startup)
 * [Core Ideas](/ideas)
+* [Principles](/principles)
 * [Features](/features)
 * [Examples](/examples/index)
 	* [Schema](/examples/schema/index)

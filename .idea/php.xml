@@ -32,6 +32,10 @@
       <path value="$PROJECT_DIR$/lib/phpunit/php-file-iterator" />
       <path value="$PROJECT_DIR$/lib/phpunit/php-code-coverage" />
       <path value="$PROJECT_DIR$/lib/phpunit/phpunit-mock-objects" />
+      <path value="$PROJECT_DIR$/lib/myclabs/php-enum" />
+      <path value="$PROJECT_DIR$/lib/graphaware/neo4j-common" />
+      <path value="$PROJECT_DIR$/lib/graphaware/neo4j-bolt" />
+      <path value="$PROJECT_DIR$/lib/symfony/event-dispatcher" />
     </include_path>
   </component>
   <component name="PhpInterpreters">
@@ -355,11 +359,7 @@
   </component>
   <component name="PhpProjectServersManager">
     <servers>
-      <server host="docker" id="4740c493-4821-4990-b19e-1758bef2d2f2" name="edde" use_path_mappings="true">
-        <path_mappings>
-          <mapping local-root="$PROJECT_DIR$" remote-root="/edde" />
-        </path_mappings>
-      </server>
+      <server host="docker" id="4740c493-4821-4990-b19e-1758bef2d2f2" name="edde" use_path_mappings="true" />
     </servers>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
