@@ -6,7 +6,6 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Reflection\ReflectionException;
-	use Edde\Common\Container\AbstractFactory;
 	use Edde\Common\Container\Dependency;
 	use Edde\Common\Reflection\ReflectionParameter;
 	use Edde\Common\Reflection\ReflectionUtils;

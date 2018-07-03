@@ -3,7 +3,7 @@
 
 	namespace Edde\Api\Html;
 
-	use Edde\Api\Control\ControlException;
+	use Edde\Api\EddeException;
 
-	class HtmlException extends ControlException {
+	class HtmlException extends EddeException {
 	}

@@ -3,13 +3,13 @@
 
 	namespace Edde\Common\Store;
 
-	use Edde\Api\Lock\LazyLockManagerTrait;
+	use Edde\Api\Lock\Inject\LockManager;
 	use Edde\Api\Store\IStore;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	abstract class AbstractStore extends Object implements IStore {
-		use LazyLockManagerTrait;
+		use LockManager;
 		use ConfigurableTrait;
 
 		/**

@@ -3,17 +3,16 @@
 
 	namespace Edde\Common\Database;
 
-	use Edde\Api\Database\DriverException;
+	use Edde\Api\Database\Exception\DriverException;
 	use Edde\Api\Database\IDriver;
-	use Edde\Api\Database\LazyDsnTrait;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * Common stuff for database driver implementation.
 	 */
 	abstract class AbstractDriver extends Object implements IDriver {
-		use LazyDsnTrait;
+		use \Edde\Api\Database\Inject\Dsn;
 		use ConfigurableTrait;
 		/**
 		 * @var string[]

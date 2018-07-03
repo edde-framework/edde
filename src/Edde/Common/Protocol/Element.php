@@ -8,6 +8,7 @@
 	use Edde\Api\Protocol\IElement;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Node\NodeIterator;
+	use Edde\Common\Protocol\Exception\ReferenceException;
 
 	class Element extends Node implements IElement {
 		/**
@@ -70,7 +71,11 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function setReference(IElement $element): IElement {
+		public function setReference(IElement $element = null): IElement {
+			if ($element === null) {
+				$this->attributeList->remove('reference');
+				return $this;
+			}
 			$this->setAttribute('reference', $element->getId());
 			return $this;
 		}
@@ -96,7 +101,7 @@
 		 * @inheritdoc
 		 */
 		public function data(array $data): IElement {
-			$this->putMeta($data);
+			$this->putMetaList($data);
 			return $this;
 		}
 

@@ -7,7 +7,7 @@
 	use Edde\Api\Resource\IResource;
 	use Edde\Api\Resource\IResourceList;
 	use Edde\Common\File\File;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	class ResourceList extends Object implements IResourceList {
 		/**

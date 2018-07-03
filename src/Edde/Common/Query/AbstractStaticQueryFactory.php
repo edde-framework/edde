@@ -5,13 +5,13 @@
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\INodeQuery;
+	use Edde\Api\Query\Exception\StaticQueryException;
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Query\IStaticQuery;
 	use Edde\Api\Query\IStaticQueryFactory;
-	use Edde\Api\Query\StaticQueryException;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Node\NodeQuery;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 	use Edde\Common\Strings\StringUtils;
 	use ReflectionClass;
 	use ReflectionMethod;
@@ -56,7 +56,7 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws StaticQueryException
+		 * @throws \Edde\Api\Query\Exception\StaticQueryException
 		 */
 		public function create(IQuery $query) {
 			return $this->fragment($query->getNode());
@@ -64,11 +64,11 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws StaticQueryException
+		 * @throws \Edde\Api\Query\Exception\StaticQueryException
 		 */
 		public function fragment(INode $node) {
 			if (isset($this->factoryList[$node->getName()]) === false) {
-				throw new StaticQueryException(sprintf('Unsuported fragment type [%s].', $node->getName()));
+				throw new \Edde\Api\Query\Exception\StaticQueryException(sprintf('Unsuported fragment type [%s].', $node->getName()));
 			}
 			return $this->factoryList[$node->getName()]($node);
 		}
@@ -113,7 +113,7 @@
 		 * @param INode $node
 		 *
 		 * @return StaticQuery
-		 * @throws StaticQueryException
+		 * @throws \Edde\Api\Query\Exception\StaticQueryException
 		 */
 		protected function formatUpdateQuery(INode $node) {
 			$parameterList = [];
@@ -138,7 +138,7 @@
 		 * @param INodeQuery $nodeQuery
 		 *
 		 * @return IStaticQuery
-		 * @throws StaticQueryException
+		 * @throws \Edde\Api\Query\Exception\StaticQueryException
 		 */
 		protected function formatWhere(INode $node, INodeQuery $nodeQuery = null) {
 			$nodeQuery = $nodeQuery ?: $this->whereNodeQuery;
@@ -201,7 +201,7 @@
 		 * @param INode $node
 		 *
 		 * @return StaticQuery
-		 * @throws StaticQueryException
+		 * @throws \Edde\Api\Query\Exception\StaticQueryException
 		 */
 		protected function formatSelectQuery(INode $node) {
 			$selectList = $this->formatSelect($node);
@@ -234,7 +234,7 @@
 		 * @param INode $node
 		 *
 		 * @return StaticQuery
-		 * @throws StaticQueryException
+		 * @throws \Edde\Api\Query\Exception\StaticQueryException
 		 */
 		protected function formatSelect(INode $node) {
 			$parameterList = [];
@@ -270,7 +270,7 @@
 		 * @param INode $node
 		 *
 		 * @return StaticQuery
-		 * @throws StaticQueryException
+		 * @throws \Edde\Api\Query\Exception\StaticQueryException
 		 */
 		protected function formatOrder(INode $node) {
 			$parameterList = [];
@@ -344,7 +344,7 @@
 		 * @param INode $node
 		 *
 		 * @return StaticQuery
-		 * @throws StaticQueryException
+		 * @throws \Edde\Api\Query\Exception\StaticQueryException
 		 */
 		protected function formatWhereGroup(INode $node) {
 			return $this->formatWhereList($node->getNodeList(), true);
@@ -354,7 +354,7 @@
 		 * @param INode $node
 		 *
 		 * @return StaticQuery
-		 * @throws StaticQueryException
+		 * @throws \Edde\Api\Query\Exception\StaticQueryException
 		 */
 		protected function formatEqual(INode $node) {
 			return $this->generateOperator($node, '=');
@@ -365,7 +365,7 @@
 		 * @param string $operator
 		 *
 		 * @return StaticQuery
-		 * @throws StaticQueryException
+		 * @throws \Edde\Api\Query\Exception\StaticQueryException
 		 */
 		protected function generateOperator(INode $node, $operator) {
 			if ($node->getNodeCount() !== 2) {
@@ -390,7 +390,7 @@
 		 * @param INode $node
 		 *
 		 * @return StaticQuery
-		 * @throws StaticQueryException
+		 * @throws \Edde\Api\Query\Exception\StaticQueryException
 		 */
 		protected function formatNotEqual(INode $node) {
 			return $this->generateOperator($node, '!=');
@@ -400,7 +400,7 @@
 		 * @param INode $node
 		 *
 		 * @return StaticQuery
-		 * @throws StaticQueryException
+		 * @throws \Edde\Api\Query\Exception\StaticQueryException
 		 */
 		protected function formatGreaterThan(INode $node) {
 			return $this->generateOperator($node, '>');
@@ -410,7 +410,7 @@
 		 * @param INode $node
 		 *
 		 * @return StaticQuery
-		 * @throws StaticQueryException
+		 * @throws \Edde\Api\Query\Exception\StaticQueryException
 		 */
 		protected function formatGreaterThanEqual(INode $node) {
 			return $this->generateOperator($node, '>=');
@@ -430,7 +430,7 @@
 		 * @param INode $node
 		 *
 		 * @return StaticQuery
-		 * @throws StaticQueryException
+		 * @throws \Edde\Api\Query\Exception\StaticQueryException
 		 */
 		protected function formatLesserThanEqual(INode $node) {
 			return $this->generateOperator($node, '<=');
@@ -440,11 +440,11 @@
 		 * @param INode $node
 		 *
 		 * @return StaticQuery
-		 * @throws StaticQueryException
+		 * @throws \Edde\Api\Query\Exception\StaticQueryException
 		 */
 		protected function formatIsNull(INode $node) {
 			if ($node->getNodeCount() !== 1) {
-				throw new StaticQueryException('Is Null must have exactly one child.');
+				throw new \Edde\Api\Query\Exception\StaticQueryException('Is Null must have exactly one child.');
 			}
 			$alpha = $this->fragment($node->getNodeList()[0]);
 			return new StaticQuery($alpha->getQuery() . ' IS NULL', $alpha->getParameterList());
@@ -454,11 +454,11 @@
 		 * @param INode $node
 		 *
 		 * @return StaticQuery
-		 * @throws StaticQueryException
+		 * @throws \Edde\Api\Query\Exception\StaticQueryException
 		 */
 		protected function formatIsNotNull(INode $node) {
 			if ($node->getNodeCount() !== 1) {
-				throw new StaticQueryException('Is Not Null must have exactly one child.');
+				throw new \Edde\Api\Query\Exception\StaticQueryException('Is Not Null must have exactly one child.');
 			}
 			$alpha = $this->fragment($node->getNodeList()[0]);
 			return new StaticQuery($alpha->getQuery() . ' IS NOT NULL', $alpha->getParameterList());

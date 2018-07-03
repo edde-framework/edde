@@ -4,7 +4,7 @@
 	namespace Edde\Common\Query;
 
 	use Edde\Api\Query\IStaticQuery;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	class StaticQuery extends Object implements IStaticQuery {
 		/**

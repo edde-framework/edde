@@ -3,11 +3,11 @@
 
 	namespace Edde\Common\Lock;
 
-	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Container\Inject\Container;
 	use Edde\Api\Lock\ILock;
 
 	class FileLockManager extends AbstractLockManager {
-		use LazyContainerTrait;
+		use Container;
 
 		/**
 		 * @inheritdoc

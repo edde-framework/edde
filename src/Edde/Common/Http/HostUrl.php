@@ -14,7 +14,7 @@
 		 * @return IHostUrl
 		 * @throws UrlException
 		 */
-		static public function createHostUrl(): IHostUrl {
+		static public function factory(): IHostUrl {
 			return self::create(sprintf('%s://%s:%s', $_SERVER['REQUEST_SCHEME'], $_SERVER['SERVER_ADDR'], $_SERVER['SERVER_PORT']));
 		}
 	}

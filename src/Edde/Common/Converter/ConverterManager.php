@@ -9,7 +9,7 @@
 	use Edde\Api\Converter\IConverter;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * Default implementation of a conversion manager.

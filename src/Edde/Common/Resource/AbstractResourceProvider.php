@@ -5,7 +5,7 @@
 
 	use Edde\Api\Resource\IResourceProvider;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	abstract class AbstractResourceProvider extends Object implements IResourceProvider {
 		use ConfigurableTrait;

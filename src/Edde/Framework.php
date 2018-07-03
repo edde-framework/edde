@@ -3,7 +3,7 @@
 
 	namespace Edde;
 
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * Information about framework hidden in this class.
@@ -24,7 +24,7 @@
 		 * @return string
 		 */
 		public function getVersion() {
-			return '3.1.0.0';
+			return '4.0.0.0';
 		}
 
 		/**
@@ -33,9 +33,14 @@
 		 * @return string
 		 */
 		public function getCodename() {
-			return 'The Pooping Unicorn';
+			return 'The Experimental Rush';
 		}
 
+		/**
+		 * return full framework version
+		 *
+		 * @return string
+		 */
 		public function __toString() {
 			return $this->getVersionString();
 		}

@@ -5,7 +5,7 @@
 
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\INodeQuery;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 	use Iterator;
 
 	class NodeQuery extends Object implements INodeQuery {
@@ -70,6 +70,7 @@
 		 */
 		static public function last(INode $node, $query, $default = null) {
 			$n = null;
+			/** @noinspection PhpStatementHasEmptyBodyInspection */
 			foreach (self::node($node, $query) as $n) {
 				;
 			}

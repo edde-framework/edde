@@ -5,7 +5,7 @@
 
 	use Edde\Api\File\IDirectory;
 	use Edde\Api\File\IDirectoryIterator;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	class DirectoryIterator extends Object implements IDirectoryIterator {
 		/**

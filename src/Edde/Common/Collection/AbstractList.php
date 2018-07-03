@@ -5,7 +5,7 @@
 
 	use ArrayIterator;
 	use Edde\Api\Collection\IList;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * This list implementation is abstract because it should be not possible to use
@@ -38,6 +38,14 @@
 		 */
 		public function put(array $array): IList {
 			$this->list = $array;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function append(array $array): IList {
+			$this->list = array_merge($this->list, $array);
 			return $this;
 		}
 

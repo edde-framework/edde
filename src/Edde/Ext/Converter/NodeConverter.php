@@ -5,7 +5,7 @@
 
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Converter\IContent;
-	use Edde\Api\Converter\LazyConverterManagerTrait;
+	use Edde\Api\Converter\Inject\ConverterManager;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
 	use Edde\Common\Converter\AbstractConverter;
@@ -13,7 +13,7 @@
 	use Edde\Common\Node\NodeUtils;
 
 	class NodeConverter extends AbstractConverter {
-		use LazyConverterManagerTrait;
+		use ConverterManager;
 
 		public function __construct() {
 			$this->register([

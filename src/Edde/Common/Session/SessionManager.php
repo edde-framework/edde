@@ -3,7 +3,6 @@
 
 	namespace Edde\Common\Session;
 
-	use Edde\Api\Http\LazyHttpResponseTrait;
 	use Edde\Api\Session\ISession;
 	use Edde\Api\Session\ISessionManager;
 	use Edde\Api\Session\LazyFingerprintTrait;
@@ -11,14 +10,13 @@
 	use Edde\Api\Session\SessionException;
 	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Http\HttpUtils;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * Session manager is... session managing tool ;). It's responsible for whole session lifetime and section
 	 * assignment (and collision preventing).
 	 */
 	class SessionManager extends Object implements ISessionManager {
-		use LazyHttpResponseTrait;
 		use LazySessionDirectoryTrait;
 		use LazyFingerprintTrait;
 		use ConfigurableTrait;

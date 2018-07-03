@@ -18,24 +18,9 @@
 		 */
 		protected $configuratorList = [];
 
-		/**
-		 * @param IFactory[] $factoryList
-		 *
-		 * @return $this
-		 */
-		public function setFactoryList(array $factoryList) {
+		public function __construct(array $factoryList, array $configuratorList) {
 			$this->factoryList = $factoryList;
-			return $this;
-		}
-
-		/**
-		 * @param string[]|IConfigurator[] $configuratorList
-		 *
-		 * @return $this
-		 */
-		public function setConfiguratorList(array $configuratorList) {
 			$this->configuratorList = $configuratorList;
-			return $this;
 		}
 
 		/**

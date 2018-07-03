@@ -3,10 +3,12 @@
 
 	namespace Edde\Api\Xml;
 
+	use Edde\Api\Config\IConfigurable;
+
 	/**
 	 * Implementation of xml handler.
 	 */
-	interface IXmlHandler {
+	interface IXmlHandler extends IConfigurable {
 		/**
 		 * @param string $text
 		 */

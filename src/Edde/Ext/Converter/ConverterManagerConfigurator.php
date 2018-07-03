@@ -3,28 +3,34 @@
 
 	namespace Edde\Ext\Converter;
 
-	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Container\Exception\ContainerException;
+	use Edde\Api\Container\Exception\FactoryException;
+	use Edde\Api\Container\Inject\Container;
 	use Edde\Api\Converter\IConverterManager;
 	use Edde\Common\Config\AbstractConfigurator;
-	use Edde\Common\Translator\Dictionary\CsvDictionaryConverter;
 	use Edde\Ext\Protocol\ElementConverter;
-	use Edde\Ext\Template\TemplateConverter;
 
 	class ConverterManagerConfigurator extends AbstractConfigurator {
-		use LazyContainerTrait;
+		use Container;
 
 		/**
 		 * @param IConverterManager $instance
+		 *
+		 * @throws ContainerException
+		 * @throws FactoryException
 		 */
 		public function configure($instance) {
-			$instance->registerConverter($this->container->create(ExceptionConverter::class));
-			$instance->registerConverter($this->container->create(TemplateConverter::class));
-			$instance->registerConverter($this->container->create(JsonConverter::class));
-			$instance->registerConverter($this->container->create(NodeConverter::class));
-			$instance->registerConverter($this->container->create(PhpConverter::class));
-			$instance->registerConverter($this->container->create(CsvDictionaryConverter::class));
-			$instance->registerConverter($this->container->create(XmlConverter::class));
-			$instance->registerConverter($this->container->create(ElementConverter::class));
-			$instance->registerConverter($this->container->create(PostConverter::class));
+			static $converterList = [
+				ExceptionConverter::class,
+				JsonConverter::class,
+				NodeConverter::class,
+				PhpConverter::class,
+				XmlConverter::class,
+				ElementConverter::class,
+				PostConverter::class,
+			];
+			foreach ($converterList as $converter) {
+				$instance->registerConverter($this->container->create($converter, [], __METHOD__));
+			}
 		}
 	}

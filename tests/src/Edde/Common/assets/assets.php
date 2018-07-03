@@ -1,144 +1,103 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Edde\Test;
+	namespace Edde\Test {
 
-	use Edde\Api\Protocol\IElement;
-	use Edde\Api\Store\IStore;
-	use Edde\Common\Application\AbstractContext;
-	use Edde\Common\Object;
-	use Edde\Common\Protocol\Request\AbstractRequestHandler;
-	use Edde\Common\Protocol\Request\Response;
-	use Edde\Common\Session\AbstractFingerprint;
-	use Edde\Common\Store\AbstractStore;
-	use Edde\Ext\Protocol\RequestServiceConfigurator;
+		use Edde\Api\Router\IRequest;
+		use Edde\Common\Object\Object;
+		use Edde\Common\Request\Message;
+		use Edde\Common\Router\AbstractRouter;
+		use Edde\Common\Router\Request;
 
-	class FooObject extends Object {
-		public $foo = 'bar';
-	}
+		class FooObject extends Object {
+			public $foo = 'foo';
 
-	class BarObject extends Object {
-		public $bar = 'foo';
-		/**
-		 * @var FooObject
-		 */
-		protected $foo;
-
-		/**
-		 * @param FooObject $foo
-		 */
-		public function __construct(FooObject $foo) {
-			$this->foo = $foo;
+			public function getMoo() {
+				return 'moo';
+			}
 		}
 
-		public function getFoo(): FooObject {
-			return $this->foo;
-		}
-	}
+		class BarObject extends Object {
+			public $bar = 'bar';
+			public $fooObject;
 
-	class FooNotCacheable extends Object {
-	}
-
-	class CompositeObject extends Object {
-		/**
-		 * @var FooObject
-		 */
-		protected $foo;
-		/**
-		 * @var BarObject
-		 */
-		protected $bar;
-
-		/**
-		 * @param FooObject $foo
-		 * @param BarObject $bar
-		 */
-		public function __construct(FooObject $foo, BarObject $bar) {
-			$this->foo = $foo;
-			$this->bar = $bar;
+			public function __construct(FooObject $fooObject) {
+				$this->fooObject = $fooObject;
+			}
 		}
 
-		public function getFoo(): FooObject {
-			return $this->foo;
+		class FooBarObject extends Object {
+			/**
+			 * @var FooObject
+			 */
+			public $fooObject;
+			/**
+			 * @var BarObject
+			 */
+			public $barObject;
+
+			public function __construct(FooObject $fooObject, BarObject $barObject) {
+				$this->fooObject = $fooObject;
+				$this->barObject = $barObject;
+			}
 		}
 
-		public function getBar(): BarObject {
-			return $this->bar;
-		}
-	}
-
-	class ExecutableService extends Object {
-		public function noResponse() {
-		}
-
-		public function method(IElement $request) {
-			return (new Response())->data(['got-this' => $request->getMeta('foo')]);
+		class AbstractDependencyObject extends Object {
+			/**
+			 * @var FooObject
+			 */
+			public $fooObject;
+			/**
+			 * @var BarObject
+			 */
+			public $barObject;
 		}
 
-		public function doThis(IElement $element) {
-			return $this->method($element);
-		}
-	}
-
-	class TestRequestHandler extends AbstractRequestHandler {
-		/**
-		 * @inheritdoc
-		 */
-		public function canHandle(IElement $element): bool {
-			return $element->getAttribute('request') === 'testquest';
+		class ConstructorDependencyObject extends AbstractDependencyObject {
+			public function __construct(FooObject $fooObject, BarObject $barObject) {
+				$this->fooObject = $fooObject;
+				$this->barObject = $barObject;
+			}
 		}
 
-		/**
-		 * @inheritdoc
-		 */
-		public function execute(IElement $element) {
-			return (new Response('foobar'))->data(['a' => 'b']);
+		class InjectDependencyObject extends AbstractDependencyObject {
+			public function injectFooObject(FooObject $fooObject) {
+				$this->fooObject = $fooObject;
+			}
+
+			public function injectBarObject(BarObject $barObject) {
+				$this->barObject = $barObject;
+			}
+		}
+
+		class AutowireDependencyObject extends AbstractDependencyObject {
+			public function lazyFooObject(FooObject $fooObject) {
+				$this->fooObject = $fooObject;
+			}
+
+			public function lazyBarObject(BarObject $barObject) {
+				$this->barObject = $barObject;
+			}
+		}
+
+		class TestRouter extends AbstractRouter {
+			public function canHandle(): bool {
+				return true;
+			}
+
+			public function createRequest(): IRequest {
+				return new Request(new Message('foo.foo-service/foo-action'));
+			}
 		}
 	}
 
-	class TestRequestServiceConfigurator extends RequestServiceConfigurator {
-		public function configure($instance) {
-			parent::configure($instance);
-			$instance->registerRequestHandler($this->container->create(TestRequestHandler::class));
-		}
-	}
+	namespace Foo {
 
-	class TestyFingerprint extends AbstractFingerprint {
-		public function fingerprint() {
-			return 'boo';
-		}
-	}
+		use Edde\Api\Protocol\IElement;
 
-	class TestContext extends AbstractContext {
-		/**
-		 * @inheritdoc
-		 */
-		public function cascade(string $delimiter, string $name = null): array {
-			return [
-				'Edde' . $delimiter . $name,
-				'Edde' . $delimiter . 'Test' . ($name ? $delimiter . $name : ''),
-			];
-		}
-	}
-
-	class DummyStore extends AbstractStore {
-		public function set(string $name, $value): IStore {
-			return $this;
-		}
-
-		public function has(string $name): bool {
-			return false;
-		}
-
-		public function get(string $name, $default = null) {
-			return $default;
-		}
-
-		public function remove(string $name): IStore {
-			return $this;
-		}
-
-		public function drop(): IStore {
-			return $this;
+		class FooService {
+			public function fooAction(IElement $element) {
+				$element->setMeta('done', true);
+			}
 		}
 	}

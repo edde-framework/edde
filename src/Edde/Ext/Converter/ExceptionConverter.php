@@ -4,12 +4,9 @@
 	namespace Edde\Ext\Converter;
 
 	use Edde\Api\Converter\IContent;
-	use Edde\Api\Http\LazyHttpResponseTrait;
 	use Edde\Common\Converter\AbstractConverter;
 
 	class ExceptionConverter extends AbstractConverter {
-		use LazyHttpResponseTrait;
-
 		public function __construct() {
 			$this->register([
 				'exception',

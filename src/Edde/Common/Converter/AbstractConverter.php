@@ -6,7 +6,7 @@
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Converter\IContent;
 	use Edde\Api\Converter\IConverter;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * Common stuff for converter implementation.

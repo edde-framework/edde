@@ -5,7 +5,7 @@
 
 	use Edde\Api\Schema\ILink;
 	use Edde\Api\Schema\IProperty;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	class Link extends Object implements ILink {
 		/**

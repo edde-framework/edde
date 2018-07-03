@@ -3,25 +3,26 @@
 
 	namespace Edde\Ext\Protocol;
 
-	use Edde\Api\Container\LazyContainerTrait;
-	use Edde\Api\Protocol\Request\IRequestService;
+	use Edde\Api\Container\Exception\ContainerException;
+	use Edde\Api\Container\Exception\FactoryException;
+	use Edde\Api\Container\Inject\Container;
+	use Edde\Api\Request\IRequestService;
 	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Ext\Protocol\Request\ClassRequestHandler;
-	use Edde\Ext\Protocol\Request\ContainerRequestHandler;
-	use Edde\Ext\Protocol\Request\ControlRequestHandler;
-	use Edde\Ext\Protocol\Request\InstanceRequestHandler;
+	use Edde\Ext\Protocol\Request\SimpleRequestHandler;
 
 	class RequestServiceConfigurator extends AbstractConfigurator {
-		use LazyContainerTrait;
+		use Container;
 
 		/**
 		 * @param IRequestService $instance
+		 *
+		 * @throws ContainerException
+		 * @throws FactoryException
 		 */
 		public function configure($instance) {
 			parent::configure($instance);
+			$instance->registerRequestHandler($this->container->create(SimpleRequestHandler::class, [], __METHOD__));
 			$instance->registerRequestHandler($this->container->create(ClassRequestHandler::class, [], __METHOD__));
-			$instance->registerRequestHandler($this->container->create(ContainerRequestHandler::class, [], __METHOD__));
-			$instance->registerRequestHandler($this->container->create(ControlRequestHandler::class, [], __METHOD__));
-			$instance->registerRequestHandler($this->container->create(InstanceRequestHandler::class, [], __METHOD__));
 		}
 	}

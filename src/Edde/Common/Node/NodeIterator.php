@@ -7,7 +7,7 @@
 	use Edde\Api\Node\IAbstractNode;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Node\NodeException;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 	use RecursiveIterator;
 	use RecursiveIteratorIterator;
 

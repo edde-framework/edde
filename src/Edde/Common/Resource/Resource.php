@@ -8,7 +8,7 @@
 	use Edde\Api\Resource\ResourceException;
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\File\FileUtils;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * Abstract definition of some "resource".

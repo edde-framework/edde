@@ -3,18 +3,23 @@
 
 	namespace Edde\Ext\Protocol;
 
-	use Edde\Api\Container\LazyContainerTrait;
-	use Edde\Api\Protocol\Event\IEventBus;
+	use Edde\Api\Container\Exception\ContainerException;
+	use Edde\Api\Container\Exception\FactoryException;
+	use Edde\Api\Container\Inject\Container;
+	use Edde\Api\Event\IEventBus;
 	use Edde\Api\Protocol\IProtocolService;
-	use Edde\Api\Protocol\Request\IRequestService;
+	use Edde\Api\Request\IRequestService;
 	use Edde\Common\Config\AbstractConfigurator;
 	use Edde\Common\Protocol\PacketProtocolHandler;
 
 	class ProtocolServiceConfigurator extends AbstractConfigurator {
-		use LazyContainerTrait;
+		use Container;
 
 		/**
 		 * @param IProtocolService $instance
+		 *
+		 * @throws ContainerException
+		 * @throws FactoryException
 		 */
 		public function configure($instance) {
 			$instance->registerProtocolHandler($this->container->create(IEventBus::class));

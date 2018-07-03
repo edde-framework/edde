@@ -8,7 +8,7 @@
 	interface IProtocolManager extends IConfigurable {
 		/**
 		 * queue element to be included in packet created by self::createPacket();
-		 * this method  is useful to collect elements around the world and then send
+		 * this method is useful to collect elements around the world and then send
 		 * them to somewhere (e.g. client)
 		 *
 		 * @param IElement    $element
@@ -32,12 +32,12 @@
 		 * @param string|null   $store
 		 * @param IElement|null $reference
 		 *
-		 * @return IPacket
+		 * @return IElement
 		 */
-		public function createPacket(string $store = null, IElement $reference = null): IPacket;
+		public function createPacket(string $store = null, IElement $reference = null): IElement;
 
 		/**
-		 * execute the given element; if the element is async, it's moved to job queue
+		 * execute the given element; if the element is async, it's moved to a job queue
 		 *
 		 * @param IElement $element
 		 *

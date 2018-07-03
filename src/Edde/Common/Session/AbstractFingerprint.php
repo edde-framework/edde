@@ -4,7 +4,7 @@
 	namespace Edde\Common\Session;
 
 	use Edde\Api\Session\IFingerprint;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	abstract class AbstractFingerprint extends Object implements IFingerprint {
 	}

@@ -4,7 +4,7 @@
 	namespace Edde\Common\Database;
 
 	use Edde\Api\Database\IDsn;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	abstract class AbstractDsn extends Object implements IDsn {
 		/**
@@ -21,6 +21,7 @@
 		 * "It makes no difference anyway."
 		 *
 		 * @param string $dsn
+		 * @param array  $optionList
 		 */
 		public function __construct(string $dsn, array $optionList = []) {
 			$this->dsn = $dsn;

@@ -5,7 +5,7 @@
 
 	use Closure;
 	use Edde\Api\Reflection\ReflectionException;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 	use ReflectionClass;
 	use ReflectionFunction;
 	use ReflectionMethod;
@@ -15,7 +15,7 @@
 	 */
 	class ReflectionUtils extends Object {
 		/**
-		 * @var \ReflectionProperty[]|ReflectionClass[]|ReflectionMethod[]
+		 * @var \ReflectionProperty[]|ReflectionClass[]|ReflectionMethod[][]
 		 */
 		static protected $cache;
 

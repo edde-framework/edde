@@ -41,9 +41,9 @@
 		public function getRemoteHost();
 
 		/**
-		 * @return IRequestUrl
+		 * @return IUrl
 		 */
-		public function getRequestUrl(): IRequestUrl;
+		public function getRequestUrl(): IUrl;
 
 		/**
 		 * @return IUrl|null
@@ -54,9 +54,4 @@
 		 * @return bool
 		 */
 		public function isSecured(): bool;
-
-		/**
-		 * @return bool
-		 */
-		public function isAjax(): bool;
 	}

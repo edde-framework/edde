@@ -5,7 +5,7 @@
 
 	use Edde\Api\Schema\ICollection;
 	use Edde\Api\Schema\IProperty;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	class Collection extends Object implements ICollection {
 		/**

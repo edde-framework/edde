@@ -6,13 +6,12 @@
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Container\IFactory;
-	use Edde\Common\Container\AbstractFactory;
 	use Edde\Common\Container\Dependency;
 
 	/**
 	 * Translate the given factory into another one.
 	 *
-	 * For example ICache can be bound to ICacheManager becase it implements ICache too.
+	 * For example ICache can be bound to ICacheManager because it implements ICache too.
 	 */
 	class LinkFactory extends AbstractFactory {
 		/**

@@ -3,13 +3,10 @@
 
 	namespace Edde\Common\Query\Delete;
 
-	use Edde\Api\Config\IConfigurable;
-	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Query\AbstractQuery;
 
-	class DeleteQuery extends AbstractQuery implements IConfigurable {
-		use ConfigurableTrait;
+	class DeleteQuery extends AbstractQuery {
 		/**
 		 * @var string
 		 */

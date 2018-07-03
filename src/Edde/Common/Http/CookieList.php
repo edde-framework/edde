@@ -3,55 +3,34 @@
 
 	namespace Edde\Common\Http;
 
-	use Edde\Api\Collection\IList;
-	use Edde\Api\Http\HttpException;
 	use Edde\Api\Http\ICookie;
 	use Edde\Api\Http\ICookieList;
-	use Edde\Common\Collection\AbstractList;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * Class holding set of cookies.
 	 */
-	class CookieList extends AbstractList implements ICookieList {
+	class CookieList extends Object implements ICookieList {
 		/**
-		 * @var ICookieList
+		 * @var ICookie[]
 		 */
-		static protected $cookieList;
+		protected $cookieList = [];
 
 		/**
 		 * @inheritdoc
 		 */
-		public function addCookie(ICookie $cookie) {
-			parent::set($cookie->getName(), $cookie);
+		public function add(ICookie $cookie) {
+			$this->cookieList[] = $cookie;
 			return $this;
 		}
 
 		/**
 		 * @inheritdoc
-		 * @throws HttpException
 		 */
-
-		/** @noinspection PhpMissingParentCallCommonInspection */
-		public function set(string $name, $value): IList {
-			throw new HttpException(sprintf('Cannot directly set value [%s] to the cookie list; use [%s::addCookie()] instead.', $name, static::class));
-		}
-
-		static public function createCookieList(): ICookieList {
-			return self::$cookieList ?: self::$cookieList = self::create($_COOKIE);
-		}
-
-		/**
-		 * factory class for cookie list
-		 *
-		 * @param array $cookieList
-		 *
-		 * @return ICookieList
-		 */
-		static public function create(array $cookieList): ICookieList {
-			$self = new self();
-			foreach ($cookieList as $name => $value) {
-				$self->addCookie(new Cookie($name, $value, 0, null, null));
+		public function setupCookieList(): ICookieList {
+			foreach ($this->cookieList as $cookie) {
+				$cookie->setupCookie();
 			}
-			return $self;
+			return $this;
 		}
 	}

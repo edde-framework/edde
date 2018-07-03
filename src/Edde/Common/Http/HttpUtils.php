@@ -4,7 +4,7 @@
 	namespace Edde\Common\Http;
 
 	use Edde\Api\Http\ICookie;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 	use Edde\Common\Strings\StringException;
 	use Edde\Common\Strings\StringUtils;
 

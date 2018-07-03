@@ -48,7 +48,7 @@
 		 * @param mixed|null $instance
 		 * @param bool       $cloneable
 		 */
-		public function __construct(string $name, string $class, array $parameterList, $instance = null, bool $cloneable = false) {
+		public function __construct(string $name, string $class, array $parameterList = [], $instance = null, bool $cloneable = false) {
 			$this->name = $name;
 			$this->class = $class;
 			$this->parameterList = $parameterList;
@@ -68,7 +68,7 @@
 		 */
 		public function createDependency(IContainer $container, string $dependency = null): IDependency {
 			if ($this->instance) {
-				return new Dependency([], [], []);
+				return new Dependency();
 			}
 			return parent::createDependency($container, $this->class);
 		}
@@ -87,6 +87,9 @@
 			if ($this->instance === null) {
 				$this->instance = $container->dependency($this->instance = parent::execute($container, $this->parameterList, $dependency, $this->class), $dependency);
 			}
+			/**
+			 * immediate clone is necessary because otherwise base class could be (surprisingly) changed
+			 */
 			return $this->cloneable ? clone $this->instance : $this->instance;
 		}
 	}

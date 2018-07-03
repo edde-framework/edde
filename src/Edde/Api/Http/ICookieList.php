@@ -3,12 +3,12 @@
 
 	namespace Edde\Api\Http;
 
-	use Edde\Api\Collection\IList;
+	use Edde\Api\Config\IConfigurable;
 
 	/**
 	 * Formal interface for a cookie list implementation.
 	 */
-	interface ICookieList extends IList {
+	interface ICookieList extends IConfigurable {
 		/**
 		 * set a cookie
 		 *
@@ -16,5 +16,12 @@
 		 *
 		 * @return $this
 		 */
-		public function addCookie(ICookie $cookie);
+		public function add(ICookie $cookie);
+
+		/**
+		 * setup cookies
+		 *
+		 * @return ICookieList
+		 */
+		public function setupCookieList(): ICookieList;
 	}

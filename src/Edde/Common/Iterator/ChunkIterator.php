@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Iterator;
 
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	class ChunkIterator extends Object implements \Iterator {
 		/**

@@ -7,7 +7,7 @@
 	use Edde\Api\Query\IQuery;
 	use Edde\Api\Storage\ICollection;
 	use Edde\Api\Storage\IStorage;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * Default implementation of collection.

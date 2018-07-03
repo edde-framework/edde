@@ -3,14 +3,11 @@
 
 	namespace Edde\Common\Query\Select;
 
-	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Node\INode;
-	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Query\AbstractFragment;
 
-	class FromFragment extends AbstractFragment implements IConfigurable {
-		use ConfigurableTrait;
+	class FromFragment extends AbstractFragment {
 		/**
 		 * @var SelectQuery
 		 */

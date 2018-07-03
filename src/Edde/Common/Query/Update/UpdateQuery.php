@@ -3,15 +3,12 @@
 
 	namespace Edde\Common\Query\Update;
 
-	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Query\AbstractQuery;
 	use Edde\Common\Query\Where\WhereExpressionFragment;
 
-	class UpdateQuery extends AbstractQuery implements IConfigurable {
-		use ConfigurableTrait;
+	class UpdateQuery extends AbstractQuery {
 		/**
 		 * @var ISchema
 		 */

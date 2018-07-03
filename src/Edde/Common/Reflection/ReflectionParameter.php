@@ -4,7 +4,7 @@
 	namespace Edde\Common\Reflection;
 
 	use Edde\Api\Reflection\IReflectionParameter;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	class ReflectionParameter extends Object implements IReflectionParameter {
 		/**

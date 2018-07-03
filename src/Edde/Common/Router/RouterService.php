@@ -3,96 +3,82 @@
 
 	namespace Edde\Common\Router;
 
-	use Edde\Api\Application\IResponseHandler;
-	use Edde\Api\Application\LazyResponseManagerTrait;
-	use Edde\Api\Container\LazyContainerTrait;
-	use Edde\Api\Protocol\IElement;
+	use Edde\Api\Log\Inject\LogService;
+	use Edde\Api\Router\Exception\BadRequestException;
+	use Edde\Api\Router\IRequest;
 	use Edde\Api\Router\IRouter;
 	use Edde\Api\Router\IRouterService;
-	use Edde\Api\Router\RouterException;
-	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
-	use Edde\Common\Strings\StringUtils;
 
-	/**
-	 * Default implementation of a router service.
-	 */
-	class RouterService extends Object implements IRouterService {
-		use LazyContainerTrait;
-		use LazyResponseManagerTrait;
-		use ConfigurableTrait;
+	class RouterService extends AbstractRouter implements IRouterService {
+		use LogService;
 		/**
-		 * @var string[]
+		 * @var IRouter[]
 		 */
 		protected $routerList = [];
 		/**
-		 * @var IElement
+		 * @var IRouter
 		 */
-		protected $defaultRequest;
+		protected $router;
 		/**
-		 * @var IResponseHandler
-		 */
-		protected $defaultResponseHandler;
-		/**
-		 * @var IElement
+		 * @var IRequest
 		 */
 		protected $request;
 
 		/**
 		 * @inheritdoc
 		 */
-		public function registerRouter(string $router, array $parameterList = []): IRouterService {
-			$this->routerList[$router] = [
-				$router,
-				$parameterList,
-			];
+		public function registerRouter(IRouter $router): IRouterService {
+			$this->routerList[] = $router;
 			return $this;
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function setDefaultRequest(IElement $element, IResponseHandler $responseHandler = null): IRouterService {
-			$this->defaultRequest = $element;
-			$this->defaultResponseHandler = $responseHandler;
+		public function registerRouterList(array $routerList): IRouterService {
+			foreach ($routerList as $router) {
+				$this->registerRouter($router);
+			}
 			return $this;
 		}
 
 		/**
 		 * @inheritdoc
-		 * @throws RouterException
 		 */
-		public function createRequest(): IElement {
+		public function getRouter(): IRouter {
+			foreach ($this->routerList as $router) {
+				if ($router->setup() && $router->canHandle()) {
+					return $router;
+				}
+			}
+			return null;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function canHandle(): bool {
+			try {
+				return ($this->router = $this->getRouter()) !== null;
+			} catch (\Exception $exception) {
+				$this->logService->exception($exception, [
+					'edde',
+					'router-service',
+				]);
+			}
+			return false;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function createRequest(): IRequest {
 			if ($this->request) {
 				return $this->request;
 			}
-			foreach ($this->routerList as $router) {
-				list($class, $parameterList) = $router;
-				/** @var $router IRouter */
-				$router = $this->container->create($class, $parameterList, __METHOD__);
-				$router->setup();
-				if (($this->request = $router->createRequest()) !== null) {
-					return $this->request;
-				}
+			if ($this->router === null && ($this->router = $this->getRouter()) === null) {
+				throw new BadRequestException('Cannot handle current request.');
 			}
-			if ($this->defaultRequest) {
-				$this->defaultResponseHandler ? $this->responseManager->setResponseHandler($this->defaultResponseHandler) : null;
-				return $this->request = $this->defaultRequest;
-			}
-			throw new BadRequestException('Cannot handle current application request.' . (empty($this->routerList) ? ' There are no registered routers.' : ''));
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getCurrentClass(): string {
-			return $this->request->getMeta('::class');
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function getCurrentMethod(): string {
-			return StringUtils::recamel($this->request->getMeta('::method'));
+			return $this->request = $this->router->createRequest();
 		}
 	}

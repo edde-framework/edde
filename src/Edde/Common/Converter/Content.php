@@ -4,7 +4,7 @@
 	namespace Edde\Common\Converter;
 
 	use Edde\Api\Converter\IContent;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	class Content extends Object implements IContent {
 		/**

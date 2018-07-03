@@ -3,16 +3,15 @@
 
 	namespace Edde\Common\Container\Factory;
 
-	use Edde\Api\Application\LazyContextTrait;
-	use Edde\Ext\Container\AbstractDiscoveryFactory;
+	use Edde\Api\Application\Inject\Context;
 
 	class CascadeFactory extends AbstractDiscoveryFactory {
-		use LazyContextTrait;
+		use Context;
 
 		/**
 		 * @inheritdoc
 		 */
-		protected function discovery(string $name): array {
+		protected function discover(string $name): array {
 			return $this->context->cascade('\\', $name);
 		}
 	}

@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Callback;
 
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * Useful set of methods around callable reflections.

@@ -10,7 +10,7 @@
 	 */
 	interface ILogService extends ILog {
 		/**
-		 * bind the given filter on the tag list; this can be useful for hiding/masking confidental data (passwords, ...)
+		 * bind the given filter on the tag list; this can be useful for hiding/masking confidential data (passwords, ...)
 		 *
 		 * @param array   $tagList
 		 * @param IFilter $filter

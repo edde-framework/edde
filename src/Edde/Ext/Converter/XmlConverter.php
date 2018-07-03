@@ -5,12 +5,12 @@
 
 	use Edde\Api\Converter\ConverterException;
 	use Edde\Api\Converter\IContent;
-	use Edde\Api\Converter\LazyConverterManagerTrait;
+	use Edde\Api\Converter\Inject\ConverterManager;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResource;
-	use Edde\Api\Xml\LazyXmlExportTrait;
-	use Edde\Api\Xml\LazyXmlParserTrait;
-	use Edde\Api\Xml\XmlParserException;
+	use Edde\Api\Xml\Exception\XmlParserException;
+	use Edde\Api\Xml\Inject\XmlExport;
+	use Edde\Api\Xml\Inject\XmlParser;
 	use Edde\Common\Converter\AbstractConverter;
 	use Edde\Common\Converter\Content;
 	use Edde\Common\Node\NodeIterator;
@@ -20,9 +20,9 @@
 	 * Xml string sourece to "something" converter.
 	 */
 	class XmlConverter extends AbstractConverter {
-		use LazyConverterManagerTrait;
-		use LazyXmlParserTrait;
-		use LazyXmlExportTrait;
+		use ConverterManager;
+		use XmlParser;
+		use XmlExport;
 
 		/**
 		 * Only 3 things that are infinite
@@ -68,7 +68,9 @@
 			try {
 				switch ($mime) {
 					case \stdClass::class:
-						return new Content($this->xmlExport->string(NodeIterator::recursive($this->converterManager->convert($content, \stdClass::class, [INode::class])->convert()->getContent(), true)), $target);
+						return new Content($this->xmlExport->string(NodeIterator::recursive($this->converterManager->convert($content, \stdClass::class, [INode::class])
+							->convert()
+							->getContent(), true)), $target);
 						break;
 					case INode::class:
 						return new Content($this->xmlExport->string(NodeIterator::recursive($content, true)), $target);

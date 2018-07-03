@@ -5,7 +5,7 @@
 
 	use Edde\Api\Log\ILog;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * Common stuff for loggers.

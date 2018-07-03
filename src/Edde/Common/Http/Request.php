@@ -6,16 +6,15 @@
 	use Edde\Api\Http\ICookieList;
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IRequest;
-	use Edde\Api\Http\IRequestUrl;
 	use Edde\Api\Url\IUrl;
 	use Edde\Common\Strings\StringUtils;
 	use Edde\Common\Url\Url;
 
 	class Request extends AbstractHttp implements IRequest {
 		/**
-		 * @var IRequestUrl
+		 * @var IUrl
 		 */
-		protected $requestUrl;
+		protected $url;
 		/**
 		 * @var string
 		 */
@@ -46,13 +45,13 @@
 		 * “Son, there’s been a change of plan,” his father replied.
 		 * “Your mother did want a baby, but now she wants a BMW.”
 		 *
-		 * @param IRequestUrl $requestUrl
+		 * @param IUrl        $url
 		 * @param IHeaderList $headerList
 		 * @param ICookieList $cookieList
 		 */
-		public function __construct(IRequestUrl $requestUrl, IHeaderList $headerList, ICookieList $cookieList) {
+		public function __construct(IUrl $url, IHeaderList $headerList, ICookieList $cookieList) {
 			parent::__construct($headerList, $cookieList);
-			$this->requestUrl = $requestUrl;
+			$this->url = $url;
 		}
 
 		/**
@@ -94,8 +93,8 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function getRequestUrl(): IRequestUrl {
-			return $this->requestUrl;
+		public function getRequestUrl(): IUrl {
+			return $this->url;
 		}
 
 		/**
@@ -109,13 +108,6 @@
 		 * @inheritdoc
 		 */
 		public function isSecured(): bool {
-			return $this->requestUrl->getScheme() === 'https';
-		}
-
-		/**
-		 * @inheritdoc
-		 */
-		public function isAjax(): bool {
-			return $this->headerList->get('X-Requested-With') === 'XMLHttpRequest';
+			return $this->url->getScheme() === 'https';
 		}
 	}

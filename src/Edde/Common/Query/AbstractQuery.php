@@ -6,7 +6,7 @@
 	use Edde\Api\Node\INode;
 	use Edde\Api\Query\IQuery;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	abstract class AbstractQuery extends Object implements IQuery {
 		use ConfigurableTrait;

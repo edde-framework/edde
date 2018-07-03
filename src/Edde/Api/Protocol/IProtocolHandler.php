@@ -6,7 +6,7 @@
 	use Edde\Api\Config\IConfigurable;
 
 	/**
-	 * Handles individual type of protocol item.
+	 * Handles individual type of a protocol item.
 	 */
 	interface IProtocolHandler extends IConfigurable {
 		/**

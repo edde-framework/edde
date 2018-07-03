@@ -5,7 +5,6 @@
 
 	use Edde\Api\Container\IContainer;
 	use Edde\Api\Container\IDependency;
-	use Edde\Common\Container\AbstractFactory;
 
 	class ExceptionFactory extends AbstractFactory {
 		/**
@@ -56,6 +55,14 @@
 		 */
 		public function canHandle(IContainer $container, string $dependency): bool {
 			return $this->name === $dependency;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function fetch(IContainer $container, string $id) {
+			$exception = $this->exception;
+			throw new $exception($this->message);
 		}
 
 		/**

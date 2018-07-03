@@ -3,14 +3,15 @@
 
 	namespace Edde\Ext\Test;
 
-	use Edde\Api\Container\ILazyInject;
-	use Edde\Common\Container\LazyTrait;
+	use Edde\Api\Container\IAutowire;
+	use Edde\Common\Container\AutowireTrait;
 	use Edde\Ext\Container\ContainerFactory;
+	use PHPUnit\Framework\TestCase as PhpUnitTestCase;
 
-	class TestCase extends \PHPUnit\Framework\TestCase implements ILazyInject {
-		use LazyTrait;
+	class TestCase extends PhpUnitTestCase implements IAutowire {
+		use AutowireTrait;
 
 		protected function setUp() {
-			ContainerFactory::autowire($this);
+			ContainerFactory::inject($this);
 		}
 	}

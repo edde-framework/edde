@@ -8,7 +8,7 @@
 	use Edde\Api\Schema\IProperty;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Schema\SchemaException;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	class Schema extends Object implements ISchema {
 		/**

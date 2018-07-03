@@ -4,7 +4,7 @@
 	namespace Edde\Common\Runtime;
 
 	use Edde\Api\Runtime\IRuntime;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	class Runtime extends Object implements IRuntime {
 		/**

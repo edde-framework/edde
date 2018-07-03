@@ -77,8 +77,16 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function putAttribute(array $attributeList): INode {
+		public function putAttributeList(array $attributeList): INode {
 			$this->attributeList->put($attributeList);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function appendAttributeList(array $attributeList): INode {
+			$this->attributeList->append($attributeList);
 			return $this;
 		}
 
@@ -107,8 +115,16 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function putMeta(array $metaList): INode {
+		public function putMetaList(array $metaList): INode {
 			$this->metaList->put($metaList);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function appendMetaList(array $metaList): INode {
+			$this->metaList->append($metaList);
 			return $this;
 		}
 

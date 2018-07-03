@@ -33,7 +33,7 @@
 		public function getAcceptList(): array;
 
 		/**
-		 * return propritized language from the current header set or default one
+		 * return prioritized language from the current header set or default one
 		 *
 		 * @param string $default
 		 *
@@ -48,10 +48,10 @@
 		 *
 		 * @return array
 		 */
-		public function getAccpetLanguageList(string $default): array;
+		public function getAcceptLanguageList(string $default): array;
 
 		/**
-		 * return preffered charset
+		 * return preferred charset
 		 *
 		 * @param string $default
 		 *
@@ -60,7 +60,7 @@
 		public function getAcceptCharset(string $default): string;
 
 		/**
-		 * return an odered list of accept charsets
+		 * return an ordered list of accept charsets
 		 *
 		 * @param string $default
 		 *
@@ -74,4 +74,11 @@
 		 * @return array
 		 */
 		public function headers(): array;
+
+		/**
+		 * send headers
+		 *
+		 * @return IHeaderList
+		 */
+		public function setupHeaderList(): IHeaderList;
 	}

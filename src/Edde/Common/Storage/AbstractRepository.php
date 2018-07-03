@@ -3,18 +3,18 @@
 
 	namespace Edde\Common\Storage;
 
-	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Container\Inject\Container;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Schema\ISchema;
 	use Edde\Api\Storage\IBoundQuery;
+	use Edde\Api\Storage\Inject\Storage;
 	use Edde\Api\Storage\IRepository;
-	use Edde\Api\Storage\LazyStorageTrait;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 	use Edde\Common\Query\Select\SelectQuery;
 
 	abstract class AbstractRepository extends Object implements IRepository {
-		use LazyContainerTrait;
-		use LazyStorageTrait;
+		use Container;
+		use Storage;
 		/**
 		 * @var ISchema
 		 */

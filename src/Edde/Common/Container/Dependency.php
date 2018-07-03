@@ -5,7 +5,7 @@
 
 	use Edde\Api\Container\IDependency;
 	use Edde\Api\Reflection\IReflectionParameter;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	class Dependency extends Object implements IDependency {
 		protected $parameterList;

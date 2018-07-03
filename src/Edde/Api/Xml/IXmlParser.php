@@ -3,12 +3,13 @@
 
 	namespace Edde\Api\Xml;
 
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Resource\IResource;
 
 	/**
 	 * Event based xml parser.
 	 */
-	interface IXmlParser {
+	interface IXmlParser extends IConfigurable {
 		/**
 		 * parse the given string
 		 *

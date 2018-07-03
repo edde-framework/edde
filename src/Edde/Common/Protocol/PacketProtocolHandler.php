@@ -4,12 +4,12 @@
 	namespace Edde\Common\Protocol;
 
 	use Edde\Api\Protocol\IElement;
-	use Edde\Api\Protocol\LazyProtocolManagerTrait;
-	use Edde\Api\Protocol\LazyProtocolServiceTrait;
+	use Edde\Api\Protocol\Inject\ProtocolManager;
+	use Edde\Api\Protocol\Inject\ProtocolService;
 
 	class PacketProtocolHandler extends AbstractProtocolHandler {
-		use LazyProtocolManagerTrait;
-		use LazyProtocolServiceTrait;
+		use ProtocolManager;
+		use ProtocolService;
 
 		/**
 		 * @inheritdoc

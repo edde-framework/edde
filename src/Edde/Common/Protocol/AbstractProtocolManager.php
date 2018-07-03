@@ -4,18 +4,14 @@
 	namespace Edde\Common\Protocol;
 
 	use Edde\Api\Protocol\IElement;
-	use Edde\Api\Protocol\IPacket;
 	use Edde\Api\Protocol\IProtocolManager;
-	use Edde\Api\Protocol\LazyProtocolServiceTrait;
 	use Edde\Api\Store\LazyStoreManagerTrait;
-	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 	use Edde\Ext\Session\SessionStore;
 
 	abstract class AbstractProtocolManager extends Object implements IProtocolManager {
-		use LazyProtocolServiceTrait;
+		use \Edde\Api\Protocol\Inject\ProtocolService;
 		use LazyStoreManagerTrait;
-		use ConfigurableTrait;
 		const ELEMENT_LIST_ID = 'protocol-manager/element-list';
 
 		/**
@@ -48,12 +44,12 @@
 		/**
 		 * @inheritdoc
 		 */
-		public function createPacket(string $store = null, IElement $reference = null): IPacket {
+		public function createPacket(string $store = null, IElement $reference = null): IElement {
 			$this->storeManager->select($store ?: SessionStore::class);
 			try {
 				$this->storeManager->block(self::ELEMENT_LIST_ID);
 				$packet = $this->protocolService->createPacket($reference);
-				$packet->elements($this->storeManager->get(self::ELEMENT_LIST_ID, []));
+				$packet->setElementList('elements', $this->storeManager->get(self::ELEMENT_LIST_ID, []));
 				$this->storeManager->remove(self::ELEMENT_LIST_ID);
 				return $packet;
 			} finally {

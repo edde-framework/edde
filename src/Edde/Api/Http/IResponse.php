@@ -35,4 +35,11 @@
 		 * @return IResponse
 		 */
 		public function redirect(string $redirect): IResponse;
+
+		/**
+		 * send current response
+		 *
+		 * @return IResponse
+		 */
+		public function send(): IResponse;
 	}

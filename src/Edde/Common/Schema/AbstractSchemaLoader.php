@@ -5,7 +5,7 @@
 
 	use Edde\Api\Schema\ISchemaLoader;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	abstract class AbstractSchemaLoader extends Object implements ISchemaLoader {
 		use ConfigurableTrait;

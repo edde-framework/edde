@@ -5,6 +5,7 @@
 
 	use Edde\Api\Converter\IContent;
 	use Edde\Api\File\IFile;
+	use Edde\Api\Http\IResponse;
 
 	/**
 	 * When request is prepared bu a handler, client should create this handler for later execution.

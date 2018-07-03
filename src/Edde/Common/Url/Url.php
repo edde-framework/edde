@@ -5,7 +5,7 @@
 
 	use Edde\Api\Url\IUrl;
 	use Edde\Api\Url\UrlException;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 	use Edde\Common\Strings\StringUtils;
 
 	class Url extends Object implements IUrl {
@@ -301,19 +301,14 @@
 		}
 
 		/**
+		 * create a "clone" of the givne url
+		 *
 		 * @param null $url
 		 *
 		 * @return IUrl|$this
 		 * @throws UrlException
 		 */
 		static public function create($url = null) {
-			if ($url instanceof IUrl) {
-				return $url;
-			}
-			$self = new static();
-			if ($url !== null) {
-				$self->parse((string)$url);
-			}
-			return $self;
+			return new static($url);
 		}
 	}

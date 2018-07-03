@@ -4,13 +4,12 @@
 	namespace Edde\Common\Session;
 
 	use Edde\Api\Session\ISession;
-	use Edde\Api\Session\LazySessionManagerTrait;
 
 	/**
 	 * Helper trait for simple work with session section.
 	 */
 	trait SessionTrait {
-		use LazySessionManagerTrait;
+		use \Edde\Api\Session\Inject\SessionManager;
 		/**
 		 * @var ISession
 		 */

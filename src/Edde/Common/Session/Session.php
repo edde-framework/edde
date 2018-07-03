@@ -6,7 +6,7 @@
 	use ArrayIterator;
 	use Edde\Api\Collection\IList;
 	use Edde\Api\Session\ISession;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * Session section for simple session data manipulation.
@@ -45,6 +45,14 @@
 		 */
 		public function put(array $array): IList {
 			$_SESSION[$this->namespace][$this->name] = $array;
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function append(array $array): IList {
+			$_SESSION[$this->namespace][$this->name] = array_merge($_SESSION[$this->namespace][$this->name], $array);
 			return $this;
 		}
 

@@ -3,17 +3,14 @@
 
 	namespace Edde\Common\Query\Insert;
 
-	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Common\Config\ConfigurableTrait;
 	use Edde\Common\Node\Node;
 	use Edde\Common\Query\AbstractQuery;
 
 	/**
 	 * IQL implementation of an insert query.
 	 */
-	class InsertQuery extends AbstractQuery implements IConfigurable {
-		use ConfigurableTrait;
+	class InsertQuery extends AbstractQuery {
 		/**
 		 * @var ISchema
 		 */

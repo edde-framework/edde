@@ -4,13 +4,24 @@
 	namespace Edde\Api\Application;
 
 	/**
-	 * Single application implementation; per project should be exactly one instance (implementation) of this interface.
+	 * Application should connect services for user input translation to
+	 * a response, for example router service to protocol service.
 	 */
 	interface IApplication {
 		/**
-		 * execute main "loop" of application (process the given request)
+		 * set an exit code from an application
 		 *
-		 * @return mixed
+		 * @param int $code
+		 *
+		 * @return IApplication
 		 */
-		public function run();
+		public function setCode(int $code): IApplication;
+
+		/**
+		 * execute the application and return a status code; application should not
+		 * die in hard way (thus internally \Throwable should be caught)
+		 *
+		 * @return int
+		 */
+		public function run(): int;
 	}

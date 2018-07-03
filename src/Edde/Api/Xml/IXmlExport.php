@@ -3,10 +3,11 @@
 
 	namespace Edde\Api\Xml;
 
+	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\File\IFile;
 	use Edde\Api\Node\INode;
 
-	interface IXmlExport {
+	interface IXmlExport extends IConfigurable {
 		/**
 		 * export the given node to the xml file
 		 *

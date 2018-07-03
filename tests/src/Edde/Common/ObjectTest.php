@@ -3,10 +3,12 @@
 
 	namespace Edde\Common;
 
-	use Edde\Api\Container\ILazyInject;
-	use Edde\Api\EddeException;
+	use Edde\Api\Config\IConfigurable;
+	use Edde\Api\Container\IAutowire;
+	use Edde\Common\Object\Exception\PropertyReadException;
+	use Edde\Common\Object\Exception\PropertyWriteException;
 	use Edde\Test\BarObject;
-	use Edde\Test\CompositeObject;
+	use Edde\Test\FooBarObject;
 	use Edde\Test\FooObject;
 	use PHPUnit\Framework\TestCase;
 
@@ -22,42 +24,39 @@
 		 */
 		protected $barObject;
 		/**
-		 * @var CompositeObject
+		 * @var FooBarObject
 		 */
-		protected $composite;
+		protected $fooBarObject;
 
-		public function testInstanceOfLazyInject() {
-			self::assertInstanceOf(ILazyInject::class, $this->fooObject);
+		public function testInstanceOf() {
+			self::assertInstanceOf(IAutowire::class, $this->fooObject);
+			self::assertInstanceOf(IConfigurable::class, $this->fooObject);
 		}
 
 		public function testWriteException() {
-			$this->expectException(EddeException::class);
-			$this->expectExceptionMessage('Writing to the undefined/private/protected property [Edde\Test\FooObject::$thisWillThrowAnException].');
+			$this->expectException(PropertyWriteException::class);
+			$this->expectExceptionMessage('Writing to the undefined/private/protected property [Edde\Test\FooObject::$undefined].');
 			/** @noinspection PhpUndefinedFieldInspection */
-			$this->fooObject->thisWillThrowAnException = 'really!';
+			$this->fooObject->undefined = true;
 		}
 
 		public function testReadException() {
-			$this->expectException(EddeException::class);
-			$this->expectExceptionMessage('Reading from the undefined/private/protected property [Edde\Test\FooObject::$yesThisWillThrowAnException].');
-			/** @noinspection PhpUnusedLocalVariableInspection */
+			$this->expectException(PropertyReadException::class);
+			$this->expectExceptionMessage('Reading from the undefined/private/protected property [Edde\Test\FooObject::$undefined].');
 			/** @noinspection PhpUndefinedFieldInspection */
-			$willYouThrowAnException = $this->fooObject->yesThisWillThrowAnException;
+			$this->fooObject->undefined;
 		}
 
 		public function testIsset() {
-			self::assertFalse(isset($this->fooObject->yesThisWillThrowAnException));
+			/** @noinspection PhpUndefinedFieldInspection */
+			self::assertFalse(isset($this->fooObject->undefined));
 			self::assertTrue(isset($this->fooObject->foo));
-		}
-
-		public function testObjectHash() {
-			self::assertSame($this->fooObject->hash(), $this->fooObject->hash());
 		}
 
 		/**
 		 * @codeCoverageIgnore
 		 */
 		protected function setUp() {
-			$this->composite = new CompositeObject($this->fooObject = new FooObject(), $this->barObject = new BarObject($this->fooObject));
+			$this->fooBarObject = new FooBarObject($this->fooObject = new FooObject(), $this->barObject = new BarObject($this->fooObject));
 		}
 	}

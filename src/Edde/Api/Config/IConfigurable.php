@@ -35,63 +35,7 @@
 		public function init();
 
 		/**
-		 * @return bool
-		 */
-		public function isInitialized(): bool;
-
-		/**
-		 * throws an exception if configurable has not been initialized
-		 */
-		public function checkInit();
-
-		/**
-		 * execute object initialization; object must be serializable after this method
-		 */
-		public function warmup();
-
-		/**
-		 * @return bool
-		 */
-		public function isWarmedup(): bool;
-
-		/**
-		 * check if configurable has been warmedup
-		 */
-		public function checkWarmup();
-
-		/**
-		 * execute object configuration (so after this method object should be fully prepared for use)
-		 */
-		public function config();
-
-		/**
-		 * what to say here, hmm ;)? If method config() has been called, this is true
-		 *
-		 * @return bool
-		 */
-		public function isConfigured(): bool;
-
-		/**
-		 * check if configurable has been configured
-		 *
-		 * @return IConfigurable
-		 */
-		public function checkConfig();
-
-		/**
 		 * do any heavy computations; after this object is usualy not serializable
 		 */
 		public function setup();
-
-		/**
-		 * has benn object set up?
-		 */
-		public function isSetup(): bool;
-
-		/**
-		 * check if configurable has been setup
-		 *
-		 * @return IConfigurable
-		 */
-		public function checkSetup();
 	}

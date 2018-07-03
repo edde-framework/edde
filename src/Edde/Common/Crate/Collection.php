@@ -4,12 +4,12 @@
 	namespace Edde\Common\Crate;
 
 	use ArrayIterator;
-	use Edde\Api\Crate\CrateException;
+	use Edde\Api\Crate\Exception\CrateException;
 	use Edde\Api\Crate\ICollection;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Crate\ICrateFactory;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	class Collection extends Object implements ICollection {
 		/**

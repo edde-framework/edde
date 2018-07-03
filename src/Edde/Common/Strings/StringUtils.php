@@ -4,13 +4,13 @@
 	namespace Edde\Common\Strings;
 
 	use Edde\Common\Callback\CallbackUtils;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * StringsUtils are set of independent methods for UTF-8 string manipulation.
 	 */
 	class StringUtils extends Object {
-		private static $SEPARATOR_LIST = [
+		const SEPARATOR_LIST = [
 			'|',
 			':',
 			'.',
@@ -208,7 +208,7 @@
 		 * @return string
 		 */
 		static public function toCamelCase($input): string {
-			return str_replace('~', null, mb_convert_case(str_replace(self::$SEPARATOR_LIST, '~', mb_strtolower(implode('~', is_array($input) ? $input : preg_split('~(?=[A-Z])~', $input, -1, PREG_SPLIT_NO_EMPTY)))), MB_CASE_TITLE, 'UTF-8'));
+			return str_replace('~', null, mb_convert_case(str_replace(self::SEPARATOR_LIST, '~', mb_strtolower(implode('~', is_array($input) ? $input : preg_split('~(?=[A-Z])~', $input, -1, PREG_SPLIT_NO_EMPTY)))), MB_CASE_TITLE, 'UTF-8'));
 		}
 
 		/**
@@ -314,11 +314,11 @@
 		 */
 		static private function pcre($func, $args) {
 			static $messages = [
-				PREG_INTERNAL_ERROR        => 'Internal error',
+				PREG_INTERNAL_ERROR => 'Internal error',
 				PREG_BACKTRACK_LIMIT_ERROR => 'Backtrack limit was exhausted',
 				PREG_RECURSION_LIMIT_ERROR => 'Recursion limit was exhausted',
-				PREG_BAD_UTF8_ERROR        => 'Malformed UTF-8 data',
-				5                          => 'Offset didn\'t correspond to the begin of a valid UTF-8 code point',
+				PREG_BAD_UTF8_ERROR => 'Malformed UTF-8 data',
+				5 => 'Offset didn\'t correspond to the begin of a valid UTF-8 code point',
 				// PREG_BAD_UTF8_OFFSET_ERROR
 			];
 			/** @noinspection ExceptionsAnnotatingAndHandlingInspection */

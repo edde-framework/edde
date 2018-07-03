@@ -3,7 +3,5 @@
 
 	namespace Edde\Common\Upgrade;
 
-	use Edde\Api\Upgrade\UpgradeException;
-
-	class CurrentVersionException extends UpgradeException {
+	class CurrentVersionException extends \Edde\Api\Upgrade\Exception\UpgradeException {
 	}

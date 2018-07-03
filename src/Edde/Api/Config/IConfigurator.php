@@ -4,7 +4,7 @@
 	namespace Edde\Api\Config;
 
 	/**
-	 * This interface is general way how to implement service configuration (or configuration of almost enything).
+	 * This interface is general way how to implement service configuration (or configuration of almost anything).
 	 */
 	interface IConfigurator {
 		/**

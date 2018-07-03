@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Cli;
 
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * Usefull set of command line utilities.

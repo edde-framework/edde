@@ -5,6 +5,9 @@
 
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Config\IConfigurator;
+	use Edde\Api\Container\Exception\ContainerException;
+	use Edde\Api\Container\Exception\FactoryException;
+	use Edde\Api\Container\Exception\UnknownFactoryException;
 
 	/**
 	 * Implementation of Dependency Injection Container.
@@ -47,13 +50,23 @@
 		public function registerConfiguratorList(array $configuratorList): IContainer;
 
 		/**
+		 * do container have a factory for the given dependency? - only check if dependency is available, but
+		 * don't ensure that it's possible to create it
+		 *
+		 * @param string $dependency
+		 *
+		 * @return bool
+		 */
+		public function canHandle(string $dependency): bool;
+
+		/**
 		 * get factory which is able to create the given dependency
 		 *
 		 * @param mixed  $dependency
-		 *
 		 * @param string $source
 		 *
 		 * @return IFactory
+		 * @throws UnknownFactoryException
 		 */
 		public function getFactory(string $dependency, string $source = null): IFactory;
 
@@ -65,6 +78,8 @@
 		 * @param string $source who has requested this dependency
 		 *
 		 * @return mixed
+		 * @throws FactoryException
+		 * @throws ContainerException
 		 */
 		public function create(string $name, array $parameterList = [], string $source = null);
 
@@ -99,7 +114,7 @@
 		 *
 		 * @return mixed
 		 */
-		public function autowire($instance, bool $force = false);
+		public function inject($instance, bool $force = false);
 
 		/**
 		 * execute injects on the given instance

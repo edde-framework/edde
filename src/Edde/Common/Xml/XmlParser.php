@@ -6,13 +6,13 @@
 	use Edde\Api\File\FileException;
 	use Edde\Api\Iterator\IIterator;
 	use Edde\Api\Resource\IResource;
+	use Edde\Api\Xml\Exception\XmlParserException;
 	use Edde\Api\Xml\IXmlHandler;
 	use Edde\Api\Xml\IXmlParser;
-	use Edde\Api\Xml\XmlParserException;
 	use Edde\Common\File\File;
 	use Edde\Common\Iterator\ChunkIterator;
 	use Edde\Common\Iterator\Iterator;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 	use Edde\Common\Strings\StringUtils;
 
 	/**
@@ -34,7 +34,7 @@
 		/**
 		 * @inheritdoc
 		 * @throws FileException
-		 * @throws XmlParserException
+		 * @throws \Edde\Api\Xml\Exception\XmlParserException
 		 */
 		public function file(string $file, IXmlHandler $xmlHandler): IXmlParser {
 			return $this->parse(new File($file), $xmlHandler);
@@ -42,7 +42,7 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws XmlParserException
+		 * @throws \Edde\Api\Xml\Exception\XmlParserException
 		 */
 		public function string(string $string, IXmlHandler $xmlHandler): IXmlParser {
 			return $this->iterate(new Iterator(StringUtils::createIterator($string)), $xmlHandler);
@@ -50,7 +50,7 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws XmlParserException
+		 * @throws \Edde\Api\Xml\Exception\XmlParserException
 		 */
 		public function parse(IResource $resource, IXmlHandler $xmlHandler): IXmlParser {
 			$this->iterate(new Iterator(new ChunkIterator([
@@ -65,7 +65,7 @@
 		 * @param IXmlHandler $xmlHandler
 		 *
 		 * @return $this
-		 * @throws XmlParserException
+		 * @throws \Edde\Api\Xml\Exception\XmlParserException
 		 */
 		protected function iterate(IIterator $iterator, IXmlHandler $xmlHandler) {
 			$value = '';
@@ -105,7 +105,7 @@
 						break;
 					case '!':
 						if ($last !== '<') {
-							throw new XmlParserException(sprintf('Unexpected token [%s] while reading open tag.', $char));
+							throw new \Edde\Api\Xml\Exception\XmlParserException(sprintf('Unexpected token [%s] while reading open tag.', $char));
 						}
 						$type = self::XML_TYPE_DOCTYPE;
 						$name .= $char;
@@ -116,7 +116,7 @@
 							break;
 						}
 						if ($last !== '<') {
-							throw new XmlParserException(sprintf('Unexpected token [%s] while reading open tag.', $char));
+							throw new \Edde\Api\Xml\Exception\XmlParserException(sprintf('Unexpected token [%s] while reading open tag.', $char));
 						}
 						$type = self::XML_TYPE_HEADER;
 						break;

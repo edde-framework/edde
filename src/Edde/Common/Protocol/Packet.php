@@ -4,43 +4,30 @@
 	namespace Edde\Common\Protocol;
 
 	use Edde\Api\Protocol\IElement;
-	use Edde\Api\Protocol\IPacket;
 
-	class Packet extends Element implements IPacket {
+	class Packet extends Element {
 		public function __construct(string $origin) {
 			parent::__construct('packet');
 			$this->setAttribute('version', '1.1');
 			$this->setAttribute('origin', $origin);
 		}
 
-		/**
-		 * @inheritdoc
-		 */
-		public function element(IElement $element): IPacket {
+		public function element(IElement $element): Packet {
 			$this->addElement('elements', $element);
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
-		public function elements(array $elementList): IPacket {
+		public function elements(array $elementList): Packet {
 			$this->setElementList('elements', $elementList);
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
-		public function reference(IElement $element): IPacket {
+		public function reference(IElement $element): Packet {
 			$this->addElement('references', $element);
 			return $this;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
-		public function references(array $elementList): IPacket {
+		public function references(array $elementList): Packet {
 			$this->setElementList('references', $elementList);
 			return $this;
 		}

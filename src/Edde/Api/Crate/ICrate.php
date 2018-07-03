@@ -3,6 +3,7 @@
 
 	namespace Edde\Api\Crate;
 
+	use Edde\Api\Crate\Exception\CrateException;
 	use Edde\Api\Schema\ISchema;
 
 	/**

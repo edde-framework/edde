@@ -5,7 +5,6 @@
 
 	use Edde\Api\Job\IJobQueue;
 	use Edde\Api\Job\IQueueList;
-	use Edde\Api\Job\JobQueueException;
 	use Edde\Api\Protocol\IElement;
 
 	abstract class AbstractQueueList extends AbstractJobQueue implements IQueueList {
@@ -26,7 +25,7 @@
 		 * @inheritdoc
 		 */
 		public function queue(IElement $element): IJobQueue {
-			throw new JobQueueException(sprintf('Cannot queue job [%s] to [%s]! Use concrete queue [%s] instead of general queue list.', $element->getType(), IQueueList::class, IJobQueue::class));
+			throw new \Edde\Api\Job\Exception\JobQueueException(sprintf('Cannot queue job [%s] to [%s]! Use concrete queue [%s] instead of general queue list.', $element->getType(), IQueueList::class, IJobQueue::class));
 		}
 
 		/**

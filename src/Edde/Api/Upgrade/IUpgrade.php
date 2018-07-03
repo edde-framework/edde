@@ -3,6 +3,8 @@
 
 	namespace Edde\Api\Upgrade;
 
+	use Edde\Api\Upgrade\Exception\UpgradeException;
+
 	/**
 	 * Simple way how to run arbitrary application upgrades; this can be storage modification, filesystem operations, ...
 	 */
@@ -19,7 +21,7 @@
 		 *
 		 * @return $this
 		 *
-		 * @throws UpgradeException
+		 * @throws \Edde\Api\Upgrade\Exception\UpgradeException
 		 */
 		public function upgrade();
 	}

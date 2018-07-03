@@ -4,7 +4,7 @@
 	namespace Edde\Common\Iterator;
 
 	use Edde\Api\Iterator\IIterator;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	class Iterator extends Object implements IIterator {
 		/**

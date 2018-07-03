@@ -3,14 +3,14 @@
 
 	namespace Edde\Common\Store;
 
-	use Edde\Api\Crypt\LazyCryptEngineTrait;
+	use Edde\Api\Crypt\Inject\CryptEngine;
 	use Edde\Api\File\IFile;
+	use Edde\Api\Store\Inject\StoreDirectory;
 	use Edde\Api\Store\IStore;
-	use Edde\Api\Store\LazyStoreDirectoryTrait;
 
 	class FileStore extends AbstractStore {
-		use LazyStoreDirectoryTrait;
-		use LazyCryptEngineTrait;
+		use StoreDirectory;
+		use CryptEngine;
 		/**
 		 * @var IFile[]
 		 */

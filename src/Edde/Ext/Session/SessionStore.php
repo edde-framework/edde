@@ -3,13 +3,13 @@
 
 	namespace Edde\Ext\Session;
 
+	use Edde\Api\Session\Inject\SessionManager;
 	use Edde\Api\Session\ISession;
-	use Edde\Api\Session\LazySessionManagerTrait;
 	use Edde\Api\Store\IStore;
 	use Edde\Common\Store\AbstractStore;
 
 	class SessionStore extends AbstractStore {
-		use LazySessionManagerTrait;
+		use SessionManager;
 		/**
 		 * @var string
 		 */

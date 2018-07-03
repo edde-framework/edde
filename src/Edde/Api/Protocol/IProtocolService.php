@@ -17,7 +17,7 @@
 		 * @param IElement|null $reference
 		 * @param string|null   $origin
 		 *
-		 * @return IPacket
+		 * @return IElement
 		 */
-		public function createPacket(IElement $reference = null, string $origin = null): IPacket;
+		public function createPacket(IElement $reference = null, string $origin = null): IElement;
 	}

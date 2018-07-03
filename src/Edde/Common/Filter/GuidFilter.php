@@ -3,13 +3,13 @@
 
 	namespace Edde\Common\Filter;
 
-	use Edde\Api\Crypt\LazyCryptEngineTrait;
+	use Edde\Api\Crypt\Inject\CryptEngine;
 
 	/**
 	 * Generate guid; if the value is set, it is used as a seed.
 	 */
 	class GuidFilter extends AbstractFilter {
-		use LazyCryptEngineTrait;
+		use CryptEngine;
 
 		/**
 		 * @inheritdoc

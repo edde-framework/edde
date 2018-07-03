@@ -7,7 +7,7 @@
 
 	/**
 	 * This implementation could track all incoming and processed Elements and to be a general
-	 * store for them. That means this should be kind of persistant storage, but it should NOT
+	 * store for them. That means this should be kind of persistent storage, but it should NOT
 	 * directly use store manager select method.
 	 */
 	interface IElementStore extends IConfigurable {
@@ -32,11 +32,11 @@
 		/**
 		 * load the given element from the store; exception should be thrown if the element does not exists
 		 *
-		 * @note element COULD not exist on top level, but could be hidden in some packet
+		 * @note element SHOULD not exist on top level, but could be hidden in some packet
 		 *
 		 * @param string $guid
 		 *
-		 * @return IElement|IElementStore
+		 * @return IElement
 		 */
 		public function load(string $guid): IElement;
 
@@ -50,7 +50,9 @@
 		/**
 		 * get list of elements referencing the given guid
 		 *
-		 * @return \Traversable|IElement[]
+		 * @param string $referenceId
+		 *
+		 * @return IElement[]|\Traversable
 		 */
 		public function getReferenceListBy(string $referenceId);
 	}

@@ -4,14 +4,23 @@
 	namespace Edde\Api\Router;
 
 	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Protocol\IElement;
 
+	/**
+	 * Router is class responsible for handling current application
+	 * request (cli, http based, whatever).
+	 */
 	interface IRouter extends IConfigurable {
 		/**
-		 * create request must create IElement as it is a general way how to send "something" to the application; so in this
-		 * case "request" means "general request to an application, even it could be an event"
+		 * can this router provide IRequest?
 		 *
-		 * @return IElement|null
+		 * @return bool
 		 */
-		public function createRequest();
+		public function canHandle(): bool;
+
+		/**
+		 * create an application request
+		 *
+		 * @return IRequest
+		 */
+		public function createRequest(): IRequest;
 	}

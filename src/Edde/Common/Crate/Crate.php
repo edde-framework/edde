@@ -3,13 +3,13 @@
 
 	namespace Edde\Common\Crate;
 
-	use Edde\Api\Crate\CrateException;
+	use Edde\Api\Crate\Exception\CrateException;
 	use Edde\Api\Crate\ICollection;
 	use Edde\Api\Crate\ICrate;
 	use Edde\Api\Crate\IProperty;
-	use Edde\Api\Crypt\CryptException;
+	use Edde\Api\Crypt\Exception\CryptException;
 	use Edde\Api\Schema\ISchema;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 	use Edde\Common\Reflection\ReflectionUtils;
 	use Edde\Common\Schema\Property as SchemaProperty;
 	use Edde\Common\Schema\Schema;
@@ -45,7 +45,7 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws CrateException
+		 * @throws \Edde\Api\Crate\Exception\CrateException
 		 */
 		public function getSchema(): ISchema {
 			if ($this->schema === null) {
@@ -98,7 +98,7 @@
 		 */
 		public function getProperty(string $name): IProperty {
 			if ($this->hasProperty($name) === false) {
-				throw new CrateException(sprintf('Unknown value [%s] in crate [%s].', $name, $this->schema ? $this->schema->getSchemaName() : static::class . '; anonymous'));
+				throw new \Edde\Api\Crate\Exception\CrateException(sprintf('Unknown value [%s] in crate [%s].', $name, $this->schema ? $this->schema->getSchemaName() : static::class . '; anonymous'));
 			}
 			return $this->propertyList[$name];
 		}
@@ -112,12 +112,12 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws CrateException
+		 * @throws \Edde\Api\Crate\Exception\CrateException
 		 */
 		public function add(string $name, $value, $key = null): ICrate {
 			$property = $this->getProperty($name)->getSchemaProperty();
 			if ($property->isArray() === false) {
-				throw new CrateException(sprintf('Property [%s] is not array; cannot add value.', $property->getPropertyName()));
+				throw new \Edde\Api\Crate\Exception\CrateException(sprintf('Property [%s] is not array; cannot add value.', $property->getPropertyName()));
 			}
 			$array = $this->get($name);
 			if ($key === null) {
@@ -152,13 +152,13 @@
 		 */
 		public function push(array $push, bool $strict = true): ICrate {
 			if ($strict && ($diff = array_diff(array_keys($push), array_keys($this->propertyList))) !== []) {
-				throw new CrateException(sprintf('Setting unknown values [%s] to the crate [%s].', implode(', ', $diff), $this->schema->getSchemaName()));
+				throw new \Edde\Api\Crate\Exception\CrateException(sprintf('Setting unknown values [%s] to the crate [%s].', implode(', ', $diff), $this->schema->getSchemaName()));
 			}
 			foreach ($push as $property => $value) {
 				$property = $this->getProperty($property = (string)$property);
 				$schemaProperty = $property->getSchemaProperty();
 				if (($isArray = is_array($value)) === false && $schemaProperty->isArray()) {
-					throw new CrateException(sprintf('Cannot push simple value [%s] to array.', $property->getSchemaProperty()));
+					throw new \Edde\Api\Crate\Exception\CrateException(sprintf('Cannot push simple value [%s] to array.', $property->getSchemaProperty()));
 				}
 				if ($isArray && $schemaProperty->isArray() === false) {
 					throw new CrateException(sprintf('Cannot push array to simple value [%s].', $property->getSchemaProperty()));
@@ -187,7 +187,7 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws CrateException
+		 * @throws \Edde\Api\Crate\Exception\CrateException
 		 */
 		public function linkTo(array $linkTo): ICrate {
 			foreach ($linkTo as $name => $crate) {
@@ -216,11 +216,11 @@
 		 */
 		public function proxy(string $name, callable $crate): ICrate {
 			if ($this->schema->hasLink($name) === false) {
-				throw new CrateException(sprintf('Crate [%s] has no link [%s] in schema [%s].', static::class, $name, $this->schema->getSchemaName()));
+				throw new \Edde\Api\Crate\Exception\CrateException(sprintf('Crate [%s] has no link [%s] in schema [%s].', static::class, $name, $this->schema->getSchemaName()));
 			}
 			$callback = ReflectionUtils::getMethodReflection($crate);
 			if (($returnType = $callback->getReturnType()) === null || (string)$returnType !== ICrate::class) {
-				throw new CrateException(sprintf('Proxied callable must have [%s] return typehint in crate [%s].', ICrate::class, static::class));
+				throw new \Edde\Api\Crate\Exception\CrateException(sprintf('Proxied callable must have [%s] return typehint in crate [%s].', ICrate::class, static::class));
 			}
 			$this->linkList[$name] = $crate;
 			return $this;
@@ -232,7 +232,7 @@
 		 */
 		public function getLink(string $name) {
 			if ($this->hasLink($name) === false) {
-				throw new CrateException(sprintf('Requested unknown link [%s] on the crate [%s].', $name, $this->schema->getSchemaName()));
+				throw new \Edde\Api\Crate\Exception\CrateException(sprintf('Requested unknown link [%s] on the crate [%s].', $name, $this->schema->getSchemaName()));
 			}
 			if (is_callable($this->linkList[$name])) {
 				$this->linkList[$name] = $this->linkList[$name]($this, $name);
@@ -253,7 +253,7 @@
 		 */
 		public function collection(string $name, ICollection $collection): ICrate {
 			if ($this->schema->hasCollection($name) === false) {
-				throw new CrateException(sprintf('Crate [%s] has no collection [%s] in schema [%s].', static::class, $name, $this->schema->getSchemaName()));
+				throw new \Edde\Api\Crate\Exception\CrateException(sprintf('Crate [%s] has no collection [%s] in schema [%s].', static::class, $name, $this->schema->getSchemaName()));
 			}
 			$this->collectionList[$name] = $collection;
 			return $this;
@@ -261,7 +261,7 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws CrateException
+		 * @throws \Edde\Api\Crate\Exception\CrateException
 		 */
 		public function getCollection(string $name): ICollection {
 			if ($this->hasCollection($name) === false) {
@@ -309,7 +309,7 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws CrateException
+		 * @throws \Edde\Api\Crate\Exception\CrateException
 		 */
 		public function addProperty(IProperty $property, bool $force = false): ICrate {
 			$schemaProperty = $property->getSchemaProperty();
@@ -342,7 +342,7 @@
 
 		/**
 		 * @inheritdoc
-		 * @throws CryptException
+		 * @throws \Edde\Api\Crypt\Exception\CryptException
 		 */
 		public function commit(callable $callback = null): ICrate {
 			if ($callback === null && $this->commit === null) {

@@ -6,7 +6,7 @@
 	use Edde\Api\Converter\IContent;
 	use Edde\Api\Converter\IConvertable;
 	use Edde\Api\Converter\IConverter;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	class Convertable extends Object implements IConvertable {
 		/**

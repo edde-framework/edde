@@ -51,7 +51,7 @@
 		 *
 		 * @return IElement
 		 */
-		public function setReference(IElement $element): IElement;
+		public function setReference(IElement $element = null): IElement;
 
 		/**
 		 * @return bool

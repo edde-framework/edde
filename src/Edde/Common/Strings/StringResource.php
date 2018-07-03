@@ -35,7 +35,6 @@
 			return $this->string;
 		}
 
-		/** @noinspection PhpMissingParentCallCommonInspection */
 		/**
 		 * @inheritdoc
 		 */

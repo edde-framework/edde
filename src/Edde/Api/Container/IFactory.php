@@ -11,7 +11,6 @@
 		 * is this factory able to handle the given input?
 		 *
 		 * @param IContainer $container
-		 *
 		 * @param string     $dependency
 		 *
 		 * @return bool

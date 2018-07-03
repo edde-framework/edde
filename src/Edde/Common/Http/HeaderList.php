@@ -12,10 +12,6 @@
 	 */
 	class HeaderList extends AbstractList implements IHeaderList {
 		/**
-		 * @var IHeaderList
-		 */
-		static protected $headerList;
-		/**
 		 * @var IContentType
 		 */
 		protected $contentType;
@@ -52,13 +48,13 @@
 		 * @inheritdoc
 		 */
 		public function getAcceptLanguage(string $default): string {
-			return $this->getAccpetLanguageList($default)[0];
+			return $this->getAcceptLanguageList($default)[0];
 		}
 
 		/**
 		 * @inheritdoc
 		 */
-		public function getAccpetLanguageList(string $default): array {
+		public function getAcceptLanguageList(string $default): array {
 			return HttpUtils::language($this->get('Accept-Language'), $default);
 		}
 
@@ -87,41 +83,13 @@
 			return $headers;
 		}
 
-		static public function createHeaderList(): IHeaderList {
-			if (self::$headerList) {
-				return self::$headerList;
+		/**
+		 * @inheritdoc
+		 */
+		public function setupHeaderList(): IHeaderList {
+			foreach ($this as $header => $value) {
+				header("$header: $value");
 			}
-			$headers = [];
-			$mysticList = [
-				'CONTENT_TYPE'   => 'Content-Type',
-				'CONTENT_LENGTH' => 'Content-Length',
-				'CONTENT_MD5'    => 'Content-Md5',
-			];
-			/** @noinspection ForeachSourceInspection */
-			foreach ($_SERVER as $key => $value) {
-				if (empty($value)) {
-					continue;
-				}
-				if (strpos($key, 'HTTP_') === 0) {
-					$key = substr($key, 5);
-					if (isset($mysticList[$key]) === false || isset($_SERVER[$key]) === false) {
-						$key = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', $key))));
-						$headers[$key] = $value;
-					}
-				} else if (isset($mysticList[$key])) {
-					$headers[$mysticList[$key]] = $value;
-				}
-			}
-			if (isset($headers['Authorization']) === false) {
-				if (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
-					$headers['Authorization'] = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
-				} else if (isset($_SERVER['PHP_AUTH_USER'])) {
-					$password = $_SERVER['PHP_AUTH_PW'] ?? '';
-					$headers['Authorization'] = 'Basic ' . base64_encode($_SERVER['PHP_AUTH_USER'] . ':' . $password);
-				} else if (isset($_SERVER['PHP_AUTH_DIGEST'])) {
-					$headers['Authorization'] = $_SERVER['PHP_AUTH_DIGEST'];
-				}
-			}
-			return self::$headerList = new HeaderList($headers);
+			return $this;
 		}
 	}

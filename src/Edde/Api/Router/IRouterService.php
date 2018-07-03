@@ -3,50 +3,32 @@
 
 	namespace Edde\Api\Router;
 
-	use Edde\Api\Application\IResponseHandler;
-	use Edde\Api\Config\IConfigurable;
-	use Edde\Api\Protocol\IElement;
-
 	/**
-	 * Implementation of application router service.
+	 * This service is responsible for user to application request translation; because
+	 * whole application is build around "The Protocol", result should be packet to be
+	 * executed by protocol service.
 	 */
-	interface IRouterService extends IConfigurable {
+	interface IRouterService extends IRouter {
 		/**
-		 * routers should be created on demand
+		 * direct router registration; use wisely as this requires target router to be already instantiated
 		 *
-		 * @param string $router
-		 * @param array  $parameterList
+		 * @param IRouter $router
 		 *
 		 * @return IRouterService
 		 */
-		public function registerRouter(string $router, array $parameterList = []): IRouterService;
+		public function registerRouter(IRouter $router): IRouterService;
 
 		/**
-		 * when routers fail, execute this default request
-		 *
-		 * @param IElement         $element
-		 * @param IResponseHandler $responseHandler
+		 * @param array $routerList
 		 *
 		 * @return IRouterService
 		 */
-		public function setDefaultRequest(IElement $element, IResponseHandler $responseHandler = null): IRouterService;
+		public function registerRouterList(array $routerList): IRouterService;
 
 		/**
-		 * @return IElement
-		 */
-		public function createRequest(): IElement;
-
-		/**
-		 * get current class being executed
+		 * return router able to handle current request or null if nobody is able to handle it
 		 *
-		 * @return string
+		 * @return IRouter|null
 		 */
-		public function getCurrentClass(): string;
-
-		/**
-		 * return current method name being executed
-		 *
-		 * @return string
-		 */
-		public function getCurrentMethod(): string;
+		public function getRouter();
 	}

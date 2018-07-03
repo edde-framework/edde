@@ -75,7 +75,14 @@
 		 *
 		 * @return INode
 		 */
-		public function putAttribute(array $attributeList): INode;
+		public function putAttributeList(array $attributeList): INode;
+
+		/**
+		 * @param array $attributeList
+		 *
+		 * @return INode
+		 */
+		public function appendAttributeList(array $attributeList): INode;
 
 		/**
 		 * return list of meta data
@@ -107,7 +114,14 @@
 		 *
 		 * @return INode
 		 */
-		public function putMeta(array $metaList): INode;
+		public function putMetaList(array $metaList): INode;
+
+		/**
+		 * @param array $metaList
+		 *
+		 * @return INode
+		 */
+		public function appendMetaList(array $metaList): INode;
 
 		/**
 		 * generate materialized path from node names

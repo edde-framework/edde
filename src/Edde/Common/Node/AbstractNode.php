@@ -5,7 +5,7 @@
 
 	use Edde\Api\Node\IAbstractNode;
 	use Edde\Api\Node\NodeException;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	/**
 	 * Pure node tree implementation; this class holds all common methods for node manipulation.
@@ -38,6 +38,7 @@
 		 */
 		public function getRoot(): IAbstractNode {
 			$parent = $this;
+			/** @noinspection PhpStatementHasEmptyBodyInspection */
 			foreach ($this->getParentList() as $parent) {
 				;
 			}
@@ -242,7 +243,8 @@
 			if ($this->isRoot()) {
 				throw new NodeException(sprintf('Cannot check last flag of root node.'));
 			}
-			$nodeList = $this->getParent()->getNodeList();
+			$nodeList = $this->getParent()
+				->getNodeList();
 			return end($nodeList) === $this;
 		}
 
@@ -306,7 +308,7 @@
 		 * @inheritdoc
 		 * @throws NodeException
 		 */
-		public function switch (IAbstractNode $abstractNode, bool $soft = false): IAbstractNode {
+		public function switch(IAbstractNode $abstractNode, bool $soft = false): IAbstractNode {
 			if (($parent = $this->getParent()) !== null) {
 				$parent->replaceNode($this, [$abstractNode], $soft);
 			}

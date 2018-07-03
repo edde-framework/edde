@@ -4,7 +4,7 @@
 	namespace Edde\Common\Xml;
 
 	use Edde\Api\Node\INode;
-	use Edde\Api\Xml\XmlParserException;
+	use Edde\Api\Xml\Exception\XmlParserException;
 	use Edde\Common\Node\Node;
 
 	/**

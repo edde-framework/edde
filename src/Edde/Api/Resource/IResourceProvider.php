@@ -7,7 +7,7 @@
 
 	interface IResourceProvider extends IConfigurable {
 		/**
-		 * is the given resource name available as a resrouce?
+		 * is the given resource name available as a resorouce?
 		 *
 		 * @param string      $name
 		 * @param string|null $namespace

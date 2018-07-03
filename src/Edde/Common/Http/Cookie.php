@@ -4,7 +4,7 @@
 	namespace Edde\Common\Http;
 
 	use Edde\Api\Http\ICookie;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	class Cookie extends Object implements ICookie {
 		/**
@@ -45,7 +45,7 @@
 		 * @param bool   $secure
 		 * @param bool   $httpOnly
 		 */
-		public function __construct($name, $value, $expire, $path, $domain, $secure = false, $httpOnly = false) {
+		public function __construct(string $name, $value, $expire, $path, $domain, $secure = false, $httpOnly = false) {
 			$this->name = $name;
 			$this->value = $value;
 			$this->expire = $expire;
@@ -55,31 +55,60 @@
 			$this->httpOnly = $httpOnly;
 		}
 
-		public function getName() {
+		/**
+		 * @inheritdoc
+		 */
+		public function getName(): string {
 			return $this->name;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getValue() {
 			return $this->value;
 		}
 
-		public function getExpire() {
+		/**
+		 * @inheritdoc
+		 */
+		public function getExpire(): int {
 			return $this->expire;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getPath() {
 			return $this->path;
 		}
 
+		/**
+		 * @inheritdoc
+		 */
 		public function getDomain() {
 			return $this->domain;
 		}
 
-		public function isSecure() {
+		/**
+		 * @inheritdoc
+		 */
+		public function isSecure(): bool {
 			return $this->secure;
 		}
 
-		public function isHttpOnly() {
+		/**
+		 * @inheritdoc
+		 */
+		public function isHttpOnly(): bool {
 			return $this->httpOnly;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function setupCookie(): ICookie {
+			setcookie($this->name, $this->value, $this->expire, $this->path, $this->domain, $this->secure, $this->httpOnly);
+			return $this;
 		}
 	}

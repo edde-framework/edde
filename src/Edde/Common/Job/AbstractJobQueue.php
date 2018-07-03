@@ -5,7 +5,7 @@
 
 	use Edde\Api\Job\IJobQueue;
 	use Edde\Common\Config\ConfigurableTrait;
-	use Edde\Common\Object;
+	use Edde\Common\Object\Object;
 
 	abstract class AbstractJobQueue extends Object implements IJobQueue {
 		use ConfigurableTrait;

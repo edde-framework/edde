@@ -3,8 +3,8 @@
 
 	namespace Edde\Ext\Upgrade;
 
-	use Edde\Api\Schema\LazySchemaManagerTrait;
-	use Edde\Api\Storage\LazyStorageTrait;
+	use Edde\Api\Schema\Inject\SchemaManager;
+	use Edde\Api\Storage\Inject\Storage;
 	use Edde\Common\Query\Schema\CreateSchemaQuery;
 	use Edde\Common\Upgrade\AbstractUpgrade;
 
@@ -12,8 +12,8 @@
 	 * This upgrade is useful for initial storage setup; it will create all available schemas.
 	 */
 	class InitialStorageUpgrade extends AbstractUpgrade {
-		use LazyStorageTrait;
-		use LazySchemaManagerTrait;
+		use Storage;
+		use SchemaManager;
 
 		/**
 		 * @param string $version

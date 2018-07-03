@@ -8,8 +8,6 @@
 	/**
 	 * Application context; basically defines application type (so under one source root could run
 	 * more applications, e.g. backend, administration and frontend, ...).
-	 *
-	 * Parts of Edde supports context's
 	 */
 	interface IContext extends IResourceProvider {
 		/**

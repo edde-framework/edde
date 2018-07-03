@@ -7,7 +7,7 @@
 	use Edde\Api\Http\IHeaderList;
 	use Edde\Api\Http\IResponse;
 
-	abstract class Response extends AbstractHttp implements IResponse {
+	class Response extends AbstractHttp implements IResponse {
 		/**
 		 * @var int
 		 */
@@ -38,6 +38,23 @@
 		 */
 		public function redirect(string $redirect): IResponse {
 			$this->headerList->set('location', $redirect);
+			return $this;
+		}
+
+		/**
+		 * @inheritdoc
+		 */
+		public function send(): IResponse {
+			http_response_code($this->code);
+			$this->headerList->setupHeaderList();
+			$this->cookieList->setupCookieList();
+			if ($this->content) {
+				$this->headerList->has('Content-Type') ? null : header('Content-Type: ' . $this->content->getMime());
+				ob_start();
+				echo $this->content->getContent();
+				header('Content-Length: ' . ob_get_length());
+				ob_end_flush();
+			}
 			return $this;
 		}
 	}

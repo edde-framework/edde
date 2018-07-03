@@ -3,6 +3,9 @@
 
 	namespace Edde;
 
+	/**
+	 * Lazy trait for Framework class.
+	 */
 	trait LazyFrameworkTrait {
 		/**
 		 * @var Framework

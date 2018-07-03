@@ -3,7 +3,7 @@
 
 	namespace Edde\Common\Resource;
 
-	use Edde\Api\Converter\LazyConverterManagerTrait;
+	use Edde\Api\Converter\Inject\ConverterManager;
 	use Edde\Api\File\FileException;
 	use Edde\Api\Node\INode;
 	use Edde\Api\Resource\IResource;
@@ -17,7 +17,7 @@
 	 * Default implementation of a resource manager.
 	 */
 	class ResourceManager extends AbstractResourceProvider implements IResourceManager {
-		use LazyConverterManagerTrait;
+		use ConverterManager;
 		/**
 		 * @var IResourceProvider[]
 		 */
@@ -60,7 +60,8 @@
 			$mime = $mime ?: $resource->getMime();
 			/** @var $node INode */
 			$convertable = $this->converterManager->convert($resource, $mime, [INode::class]);
-			if (($node = $convertable->convert()->getContent()) instanceof INode === false) {
+			if (($node = $convertable->convert()
+					->getContent()) instanceof INode === false) {
 				throw new ResourceConversionException(sprintf('Conversion has failed: converter for [%s] did not returned an instance of [%s].', $mime, INode::class));
 			}
 			if ($root) {

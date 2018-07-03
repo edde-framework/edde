@@ -3,20 +3,28 @@
 
 	namespace Edde\Common\Http\Client;
 
-	use Edde\Api\Container\LazyContainerTrait;
+	use Edde\Api\Container\Inject\Container;
 	use Edde\Api\Converter\IContent;
-	use Edde\Api\Converter\LazyConverterManagerTrait;
+	use Edde\Api\Converter\Inject\ConverterManager;
 	use Edde\Api\File\IFile;
 	use Edde\Api\File\LazyTempDirectoryTrait;
-	use Edde\Api\Http\Client\ClientException;
+	use Edde\Api\Http\Client\Exception\ClientException;
 	use Edde\Api\Http\Client\IHttpHandler;
-	use Edde\Api\Http\Client\IResponse;
 	use Edde\Api\Http\IRequest;
+	use Edde\Api\Http\IResponse;
 	use Edde\Common\Converter\Content;
+	use Edde\Common\Http\Client\Exception\BadRequestException;
+	use Edde\Common\Http\Client\Exception\ForbiddenException;
+	use Edde\Common\Http\Client\Exception\MethodNotAllowedException;
+	use Edde\Common\Http\Client\Exception\NotFoundException;
+	use Edde\Common\Http\Client\Exception\ServerErrorException;
+	use Edde\Common\Http\Client\Exception\ServiceUnavailableException;
+	use Edde\Common\Http\Client\Exception\UnauthorizedException;
 	use Edde\Common\Http\CookieList;
 	use Edde\Common\Http\HeaderList;
 	use Edde\Common\Http\HttpUtils;
-	use Edde\Common\Object;
+	use Edde\Common\Http\Response;
+	use Edde\Common\Object\Object;
 	use Edde\Common\Strings\StringException;
 	use Edde\Ext\Converter\ArrayContent;
 
@@ -24,8 +32,8 @@
 	 * Http client handler; this should not be used in common; only as a result from HttpClient calls
 	 */
 	class HttpHandler extends Object implements IHttpHandler {
-		use LazyContainerTrait;
-		use LazyConverterManagerTrait;
+		use Container;
+		use ConverterManager;
 		use LazyTempDirectoryTrait;
 		/**
 		 * @var IRequest
@@ -69,7 +77,7 @@
 		public function basic(string $user, string $password): IHttpHandler {
 			curl_setopt_array($this->curl, [
 				CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
-				CURLOPT_USERPWD  => vsprintf('%s:%s', func_get_args()),
+				CURLOPT_USERPWD => vsprintf('%s:%s', func_get_args()),
 			]);
 			return $this;
 		}
@@ -80,7 +88,7 @@
 		public function digest(string $user, string $password): IHttpHandler {
 			curl_setopt_array($this->curl, [
 				CURLOPT_HTTPAUTH => CURLAUTH_DIGEST,
-				CURLOPT_USERPWD  => vsprintf('%s:%s', func_get_args()),
+				CURLOPT_USERPWD => vsprintf('%s:%s', func_get_args()),
 			]);
 			return $this;
 		}
@@ -215,7 +223,8 @@
 				}
 				return $length;
 			};
-			$options[CURLOPT_HTTPHEADER] = $this->request->getHeaderList()->headers();
+			$options[CURLOPT_HTTPHEADER] = $this->request->getHeaderList()
+				->headers();
 			$options[CURLOPT_FAILONERROR] = false;
 			curl_setopt_array($this->curl, $options);
 			if (($content = curl_exec($this->curl)) === false) {

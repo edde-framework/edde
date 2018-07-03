@@ -5,6 +5,7 @@
 
 	use Edde\Api\Config\IConfigurable;
 	use Edde\Api\Crate\ICrate;
+	use Edde\Api\Upgrade\Exception\UpgradeException;
 
 	/**
 	 * This class is responsible for proper application upgrades.
