@@ -51,6 +51,7 @@ services:
             # you can hide logs inside container if you're not so much interested in them
             - /mnt/storage/git.john-doe.com/storage/gitlab/logs:/var/log/gitlab
             - /mnt/storage/git.john-doe.com/storage/gitlab/data:/var/opt/gitlab
+        # this is Docker Flow proxy configuration to let it deploy GitLab instance
         deploy:
             labels:
                 - com.df.notify=true
