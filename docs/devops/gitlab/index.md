@@ -13,3 +13,4 @@ for this purpose. Just keep **less secure** login options enabled.
 * [Storage](/devops/gitlab/storage): We have to prepare storage schema for GitLab to keep the stuff safe.
 * [Docker Compose](/devops/gitlab/docker-compose): Configuration file of the stack.
 * [Deployment](/devops/gitlab/deployment): Put things online.
+* [Runner](/devops/gitlab/runner): Setting up GitLab runner is quite important too!

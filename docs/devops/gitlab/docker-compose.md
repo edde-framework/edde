@@ -1,7 +1,9 @@
 # Docker Compose {docsify-ignore-all}
 
-GitLab has one little trick to do when it has to be deployed over SSL; **this configuration will be
-updated during deployment**. 
+GitLab has one little trick to do when it has to be deployed over SSL.
+
+> Remember this file as it will need a little update after deployment: that's because in the first deployment
+you'll get certificates from Let's Encrypt and in subsequent update you'll enable SSL on the GitLab instance. 
 
 ```yaml
 # version is important to keep on 3+ as lower version is not supported by Docker Swarm
