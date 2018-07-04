@@ -44,7 +44,7 @@ Container implementation.
 
 Every time you start to write a new application there is at the beginning more stuff around the framework you're about to use than
 things related to the application. Edde is trying to shorten this to the minimum - not by faking things behind cli commands making
-stuff optically simple (yes, `artisan` I'm talking about you) or forcing you to use complex and unknown directory structure.
+stuff optically simple (yes, `artisan` I'm talking to you) or forcing you to use complex and unknown directory structure.
 Just include `vendor/autoload.php` and you're happy.
 
 !> General problem is Open Source: it costs a lot of money. Even Edde. But this framework is not built with complexity in mind to
