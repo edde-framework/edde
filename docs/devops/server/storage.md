@@ -35,7 +35,7 @@ requirements:
 * **data**: almost every service needs some persistence
 
 This simple schema means you have one root of everything important: `/mnt/storage`; it's enough to harden
-this drive and you're happy. Basically :wink:.
+this drive and you're happy. Basically.
 
 Schema itself could be based on domain name of used service, for example common services on the server (thus
 occupying some well known port like `80` or `443`) could live in `common` leading to:
@@ -55,7 +55,7 @@ maintained by some CI server like [GitLab](/devops/gitlab/index).
 and how much data the service is taking. Also you can simply take service's data and moved it to another node
 if necessary.
 
-## Drawback
+## Drawbacks
 
 There is also a drawback of this schema as when you're working on physical filesystem of the server, you need
 to create exactly **same** structure on every node where an application may run; for example if you have GitLab,
@@ -63,6 +63,6 @@ it could be deployed on any of 100 nodes you have, thus everywhere must be same 
 set to restrict service on a particular node.
 
 !> This is not done in a nice way, but it's enough for a lot of applications; do not argue when you'll be Facebook
-as in that time you won't need guide :blush:.
+as in that time you won't need guide.
 
 **Previous**: [Docker Swarm](/devops/server/docker-swarm) | **Next**: [Proxy](/devops/server/proxy)

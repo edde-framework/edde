@@ -1,3 +1,3 @@
 # FAQ
 
-- nobody asked anything yet :wink:
+- nobody asked anything yet

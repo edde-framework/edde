@@ -6,7 +6,7 @@ ready server to run all of related products needed to have full and simple
 
 !> A lot of things are possible to run on localhost, but this section requires some cheap
 VPS to run the stuff on; yes, it will costs something, but it's a bit price for the
-knowledge :wink:.
+knowledge.
 
 !> VPS (or other) server with **public** IP address (with access to
 virtual CD drive to install **any** operating system) and **own** domain name is **required**!
@@ -23,4 +23,4 @@ which is good to use for Dockerized environment.
 on just one node).
 * [Storage](/devops/server/storage): Yes, you'll need to store data in some way.
 * [Proxy](/devops/server/proxy): Messing up with nginx/apache virtual hosts belongs to some ancient
-ages we already don't remember :wink:!
+ages we already don't remember!

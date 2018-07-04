@@ -10,7 +10,7 @@ A lot of things has many iterations behind, the code itself is not much more lik
 ideas which it could simply argue about.  
 
 So that's the core: [Concepts and Ideas](/ideas). A lot of things are done in different way or are generally "incompatible" with current
-state of PHP scene, but I believe in my work and in the effort put in to make the things work :wink: !. 
+state of PHP scene, but I believe in my work and in the effort put in to make the things work! 
 
 # Important Notes
 

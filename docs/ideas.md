@@ -4,7 +4,7 @@
 
 Edde is built around key set of concepts more than relying on repeating code found all over the internet.
 This article explains some decisions made to keep life a bit easier despite it could be strange on the first
-look. It isn't :blush: !
+look. It isn't.
 
 > Important note about concepts: Edde is trying to use some pieces of design patterns, but also it makes some
 choices between them based on good practices or just on experience. Despite it's quite high quality, Edde is
