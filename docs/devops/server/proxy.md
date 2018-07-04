@@ -123,6 +123,6 @@ After a while you can open your domain in a browser and you'll see http error yo
 ?> Now everything is nice and shiny as Proxy is listening for new containers, so everything is ready to deploy any new
 service!
 
-> Now you can continue by deploying [GitLab](/devops/gitlab/index.md) which is a bit harder to do, but the feeling from success is priceless!
+> Now you can continue by deploying [GitLab](/devops/gitlab/index) which is a bit harder to do, but the feeling from success is priceless!
 
 **Previous**: [Storage](/devops/server/storage)
