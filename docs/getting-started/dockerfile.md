@@ -73,5 +73,3 @@ HEALTHCHECK --timeout=3s --start-period=10s --interval=5s CMD ["/sandbox/bin/hea
 # formally expose ports used
 EXPOSE 80
 ```
-
-**Previous**: [Index](/getting-started/index) | **Next**: [Root Filesystem](/getting-started/rootfs)

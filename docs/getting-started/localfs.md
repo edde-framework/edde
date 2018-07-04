@@ -101,5 +101,3 @@ yLaGCZECgYEAg/olGfSjymY/1EHwojSPhw9SZ/PHgAsRdlS3GcrY4w9NCpLVLUbn
 eRaCqDMfhyOs+q8jfO5zbkz0YPP0Lu5ys8fC2koPFg4wXAZD0z+QEX4=
 -----END RSA PRIVATE KEY-----
 ```
-
-**Previous**: [Root Filesystem](/getting-started/rootfs) | **Next**: [Docker Compose](/getting-started/docker-compose)

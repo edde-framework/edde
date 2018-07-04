@@ -129,5 +129,3 @@ services:
 networks:
         sandbox-network:
 ```
-
-**Previous**: [Local Filesystem](/getting-started/localfs) | **Next**: [Bin](/getting-started/bin)

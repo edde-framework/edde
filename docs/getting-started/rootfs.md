@@ -245,5 +245,3 @@ Simple healthcheck script to keep some info about the container.
 		exit(1);
 	}
 ```
-
-**Previous**: [Dockerfile](/getting-started/dockerfile) | **Next**: [Local Filesystem](/getting-started/localfs)

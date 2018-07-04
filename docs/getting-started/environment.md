@@ -14,5 +14,3 @@ Please read about [storage](/examples/storage/index) concept; it's necessary to 
 
 It's time to configure [Dockerflow Proxy](https://proxy.dockerflow.com/) for production deployment. This service will watch containers
 and make automatic adjustments to [HAPRoxy](http://www.haproxy.org/) configuration, so you'll never make manual webserver setup again. 
-
-**Previous**: [Index](/getting-started/index) | **Next**: [Dockerfile](/getting-started/dockerfile)

@@ -206,5 +206,3 @@ Just for fun we can create CLI controller too to see how the thing works.
 		}
 	}	
 ```
-
-**Previous**: [Bin](/getting-started/bin) | **Next**: [Startup](/getting-started/startup)
