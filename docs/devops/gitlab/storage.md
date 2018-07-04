@@ -30,5 +30,3 @@ docker-host:/mnt/storage # mkdir -p git.john-doe.com/storage/gitlab-runner
 ```
 
 Now it's time to prepare `docker-compose.yml` for deployment process. 
-
-**Previous**: [Index](/devops/gitlab/index) | **Next**: [Docker Compose](/devops/gitlab/docker-compose)

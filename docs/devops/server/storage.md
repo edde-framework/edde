@@ -64,5 +64,3 @@ set to restrict service on a particular node.
 
 !> This is not done in a nice way, but it's enough for a lot of applications; do not argue when you'll be Facebook
 as in that time you won't need guide.
-
-**Previous**: [Docker Swarm](/devops/server/docker-swarm) | **Next**: [Proxy](/devops/server/proxy)

@@ -30,5 +30,3 @@ same virtual network.
 # external network is necessary to keep all services connected
 $ docker network create --driver overlay --attachable proxy
 ```
-
-**Previous**: [Distribution](/devops/server/distribution) | **Next**: [Storage](/devops/server/storage)

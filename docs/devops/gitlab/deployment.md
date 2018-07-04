@@ -56,5 +56,3 @@ container update. **Remember** that updates are causing downtime even for a few 
 
 ?> Now you can enjoy your newly created GitLab instance but you have to setup an account instantly as the very first visitor of the instance
 could steal it; also go through documentation of GitLab and see how to disable public registrations.
-
-**Previous**: [Docker Compose](/devops/gitlab/docker-compose) | **Next**: [Runner](/devops/gitlab/runner)

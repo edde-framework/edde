@@ -62,5 +62,3 @@ check_interval = 0
 
 > Now you have running GitLab instance with runner able to catch your CI jobs! You can continue with [workflow](/examples/workflow/index)
 example to see how you can take advantage from the things you've already created!  
-
-**Previous**: [Deployment](/devops/gitlab/deployment)

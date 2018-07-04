@@ -10,6 +10,9 @@ start with one configuration and that's enough.
 !> During setup you'll need some email provider for sending emails; it's enough to create a **gmail** account
 for this purpose. Just keep **less secure** login options enabled. 
 
+?> This section requires to have up and running Docker Swarm! If you missed [Server](/devops/server/index) section,
+please have a look.
+
 * [Storage](/devops/gitlab/storage): We have to prepare storage schema for GitLab to keep the stuff safe.
 * [Docker Compose](/devops/gitlab/docker-compose): Configuration file of the stack.
 * [Deployment](/devops/gitlab/deployment): Put things online.

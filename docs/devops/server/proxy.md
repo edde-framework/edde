@@ -124,5 +124,3 @@ After a while you can open your domain in a browser and you'll see http error yo
 service!
 
 > Now you can continue by deploying [GitLab](/devops/gitlab/index) which is a bit harder to do, but the feeling from success is priceless!
-
-**Previous**: [Storage](/devops/server/storage)

@@ -85,5 +85,3 @@ on system and data separation so it's incredibly simple to switch between instal
 your needs.
 
 If you're a bit more brave, use RancherOS, if a bit less, go Alpine Linux way.
-
-**Previous**: [Index](/devops/server/index) | **Next**: [Docker Swarm](/devops/server/docker-swarm)

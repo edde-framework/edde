@@ -87,5 +87,3 @@ networks:
     proxy:
         external: true
 ```
-
-**Previous**: [Index](/devops/gitlab/index) | **Next**: [Deployment](/devops/gitlab/deployment)
