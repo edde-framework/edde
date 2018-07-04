@@ -48,6 +48,9 @@ docker-host:/mnt/storage/git.john-doe.com/stack # vim docker-compose.yml
 ```bash
 # update the instance with a new configuration; after this you should get https://git.john-doe.com alive
 docker-host:/mnt/storage/git.john-doe.com/stack # docker stack deploy -c docker-compose.yml git-john-doe-com
+
+# now you can watch following command if everything is ok and GitLab is starting properly
+docker-host:/mnt/storage/git.john-doe.com/stack # docker stack ps git-john-doe-com
 ```
 
 > If you want to update your instance deploy command works in the same way; when a stack is deployed (or updated), Docker Swarm looks
