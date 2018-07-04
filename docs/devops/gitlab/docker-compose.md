@@ -1,4 +1,4 @@
-# Docker Compose
+# Docker Compose {docsify-ignore-all}
 
 GitLab has one little trick to do when it has to be deployed over SSL; **this configuration will be
 updated during deployment**. 

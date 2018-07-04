@@ -1,4 +1,4 @@
-# Storage
+# Storage {docsify-ignore-all}
 
 **Related**: [Storage Schema](/devops/server/storage)
 
