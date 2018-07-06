@@ -6,13 +6,17 @@
 	use Edde\Hydrator\IHydrator;
 	use PDO;
 	use PDOException;
+	use PDOStatement;
 	use Throwable;
+	use function sha1;
 	use function vsprintf;
 
 	abstract class AbstractPdoStorage extends AbstractStorage {
 		const TYPES = [];
 		/** @var PDO */
 		protected $pdo;
+		/** @var PDOStatement[] */
+		protected $statements = [];
 
 		/** @inheritdoc */
 		public function fetch(string $query, array $params = []) {
@@ -278,12 +282,21 @@
 			$this->pdo->rollBack();
 		}
 
+		protected function cache(string $query, array $params = []) {
+			if (isset($this->statements[$cacheId = sha1($query)]) === false) {
+				$statement = $this->pdo->prepare($query);
+				$statement->setFetchMode(PDO::FETCH_ASSOC);
+				$this->statements[$cacheId] = $statement;
+			}
+			return $this->statements[$cacheId]->execute($params);
+		}
+
 		/**
 		 * @inheritdoc
 		 *
 		 * @throws ConfigException
 		 */
-		public function handleSetup(): void {
+		protected function handleSetup(): void {
 			parent::handleSetup();
 			$this->pdo = new PDO(
 				$this->section->require('dsn'),
