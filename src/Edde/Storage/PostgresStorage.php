@@ -15,6 +15,7 @@
 			'float'    => 'DOUBLE PRECISION',
 			'bool'     => 'SMALLINT',
 			'datetime' => 'TIMESTAMP(6)',
+			'uuid'     => 'UUID',
 		];
 
 		public function __construct(string $config = 'postgres') {

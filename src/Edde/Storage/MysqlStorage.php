@@ -15,6 +15,7 @@
 			'float'    => 'DOUBLE PRECISION',
 			'bool'     => 'TINYINT',
 			'datetime' => 'DATETIME(6)',
+			'uuid'     => 'CHARACTER(36)',
 		];
 
 		public function __construct(string $config = 'mysql') {

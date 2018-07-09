@@ -5,5 +5,5 @@
 	interface UuidSchema {
 		const primary = 'uuid';
 
-		public function uuid(): string;
+		public function uuid($type = 'uuid', $required = true);
 	}

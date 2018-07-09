@@ -31,6 +31,7 @@
 				'storage:float'    => $filter,
 				'int'              => $filter = new IntFilter(),
 				'storage:int'      => $filter,
+				'binary-uuid'      => new BinaryUuidFilter(),
 			]);
 		}
 	}

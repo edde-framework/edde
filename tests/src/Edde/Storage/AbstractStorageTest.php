@@ -108,7 +108,7 @@
 		 */
 		public function testNullValueException() {
 			$this->expectException(NullValueException::class);
-			$this->storage->insert(new Entity(LabelSchema::class, ['uuid' => 'kaboom']), new class() extends AbstractHydrator {
+			$this->storage->insert(new Entity(LabelSchema::class, ['uuid' => '11111111111111111111111111111111']), new class() extends AbstractHydrator {
 				public function hydrate(array $source) {
 					return $source;
 				}
@@ -347,14 +347,14 @@
 		 */
 		public function testAttachNotSavedException() {
 			$this->expectException(StorageException::class);
-			$this->expectExceptionMessage('Source [ProjectSchema] uuid [yaay], target [UserSchema] uuid [nope] or both are not saved.');
+			$this->expectExceptionMessage('Source [ProjectSchema] uuid [22222222222222222222222222222222], target [UserSchema] uuid [33333333333333333333333333333333] or both are not saved.');
 			$project = $this->storage->save(new Entity(ProjectSchema::class, [
 				'name' => 'to be linked',
-				'uuid' => 'yaay',
+				'uuid' => '22222222222222222222222222222222',
 			]));
 			$relation = $this->storage->attach(
 				$project,
-				new Entity(UserSchema::class, ['uuid' => 'nope']),
+				new Entity(UserSchema::class, ['uuid' => '33333333333333333333333333333333']),
 				ProjectMemberSchema::class
 			);
 			$relation['owner'] = true;
@@ -391,11 +391,11 @@
 		 */
 		public function testAttach() {
 			$project = $this->storage->save(new Entity(ProjectSchema::class, [
-				'uuid' => 'one',
+				'uuid' => '12121212-1212-1212-1212-121212212121',
 				'name' => 'to be linked',
 			]));
 			$user = $this->storage->save(new Entity(UserSchema::class, [
-				'uuid'     => 'two',
+				'uuid'     => '21212121-2121-2121-2121-112121212121',
 				'login'    => 'roota',
 				'password' => '123',
 			]));
@@ -419,17 +419,17 @@
 		 */
 		public function testAttachInsertUpdate() {
 			$relation = $this->storage->attach(
-				new Entity(ProjectSchema::class, ['uuid' => 'one']),
-				new Entity(UserSchema::class, ['uuid' => 'two']),
+				new Entity(ProjectSchema::class, ['uuid' => '12121212-1212-1212-1212-121212212121']),
+				new Entity(UserSchema::class, ['uuid' => '21212121-2121-2121-2121-112121212121']),
 				ProjectMemberSchema::class
 			);
-			$relation['uuid'] = 'relation';
+			$relation['uuid'] = '34567801-5423-1234-5255-014323531243';
 			$relation['owner'] = true;
 			$this->storage->insert($relation);
-			$relation = $this->storage->load(ProjectMemberSchema::class, 'relation');
+			$relation = $this->storage->load(ProjectMemberSchema::class, '34567801-5423-1234-5255-014323531243');
 			self::assertTrue($relation['owner']);
-			self::assertEquals($relation['project'], 'one');
-			self::assertEquals($relation['user'], 'two');
+			self::assertEquals($relation['project'], '12121212-1212-1212-1212-121212212121');
+			self::assertEquals($relation['user'], '21212121-2121-2121-2121-112121212121');
 			$relation['owner'] = false;
 			$this->storage->update($relation);
 			$relation = $this->storage->load(ProjectMemberSchema::class, $relation['uuid']);
@@ -448,8 +448,8 @@
 			$this->expectException(SchemaException::class);
 			$this->expectExceptionMessage('Invalid relation (!UserSchema)-[ProjectMemberSchema]->(ProjectSchema): Source schema [UserSchema] differs from expected relation [ProjectSchema]; did you swap $source and $target schema?');
 			$this->storage->unlink(
-				new Entity(UserSchema::class, ['uuid' => 'two']),
-				new Entity(ProjectSchema::class, ['uuid' => 'one']),
+				new Entity(UserSchema::class, ['uuid' => '21212121-2121-2121-2121-112121212121']),
+				new Entity(ProjectSchema::class, ['uuid' => '12121212-1212-1212-1212-121212212121']),
 				ProjectMemberSchema::class
 			);
 		}
@@ -461,13 +461,13 @@
 		 */
 		public function testUnlink() {
 			$this->expectException(EmptyEntityException::class);
-			$this->expectExceptionMessage('Requested unknown uuid [relation] of [ProjectMemberSchema].');
+			$this->expectExceptionMessage('Requested unknown uuid [34567801-5423-1234-5255-014323531243] of [ProjectMemberSchema].');
 			$this->storage->unlink(
-				new Entity(ProjectSchema::class, ['uuid' => 'one']),
-				new Entity(UserSchema::class, ['uuid' => 'two']),
+				new Entity(ProjectSchema::class, ['uuid' => '12121212-1212-1212-1212-121212212121']),
+				new Entity(UserSchema::class, ['uuid' => '21212121-2121-2121-2121-112121212121']),
 				ProjectMemberSchema::class
 			);
-			$this->storage->load(ProjectMemberSchema::class, 'relation');
+			$this->storage->load(ProjectMemberSchema::class, '34567801-5423-1234-5255-014323531243');
 		}
 
 		/**
@@ -478,8 +478,8 @@
 			$this->expectException(SchemaException::class);
 			$this->expectExceptionMessage('Invalid relation (!UserSchema)-[ProjectMemberSchema]->(ProjectSchema): Source schema [UserSchema] differs from expected relation [ProjectSchema]; did you swap $source and $target schema?');
 			$this->storage->link(
-				new Entity(UserSchema::class, ['uuid' => 'two']),
-				new Entity(ProjectSchema::class, ['uuid' => 'one']),
+				new Entity(UserSchema::class, ['uuid' => '21212121-2121-2121-2121-112121212121']),
+				new Entity(ProjectSchema::class, ['uuid' => '12121212-1212-1212-1212-121212212121']),
 				ProjectMemberSchema::class
 			);
 		}
@@ -491,13 +491,13 @@
 		 */
 		public function testLink() {
 			$this->expectException(EmptyEntityException::class);
-			$this->expectExceptionMessage('Requested unknown uuid [original] of [ProjectMemberSchema].');
+			$this->expectExceptionMessage('Requested unknown uuid [34567801-5255-1234-5423-014323531243] of [ProjectMemberSchema].');
 			$project = $this->storage->save(new Entity(ProjectSchema::class, [
-				'uuid' => 'two-pi',
+				'uuid' => '98743242-3456-7893-1423-324598542154',
 				'name' => 'multilink, yaay',
 			]));
-			$original = $this->storage->attach($project, $user = new Entity(UserSchema::class, ['uuid' => 'two']), ProjectMemberSchema::class);
-			$original['uuid'] = 'original';
+			$original = $this->storage->attach($project, $user = new Entity(UserSchema::class, ['uuid' => '21212121-2121-2121-2121-112121212121']), ProjectMemberSchema::class);
+			$original['uuid'] = '34567801-5255-1234-5423-014323531243';
 			$this->storage->save($original);
 			$relation = $this->storage->link(
 				$project,
@@ -515,13 +515,13 @@
 		 */
 		public function testDelete() {
 			$this->expectException(EmptyEntityException::class);
-			$this->expectExceptionMessage('Requested unknown uuid [to-be-deleted] of [ProjectSchema].');
+			$this->expectExceptionMessage('Requested unknown uuid [e5fb371a-9d5e-4cac-9739-fdc7d0ce91df] of [ProjectSchema].');
 			$project = $this->storage->save(new Entity(ProjectSchema::class, [
-				'uuid' => 'to-be-deleted',
+				'uuid' => 'e5fb371a-9d5e-4cac-9739-fdc7d0ce91df',
 				'name' => 'kill me, bitch!',
 			]));
 			$this->storage->delete($project);
-			$this->storage->load(ProjectSchema::class, 'to-be-deleted');
+			$this->storage->load(ProjectSchema::class, 'e5fb371a-9d5e-4cac-9739-fdc7d0ce91df');
 		}
 
 		/**
@@ -530,7 +530,7 @@
 		 */
 		public function testQuery() {
 			$user = $this->storage->save(new Entity(UserSchema::class, [
-				'uuid'     => 'ja',
+				'uuid'     => '54b94349-b304-4bfa-aaec-cd2c6b49aa99',
 				'login'    => 'me',
 				'password' => '1234',
 			]));
