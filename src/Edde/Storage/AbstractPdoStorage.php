@@ -8,6 +8,8 @@
 	use PDOException;
 	use PDOStatement;
 	use Throwable;
+	use function array_shift;
+	use function count;
 	use function sha1;
 	use function vsprintf;
 
@@ -21,10 +23,16 @@
 		/** @inheritdoc */
 		public function fetch(string $query, array $params = []) {
 			try {
-				$statement = $this->pdo->prepare($query);
-				$statement->setFetchMode(PDO::FETCH_ASSOC);
-				$statement->execute($params);
-				return $statement;
+				if (isset($this->statements[$cacheId = sha1($query)]) === false) {
+					$statement = $this->pdo->prepare($query);
+					$statement->setFetchMode(PDO::FETCH_ASSOC);
+					$this->statements[$cacheId] = $statement;
+				}
+				if (count($this->statements) >= 64) {
+					array_shift($this->statements);
+				}
+				$this->statements[$cacheId]->execute($params);
+				return $this->statements[$cacheId];
 			} catch (PDOException $exception) {
 				throw $this->exception($exception);
 			}
@@ -280,15 +288,6 @@
 		/** @inheritdoc */
 		public function onRollback(): void {
 			$this->pdo->rollBack();
-		}
-
-		protected function cache(string $query, array $params = []) {
-			if (isset($this->statements[$cacheId = sha1($query)]) === false) {
-				$statement = $this->pdo->prepare($query);
-				$statement->setFetchMode(PDO::FETCH_ASSOC);
-				$this->statements[$cacheId] = $statement;
-			}
-			return $this->statements[$cacheId]->execute($params);
 		}
 
 		/**
