@@ -75,6 +75,20 @@
 		public function hydrate(string $query, IHydrator $hydrator, array $params = []): Generator;
 
 		/**
+		 * hydrate a single entity from the given query; there is no cursor used
+		 *
+		 * @param string $name
+		 * @param string $query
+		 * @param array  $params
+		 *
+		 * @return IEntity
+		 *
+		 * @throws EmptyEntityException
+		 * @throws StorageException
+		 */
+		public function single(string $name, string $query, array $params = []): IEntity;
+
+		/**
 		 * hydrate a single value from the query
 		 *
 		 * @param string $query

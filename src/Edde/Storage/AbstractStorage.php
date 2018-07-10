@@ -9,7 +9,11 @@
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Transaction\AbstractTransaction;
 	use Generator;
+	use function array_keys;
+	use function count;
+	use function implode;
 	use function preg_match_all;
+	use function sha1;
 	use function str_replace;
 	use function uasort;
 
@@ -21,6 +25,8 @@
 		protected $config;
 		/** @var ISection */
 		protected $section;
+		/** @var string[] */
+		protected $queries = [];
 
 		/**
 		 * @param string $config
@@ -41,6 +47,14 @@
 		}
 
 		/** @inheritdoc */
+		public function single(string $name, string $query, array $params = []): IEntity {
+			foreach ($this->schema($name, $query, $params) as $entity) {
+				return $entity;
+			}
+			throw new EmptyEntityException(sprintf('Could not fetch single entity [%s].', $name));
+		}
+
+		/** @inheritdoc */
 		public function value(string $query, array $params = []): Generator {
 			return $this->hydrate($query, $this->hydratorManager->single(), $params);
 		}
@@ -54,6 +68,12 @@
 
 		/** @inheritdoc */
 		public function query(string $query, array $schemas): string {
+			if (isset($this->queries[$cacheId = sha1($query . implode(':', $schemas) . implode(':', array_keys($schemas)))])) {
+				return $this->queries[$cacheId];
+			}
+			if (count($this->queries) > 128) {
+				array_shift($this->queries);
+			}
 			$matches = null;
 			preg_match_all('~([a-zA-Z0-9]+):schema~', $query, $matches);
 			uasort($matches[0], function ($a, $b) {
@@ -72,7 +92,7 @@
 			foreach ($matches[0] as $index => $replace) {
 				$query = str_replace($replace, $this->delimit($matches[1][$index]), $query);
 			}
-			return $query;
+			return $this->queries[$cacheId] = $query;
 		}
 
 		/** @inheritdoc */
