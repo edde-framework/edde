@@ -13,7 +13,6 @@
 	use Edde\Http\IResponse;
 	use Edde\Http\Response;
 	use Edde\Service\Http\RequestService;
-	use stdClass;
 	use function json_decode;
 
 	/**
@@ -44,12 +43,12 @@
 		}
 
 		/**
-		 * @return stdClass
+		 * @return mixed
 		 *
 		 * @throws ApplicationException
 		 * @throws EmptyBodyException
 		 */
-		protected function jsonRequest(): stdClass {
+		protected function jsonRequest() {
 			return json_decode($this->getContent('application/json'));
 		}
 
