@@ -2,3 +2,4 @@
 .idea/workspace.xml
 lib
 temp
+.phpunit.result.cache
