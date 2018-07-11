@@ -37,7 +37,7 @@
 		 * @throws EmptyBodyException
 		 */
 		protected function getContent(string $expected) {
-			if (($content = $this->requestService->getContent())->getType() !== 'application/json') {
+			if (($content = $this->requestService->getContent())->getType() !== $expected) {
 				throw new ApplicationException(sprintf('Content mismatch: expected [%s], got [%s]', $expected, $content->getType()));
 			}
 			return $content->getContent();
