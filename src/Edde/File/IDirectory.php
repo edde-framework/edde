@@ -28,6 +28,13 @@
 		public function getFiles();
 
 		/**
+		 * return recursive iterator over all available objects in directory tree
+		 *
+		 * @return SplFileInfo[]
+		 */
+		public function iterator();
+
+		/**
 		 * create a file with the given name in this directory
 		 *
 		 * @param string $file

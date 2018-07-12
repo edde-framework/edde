@@ -40,12 +40,16 @@
 
 		/** @inheritdoc */
 		public function getFiles() {
-			/** @var $splFileInfo SplFileInfo */
-			foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->directory, RecursiveDirectoryIterator::SKIP_DOTS)) as $splFileInfo) {
+			foreach ($this->iterator() as $splFileInfo) {
 				if ($splFileInfo->isFile()) {
 					yield $splFileInfo;
 				}
 			}
+		}
+
+		/** @inheritdoc */
+		public function iterator() {
+			return new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->directory, RecursiveDirectoryIterator::SKIP_DOTS));
 		}
 
 		/** @inheritdoc */
