@@ -13,6 +13,9 @@ Bootstrap is simple bash script responsible for bootstrapping the container.
 ```bash
 #!/usr/bin/env sh
 
+chmod +x /etc/service -R
+chmod +x /etc/bootstrap -R
+
 # execute all scripts being part of bootstrap process; this should NOT execute any
 # daemon processes!
 for script in /etc/bootstrap/*
@@ -25,7 +28,6 @@ do
         exit $status
     fi
 done
-# execute runit daemon to take care about process management
 exec /sbin/runsvdir -P /etc/service
 ```
 
