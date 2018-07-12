@@ -21,6 +21,4 @@ RUN chmod +x test.sh
 
 RUN composer install --prefer-dist --no-progress
 
-ENTRYPOINT ["/bootstrap.sh"]
-
 EXPOSE 80 22
