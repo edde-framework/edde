@@ -1,4 +1,4 @@
-image: docker:latest
+image: docker.x32.cz/tools/runner
 
 variables:
     IMAGE: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}
