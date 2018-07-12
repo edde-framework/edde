@@ -11,19 +11,17 @@ Bootstrap is simple bash script responsible for bootstrapping the container.
 ?> **.docker/rootfs/bootstrap.sh**
 
 ```bash
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+
+shopt -s nullglob
 
 chmod +x /etc/service -R
 chmod +x /etc/bootstrap -R
 
-# execute all scripts being part of bootstrap process; this should NOT execute any
-# daemon processes!
-for script in /etc/bootstrap/*
-do
+for script in /etc/bootstrap/*; do
 	$script
     status=$?
-    if [ $status != 0 ];
-    then
+    if [ $status != 0 ]; then
         echo >&2 "$script: failed with return value $?"
         exit $status
     fi

@@ -46,9 +46,6 @@ RUN apk --update upgrade && apk add --no-cache \
 	# yes, both of them as they're updated in prod/local environemnts
 	php7-opcache php7-xdebug
 
-# init scripts must be executable
-RUN chmod 0750 -R /etc/service
-RUN chmod 0750 -R /etc/bootstrap
 # setup executable on boot script
 RUN chmod +x /bootstrap.sh
 
