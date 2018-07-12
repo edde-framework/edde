@@ -62,7 +62,7 @@
 		 *
 		 * @throws XmlException
 		 */
-		protected function iterate(Iterator $iterator, IXmlHandler $xmlHandler) {
+		protected function iterate(Iterator $iterator, IXmlHandler $xmlHandler): IXmlParserService {
 			$value = '';
 			$iterator->rewind();
 			while ($iterator->valid()) {
@@ -91,7 +91,7 @@
 		 *
 		 * @throws XmlException
 		 */
-		protected function parseTag(Iterator $iterator, IXmlHandler $xmlHandler) {
+		protected function parseTag(Iterator $iterator, IXmlHandler $xmlHandler): void {
 			$last = null;
 			$name = '';
 			$attributeList = [];
@@ -176,7 +176,7 @@
 		 *
 		 * @throws XmlException
 		 */
-		protected function parseComment(Iterator $iterator) {
+		protected function parseComment(Iterator $iterator): void {
 			$type = self::XML_TYPE_COMMENT;
 			$close = false;
 			while ($iterator->valid()) {
@@ -209,22 +209,23 @@
 		 * @param Iterator $iterator
 		 *
 		 * @return array
+		 *
 		 * @throws XmlException
 		 */
-		protected function parseAttributes(Iterator $iterator) {
-			$attributeList = [];
+		protected function parseAttributes(Iterator $iterator): array {
+			$attributes = [];
 			while ($iterator->valid()) {
 				switch ($char = $iterator->current()) {
 					case '/':
 					case '>':
-						return $attributeList;
+						return $attributes;
 					case "\n":
 					case "\t":
 					case ' ':
 						break;
 					default:
 						if ($attribute = $this->parseAttribute($iterator)) {
-							$attributeList[$attribute[0]] = $attribute[1];
+							$attributes[$attribute[0]] = $attribute[1];
 						}
 				}
 				$iterator->next();
@@ -236,9 +237,10 @@
 		 * @param Iterator $iterator
 		 *
 		 * @return array
+		 *
 		 * @throws XmlException
 		 */
-		protected function parseAttribute(Iterator $iterator) {
+		protected function parseAttribute(Iterator $iterator): array {
 			$name = null;
 			$open = false;
 			$quote = null;

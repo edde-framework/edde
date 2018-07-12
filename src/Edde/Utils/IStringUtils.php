@@ -2,6 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Utils;
 
+	use Generator;
+
 	/**
 	 * String utils interface.
 	 */
@@ -139,7 +141,7 @@
 		 *
 		 * @param string $string
 		 *
-		 * @return \Generator
+		 * @return Generator
 		 */
-		public function createIterator(string $string): \Generator;
+		public function createIterator(string $string): Generator;
 	}

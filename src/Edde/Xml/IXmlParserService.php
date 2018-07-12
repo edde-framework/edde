@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Xml;
 
+	use Edde\File\FileException;
 	use Edde\File\IFile;
 
 	/**
@@ -29,6 +30,7 @@
 		 * @return IXmlParserService
 		 *
 		 * @throws XmlException
+		 * @throws FileException
 		 */
 		public function file(string $file, IXmlHandler $xmlHandler): IXmlParserService;
 
@@ -41,6 +43,7 @@
 		 * @return IXmlParserService
 		 *
 		 * @throws XmlException
+		 * @throws FileException
 		 */
 		public function parse(IFile $file, IXmlHandler $xmlHandler): IXmlParserService;
 	}

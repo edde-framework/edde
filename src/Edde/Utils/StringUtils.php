@@ -3,6 +3,7 @@
 	namespace Edde\Utils;
 
 	use Edde\Edde;
+	use Generator;
 	use function is_array;
 
 	class StringUtils extends Edde implements IStringUtils {
@@ -120,12 +121,11 @@
 		}
 
 		/** @inheritdoc */
-		public function createIterator(string $string): \Generator {
+		public function createIterator(string $string): Generator {
 			$length = mb_strlen($string = $this->normalizeNewLines($string));
 			while ($length) {
 				yield mb_substr($string, 0, 1);
-				$string = mb_substr($string, 1, $length);
-				$length = mb_strlen($string);
+				$length = mb_strlen($string = mb_substr($string, 1, $length));
 			}
 		}
 	}
