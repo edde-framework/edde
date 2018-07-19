@@ -1,4 +1,4 @@
-FROM docker.x32.cz/tools/turtle:v1.0.0
+FROM docker.x32.cz/tools/turtle
 
 COPY .docker/rootfs /
 
@@ -8,15 +8,8 @@ RUN echo "zend_extension = xdebug.so" > /etc/php7/conf.d/xdebug.ini
 
 WORKDIR /edde
 
-COPY composer.json .
-COPY composer.lock .
-COPY loader.php .
-COPY phpunit.xml .
-ADD docs docs
-ADD src src
-ADD tests tests
+COPY . .
 
-COPY test.sh .
 RUN chmod +x test.sh
 
 RUN composer install --prefer-dist --no-progress

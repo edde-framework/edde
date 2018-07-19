@@ -5,25 +5,25 @@ variables:
 
 stages:
     - test
-    - publish
+    - github
 
 test:
     stage: test
     script:
-        - docker build --pull -t ${IMAGE} -f ./.docker/Dockerfile . >/dev/null 2>&1
-        - docker-compose -f .docker/dc.test.yml up -d >/dev/null 2>&1
+        - docker build --pull -t ${IMAGE} -f ./.docker/Dockerfile .
+        - docker-compose -f .docker/dc.test.yml up -d
         - docker exec ${CI_COMMIT_SHA} ./test.sh
     after_script:
-        - docker-compose -f .docker/dc.test.yml down --volumes >/dev/null 2>&1
+        - docker-compose -f .docker/dc.test.yml down --volumes
 
-github sync:
-    stage: publish
+github:
+    stage: github
     variables:
         GIT_STRATEGY: none
     script:
-        - git clone --mirror $CI_REPOSITORY_URL edde.git
+        - git clone --mirror $CI_REPOSITORY_URL edde.git >/dev/null 2>&1
         - cd edde.git
-        - git push --mirror https://$GITHUB_TOKEN@github.com/edde-framework/edde.git
+        - git push --mirror https://$GITHUB_TOKEN@github.com/edde-framework/edde.git >/dev/null 2>&1
     only:
         - master
         - tags
