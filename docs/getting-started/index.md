@@ -2,7 +2,7 @@
 
 ?> To pass this tutorial, you will need some knowledge about [Docker](https://docs.docker.com/) and
 [Docker Compose](https://docs.docker.com/compose/) as development on local machine belongs to the
-`good old days` :wink:.
+`good old days`.
 
 !> This is one of the ways you can build an image; you should consult best practices around the world to
 check if this tutorial does not contain some anti-patterns despite it was build with big care. 
