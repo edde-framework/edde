@@ -10,6 +10,13 @@
 	 */
 	interface ILogger extends IConfigurable {
 		/**
+		 * return logger name
+		 *
+		 * @return string
+		 */
+		public function getName(): string;
+
+		/**
 		 * shortcut for record();
 		 *
 		 * @param mixed $log

@@ -9,6 +9,21 @@
 	 * Common stuff for loggers.
 	 */
 	abstract class AbstractLogger extends Edde implements ILogger {
+		/** @var string */
+		protected $name;
+
+		/**
+		 * @param string $name
+		 */
+		public function __construct(string $name = null) {
+			$this->name = $name ?: static::class;
+		}
+
+		/** @inheritdoc */
+		public function getName(): string {
+			return $this->name;
+		}
+
 		/** @inheritdoc */
 		public function log($log, array $tags = []): void {
 			$this->record(new Log($log), $tags);

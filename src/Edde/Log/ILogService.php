@@ -34,4 +34,24 @@
 		 * @return ILogService
 		 */
 		public function stderr(string $log, array $tags = []): ILogService;
+
+		/**
+		 * disable logger with the given name
+		 *
+		 * @param string $name
+		 *
+		 * @return ILogService
+		 *
+		 * @throws LogException if the name does not exist
+		 */
+		public function disable(string $name): ILogService;
+
+		/**
+		 * @param string $name
+		 *
+		 * @return ILogService
+		 *
+		 * @throws LogException if the name does not exist
+		 */
+		public function enable(string $name): ILogService;
 	}
