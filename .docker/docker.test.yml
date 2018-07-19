@@ -1,0 +1,28 @@
+version: '2'
+services:
+        edde:
+            image: ${IMAGE}
+            container_name: ${CI_COMMIT_SHA}
+            networks:
+                - edde-network
+
+        edde-postgres:
+            image: postgres:latest
+            environment:
+                - POSTGRES_USER=edde
+                - POSTGRES_PASSWORD=PBXxSgEWY3LT
+            networks:
+                - edde-network
+
+        edde-mysql:
+            image: mariadb:latest
+            environment:
+                - MYSQL_ROOT_PASSWORD=enPUxu8SRctV
+                - MYSQL_DATABASE=edde
+                - MYSQL_USER=edde
+                - MYSQL_PASSWORD=enPUxu8SRctV
+            networks:
+                - edde-network
+
+networks:
+        edde-network:
