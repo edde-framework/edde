@@ -11,6 +11,7 @@
 		public function testValidator() {
 			$validator = new FloatValidator();
 			$validator->validate(3.14, ['name' => 'name of validated value']);
+			$validator->validate(0);
 			self::assertTrue(true, 'no error reported :)!');
 		}
 

@@ -219,3 +219,7 @@
 	interface InvalidPrimarySchema {
 		const primary = 'blabla';
 	}
+
+	interface DefaultFloatValueSchema extends UuidSchema {
+		public function value($default = 0): ?float;
+	}

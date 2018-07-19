@@ -5,6 +5,7 @@
 	use Edde\Service\Filter\FilterManager;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Validator\ValidatorManager;
+	use function array_key_exists;
 
 	class SchemaHydrator extends AbstractHydrator {
 		use SchemaManager;
@@ -39,7 +40,7 @@
 				if (($generator = $attribute->getFilter('generator')) && isset($input[$name]) === false) {
 					$input[$name] = $this->filterManager->getFilter($this->prefix . ':' . $generator)->input(null);
 				}
-				$input[$name] = $input[$name] ?? $attribute->getDefault();
+				$input[$name] = isset($input[$name]) || array_key_exists($name, $input) ? $input[$name] : $attribute->getDefault();
 				if ($validator = $attribute->getValidator()) {
 					$this->validatorManager->validate($this->prefix . ':' . $validator, $input[$name], [
 						'name'     => $schema->getName() . '::' . $name,

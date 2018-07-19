@@ -3,6 +3,7 @@
 	namespace Edde\Storage;
 
 	use DateTime;
+	use DefaultFloatValueSchema;
 	use Edde\Container\ContainerException;
 	use Edde\Hydrator\AbstractHydrator;
 	use Edde\Schema\SchemaException;
@@ -43,6 +44,7 @@
 				ProjectSchema::class,
 				ProjectMemberSchema::class,
 				IssueSchema::class,
+				DefaultFloatValueSchema::class,
 			]);
 			self::assertTrue(true, 'everything is ok');
 		}
@@ -559,6 +561,18 @@
 		}
 
 		/**
+		 * @throws StorageException
+		 */
+		public function testDefaultFloat() {
+			$entity = $this->storage->save(new Entity(DefaultFloatValueSchema::class, [
+				'value' => null,
+			]));
+			self::assertNull($entity['value']);
+			$entity = $this->storage->save(new Entity(DefaultFloatValueSchema::class, []));
+			self::assertEquals(0, $entity['value']);
+		}
+
+		/**
 		 * @throws ContainerException
 		 * @throws SchemaException
 		 */
@@ -571,6 +585,7 @@
 				ProjectMemberSchema::class,
 				IssueSchema::class,
 				ShittyTypeSchema::class,
+				DefaultFloatValueSchema::class,
 			]);
 		}
 	}
