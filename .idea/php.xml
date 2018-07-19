@@ -31,6 +31,35 @@
       <path value="$PROJECT_DIR$/lib/myclabs/deep-copy" />
       <path value="$PROJECT_DIR$/lib/phar-io/manifest" />
       <path value="$PROJECT_DIR$/lib/composer" />
+      <path value="$PROJECT_DIR$/lib/phpunit/phpunit-mock-objects" />
+      <path value="$PROJECT_DIR$/lib/myclabs/php-enum" />
+      <path value="$PROJECT_DIR$/lib/graphaware/neo4j-common" />
+      <path value="$PROJECT_DIR$/lib/graphaware/neo4j-bolt" />
+      <path value="$PROJECT_DIR$/lib/symfony/event-dispatcher" />
+      <path value="$PROJECT_DIR$/lib/defuse/php-encryption" />
+      <path value="$PROJECT_DIR$/lib/paragonie/constant_time_encoding" />
+      <path value="$PROJECT_DIR$/lib/paragonie/random_compat" />
+      <path value="$PROJECT_DIR$/lib/michelf/php-markdown" />
+      <path value="$PROJECT_DIR$/lib/pimple/pimple" />
+      <path value="$PROJECT_DIR$/lib/guzzle/guzzle" />
+      <path value="$PROJECT_DIR$/lib/nikic/php-parser" />
+      <path value="$PROJECT_DIR$/lib/twig/twig" />
+      <path value="$PROJECT_DIR$/lib/padraic/phar-updater" />
+      <path value="$PROJECT_DIR$/lib/sami/sami" />
+      <path value="$PROJECT_DIR$/lib/codeclimate/php-test-reporter" />
+      <path value="$PROJECT_DIR$/lib/blackfire/php-sdk" />
+      <path value="$PROJECT_DIR$/lib/satooshi/php-coveralls" />
+      <path value="$PROJECT_DIR$/lib/psr/log" />
+      <path value="$PROJECT_DIR$/lib/symfony/yaml" />
+      <path value="$PROJECT_DIR$/lib/symfony/finder" />
+      <path value="$PROJECT_DIR$/lib/symfony/stopwatch" />
+      <path value="$PROJECT_DIR$/lib/symfony/filesystem" />
+      <path value="$PROJECT_DIR$/lib/symfony/config" />
+      <path value="$PROJECT_DIR$/lib/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/lib/symfony/debug" />
+      <path value="$PROJECT_DIR$/lib/symfony/process" />
+      <path value="$PROJECT_DIR$/lib/symfony/console" />
+      <path value="$PROJECT_DIR$/lib/padraic/humbug_get_contents" />
     </include_path>
   </component>
   <component name="PhpInterpreters">
@@ -358,18 +387,6 @@
     </servers>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
-  <component name="PhpStepFilterConfiguration">
-    <skipped_functions>
-      <skipped_function name="Edde\Autoloader-&gt;load" />
-      <skipped_function name="Edde\Hydrator\SchemaHydrator-&gt;__get" />
-    </skipped_functions>
-    <option name="skippedFunctions">
-      <list>
-        <option value="Edde\Autoloader-&gt;load" />
-        <option value="Edde\Hydrator\SchemaHydrator-&gt;__get" />
-      </list>
-    </option>
-  </component>
   <component name="PhpUnit">
     <phpunit_settings>
       <phpunit_by_interpreter interpreter_id="24e550ee-60c1-4aa1-a4a7-b059cc3d8574" load_method="CUSTOM_LOADER" configuration_file_path="/edde/phpunit.xml" custom_loader_path="/edde/lib/autoload.php" phpunit_phar_path="" use_configuration_file="true" />

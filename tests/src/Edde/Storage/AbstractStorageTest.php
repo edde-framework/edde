@@ -573,6 +573,18 @@
 		}
 
 		/**
+		 * @throws EmptyEntityException
+		 * @throws StorageException
+		 */
+		public function testUtf() {
+			$label = $this->storage->save(new Entity(LabelSchema::class, [
+				'name' => $name = 'ěščřžýáíéňďť',
+			]));
+			$label = $this->storage->load(LabelSchema::class, $label['uuid']);
+			self::assertSame($name, $label['name']);
+		}
+
+		/**
 		 * @throws ContainerException
 		 * @throws SchemaException
 		 */
