@@ -3,7 +3,6 @@
 	namespace Edde\Upgrade;
 
 	use Edde\Configurable\IConfigurable;
-	use Generator;
 
 	interface IUpgradeManager extends IConfigurable {
 		/**
@@ -35,21 +34,4 @@
 		 * @throws CurrentVersionException
 		 */
 		public function upgrade(string $version = null): IUpgrade;
-
-		/**
-		 * get current version (basically current version of an application); if null
-		 * is returned, application is in "zero state", thus nothing nowhere
-		 *
-		 * @return string|null
-		 *
-		 * @throws UpgradeException
-		 */
-		public function getVersion(): ?string;
-
-		/**
-		 * get current list of installed upgrades
-		 *
-		 * @return Generator|array
-		 */
-		public function getCurrentCollection(): Generator;
 	}

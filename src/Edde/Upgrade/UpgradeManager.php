@@ -4,9 +4,11 @@
 
 	use Edde\Edde;
 	use Edde\Service\Log\LogService;
+	use Edde\Service\Upgrade\VersionService;
 	use Throwable;
 
-	abstract class AbstractUpgradeManager extends Edde implements IUpgradeManager {
+	class UpgradeManager extends Edde implements IUpgradeManager {
+		use VersionService;
 		use LogService;
 		/** @var IUpgrade[] */
 		protected $upgrades = [];
@@ -41,7 +43,7 @@
 					throw new UpgradeException(sprintf('Requested unknown version [%s] for upgrade; there is no such upgrade available.', $version));
 				}
 				$upgrades = array_keys($this->upgrades);
-				if (($current = $this->getVersion()) !== null && array_search($current, $upgrades, true) > array_search($version, $upgrades, true)) {
+				if (($current = $this->versionService->getVersion()) !== null && array_search($current, $upgrades, true) > array_search($version, $upgrades, true)) {
 					throw new UpgradeException(sprintf('Current version [%s] is newer than requested version [%s] for upgrade.', $current, $version));
 				}
 				$upgrades = $current ? array_slice($this->upgrades, $index = array_search($current, array_keys($this->upgrades), true) + 1, null, true) : $this->upgrades;
@@ -75,6 +77,7 @@
 		}
 
 		protected function onUpgrade(IUpgrade $upgrade): void {
+			$this->versionService->update($upgrade->getVersion());
 		}
 
 		protected function onUpgradeEnd(IUpgrade $upgrade): void {

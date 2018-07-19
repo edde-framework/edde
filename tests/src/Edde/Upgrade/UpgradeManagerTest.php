@@ -7,14 +7,16 @@
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
 	use Edde\Service\Upgrade\UpgradeManager;
+	use Edde\Service\Upgrade\VersionService;
 	use Edde\Storage\UnknownTableException;
 	use Edde\TestCase;
 	use TestUpgradeSchema;
 	use UpgradeConfigurator;
-	use UpgradeTestManager;
+	use VersionTestService;
 
 	class UpgradeManagerTest extends TestCase {
 		use UpgradeManager;
+		use VersionService;
 		use SchemaManager;
 		use Storage;
 
@@ -47,10 +49,10 @@
 		 */
 		public function testUpgrade() {
 			$this->container->registerConfigurator(IUpgradeManager::class, $this->container->inject(new UpgradeConfigurator()));
-			self::assertNull($this->upgradeManager->getVersion());
+			self::assertNull($this->versionService->getVersion());
 			$upgrade = $this->upgradeManager->upgrade();
 			self::assertSame('2.0', $upgrade->getVersion());
-			self::assertSame('2.0', $this->upgradeManager->getVersion());
+			self::assertSame('2.0', $this->versionService->getVersion());
 		}
 
 		/**
@@ -60,11 +62,11 @@
 		 */
 		public function testRollingUpgrade() {
 			$this->container->registerConfigurator(IUpgradeManager::class, $this->container->inject(new UpgradeConfigurator()));
-			self::assertNull($this->upgradeManager->getVersion());
+			self::assertNull($this->versionService->getVersion());
 			$this->upgradeManager->upgrade('1.0');
 			$this->upgradeManager->upgrade('1.5');
 			$this->upgradeManager->upgrade('2.0');
-			self::assertSame('2.0', $this->upgradeManager->getVersion());
+			self::assertSame('2.0', $this->versionService->getVersion());
 		}
 
 		/**
@@ -76,7 +78,7 @@
 			$this->expectException(UpgradeException::class);
 			$this->expectExceptionMessage('Current version [2.0] is newer than requested version [1.5] for upgrade.');
 			$this->container->registerConfigurator(IUpgradeManager::class, $this->container->inject(new UpgradeConfigurator()));
-			self::assertNull($this->upgradeManager->getVersion());
+			self::assertNull($this->versionService->getVersion());
 			$this->upgradeManager->upgrade();
 			$this->upgradeManager->upgrade('1.5');
 		}
@@ -90,7 +92,7 @@
 			$this->expectException(UpgradeException::class);
 			$this->expectExceptionMessage('Version [2.0] is current; no upgrades has been run.');
 			$this->container->registerConfigurator(IUpgradeManager::class, $this->container->inject(new UpgradeConfigurator()));
-			self::assertNull($this->upgradeManager->getVersion());
+			self::assertNull($this->versionService->getVersion());
 			$this->upgradeManager->upgrade();
 			$this->upgradeManager->upgrade();
 		}
@@ -102,6 +104,6 @@
 				$this->storage->exec($this->storage->query('DROP TABLE u:schema', ['u' => TestUpgradeSchema::class]));
 			} catch (UnknownTableException $_) {
 			}
-			$this->container->registerFactory(new InterfaceFactory(IUpgradeManager::class, UpgradeTestManager::class));
+			$this->container->registerFactory(new InterfaceFactory(IVersionService::class, VersionTestService::class));
 		}
 	}

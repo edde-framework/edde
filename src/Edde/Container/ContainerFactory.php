@@ -42,6 +42,8 @@
 	use Edde\Storage\PostgresStorage;
 	use Edde\Transaction\ITransaction;
 	use Edde\Upgrade\IUpgradeManager;
+	use Edde\Upgrade\IVersionService;
+	use Edde\Upgrade\UpgradeManager;
 	use Edde\Utils\IStringUtils;
 	use Edde\Utils\StringUtils;
 	use Edde\Validator\IValidatorManager;
@@ -232,9 +234,10 @@
 				/**
 				 * an application upgrades support
 				 */
-				IUpgradeManager::class     => (object)[
+				IUpgradeManager::class     => UpgradeManager::class,
+				IVersionService::class     => (object)[
 					'type'    => 'exception',
-					'message' => sprintf('Please provide UpgradeManager implementation of [%s] interface.', IUpgradeManager::class),
+					'message' => sprintf('Please provide version service implementation of [%s] interface.', IVersionService::class),
 					'class'   => EddeException::class,
 				],
 				/**

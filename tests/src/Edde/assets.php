@@ -9,12 +9,12 @@
 	use Edde\Storage\Entity;
 	use Edde\Storage\UnknownTableException;
 	use Edde\Upgrade\AbstractUpgrade;
-	use Edde\Upgrade\AbstractUpgradeManager;
-	use Edde\Upgrade\IUpgrade;
+	use Edde\Upgrade\AbstractVersionService;
 	use Edde\Upgrade\IUpgradeManager;
+	use Edde\Upgrade\IVersionService;
 	use Edde\Upgrade\UpgradeException;
 
-	class UpgradeTestManager extends AbstractUpgradeManager {
+	class VersionTestService extends AbstractVersionService {
 		use Storage;
 
 		/** @inheritdoc */
@@ -35,15 +35,16 @@
 		}
 
 		/** @inheritdoc */
-		public function getCurrentCollection(): Generator {
-			return $this->storage->schema(TestUpgradeSchema::class, 'SELECT * FROM u:schema ORDER BY stamp DESC', ['$query' => ['u' => TestUpgradeSchema::class]]);
+		public function update(string $version): IVersionService {
+			$this->storage->insert(new Entity(TestUpgradeSchema::class, [
+				'version' => $version,
+			]));
+			return $this;
 		}
 
 		/** @inheritdoc */
-		protected function onUpgrade(IUpgrade $upgrade): void {
-			$this->storage->insert(new Entity(TestUpgradeSchema::class, [
-				'version' => $upgrade->getVersion(),
-			]));
+		public function getCollection(): Generator {
+			return $this->storage->schema(TestUpgradeSchema::class, 'SELECT * FROM u:schema ORDER BY stamp DESC', ['$query' => ['u' => TestUpgradeSchema::class]]);
 		}
 	}
 
