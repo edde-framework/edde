@@ -23,6 +23,8 @@
 				'storage:datetime' => $validator,
 				'DateTime'         => $validator,
 				'storage:DateTime' => $validator,
+				'uuid'             => $validator = new UuidValidator(),
+				'storage:uuid'     => $validator,
 			]);
 		}
 	}

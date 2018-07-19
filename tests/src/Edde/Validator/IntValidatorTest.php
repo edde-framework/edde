@@ -4,7 +4,7 @@
 
 	use Edde\TestCase;
 
-	class IntValidatorException extends TestCase {
+	class IntValidatorTest extends TestCase {
 		/**
 		 * @throws ValidatorException
 		 */

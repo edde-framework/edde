@@ -13,7 +13,7 @@
 	use function reset;
 	use function str_replace;
 
-	class SchemaReflectionLoader extends AbstractSchemaLoader implements ISchemaLoader {
+	class ReflectoinSchemaLoader extends AbstractSchemaLoader implements ISchemaLoader {
 		use StringUtils;
 
 		/** @inheritdoc */
@@ -68,14 +68,6 @@
 						$attributeBuilder->type($propertyType = $type->getName());
 						$attributeBuilder->required($type->allowsNull() === false);
 					}
-					if ($propertyName === $primary) {
-						$primary = true;
-						$attributeBuilder->primary();
-						$attributeBuilder->filter('generator', $propertyName);
-					} else if ($propertyName === $source || $propertyName === $target) {
-						$relation++;
-						$attributeBuilder->schema($propertyType);
-					}
 					foreach ($reflectionMethod->getParameters() as $parameter) {
 						switch ($parameterName = $parameter->getName()) {
 							case 'unique':
@@ -125,6 +117,7 @@
 								}
 								$attributeBuilder->type($type);
 								$attributeBuilder->required($parameter->isOptional());
+								$propertyType = $type;
 								break;
 							case 'default':
 								$attributeBuilder->default($parameter->getDefaultValue());
@@ -136,11 +129,20 @@
 								throw new SchemaException(sprintf('Unknown schema [%s::%s] directive [%s].', $schema, $propertyName, $propertyName));
 						}
 					}
+					if ($propertyName === $primary) {
+						$primary = true;
+						$attributeBuilder->primary();
+						$attributeBuilder->filter('generator', $propertyName);
+					} else if ($propertyName === $source || $propertyName === $target) {
+						$relation++;
+						$attributeBuilder->schema($propertyType);
+					}
 					switch ($propertyType) {
 						case 'float':
 						case 'int':
 						case 'bool':
 						case 'string':
+						case 'uuid':
 						case 'datetime':
 						case DateTime::class:
 							$attributeBuilder->filter('type', $propertyType);

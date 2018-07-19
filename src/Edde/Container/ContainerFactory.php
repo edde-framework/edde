@@ -32,8 +32,8 @@
 	use Edde\Runtime\Runtime;
 	use Edde\Schema\ISchemaLoader;
 	use Edde\Schema\ISchemaManager;
+	use Edde\Schema\ReflectoinSchemaLoader;
 	use Edde\Schema\SchemaManager;
-	use Edde\Schema\SchemaReflectionLoader;
 	use Edde\Security\IPasswordService;
 	use Edde\Security\IRandomService;
 	use Edde\Security\PasswordService;
@@ -209,7 +209,7 @@
 				 * schema support
 				 */
 				ISchemaManager::class      => SchemaManager::class,
-				ISchemaLoader::class       => SchemaReflectionLoader::class,
+				ISchemaLoader::class       => ReflectoinSchemaLoader::class,
 				/**
 				 * validation support
 				 */
