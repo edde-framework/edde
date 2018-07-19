@@ -140,12 +140,6 @@
 		public function system($default = false): bool;
 	}
 
-	interface OrganizationSchema extends UuidSchema {
-		const alias = true;
-
-		public function name(): string;
-	}
-
 	interface ProjectSchema extends UuidSchema {
 		const alias = true;
 		const meta = ['some-meta' => true];
@@ -165,15 +159,6 @@
 		public function end(): ?DateTime;
 	}
 
-	interface ProjectOrganizationSchema extends UuidSchema {
-		const alias = true;
-		const relation = ['project' => 'organization'];
-
-		public function project(): ProjectSchema;
-
-		public function organization(): OrganizationSchema;
-	}
-
 	interface IssueSchema extends UuidSchema {
 		const alias = true;
 
@@ -182,14 +167,6 @@
 		public function due(): ?DateTime;
 
 		public function weight($default = 1.0): float;
-	}
-
-	interface IssueProjectSchema extends UuidSchema {
-		const relation = ['issue' => 'project'];
-
-		public function issue(): IssueSchema;
-
-		public function project(): ProjectSchema;
 	}
 
 	interface ProjectMemberSchema extends UuidSchema {
@@ -201,27 +178,6 @@
 		public function user(): UserSchema;
 
 		public function owner($default = false): bool;
-	}
-
-	interface ProjectLabelSchema extends UuidSchema {
-		const relation = ['project' => 'label'];
-		const alias = true;
-
-		public function project(): ProjectSchema;
-
-		public function label(): LabelSchema;
-	}
-
-	interface IssueAssigneeSchema extends UuidSchema {
-		public function issue(): IssueSchema;
-
-		public function user(): UserSchema;
-
-		public function created($generator = 'stamp'): DateTime;
-	}
-
-	interface ToBeOrdered extends UuidSchema {
-		public function index(): float;
 	}
 
 	interface ShittyTypeSchema extends UuidSchema {
