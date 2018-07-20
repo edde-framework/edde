@@ -12,7 +12,7 @@ Maybe that's the benefit: because of kind of one-man-show project has much more 
 more consistent and much simpler. Everything is publicly available, including this doc as a part of the
 [repository](https://github.com/edde-framework/edde/tree/master/docs). At least framework will stay alive.
 
-See [Story](/story) how long Edde is here, it's quite long reading because for now it's few years.
+See a [story](/story) how long Edde is here, it's quite long reading because for now it's few years.
 
 ## Docker aware
 
