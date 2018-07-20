@@ -14,6 +14,12 @@ more consistent and much simpler. Everything is publicly available, including th
 
 See [Story](/story) how long Edde is here, it's quite long reading because for now it's few years.
 
+## Docker based
+
+Docker is quite important today, and so framework aware of this cool technology simplifying all the stuff around to
+make container builds much more easy. This could be done for example by making services integral part of
+[container](/components/container), thus available everywhere, so you can for example execute upgrades from URL.
+
 ## Concepts
 
 Edde is not yet another implementation of existing parts of another libraries or frameworks; it has it's own ideas,
