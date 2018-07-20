@@ -14,11 +14,14 @@ more consistent and much simpler. Everything is publicly available, including th
 
 See [Story](/story) how long Edde is here, it's quite long reading because for now it's few years.
 
-## Docker based
+## Docker aware
 
 Docker is quite important today, and so framework aware of this cool technology simplifying all the stuff around to
 make container builds much more easy. This could be done for example by making services integral part of
 [container](/components/container), thus available everywhere, so you can for example execute upgrades from URL.
+
+> If you don't know Docker, it's time to have a look [around](/getting-started/index) this site to get some idea
+what's this technology about and also have a look on [official site](https://docs.docker.com/).   
 
 ## Concepts
 
@@ -37,3 +40,11 @@ nice enough, don't touch it".
 
 A little story in short: there was a new ORM for 5th generation of Edde which was... ripped of before release
 as there was major conceptual flaw. More [here](/components/orm).
+
+## No ORM
+
+Common framework are trying to be extremely cool with theirs ORMs which are the best over the globe. But if you ever
+built an application, there was usually just one database engine. So why not to use it's native language which
+**everybody** knows? Do you know SQL? Yes? And what about Edde proprietary ORM? Nope. That's the reason, why 
+there is just a thin layer over a database connection providing just [necessary features](/components/storage) to
+get and save data.
