@@ -1,9 +1,0 @@
-#!/usr/bin/env sh
-
-exec 2>&1
-set -e
-
-chmod 600 -R /etc/ssh
-apk add openssh
-echo "root:1234" | chpasswd
-exec /usr/sbin/sshd -D >/dev/null 2>&1

@@ -13,7 +13,7 @@ services:
                 - "80:80"
                 - "4722:22"
             networks:
-                    - edde-network
+                - edde-network
 
         edde-postgres:
             image: postgres:latest

@@ -1,8 +1,0 @@
-#!/usr/bin/env sh
-
-exec 2>&1
-set -e
-
-umask 022
-
-exec /usr/sbin/nginx

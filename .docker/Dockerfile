@@ -1,4 +1,10 @@
-FROM docker.x32.cz/tools/turtle
+FROM eddeframework/elephant:latest
+
+ENV \
+	BACKEND_ROOT=/edde \
+	BACKEND_PUBLIC_ROOT=/edde \
+	ROOT_PASSWORD=root:4321 \
+	USE_SSHD=true
 
 COPY .docker/rootfs /
 
