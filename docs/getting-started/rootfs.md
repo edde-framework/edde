@@ -55,7 +55,7 @@ Execute composer and install production dependencies.
 set -e
 
 cd /sandbox/backend
-if [ -f compose.json ]; then
+if [ -f composer.json ]; then
 	composer install --prefer-dist --no-progress
 fi
 ```
