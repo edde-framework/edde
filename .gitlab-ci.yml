@@ -1,4 +1,4 @@
-image: docker.x32.cz/tools/runner
+image: eddeframework/gitlab-runner:latest
 
 variables:
     IMAGE: ${CI_COMMIT_REF_NAME}
