@@ -1,9 +1,9 @@
-FROM eddeframework/elephant:latest
+FROM docker.x32.cz/edde-framework/elephant:latest
 
 ENV \
 	BACKEND_ROOT=/edde \
 	BACKEND_PUBLIC_ROOT=/edde \
-	ROOT_PASSWORD=root:4321 \
+	ROOT_PASSWORD="root:1234" \
 	USE_SSHD=true
 
 COPY .docker/rootfs /
