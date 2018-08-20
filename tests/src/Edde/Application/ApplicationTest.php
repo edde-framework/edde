@@ -6,25 +6,21 @@
 	use Edde\Container\ContainerException;
 	use Edde\Log\AbstractLogger;
 	use Edde\Log\ILog;
-	use Edde\Router\IRouterService;
-	use Edde\Router\RouterException;
 	use Edde\Service\Application\Application;
 	use Edde\Service\Container\Container;
 	use Edde\Service\Log\LogService;
-	use Edde\Service\Router\RouterService;
 	use Edde\TestCase;
 	use function in_array;
 
 	class ApplicationTest extends TestCase {
 		use Application;
 		use LogService;
-		use RouterService;
 
 		/**
 		 * @throws ApplicationException
 		 */
 		public function testRunException() {
-			$this->expectException(RouterException::class);
+			$this->expectException(ApplicationException::class);
 			$this->expectExceptionMessage('Cannot handle current request.');
 			$this->logService->registerLogger($logger = new class() extends AbstractLogger {
 				public $logs = [];
@@ -47,7 +43,7 @@
 		 * @throws ContainerException
 		 */
 		public function testRun() {
-			$this->container->registerConfigurator(IRouterService::class, $this->container->inject(new class() extends AbstractConfigurator {
+			$this->container->registerConfigurator(IRequestService::class, $this->container->inject(new class() extends AbstractConfigurator {
 				use Container;
 
 				/**
@@ -68,7 +64,7 @@
 		public function testRunControllerException() {
 			$this->expectException(ApplicationException::class);
 			$this->expectExceptionMessage('Requested controller [Edde\Application\SomeService] is not instance of [Edde\Controller\IController].');
-			$this->container->registerConfigurator(IRouterService::class, $this->container->inject(new class() extends AbstractConfigurator {
+			$this->container->registerConfigurator(IRequestService::class, $this->container->inject(new class() extends AbstractConfigurator {
 				use Container;
 
 				/**
@@ -85,10 +81,9 @@
 		/**
 		 * @throws ApplicationException
 		 * @throws ContainerException
-		 * @throws RouterException
 		 */
 		public function testRunResponse() {
-			$this->container->registerConfigurator(IRouterService::class, $this->container->inject(new class() extends AbstractConfigurator {
+			$this->container->registerConfigurator(IRequestService::class, $this->container->inject(new class() extends AbstractConfigurator {
 				use Container;
 
 				/**

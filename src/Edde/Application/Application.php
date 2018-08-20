@@ -5,14 +5,12 @@
 	use Edde\Controller\IController;
 	use Edde\Edde;
 	use Edde\Service\Container\Container;
-	use Edde\Service\Router\RouterService;
 	use Edde\Service\Utils\StringUtils;
 	use function get_class;
 	use function is_int;
 
 	class Application extends Edde implements IApplication {
 		use Container;
-		use RouterService;
 		use StringUtils;
 
 		/** @inheritdoc */

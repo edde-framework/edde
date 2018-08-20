@@ -4,6 +4,8 @@
 
 	use Edde\Application\Application;
 	use Edde\Application\IApplication;
+	use Edde\Application\IRequestService;
+	use Edde\Application\RequestService;
 	use Edde\Config\ConfigLoader;
 	use Edde\Config\ConfigService;
 	use Edde\Config\IConfigLoader;
@@ -25,9 +27,6 @@
 	use Edde\Log\ILogService;
 	use Edde\Log\LogService;
 	use Edde\Log\LogServiceConfigurator;
-	use Edde\Router\IRouterService;
-	use Edde\Router\RouterService;
-	use Edde\Router\RouterServiceConfigurator;
 	use Edde\Runtime\IRuntime;
 	use Edde\Runtime\Runtime;
 	use Edde\Schema\ISchemaLoader;
@@ -200,9 +199,9 @@
 				 */
 				ILogService::class         => LogService::class,
 				/**
-				 * user request into protocol element translation
+				 * request service
 				 */
-				IRouterService::class      => RouterService::class,
+				IRequestService::class     => RequestService::class,
 				/**
 				 * general service for http request/response
 				 */
@@ -260,7 +259,6 @@
 
 		static public function getDefaultConfigurators(): array {
 			return [
-				IRouterService::class    => RouterServiceConfigurator::class,
 				IFilterManager::class    => FilterManagerConfigurator::class,
 				IValidatorManager::class => ValidatorManagerConfigurator::class,
 				ILogService::class       => LogServiceConfigurator::class,

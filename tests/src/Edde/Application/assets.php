@@ -4,7 +4,6 @@
 
 	use Edde\Controller\IController;
 	use Edde\Edde;
-	use Edde\Router\AbstractRouter;
 
 	class TestService extends Edde implements IController {
 		public function noResponse() {
@@ -18,7 +17,7 @@
 	class SomeService extends Edde {
 	}
 
-	class TestWrongControllerRouter extends AbstractRouter {
+	class TestWrongControllerRouter extends Edde implements IRequestService {
 		/** @inheritdoc */
 		public function canHandle(): bool {
 			return true;
@@ -30,7 +29,7 @@
 		}
 	}
 
-	class TestRouter extends AbstractRouter {
+	class TestRouter extends Edde implements IRequestService {
 		protected $method;
 
 		public function __construct(string $method) {

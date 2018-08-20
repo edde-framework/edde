@@ -1,40 +1,19 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Router;
+	namespace Edde\Application;
 
-	use Edde\Application\IRequest;
-	use Edde\Application\Request;
+	use Edde\Edde;
 	use Edde\Runtime\RuntimeException;
-	use Edde\Service\Container\Container;
-	use Edde\Service\Http\RequestService;
 	use Edde\Service\Runtime\Runtime;
-	use Edde\Service\Security\RandomService;
 	use Edde\Service\Utils\StringUtils;
-	use Throwable;
 
-	/**
-	 * Maybe not the best name: this router provides application request made from
-	 * CLI and from HTTP request.
-	 */
-	class RequestRouter extends AbstractRouter {
-		use RequestService;
-		use Container;
-		use Runtime;
+	class RequestService extends Edde implements IRequestService {
 		use StringUtils;
-		use RandomService;
+		use Runtime;
 		const PREG_CONTROLLER = '~^/?(?<class>[.a-z0-9-]+)/(?<method>[a-z0-9_-]+)$~';
 		const PREG_REST = '~^/?rest/(?<class>[.a-z0-9-]+)$~';
 		/** @var IRequest */
 		protected $request;
-
-		/** @inheritdoc */
-		public function canHandle(): bool {
-			try {
-				return $this->container->canHandle($this->createRequest()->getService());
-			} catch (Throwable $exception) {
-				return false;
-			}
-		}
 
 		/** @inheritdoc */
 		public function createRequest(): IRequest {
@@ -42,7 +21,7 @@
 		}
 
 		/**
-		 * @throws RouterException
+		 * @throws ApplicationException
 		 */
 		protected function createHttpRequest(): IRequest {
 			if ($match = $this->stringUtils->match($path = ($requestUrl = $this->requestService->getUrl())->getPath(false), self::PREG_REST, true, true)) {
@@ -50,13 +29,13 @@
 			} else if ($match = $this->stringUtils->match($path, self::PREG_CONTROLLER, true, true)) {
 				return $this->factory($match['class'], $match['method'], 'Http', $requestUrl->getParams());
 			}
-			throw new RouterException('Cannot handle current HTTP request.');
+			throw new ApplicationException('Cannot handle current HTTP request.');
 		}
 
 		/**
 		 * @return IRequest
 		 *
-		 * @throws RouterException
+		 * @throws ApplicationException
 		 * @throws RuntimeException
 		 */
 		protected function createCliRequest(): IRequest {
@@ -65,12 +44,12 @@
 			 * first parameter must be plain string in the same format, like in URL (for example foo.bar-service/do-this)
 			 */
 			if (isset($parameters[1]) === false || is_string($parameters[1]) === false) {
-				throw new RouterException('First argument must be plain (just string)!');
+				throw new ApplicationException('First argument must be plain (just string)!');
 			}
 			if ($match = $this->stringUtils->match($parameters[1], self::PREG_CONTROLLER, true, true)) {
 				return $this->factory($match['class'], $match['method'], 'Cli', array_slice($parameters, 2));
 			}
-			throw new RouterException('Cannot handle current Cli request.');
+			throw new ApplicationException('Cannot handle current Cli request.');
 		}
 
 		/**
