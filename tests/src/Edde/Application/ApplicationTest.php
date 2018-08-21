@@ -43,7 +43,7 @@
 		 * @throws ContainerException
 		 */
 		public function testRun() {
-			$this->container->registerConfigurator(IRequestService::class, $this->container->inject(new class() extends AbstractConfigurator {
+			$this->container->registerConfigurator(IRouterService::class, $this->container->inject(new class() extends AbstractConfigurator {
 				use Container;
 
 				/**
@@ -64,7 +64,7 @@
 		public function testRunControllerException() {
 			$this->expectException(ApplicationException::class);
 			$this->expectExceptionMessage('Requested controller [Edde\Application\SomeService] is not instance of [Edde\Controller\IController].');
-			$this->container->registerConfigurator(IRequestService::class, $this->container->inject(new class() extends AbstractConfigurator {
+			$this->container->registerConfigurator(IRouterService::class, $this->container->inject(new class() extends AbstractConfigurator {
 				use Container;
 
 				/**
@@ -83,7 +83,7 @@
 		 * @throws ContainerException
 		 */
 		public function testRunResponse() {
-			$this->container->registerConfigurator(IRequestService::class, $this->container->inject(new class() extends AbstractConfigurator {
+			$this->container->registerConfigurator(IRouterService::class, $this->container->inject(new class() extends AbstractConfigurator {
 				use Container;
 
 				/**

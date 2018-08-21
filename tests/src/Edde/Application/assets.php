@@ -17,7 +17,7 @@
 	class SomeService extends Edde {
 	}
 
-	class TestWrongControllerRouter extends Edde implements IRequestService {
+	class TestWrongControllerRouter extends Edde implements IRouterService {
 		/** @inheritdoc */
 		public function canHandle(): bool {
 			return true;
@@ -29,7 +29,7 @@
 		}
 	}
 
-	class TestRouter extends Edde implements IRequestService {
+	class TestRouter extends Edde implements IRouterService {
 		protected $method;
 
 		public function __construct(string $method) {

@@ -4,11 +4,14 @@
 
 	use Edde\Edde;
 	use Edde\Runtime\RuntimeException;
+	use Edde\Service\Http\RequestService;
 	use Edde\Service\Runtime\Runtime;
 	use Edde\Service\Utils\StringUtils;
+	use Edde\Url\UrlException;
 
-	class RequestService extends Edde implements IRequestService {
+	class RouterService extends Edde implements IRouterService {
 		use StringUtils;
+		use RequestService;
 		use Runtime;
 		const PREG_CONTROLLER = '~^/?(?<class>[.a-z0-9-]+)/(?<method>[a-z0-9_-]+)$~';
 		const PREG_REST = '~^/?rest/(?<class>[.a-z0-9-]+)$~';
@@ -21,7 +24,10 @@
 		}
 
 		/**
-		 * @throws ApplicationException
+		 * @return IRequest
+		 *
+		 * @throws RouterException
+		 * @throws UrlException
 		 */
 		protected function createHttpRequest(): IRequest {
 			if ($match = $this->stringUtils->match($path = ($requestUrl = $this->requestService->getUrl())->getPath(false), self::PREG_REST, true, true)) {
@@ -29,13 +35,13 @@
 			} else if ($match = $this->stringUtils->match($path, self::PREG_CONTROLLER, true, true)) {
 				return $this->factory($match['class'], $match['method'], 'Http', $requestUrl->getParams());
 			}
-			throw new ApplicationException('Cannot handle current HTTP request.');
+			throw new RouterException('Cannot handle current HTTP request.');
 		}
 
 		/**
 		 * @return IRequest
 		 *
-		 * @throws ApplicationException
+		 * @throws RouterException
 		 * @throws RuntimeException
 		 */
 		protected function createCliRequest(): IRequest {
@@ -44,12 +50,12 @@
 			 * first parameter must be plain string in the same format, like in URL (for example foo.bar-service/do-this)
 			 */
 			if (isset($parameters[1]) === false || is_string($parameters[1]) === false) {
-				throw new ApplicationException('First argument must be plain (just string)!');
+				throw new RouterException('First argument must be plain (just string)!');
 			}
 			if ($match = $this->stringUtils->match($parameters[1], self::PREG_CONTROLLER, true, true)) {
 				return $this->factory($match['class'], $match['method'], 'Cli', array_slice($parameters, 2));
 			}
-			throw new ApplicationException('Cannot handle current Cli request.');
+			throw new RouterException('Cannot handle current Cli request.');
 		}
 
 		/**

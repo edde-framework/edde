@@ -4,8 +4,8 @@
 
 	use Edde\Application\Application;
 	use Edde\Application\IApplication;
-	use Edde\Application\IRequestService;
-	use Edde\Application\RequestService;
+	use Edde\Application\IRouterService;
+	use Edde\Application\RouterService;
 	use Edde\Config\ConfigLoader;
 	use Edde\Config\ConfigService;
 	use Edde\Config\IConfigLoader;
@@ -199,9 +199,9 @@
 				 */
 				ILogService::class         => LogService::class,
 				/**
-				 * request service
+				 * service providing request from current environment translation (http/cli/...)
 				 */
-				IRequestService::class     => RequestService::class,
+				IRouterService::class      => RouterService::class,
 				/**
 				 * general service for http request/response
 				 */
