@@ -29,8 +29,9 @@
 		}
 	}
 
-	class TestRouter extends Edde implements IRouterService {
+	class TestRouterService extends Edde implements IRouterService {
 		protected $method;
+		protected $request;
 
 		public function __construct(string $method) {
 			$this->method = $method;
@@ -43,6 +44,6 @@
 
 		/** @inheritdoc */
 		public function createRequest(): IRequest {
-			return new Request(TestService::class, $this->method);
+			return $this->request ?: $this->request = new Request(TestService::class, $this->method);
 		}
 	}

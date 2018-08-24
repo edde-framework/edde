@@ -2,26 +2,28 @@
 	declare(strict_types=1);
 	namespace Edde\Application;
 
-	use Edde\Configurable\AbstractConfigurator;
-	use Edde\Container\ContainerException;
+	use Edde\Factory\InstanceFactory;
 	use Edde\Log\AbstractLogger;
 	use Edde\Log\ILog;
+	use Edde\Runtime\RuntimeException;
 	use Edde\Service\Application\Application;
-	use Edde\Service\Container\Container;
+	use Edde\Service\Application\RouterService;
 	use Edde\Service\Log\LogService;
 	use Edde\TestCase;
+	use Edde\Url\UrlException;
 	use function in_array;
 
 	class ApplicationTest extends TestCase {
 		use Application;
 		use LogService;
+		use RouterService;
 
 		/**
 		 * @throws ApplicationException
 		 */
 		public function testRunException() {
-			$this->expectException(ApplicationException::class);
-			$this->expectExceptionMessage('Cannot handle current request.');
+			$this->expectException(RouterException::class);
+			$this->expectExceptionMessage('Cannot handle current Cli request.');
 			$this->logService->registerLogger($logger = new class() extends AbstractLogger {
 				public $logs = [];
 
@@ -40,60 +42,30 @@
 
 		/**
 		 * @throws ApplicationException
-		 * @throws ContainerException
 		 */
 		public function testRun() {
-			$this->container->registerConfigurator(IRouterService::class, $this->container->inject(new class() extends AbstractConfigurator {
-				use Container;
-
-				/**
-				 * @param $instance IRouterService
-				 */
-				public function configure($instance) {
-					parent::configure($instance);
-					$instance->registerRouter($this->container->inject(new TestRouter('noResponse')));
-				}
-			}));
+			$this->container->registerFactory(new InstanceFactory(IRouterService::class, new TestRouterService('noResponse')));
 			self::assertEquals(0, $this->application->run());
 		}
 
 		/**
 		 * @throws ApplicationException
-		 * @throws ContainerException
 		 */
 		public function testRunControllerException() {
 			$this->expectException(ApplicationException::class);
-			$this->expectExceptionMessage('Requested controller [Edde\Application\SomeService] is not instance of [Edde\Controller\IController].');
-			$this->container->registerConfigurator(IRouterService::class, $this->container->inject(new class() extends AbstractConfigurator {
-				use Container;
-
-				/**
-				 * @param $instance IRouterService
-				 */
-				public function configure($instance) {
-					parent::configure($instance);
-					$instance->registerRouter($this->container->inject(new TestWrongControllerRouter()));
-				}
-			}));
+			$this->expectExceptionMessage('Requested class [Edde\Application\SomeService] is not instance of [Edde\Controller\IController].');
+			$this->container->registerFactory(new InstanceFactory(IRouterService::class, new TestWrongControllerRouter()));
 			$this->application->run();
 		}
 
 		/**
 		 * @throws ApplicationException
-		 * @throws ContainerException
+		 * @throws RouterException
+		 * @throws RuntimeException
+		 * @throws UrlException
 		 */
 		public function testRunResponse() {
-			$this->container->registerConfigurator(IRouterService::class, $this->container->inject(new class() extends AbstractConfigurator {
-				use Container;
-
-				/**
-				 * @param $instance IRouterService
-				 */
-				public function configure($instance) {
-					parent::configure($instance);
-					$instance->registerRouter($this->container->inject(new TestRouter('response')));
-				}
-			}));
+			$this->container->registerFactory(new InstanceFactory(IRouterService::class, new TestRouterService('response')));
 			self::assertEquals(123, $this->application->run());
 			self::assertSame($this->routerService->createRequest(), $this->routerService->createRequest());
 		}

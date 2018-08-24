@@ -128,4 +128,19 @@
 				$length = mb_strlen($string = mb_substr($string, 1, $length));
 			}
 		}
+
+		/** @inheritdoc */
+		public function className(string $string): string {
+			return (string)str_replace(
+				'°',
+				'\\',
+				$this->toCamelCase(
+					str_replace(
+						['.', '-'],
+						['°', '~'],
+						$string
+					)
+				)
+			);
+		}
 	}

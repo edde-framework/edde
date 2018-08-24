@@ -50,7 +50,7 @@
 			 * first parameter must be plain string in the same format, like in URL (for example foo.bar-service/do-this)
 			 */
 			if (isset($parameters[1]) === false || is_string($parameters[1]) === false) {
-				throw new RouterException('First argument must be plain (just string)!');
+				throw new RouterException('Cannot handle current Cli request.');
 			}
 			if ($match = $this->stringUtils->match($parameters[1], self::PREG_CONTROLLER, true, true)) {
 				return $this->factory($match['class'], $match['method'], 'Cli', array_slice($parameters, 2));

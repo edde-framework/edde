@@ -144,4 +144,14 @@
 		 * @return Generator
 		 */
 		public function createIterator(string $string): Generator;
+
+		/**
+		 * converts lowercase notation to PHP FQDN class name with namespace (if present), for
+		 * example foo-bar.some-thing will be FooBar\\SomeThing
+		 *
+		 * @param string $string
+		 *
+		 * @return string
+		 */
+		public function className(string $string): string;
 	}

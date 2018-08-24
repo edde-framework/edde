@@ -33,16 +33,12 @@
 			return $this->interface;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function canHandle(IContainer $container, string $dependency): bool {
 			return $dependency === $this->interface;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function getReflection(IContainer $container, string $dependency): IReflection {
 			if ($this->instance) {
 				return new Reflection();
@@ -50,16 +46,12 @@
 			return parent::getReflection($container, $this->class);
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function fetch(IContainer $container, string $name, array $params) {
 			return $this->instance;
 		}
 
-		/**
-		 * @inheritdoc
-		 */
+		/** @inheritdoc */
 		public function factory(IContainer $container, array $params, IReflection $dependency, string $name = null) {
 			return $this->instance ?: $this->instance = parent::factory($container, $params, $dependency, $this->class);
 		}

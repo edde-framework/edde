@@ -97,4 +97,10 @@
 			];
 			self::assertEquals($trim, $result);
 		}
+
+		public function testClassName() {
+			self::assertEquals('BlaBla', $this->stringUtils->className('bla-bla'));
+			self::assertEquals('Bla\\Bla', $this->stringUtils->className('bla.bla'));
+			self::assertEquals('FooBar\\BarFoo\\BlaBla', $this->stringUtils->className('foo-bar.bar-foo.bla-bla'));
+		}
 	}
