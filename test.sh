@@ -4,9 +4,8 @@ set -e
 echo "Waiting for MySQL"
 #while !(nc -z edde-mysql 3306); do
 	echo -n .
-	sleep 1
 	echo -n .
-	sleep 1
+	sleep 3
 	echo -n .
 	sleep 1
 #done
