@@ -2,10 +2,16 @@
 set -e
 
 echo "Waiting for MySQL"
-#while ! timeout bash -c "echo > /dev/tcp/edde-mysql/3306"; do sleep 1; done
-sleep 1
-echo "Waiting for Postgres"
-#while ! timeout bash -c "echo > /dev/tcp/edde-postgres/5432"; do sleep 1; done
-sleep 6
+while !(nc -z edde-mysql 3306); do
+	echo -n .
+	sleep 1
+done
+echo "Waiting for PostgreSQL"
+while !(nc -z edde-postgres 5432); do
+	echo -n .
+	sleep 1
+done
 
-phpunit --coverage-text
+echo "YAHOOO"
+
+#phpunit --coverage-text
