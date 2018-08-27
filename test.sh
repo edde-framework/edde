@@ -3,7 +3,7 @@ set -e
 
 echo "Waiting for MySQL"
 while !(nc -z edde-mysql 3306); do
-	echo -n .
+#	echo -n .
 	sleep 2
 done
 echo "Waiting for PostgreSQL"
