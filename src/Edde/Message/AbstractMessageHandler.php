@@ -5,11 +5,4 @@
 	use Edde\Edde;
 
 	abstract class AbstractMessageHandler extends Edde implements IMessageHandler {
-		/** @inheritdoc */
-		public function request(IMessage $message): IMessage {
-		}
-
-		/** @inheritdoc */
-		public function response(IMessage $message): IMessage {
-		}
 	}

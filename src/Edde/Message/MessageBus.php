@@ -3,9 +3,18 @@
 	namespace Edde\Message;
 
 	use Edde\Service\Security\RandomService;
+	use function sprintf;
 
 	class MessageBus extends AbstractMessageHandler implements IMessageBus {
 		use RandomService;
+		/** @var IMessageHandler[][] */
+		protected $messageHandlers = [];
+
+		/** @inheritdoc */
+		public function register(string $type, IMessageHandler $messageHandler): IMessageBus {
+			$this->messageHandlers[$type][] = $messageHandler;
+			return $this;
+		}
 
 		/** @inheritdoc */
 		public function packet(IPacket $packet): IPacket {
@@ -17,6 +26,16 @@
 		}
 
 		/** @inheritdoc */
+		public function resolve(IMessage $message): IMessageHandler {
+			foreach ($this->messageHandlers[$message->getType()] ?? [] as $messageHandler) {
+				if ($messageHandler->canHandle($message)) {
+					return $messageHandler;
+				}
+			}
+			throw new MessageException(sprintf('Cannot resolve Message Handler for message [%s] uuid [%s] for resource [%s].', $message->getType(), $message->getUuid(), $message->getResource()));
+		}
+
+		/** @inheritdoc */
 		public function createPacket(): IPacket {
 			return new Packet(self::VERSION, $this->randomService->uuid());
 		}
@@ -24,5 +43,25 @@
 		/** @inheritdoc */
 		public function createMessage(string $type, string $resource, string $uuid = null): IMessage {
 			return new Message($type, $resource, $uuid ?: $this->randomService->uuid());
+		}
+
+		/** @inheritdoc */
+		public function canHandle(IMessage $message): bool {
+			foreach ($this->messageHandlers[$message->getType()] ?? [] as $messageHandler) {
+				if ($messageHandler->canHandle($message)) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		/** @inheritdoc */
+		public function request(IMessage $message): IMessage {
+			return $this->resolve($message)->request($message);
+		}
+
+		/** @inheritdoc */
+		public function response(IMessage $message): IMessage {
+			return $this->resolve($message)->response($message);
 		}
 	}
