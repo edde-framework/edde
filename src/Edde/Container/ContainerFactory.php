@@ -27,6 +27,8 @@
 	use Edde\Log\ILogService;
 	use Edde\Log\LogService;
 	use Edde\Log\LogServiceConfigurator;
+	use Edde\Message\IMessageBus;
+	use Edde\Message\MessageBus;
 	use Edde\Runtime\IRuntime;
 	use Edde\Runtime\Runtime;
 	use Edde\Schema\ISchemaLoader;
@@ -230,6 +232,10 @@
 				 * general filtering (data conversion) support
 				 */
 				IFilterManager::class      => FilterManager::class,
+				/**
+				 * Message bus support
+				 */
+				IMessageBus::class         => MessageBus::class,
 				/**
 				 * an application upgrades support
 				 */
