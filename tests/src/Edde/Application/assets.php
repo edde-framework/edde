@@ -4,6 +4,17 @@
 
 	use Edde\Controller\IController;
 	use Edde\Edde;
+	use Edde\Runtime\IRuntime;
+
+	class DummyRuntime implements IRuntime {
+		public function isConsoleMode(): bool {
+			return true;
+		}
+
+		public function getArguments(): array {
+			return [];
+		}
+	}
 
 	class TestService extends Edde implements IController {
 		public function noResponse() {

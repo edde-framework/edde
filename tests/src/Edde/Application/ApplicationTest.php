@@ -3,8 +3,10 @@
 	namespace Edde\Application;
 
 	use Edde\Factory\InstanceFactory;
+	use Edde\Factory\InterfaceFactory;
 	use Edde\Log\AbstractLogger;
 	use Edde\Log\ILog;
+	use Edde\Runtime\IRuntime;
 	use Edde\Runtime\RuntimeException;
 	use Edde\Service\Application\Application;
 	use Edde\Service\Application\RouterService;
@@ -24,6 +26,7 @@
 		public function testRunException() {
 			$this->expectException(RouterException::class);
 			$this->expectExceptionMessage('Cannot handle current Cli request.');
+			$this->container->registerFactory(new InterfaceFactory(IRuntime::class, DummyRuntime::class));
 			$this->logService->registerLogger($logger = new class() extends AbstractLogger {
 				public $logs = [];
 
