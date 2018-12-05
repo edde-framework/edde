@@ -2,9 +2,29 @@
 	declare(strict_types=1);
 	namespace Edde\Application;
 
+	use Edde\Configurable\AbstractConfigurator;
+	use Edde\Controller\AbstractController;
 	use Edde\Controller\IController;
 	use Edde\Edde;
 	use Edde\Runtime\IRuntime;
+	use Edde\Service\Log\LogService;
+
+	class TestMagicService extends AbstractController {
+		use LogService;
+
+		public function doMagick() {
+			$this->logService->info('fireball!');
+			return 'fireball!';
+		}
+	}
+
+	class SomeRouterServiceConfigurator extends AbstractConfigurator {
+		/** @var $instance IRouterService */
+		public function configure($instance) {
+			parent::configure($instance);
+			$instance->default(new Request(TestMagicService::class, 'doMagick'));
+		}
+	}
 
 	class DummyRuntime implements IRuntime {
 		public function isConsoleMode(): bool {

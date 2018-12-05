@@ -32,7 +32,7 @@
 
 				public function record(ILog $log, array $tags = []): void {
 					if (in_array('exception', $tags)) {
-						$logs[] = $log;
+						$this->logs[] = $log;
 					}
 				}
 			});
@@ -41,6 +41,26 @@
 			self::assertNotEmpty($logs = $logger->logs);
 			[$record] = $logs;
 			throw $record->getLog();
+		}
+
+		public function testDefaultRequest() {
+			$this->container->registerFactory(new InterfaceFactory(IRuntime::class, DummyRuntime::class));
+			$this->container->registerFactory(new InterfaceFactory(TestMagicService::class, TestMagicService::class));
+			$this->container->registerConfigurator(IRouterService::class, new SomeRouterServiceConfigurator);
+			$this->logService->registerLogger($logger = new class() extends AbstractLogger {
+				/** @var ILog[] */
+				public $logs = [];
+
+				public function record(ILog $log, array $tags = []): void {
+					if (in_array('info', $tags)) {
+						$this->logs[] = $log;
+					}
+				}
+			});
+			$this->application->run();
+			self::assertNotEmpty($logs = $logger->logs);
+			[$record] = $logs;
+			self::assertSame('fireball!', $record->getLog());
 		}
 
 		/**

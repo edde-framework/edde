@@ -4,6 +4,7 @@
 
 	use Edde\Runtime\RuntimeException;
 	use Edde\Service\Http\RequestService;
+	use Edde\Service\Log\LogService;
 	use Edde\Service\Runtime\Runtime;
 	use Edde\Service\Utils\StringUtils;
 	use Edde\Url\UrlException;
@@ -12,6 +13,7 @@
 	class RouterService extends AbstractRouterService implements IRouterService {
 		use StringUtils;
 		use RequestService;
+		use LogService;
 		use Runtime;
 		const PREG_CONTROLLER = '~^/?(?<class>[.a-z0-9-]+)/(?<method>[a-z0-9_-]+)$~';
 		const PREG_REST = '~^/?rest/(?<class>[.a-z0-9-]+)$~';
@@ -24,7 +26,7 @@
 				return $this->request ?: $this->request = ($this->runtime->isConsoleMode() ? $this->createCliRequest() : $this->createHttpRequest());
 			} catch (Throwable $e) {
 				if ($this->default) {
-					$this->exception = $e;
+					$this->logService->exception($this->exception = $e);
 					return $this->request = $this->default;
 				}
 				/** @noinspection PhpUnhandledExceptionInspection */
