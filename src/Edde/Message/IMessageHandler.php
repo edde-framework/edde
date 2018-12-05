@@ -35,4 +35,14 @@
 		 * @throws MessageException
 		 */
 		public function response(IMessage $message): IMessage;
+
+		/**
+		 * @param string      $type
+		 * @param string      $resource
+		 * @param string|null $uuid
+		 * @param array|null  $attrs
+		 *
+		 * @return IMessage
+		 */
+		public function createMessage(string $type, string $resource, string $uuid = null, array $attrs = null): IMessage;
 	}

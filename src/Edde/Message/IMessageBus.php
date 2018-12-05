@@ -47,13 +47,4 @@
 		 * @return IPacket
 		 */
 		public function createPacket(): IPacket;
-
-		/**
-		 * @param string      $type
-		 * @param string      $resource
-		 * @param string|null $uuid
-		 *
-		 * @return IMessage
-		 */
-		public function createMessage(string $type, string $resource, string $uuid = null): IMessage;
 	}

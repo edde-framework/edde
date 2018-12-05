@@ -2,11 +2,9 @@
 	declare(strict_types=1);
 	namespace Edde\Message;
 
-	use Edde\Service\Security\RandomService;
 	use function sprintf;
 
 	class MessageBus extends AbstractMessageHandler implements IMessageBus {
-		use RandomService;
 		/** @var IMessageHandler[][] */
 		protected $messageHandlers = [];
 
@@ -38,11 +36,6 @@
 		/** @inheritdoc */
 		public function createPacket(): IPacket {
 			return new Packet(self::VERSION, $this->randomService->uuid());
-		}
-
-		/** @inheritdoc */
-		public function createMessage(string $type, string $resource, string $uuid = null): IMessage {
-			return new Message($type, $resource, $uuid ?: $this->randomService->uuid());
 		}
 
 		/** @inheritdoc */

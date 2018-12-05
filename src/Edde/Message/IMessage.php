@@ -31,6 +31,11 @@
 		public function getUuid(): string;
 
 		/**
+		 * @return array
+		 */
+		public function getAttrs(): array;
+
+		/**
 		 * export message as an standard object (to be serialized)
 		 *
 		 * @return stdClass

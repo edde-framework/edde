@@ -12,16 +12,20 @@
 		protected $resource;
 		/** @var string */
 		protected $uuid;
+		/** @var array */
+		protected $attrs;
 
 		/**
 		 * @param string $type
 		 * @param string $resource
+		 * @param array  $attrs
 		 * @param string $uuid
 		 */
-		public function __construct(string $type, string $resource, string $uuid) {
+		public function __construct(string $type, string $resource, string $uuid, array $attrs = null) {
 			$this->type = $type;
 			$this->resource = $resource;
 			$this->uuid = $uuid;
+			$this->attrs = $attrs ?? [];
 		}
 
 		/** @inheritdoc */
@@ -40,9 +44,17 @@
 		}
 
 		/** @inheritdoc */
+		public function getAttrs(): array {
+			return $this->attrs;
+		}
+
+		/** @inheritdoc */
 		public function export(): stdClass {
 			return (object)[
-				'type' => $this->getType(),
+				'type'     => $this->getType(),
+				'resource' => $this->getResource(),
+				'uuid'     => $this->getUuid(),
+				'attrs'    => (object)$this->getAttrs(),
 			];
 		}
 	}

@@ -9,6 +9,9 @@
 
 		/** @inheritdoc */
 		public function request(IMessage $message): IMessage {
+			return $this->reply($message, [
+				'foo' => 'bar',
+			]);
 		}
 
 		/** @inheritdoc */
