@@ -41,7 +41,7 @@ set -e
 
 cd /sandbox/backend
 # create config file from template using values from environment variables
-cat config.ini.template | envsubst > config.ini
+envsubst < config.ini.template > config.ini
 ```
 
 ## 05-composer.sh
