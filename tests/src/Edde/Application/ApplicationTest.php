@@ -70,6 +70,6 @@
 		public function testRunResponse() {
 			$this->container->registerFactory(new InstanceFactory(IRouterService::class, new TestRouterService('response')));
 			self::assertEquals(123, $this->application->run());
-			self::assertSame($this->routerService->createRequest(), $this->routerService->createRequest());
+			self::assertSame($this->routerService->request(), $this->routerService->request());
 		}
 	}

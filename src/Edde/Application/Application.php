@@ -22,7 +22,7 @@
 			 * converted to Foo°FooService and ° could be replaced by "\" leading to Foo\FooService
 			 */
 			$controller = $this->container->create(
-				$this->stringUtils->className(($request = $this->routerService->createRequest())->getService()),
+				$this->stringUtils->className(($request = $this->routerService->request())->getService()),
 				[],
 				__METHOD__
 			);

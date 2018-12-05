@@ -28,19 +28,19 @@
 	class SomeService extends Edde {
 	}
 
-	class TestWrongControllerRouter extends Edde implements IRouterService {
+	class TestWrongControllerRouter extends AbstractRouterService implements IRouterService {
 		/** @inheritdoc */
 		public function canHandle(): bool {
 			return true;
 		}
 
 		/** @inheritdoc */
-		public function createRequest(): IRequest {
+		public function request(): IRequest {
 			return new Request(SomeService::class, 'nope');
 		}
 	}
 
-	class TestRouterService extends Edde implements IRouterService {
+	class TestRouterService extends AbstractRouterService implements IRouterService {
 		protected $method;
 		protected $request;
 
@@ -54,7 +54,7 @@
 		}
 
 		/** @inheritdoc */
-		public function createRequest(): IRequest {
+		public function request(): IRequest {
 			return $this->request ?: $this->request = new Request(TestService::class, $this->method);
 		}
 	}

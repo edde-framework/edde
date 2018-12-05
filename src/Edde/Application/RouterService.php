@@ -2,14 +2,14 @@
 	declare(strict_types=1);
 	namespace Edde\Application;
 
-	use Edde\Edde;
 	use Edde\Runtime\RuntimeException;
 	use Edde\Service\Http\RequestService;
 	use Edde\Service\Runtime\Runtime;
 	use Edde\Service\Utils\StringUtils;
 	use Edde\Url\UrlException;
+	use Throwable;
 
-	class RouterService extends Edde implements IRouterService {
+	class RouterService extends AbstractRouterService implements IRouterService {
 		use StringUtils;
 		use RequestService;
 		use Runtime;
@@ -19,8 +19,17 @@
 		protected $request;
 
 		/** @inheritdoc */
-		public function createRequest(): IRequest {
-			return $this->request ?: $this->request = ($this->runtime->isConsoleMode() ? $this->createCliRequest() : $this->createHttpRequest());
+		public function request(): IRequest {
+			try {
+				return $this->request ?: $this->request = ($this->runtime->isConsoleMode() ? $this->createCliRequest() : $this->createHttpRequest());
+			} catch (Throwable $e) {
+				if ($this->default) {
+					$this->exception = $e;
+					return $this->request = $this->default;
+				}
+				/** @noinspection PhpUnhandledExceptionInspection */
+				throw $e;
+			}
 		}
 
 		/**
