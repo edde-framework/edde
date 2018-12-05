@@ -1,5 +1,6 @@
 .coverage
 .idea/workspace.xml
+.phpunit.result.cache
 lib
 temp
-.phpunit.result.cache
+node_modules

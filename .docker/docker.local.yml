@@ -11,6 +11,7 @@ services:
             ports:
                 # documentation
                 - "4780:80"
+                - "4788:8080"
                 - "4722:22"
             networks:
                 - edde-network
