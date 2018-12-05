@@ -2,23 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Message;
 
-	use Edde\Edde;
 	use Edde\Service\Security\RandomService;
 
-	class MessageBus extends Edde implements IMessageBus {
+	class MessageBus extends AbstractMessageHandler implements IMessageBus {
 		use RandomService;
-
-		/** @inheritdoc */
-		public function request(IMessage $message): IMessage {
-		}
-
-		/** @inheritdoc */
-		public function response(IMessage $message): IMessage {
-		}
-
-		/** @inheritdoc */
-		public function message(IMessage $message): IMessage {
-		}
 
 		/** @inheritdoc */
 		public function packet(IPacket $packet): IPacket {

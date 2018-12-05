@@ -2,41 +2,12 @@
 	declare(strict_types=1);
 	namespace Edde\Message;
 
-	use Edde\Configurable\IConfigurable;
-
-	interface IMessageBus extends IConfigurable {
+	interface IMessageBus extends IMessageHandler {
 		/**
 		 * quite strange version number, but it's high enough to keep line with
 		 * edde and make difference from the original The Protocol
 		 */
 		const VERSION = '5.0';
-
-		/**
-		 * process input message in request mode (thus input message is in "request" part)
-		 *
-		 * @param IMessage $message
-		 *
-		 * @return IMessage
-		 */
-		public function request(IMessage $message): IMessage;
-
-		/**
-		 * process input message in response mode
-		 *
-		 * @param IMessage $message
-		 *
-		 * @return IMessage
-		 */
-		public function response(IMessage $message): IMessage;
-
-		/**
-		 * process individual message
-		 *
-		 * @param IMessage $message
-		 *
-		 * @return IMessage
-		 */
-		public function message(IMessage $message): IMessage;
 
 		/**
 		 * process packet (high level method)
