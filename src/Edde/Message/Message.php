@@ -6,55 +6,46 @@
 	use stdClass;
 
 	class Message extends Edde implements IMessage {
-		/** @var string */
-		protected $type;
-		/** @var string */
-		protected $resource;
-		/** @var string */
-		protected $uuid;
 		/** @var array */
-		protected $attrs;
+		protected $message;
 
 		/**
 		 * @param string $type
-		 * @param string $resource
+		 * @param string $namespace
 		 * @param array  $attrs
 		 * @param string $uuid
 		 */
-		public function __construct(string $type, string $resource, string $uuid, array $attrs = null) {
-			$this->type = $type;
-			$this->resource = $resource;
-			$this->uuid = $uuid;
-			$this->attrs = $attrs ?? [];
+		public function __construct(string $type, string $namespace, string $uuid, array $attrs = null) {
+			$this->message = [
+				'type'      => $type,
+				'namespace' => $namespace,
+				'uuid'      => $uuid,
+				'attrs'     => $attrs,
+			];
 		}
 
 		/** @inheritdoc */
 		public function getType(): string {
-			return $this->type;
+			return (string)$this->message['type'];
 		}
 
 		/** @inheritdoc */
-		public function getResource(): string {
-			return $this->resource;
+		public function getNamespace(): string {
+			return (string)$this->message['namespace'];
 		}
 
 		/** @inheritdoc */
 		public function getUuid(): string {
-			return $this->uuid;
+			return (string)$this->message['uuid'];
 		}
 
 		/** @inheritdoc */
-		public function getAttrs(): array {
-			return $this->attrs;
+		public function getAttrs(): ?array {
+			return $this->message['attrs'];
 		}
 
 		/** @inheritdoc */
 		public function export(): stdClass {
-			return (object)[
-				'type'     => $this->getType(),
-				'resource' => $this->getResource(),
-				'uuid'     => $this->getUuid(),
-				'attrs'    => (object)$this->getAttrs(),
-			];
+			return (object)$this->message;
 		}
 	}

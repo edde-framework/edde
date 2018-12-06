@@ -14,6 +14,6 @@
 		}
 
 		protected function reply(IMessage $message, array $attrs = null): IMessage {
-			return $this->createMessage($message->getType(), $message->getResource(), null, $attrs);
+			return $this->createMessage($message->getType(), $message->getNamespace(), null, $attrs);
 		}
 	}

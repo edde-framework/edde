@@ -19,7 +19,7 @@
 
 		/** @inheritdoc */
 		public function resolve(IMessage $message): IMessageHandler {
-			throw new MessageException(sprintf('Cannot resolve Message Handler for message [%s] uuid [%s] for resource [%s].', $message->getType(), $message->getUuid(), $message->getResource()));
+			throw new MessageException(sprintf('Cannot resolve Message Handler for message [%s] uuid [%s] for resource [%s].', $message->getType(), $message->getUuid(), $message->getNamespace()));
 		}
 
 		/** @inheritdoc */

@@ -17,11 +17,11 @@
 		public function getType(): string;
 
 		/**
-		 * get related resource name of this message
+		 * get namespace of this message (could be used for service handler translation)
 		 *
 		 * @return string
 		 */
-		public function getResource(): string;
+		public function getNamespace(): string;
 
 		/**
 		 * every message should have unique id (uuid v4)
@@ -33,7 +33,7 @@
 		/**
 		 * @return array
 		 */
-		public function getAttrs(): array;
+		public function getAttrs(): ?array;
 
 		/**
 		 * export message as an standard object (to be serialized)
