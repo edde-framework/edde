@@ -5,6 +5,7 @@
 	use Edde\Service\Container\Container;
 	use Edde\Service\Utils\StringUtils;
 	use stdClass;
+	use function is_string;
 	use function sprintf;
 
 	class MessageBus extends AbstractMessageHandler implements IMessageBus {
@@ -51,6 +52,15 @@
 				throw new MessageException(sprintf('Incompatible version of Message Bus - expected [%s], given [%s].', self::VERSION, $version));
 			}
 			foreach ($import->messages ?? [] as $item) {
+				if (is_string($item->type ?? null) === false) {
+					throw new MessageException('Missing message type or it is not string');
+				}
+				if (is_string($item->namespace ?? null) === false) {
+					throw new MessageException('Missing message namespace or it is not string');
+				}
+				if (is_string($item->uuid ?? null) === false) {
+					throw new MessageException('Missing message uuid or it is not string');
+				}
 				$packet->message(new Message($item->type, $item->namespace, $item->uuid, $item->attrs ?? null));
 			}
 			return $packet;
