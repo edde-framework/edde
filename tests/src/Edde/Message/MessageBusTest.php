@@ -31,11 +31,11 @@
 		 */
 		public function testStateMessage() {
 			$input = $this->messageBus->createPacket();
-			$input->push($state = $this->messageBus->createMessage('state', 'edde.message', 'da-uuid'));
+			$input->message($state = $this->messageBus->createMessage('state', 'edde.message', 'da-uuid'));
 			$output = $this->messageBus->packet($input);
 			self::assertInstanceOf(IPacket::class, $output);
-			self::assertCount(1, $output->pulls());
-			[$pull] = $output->pulls();
+			self::assertCount(1, $output->messages());
+			[$pull] = $output->messages();
 			self::assertSame(['foo' => 'bar'], $pull->getAttrs());
 		}
 	}

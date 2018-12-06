@@ -5,9 +5,8 @@
 	use Edde\Configurable\IConfigurable;
 
 	interface IMessageHandler extends IConfigurable {
-
 		/**
-		 * messages pushed (from "client" point of view) to the server (alias request)
+		 * handle incoming message
 		 *
 		 * @param IMessage $message message being processed
 		 * @param IPacket  $packet  output packet (response)
@@ -16,20 +15,7 @@
 		 *
 		 * @throws MessageException
 		 */
-		public function push(IMessage $message, IPacket $packet): IMessageHandler;
-
-		/**
-		 * messages pulled (from "client" point of view) to the client (alias response); pulled messages
-		 * should be executed by the other side potentially making another roundtrip
-		 *
-		 * @param IMessage $message
-		 * @param IPacket  $packet
-		 *
-		 * @return IMessageHandler
-		 *
-		 * @throws MessageException
-		 */
-		public function pull(IMessage $message, IPacket $packet): IMessageHandler;
+		public function message(IMessage $message, IPacket $packet): IMessageHandler;
 
 		/**
 		 * @param string      $type

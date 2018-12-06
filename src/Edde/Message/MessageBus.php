@@ -13,11 +13,8 @@
 		/** @inheritdoc */
 		public function packet(IPacket $packet): IPacket {
 			$response = $this->createPacket();
-			foreach ($packet->pushes() as $message) {
-				$this->push($message, $response);
-			}
-			foreach ($packet->pulls() as $message) {
-				$this->pull($message, $response);
+			foreach ($packet->messages() as $message) {
+				$this->message($message, $response);
 			}
 			return $response;
 		}
@@ -41,14 +38,8 @@
 		}
 
 		/** @inheritdoc */
-		public function push(IMessage $message, IPacket $packet): IMessageHandler {
-			$this->resolve($message)->push($message, $packet);
-			return $this;
-		}
-
-		/** @inheritdoc */
-		public function pull(IMessage $message, IPacket $packet): IMessageHandler {
-			$this->resolve($message)->pull($message, $packet);
+		public function message(IMessage $message, IPacket $packet): IMessageHandler {
+			$this->resolve($message)->message($message, $packet);
 			return $this;
 		}
 	}

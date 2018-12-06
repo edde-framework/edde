@@ -5,8 +5,8 @@
 
 	class StateMessageHandler extends AbstractMessageHandler {
 		/** @inheritdoc */
-		public function push(IMessage $message, IPacket $packet): IMessageHandler {
-			$packet->pull($this->reply($message, [
+		public function message(IMessage $message, IPacket $packet): IMessageHandler {
+			$packet->message($this->reply($message, [
 				'foo' => 'bar',
 			]));
 			return $this;
