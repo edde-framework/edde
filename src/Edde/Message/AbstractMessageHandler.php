@@ -9,11 +9,11 @@
 		use RandomService;
 
 		/** @inheritdoc */
-		public function createMessage(string $type, string $namespace, string $uuid = null, array $attrs = null): IMessage {
+		public function createMessage(string $type, string $namespace, array $attrs = null, string $uuid = null): IMessage {
 			return new Message($type, $namespace, $uuid ?: $this->randomService->uuid(), $attrs);
 		}
 
 		protected function reply(IMessage $message, array $attrs = null): IMessage {
-			return $this->createMessage($message->getType(), $message->getNamespace(), null, $attrs);
+			return $this->createMessage($message->getType(), $message->getNamespace(), $attrs, null);
 		}
 	}

@@ -3,13 +3,6 @@
   <component name="RemoteMappingsManager">
     <list>
       <list>
-        <remote-mappings server-id="php@b6711a25-b459-4e6a-8ac9-ebac21883e33">
-          <settings>
-            <list>
-              <mapping local-root="$PROJECT_DIR$" remote-root="/edde" />
-            </list>
-          </settings>
-        </remote-mappings>
         <remote-mappings server-id="php@24e550ee-60c1-4aa1-a4a7-b059cc3d8574">
           <settings>
             <list>

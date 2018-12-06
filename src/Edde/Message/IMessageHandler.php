@@ -20,10 +20,10 @@
 		/**
 		 * @param string      $type
 		 * @param string      $namespace
-		 * @param string|null $uuid
 		 * @param array|null  $attrs
+		 * @param string|null $uuid
 		 *
 		 * @return IMessage
 		 */
-		public function createMessage(string $type, string $namespace, string $uuid = null, array $attrs = null): IMessage;
+		public function createMessage(string $type, string $namespace, array $attrs = null, string $uuid = null): IMessage;
 	}

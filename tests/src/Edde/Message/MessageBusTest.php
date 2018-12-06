@@ -14,7 +14,7 @@
 		public function testResolveException() {
 			$this->expectException(MessageException::class);
 			$this->expectExceptionMessage('Cannot resolve Message Handler for message [nope] uuid [uuid] for namespace [boom]; please register a service [Boom\NopeMessageHandler] (IMessageHandler).');
-			$this->messageBus->resolve($this->messageBus->createMessage('nope', 'boom', 'uuid'));
+			$this->messageBus->resolve($this->messageBus->createMessage('nope', 'boom', null, 'uuid'));
 		}
 
 		/**
@@ -23,7 +23,7 @@
 		public function testResolveInterfaceException() {
 			$this->expectException(MessageException::class);
 			$this->expectExceptionMessage('Message handler service [Edde\Message\DummyMessageHandler] does not implement interface [Edde\Message\IMessageHandler].');
-			$this->messageBus->resolve($this->messageBus->createMessage('dummy', 'edde.message', 'da-uuid'));
+			$this->messageBus->resolve($this->messageBus->createMessage('dummy', 'edde.message', null, 'da-uuid'));
 		}
 
 		/**
@@ -31,7 +31,7 @@
 		 */
 		public function testStateMessage() {
 			$input = $this->messageBus->createPacket();
-			$input->message($state = $this->messageBus->createMessage('state', 'edde.message', 'da-uuid'));
+			$input->message($state = $this->messageBus->createMessage('state', 'edde.message', null, 'da-uuid'));
 			$output = $this->messageBus->packet($input);
 			self::assertInstanceOf(IPacket::class, $output);
 			self::assertCount(1, $output->messages());

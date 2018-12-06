@@ -5,19 +5,38 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/tests/src" isTestSource="false" />
-      <excludeFolder url="file://$MODULE_DIR$/.coverage" />
       <excludeFolder url="file://$MODULE_DIR$/.docker" />
       <excludeFolder url="file://$MODULE_DIR$/bin" />
       <excludeFolder url="file://$MODULE_DIR$/lib/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/doctrine/instantiator" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/myclabs/deep-copy" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phar-io/manifest" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phar-io/version" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phpdocumentor/reflection-common" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phpdocumentor/reflection-docblock" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phpdocumentor/type-resolver" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phpspec/prophecy" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/php-code-coverage" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/php-file-iterator" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/php-text-template" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/php-timer" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/php-token-stream" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/phpunit/phpunit" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/code-unit-reverse-lookup" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/comparator" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/diff" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/environment" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/exporter" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/global-state" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/object-enumerator" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/object-reflector" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/recursion-context" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/resource-operations" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/sebastian/version" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/theseer/tokenizer" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/webmozart/assert" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="docsify" level="application" />
-    <orderEntry type="library" name="docsify-pagination" level="application" />
-    <orderEntry type="library" name="prism-ini" level="application" />
-    <orderEntry type="library" name="prism-yaml" level="application" />
-    <orderEntry type="library" name="prism-bash" level="application" />
-    <orderEntry type="library" name="prism-php" level="application" />
-    <orderEntry type="library" name="prism-docker" level="application" />
   </component>
 </module>
