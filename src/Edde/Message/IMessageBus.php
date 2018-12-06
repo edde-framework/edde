@@ -10,16 +10,6 @@
 		const VERSION = '5.0';
 
 		/**
-		 * register a message handler for the given message type
-		 *
-		 * @param string          $type
-		 * @param IMessageHandler $messageHandler
-		 *
-		 * @return IMessageBus
-		 */
-		public function register(string $type, IMessageHandler $messageHandler): IMessageBus;
-
-		/**
 		 * process packet (high level method)
 		 *
 		 * @param IPacket $packet

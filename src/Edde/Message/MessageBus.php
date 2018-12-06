@@ -5,31 +5,20 @@
 	use function sprintf;
 
 	class MessageBus extends AbstractMessageHandler implements IMessageBus {
-		/** @var IMessageHandler[][] */
-		protected $messageHandlers = [];
-
-		/** @inheritdoc */
-		public function register(string $type, IMessageHandler $messageHandler): IMessageBus {
-			$this->messageHandlers[$type][] = $messageHandler;
-			return $this;
-		}
-
 		/** @inheritdoc */
 		public function packet(IPacket $packet): IPacket {
 			$response = $this->createPacket();
 			foreach ($packet->pushes() as $message) {
-				$response->pull($this->push($message));
+				$this->push($message, $response);
+			}
+			foreach ($packet->pulls() as $message) {
+				$this->pull($message, $response);
 			}
 			return $response;
 		}
 
 		/** @inheritdoc */
 		public function resolve(IMessage $message): IMessageHandler {
-			foreach ($this->messageHandlers[$message->getType()] ?? [] as $messageHandler) {
-				if ($messageHandler->canHandle($message)) {
-					return $messageHandler;
-				}
-			}
 			throw new MessageException(sprintf('Cannot resolve Message Handler for message [%s] uuid [%s] for resource [%s].', $message->getType(), $message->getUuid(), $message->getResource()));
 		}
 
@@ -40,12 +29,12 @@
 
 		/** @inheritdoc */
 		public function canHandle(IMessage $message): bool {
-			foreach ($this->messageHandlers[$message->getType()] ?? [] as $messageHandler) {
-				if ($messageHandler->canHandle($message)) {
-					return true;
-				}
+			try {
+				$this->resolve($message);
+				return true;
+			} catch (MessageException $e) {
+				return false;
 			}
-			return false;
 		}
 
 		/** @inheritdoc */

@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Message;
 
-	use Edde\Container\ContainerException;
 	use Edde\Service\Message\MessageBus;
 	use Edde\TestCase;
 
@@ -24,11 +23,9 @@
 
 		/**
 		 * @throws MessageException
-		 * @throws ContainerException
 		 */
 		public function testStateMessage() {
 			$output = $this->messageBus->createPacket();
-			$this->messageBus->register('state', $this->container->create(TestStateHandler::class));
 			$output->push($state = $this->messageBus->createMessage('state', 'test-resource', 'da-uuid'));
 			$input = $this->messageBus->packet($output);
 			self::assertInstanceOf(IPacket::class, $input);
