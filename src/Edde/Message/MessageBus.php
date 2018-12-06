@@ -48,7 +48,7 @@
 		/** @inheritdoc */
 		public function import(stdClass $import): IPacket {
 			$packet = $this->createPacket();
-			if ($version = ($import->version ?? 'no version') !== self::VERSION) {
+			if (($version = ($import->version ?? 'no version')) !== self::VERSION) {
 				throw new MessageException(sprintf('Incompatible version of Message Bus - expected [%s], given [%s].', self::VERSION, $version));
 			}
 			foreach ($import->messages ?? [] as $item) {
