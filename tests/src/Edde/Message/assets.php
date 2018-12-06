@@ -8,13 +8,13 @@
 		}
 
 		/** @inheritdoc */
-		public function request(IMessage $message): IMessage {
-			return $this->reply($message, [
+		public function push(IMessage $message, IPacket $packet): IMessageHandler {
+			$packet->pull($this->reply($message, [
 				'foo' => 'bar',
-			]);
+			]));
 		}
 
 		/** @inheritdoc */
-		public function response(IMessage $message): IMessage {
+		public function pull(IMessage $message, IPacket $packet): IMessageHandler {
 		}
 	}

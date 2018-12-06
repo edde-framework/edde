@@ -15,26 +15,29 @@
 		public function canHandle(IMessage $message): bool;
 
 		/**
-		 * process input message in request mode (thus input message is in "request" part)
+		 * messages pushed (from "client" point of view) to the server (alias request)
 		 *
-		 * @param IMessage $message
+		 * @param IMessage $message message being processed
+		 * @param IPacket  $packet  output packet (response)
 		 *
-		 * @return IMessage
+		 * @return IMessageHandler
 		 *
 		 * @throws MessageException
 		 */
-		public function request(IMessage $message): IMessage;
+		public function push(IMessage $message, IPacket $packet): IMessageHandler;
 
 		/**
-		 * process input message in response mode
+		 * messages pulled (from "client" point of view) to the client (alias response); pulled messages
+		 * should be executed by the other side potentially making another roundtrip
 		 *
 		 * @param IMessage $message
+		 * @param IPacket  $packet
 		 *
-		 * @return IMessage
+		 * @return IMessageHandler
 		 *
 		 * @throws MessageException
 		 */
-		public function response(IMessage $message): IMessage;
+		public function pull(IMessage $message, IPacket $packet): IMessageHandler;
 
 		/**
 		 * @param string      $type

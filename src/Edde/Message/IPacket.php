@@ -20,36 +20,36 @@
 		public function getUuid(): string;
 
 		/**
-		 * add a message to requests
+		 * add a message which should be executed "on the other side"
 		 *
 		 * @param IMessage $message
 		 *
 		 * @return IPacket
 		 */
-		public function request(IMessage $message): IPacket;
+		public function push(IMessage $message): IPacket;
 
 		/**
 		 * return an array of request messages
 		 *
 		 * @return IMessage[]
 		 */
-		public function requests(): array;
+		public function pushes(): array;
 
 		/**
-		 * add a message to responses
+		 * add a message which should be executed as a "response" on "the other side"
 		 *
 		 * @param IMessage $message
 		 *
 		 * @return IPacket
 		 */
-		public function response(IMessage $message): IPacket;
+		public function pull(IMessage $message): IPacket;
 
 		/**
-		 * return an array of response messages
+		 * return an array of pulled messages
 		 *
 		 * @return IMessage[]
 		 */
-		public function responses(): array;
+		public function pulls(): array;
 
 		/**
 		 * export packet as an standard object

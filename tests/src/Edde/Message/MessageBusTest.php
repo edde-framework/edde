@@ -27,10 +27,10 @@
 		 * @throws ContainerException
 		 */
 		public function testStateMessage() {
-			$request = $this->messageBus->createPacket();
+			$output = $this->messageBus->createPacket();
 			$this->messageBus->register('state', $this->container->create(TestStateHandler::class));
-			$request->request($state = $this->messageBus->createMessage('state', 'test-resource', 'da-uuid'));
-			$response = $this->messageBus->packet($request);
-			self::assertInstanceOf(IPacket::class, $response);
+			$output->push($state = $this->messageBus->createMessage('state', 'test-resource', 'da-uuid'));
+			$input = $this->messageBus->packet($output);
+			self::assertInstanceOf(IPacket::class, $input);
 		}
 	}

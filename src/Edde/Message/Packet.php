@@ -12,9 +12,9 @@
 		/** @var string */
 		protected $uuid;
 		/** @var IMessage[] */
-		protected $request;
+		protected $push;
 		/** @var IMessage[] */
-		protected $response;
+		protected $pull;
 
 		/**
 		 * @param string $version
@@ -23,8 +23,8 @@
 		public function __construct(string $version, string $uuid) {
 			$this->version = $version;
 			$this->uuid = $uuid;
-			$this->request = [];
-			$this->response = [];
+			$this->push = [];
+			$this->pull = [];
 		}
 
 		/** @inheritdoc */
@@ -38,43 +38,43 @@
 		}
 
 		/** @inheritdoc */
-		public function request(IMessage $message): IPacket {
-			$this->request[] = $message;
+		public function push(IMessage $message): IPacket {
+			$this->push[] = $message;
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function requests(): array {
-			return $this->request;
+		public function pushes(): array {
+			return $this->push;
 		}
 
 		/** @inheritdoc */
-		public function response(IMessage $message): IPacket {
-			$this->response[] = $message;
+		public function pull(IMessage $message): IPacket {
+			$this->pull[] = $message;
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function responses(): array {
-			return $this->response;
+		public function pulls(): array {
+			return $this->pull;
 		}
 
 		/** @inheritdoc */
 		public function export(): stdClass {
 			return (object)[
-				'version'  => $this->getVersion(),
-				'request'  => iterator_to_array((function (array $messages) {
+				'version' => $this->getVersion(),
+				'push'    => iterator_to_array((function (array $messages) {
 					/** @var $messages IMessage[] */
 					foreach ($messages as $message) {
 						yield $message->export();
 					}
-				})($this->requests())),
-				'response' => iterator_to_array((function (array $messages) {
+				})($this->pushes())),
+				'pull'    => iterator_to_array((function (array $messages) {
 					/** @var $messages IMessage[] */
 					foreach ($messages as $message) {
 						yield $message->export();
 					}
-				})($this->responses())),
+				})($this->pulls())),
 			];
 		}
 	}
