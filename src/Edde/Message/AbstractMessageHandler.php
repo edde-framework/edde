@@ -9,8 +9,8 @@
 		use RandomService;
 
 		/** @inheritdoc */
-		public function createMessage(string $type, string $resource, string $uuid = null, array $attrs = null): IMessage {
-			return new Message($type, $resource, $uuid ?: $this->randomService->uuid(), $attrs);
+		public function createMessage(string $type, string $namespace, string $uuid = null, array $attrs = null): IMessage {
+			return new Message($type, $namespace, $uuid ?: $this->randomService->uuid(), $attrs);
 		}
 
 		protected function reply(IMessage $message, array $attrs = null): IMessage {
