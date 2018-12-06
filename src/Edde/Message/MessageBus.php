@@ -4,6 +4,7 @@
 
 	use Edde\Service\Container\Container;
 	use Edde\Service\Utils\StringUtils;
+	use stdClass;
 	use function sprintf;
 
 	class MessageBus extends AbstractMessageHandler implements IMessageBus {
@@ -41,5 +42,17 @@
 		public function message(IMessage $message, IPacket $packet): IMessageHandler {
 			$this->resolve($message)->message($message, $packet);
 			return $this;
+		}
+
+		/** @inheritdoc */
+		public function import(stdClass $import): IPacket {
+			$packet = $this->createPacket();
+			if ($version = ($import->version ?? 'no version') !== self::VERSION) {
+				throw new MessageException(sprintf('Incompatible version of Message Bus - expected [%s], given [%s].', self::VERSION, $version));
+			}
+			foreach ($import->messages ?? [] as $item) {
+				$packet->message(new Message($item->type, $item->namespace, $item->uuid, $item->attrs ?? null));
+			}
+			return $packet;
 		}
 	}

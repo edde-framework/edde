@@ -2,6 +2,8 @@
 	declare(strict_types=1);
 	namespace Edde\Message;
 
+	use stdClass;
+
 	interface IMessageBus extends IMessageHandler {
 		/**
 		 * quite strange version number, but it's high enough to keep line with
@@ -37,4 +39,15 @@
 		 * @return IPacket
 		 */
 		public function createPacket(): IPacket;
+
+		/**
+		 * just convert an import into packet; nothing is going to be executed
+		 *
+		 * @param stdClass $import
+		 *
+		 * @return IPacket
+		 *
+		 * @throws MessageException
+		 */
+		public function import(stdClass $import): IPacket;
 	}
