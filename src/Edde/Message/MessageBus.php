@@ -70,7 +70,7 @@
 				if (is_string($item->uuid ?? null) === false) {
 					throw new MessageException('Missing message uuid or it is not string');
 				}
-				$packet->message(new Message($item->type, $item->namespace, $item->uuid, $item->attrs ?? null));
+				$packet->message(new Message($item->type, $item->namespace, $item->uuid, ((array)$item->attrs) ?? null));
 			}
 			return $packet;
 		}
