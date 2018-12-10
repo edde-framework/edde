@@ -5,6 +5,7 @@
 	use Edde\Service\Container\Container;
 	use Edde\Service\Utils\StringUtils;
 	use stdClass;
+	use Throwable;
 	use function is_string;
 	use function sprintf;
 
@@ -16,7 +17,14 @@
 		public function packet(IPacket $packet): IPacket {
 			$response = $this->createPacket();
 			foreach ($packet->messages() as $message) {
-				$this->message($message, $response);
+				try {
+					$this->message($message, $response);
+				} catch (Throwable $e) {
+					$response->message($this->createMessage('error', 'common', [
+						'message' => $message->export(),
+						'text'    => $e->getMessage(),
+					]));
+				}
 			}
 			return $response;
 		}
