@@ -25,7 +25,11 @@
 		public function resolve(IMessage $message): IMessageHandler {
 			$service = $this->stringUtils->className(sprintf('%s.%sMessageHandler', $message->getNamespace(), $message->getType()));
 			if ($this->container->canHandle($service) === false) {
-				throw new MessageException(sprintf('Cannot resolve Message Handler for message [%s] uuid [%s] for namespace [%s]; please register a service [%s] (IMessageHandler).', $message->getType(), $message->getUuid(), $message->getNamespace(), $service));
+				$common = $this->stringUtils->className(sprintf('Message.%sMessageHandler', $message->getType()));
+				if ($this->container->canHandle($common) === false) {
+					throw new MessageException(sprintf('Cannot resolve Message Handler for message [%s] uuid [%s] for namespace [%s]; please register a service [%s or %s] (IMessageHandler).', $message->getType(), $message->getUuid(), $message->getNamespace(), $service, $common));
+				}
+				$service = $common;
 			}
 			$instance = $this->container->create($service, [], __METHOD__);
 			if ($instance instanceof IMessageHandler === false) {

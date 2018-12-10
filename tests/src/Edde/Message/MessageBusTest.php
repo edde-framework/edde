@@ -13,7 +13,7 @@
 		 */
 		public function testResolveException() {
 			$this->expectException(MessageException::class);
-			$this->expectExceptionMessage('Cannot resolve Message Handler for message [nope] uuid [uuid] for namespace [boom]; please register a service [Boom\NopeMessageHandler] (IMessageHandler).');
+			$this->expectExceptionMessage('Cannot resolve Message Handler for message [nope] uuid [uuid] for namespace [boom]; please register a service [Boom\NopeMessageHandler or Message\NopeMessageHandler] (IMessageHandler).');
 			$this->messageBus->resolve($this->messageBus->createMessage('nope', 'boom', null, 'uuid'));
 		}
 
