@@ -11,20 +11,13 @@
 		protected $packet = [];
 
 		/**
-		 * @param string $version
 		 * @param string $uuid
 		 */
-		public function __construct(string $version, string $uuid) {
+		public function __construct(string $uuid) {
 			$this->packet = [
-				'version'  => $version,
 				'uuid'     => $uuid,
 				'messages' => [],
 			];
-		}
-
-		/** @inheritdoc */
-		public function getVersion(): string {
-			return (string)$this->packet['version'];
 		}
 
 		/** @inheritdoc */
@@ -46,7 +39,7 @@
 		/** @inheritdoc */
 		public function export(): stdClass {
 			return (object)[
-				'version'  => $this->getVersion(),
+				'uuid'     => $this->getUuid(),
 				'messages' => iterator_to_array((function (array $messages) {
 					/** @var $messages IMessage[] */
 					foreach ($messages as $message) {

@@ -36,7 +36,7 @@
 
 		/** @inheritdoc */
 		public function createPacket(): IPacket {
-			return new Packet(self::VERSION, $this->randomService->uuid());
+			return new Packet($this->randomService->uuid());
 		}
 
 		/** @inheritdoc */
@@ -48,9 +48,6 @@
 		/** @inheritdoc */
 		public function import(stdClass $import): IPacket {
 			$packet = $this->createPacket();
-			if (($version = ($import->version ?? 'no version')) !== self::VERSION) {
-				throw new MessageException(sprintf('Incompatible version of Message Bus - expected [%s], given [%s].', self::VERSION, $version));
-			}
 			foreach ($import->messages ?? [] as $item) {
 				if (is_string($item->type ?? null) === false) {
 					throw new MessageException('Missing message type or it is not string');

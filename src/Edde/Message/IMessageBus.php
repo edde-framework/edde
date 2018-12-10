@@ -6,12 +6,6 @@
 
 	interface IMessageBus extends IMessageHandler {
 		/**
-		 * quite strange version number, but it's high enough to keep line with
-		 * edde and make difference from the original The Protocol
-		 */
-		const VERSION = '5.0';
-
-		/**
 		 * process packet (high level method)
 		 *
 		 * @param IPacket $packet

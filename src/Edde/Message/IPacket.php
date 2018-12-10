@@ -6,13 +6,6 @@
 
 	interface IPacket {
 		/**
-		 * get packet version (alias message bus version)
-		 *
-		 * @return string
-		 */
-		public function getVersion(): string;
-
-		/**
 		 * uuid of packet should be... universally unique
 		 *
 		 * @return string
