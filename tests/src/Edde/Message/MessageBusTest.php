@@ -13,7 +13,7 @@
 		 */
 		public function testResolveException() {
 			$this->expectException(MessageException::class);
-			$this->expectExceptionMessage('Cannot resolve Message Handler for message [nope] uuid [uuid] for namespace [boom]; please register a service [Boom] (Edde\Message\IMessageService).');
+			$this->expectExceptionMessage('Cannot resolve Message Service for message [nope] uuid [uuid] for namespace [boom]; please register a service [Boom] (Edde\Message\IMessageService).');
 			$this->messageBus->resolve($this->messageBus->createMessage('boom', 'nope', null, 'uuid'));
 		}
 
@@ -22,7 +22,7 @@
 		 */
 		public function testResolveInterfaceException() {
 			$this->expectException(MessageException::class);
-			$this->expectExceptionMessage('Cannot resolve Message Handler for message [dummy] uuid [da-uuid] for namespace [edde.message]; please register a service [Edde\Message] (Edde\Message\IMessageService).');
+			$this->expectExceptionMessage('Cannot resolve Message Service for message [dummy] uuid [da-uuid] for namespace [edde.message]; please register a service [Edde\Message] (Edde\Message\IMessageService).');
 			$this->messageBus->resolve($this->messageBus->createMessage('edde.message', 'dummy', null, 'da-uuid'));
 		}
 
