@@ -31,16 +31,11 @@
 
 		/** @inheritdoc */
 		public function resolve(IMessage $message): IMessageService {
-			$service = $this->stringUtils->className(sprintf('%s.%sMessageService', $message->getService(), $message->getType()));
+			$service = $this->stringUtils->className($message->getService());
 			if ($this->container->canHandle($service) === false) {
-				$common = $this->stringUtils->className(sprintf('Message.%sMessageService', $message->getType()));
-				if ($this->container->canHandle($common) === false) {
-					throw new MessageException(sprintf('Cannot resolve Message Handler for message [%s] uuid [%s] for namespace [%s]; please register a service [%s or %s] (%s).', $message->getType(), $message->getUuid(), $message->getService(), $service, $common, IMessageService::class));
-				}
-				$service = $common;
+				throw new MessageException(sprintf('Cannot resolve Message Handler for message [%s] uuid [%s] for namespace [%s]; please register a service [%s] (%s).', $message->getType(), $message->getUuid(), $message->getService(), $service, IMessageService::class));
 			}
-			$instance = $this->container->create($service, [], __METHOD__);
-			if ($instance instanceof IMessageService === false) {
+			if (($instance = $this->container->create($service, [], __METHOD__)) instanceof IMessageService === false) {
 				throw new MessageException(sprintf('Message handler service [%s] does not implement interface [%s].', $service, IMessageService::class));
 			}
 			return $instance;
