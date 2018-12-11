@@ -4,18 +4,18 @@
 
 	use Edde\Configurable\IConfigurable;
 
-	interface IMessageHandler extends IConfigurable {
+	interface IMessageService extends IConfigurable {
 		/**
 		 * handle incoming message
 		 *
 		 * @param IMessage $message message being processed
 		 * @param IPacket  $packet  output packet (response)
 		 *
-		 * @return IMessageHandler
+		 * @return IMessageService
 		 *
 		 * @throws MessageException
 		 */
-		public function message(IMessage $message, IPacket $packet): IMessageHandler;
+		public function message(IMessage $message, IPacket $packet): IMessageService;
 
 		/**
 		 * @param string      $type

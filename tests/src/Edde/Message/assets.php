@@ -3,9 +3,9 @@
 
 	use Edde\Edde;
 
-	class StateMessageHandler extends AbstractMessageHandler {
+	class StateMessageService extends AbstractMessageService {
 		/** @inheritdoc */
-		public function message(IMessage $message, IPacket $packet): IMessageHandler {
+		public function message(IMessage $message, IPacket $packet): IMessageService {
 			$packet->message($this->reply($message, [
 				'foo' => 'bar',
 			]));
@@ -13,7 +13,7 @@
 		}
 
 		/** @inheritdoc */
-		public function pull(IMessage $message, IPacket $packet): IMessageHandler {
+		public function pull(IMessage $message, IPacket $packet): IMessageService {
 			return $this;
 		}
 	}

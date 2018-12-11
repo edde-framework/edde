@@ -4,7 +4,7 @@
 
 	use stdClass;
 
-	interface IMessageBus extends IMessageHandler {
+	interface IMessageBus extends IMessageService {
 		/**
 		 * process packet (high level method)
 		 *
@@ -21,11 +21,11 @@
 		 *
 		 * @param IMessage $message
 		 *
-		 * @return IMessageHandler
+		 * @return IMessageService
 		 *
 		 * @throws MessageException
 		 */
-		public function resolve(IMessage $message): IMessageHandler;
+		public function resolve(IMessage $message): IMessageService;
 
 		/**
 		 * create a packet

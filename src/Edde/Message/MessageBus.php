@@ -9,7 +9,7 @@
 	use function is_string;
 	use function sprintf;
 
-	class MessageBus extends AbstractMessageHandler implements IMessageBus {
+	class MessageBus extends AbstractMessageService implements IMessageBus {
 		use StringUtils;
 		use Container;
 
@@ -30,18 +30,18 @@
 		}
 
 		/** @inheritdoc */
-		public function resolve(IMessage $message): IMessageHandler {
-			$service = $this->stringUtils->className(sprintf('%s.%sMessageHandler', $message->getNamespace(), $message->getType()));
+		public function resolve(IMessage $message): IMessageService {
+			$service = $this->stringUtils->className(sprintf('%s.%sMessageService', $message->getNamespace(), $message->getType()));
 			if ($this->container->canHandle($service) === false) {
 				$common = $this->stringUtils->className(sprintf('Message.%sMessageHandler', $message->getType()));
 				if ($this->container->canHandle($common) === false) {
-					throw new MessageException(sprintf('Cannot resolve Message Handler for message [%s] uuid [%s] for namespace [%s]; please register a service [%s or %s] (IMessageHandler).', $message->getType(), $message->getUuid(), $message->getNamespace(), $service, $common));
+					throw new MessageException(sprintf('Cannot resolve Message Handler for message [%s] uuid [%s] for namespace [%s]; please register a service [%s or %s] (%s).', $message->getType(), $message->getUuid(), $message->getNamespace(), $service, $common, IMessageService::class));
 				}
 				$service = $common;
 			}
 			$instance = $this->container->create($service, [], __METHOD__);
-			if ($instance instanceof IMessageHandler === false) {
-				throw new MessageException(sprintf('Message handler service [%s] does not implement interface [%s].', $service, IMessageHandler::class));
+			if ($instance instanceof IMessageService === false) {
+				throw new MessageException(sprintf('Message handler service [%s] does not implement interface [%s].', $service, IMessageService::class));
 			}
 			return $instance;
 		}
@@ -52,7 +52,7 @@
 		}
 
 		/** @inheritdoc */
-		public function message(IMessage $message, IPacket $packet): IMessageHandler {
+		public function message(IMessage $message, IPacket $packet): IMessageService {
 			$this->resolve($message)->message($message, $packet);
 			return $this;
 		}

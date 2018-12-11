@@ -5,7 +5,7 @@
 	use Edde\Edde;
 	use Edde\Service\Security\RandomService;
 
-	abstract class AbstractMessageHandler extends Edde implements IMessageHandler {
+	abstract class AbstractMessageService extends Edde implements IMessageService {
 		use RandomService;
 
 		/** @inheritdoc */
