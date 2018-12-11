@@ -29,6 +29,20 @@
 		/**
 		 * @throws MessageException
 		 */
+		public function testMissingMethodException() {
+			$response = $this->messageBus->packet($this->messageBus->createPacket()->message($input = $this->messageBus->createMessage('edde.message.common-message-service', 'kaboom')));
+			self::assertInstanceOf(IPacket::class, $response);
+			self::assertCount(1, $response->messages());
+			[$message] = $response->messages();
+			self::assertEquals([
+				'message' => $input->export(),
+				'text'    => 'Cannot handle message [kaboom] in [Edde\Message\CommonMessageService]. Please implement Edde\Message\CommonMessageService::onKaboomMessage($message, $packet) method.',
+			], $message->getAttrs());
+		}
+
+		/**
+		 * @throws MessageException
+		 */
 		public function testStateMessage() {
 			$input = $this->messageBus->createPacket();
 			$input->message($state = $this->messageBus->createMessage('edde.message.common-message-service', 'state', null, 'da-uuid'));

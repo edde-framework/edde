@@ -4,12 +4,8 @@
 	use Edde\Edde;
 
 	class CommonMessageService extends AbstractMessageService {
-		public function message(IMessage $message, IPacket $packet): IMessageService {
-			return $this;
-		}
-
 		/** @inheritdoc */
-		public function stateMessage(IMessage $message, IPacket $packet): IMessageService {
+		public function onStateMessage(IMessage $message, IPacket $packet): IMessageService {
 			$packet->message($this->reply($message, [
 				'foo' => 'bar',
 			]));
