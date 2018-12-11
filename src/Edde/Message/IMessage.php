@@ -10,18 +10,18 @@
 	 */
 	interface IMessage {
 		/**
+		 * get message handler name of this message (basically used for message routing)
+		 *
+		 * @return string
+		 */
+		public function getService(): string;
+
+		/**
 		 * return type of a message
 		 *
 		 * @return string
 		 */
 		public function getType(): string;
-
-		/**
-		 * get namespace of this message (could be used for service handler translation)
-		 *
-		 * @return string
-		 */
-		public function getNamespace(): string;
 
 		/**
 		 * every message should have unique id (uuid v4)

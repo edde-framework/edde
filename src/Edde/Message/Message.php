@@ -10,28 +10,28 @@
 		protected $message;
 
 		/**
+		 * @param string $service
 		 * @param string $type
-		 * @param string $namespace
 		 * @param array  $attrs
 		 * @param string $uuid
 		 */
-		public function __construct(string $type, string $namespace, string $uuid, array $attrs = null) {
+		public function __construct(string $service, string $type, string $uuid, array $attrs = null) {
 			$this->message = [
-				'type'      => $type,
-				'namespace' => $namespace,
-				'uuid'      => $uuid,
-				'attrs'     => $attrs,
+				'service' => $service,
+				'type'    => $type,
+				'uuid'    => $uuid,
+				'attrs'   => $attrs,
 			];
+		}
+
+		/** @inheritdoc */
+		public function getService(): string {
+			return (string)$this->message['service'];
 		}
 
 		/** @inheritdoc */
 		public function getType(): string {
 			return (string)$this->message['type'];
-		}
-
-		/** @inheritdoc */
-		public function getNamespace(): string {
-			return (string)$this->message['namespace'];
 		}
 
 		/** @inheritdoc */

@@ -13,8 +13,8 @@
 		 */
 		public function testResolveException() {
 			$this->expectException(MessageException::class);
-			$this->expectExceptionMessage('Cannot resolve Message Handler for message [nope] uuid [uuid] for namespace [boom]; please register a service [Boom\NopeMessageService or Message\NopeMessageHandler] (Edde\Message\IMessageService).');
-			$this->messageBus->resolve($this->messageBus->createMessage('nope', 'boom', null, 'uuid'));
+			$this->expectExceptionMessage('Cannot resolve Message Handler for message [nope] uuid [uuid] for namespace [boom]; please register a service [Boom\NopeMessageService or Message\NopeMessageService] (Edde\Message\IMessageService).');
+			$this->messageBus->resolve($this->messageBus->createMessage('boom', 'nope', null, 'uuid'));
 		}
 
 		/**
@@ -22,8 +22,8 @@
 		 */
 		public function testResolveInterfaceException() {
 			$this->expectException(MessageException::class);
-			$this->expectExceptionMessage('Cannot resolve Message Handler for message [dummy] uuid [da-uuid] for namespace [edde.message]; please register a service [Edde\Message\DummyMessageService or Message\DummyMessageHandler] (Edde\Message\IMessageService).');
-			$this->messageBus->resolve($this->messageBus->createMessage('dummy', 'edde.message', null, 'da-uuid'));
+			$this->expectExceptionMessage('Cannot resolve Message Handler for message [dummy] uuid [da-uuid] for namespace [edde.message]; please register a service [Edde\Message\DummyMessageService or Message\DummyMessageService] (Edde\Message\IMessageService).');
+			$this->messageBus->resolve($this->messageBus->createMessage('edde.message', 'dummy', null, 'da-uuid'));
 		}
 
 		/**
@@ -31,7 +31,7 @@
 		 */
 		public function testStateMessage() {
 			$input = $this->messageBus->createPacket();
-			$input->message($state = $this->messageBus->createMessage('state', 'edde.message', null, 'da-uuid'));
+			$input->message($state = $this->messageBus->createMessage('edde.message', 'state', null, 'da-uuid'));
 			$output = $this->messageBus->packet($input);
 			self::assertInstanceOf(IPacket::class, $output);
 			self::assertCount(1, $output->messages());

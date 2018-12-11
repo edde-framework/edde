@@ -18,12 +18,12 @@
 		public function message(IMessage $message, IPacket $packet): IMessageService;
 
 		/**
+		 * @param string      $service
 		 * @param string      $type
-		 * @param string      $namespace
 		 * @param array|null  $attrs
 		 * @param string|null $uuid
 		 *
 		 * @return IMessage
 		 */
-		public function createMessage(string $type, string $namespace, array $attrs = null, string $uuid = null): IMessage;
+		public function createMessage(string $service, string $type, array $attrs = null, string $uuid = null): IMessage;
 	}

@@ -18,5 +18,10 @@
 		}
 	}
 
+//	class CommonMessageService extends AbstractMessageService {
+//		public function message(IMessage $message, IPacket $packet): IMessageService {
+//		}
+//	}
+
 	class DummyMessageHandler extends Edde {
 	}
