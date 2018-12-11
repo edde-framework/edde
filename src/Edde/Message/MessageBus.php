@@ -33,10 +33,10 @@
 		public function resolve(IMessage $message): IMessageService {
 			$service = $this->stringUtils->className($message->getService());
 			if ($this->container->canHandle($service) === false) {
-				throw new MessageException(sprintf('Cannot resolve Message Handler for message [%s] uuid [%s] for namespace [%s]; please register a service [%s] (%s).', $message->getType(), $message->getUuid(), $message->getService(), $service, IMessageService::class));
+				throw new MessageException(sprintf('Cannot resolve Message Service for message [%s] uuid [%s] for namespace [%s]; please register a service [%s] (%s).', $message->getType(), $message->getUuid(), $message->getService(), $service, IMessageService::class));
 			}
 			if (($instance = $this->container->create($service, [], __METHOD__)) instanceof IMessageService === false) {
-				throw new MessageException(sprintf('Message handler service [%s] does not implement interface [%s].', $service, IMessageService::class));
+				throw new MessageException(sprintf('Message service [%s] does not implement interface [%s].', $service, IMessageService::class));
 			}
 			return $instance;
 		}
