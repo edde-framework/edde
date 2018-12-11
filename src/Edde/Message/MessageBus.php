@@ -56,16 +56,16 @@
 		public function import(stdClass $import): IPacket {
 			$packet = $this->createPacket();
 			foreach ($import->messages ?? [] as $item) {
+				if (is_string($item->service ?? null) === false) {
+					throw new MessageException('Missing message service or it is not string');
+				}
 				if (is_string($item->type ?? null) === false) {
 					throw new MessageException('Missing message type or it is not string');
-				}
-				if (is_string($item->namespace ?? null) === false) {
-					throw new MessageException('Missing message namespace or it is not string');
 				}
 				if (is_string($item->uuid ?? null) === false) {
 					throw new MessageException('Missing message uuid or it is not string');
 				}
-				$packet->message(new Message($item->type, $item->namespace, $item->uuid, ((array)$item->attrs) ?? null));
+				$packet->message(new Message($item->service, $item->type, $item->uuid, ((array)$item->attrs) ?? null));
 			}
 			return $packet;
 		}
