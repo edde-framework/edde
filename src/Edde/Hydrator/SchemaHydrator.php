@@ -59,21 +59,22 @@
 			foreach (array_keys(array_diff_key($update, $schema->getAttributes())) as $diff) {
 				unset($update[$diff]);
 			}
-			foreach ($schema->getAttributes() as $name => $attribute) {
+			foreach ($update as $k => $v) {
+				$attribute = $schema->getAttribute($k);
 				if ($validator = $attribute->getValidator()) {
-					$this->validatorManager->validate($this->prefix . ':' . $validator, $update[$name] ?? null, [
+					$this->validatorManager->validate($this->prefix . ':' . $validator, $v, [
 						'name'     => $schema->getName() . '::' . $name,
 						'required' => $attribute->isRequired(),
 					]);
 				}
 				if ($filter = $attribute->getFilter('type')) {
-					$update[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($update[$name] ?? null);
+					$update[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($v);
 				}
 				/**
 				 * common filter support; filter name is used for both directions
 				 */
 				if ($filter = $attribute->getFilter('filter')) {
-					$update[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($update[$name] ?? null);
+					$update[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($v);
 				}
 			}
 			return $update;
