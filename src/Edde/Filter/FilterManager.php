@@ -32,10 +32,10 @@
 		}
 
 		/** @inheritdoc */
-		public function input(array $input, string $schema, string $filter): array {
+		public function input(array $input, string $schema, string $type): array {
 			$schema = $this->schemaManager->getSchema($schema);
 			foreach ($schema->getAttributes() as $name => $attribute) {
-				if ($filter = $attribute->getFilter($filter)) {
+				if ($filter = $attribute->getFilter($type)) {
 					$input[$name] = $this->getFilter($filter)->input($input[$name] ?? null);
 				}
 			}
@@ -43,10 +43,10 @@
 		}
 
 		/** @inheritdoc */
-		public function output(array $input, string $schema, string $filter): array {
+		public function output(array $input, string $schema, string $type): array {
 			$schema = $this->schemaManager->getSchema($schema);
 			foreach ($schema->getAttributes() as $name => $attribute) {
-				if ($filter = $attribute->getFilter($filter)) {
+				if ($filter = $attribute->getFilter($type)) {
 					$input[$name] = $this->getFilter($filter)->output($input[$name] ?? null);
 				}
 			}

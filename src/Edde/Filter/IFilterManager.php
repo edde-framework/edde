@@ -42,26 +42,26 @@
 		 *
 		 * @param array  $input
 		 * @param string $schema
-		 * @param string $filter
+		 * @param string $type
 		 *
 		 * @return array
 		 *
 		 * @throws SchemaException
 		 * @throws FilterException
 		 */
-		public function input(array $input, string $schema, string $filter): array;
+		public function input(array $input, string $schema, string $type): array;
 
 		/**
 		 * filter an array as output (e.g. converting DateTime object to stringified version of date time)
 		 *
 		 * @param array  $input
 		 * @param string $schema
-		 * @param string $filter
+		 * @param string $type
 		 *
 		 * @return array
 		 *
 		 * @throws SchemaException
 		 * @throws FilterException
 		 */
-		public function output(array $input, string $schema, string $filter): array;
+		public function output(array $input, string $schema, string $type): array;
 	}

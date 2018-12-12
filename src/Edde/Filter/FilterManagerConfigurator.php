@@ -24,6 +24,7 @@
 				'uuid'             => $filter = $this->container->inject(new UuidFilter()),
 				'storage:uuid'     => $filter,
 				'datetime'         => $filter = new DateTimeFilter(),
+				'DateTime'         => $filter,
 				'storage:DateTime' => $filter,
 				'string'           => $filter = new StringFilter(),
 				'storage:string'   => $filter,
