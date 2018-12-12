@@ -26,14 +26,6 @@
 	abstract class Edde extends SimpleObject implements IAutowire, IConfigurable {
 		use Autowire;
 		use Configurable;
-		/**
-		 * version framework; "version" is not used as it will block use of version in whole
-		 * framework
-		 *
-		 * @var string
-		 */
-		static public $framework = '5.0';
-		static public $codename = 'Full Balls';
 
 		/**
 		 * because PHP has some cool shit things like it cannot call

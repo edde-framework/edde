@@ -13,6 +13,8 @@
 	use Edde\Http\IResponse;
 	use Edde\Http\Response;
 	use Edde\Service\Http\RequestService;
+	use Edde\Url\UrlException;
+	use Edde\Version;
 	use function json_decode;
 
 	/**
@@ -34,6 +36,7 @@
 		 *
 		 * @throws ApplicationException
 		 * @throws EmptyBodyException
+		 * @throws UrlException
 		 */
 		protected function getContent(string $expected) {
 			if (($content = $this->requestService->getContent())->getType() !== $expected) {
@@ -47,6 +50,7 @@
 		 *
 		 * @throws ApplicationException
 		 * @throws EmptyBodyException
+		 * @throws UrlException
 		 */
 		protected function jsonRequest() {
 			return json_decode($this->getContent('application/json'));
@@ -131,7 +135,7 @@
 		 * @return IResponse
 		 */
 		protected function response(IResponse $response, int $code = IResponse::R200_OK) {
-			$response->header('X-Powered-By', 'Edde Framework "' . self::$codename . '" ' . self::$framework);
+			$response->header('X-Powered-By', 'Edde Framework "' . Version::$codename . '" ' . Version::$framework);
 			$response->header('Access-Control-Allow-Origin', '*');
 			$response->header('Access-Control-Expose-Headers', '*');
 			$response->setCode($code);
