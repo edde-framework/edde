@@ -40,7 +40,7 @@
 		 * filter an array with input filters by a schema; input is meant as an input to PHP side (e.g. converting
 		 * string datetime to DateTime object0
 		 *
-		 * @param array  $input
+		 * @param array  $source
 		 * @param string $schema
 		 * @param string $type
 		 *
@@ -49,12 +49,12 @@
 		 * @throws SchemaException
 		 * @throws FilterException
 		 */
-		public function input(array $input, string $schema, string $type): array;
+		public function input(array $source, string $schema, string $type): array;
 
 		/**
 		 * filter an array as output (e.g. converting DateTime object to stringified version of date time)
 		 *
-		 * @param array  $input
+		 * @param array  $source
 		 * @param string $schema
 		 * @param string $type
 		 *
@@ -63,5 +63,5 @@
 		 * @throws SchemaException
 		 * @throws FilterException
 		 */
-		public function output(array $input, string $schema, string $type): array;
+		public function output(array $source, string $schema, string $type): array;
 	}

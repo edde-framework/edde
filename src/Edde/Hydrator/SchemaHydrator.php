@@ -47,6 +47,9 @@
 					$input[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->input($input[$name]);
 				}
 			}
+			foreach (array_keys(array_diff_key($input, $schema->getAttributes())) as $diff) {
+				unset($input[$diff]);
+			}
 			return $input;
 		}
 
@@ -69,6 +72,9 @@
 				if ($filter = $attribute->getFilter('filter')) {
 					$update[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($update[$name] ?? null);
 				}
+			}
+			foreach (array_keys(array_diff_key($update, $schema->getAttributes())) as $diff) {
+				unset($update[$diff]);
 			}
 			return $update;
 		}
@@ -96,6 +102,9 @@
 				if ($filter = $attribute->getFilter('filter')) {
 					$output[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($output[$name]);
 				}
+			}
+			foreach (array_keys(array_diff_key($output, $schema->getAttributes())) as $diff) {
+				unset($output[$diff]);
 			}
 			return $output;
 		}
