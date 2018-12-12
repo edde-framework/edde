@@ -34,13 +34,14 @@
 		/** @inheritdoc */
 		public function input(array $source, string $schema, string $type): array {
 			$schema = $this->schemaManager->getSchema($schema);
-			foreach ($schema->getAttributes() as $name => $attribute) {
-				if ($filter = $attribute->getFilter($type)) {
-					$source[$name] = $this->getFilter($filter)->input($source[$name] ?? null);
-				}
-			}
 			foreach (array_keys(array_diff_key($source, $schema->getAttributes())) as $diff) {
 				unset($source[$diff]);
+			}
+			foreach ($source as $k => $v) {
+				$attribute = $schema->getAttribute($k);
+				if ($filter = $attribute->getFilter($type)) {
+					$source[$k] = $this->getFilter($filter)->input($v);
+				}
 			}
 			return $source;
 		}
@@ -48,13 +49,14 @@
 		/** @inheritdoc */
 		public function output(array $source, string $schema, string $type): array {
 			$schema = $this->schemaManager->getSchema($schema);
-			foreach ($schema->getAttributes() as $name => $attribute) {
-				if ($filter = $attribute->getFilter($type)) {
-					$source[$name] = $this->getFilter($filter)->output($source[$name] ?? null);
-				}
-			}
 			foreach (array_keys(array_diff_key($source, $schema->getAttributes())) as $diff) {
 				unset($source[$diff]);
+			}
+			foreach ($source as $k => $v) {
+				$attribute = $schema->getAttribute($k);
+				if ($filter = $attribute->getFilter($type)) {
+					$source[$k] = $this->getFilter($filter)->output($v);
+				}
 			}
 			return $source;
 		}

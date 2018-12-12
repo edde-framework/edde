@@ -36,6 +36,9 @@
 		/** @inheritdoc */
 		public function input(string $name, array $input): array {
 			$schema = $this->schemaManager->getSchema($name);
+			foreach (array_keys(array_diff_key($input, $schema->getAttributes())) as $diff) {
+				unset($input[$diff]);
+			}
 			foreach ($schema->getAttributes() as $name => $attribute) {
 				if (isset($input[$name]) === false && array_key_exists($name, $input) === false) {
 					$input[$name] = $attribute->getDefault();
@@ -47,15 +50,15 @@
 					$input[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->input($input[$name]);
 				}
 			}
-			foreach (array_keys(array_diff_key($input, $schema->getAttributes())) as $diff) {
-				unset($input[$diff]);
-			}
 			return $input;
 		}
 
 		/** @inheritdoc */
 		public function update(string $name, array $update): array {
 			$schema = $this->schemaManager->getSchema($name);
+			foreach (array_keys(array_diff_key($update, $schema->getAttributes())) as $diff) {
+				unset($update[$diff]);
+			}
 			foreach ($schema->getAttributes() as $name => $attribute) {
 				if ($validator = $attribute->getValidator()) {
 					$this->validatorManager->validate($this->prefix . ':' . $validator, $update[$name] ?? null, [
@@ -73,15 +76,15 @@
 					$update[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($update[$name] ?? null);
 				}
 			}
-			foreach (array_keys(array_diff_key($update, $schema->getAttributes())) as $diff) {
-				unset($update[$diff]);
-			}
 			return $update;
 		}
 
 		/** @inheritdoc */
 		public function output(string $name, array $output): array {
 			$schema = $this->schemaManager->getSchema($name);
+			foreach (array_keys(array_diff_key($output, $schema->getAttributes())) as $diff) {
+				unset($output[$diff]);
+			}
 			foreach ($schema->getAttributes() as $name => $attribute) {
 				if (($generator = $attribute->getFilter('generator')) && isset($output[$name]) === false) {
 					$output[$name] = $this->filterManager->getFilter($this->prefix . ':' . $generator)->output(null);
@@ -102,9 +105,6 @@
 				if ($filter = $attribute->getFilter('filter')) {
 					$output[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($output[$name]);
 				}
-			}
-			foreach (array_keys(array_diff_key($output, $schema->getAttributes())) as $diff) {
-				unset($output[$diff]);
 			}
 			return $output;
 		}
