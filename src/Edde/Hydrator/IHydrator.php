@@ -58,6 +58,7 @@
 		 *
 		 * @throws SchemaException
 		 * @throws FilterException
+		 * @throws ValidatorException
 		 */
 		public function output(string $name, array $output): array;
 	}
