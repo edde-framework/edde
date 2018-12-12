@@ -12,6 +12,6 @@
 
 		/** @inheritdoc */
 		public function output($value, ?array $options = null) {
-			return (int)filter_var($value, FILTER_VALIDATE_INT);
+			return $this->input($value);
 		}
 	}
