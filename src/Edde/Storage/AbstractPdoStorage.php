@@ -159,7 +159,7 @@
 					]),
 					$params
 				);
-				return new Entity($name, $hydrator->input($name, $source));
+				return $this->load($entity->getSchema(), $params['primary']);
 			} catch (Throwable $exception) {
 				/** @noinspection PhpUnhandledExceptionInspection */
 				throw $this->exception($exception);
