@@ -5,6 +5,9 @@
 	use Edde\TestCase;
 
 	class BoolIntFilterTest extends TestCase {
+		/**
+		 * @throws FilterException
+		 */
 		public function testBoolFilterInput() {
 			$filter = new BoolIntFilter();
 			self::assertSame(1, $filter->input('true'));
@@ -15,6 +18,9 @@
 			self::assertSame(0, $filter->input(0));
 		}
 
+		/**
+		 * @throws FilterException
+		 */
 		public function testBoolFilterOutput() {
 			$filter = new BoolIntFilter();
 			self::assertTrue($filter->output('true'));

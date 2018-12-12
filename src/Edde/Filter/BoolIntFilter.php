@@ -13,6 +13,6 @@
 
 		/** @inheritdoc */
 		public function output($value, ?array $options = null) {
-			return filter_var($value, FILTER_VALIDATE_BOOLEAN);
+			return (bool)filter_var($value, FILTER_VALIDATE_BOOLEAN);
 		}
 	}
