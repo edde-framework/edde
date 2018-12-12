@@ -159,7 +159,7 @@
 					]),
 					$params
 				);
-				return $this->load($entity->getSchema(), $params['primary']);
+				return $this->load($name, $params['primary']);
 			} catch (Throwable $exception) {
 				/** @noinspection PhpUnhandledExceptionInspection */
 				throw $this->exception($exception);
