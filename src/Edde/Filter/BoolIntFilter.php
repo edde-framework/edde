@@ -8,11 +8,11 @@
 	class BoolIntFilter extends AbstractFilter {
 		/** @inheritdoc */
 		public function input($value, ?array $options = null) {
-			return (int)$this->output($value);
+			return filter_var($value, FILTER_VALIDATE_BOOLEAN);
 		}
 
 		/** @inheritdoc */
 		public function output($value, ?array $options = null) {
-			return filter_var($value, FILTER_VALIDATE_BOOLEAN);
+			return (int)$this->input($value);
 		}
 	}

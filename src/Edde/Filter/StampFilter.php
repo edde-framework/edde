@@ -7,14 +7,14 @@
 	class StampFilter extends AbstractFilter {
 		/** @inheritdoc */
 		public function input($value, ?array $options = null) {
-			if (empty($value) === false) {
-				return $value;
-			}
-			return new DateTime();
+			return $value;
 		}
 
 		/** @inheritdoc */
 		public function output($value, ?array $options = null) {
-			return $value;
+			if (empty($value) === false) {
+				return $value;
+			}
+			return new DateTime();
 		}
 	}

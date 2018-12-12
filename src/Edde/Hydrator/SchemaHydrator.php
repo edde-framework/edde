@@ -28,7 +28,7 @@
 		/** @inheritdoc */
 		public function hydrate(array $source) {
 			if ($this->name) {
-				return $this->output($this->name, $source);
+				return $this->input($this->name, $source);
 			}
 			return $source;
 		}
@@ -48,13 +48,13 @@
 					]);
 				}
 				if ($filter = $attribute->getFilter('type')) {
-					$input[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->input($input[$name]);
+					$input[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($input[$name]);
 				}
 				/**
 				 * common filter support; filter name is used for both directions
 				 */
 				if ($filter = $attribute->getFilter('filter')) {
-					$input[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->input($input[$name]);
+					$input[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($input[$name]);
 				}
 			}
 			return $input;
@@ -71,13 +71,13 @@
 					]);
 				}
 				if ($filter = $attribute->getFilter('type')) {
-					$update[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->input($update[$name] ?? null);
+					$update[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($update[$name] ?? null);
 				}
 				/**
 				 * common filter support; filter name is used for both directions
 				 */
 				if ($filter = $attribute->getFilter('filter')) {
-					$update[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->input($update[$name] ?? null);
+					$update[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($update[$name] ?? null);
 				}
 			}
 			return $update;
@@ -91,10 +91,10 @@
 					$output[$name] = $attribute->getDefault();
 				}
 				if ($filter = $attribute->getFilter('type')) {
-					$output[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($output[$name]);
+					$output[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->input($output[$name]);
 				}
 				if ($filter = $attribute->getFilter('filter')) {
-					$output[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($output[$name]);
+					$output[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->input($output[$name]);
 				}
 			}
 			return $output;

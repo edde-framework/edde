@@ -2,6 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Hydrator;
 
+	use Edde\Filter\FilterException;
+	use Edde\Schema\SchemaException;
+	use Edde\Validator\ValidatorException;
+
 	interface IHydrator {
 		/**
 		 * hydrate the given input (row, record) to (arbitrary) output
@@ -9,6 +13,9 @@
 		 * @param array $source
 		 *
 		 * @return mixed
+		 *
+		 * @throws SchemaException
+		 * @throws FilterException
 		 */
 		public function hydrate(array $source);
 
@@ -19,6 +26,9 @@
 		 * @param array  $input
 		 *
 		 * @return array
+		 *
+		 * @throws SchemaException
+		 * @throws FilterException
 		 */
 		public function input(string $name, array $input): array;
 
@@ -31,6 +41,10 @@
 		 * @param array  $update
 		 *
 		 * @return array
+		 *
+		 * @throws SchemaException
+		 * @throws FilterException
+		 * @throws ValidatorException
 		 */
 		public function update(string $name, array $update): array;
 
@@ -41,6 +55,9 @@
 		 * @param array  $output
 		 *
 		 * @return array
+		 *
+		 * @throws SchemaException
+		 * @throws FilterException
 		 */
 		public function output(string $name, array $output): array;
 	}

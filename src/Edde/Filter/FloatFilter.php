@@ -7,14 +7,14 @@
 	class FloatFilter extends AbstractFilter {
 		/** @inheritdoc */
 		public function input($value, ?array $options = null) {
-			if (($value = filter_var($value, FILTER_VALIDATE_FLOAT)) === false) {
-				return null;
-			}
-			return $value;
+			return $this->output($value, $options);
 		}
 
 		/** @inheritdoc */
 		public function output($value, ?array $options = null) {
-			return $this->input($value, $options);
+			if (($value = filter_var($value, FILTER_VALIDATE_FLOAT)) === false) {
+				return null;
+			}
+			return $value;
 		}
 	}
