@@ -29,15 +29,15 @@
 		public function testInputFilter() {
 			$this->schemaManager->load(SomeSchema::class);
 			$filter = $this->filterManager->input($input = [
-				'date' => '3.8.2015 6:34:11',
+				'date' => '2015-08-03T06:34:11.000000',
 				'bint' => 1,
-				'uuid' => null,
+				'uuid' => '123',
 			], SomeSchema::class, 'type');
-			self::assertEquals([
+			self::assertEquals($output = [
 				'date' => new DateTime('2015-08-03 06:34:11.000000'),
 				'bint' => true,
-				'uuid' => null,
+				'uuid' => '123',
 			], $filter);
-//			self::assertEquals($i, $filter);
+			self::assertEquals($this->filterManager->output($output, SomeSchema::class, 'type'), $input);
 		}
 	}
