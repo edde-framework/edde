@@ -9,14 +9,14 @@
 
 		/** @inheritdoc */
 		public function input($value, ?array $options = null) {
-			if (empty($value) === false) {
-				return $value;
-			}
-			return $this->randomService->uuid($options['seed'] ?? null);
+			return $value;
 		}
 
 		/** @inheritdoc */
 		public function output($value, ?array $options = null) {
-			return $value;
+			if (empty($value) === false) {
+				return $value;
+			}
+			return $this->randomService->uuid($options['seed'] ?? null);
 		}
 	}

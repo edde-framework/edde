@@ -3,8 +3,10 @@
 	namespace Edde\Filter;
 
 	use Edde\Edde;
+	use Edde\Service\Schema\SchemaManager;
 
 	class FilterManager extends Edde implements IFilterManager {
+		use SchemaManager;
 		protected $filters = [];
 
 		/** @inheritdoc */
@@ -27,5 +29,27 @@
 				throw new FilterException(sprintf('Requested unknown filter [%s].', $name));
 			}
 			return $this->filters[$name];
+		}
+
+		/** @inheritdoc */
+		public function input(array $input, string $schema, string $type): array {
+			$schema = $this->schemaManager->getSchema($schema);
+			foreach ($schema->getAttributes() as $name => $attribute) {
+				if ($filter = $attribute->getFilter($type)) {
+					$input[$name] = $this->getFilter($filter)->input($input[$name] ?? null);
+				}
+			}
+			return $input;
+		}
+
+		/** @inheritdoc */
+		public function output(array $input, string $schema, string $type): array {
+			$schema = $this->schemaManager->getSchema($schema);
+			foreach ($schema->getAttributes() as $name => $attribute) {
+				if ($filter = $attribute->getFilter($type)) {
+					$input[$name] = $this->getFilter($filter)->output($input[$name] ?? null);
+				}
+			}
+			return $input;
 		}
 	}
