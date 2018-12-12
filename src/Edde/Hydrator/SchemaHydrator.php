@@ -37,24 +37,14 @@
 		public function input(string $name, array $input): array {
 			$schema = $this->schemaManager->getSchema($name);
 			foreach ($schema->getAttributes() as $name => $attribute) {
-				if (($generator = $attribute->getFilter('generator')) && isset($input[$name]) === false) {
-					$input[$name] = $this->filterManager->getFilter($this->prefix . ':' . $generator)->input(null);
-				}
-				$input[$name] = isset($input[$name]) || array_key_exists($name, $input) ? $input[$name] : $attribute->getDefault();
-				if ($validator = $attribute->getValidator()) {
-					$this->validatorManager->validate($this->prefix . ':' . $validator, $input[$name], [
-						'name'     => $schema->getName() . '::' . $name,
-						'required' => $attribute->isRequired(),
-					]);
+				if (isset($input[$name]) === false && array_key_exists($name, $input) === false) {
+					$input[$name] = $attribute->getDefault();
 				}
 				if ($filter = $attribute->getFilter('type')) {
-					$input[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($input[$name]);
+					$input[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->input($input[$name]);
 				}
-				/**
-				 * common filter support; filter name is used for both directions
-				 */
 				if ($filter = $attribute->getFilter('filter')) {
-					$input[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($input[$name]);
+					$input[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->input($input[$name]);
 				}
 			}
 			return $input;
@@ -87,14 +77,24 @@
 		public function output(string $name, array $output): array {
 			$schema = $this->schemaManager->getSchema($name);
 			foreach ($schema->getAttributes() as $name => $attribute) {
-				if (isset($output[$name]) === false && array_key_exists($name, $output) === false) {
-					$output[$name] = $attribute->getDefault();
+				if (($generator = $attribute->getFilter('generator')) && isset($output[$name]) === false) {
+					$output[$name] = $this->filterManager->getFilter($this->prefix . ':' . $generator)->output(null);
+				}
+				$output[$name] = isset($output[$name]) || array_key_exists($name, $output) ? $output[$name] : $attribute->getDefault();
+				if ($validator = $attribute->getValidator()) {
+					$this->validatorManager->validate($this->prefix . ':' . $validator, $output[$name], [
+						'name'     => $schema->getName() . '::' . $name,
+						'required' => $attribute->isRequired(),
+					]);
 				}
 				if ($filter = $attribute->getFilter('type')) {
-					$output[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->input($output[$name]);
+					$output[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($output[$name]);
 				}
+				/**
+				 * common filter support; filter name is used for both directions
+				 */
 				if ($filter = $attribute->getFilter('filter')) {
-					$output[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->input($output[$name]);
+					$output[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($output[$name]);
 				}
 			}
 			return $output;

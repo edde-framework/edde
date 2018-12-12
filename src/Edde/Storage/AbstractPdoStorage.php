@@ -106,7 +106,7 @@
 				$schema = $this->schemaManager->getSchema($name);
 				$columns = [];
 				$params = [];
-				foreach ($source = $hydrator->input($name, $insert) as $k => $v) {
+				foreach ($source = $hydrator->output($name, $insert) as $k => $v) {
 					$columns[sha1($k)] = $this->delimit($k);
 					$params[sha1($k)] = $v;
 				}
@@ -118,7 +118,7 @@
 					]),
 					$params
 				);
-				return new Entity($name, $hydrator->output($name, $source));
+				return new Entity($name, $hydrator->input($name, $source));
 			} catch (Throwable $exception) {
 				/** @noinspection PhpUnhandledExceptionInspection */
 				throw $this->exception($exception);
@@ -159,7 +159,7 @@
 					]),
 					$params
 				);
-				return new Entity($name, $hydrator->output($name, $source));
+				return new Entity($name, $hydrator->input($name, $source));
 			} catch (Throwable $exception) {
 				/** @noinspection PhpUnhandledExceptionInspection */
 				throw $this->exception($exception);

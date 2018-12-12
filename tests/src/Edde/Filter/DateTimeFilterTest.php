@@ -26,8 +26,8 @@
 		public function testDateTimeOutput() {
 			$filter = new DateTimeFilter();
 			$stamp = new DateTime('2018-05-22T23:42:11.129394Z');
-			self::assertSame('2018-05-22T23:42:11+0000', $filter->output($stamp));
-			self::assertSame('2018-05-22T23:42:11+0000', $filter->output('2018-05-22T23:42:11'));
+			self::assertSame('2018-05-22T23:42:11.129394', $filter->output($stamp));
+			self::assertSame('2018-05-22T23:42:11.000000', $filter->output('2018-05-22T23:42:11'));
 			self::assertNull($filter->output(null));
 		}
 	}
