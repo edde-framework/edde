@@ -63,18 +63,18 @@
 				$attribute = $schema->getAttribute($k);
 				if ($validator = $attribute->getValidator()) {
 					$this->validatorManager->validate($this->prefix . ':' . $validator, $v, [
-						'name'     => $schema->getName() . '::' . $name,
+						'name'     => $schema->getName() . '::' . $k,
 						'required' => $attribute->isRequired(),
 					]);
 				}
 				if ($filter = $attribute->getFilter('type')) {
-					$update[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($v);
+					$update[$k] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($v);
 				}
 				/**
 				 * common filter support; filter name is used for both directions
 				 */
 				if ($filter = $attribute->getFilter('filter')) {
-					$update[$name] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($v);
+					$update[$k] = $this->filterManager->getFilter($this->prefix . ':' . $filter)->output($v);
 				}
 			}
 			return $update;
