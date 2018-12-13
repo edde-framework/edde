@@ -6,13 +6,6 @@
 
 	interface IPacket {
 		/**
-		 * uuid of packet should be... universally unique
-		 *
-		 * @return string
-		 */
-		public function getUuid(): string;
-
-		/**
 		 * add a message which should be executed "on the other side"
 		 *
 		 * @param IMessage $message

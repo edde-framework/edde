@@ -3,13 +3,11 @@
 	namespace Edde\Message;
 
 	use Edde\Edde;
-	use Edde\Service\Security\RandomService;
 	use Edde\Service\Utils\StringUtils;
 	use ReflectionClass;
 	use ReflectionMethod;
 
 	abstract class AbstractMessageService extends Edde implements IMessageService {
-		use RandomService;
 		use StringUtils;
 		/** @var ReflectionMethod[] */
 		protected $routes = [];

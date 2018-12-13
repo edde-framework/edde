@@ -57,7 +57,7 @@
 
 		/** @inheritdoc */
 		public function createPacket(): IPacket {
-			return new Packet($this->randomService->uuid());
+			return new Packet();
 		}
 
 		/** @inheritdoc */
