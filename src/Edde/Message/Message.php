@@ -6,8 +6,12 @@
 	use stdClass;
 
 	class Message extends Edde implements IMessage {
+		/** @var string */
+		protected $type;
+		/** @var string|null */
+		protected $target;
 		/** @var array */
-		protected $message;
+		protected $attrs;
 
 		/**
 		 * @param string $type
@@ -15,30 +19,32 @@
 		 * @param array  $attrs
 		 */
 		public function __construct(string $type, string $target = null, array $attrs = null) {
-			$this->message = [
-				'service' => $target,
-				'type'    => $type,
-				'attrs'   => $attrs,
-			];
+			$this->type = $type;
+			$this->target = $target;
+			$this->attrs = $attrs;
 		}
 
 		/** @inheritdoc */
 		public function getType(): string {
-			return (string)$this->message['type'];
+			return $this->type;
 		}
 
 		/** @inheritdoc */
 		public function getTarget(): ?string {
-			return ((string)$this->message['service']) ?? null;
+			return $this->target;
 		}
 
 		/** @inheritdoc */
 		public function getAttrs(): ?array {
-			return $this->message['attrs'];
+			return $this->attrs;
 		}
 
 		/** @inheritdoc */
 		public function export(): stdClass {
-			return (object)$this->message;
+			return (object)[
+				'type'   => $this->type,
+				'target' => $this->target,
+				'attrs'  => $this->attrs ? (object)$this->attrs : null,
+			];
 		}
 	}

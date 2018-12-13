@@ -41,7 +41,7 @@
 			/** @var $service string */
 			$service = null;
 			foreach ($resolve as $name) {
-				if ($this->container->canHandle($target)) {
+				if ($this->container->canHandle($name)) {
 					$service = $name;
 					break;
 				}
