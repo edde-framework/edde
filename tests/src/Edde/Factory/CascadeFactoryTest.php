@@ -7,6 +7,7 @@
 	use Edde\Container\IContainer;
 	use Edde\Hydrator\IHydratorManager;
 	use Edde\Schema\ISchemaManager;
+	use Edde\Security\IRandomService;
 	use Edde\Storage\MysqlStorage;
 	use Edde\TestCase;
 
@@ -36,6 +37,7 @@
 				new Parameter('configService', IConfigService::class),
 				new Parameter('hydratorManager', IHydratorManager::class),
 				new Parameter('schemaManager', ISchemaManager::class),
+				new Parameter('randomService', IRandomService::class),
 				new Parameter('container', IContainer::class),
 			], $reflection->getInjects());
 			self::assertEquals([
