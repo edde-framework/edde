@@ -4,6 +4,7 @@
 
 	use Edde\Config\ConfigException;
 	use Edde\Hydrator\IHydrator;
+	use Edde\Service\Security\RandomService;
 	use PDO;
 	use PDOException;
 	use PDOStatement;
@@ -14,6 +15,7 @@
 	use function vsprintf;
 
 	abstract class AbstractPdoStorage extends AbstractStorage {
+		use RandomService;
 		const TYPES = [];
 		/** @var PDO */
 		protected $pdo;
@@ -257,6 +259,21 @@
 				return $entity;
 			}
 			throw new EmptyEntityException(sprintf('Requested unknown uuid [%s] of [%s].', $uuid, $name));
+		}
+
+		/** @inheritdoc */
+		public function temporal(string $type, iterable $items, callable $callback): IStorage {
+			$table = $this->randomService->generate(64);
+			$this->start();
+			$this->exec($this->query(sprintf('CREATE TABLE %s:delimit ( item %s )', $table, $this->type($table))));
+			foreach ($items as $uuid) {
+				$this->fetch($this->query(sprintf('INSERT INTO %s:delimit (item) VALUES (:item)', $table)), [
+					'item' => $uuid,
+				]);
+			}
+			$callback($table);
+			$this->rollback();
+			return $this;
 		}
 
 		/** @inheritdoc */

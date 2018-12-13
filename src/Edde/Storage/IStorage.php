@@ -5,6 +5,7 @@
 	use Edde\Hydrator\IHydrator;
 	use Edde\Schema\SchemaException;
 	use Edde\Transaction\ITransaction;
+	use Edde\Transaction\TransactionException;
 	use Generator;
 	use Throwable;
 
@@ -227,6 +228,20 @@
 		 * @throws EmptyEntityException
 		 */
 		public function load(string $name, string $uuid): IEntity;
+
+		/**
+		 * enable temporal context; callback will get temporary table nam
+		 *
+		 * @param string   $type
+		 * @param iterable $items
+		 * @param callable $callback
+		 *
+		 * @return IStorage
+		 *
+		 * @throws StorageException
+		 * @throws TransactionException
+		 */
+		public function temporal(string $type, iterable $items, callable $callback): IStorage;
 
 		/**
 		 * @param IEntity $entity
