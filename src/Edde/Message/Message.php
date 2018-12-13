@@ -10,23 +10,16 @@
 		protected $message;
 
 		/**
-		 * @param string $service
 		 * @param string $type
+		 * @param string $target
 		 * @param array  $attrs
-		 * @param string $uuid
 		 */
-		public function __construct(string $service, string $type, string $uuid, array $attrs = null) {
+		public function __construct(string $type, string $target = null, array $attrs = null) {
 			$this->message = [
-				'service' => $service,
+				'service' => $target,
 				'type'    => $type,
-				'uuid'    => $uuid,
 				'attrs'   => $attrs,
 			];
-		}
-
-		/** @inheritdoc */
-		public function getService(): string {
-			return (string)$this->message['service'];
 		}
 
 		/** @inheritdoc */
@@ -35,8 +28,8 @@
 		}
 
 		/** @inheritdoc */
-		public function getUuid(): string {
-			return (string)$this->message['uuid'];
+		public function getTarget(): ?string {
+			return ((string)$this->message['service']) ?? null;
 		}
 
 		/** @inheritdoc */

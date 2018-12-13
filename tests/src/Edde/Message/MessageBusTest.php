@@ -13,8 +13,8 @@
 		 */
 		public function testResolveException() {
 			$this->expectException(MessageException::class);
-			$this->expectExceptionMessage('Cannot resolve Message Service for message [nope] uuid [uuid] for namespace [boom]; please register a service [Boom] (Edde\Message\IMessageService).');
-			$this->messageBus->resolve($this->messageBus->createMessage('boom', 'nope', null, 'uuid'));
+			$this->expectExceptionMessage('Cannot resolve Message Service for message [nope] for target [boom]; please register one of [Boom, Message\NopeMessageService, Message\CommonMessageService] (Edde\Message\IMessageService).');
+			$this->messageBus->resolve($this->messageBus->createMessage('nope', 'boom'));
 		}
 
 		/**
@@ -22,15 +22,15 @@
 		 */
 		public function testResolveInterfaceException() {
 			$this->expectException(MessageException::class);
-			$this->expectExceptionMessage('Cannot resolve Message Service for message [dummy] uuid [da-uuid] for namespace [edde.message]; please register a service [Edde\Message] (Edde\Message\IMessageService).');
-			$this->messageBus->resolve($this->messageBus->createMessage('edde.message', 'dummy', null, 'da-uuid'));
+			$this->expectExceptionMessage('Cannot resolve Message Service for message [dummy] for target [- no target -]; please register one of [Message\DummyMessageService, Message\CommonMessageService] (Edde\Message\IMessageService).');
+			$this->messageBus->resolve($this->messageBus->createMessage('dummy'));
 		}
 
 		/**
 		 * @throws MessageException
 		 */
 		public function testMissingMethodException() {
-			$response = $this->messageBus->packet($this->messageBus->createPacket()->message($input = $this->messageBus->createMessage('edde.message.common-message-service', 'kaboom')));
+			$response = $this->messageBus->packet($this->messageBus->createPacket()->message($input = $this->messageBus->createMessage('kaboom', 'edde.message.common-message-service')));
 			self::assertInstanceOf(IPacket::class, $response);
 			self::assertCount(1, $response->messages());
 			[$message] = $response->messages();
@@ -45,7 +45,7 @@
 		 */
 		public function testStateMessage() {
 			$input = $this->messageBus->createPacket();
-			$input->message($state = $this->messageBus->createMessage('edde.message.common-message-service', 'state', null, 'da-uuid'));
+			$input->message($state = $this->messageBus->createMessage('state', 'edde.message.common-message-service', null));
 			$output = $this->messageBus->packet($input);
 			self::assertInstanceOf(IPacket::class, $output);
 			self::assertCount(1, $output->messages());

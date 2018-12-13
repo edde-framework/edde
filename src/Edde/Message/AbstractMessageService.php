@@ -33,11 +33,11 @@
 		}
 
 		/** @inheritdoc */
-		public function createMessage(string $service, string $type, array $attrs = null, string $uuid = null): IMessage {
-			return new Message($service, $type, $uuid ?: $this->randomService->uuid(), $attrs);
+		public function createMessage(string $type, string $target = null, array $attrs = null): IMessage {
+			return new Message($type, $target, $attrs);
 		}
 
 		protected function reply(IMessage $message, array $attrs = null): IMessage {
-			return $this->createMessage($message->getService(), $message->getType(), $attrs, null);
+			return $this->createMessage($message->getType(), $message->getTarget(), $attrs);
 		}
 	}
