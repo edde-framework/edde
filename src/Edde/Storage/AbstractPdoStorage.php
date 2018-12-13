@@ -265,7 +265,7 @@
 		public function temporal(string $type, iterable $items, callable $callback): IStorage {
 			$table = $this->randomService->generate(64);
 			$this->start();
-			$this->exec($this->query(sprintf('CREATE TABLE %s:delimit ( item %s )', $table, $this->type($table))));
+			$this->exec($this->query(sprintf('CREATE TABLE %s:delimit ( item %s )', $table, $this->type($type))));
 			foreach ($items as $uuid) {
 				$this->fetch($this->query(sprintf('INSERT INTO %s:delimit (item) VALUES (:item)', $table)), [
 					'item' => $uuid,
