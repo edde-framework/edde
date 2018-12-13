@@ -125,7 +125,7 @@
 		 *
 		 * @throws StorageException
 		 */
-		public function query(string $query, array $schemas): string;
+		public function query(string $query, array $schemas = []): string;
 
 		/**
 		 * insert a new item into storage ($name is schema name)

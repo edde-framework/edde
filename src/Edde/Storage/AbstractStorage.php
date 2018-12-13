@@ -67,7 +67,7 @@
 		}
 
 		/** @inheritdoc */
-		public function query(string $query, array $schemas): string {
+		public function query(string $query, array $schemas = []): string {
 			if (isset($this->queries[$cacheId = sha1($query . implode(':', $schemas) . implode(':', array_keys($schemas)))])) {
 				return $this->queries[$cacheId];
 			}
