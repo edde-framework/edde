@@ -262,7 +262,7 @@
 		}
 
 		/** @inheritdoc */
-		public function temporal(string $type, iterable $items, callable $callback): IStorage {
+		public function temporal(string $type, iterable $items, callable $callback): iterable {
 			$table = $this->randomService->generate(64);
 			$this->start();
 			$this->exec($this->query(sprintf('CREATE TABLE %s:delimit ( item %s )', $table, $this->type($type))));
@@ -271,9 +271,8 @@
 					'item' => $uuid,
 				]);
 			}
-			$callback($table);
+			yield from $callback($table);
 			$this->rollback();
-			return $this;
 		}
 
 		/** @inheritdoc */

@@ -236,12 +236,12 @@
 		 * @param iterable $items
 		 * @param callable $callback
 		 *
-		 * @return IStorage
+		 * @return iterable
 		 *
 		 * @throws StorageException
 		 * @throws TransactionException
 		 */
-		public function temporal(string $type, iterable $items, callable $callback): IStorage;
+		public function temporal(string $type, iterable $items, callable $callback): iterable;
 
 		/**
 		 * @param IEntity $entity
