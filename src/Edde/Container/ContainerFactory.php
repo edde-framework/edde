@@ -12,6 +12,10 @@
 	use Edde\Config\IConfigService;
 	use Edde\Edde;
 	use Edde\EddeException;
+	use Edde\Encoder\DecoderService;
+	use Edde\Encoder\EncoderService;
+	use Edde\Encoder\IDecoderService;
+	use Edde\Encoder\IEncoderService;
 	use Edde\Factory\ClassFactory;
 	use Edde\Factory\ExceptionFactory;
 	use Edde\Factory\IFactory;
@@ -233,9 +237,14 @@
 				 */
 				IFilterManager::class      => FilterManager::class,
 				/**
-				 * Message bus support
+				 * message bus support
 				 */
 				IMessageBus::class         => MessageBus::class,
+				/**
+				 * binary encoding/decoding support
+				 */
+				IEncoderService::class     => EncoderService::class,
+				IDecoderService::class     => DecoderService::class,
 				/**
 				 * an application upgrades support
 				 */
