@@ -8,6 +8,8 @@
 		const TYPE_NULL = 'n';
 		const TYPE_BOOL_TRUE = 't';
 		const TYPE_BOOL_FALSE = 'f';
+		const TYPE_DOUBLE = 'd';
+		const TYPE_INTEGER = 'i';
 
 		/**
 		 * return encoded binary string (more stream than string)
