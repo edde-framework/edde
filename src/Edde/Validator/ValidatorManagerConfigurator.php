@@ -25,6 +25,7 @@
 				'storage:DateTime' => $validator,
 				'uuid'             => $validator = new UuidValidator(),
 				'storage:uuid'     => $validator,
+				'storage:json'     => new JsonValidator(),
 			]);
 		}
 	}

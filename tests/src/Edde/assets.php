@@ -224,3 +224,7 @@
 	interface DefaultFloatValueSchema extends UuidSchema {
 		public function value($default = 0): ?float;
 	}
+
+	interface JsonSchema extends UuidSchema {
+		public function someJson($type = 'json');
+	}

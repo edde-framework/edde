@@ -10,6 +10,7 @@
 		const TYPES = [
 			'string'   => 'CHARACTER VARYING(1024)',
 			'text'     => 'TEXT',
+			'json'     => 'TEXT',
 			'binary'   => 'BYTEA',
 			'int'      => 'INTEGER',
 			'float'    => 'DOUBLE PRECISION',

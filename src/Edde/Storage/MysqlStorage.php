@@ -10,6 +10,7 @@
 		const TYPES = [
 			'string'   => 'CHARACTER VARYING(1024)',
 			'text'     => 'LONGTEXT',
+			'json'     => 'LONGTEXT',
 			'binary'   => 'LONGBLOB',
 			'int'      => 'INTEGER',
 			'float'    => 'DOUBLE PRECISION',

@@ -14,6 +14,7 @@
 	use Edde\Transaction\TransactionException;
 	use Edde\Validator\ValidatorException;
 	use IssueSchema;
+	use JsonSchema;
 	use LabelSchema;
 	use ProjectMemberSchema;
 	use ProjectSchema;
@@ -45,6 +46,7 @@
 				ProjectMemberSchema::class,
 				IssueSchema::class,
 				DefaultFloatValueSchema::class,
+				JsonSchema::class,
 			]);
 			self::assertTrue(true, 'everything is ok');
 		}
@@ -612,6 +614,20 @@
 			self::assertSame($name, $label['name']);
 		}
 
+		public function testJson() {
+			$entity = $this->storage->save(new Entity(JsonSchema::class, [
+				'someJson' => $source = (object)[
+					'foo'  => [
+						(object)['bar' => 1],
+						(object)['bar' => 2],
+					],
+					'bool' => "could be true, but it's a string!",
+				],
+			]));
+			$entity2 = $this->storage->load(JsonSchema::class, $entity['uuid']);
+			self::assertEquals($entity, $entity2);
+		}
+
 		/**
 		 * @throws ContainerException
 		 * @throws SchemaException
@@ -626,6 +642,7 @@
 				IssueSchema::class,
 				ShittyTypeSchema::class,
 				DefaultFloatValueSchema::class,
+				JsonSchema::class,
 			]);
 		}
 	}
