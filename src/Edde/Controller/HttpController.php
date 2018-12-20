@@ -16,7 +16,6 @@
 	use Edde\Url\UrlException;
 	use Edde\Version;
 	use function json_decode;
-	use function strpos;
 
 	/**
 	 * Http control provides helpers for a http response style.
@@ -40,7 +39,7 @@
 		 * @throws UrlException
 		 */
 		protected function getContent(string $expected) {
-			if (strpos(($content = $this->requestService->getContent())->getType(), $expected) === false) {
+			if (($content = $this->requestService->getContent())->getType() !== $expected) {
 				throw new ApplicationException(sprintf('Content mismatch: expected [%s], got [%s]', $expected, $content->getType()));
 			}
 			return $content->getContent();
