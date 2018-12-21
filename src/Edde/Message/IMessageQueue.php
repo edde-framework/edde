@@ -18,5 +18,5 @@
 		 *
 		 * @return IMessageQueue
 		 */
-		public function execute(): IMessageQueue;
+		public function execute(string $batch): IMessageQueue;
 	}

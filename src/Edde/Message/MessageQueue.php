@@ -10,11 +10,12 @@
 
 		/** @inheritdoc */
 		public function enqueue(): IMessageQueue {
+
 			return $this;
 		}
 
 		/** @inheritdoc */
-		public function execute(): IMessageQueue {
+		public function execute(string $batch): IMessageQueue {
 			return $this;
 		}
 	}

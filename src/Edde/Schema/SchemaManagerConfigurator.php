@@ -3,6 +3,7 @@
 	namespace Edde\Schema;
 
 	use Edde\Configurable\AbstractConfigurator;
+	use Edde\Message\BatchSchema;
 	use Edde\Message\MessageQueueSchema;
 	use Edde\Upgrade\UpgradeSchema;
 
@@ -16,6 +17,7 @@
 			parent::configure($instance);
 			$instance->loads([
 				UpgradeSchema::class,
+				BatchSchema::class,
 				MessageQueueSchema::class,
 			]);
 		}

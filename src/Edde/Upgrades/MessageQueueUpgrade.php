@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Upgrades;
 
+	use Edde\Message\BatchSchema;
 	use Edde\Message\MessageQueueSchema;
 	use Edde\Upgrade\AbstractUpgrade;
 
@@ -13,6 +14,9 @@
 
 		/** @inheritdoc */
 		public function upgrade(): void {
-			$this->storage->create(MessageQueueSchema::class);
+			$this->storage->creates([
+				BatchSchema::class,
+				MessageQueueSchema::class,
+			]);
 		}
 	}
