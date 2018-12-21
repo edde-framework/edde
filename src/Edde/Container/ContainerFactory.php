@@ -42,8 +42,6 @@
 	use Edde\Security\RandomService;
 	use Edde\Storage\IStorage;
 	use Edde\Storage\PostgresStorage;
-	use Edde\Tick\ITickService;
-	use Edde\Tick\TickService;
 	use Edde\Transaction\ITransaction;
 	use Edde\Upgrade\IUpgradeManager;
 	use Edde\Upgrade\IVersionService;
@@ -224,44 +222,43 @@
 				/**
 				 * random & security support
 				 */
-				IRandomService::class    => RandomService::class,
-				IPasswordService::class  => PasswordService::class,
+				IRandomService::class      => RandomService::class,
+				IPasswordService::class    => PasswordService::class,
 				/**
 				 * storage support
 				 */
-				IStorage::class          => PostgresStorage::class,
-				ITransaction::class      => IStorage::class,
-				IHydratorManager::class  => HydratorManager::class,
+				IStorage::class            => PostgresStorage::class,
+				ITransaction::class        => IStorage::class,
+				IHydratorManager::class    => HydratorManager::class,
 				/**
 				 * general filtering (data conversion) support
 				 */
-				IFilterManager::class    => FilterManager::class,
+				IFilterManager::class      => FilterManager::class,
 				/**
 				 * Message bus support
 				 */
-				IMessageBus::class       => MessageBus::class,
-				IMessageQueue::class     => MessageQueue::class,
-				ITickService::class      => TickService::class,
+				IMessageBus::class         => MessageBus::class,
+				IMessageQueue::class       => MessageQueue::class,
 				/**
 				 * an application upgrades support
 				 */
-				IUpgradeManager::class   => UpgradeManager::class,
-				IVersionService::class   => VersionService::class,
+				IUpgradeManager::class     => UpgradeManager::class,
+				IVersionService::class     => VersionService::class,
 				/**
 				 * Xml support
 				 */
-				IXmlExportService::class => XmlExportService::class,
-				IXmlParserService::class => XmlParserService::class,
+				IXmlExportService::class   => XmlExportService::class,
+				IXmlParserService::class   => XmlParserService::class,
 				/**
 				 * simple scalar configuration support (should not be used
 				 * for any complex config as it's considered to be anti-pattern)
 				 */
-				IConfigService::class    => ConfigService::class,
-				IConfigLoader::class     => ConfigLoader::class,
+				IConfigService::class      => ConfigService::class,
+				IConfigLoader::class       => ConfigLoader::class,
 				/**
 				 * an application handles lifecycle workflow
 				 */
-				IApplication::class      => Application::class,
+				IApplication::class        => Application::class,
 			];
 		}
 
