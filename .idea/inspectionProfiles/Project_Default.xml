@@ -4,6 +4,7 @@
     <inspection_tool class="LongInheritanceChainInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="MoreThanThreeArgumentsInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="NestedTernaryOperatorInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PhpDocSignatureInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="PhpDuplicateArrayKeysInspection" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="PhpIncompatibleReturnTypeInspection" enabled="true" level="ERROR" enabled_by_default="true">
       <option name="STRICT_TYPE_CHECKING" value="true" />
