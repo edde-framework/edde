@@ -61,6 +61,8 @@
 			[$message1] = $packet1->messages();
 			[$message2] = $packet2->messages();
 			self::assertSame(['foo' => 'bar'], $message1->getAttrs());
+			self::assertSame('mwah', $message1->getType());
 			self::assertSame(['bar' => 'foo'], $message2->getAttrs());
+			self::assertSame('mwah', $message2->getType());
 		}
 	}
