@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Message;
 
+	use Edde\Job\JobSchema;
 	use Edde\Service\Message\MessageQueue;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
@@ -23,8 +24,7 @@
 		 */
 		public function testMessageQueueFlow() {
 			$drops = [
-				BatchSchema::class,
-				MessageQueueSchema::class,
+				JobSchema::class,
 				UpgradeSchema::class,
 			];
 			foreach ($drops as $drop) {
@@ -41,6 +41,6 @@
 				$this->upgradeManager->upgrade();
 			} catch (CurrentVersionException $exception) {
 			}
-			$this->messageQueue->send(new Message('async', 'edde.message.common-message-service'));
+			$this->messageQueue->enqueue(new Message('async', 'edde.message.common-message-service'));
 		}
 	}

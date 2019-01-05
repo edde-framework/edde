@@ -23,13 +23,13 @@
 	use Edde\Http\RequestService as HttpRequestService;
 	use Edde\Hydrator\HydratorManager;
 	use Edde\Hydrator\IHydratorManager;
+	use Edde\Job\IJobQueue;
+	use Edde\Job\JobQueue;
 	use Edde\Log\ILogService;
 	use Edde\Log\LogService;
 	use Edde\Log\LogServiceConfigurator;
 	use Edde\Message\IMessageBus;
-	use Edde\Message\IMessageQueue;
 	use Edde\Message\MessageBus;
-	use Edde\Message\MessageQueue;
 	use Edde\Runtime\IRuntime;
 	use Edde\Runtime\Runtime;
 	use Edde\Schema\ISchemaLoader;
@@ -240,7 +240,7 @@
 				 * Message bus support
 				 */
 				IMessageBus::class         => MessageBus::class,
-				IMessageQueue::class       => MessageQueue::class,
+				IJobQueue::class           => JobQueue::class,
 				/**
 				 * an application upgrades support
 				 */

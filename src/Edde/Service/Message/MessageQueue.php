@@ -2,16 +2,16 @@
 	declare(strict_types=1);
 	namespace Edde\Service\Message;
 
-	use Edde\Message\IMessageQueue;
+	use Edde\Job\IJobQueue;
 
 	trait MessageQueue {
-		/** @var IMessageQueue */
+		/** @var IJobQueue */
 		protected $messageQueue;
 
 		/**
-		 * @param IMessageQueue $messageQueue
+		 * @param \Edde\Job\IJobQueue $messageQueue
 		 */
-		public function injectMessageQueue(IMessageQueue $messageQueue): void {
+		public function injectMessageQueue(IJobQueue $messageQueue): void {
 			$this->messageQueue = $messageQueue;
 		}
 	}

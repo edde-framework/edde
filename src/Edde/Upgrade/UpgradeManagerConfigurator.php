@@ -5,7 +5,7 @@
 	use Edde\Configurable\AbstractConfigurator;
 	use Edde\Container\ContainerException;
 	use Edde\Service\Container\Container;
-	use Edde\Upgrades\MessageQueueUpgrade;
+	use Edde\Upgrades\JobUpgrade;
 
 	class UpgradeManagerConfigurator extends AbstractConfigurator {
 		use Container;
@@ -18,7 +18,7 @@
 		public function configure($instance) {
 			parent::configure($instance);
 			$upgrades = [
-				MessageQueueUpgrade::class,
+				JobUpgrade::class,
 			];
 			foreach ($upgrades as $upgrade) {
 				$instance->registerUpgrade($this->container->create($upgrade, [], __METHOD__));
