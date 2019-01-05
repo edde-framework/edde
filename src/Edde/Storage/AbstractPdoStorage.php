@@ -25,6 +25,10 @@
 		/** @inheritdoc */
 		public function fetch(string $query, array $params = []) {
 			try {
+				if (isset($params['$query'])) {
+					$query = $this->query($query, $params['$query']);
+					unset($params['$query']);
+				}
 				if (isset($this->statements[$cacheId = sha1($query)]) === false) {
 					$statement = $this->pdo->prepare($query);
 					$statement->setFetchMode(PDO::FETCH_ASSOC);
@@ -43,6 +47,10 @@
 		/** @inheritdoc */
 		public function exec(string $query, array $params = []) {
 			try {
+				if (isset($params['$query'])) {
+					$query = $this->query($query, $params['$query']);
+					unset($params['$query']);
+				}
 				return $this->pdo->exec($query);
 			} catch (PDOException $exception) {
 				throw $this->exception($exception);

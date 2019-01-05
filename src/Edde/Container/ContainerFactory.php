@@ -47,7 +47,6 @@
 	use Edde\Upgrade\IUpgradeManager;
 	use Edde\Upgrade\IVersionService;
 	use Edde\Upgrade\UpgradeManager;
-	use Edde\Upgrade\UpgradeManagerConfigurator;
 	use Edde\Upgrade\VersionService;
 	use Edde\Utils\IStringUtils;
 	use Edde\Utils\StringUtils;
@@ -270,7 +269,6 @@
 				IValidatorManager::class => ValidatorManagerConfigurator::class,
 				ILogService::class       => LogServiceConfigurator::class,
 				ISchemaManager::class    => SchemaManagerConfigurator::class,
-				IUpgradeManager::class   => UpgradeManagerConfigurator::class,
 			];
 		}
 	}

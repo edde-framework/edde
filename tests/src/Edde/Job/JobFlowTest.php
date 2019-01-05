@@ -2,16 +2,19 @@
 	declare(strict_types=1);
 	namespace Edde\Job;
 
+	use Edde\Container\ContainerException;
 	use Edde\Message\Message;
 	use Edde\Service\Job\JobQueue;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
 	use Edde\Service\Upgrade\UpgradeManager;
+	use Edde\Storage\StorageException;
+	use Edde\Storage\UnknownTableException;
 	use Edde\TestCase;
 	use Edde\Upgrade\CurrentVersionException;
+	use Edde\Upgrade\IUpgradeManager;
 	use Edde\Upgrade\UpgradeException;
-	use Edde\Upgrade\UpgradeSchema;
-	use Throwable;
+	use Edde\Upgrade\UpgradeManagerConfigurator;
 
 	class JobFlowTest extends TestCase {
 		use JobQueue;
@@ -20,23 +23,13 @@
 		use Storage;
 
 		/**
+		 * @throws ContainerException
 		 * @throws UpgradeException
+		 * @throws StorageException
+		 * @throws UnknownTableException
 		 */
 		public function testMessageQueueFlow() {
-			$drops = [
-				JobSchema::class,
-				UpgradeSchema::class,
-			];
-			foreach ($drops as $drop) {
-				try {
-					$this->storage->exec(
-						$this->storage->query('DROP TABLE s:schema', [
-							's' => $drop,
-						])
-					);
-				} catch (Throwable $exception) {
-				}
-			}
+			$this->container->registerConfigurator(IUpgradeManager::class, $this->container->create(UpgradeManagerConfigurator::class));
 			try {
 				$this->upgradeManager->upgrade();
 			} catch (CurrentVersionException $exception) {
@@ -64,5 +57,10 @@
 			self::assertSame('mwah', $message1->getType());
 			self::assertSame(['bar' => 'foo'], $message2->getAttrs());
 			self::assertSame('mwah', $message2->getType());
+			$this->storage->exec('DROP TABLE s:schema', [
+				'$query' => [
+					's' => JobSchema::class,
+				],
+			]);
 		}
 	}
