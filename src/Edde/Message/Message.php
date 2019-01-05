@@ -2,10 +2,10 @@
 	declare(strict_types=1);
 	namespace Edde\Message;
 
-	use Edde\Edde;
+	use Edde\SimpleObject;
 	use stdClass;
 
-	class Message extends Edde implements IMessage {
+	class Message extends SimpleObject implements IMessage {
 		/** @var string */
 		protected $type;
 		/** @var string|null */

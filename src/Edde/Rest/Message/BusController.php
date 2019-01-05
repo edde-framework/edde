@@ -30,7 +30,7 @@
 		public function actionPost() {
 			try {
 				$this->jsonResponse(
-					$this->messageBus->packet($this->messageBus->import($this->jsonRequest()))->export()
+					$this->messageBus->packet($this->messageBus->importPacket($this->jsonRequest()))->export()
 				)->execute();
 			} catch (EmptyBodyException $exception) {
 				$this->jsonResponse(

@@ -48,5 +48,19 @@
 			self::assertNotEquals($job1, $job2);
 			self::assertEquals((object)['foo' => 'bar'], $job1['message']->attrs);
 			self::assertEquals((object)['bar' => 'foo'], $job2['message']->attrs);
+			self::assertEquals(JobSchema::STATE_ENQUEUED, $job1['state']);
+			self::assertEquals(JobSchema::STATE_ENQUEUED, $job2['state']);
+			$packet1 = $this->jobQueue->execute($job1['uuid']);
+			$packet2 = $this->jobQueue->execute($job2['uuid']);
+			$job1 = $this->jobQueue->byUuid($job1['uuid']);
+			$job2 = $this->jobQueue->byUuid($job2['uuid']);
+			self::assertEquals(JobSchema::STATE_DONE, $job1['state']);
+			self::assertEquals(JobSchema::STATE_DONE, $job2['state']);
+			self::assertCount(1, $packet1->messages());
+			self::assertCount(1, $packet2->messages());
+			[$message1] = $packet1->messages();
+			[$message2] = $packet2->messages();
+			self::assertSame(['foo' => 'bar'], $message1->getAttrs());
+			self::assertSame(['bar' => 'foo'], $message2->getAttrs());
 		}
 	}

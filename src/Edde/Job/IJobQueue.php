@@ -5,6 +5,7 @@
 	use DateTime;
 	use Edde\Configurable\IConfigurable;
 	use Edde\Message\IMessage;
+	use Edde\Message\IPacket;
 	use Edde\Storage\IEntity;
 
 	interface IJobQueue extends IConfigurable {
@@ -27,9 +28,18 @@
 		public function enqueue(): IEntity;
 
 		/**
-		 * execute the given message uuid
+		 * execute the given job
 		 *
-		 * @return IJobQueue
+		 * @return IPacket
 		 */
-		public function execute(string $message): IJobQueue;
+		public function execute(string $job): IPacket;
+
+		/**
+		 * get a job by an uuid
+		 *
+		 * @param string $uuid
+		 *
+		 * @return IEntity
+		 */
+		public function byUuid(string $uuid): IEntity;
 	}

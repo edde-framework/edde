@@ -13,7 +13,7 @@
 		}
 
 		public function onAsyncMessage(IMessage $message, IPacket $packet) {
-			$packet->message(new Message('mwah', 'it works'));
+			$packet->message(new Message('mwah', 'it works', $message->getAttrs()));
 		}
 	}
 

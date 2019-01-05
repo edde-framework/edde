@@ -7,7 +7,6 @@
 	use stdClass;
 	use Throwable;
 	use function implode;
-	use function is_string;
 	use function sprintf;
 
 	class MessageBus extends AbstractMessageService implements IMessageBus {
@@ -56,6 +55,12 @@
 		}
 
 		/** @inheritdoc */
+		public function execute(IMessage $message): IPacket {
+			$this->message($message, $packet = $this->createPacket());
+			return $packet;
+		}
+
+		/** @inheritdoc */
 		public function createPacket(): IPacket {
 			return new Packet();
 		}
@@ -67,13 +72,10 @@
 		}
 
 		/** @inheritdoc */
-		public function import(stdClass $import): IPacket {
+		public function importPacket(stdClass $import): IPacket {
 			$packet = $this->createPacket();
 			foreach ($import->messages ?? [] as $item) {
-				if (is_string($item->type ?? null) === false) {
-					throw new MessageException('Missing message type or it is not string');
-				}
-				$packet->message(new Message($item->type, $item->target ?? null, ((array)$item->attrs) ?? null));
+				$packet->message($this->importMessage($item));
 			}
 			return $packet;
 		}

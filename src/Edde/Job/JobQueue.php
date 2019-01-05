@@ -5,12 +5,16 @@
 	use DateTime;
 	use Edde\Edde;
 	use Edde\Message\IMessage;
+	use Edde\Message\IPacket;
+	use Edde\Service\Message\MessageBus;
 	use Edde\Service\Storage\Storage;
 	use Edde\Storage\Entity;
 	use Edde\Storage\IEntity;
+	use Throwable;
 
 	class JobQueue extends Edde implements IJobQueue {
 		use Storage;
+		use MessageBus;
 
 		/** @inheritdoc */
 		public function push(IMessage $message, DateTime $time = null): IJobQueue {
@@ -46,7 +50,22 @@
 		}
 
 		/** @inheritdoc */
-		public function execute(string $message): IJobQueue {
-			return $this;
+		public function execute(string $job): IPacket {
+			$job = $this->byUuid($job);
+			$job['state'] = JobSchema::STATE_RUNNING;
+			$this->storage->update($job);
+			try {
+				return $this->messageBus->execute($this->messageBus->importMessage($job['message']));
+			} catch (Throwable $exception) {
+				throw $exception;
+			} finally {
+				$job['state'] = JobSchema::STATE_DONE;
+				$this->storage->update($job);
+			}
+		}
+
+		/** @inheritdoc */
+		public function byUuid(string $uuid): IEntity {
+			return $this->storage->load(JobSchema::class, $uuid);
 		}
 	}

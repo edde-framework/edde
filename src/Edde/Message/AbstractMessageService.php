@@ -6,6 +6,7 @@
 	use Edde\Service\Utils\StringUtils;
 	use ReflectionClass;
 	use ReflectionMethod;
+	use stdClass;
 
 	abstract class AbstractMessageService extends Edde implements IMessageService {
 		use StringUtils;
@@ -33,6 +34,14 @@
 		/** @inheritdoc */
 		public function createMessage(string $type, string $target = null, array $attrs = null): IMessage {
 			return new Message($type, $target, $attrs);
+		}
+
+		/** @inheritdoc */
+		public function importMessage(stdClass $stdClass): IMessage {
+			if (is_string($stdClass->type ?? null) === false) {
+				throw new MessageException('Missing message type or it is not string');
+			}
+			return new Message($stdClass->type, $stdClass->target ?? null, ((array)$stdClass->attrs) ?? null);
 		}
 
 		protected function reply(IMessage $message, array $attrs = null): IMessage {

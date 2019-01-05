@@ -28,6 +28,15 @@
 		public function resolve(IMessage $message): IMessageService;
 
 		/**
+		 * execute a message and return "response" packet
+		 *
+		 * @param IMessage $message
+		 *
+		 * @return IPacket
+		 */
+		public function execute(IMessage $message): IPacket;
+
+		/**
 		 * create a packet
 		 *
 		 * @return IPacket
@@ -43,5 +52,5 @@
 		 *
 		 * @throws MessageException
 		 */
-		public function import(stdClass $import): IPacket;
+		public function importPacket(stdClass $import): IPacket;
 	}

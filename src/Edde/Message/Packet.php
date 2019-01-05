@@ -2,11 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Message;
 
-	use Edde\Edde;
+	use Edde\SimpleObject;
 	use stdClass;
 	use function iterator_to_array;
 
-	class Packet extends Edde implements IPacket {
+	class Packet extends SimpleObject implements IPacket {
 		/** @var array */
 		protected $packet = [];
 

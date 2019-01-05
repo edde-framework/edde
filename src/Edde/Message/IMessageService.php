@@ -3,6 +3,7 @@
 	namespace Edde\Message;
 
 	use Edde\Configurable\IConfigurable;
+	use stdClass;
 
 	interface IMessageService extends IConfigurable {
 		/**
@@ -25,4 +26,13 @@
 		 * @return IMessage
 		 */
 		public function createMessage(string $type, string $target = null, array $attrs = null): IMessage;
+
+		/**
+		 * @param stdClass $stdClass
+		 *
+		 * @return IMessage
+		 *
+		 * @throws MessageException
+		 */
+		public function importMessage(stdClass $stdClass): IMessage;
 	}
