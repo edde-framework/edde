@@ -31,6 +31,7 @@
       <path value="$PROJECT_DIR$/lib/phpspec/prophecy" />
       <path value="$PROJECT_DIR$/lib/myclabs/deep-copy" />
       <path value="$PROJECT_DIR$/lib/composer" />
+      <path value="$PROJECT_DIR$/lib/symfony/polyfill-ctype" />
     </include_path>
   </component>
   <component name="PhpInterpreters">
@@ -374,7 +375,11 @@
   </component>
   <component name="PhpProjectServersManager">
     <servers>
-      <server host="docker" id="4740c493-4821-4990-b19e-1758bef2d2f2" name="edde" use_path_mappings="true" />
+      <server host="docker" id="4740c493-4821-4990-b19e-1758bef2d2f2" name="edde" use_path_mappings="true">
+        <path_mappings>
+          <mapping local-root="$PROJECT_DIR$" remote-root="/edde" />
+        </path_mappings>
+      </server>
     </servers>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />

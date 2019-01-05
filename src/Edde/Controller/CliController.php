@@ -2,9 +2,11 @@
 	declare(strict_types=1);
 	namespace Edde\Controller;
 
+	use DateTime;
 	use Edde\Service\Utils\StringUtils;
 	use ReflectionClass;
 	use ReflectionException;
+	use function vsprintf;
 
 	/**
 	 * Control used for a command line content rendering.
@@ -31,6 +33,10 @@
 			printf("Called unknown method on [%s::%s]\n", $this->stringUtils->extract(static::class), strtolower(str_replace('action', '', $name)));
 			$this->help();
 			printf("Please check your commandline arguments\n");
+		}
+
+		protected function printf(string $message, ...$params) {
+			printf("[%s] %s\n", (new DateTime())->format('Y-m-d H:i:s'), vsprintf($message, $params));
 		}
 
 		/**

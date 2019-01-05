@@ -30,6 +30,7 @@
 		"ext-PDO": "*",
 		"ext-json": "*",
 		"ext-mbstring": "*",
+		"ext-pcntl": "*",
 		"roave/security-advisories": "dev-master"
 	},
 	"require-dev": {

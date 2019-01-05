@@ -3,8 +3,10 @@
 	namespace Edde\Schema;
 
 	use Edde\Container\ContainerException;
+	use Edde\Job\JobSchema;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\TestCase;
+	use Edde\Upgrade\UpgradeSchema;
 	use InvalidFilterSchema;
 	use InvalidGeneratorSchema;
 	use InvalidMetaSchema;
@@ -39,6 +41,8 @@
 
 		public function testGetSchemas() {
 			$expect = [
+				UpgradeSchema::class       => UpgradeSchema::class,
+				JobSchema::class           => JobSchema::class,
 				ProjectMemberSchema::class => ProjectMemberSchema::class,
 				'project-member'           => ProjectMemberSchema::class,
 				ProjectSchema::class       => ProjectSchema::class,

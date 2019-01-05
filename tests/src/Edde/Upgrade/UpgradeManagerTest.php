@@ -102,6 +102,7 @@
 			$this->schemaManager->load(TestUpgradeSchema::class);
 			try {
 				$this->storage->exec($this->storage->query('DROP TABLE u:schema', ['u' => TestUpgradeSchema::class]));
+				$this->storage->exec($this->storage->query('DROP TABLE u:schema', ['u' => UpgradeSchema::class]));
 			} catch (UnknownTableException $_) {
 			}
 			$this->container->registerFactory(new InterfaceFactory(IVersionService::class, VersionTestService::class));

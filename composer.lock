@@ -9,6 +9,17 @@
         {
             "name": "roave/security-advisories",
             "version": "dev-master",
+	        "source": {
+		        "type": "git",
+		        "url": "https://github.com/Roave/SecurityAdvisories.git",
+		        "reference": "5f3e0c82ada2d16fdd637b24e095888f4abac43f"
+	        },
+	        "dist": {
+		        "type": "zip",
+		        "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/5f3e0c82ada2d16fdd637b24e095888f4abac43f",
+		        "reference": "5f3e0c82ada2d16fdd637b24e095888f4abac43f",
+		        "shasum": ""
+	        },
             "conflict": {
                 "3f/pygmentize": "<1.2",
                 "adodb/adodb-php": "<5.20.12",
@@ -70,6 +81,7 @@
                 "la-haute-societe/tcpdf": "<6.2.22",
                 "laravel/framework": ">=4,<4.0.99|>=4.1,<=4.1.31|>=4.2,<=4.2.22|>=5,<=5.0.35|>=5.1,<=5.1.46|>=5.2,<=5.2.45|>=5.3,<=5.3.31|>=5.4,<=5.4.36|>=5.5,<5.5.42|>=5.6,<5.6.30",
                 "laravel/socialite": ">=1,<1.0.99|>=2,<2.0.10",
+	            "league/commonmark": ">=0.15.6,<0.18.1",
                 "magento/magento1ce": "<1.9.4",
                 "magento/magento1ee": ">=1.9,<1.14.4",
                 "magento/product-community-edition": ">=2,<2.2.7",
@@ -103,7 +115,7 @@
                 "silverstripe/userforms": "<3",
                 "simple-updates/phpwhois": "<=1",
                 "simplesamlphp/saml2": "<1.10.6|>=2,<2.3.8|>=3,<3.1.4",
-                "simplesamlphp/simplesamlphp": "<1.15.2",
+	            "simplesamlphp/simplesamlphp": "<1.16.3",
                 "simplesamlphp/simplesamlphp-module-infocard": "<1.0.1",
                 "slim/slim": "<2.6",
                 "smarty/smarty": "<3.1.33",
@@ -137,7 +149,7 @@
                 "symfony/yaml": ">=2,<2.0.22|>=2.1,<2.1.7",
                 "tecnickcom/tcpdf": "<6.2.22",
                 "thelia/backoffice-default-template": ">=2.1,<2.1.2",
-                "thelia/thelia": ">=2.1.0-beta1,<2.1.3|>=2.1,<2.1.2",
+	            "thelia/thelia": ">=2.1,<2.1.2|>=2.1.0-beta1,<2.1.3",
                 "theonedemon/phpwhois": "<=4.2.5",
                 "titon/framework": ">=0,<9.9.99",
                 "truckersmp/phpwhois": "<=4.3.1",
@@ -146,6 +158,7 @@
                 "typo3/cms-core": ">=8,<8.7.21|>=9,<9.5.2",
                 "typo3/flow": ">=1,<1.0.4|>=1.1,<1.1.1|>=2,<2.0.1|>=2.3,<2.3.16|>=3,<3.0.10|>=3.1,<3.1.7|>=3.2,<3.2.7|>=3.3,<3.3.5",
                 "typo3/neos": ">=1.1,<1.1.3|>=1.2,<1.2.13|>=2,<2.0.4",
+	            "ua-parser/uap-php": "<3.8",
                 "wallabag/tcpdf": "<6.2.22",
                 "willdurand/js-translation-bundle": "<2.1.1",
                 "yiisoft/yii": ">=1.1.14,<1.1.15",
@@ -194,7 +207,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2018-12-11T16:56:18+00:00"
+	        "time": "2018-12-30T13:00:21+00:00"
         }
     ],
     "packages-dev": [
@@ -561,12 +574,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "3660b2eed90abdf92ac2e9dae9a238d2701bfa77"
+	            "reference": "7e272180527c34a97680de85eb5aba0847a664e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/3660b2eed90abdf92ac2e9dae9a238d2701bfa77",
-                "reference": "3660b2eed90abdf92ac2e9dae9a238d2701bfa77",
+	            "url": "https://api.github.com/repos/phpspec/prophecy/zipball/7e272180527c34a97680de85eb5aba0847a664e0",
+	            "reference": "7e272180527c34a97680de85eb5aba0847a664e0",
                 "shasum": ""
             },
             "require": {
@@ -587,8 +600,8 @@
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Prophecy\\": "src/"
+	            "psr-4": {
+		            "Prophecy\\": "src/Prophecy"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -616,7 +629,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2018-11-04T18:50:11+00:00"
+	        "time": "2018-12-18T15:40:51+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -876,12 +889,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "a6d9814ed15b695e72b6ce4a3d8f18e681f2dddf"
+	            "reference": "ee255833412ad661ecc6504ead49f4cab05900c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a6d9814ed15b695e72b6ce4a3d8f18e681f2dddf",
-                "reference": "a6d9814ed15b695e72b6ce4a3d8f18e681f2dddf",
+	            "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ee255833412ad661ecc6504ead49f4cab05900c3",
+	            "reference": "ee255833412ad661ecc6504ead49f4cab05900c3",
                 "shasum": ""
             },
             "require": {
@@ -949,7 +962,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-12-12T07:27:46+00:00"
+	        "time": "2019-01-05T05:51:54+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -1518,6 +1531,64 @@
             "time": "2016-10-03T07:35:21+00:00"
         },
         {
+	        "name": "symfony/polyfill-ctype",
+	        "version": "v1.10.0",
+	        "source": {
+		        "type": "git",
+		        "url": "https://github.com/symfony/polyfill-ctype.git",
+		        "reference": "e3d826245268269cd66f8326bd8bc066687b4a19"
+	        },
+	        "dist": {
+		        "type": "zip",
+		        "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/e3d826245268269cd66f8326bd8bc066687b4a19",
+		        "reference": "e3d826245268269cd66f8326bd8bc066687b4a19",
+		        "shasum": ""
+	        },
+	        "require": {
+		        "php": ">=5.3.3"
+	        },
+	        "suggest": {
+		        "ext-ctype": "For best performance"
+	        },
+	        "type": "library",
+	        "extra": {
+		        "branch-alias": {
+			        "dev-master": "1.9-dev"
+		        }
+	        },
+	        "autoload": {
+		        "psr-4": {
+			        "Symfony\\Polyfill\\Ctype\\": ""
+		        },
+		        "files": [
+			        "bootstrap.php"
+		        ]
+	        },
+	        "notification-url": "https://packagist.org/downloads/",
+	        "license": [
+		        "MIT"
+	        ],
+	        "authors": [
+		        {
+			        "name": "Symfony Community",
+			        "homepage": "https://symfony.com/contributors"
+		        },
+		        {
+			        "name": "Gert de Pagter",
+			        "email": "BackEndTea@gmail.com"
+		        }
+	        ],
+	        "description": "Symfony polyfill for ctype functions",
+	        "homepage": "https://symfony.com",
+	        "keywords": [
+		        "compatibility",
+		        "ctype",
+		        "polyfill",
+		        "portable"
+	        ],
+	        "time": "2018-08-06T14:22:27+00:00"
+        },
+	    {
             "name": "theseer/tokenizer",
             "version": "1.1.0",
             "source": {
@@ -1559,20 +1630,21 @@
         },
         {
             "name": "webmozart/assert",
-            "version": "dev-master",
+	        "version": "1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozart/assert.git",
-                "reference": "53927dddf3afa2088b355188e143bba42159bf5d"
+	            "reference": "83e253c8e0be5b0257b881e1827274667c5c17a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/53927dddf3afa2088b355188e143bba42159bf5d",
-                "reference": "53927dddf3afa2088b355188e143bba42159bf5d",
+	            "url": "https://api.github.com/repos/webmozart/assert/zipball/83e253c8e0be5b0257b881e1827274667c5c17a9",
+	            "reference": "83e253c8e0be5b0257b881e1827274667c5c17a9",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.3.3 || ^7.0"
+	            "php": "^5.3.3 || ^7.0",
+	            "symfony/polyfill-ctype": "^1.8"
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.6",
@@ -1605,7 +1677,7 @@
                 "check",
                 "validate"
             ],
-            "time": "2018-05-29T14:25:02+00:00"
+	        "time": "2018-12-25T11:19:39+00:00"
         }
     ],
     "aliases": [],
