@@ -10,6 +10,7 @@
 		const STATE_ENQUEUED = 1;
 		const STATE_RUNNING = 2;
 		const STATE_DONE = 3;
+		const STATE_FAILED = 4;
 
 		public function state($default = self::STATE_CREATED): int;
 

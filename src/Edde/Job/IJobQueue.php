@@ -6,6 +6,7 @@
 	use Edde\Configurable\IConfigurable;
 	use Edde\Message\IMessage;
 	use Edde\Message\IPacket;
+	use Edde\Storage\EmptyEntityException;
 	use Edde\Storage\IEntity;
 
 	interface IJobQueue extends IConfigurable {
@@ -17,13 +18,15 @@
 		 *
 		 * @return IJobQueue
 		 */
-		public function push(IMessage $message, DateTime $time = null): IJobQueue;
+		public function push(IMessage $message, DateTime $time = null): IEntity;
 
 		/**
 		 * enqueue a job (change it's state to ENQUEUED); this method should NOT be executed
 		 * in parallel as it's not thread safe
 		 *
 		 * @return IEntity
+		 *
+		 * @throws EmptyEntityException
 		 */
 		public function enqueue(): IEntity;
 

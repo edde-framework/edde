@@ -17,12 +17,11 @@
 		use MessageBus;
 
 		/** @inheritdoc */
-		public function push(IMessage $message, DateTime $time = null): IJobQueue {
-			$this->storage->insert(new Entity(JobSchema::class, [
+		public function push(IMessage $message, DateTime $time = null): IEntity {
+			return $this->storage->insert(new Entity(JobSchema::class, [
 				'stamp'   => $time ?? new DateTime(),
 				'message' => $message->export(),
 			]));
-			return $this;
 		}
 
 		/** @inheritdoc */

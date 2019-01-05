@@ -2,38 +2,32 @@
 	declare(strict_types=1);
 	namespace Edde\Job;
 
-	use Edde\Container\ContainerException;
 	use Edde\Message\Message;
+	use Edde\Service\Job\JobManager;
 	use Edde\Service\Job\JobQueue;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
 	use Edde\Service\Upgrade\UpgradeManager;
-	use Edde\Storage\StorageException;
-	use Edde\Storage\UnknownTableException;
+	use Edde\Storage\EmptyEntityException;
 	use Edde\TestCase;
 	use Edde\Upgrade\CurrentVersionException;
 	use Edde\Upgrade\IUpgradeManager;
-	use Edde\Upgrade\UpgradeException;
 	use Edde\Upgrade\UpgradeManagerConfigurator;
+	use Edde\Upgrade\UpgradeSchema;
+	use function chdir;
+	use function sleep;
 
 	class JobFlowTest extends TestCase {
 		use JobQueue;
+		use JobManager;
 		use SchemaManager;
 		use UpgradeManager;
 		use Storage;
 
 		/**
-		 * @throws ContainerException
-		 * @throws UpgradeException
-		 * @throws StorageException
-		 * @throws UnknownTableException
+		 * @throws EmptyEntityException
 		 */
-		public function testMessageQueueFlow() {
-			$this->container->registerConfigurator(IUpgradeManager::class, $this->container->create(UpgradeManagerConfigurator::class));
-			try {
-				$this->upgradeManager->upgrade();
-			} catch (CurrentVersionException $exception) {
-			}
+		public function testJobFlow() {
 			$this->jobQueue->push(new Message('async', 'edde.message.common-message-service', ['foo' => 'bar']));
 			$this->jobQueue->push(new Message('async', 'edde.message.common-message-service', ['bar' => 'foo']));
 			$job1 = $this->jobQueue->enqueue();
@@ -57,9 +51,41 @@
 			self::assertSame('mwah', $message1->getType());
 			self::assertSame(['bar' => 'foo'], $message2->getAttrs());
 			self::assertSame('mwah', $message2->getType());
+		}
+
+		/**
+		 * @depends testJobFlow
+		 */
+		public function testAsyncJobs() {
+			$job = $this->jobQueue->push(new Message('async', 'edde.message.common-message-service', ['foo' => 'bar']));
+			$this->jobManager->startup();
+			$this->jobManager->tick();
+			$this->jobManager->shutdown();
+			sleep(2);
+			$job = $this->jobQueue->byUuid($job['uuid']);
+			self::assertSame(JobSchema::STATE_DONE, $job['state']);
+		}
+
+		public function setUp() {
+			parent::setUp();
+			chdir('/edde');
+			$this->container->registerConfigurator(IUpgradeManager::class, $this->container->create(UpgradeManagerConfigurator::class));
+			try {
+				$this->upgradeManager->upgrade();
+			} catch (CurrentVersionException $exception) {
+			}
+		}
+
+		public function tearDown() {
+			parent::tearDown();
 			$this->storage->exec('DROP TABLE s:schema', [
 				'$query' => [
 					's' => JobSchema::class,
+				],
+			]);
+			$this->storage->exec('DROP TABLE s:schema', [
+				'$query' => [
+					's' => UpgradeSchema::class,
 				],
 			]);
 		}

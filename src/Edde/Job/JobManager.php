@@ -11,67 +11,76 @@
 		use JobQueue;
 		use ConfigService;
 		protected $running;
+		protected $pids;
+		protected $binary;
+		protected $controller;
+		protected $limit;
+		protected $rate;
+		protected $param;
 
 		public function __construct() {
 			$this->running = true;
+			$this->pids = [];
+		}
+
+		public function startup(): IJobManager {
+			pcntl_async_signals(true);
+			pcntl_signal(SIGTERM, [$this, 'handleShutdown']);
+			pcntl_signal(SIGINT, [$this, 'handleShutdown']);
+			return $this;
 		}
 
 		/** @inheritdoc */
 		public function run(): IJobManager {
-			$config = $this->configService->require('jobs');
-			$binary = $config->require('binary');
-			/**
-			 * which controller should pickup the job
-			 */
-			$params = [$config->optional('controller', 'job.manager/job')];
-			/**
-			 * how many concurrent jobs could be run
-			 */
-			$limit = $config->optional('limit', 8);
-			/**
-			 * heartbeat rate
-			 */
-			$rate = $config->optional('rate', 250);
-			$param = $config->optional('param', 'job');
-			pcntl_async_signals(true);
-			pcntl_signal(SIGTERM, [$this, 'handleShutdown']);
-			pcntl_signal(SIGINT, [$this, 'handleShutdown']);
-			$pids = [];
+			$this->startup();
 			while ($this->running) {
-				try {
-					$job = $this->jobQueue->enqueue();
-					/**
-					 * limit concurrency level
-					 */
-					if (count($pids) < $limit) {
-						$params[] = '--' . $param . '=' . $job['uuid'];
-						/**
-						 * fork and replace fork by a new binary
-						 */
-						($pids[] = pcntl_fork()) === 0 && pcntl_exec($binary, $params);
-					}
-				} catch (EmptyEntityException $exception) {
-					/**
-					 * noop
-					 */
-				}
-				/**
-				 * pickup children process to prevent zombies
-				 */
-				pcntl_waitpid(0, $status, WNOHANG);
-				/**
-				 * remove already executed PIDs
-				 */
-				foreach ($pids as $i => $pid) {
-					if (posix_getpgid($pid) === false) {
-						unset($pids[$i]);
-					}
-				}
+				$this->tick();
 				/**
 				 * heartbeat rate to keep stuff on rails
 				 */
-				usleep($rate * 1000);
+				usleep($this->rate * 1000);
 			}
+			$this->shutdown();
+			return $this;
+		}
+
+		/** @inheritdoc */
+		public function tick(): IJobManager {
+			try {
+				$job = $this->jobQueue->enqueue();
+				/**
+				 * limit concurrency level
+				 */
+				if (count($this->pids) < $this->limit) {
+					/**
+					 * fork and replace fork by a new binary
+					 */
+					($this->pids[] = pcntl_fork()) === 0 && pcntl_exec($this->binary, [
+						$this->controller,
+						'--' . $this->param . '=' . $job['uuid'],
+					]);
+				}
+			} catch (EmptyEntityException $exception) {
+				/**
+				 * noop
+				 */
+			}
+			/**
+			 * pickup children process to prevent zombies
+			 */
+			pcntl_waitpid(0, $status, WNOHANG);
+			/**
+			 * remove already executed PIDs
+			 */
+			foreach ($this->pids as $i => $pid) {
+				if (posix_getpgid($pid) === false) {
+					unset($this->pids[$i]);
+				}
+			}
+			return $this;
+		}
+
+		public function shutdown(): IJobManager {
 			/**
 			 * wait until all children processes are done
 			 */
@@ -83,5 +92,23 @@
 
 		public function handleShutdown() {
 			$this->running = false;
+		}
+
+		protected function handleInit(): void {
+			$config = $this->configService->require('jobs');
+			$this->binary = $config->require('binary');
+			/**
+			 * which controller should pickup the job
+			 */
+			$this->controller = $config->optional('controller', 'job.manager/job');
+			/**
+			 * how many concurrent jobs could be run
+			 */
+			$this->limit = $config->optional('limit', 8);
+			/**
+			 * heartbeat rate
+			 */
+			$this->rate = $config->optional('rate', 250);
+			$this->param = $config->optional('param', 'job');
 		}
 	}
