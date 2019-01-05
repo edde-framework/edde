@@ -54,15 +54,34 @@
 		}
 
 		protected function run() {
-			$concurrency = 4;
-			$pids = [];
 			$binary = $GLOBALS['argv'][0];
+			/**
+			 * which controller should pickup the job
+			 */
 			$params = ['job.manager/job'];
+			/**
+			 * how many concurrent jobs could be run
+			 */
+			$concurrency = 4;
+			/**
+			 * heartbeat rate
+			 */
+			$rate = 250;
+			$pids = [];
 			while ($this->running) {
-				usleep(250000);
+				/**
+				 * heartbeat rate to keep stuff on rails
+				 */
+				usleep($rate * 1000);
 				$this->printf('workers: %d/%d', count($pids), $concurrency);
+				/**
+				 * limit concurrency level
+				 */
 				if (count($pids) < $concurrency) {
 					$params[] = '--job=' . $this->randomService->uuid();
+					/**
+					 * fork and replace fork by a new binary
+					 */
 					($pids[] = pcntl_fork()) === 0 && pcntl_exec($binary, $params);
 				}
 				/**
