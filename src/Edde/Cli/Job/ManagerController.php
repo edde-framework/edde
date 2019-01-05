@@ -3,13 +3,15 @@
 	namespace Edde\Cli\Job;
 
 	use Edde\Controller\CliController;
+	use Edde\Service\Job\JobQueue;
 	use Edde\Service\Log\LogService;
 	use Edde\Service\Security\RandomService;
 	use function pcntl_async_signals;
 	use function pcntl_exec;
 	use function pcntl_fork;
 	use function pcntl_signal;
-	use function sleep;
+	use function posix_getpgid;
+	use function usleep;
 	use const SIGINT;
 	use const SIGTERM;
 	use const WNOHANG;
@@ -17,23 +19,29 @@
 	class ManagerController extends CliController {
 		use LogService;
 		use RandomService;
+		use JobQueue;
 		protected $running = true;
 
 		public function actionRun(): void {
 			$this->printf('Job: Running endless loop');
 			$this->installHandlers();
 			$this->run();
+			$this->wait();
 			$this->printf('Job: Finished');
 		}
 
 		public function actionJob(): void {
-			$this->printf('Executing job [%s]', $this->getParams()['job']);
-			sleep(2);
-			$this->printf('Done job [%s]', $this->getParams()['job']);
+			$this->printf('Executing job [%s]', $uuid = $this->getParams()['job']);
+			$this->jobQueue->execute($uuid);
+			$this->printf('Done job [%s]', $uuid);
 		}
 
 		public function handleShutdown() {
 			$this->running = false;
+			$this->wait();
+		}
+
+		public function wait() {
 			while (pcntl_waitpid(0, $status) !== -1) {
 				;
 			}
@@ -46,11 +54,26 @@
 		}
 
 		protected function run() {
-			for ($i = 0; $i < 5; $i++) {
-				if (pcntl_fork() === 0) {
-					pcntl_exec($GLOBALS['argv'][0], ['job.manager/job', '--job=' . $this->randomService->uuid()]);
+			$concurrency = 4;
+			$pids = [];
+			$binary = $GLOBALS['argv'][0];
+			$params = ['job.manager/job'];
+			while ($this->running) {
+				usleep(250000);
+				$this->printf('workers: %d/%d', count($pids), $concurrency);
+				if (count($pids) < $concurrency) {
+					$params[] = '--job=' . $this->randomService->uuid();
+					($pids[] = pcntl_fork()) === 0 && pcntl_exec($binary, $params);
 				}
+				/**
+				 * pickup children process to prevent zombies
+				 */
 				pcntl_waitpid(0, $status, WNOHANG);
+				foreach ($pids as $i => $pid) {
+					if (posix_getpgid($pid) === false) {
+						unset($pids[$i]);
+					}
+				}
 			}
 		}
 	}

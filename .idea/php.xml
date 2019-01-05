@@ -19,6 +19,7 @@
       <path value="$PROJECT_DIR$/lib/sebastian/exporter" />
       <path value="$PROJECT_DIR$/lib/theseer/tokenizer" />
       <path value="$PROJECT_DIR$/lib/phpunit/phpunit" />
+      <path value="$PROJECT_DIR$/lib/symfony/polyfill-ctype" />
       <path value="$PROJECT_DIR$/lib/sebastian/global-state" />
       <path value="$PROJECT_DIR$/lib/doctrine/instantiator" />
       <path value="$PROJECT_DIR$/lib/phpunit/php-text-template" />
@@ -31,7 +32,6 @@
       <path value="$PROJECT_DIR$/lib/phpspec/prophecy" />
       <path value="$PROJECT_DIR$/lib/myclabs/deep-copy" />
       <path value="$PROJECT_DIR$/lib/composer" />
-      <path value="$PROJECT_DIR$/lib/symfony/polyfill-ctype" />
     </include_path>
   </component>
   <component name="PhpInterpreters">
