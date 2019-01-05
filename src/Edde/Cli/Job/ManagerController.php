@@ -84,7 +84,9 @@
 						($pids[] = pcntl_fork()) === 0 && pcntl_exec($binary, $params);
 					}
 				} catch (EmptyEntityException $exception) {
-					$this->printf('No jobs.');
+					/**
+					 * noop
+					 */
 				}
 				/**
 				 * pickup children process to prevent zombies
