@@ -41,6 +41,12 @@
 				$this->upgradeManager->upgrade();
 			} catch (CurrentVersionException $exception) {
 			}
-			$this->jobQueue->enqueue(new Message('async', 'edde.message.common-message-service'));
+			$this->jobQueue->push(new Message('async', 'edde.message.common-message-service', ['foo' => 'bar']));
+			$this->jobQueue->push(new Message('async', 'edde.message.common-message-service', ['bar' => 'foo']));
+			$job1 = $this->jobQueue->enqueue();
+			$job2 = $this->jobQueue->enqueue();
+			self::assertNotEquals($job1, $job2);
+			self::assertEquals((object)['foo' => 'bar'], $job1['message']->attrs);
+			self::assertEquals((object)['bar' => 'foo'], $job2['message']->attrs);
 		}
 	}

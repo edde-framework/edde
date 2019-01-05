@@ -5,6 +5,7 @@
 	use DateTime;
 	use Edde\Configurable\IConfigurable;
 	use Edde\Message\IMessage;
+	use Edde\Storage\IEntity;
 
 	interface IJobQueue extends IConfigurable {
 		/**
@@ -15,7 +16,15 @@
 		 *
 		 * @return IJobQueue
 		 */
-		public function enqueue(IMessage $message, DateTime $time = null): IJobQueue;
+		public function push(IMessage $message, DateTime $time = null): IJobQueue;
+
+		/**
+		 * enqueue a job (change it's state to ENQUEUED); this method should NOT be executed
+		 * in parallel as it's not thread safe
+		 *
+		 * @return IEntity
+		 */
+		public function enqueue(): IEntity;
 
 		/**
 		 * execute the given message uuid

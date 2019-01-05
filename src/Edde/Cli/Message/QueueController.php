@@ -25,7 +25,7 @@
 			);
 			sleep($sleep);
 			printf("[%s] Enqueue: Enqueuing messages\n", (new DateTime())->format('Y-m-d H:i:s'));
-			$this->jobQueue->enqueue();
+			$this->jobQueue->push();
 			printf("[%s] Enqueue: Done!\n", (new DateTime())->format('Y-m-d H:i:s'));
 		}
 
