@@ -3,6 +3,7 @@
 	namespace Edde\Cli\Job;
 
 	use Edde\Controller\CliController;
+	use Edde\Service\Config\ConfigService;
 	use Edde\Service\Job\JobQueue;
 	use Edde\Service\Log\LogService;
 	use Edde\Service\Security\RandomService;
@@ -20,6 +21,7 @@
 		use LogService;
 		use RandomService;
 		use JobQueue;
+		use ConfigService;
 		protected $running = true;
 
 		public function actionRun(): void {
@@ -54,31 +56,33 @@
 		}
 
 		protected function run() {
-			$binary = $GLOBALS['argv'][0];
+			$config = $this->configService->require('jobs');
+			$binary = $config->optional('binary', $GLOBALS['argv'][0]);
 			/**
 			 * which controller should pickup the job
 			 */
-			$params = ['job.manager/job'];
+			$params = [$config->optional('controller', 'job.manager/job')];
 			/**
 			 * how many concurrent jobs could be run
 			 */
-			$concurrency = 4;
+			$limit = $config->optional('limit', 8);
 			/**
 			 * heartbeat rate
 			 */
-			$rate = 250;
+			$rate = $config->optional('rate', 250);
+			$param = $config->optional('param', 'job');
 			$pids = [];
 			while ($this->running) {
 				/**
 				 * heartbeat rate to keep stuff on rails
 				 */
 				usleep($rate * 1000);
-				$this->printf('workers: %d/%d', count($pids), $concurrency);
+				$this->printf('workers: %d/%d', count($pids), $limit);
 				/**
 				 * limit concurrency level
 				 */
-				if (count($pids) < $concurrency) {
-					$params[] = '--job=' . $this->randomService->uuid();
+				if (count($pids) < $limit) {
+					$params[] = '--' . $param . '=' . $this->randomService->uuid();
 					/**
 					 * fork and replace fork by a new binary
 					 */
