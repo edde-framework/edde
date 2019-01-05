@@ -56,7 +56,7 @@
 		}
 
 		protected function run() {
-			$config = $this->configService->require('jobs');
+			$config = $this->configService->optional('jobs');
 			$binary = $config->optional('binary', $GLOBALS['argv'][0]);
 			/**
 			 * which controller should pickup the job
