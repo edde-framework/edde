@@ -6,7 +6,7 @@
 	use Edde\Service\Config\ConfigService;
 	use Edde\Service\Job\JobQueue;
 	use Edde\Service\Log\LogService;
-	use Edde\Service\Security\RandomService;
+	use Edde\Storage\EmptyEntityException;
 	use function pcntl_async_signals;
 	use function pcntl_exec;
 	use function pcntl_fork;
@@ -19,7 +19,6 @@
 
 	class ManagerController extends CliController {
 		use LogService;
-		use RandomService;
 		use JobQueue;
 		use ConfigService;
 		protected $running = true;
@@ -72,20 +71,20 @@
 			$param = $config->optional('param', 'job');
 			$pids = [];
 			while ($this->running) {
-				/**
-				 * heartbeat rate to keep stuff on rails
-				 */
-				usleep($rate * 1000);
-				$this->printf('workers: %d/%d', count($pids), $limit);
-				/**
-				 * limit concurrency level
-				 */
-				if (count($pids) < $limit) {
-					$params[] = '--' . $param . '=' . $this->randomService->uuid();
+				try {
+					$job = $this->jobQueue->enqueue();
 					/**
-					 * fork and replace fork by a new binary
+					 * limit concurrency level
 					 */
-					($pids[] = pcntl_fork()) === 0 && pcntl_exec($binary, $params);
+					if (count($pids) < $limit) {
+						$params[] = '--' . $param . '=' . $job['uuid'];
+						/**
+						 * fork and replace fork by a new binary
+						 */
+						($pids[] = pcntl_fork()) === 0 && pcntl_exec($binary, $params);
+					}
+				} catch (EmptyEntityException $exception) {
+					$this->printf('No jobs.');
 				}
 				/**
 				 * pickup children process to prevent zombies
@@ -99,6 +98,10 @@
 						unset($pids[$i]);
 					}
 				}
+				/**
+				 * heartbeat rate to keep stuff on rails
+				 */
+				usleep($rate * 1000);
 			}
 		}
 	}
