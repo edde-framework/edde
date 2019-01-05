@@ -11,6 +11,10 @@
 			]));
 			return $this;
 		}
+
+		public function onAsyncMessage(IMessage $message, IPacket $packet) {
+			$packet->message(new Message('mwah', 'it works'));
+		}
 	}
 
 	class DummyMessageHandler extends Edde {

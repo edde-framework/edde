@@ -36,6 +36,7 @@
 	use Edde\Schema\ISchemaManager;
 	use Edde\Schema\ReflectoinSchemaLoader;
 	use Edde\Schema\SchemaManager;
+	use Edde\Schema\SchemaManagerConfigurator;
 	use Edde\Security\IPasswordService;
 	use Edde\Security\IRandomService;
 	use Edde\Security\PasswordService;
@@ -46,6 +47,7 @@
 	use Edde\Upgrade\IUpgradeManager;
 	use Edde\Upgrade\IVersionService;
 	use Edde\Upgrade\UpgradeManager;
+	use Edde\Upgrade\UpgradeManagerConfigurator;
 	use Edde\Upgrade\VersionService;
 	use Edde\Utils\IStringUtils;
 	use Edde\Utils\StringUtils;
@@ -267,6 +269,8 @@
 				IFilterManager::class    => FilterManagerConfigurator::class,
 				IValidatorManager::class => ValidatorManagerConfigurator::class,
 				ILogService::class       => LogServiceConfigurator::class,
+				ISchemaManager::class    => SchemaManagerConfigurator::class,
+				IUpgradeManager::class   => UpgradeManagerConfigurator::class,
 			];
 		}
 	}

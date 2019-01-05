@@ -14,16 +14,6 @@
 		public function state($default = self::STATE_CREATED): int;
 
 		/**
-		 * when messages are enqueued, they're closed into batch for execution
-		 */
-		public function batch(): string;
-
-		/**
-		 * when a message should be executed (it could be event later this time)
-		 */
-		public function stamp(): DateTime;
-
-		/**
 		 * message type from specification
 		 */
 		public function type(): string;
@@ -37,6 +27,16 @@
 		 * message itself
 		 */
 		public function message($type = 'json');
+
+		/**
+		 * when a message should be executed (it could be event later this time)
+		 */
+		public function stamp(): ?DateTime;
+
+		/**
+		 * when messages are enqueued, they're closed into batch for execution
+		 */
+		public function batch(): ?string;
 
 		/**
 		 * amount of time this message has taken
