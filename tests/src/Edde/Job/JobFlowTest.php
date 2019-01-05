@@ -30,8 +30,8 @@
 			foreach ($drops as $drop) {
 				try {
 					$this->storage->exec(
-						$this->storage->query('DROP TABLE t:schema', [
-							't' => $drop,
+						$this->storage->query('DROP TABLE s:schema', [
+							's' => $drop,
 						])
 					);
 				} catch (Throwable $exception) {
