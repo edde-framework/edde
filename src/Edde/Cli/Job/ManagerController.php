@@ -40,7 +40,6 @@
 
 		public function handleShutdown() {
 			$this->running = false;
-			$this->wait();
 		}
 
 		public function wait() {
