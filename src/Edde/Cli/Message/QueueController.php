@@ -5,12 +5,12 @@
 	use DateTime;
 	use Edde\Controller\CliController;
 	use Edde\Service\Config\ConfigService;
-	use Edde\Service\Message\MessageQueue;
+	use Edde\Service\Job\JobQueue;
 	use Exception;
 
 	class QueueController extends CliController {
 		use ConfigService;
-		use MessageQueue;
+		use JobQueue;
 
 		/**
 		 * this MUST be called synchronously (enqueues messages for "execute");
@@ -25,7 +25,7 @@
 			);
 			sleep($sleep);
 			printf("[%s] Enqueue: Enqueuing messages\n", (new DateTime())->format('Y-m-d H:i:s'));
-			$this->messageQueue->enqueue();
+			$this->jobQueue->enqueue();
 			printf("[%s] Enqueue: Done!\n", (new DateTime())->format('Y-m-d H:i:s'));
 		}
 
@@ -36,7 +36,7 @@
 		 */
 		public function actionExecute() {
 			printf("[%s] Execute: Executing Message Queue\n", (new DateTime())->format('Y-m-d H:i:s'));
-			$this->messageQueue->execute();
+			$this->jobQueue->execute();
 			printf("[%s] Execute: Done!\n", (new DateTime())->format('Y-m-d H:i:s'));
 		}
 	}

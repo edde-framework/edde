@@ -1,9 +1,9 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Message;
+	namespace Edde\Job;
 
-	use Edde\Job\JobSchema;
-	use Edde\Service\Message\MessageQueue;
+	use Edde\Message\Message;
+	use Edde\Service\Job\JobQueue;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\Service\Storage\Storage;
 	use Edde\Service\Upgrade\UpgradeManager;
@@ -13,8 +13,8 @@
 	use Edde\Upgrade\UpgradeSchema;
 	use Throwable;
 
-	class MessageQueueFlowTest extends TestCase {
-		use MessageQueue;
+	class JobFlowTest extends TestCase {
+		use JobQueue;
 		use SchemaManager;
 		use UpgradeManager;
 		use Storage;
@@ -41,6 +41,6 @@
 				$this->upgradeManager->upgrade();
 			} catch (CurrentVersionException $exception) {
 			}
-			$this->messageQueue->enqueue(new Message('async', 'edde.message.common-message-service'));
+			$this->jobQueue->enqueue(new Message('async', 'edde.message.common-message-service'));
 		}
 	}
