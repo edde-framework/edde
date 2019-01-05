@@ -299,23 +299,6 @@
 		}
 
 		/** @inheritdoc */
-		public function reconnect(): IStorage {
-			$this->pdo = null;
-			$this->pdo = new PDO(
-				$this->section->require('dsn'),
-				$this->section->require('user'),
-				$this->section->optional('password')
-			);
-			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$this->pdo->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
-			$this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-			$this->pdo->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_EMPTY_STRING);
-			$this->pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
-			$this->pdo->setAttribute(PDO::ATTR_TIMEOUT, 120);
-			return $this;
-		}
-
-		/** @inheritdoc */
 		public function onStart(): void {
 			$this->pdo->beginTransaction();
 		}
@@ -333,7 +316,18 @@
 		/** @inheritdoc */
 		protected function handleSetup(): void {
 			parent::handleSetup();
-			$this->reconnect();
+			$this->pdo = null;
+			$this->pdo = new PDO(
+				$this->section->require('dsn'),
+				$this->section->require('user'),
+				$this->section->optional('password')
+			);
+			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$this->pdo->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
+			$this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+			$this->pdo->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_EMPTY_STRING);
+			$this->pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
+			$this->pdo->setAttribute(PDO::ATTR_TIMEOUT, 120);
 		}
 
 		/**
