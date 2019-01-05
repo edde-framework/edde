@@ -268,4 +268,11 @@
 		 * @return Throwable
 		 */
 		public function exception(Throwable $throwable): Throwable;
+
+		/**
+		 * reconnect to a storage or do nothing if not necessary
+		 *
+		 * @return IStorage
+		 */
+		public function reconnect(): IStorage;
 	}

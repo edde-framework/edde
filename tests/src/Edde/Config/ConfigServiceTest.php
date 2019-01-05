@@ -2,7 +2,6 @@
 	declare(strict_types=1);
 	namespace Edde\Config;
 
-	use Edde\Configurable\ConfigurableException;
 	use Edde\Service\Config\ConfigLoader;
 	use Edde\Service\Config\ConfigService;
 	use Edde\TestCase;
@@ -96,7 +95,6 @@
 
 		/**
 		 * @throws ConfigException
-		 * @throws ConfigurableException
 		 */
 		public function testRequiredValue() {
 			$this->expectException(ConfigException::class);
@@ -108,7 +106,6 @@
 
 		/**
 		 * @throws ConfigException
-		 * @throws ConfigurableException
 		 */
 		public function testYep() {
 			$this->configLoader->require(__DIR__ . '/assets/config.ini');

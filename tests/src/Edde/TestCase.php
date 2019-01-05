@@ -31,7 +31,7 @@
 					 */
 					public function configure($instance) {
 						parent::configure($instance);
-						$instance->require(__DIR__ . '/../config.ini');
+						$instance->require(__DIR__ . '/../../../config.ini');
 					}
 				},
 			]);

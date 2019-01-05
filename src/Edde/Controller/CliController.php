@@ -36,6 +36,7 @@
 		}
 
 		protected function printf(string $message, ...$params) {
+			/** @noinspection PhpUnhandledExceptionInspection */
 			printf("[%s] %s\n", (new DateTime())->format('Y-m-d H:i:s'), vsprintf($message, $params));
 		}
 
