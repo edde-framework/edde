@@ -92,6 +92,9 @@
 				 * pickup children process to prevent zombies
 				 */
 				pcntl_waitpid(0, $status, WNOHANG);
+				/**
+				 * remove already executed PIDs
+				 */
 				foreach ($pids as $i => $pid) {
 					if (posix_getpgid($pid) === false) {
 						unset($pids[$i]);
