@@ -9,6 +9,8 @@
 		 * executes infinite loop
 		 *
 		 * @return IJobManager
+		 *
+		 * @throws JobException
 		 */
 		public function run(): IJobManager;
 
@@ -16,6 +18,8 @@
 		 * run one job if any
 		 *
 		 * @return IJobManager
+		 *
+		 * @throws JobException
 		 */
 		public function tick(): IJobManager;
 

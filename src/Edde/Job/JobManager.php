@@ -6,6 +6,7 @@
 	use Edde\Service\Config\ConfigService;
 	use Edde\Service\Job\JobQueue;
 	use Edde\Storage\EmptyEntityException;
+	use function sprintf;
 
 	class JobManager extends Edde implements IJobManager {
 		use JobQueue;
@@ -52,13 +53,15 @@
 				 * limit concurrency level
 				 */
 				if (count($this->pids) < $this->limit) {
-					/**
-					 * fork and replace fork by a new binary
-					 */
-					($this->pids[] = pcntl_fork()) === 0 && pcntl_exec($this->binary, [
-						$this->controller,
-						'--' . $this->param . '=' . $job['uuid'],
-					]);
+					if (($this->pids[] = pcntl_fork()) === 0) {
+						if (pcntl_exec($this->binary, [
+								$this->controller,
+								'--' . $this->param . '=' . $job['uuid'],
+							]) === false) {
+							throw new JobException(sprintf('Cannot execute a job [%s].', $job['uuid']));
+						}
+					}
+					throw new JobException(sprintf('Cannot fork a job [%s].', $job['uuid']));
 				}
 			} catch (EmptyEntityException $exception) {
 				/**
