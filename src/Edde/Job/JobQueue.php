@@ -32,7 +32,8 @@
 				FROM
 					j:schema
 				WHERE
-					state = :state
+					state = :state AND
+					stamp <= NOW()
 				ORDER BY
 					stamp ASC
 				LIMIT
