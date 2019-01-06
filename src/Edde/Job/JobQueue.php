@@ -66,7 +66,7 @@
 
 		/** @inheritdoc */
 		public function cleanup(): IJobQueue {
-			$this->storage->exec('
+			$this->storage->fetch('
 				DELETE FROM s:schema WHERE state >= :state
 			', [
 				'$query' => [
