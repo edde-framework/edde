@@ -38,6 +38,13 @@
 		public function execute(string $job): IPacket;
 
 		/**
+		 * cleanup jobs already executed
+		 *
+		 * @return IJobQueue
+		 */
+		public function cleanup(): IJobQueue;
+
+		/**
 		 * get a job by an uuid
 		 *
 		 * @param string $uuid

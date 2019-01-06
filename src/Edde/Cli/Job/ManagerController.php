@@ -24,4 +24,10 @@
 			$this->jobQueue->execute($uuid);
 			$this->printf('Done job [%s]', $uuid);
 		}
+
+		public function actionCleanup(): void {
+			$this->printf('Cleaning up');
+			$this->jobQueue->cleanup();
+			$this->printf('Done');
+		}
 	}

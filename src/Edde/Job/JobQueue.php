@@ -65,6 +65,19 @@
 		}
 
 		/** @inheritdoc */
+		public function cleanup(): IJobQueue {
+			$this->storage->exec('
+				DELETE FROM s:schema WHERE state >= :state
+			', [
+				'$query' => [
+					's' => JobSchema::class,
+				],
+				'state'  => JobSchema::STATE_DONE,
+			]);
+			return $this;
+		}
+
+		/** @inheritdoc */
 		public function byUuid(string $uuid): IEntity {
 			return $this->storage->load(JobSchema::class, $uuid);
 		}
