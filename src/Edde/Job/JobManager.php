@@ -100,7 +100,7 @@
 			/**
 			 * which controller should pickup the job
 			 */
-			$this->controller = $config->optional('controller', 'job.manager/job');
+			$this->controller = $config->optional('controller', 'job.manager/execute');
 			/**
 			 * how many concurrent jobs could be run
 			 */

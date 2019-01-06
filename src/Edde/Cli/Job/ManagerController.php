@@ -19,7 +19,7 @@
 			$this->printf('Job: Finished');
 		}
 
-		public function actionJob(): void {
+		public function actionExecute(): void {
 			$this->printf('Executing job [%s]', $uuid = $this->getParams()['job']);
 			$this->jobQueue->execute($uuid);
 			$this->printf('Done job [%s]', $uuid);
