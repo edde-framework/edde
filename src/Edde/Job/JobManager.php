@@ -96,7 +96,7 @@
 
 		protected function handleInit(): void {
 			$config = $this->configService->require('jobs');
-			$this->binary = $config->require('binary');
+			$this->binary = $config->optional('binary', './cli');
 			/**
 			 * which controller should pickup the job
 			 */
