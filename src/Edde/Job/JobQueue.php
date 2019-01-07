@@ -104,4 +104,22 @@
 			]);
 			return $this;
 		}
+
+		/** @inheritdoc */
+		public function stats(): array {
+			$stats = [];
+			$query = '
+				SELECT
+					(SELECT count(uuid) FROM s:schema WHERE state = 0) AS enqueued,
+					(SELECT count(uuid) FROM s:schema WHERE state = 1) AS scheduled,
+					(SELECT count(uuid) FROM s:schema WHERE state = 2) AS running,
+					(SELECT count(uuid) FROM s:schema WHERE state = 3) AS success,
+					(SELECT count(uuid) FROM s:schema WHERE state = 4) AS rejected,
+					(SELECT count(uuid) FROM s:schema WHERE state = 5) AS failed
+			';
+			foreach ($this->storage->fetch($query, ['$query' => ['s' => JobSchema::class]]) as $stats) {
+				break;
+			}
+			return $stats;
+		}
 	}

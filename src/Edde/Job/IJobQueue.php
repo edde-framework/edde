@@ -92,4 +92,11 @@
 		 * @return IJobQueue
 		 */
 		public function cleanup(): IJobQueue;
+
+		/**
+		 * return array of state counts
+		 *
+		 * @return array
+		 */
+		public function stats(): array;
 	}
