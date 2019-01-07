@@ -34,11 +34,11 @@
 				$this->jobQueue->state($job, JobSchema::STATE_FAILED);
 				throw $exception;
 			}
-			$this->jsonResponse(sprintf('job done [%s]', $job['uuid']))->execute();
+			$this->textResponse(sprintf('job done [%s]', $job['uuid']))->execute();
 		}
 
 		public function actionCleanup(): void {
 			$this->jobQueue->cleanup();
-			$this->jsonResponse('ok')->execute();
+			$this->textResponse('ok')->execute();
 		}
 	}
