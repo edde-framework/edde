@@ -102,6 +102,27 @@
 		}
 
 		/** @inheritdoc */
+		public function reset(): IJobQueue {
+			$this->storage->fetch('
+				UPDATE
+					s:schema
+				SET
+					state = :enqueued,
+					stamp = :stamp
+				WHERE
+					state = :scheduled
+			', [
+				'$query'    => [
+					's' => JobSchema::class,
+				],
+				'enqueued'  => JobSchema::STATE_ENQUEUED,
+				'scheduled' => JobSchema::STATE_SCHEDULED,
+				'stamp'     => date('c'),
+			]);
+			return $this;
+		}
+
+		/** @inheritdoc */
 		public function cleanup(): IJobQueue {
 			$this->storage->fetch('
 				DELETE FROM s:schema WHERE state >= :state

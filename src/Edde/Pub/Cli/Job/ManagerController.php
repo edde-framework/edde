@@ -16,6 +16,12 @@
 			$this->printf('Job: Finished');
 		}
 
+		public function actionReset(): void {
+			$this->printf('Resetting dead jobs');
+			$this->jobQueue->reset();
+			$this->printf('Done');
+		}
+
 		public function actionCleanup(): void {
 			$this->printf('Cleaning up');
 			$this->jobQueue->cleanup();

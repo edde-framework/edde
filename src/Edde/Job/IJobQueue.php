@@ -86,6 +86,15 @@
 		public function countLimit(): int;
 
 		/**
+		 * reset "dead" jobs; this should be used when one is sure there is nothing actually
+		 * running, for example after a container restart; thus there are "dead" jobs in the queue
+		 * which has to be rescheduled
+		 *
+		 * @return IJobQueue
+		 */
+		public function reset(): IJobQueue;
+
+		/**
 		 * cleanup all (scheduled) jobs in a (persistent) queue
 		 *
 		 * @return IJobQueue
