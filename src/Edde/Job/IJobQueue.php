@@ -59,6 +59,16 @@
 		public function pick(): IEntity;
 
 		/**
+		 * update a state of the given job
+		 *
+		 * @param string $job
+		 * @param int    $state
+		 *
+		 * @return IJobQueue
+		 */
+		public function state(string $job, int $state): IJobQueue;
+
+		/**
 		 * cleanup all (scheduled) jobs in a (persistent) queue
 		 *
 		 * @return IJobQueue

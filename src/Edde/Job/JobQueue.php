@@ -12,6 +12,7 @@
 	use Edde\Storage\EmptyEntityException;
 	use Edde\Storage\Entity;
 	use Edde\Storage\IEntity;
+	use function date;
 
 	class JobQueue extends Edde implements IJobQueue {
 		use Storage;
@@ -20,8 +21,9 @@
 		/** @inheritdoc */
 		public function packet(IPacket $packet, DateTime $time = null): IEntity {
 			return $this->storage->insert(new Entity(JobSchema::class, [
-				'stamp'  => $time ?? new DateTime(),
-				'packet' => $packet->export(),
+				'schedule' => $time ?? new DateTime(),
+				'stamp'    => new DateTime(),
+				'packet'   => $packet->export(),
 			]));
 		}
 
@@ -49,21 +51,32 @@
 					FROM
 						j:schema
 					WHERE
-						stamp <= NOW()
+						state = :state AND
+						schedule <= :now
 					ORDER BY
-						stamp ASC
+						schedule ASC
 					LIMIT
 						1
 				', [
 					'$query' => [
 						'j' => JobSchema::class,
 					],
+					'state'  => JobSchema::STATE_ENQUEUED,
+					'now'    => date('c'),
 				]);
-				$this->storage->delete($job);
 			} catch (EmptyEntityException $exception) {
 				throw new HolidayException('Nothing to do, bro!');
 			}
 			return $job;
+		}
+
+		/** @inheritdoc */
+		public function state(string $job, int $state): IJobQueue {
+			$job = $this->storage->load(JobSchema::class, $job);
+			$job['state'] = $state;
+			$job['stamp'] = new DateTime();
+			$this->storage->update($job);
+			return $this;
 		}
 
 		/** @inheritdoc */
