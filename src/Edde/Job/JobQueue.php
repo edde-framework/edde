@@ -87,7 +87,7 @@
 		/** @inheritdoc */
 		public function countState(int $state): int {
 			$count = 0;
-			foreach ($this->storage->value('SELECT COUNT(uuid) as count FROM s:schema', ['$query' => ['s' => JobSchema::class]]) as $count) {
+			foreach ($this->storage->value('SELECT COUNT(uuid) as count FROM s:schema WHERE state = :state', ['state' => $state, '$query' => ['s' => JobSchema::class]]) as $count) {
 				break;
 			}
 			return $count;
