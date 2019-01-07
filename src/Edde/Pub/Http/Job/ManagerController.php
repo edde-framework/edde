@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Pub\Rest\Job;
+	namespace Edde\Pub\Http\Job;
 
 	use Edde\Application\RouterException;
 	use Edde\Controller\RestController;
@@ -34,6 +34,7 @@
 				$this->jobQueue->state($job, JobSchema::STATE_FAILED);
 				throw $exception;
 			}
+			$this->jsonResponse(sprintf('job done [%s]', $job['uuid']))->execute();
 		}
 
 		public function actionCleanup(): void {

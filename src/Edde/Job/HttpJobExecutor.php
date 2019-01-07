@@ -35,6 +35,6 @@
 		protected function handleInit(): void {
 			parent::handleInit();
 			$section = $this->configService->optional('http-job-executor');
-			$this->url = $section->optional('url', 'http://localhost/rest/job.manager/execute');
+			$this->url = $section->optional('url', 'http://localhost/job.manager/execute');
 		}
 	}
