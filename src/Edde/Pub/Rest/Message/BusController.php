@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Rest\Message;
+	namespace Edde\Pub\Rest\Message;
 
 	use Edde\Application\ApplicationException;
 	use Edde\Controller\RestController;

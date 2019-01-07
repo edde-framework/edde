@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Cli\Job;
+	namespace Edde\Pub\Cli\Job;
 
 	use Edde\Controller\CliController;
 	use Edde\Service\Job\JobManager;

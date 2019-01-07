@@ -1,6 +1,6 @@
 <?php
 	declare(strict_types=1);
-	namespace Edde\Cli\Upgrade;
+	namespace Edde\Pub\Cli\Upgrade;
 
 	use Edde\Controller\CliController;
 	use Edde\Service\Upgrade\UpgradeManager;
