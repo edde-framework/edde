@@ -57,6 +57,7 @@
 						) AND
 						schedule <= :now
 					ORDER BY
+						state DESC,
 						schedule ASC
 					LIMIT
 						1
