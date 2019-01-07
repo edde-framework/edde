@@ -32,7 +32,7 @@
 		/** @inheritdoc */
 		public function resolve(IMessage $message): IMessageService {
 			$resolve = [];
-			if (($target = $message->getTarget())) {
+			if ($target = $message->getTarget()) {
 				$resolve[] = $this->stringUtils->className('pub.' . $message->getTarget() . '-message-service');
 				$resolve[] = $this->stringUtils->className('pub.' . $message->getTarget());
 			}
