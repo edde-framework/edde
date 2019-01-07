@@ -10,6 +10,7 @@
 	use Edde\Service\Message\MessageBus;
 	use Edde\Url\UrlException;
 	use Throwable;
+	use function implode;
 
 	class ManagerController extends RestController {
 		use JobQueue;
@@ -40,5 +41,13 @@
 		public function actionCleanup(): void {
 			$this->jobQueue->cleanup();
 			$this->textResponse('ok')->execute();
+		}
+
+		public function actionStats(): void {
+			$stats = [];
+			foreach ($this->jobQueue->stats() as $name => $stat) {
+				$stats[] = $name . ' = ' . $stat;
+			}
+			$this->textResponse(implode("\n", $stats))->execute();
 		}
 	}
