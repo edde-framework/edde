@@ -38,12 +38,6 @@
 		public function state($default = self::STATE_ENQUEUED): int;
 
 		/**
-		 * timestamp of last change; if state is 0, than job has been created by
-		 * "stamp" time and so on
-		 */
-		public function stamp(): DateTime;
-
-		/**
 		 * when a message should be executed
 		 */
 		public function schedule(): DateTime;
@@ -52,4 +46,10 @@
 		 * packet to be processed
 		 */
 		public function packet($type = 'json');
+
+		/**
+		 * timestamp of last change; if state is 0, than job has been created by
+		 * "stamp" time and so on
+		 */
+		public function stamp(): DateTime;
 	}
