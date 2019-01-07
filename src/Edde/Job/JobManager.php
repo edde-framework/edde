@@ -34,7 +34,7 @@
 
 		/** @inheritdoc */
 		public function tick(): IJobManager {
-			$this->jobExecutor->execute($this->messageBus->importPacket($this->jobQueue->pick()['packet']));
+			$this->jobExecutor->execute($this->jobQueue->pick()['uuid']);
 			return $this;
 		}
 	}
