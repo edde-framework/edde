@@ -8,6 +8,7 @@
 	use Edde\Message\IPacket;
 	use Edde\Service\Message\MessageBus;
 	use Edde\Service\Storage\Storage;
+	use Edde\Storage\EmptyEntityException;
 	use Edde\Storage\Entity;
 	use Edde\Storage\IEntity;
 
@@ -29,8 +30,9 @@
 		}
 
 		/** @inheritdoc */
-		public function enqueue(): IEntity {
-			$job = $this->storage->single(JobSchema::class, '
+		public function pick(): IEntity {
+			try {
+				$job = $this->storage->single(JobSchema::class, '
 				SELECT
 					*
 				FROM
@@ -43,13 +45,14 @@
 				LIMIT
 					1
 			', [
-				'$query' => [
-					'j' => JobSchema::class,
-				],
-				'state'  => JobSchema::STATE_CREATED,
-			]);
-			$job['state'] = JobSchema::STATE_ENQUEUED;
-			$this->storage->update($job);
+					'$query' => [
+						'j' => JobSchema::class,
+					],
+					'state'  => JobSchema::STATE_CREATED,
+				]);
+			} catch (EmptyEntityException $exception) {
+				throw new HolidayException('Nothing to do, bro!');
+			}
 			return $job;
 		}
 

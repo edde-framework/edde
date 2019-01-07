@@ -3,6 +3,7 @@
 	namespace Edde\Job;
 
 	use Edde\Configurable\IConfigurable;
+	use Edde\Message\MessageException;
 
 	interface IJobManager extends IConfigurable {
 		/**
@@ -19,7 +20,9 @@
 		 *
 		 * @return IJobManager
 		 *
+		 * @throws HolidayException
 		 * @throws JobException
+		 * @throws MessageException
 		 */
 		public function tick(): IJobManager;
 	}

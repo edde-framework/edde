@@ -5,7 +5,6 @@
 	use DateTime;
 	use Edde\Configurable\IConfigurable;
 	use Edde\Message\IPacket;
-	use Edde\Storage\EmptyEntityException;
 	use Edde\Storage\IEntity;
 
 	interface IJobQueue extends IConfigurable {
@@ -30,14 +29,13 @@
 		public function schedule(IPacket $packet, string $diff): IEntity;
 
 		/**
-		 * enqueue a job (change it's state to ENQUEUED); this method should NOT be executed
-		 * in parallel as it's not thread safe
+		 * pick a job (should be removed from source queue)
 		 *
 		 * @return IEntity
 		 *
-		 * @throws EmptyEntityException
+		 * @throws HolidayException
 		 */
-		public function enqueue(): IEntity;
+		public function pick(): IEntity;
 
 		/**
 		 * cleanup all (scheduled) jobs in a (persistent) queue
