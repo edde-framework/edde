@@ -167,12 +167,15 @@
 			$stats = [];
 			$query = '
 				SELECT
-					(SELECT COUNT(uuid) FROM s:schema WHERE state = 0) AS enqueued,
-					(SELECT COUNT(uuid) FROM s:schema WHERE state = 1) AS reset,
-					(SELECT COUNT(uuid) FROM s:schema WHERE state = 2) AS scheduled,
-					(SELECT COUNT(uuid) FROM s:schema WHERE state = 3) AS running,
-					(SELECT COUNT(uuid) FROM s:schema WHERE state = 4) AS success,
-					(SELECT COUNT(uuid) FROM s:schema WHERE state = 5) AS failed
+					(SELECT COUNT(uuid) FROM s:schema WHERE state = 0) AS Enqueued:delimit,
+					(SELECT COUNT(uuid) FROM s:schema WHERE state = 1) AS Reset:delimit,
+					(SELECT COUNT(uuid) FROM s:schema WHERE state = 2) AS Scheduled:delimit,
+					(SELECT COUNT(uuid) FROM s:schema WHERE state = 3) AS Running:delimit,
+					(SELECT COUNT(uuid) FROM s:schema WHERE state = 4) AS Success:delimit,
+					(SELECT COUNT(uuid) FROM s:schema WHERE state = 5) AS Failed:delimit,
+					(SELECT AVG(stamp-schedule) FROM s:schema WHERE state = 4) AS AverageRuntime:delimit,
+					(SELECT MIN(stamp-schedule) FROM s:schema WHERE state = 4) AS MinRuntime:delimit,
+					(SELECT MAX(stamp-schedule) FROM s:schema WHERE state = 4) AS MAXRuntime:delimit
 			';
 			foreach ($this->storage->fetch($query, ['$query' => ['s' => JobSchema::class]]) as $stats) {
 				break;
