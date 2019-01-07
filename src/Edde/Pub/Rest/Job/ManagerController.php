@@ -2,16 +2,25 @@
 	declare(strict_types=1);
 	namespace Edde\Pub\Rest\Job;
 
+	use Edde\Application\RouterException;
 	use Edde\Controller\RestController;
 	use Edde\Job\JobSchema;
+	use Edde\Runtime\RuntimeException;
 	use Edde\Service\Job\JobQueue;
 	use Edde\Service\Message\MessageBus;
+	use Edde\Url\UrlException;
 	use Throwable;
 
 	class ManagerController extends RestController {
 		use JobQueue;
 		use MessageBus;
 
+		/**
+		 * @throws Throwable
+		 * @throws RouterException
+		 * @throws RuntimeException
+		 * @throws UrlException
+		 */
 		public function actionExecute(): void {
 			$this->jobQueue->state($job = $this->getParams()['job'], JobSchema::STATE_STARTED);
 			try {
