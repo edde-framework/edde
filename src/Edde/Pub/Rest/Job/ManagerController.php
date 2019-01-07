@@ -22,7 +22,7 @@
 		 * @throws UrlException
 		 */
 		public function actionExecute(): void {
-			$this->jobQueue->state($job = $this->getParams()['job'], JobSchema::STATE_STARTED);
+			$this->jobQueue->state($job = $this->getParams()['job'], JobSchema::STATE_RUNNING);
 			try {
 				$this->messageBus->packet(
 					$this->messageBus->importPacket(

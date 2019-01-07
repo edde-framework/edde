@@ -3,12 +3,15 @@
 	namespace Edde\Job;
 
 	use Edde\Edde;
+	use Edde\Service\Config\ConfigService;
 	use Edde\Service\Job\JobExecutor;
 	use Edde\Service\Job\JobQueue;
 
 	class JobManager extends Edde implements IJobManager {
 		use JobQueue;
 		use JobExecutor;
+		use ConfigService;
+		protected $limit;
 
 		/** @inheritdoc */
 		public function run(): IJobManager {
@@ -18,7 +21,9 @@
 				 * die hard on any exception as it will be re-executed again
 				 */
 				try {
-					$this->tick();
+					if ($this->jobQueue->countState(JobSchema::STATE_RUNNING) <= $this->limit) {
+						$this->tick();
+					}
 				} catch (HolidayException $exception) {
 					/**
 					 * noop
@@ -36,5 +41,11 @@
 		public function tick(): IJobManager {
 			$this->jobExecutor->execute($this->jobQueue->pick()['uuid']);
 			return $this;
+		}
+
+		protected function handleInit(): void {
+			parent::handleInit();
+			$section = $this->configService->optional('job-manager');
+			$this->limit = $section->optional('limit', 8);
 		}
 	}

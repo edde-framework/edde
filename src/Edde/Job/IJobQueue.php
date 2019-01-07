@@ -78,6 +78,15 @@
 		public function byUuid(string $uuid): IEntity;
 
 		/**
+		 * return count of jobs of the given state
+		 *
+		 * @param int $state
+		 *
+		 * @return int
+		 */
+		public function countState(int $state): int;
+
+		/**
 		 * cleanup all (scheduled) jobs in a (persistent) queue
 		 *
 		 * @return IJobQueue

@@ -85,6 +85,15 @@
 		}
 
 		/** @inheritdoc */
+		public function countState(int $state): int {
+			$count = 0;
+			foreach ($this->storage->value('SELECT COUNT(uuid) as count FROM s:schema', ['$query' => ['s' => JobSchema::class]]) as $count) {
+				break;
+			}
+			return $count;
+		}
+
+		/** @inheritdoc */
 		public function cleanup(): IJobQueue {
 			$this->storage->fetch('
 				DELETE FROM s:schema

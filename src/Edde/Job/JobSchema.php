@@ -18,7 +18,7 @@
 		/**
 		 * a job has been started by a worker (worker side)
 		 */
-		const STATE_STARTED = 2;
+		const STATE_RUNNING = 2;
 		/**
 		 * a job has been successfully done (worker side)
 		 */
