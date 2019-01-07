@@ -16,14 +16,19 @@
 		/** @inheritdoc */
 		public function run(): IJobManager {
 			while (true) {
+				if ($this->jobQueue->countState(JobSchema::STATE_RUNNING) >= $this->limit) {
+					/**
+					 * sleep a bit more if limit is reached
+					 */
+					usleep(1000 * 1000);
+					continue;
+				}
 				/**
 				 * because job manager should be managed by some service (systemd, runit, ...) it could
 				 * die hard on any exception as it will be re-executed again
 				 */
 				try {
-					if ($this->jobQueue->countState(JobSchema::STATE_RUNNING) <= $this->limit) {
-						$this->tick();
-					}
+					$this->tick();
 				} catch (HolidayException $exception) {
 					/**
 					 * noop
