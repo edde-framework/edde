@@ -47,4 +47,24 @@
 				'attrs'  => $this->attrs ? (object)$this->attrs : null,
 			];
 		}
+
+		/** @inheritdoc */
+		public function offsetExists($offset) {
+			return isset($this->attrs[$offset]) || array_key_exists($offset, $this->attrs);
+		}
+
+		/** @inheritdoc */
+		public function offsetGet($offset) {
+			return $this->attrs[$offset];
+		}
+
+		/** @inheritdoc */
+		public function offsetSet($offset, $value) {
+			$this->attrs[$offset] = $value;
+		}
+
+		/** @inheritdoc */
+		public function offsetUnset($offset) {
+			unset($this->attrs[$offset]);
+		}
 	}

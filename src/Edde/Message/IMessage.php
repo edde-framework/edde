@@ -2,13 +2,14 @@
 	declare(strict_types=1);
 	namespace Edde\Message;
 
+	use ArrayAccess;
 	use stdClass;
 
 	/**
 	 * Basic element of the whole concept of Message Bus; a message
 	 * is an individual piece to be processed on the line.
 	 */
-	interface IMessage {
+	interface IMessage extends ArrayAccess {
 		/**
 		 * return type of a message
 		 *
