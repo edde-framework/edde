@@ -24,7 +24,7 @@
 				if (($socket = fsockopen($this->parts['host'], isset($this->parts['port']) ? $this->parts['port'] : 80, $status, $error, 15)) === false) {
 					throw new JobException(sprintf('Cannot connect to [%s].', $this->url));
 				}
-				fwrite($socket, vsprintf("GET %s HTTP/1.1\r\nHost: %s\r\nContent-Type: application/json\r\nContent-Length: %d\r\nConnection: Close\r\n\r\n", [
+				fwrite($socket, vsprintf("GET %s HTTP/1.1\r\nHost: %s\r\nConnection: Close\r\n\r\n", [
 					sprintf($this->parts['path'], $job),
 					$this->parts['host'],
 				]));
