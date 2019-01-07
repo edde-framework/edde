@@ -45,7 +45,7 @@
 		/** @inheritdoc */
 		public function pick(): IEntity {
 			try {
-				$job = $this->storage->single(JobSchema::class, '
+				return $this->storage->single(JobSchema::class, '
 					SELECT
 						*
 					FROM
@@ -67,7 +67,6 @@
 			} catch (EmptyEntityException $exception) {
 				throw new HolidayException('Nothing to do, bro!');
 			}
-			return $job;
 		}
 
 		/** @inheritdoc */
