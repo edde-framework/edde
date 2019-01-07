@@ -3,33 +3,12 @@
 	namespace Edde\Job;
 
 	use Edde\Edde;
-	use Edde\Service\Config\ConfigService;
 	use Edde\Service\Job\JobQueue;
 	use Edde\Storage\EmptyEntityException;
 	use function sprintf;
 
 	class JobManager extends Edde implements IJobManager {
 		use JobQueue;
-		use ConfigService;
-		protected $running;
-		protected $pids;
-		protected $binary;
-		protected $controller;
-		protected $limit;
-		protected $rate;
-		protected $param;
-
-		public function __construct() {
-			$this->running = true;
-			$this->pids = [];
-		}
-
-		public function startup(): IJobManager {
-			pcntl_async_signals(true);
-			pcntl_signal(SIGTERM, [$this, 'handleShutdown']);
-			pcntl_signal(SIGINT, [$this, 'handleShutdown']);
-			return $this;
-		}
 
 		/** @inheritdoc */
 		public function run(): IJobManager {
@@ -82,37 +61,5 @@
 				}
 			}
 			return $this;
-		}
-
-		public function shutdown(): IJobManager {
-			/**
-			 * wait until all children processes are done
-			 */
-			while (pcntl_waitpid(0, $status) !== -1) {
-				;
-			}
-			return $this;
-		}
-
-		public function handleShutdown() {
-			$this->running = false;
-		}
-
-		protected function handleInit(): void {
-			$config = $this->configService->require('jobs');
-			$this->binary = $config->optional('binary', './cli');
-			/**
-			 * which controller should pickup the job
-			 */
-			$this->controller = $config->optional('controller', 'job.manager/execute');
-			/**
-			 * how many concurrent jobs could be run
-			 */
-			$this->limit = $config->optional('limit', 8);
-			/**
-			 * heartbeat rate
-			 */
-			$this->rate = $config->optional('rate', 250);
-			$this->param = $config->optional('param', 'job');
 		}
 	}

@@ -12,6 +12,8 @@
 		 * @param IPacket $packet
 		 *
 		 * @return IJobExecutor
+		 *
+		 * @throws JobException if a job has not been successfully executed
 		 */
 		public function execute(IPacket $packet): IJobExecutor;
 	}
