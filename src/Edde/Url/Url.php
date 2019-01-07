@@ -51,20 +51,20 @@
 
 		/** @inheritdoc */
 		public function getResourceName(): string {
-			$pathList = $this->getPathList();
-			return (string)end($pathList);
+			$paths = $this->getPaths();
+			return (string)end($paths);
 		}
 
 		/** @inheritdoc */
-		public function getPathList() {
+		public function getPaths() {
 			return explode('/', ltrim($this->path, '/'));
 		}
 
 		/** @inheritdoc */
 		public function getBasePath(): string {
-			$pathList = $this->getPathList();
-			array_pop($pathList);
-			return implode('/', $pathList);
+			$paths = $this->getPaths();
+			array_pop($paths);
+			return implode('/', $paths);
 		}
 
 		/** @inheritdoc */
@@ -133,8 +133,8 @@
 		}
 
 		/** @inheritdoc */
-		public function getPort() {
-			return $this->port;
+		public function getPort(int $default = 80): int {
+			return $this->port ?? $default;
 		}
 
 		/** @inheritdoc */

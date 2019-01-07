@@ -6,7 +6,8 @@
 	use Edde\Service\Config\ConfigService;
 	use Edde\Service\Job\JobQueue;
 	use Edde\Service\Storage\Storage;
-	use function parse_url;
+	use Edde\Url\IUrl;
+	use Edde\Url\Url;
 	use function sprintf;
 
 	class HttpJobExecutor extends Edde implements IJobExecutor {
@@ -14,19 +15,19 @@
 		use JobQueue;
 		use ConfigService;
 		protected $url;
-		/** @var array */
+		/** @var IUrl */
 		protected $parts;
 
 		/** @inheritdoc */
 		public function execute(string $job): IJobExecutor {
 			$this->storage->transaction(function () use ($job) {
 				$this->jobQueue->state($job, JobSchema::STATE_SCHEDULED);
-				if (($socket = fsockopen($this->parts['host'], isset($this->parts['port']) ? $this->parts['port'] : 80, $status, $error, 15)) === false) {
+				if (($socket = fsockopen($this->parts->getHost(), $this->parts->getPort(80), $status, $error, 15)) === false) {
 					throw new JobException(sprintf('Cannot connect to [%s].', $this->url));
 				}
 				fwrite($socket, vsprintf("GET %s HTTP/1.1\r\nHost: %s\r\nConnection: Close\r\n\r\n", [
-					sprintf($this->parts['path'], $job),
-					$this->parts['host'],
+					sprintf($this->parts->getPath(), $job),
+					$this->parts->getHost(),
 				]));
 				fclose($socket);
 			});
@@ -36,6 +37,6 @@
 		protected function handleInit(): void {
 			parent::handleInit();
 			$section = $this->configService->optional('http-job-executor');
-			$this->parts = parse_url($this->url = $section->optional('url', 'http://localhost/rest/job.manager/execute?job=%s'));
+			$this->parts = Url::create($this->url = $section->optional('url', 'http://localhost/rest/job.manager/execute?job=%s'));
 		}
 	}

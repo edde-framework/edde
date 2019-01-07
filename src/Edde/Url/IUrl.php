@@ -16,7 +16,7 @@
 		/**
 		 * @return int
 		 */
-		public function getPort();
+		public function getPort(int $default = 80): int;
 
 		/**
 		 * set path path of an url
@@ -37,7 +37,7 @@
 		/**
 		 * @return string[]
 		 */
-		public function getPathList();
+		public function getPaths();
 
 		/**
 		 * return path without filename (simply throw away last part of url)
