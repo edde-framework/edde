@@ -84,8 +84,7 @@
 			], [
 				'\\',
 				'',
-			], $this->stringUtils->capitalize(str_replace('.', ' ', 'pub.' . $class))));
-			array_splice($class, 0, 0, $type);
+			], $this->stringUtils->capitalize(str_replace('.', ' ', 'pub.' . $type . '.' . $class))));
 			/**
 			 * this is synthetic restriction to keep requests just for controller classes
 			 */
