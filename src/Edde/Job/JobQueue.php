@@ -84,9 +84,18 @@
 		}
 
 		/** @inheritdoc */
-		public function countState(int $state): int {
+		public function countLimit(): int {
 			$count = 0;
-			foreach ($this->storage->value('SELECT COUNT(uuid) as count FROM s:schema WHERE state = :state', ['state' => $state, '$query' => ['s' => JobSchema::class]]) as $count) {
+			$query = '
+				SELECT 
+					COUNT(uuid) as count 
+				FROM 
+					s:schema 
+				WHERE 
+					state = :scheduled OR
+					state = :running
+			';
+			foreach ($this->storage->value($query, ['scheduled' => JobSchema::STATE_SCHEDULED, 'running' => JobSchema::STATE_RUNNING, '$query' => ['s' => JobSchema::class]]) as $count) {
 				break;
 			}
 			return $count;

@@ -16,7 +16,7 @@
 		/** @inheritdoc */
 		public function run(): IJobManager {
 			while (true) {
-				if ($this->jobQueue->countState(JobSchema::STATE_SCHEDULED) >= $this->limit) {
+				if ($this->jobQueue->countLimit() >= $this->limit) {
 					/**
 					 * sleep a bit more if limit is reached
 					 */

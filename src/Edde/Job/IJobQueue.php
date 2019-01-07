@@ -78,13 +78,12 @@
 		public function byUuid(string $uuid): IEntity;
 
 		/**
-		 * return count of jobs of the given state
-		 *
-		 * @param int $state
+		 * return number of allocated jobs; this could be used for parallel
+		 * job limitation
 		 *
 		 * @return int
 		 */
-		public function countState(int $state): int;
+		public function countLimit(): int;
 
 		/**
 		 * cleanup all (scheduled) jobs in a (persistent) queue
