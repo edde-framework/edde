@@ -173,9 +173,10 @@
 					(SELECT COUNT(uuid) FROM s:schema WHERE state = 3) AS Running:delimit,
 					(SELECT COUNT(uuid) FROM s:schema WHERE state = 4) AS Success:delimit,
 					(SELECT COUNT(uuid) FROM s:schema WHERE state = 5) AS Failed:delimit,
-					(SELECT AVG(stamp-schedule) FROM s:schema WHERE state = 4) AS AverageRuntime:delimit,
-					(SELECT MIN(stamp-schedule) FROM s:schema WHERE state = 4) AS MinRuntime:delimit,
-					(SELECT MAX(stamp-schedule) FROM s:schema WHERE state = 4) AS MAXRuntime:delimit
+					(SELECT COUNT(uuid) FROM s:schema WHERE state >= 4) AS Finished:delimit,
+					(SELECT AVG(stamp-schedule) FROM s:schema WHERE state = 4) AS Average:delimit,
+					(SELECT MIN(stamp-schedule) FROM s:schema WHERE state = 4) AS Shortest:delimit,
+					(SELECT MAX(stamp-schedule) FROM s:schema WHERE state = 4) AS Longest:delimit
 			';
 			foreach ($this->storage->fetch($query, ['$query' => ['s' => JobSchema::class]]) as $stats) {
 				break;
