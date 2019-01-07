@@ -33,6 +33,7 @@
 		public function resolve(IMessage $message): IMessageService {
 			$resolve = [];
 			if (($target = $message->getTarget()) && ($target = $this->stringUtils->className('pub.' . $message->getTarget()))) {
+				$resolve[] = $target = $this->stringUtils->className('pub.' . $message->getTarget() . '-message-service');
 				$resolve[] = $target;
 			}
 			$resolve[] = sprintf('Pub\\Message\\%sMessageService', $this->stringUtils->className($message->getType()));
