@@ -5,7 +5,6 @@
 	use DateTime;
 	use Edde\Configurable\IConfigurable;
 	use Edde\Message\IMessage;
-	use Edde\Message\IPacket;
 	use Edde\Storage\EmptyEntityException;
 	use Edde\Storage\IEntity;
 
@@ -29,13 +28,6 @@
 		 * @throws EmptyEntityException
 		 */
 		public function enqueue(): IEntity;
-
-		/**
-		 * execute the given job
-		 *
-		 * @return IPacket
-		 */
-		public function execute(string $job): IPacket;
 
 		/**
 		 * cleanup jobs already executed

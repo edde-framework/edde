@@ -53,15 +53,16 @@
 				 * limit concurrency level
 				 */
 				if (count($this->pids) < $this->limit) {
-					if (($this->pids[] = pcntl_fork()) === 0) {
+					if (($pid = $this->pids[] = pcntl_fork()) === 0) {
 						if (pcntl_exec($this->binary, [
 								$this->controller,
 								'--' . $this->param . '=' . $job['uuid'],
 							]) === false) {
 							throw new JobException(sprintf('Cannot execute a job [%s].', $job['uuid']));
 						}
+					} else if ($pid === -1) {
+						throw new JobException(sprintf('Cannot fork a job [%s].', $job['uuid']));
 					}
-					throw new JobException(sprintf('Cannot fork a job [%s].', $job['uuid']));
 				}
 			} catch (EmptyEntityException $exception) {
 				/**
