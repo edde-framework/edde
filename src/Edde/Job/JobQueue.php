@@ -51,18 +51,22 @@
 					FROM
 						j:schema
 					WHERE
-						state = :state AND
+						(
+							state = :enqueued OR
+							state = :reset
+						) AND
 						schedule <= :now
 					ORDER BY
 						schedule ASC
 					LIMIT
 						1
 				', [
-					'$query' => [
+					'$query'   => [
 						'j' => JobSchema::class,
 					],
-					'state'  => JobSchema::STATE_ENQUEUED,
-					'now'    => date('c'),
+					'enqueued' => JobSchema::STATE_ENQUEUED,
+					'reset'    => JobSchema::STATE_RESET,
+					'now'      => date('c'),
 				]);
 			} catch (EmptyEntityException $exception) {
 				throw new HolidayException('Nothing to do, bro!');
@@ -103,6 +107,9 @@
 
 		/** @inheritdoc */
 		public function reset(): IJobQueue {
+			/**
+			 * the simple phase is to reset jobs just scheduled
+			 */
 			$this->storage->fetch('
 				UPDATE
 					s:schema
@@ -118,6 +125,25 @@
 				'enqueued'  => JobSchema::STATE_ENQUEUED,
 				'scheduled' => JobSchema::STATE_SCHEDULED,
 				'stamp'     => date('c'),
+			]);
+			/**
+			 * a bit more complicated is to reset originally running jobs
+			 */
+			$this->storage->fetch('
+				UPDATE
+					s:schema
+				SET
+					state = :reset,
+					stamp = :stamp
+				WHERE
+					state = :running
+			', [
+				'$query'  => [
+					's' => JobSchema::class,
+				],
+				'reset'   => JobSchema::STATE_RESET,
+				'running' => JobSchema::STATE_RUNNING,
+				'stamp'   => date('c'),
 			]);
 			return $this;
 		}
@@ -141,10 +167,10 @@
 			$query = '
 				SELECT
 					(SELECT count(uuid) FROM s:schema WHERE state = 0) AS enqueued,
-					(SELECT count(uuid) FROM s:schema WHERE state = 1) AS scheduled,
-					(SELECT count(uuid) FROM s:schema WHERE state = 2) AS running,
-					(SELECT count(uuid) FROM s:schema WHERE state = 3) AS success,
-					(SELECT count(uuid) FROM s:schema WHERE state = 4) AS rejected,
+					(SELECT count(uuid) FROM s:schema WHERE state = 1) AS reset,
+					(SELECT count(uuid) FROM s:schema WHERE state = 2) AS scheduled,
+					(SELECT count(uuid) FROM s:schema WHERE state = 3) AS running,
+					(SELECT count(uuid) FROM s:schema WHERE state = 4) AS success,
 					(SELECT count(uuid) FROM s:schema WHERE state = 5) AS failed
 			';
 			foreach ($this->storage->fetch($query, ['$query' => ['s' => JobSchema::class]]) as $stats) {

@@ -12,21 +12,21 @@
 		 */
 		const STATE_ENQUEUED = 0;
 		/**
+		 * when message has been reset due restart or so (originally RUNNING messages)
+		 */
+		const STATE_RESET = 1;
+		/**
 		 * a job is scheduled and an executor should run the job (daemon side)
 		 */
-		const STATE_SCHEDULED = 1;
+		const STATE_SCHEDULED = 2;
 		/**
 		 * a job has been started by a worker (worker side)
 		 */
-		const STATE_RUNNING = 2;
+		const STATE_RUNNING = 3;
 		/**
 		 * a job has been successfully done (worker side)
 		 */
-		const STATE_SUCCESS = 3;
-		/**
-		 * a job has been rejected for whatever reason (worker/daemon side)
-		 */
-		const STATE_REJECTED = 4;
+		const STATE_SUCCESS = 4;
 		/**
 		 * a job has failed (worker/daemon side)
 		 */
