@@ -34,7 +34,7 @@
 				$this->jobQueue->state($job, JobSchema::STATE_FAILED);
 				throw $exception;
 			}
-			$this->textResponse(sprintf('job done [%s]', $job['uuid']))->execute();
+			$this->textResponse(sprintf('job done [%s]', $job))->execute();
 		}
 
 		public function actionCleanup(): void {
