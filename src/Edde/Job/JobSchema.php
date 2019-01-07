@@ -6,6 +6,7 @@
 	use Edde\Schema\UuidSchema;
 
 	interface JobSchema extends UuidSchema {
+		const alias = true;
 		const STATE_CREATED = 0;
 		const STATE_ENQUEUED = 1;
 		const STATE_RUNNING = 2;

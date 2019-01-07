@@ -6,6 +6,8 @@
 	use Edde\Schema\UuidSchema;
 
 	interface UpgradeSchema extends UuidSchema {
+		const alias = true;
+
 		public function version($unique): string;
 
 		public function stamp($generator = 'stamp'): DateTime;
