@@ -166,12 +166,12 @@
 			$stats = [];
 			$query = '
 				SELECT
-					(SELECT count(uuid) FROM s:schema WHERE state = 0) AS enqueued,
-					(SELECT count(uuid) FROM s:schema WHERE state = 1) AS reset,
-					(SELECT count(uuid) FROM s:schema WHERE state = 2) AS scheduled,
-					(SELECT count(uuid) FROM s:schema WHERE state = 3) AS running,
-					(SELECT count(uuid) FROM s:schema WHERE state = 4) AS success,
-					(SELECT count(uuid) FROM s:schema WHERE state = 5) AS failed
+					(SELECT COUNT(uuid) FROM s:schema WHERE state = 0) AS enqueued,
+					(SELECT COUNT(uuid) FROM s:schema WHERE state = 1) AS reset,
+					(SELECT COUNT(uuid) FROM s:schema WHERE state = 2) AS scheduled,
+					(SELECT COUNT(uuid) FROM s:schema WHERE state = 3) AS running,
+					(SELECT COUNT(uuid) FROM s:schema WHERE state = 4) AS success,
+					(SELECT COUNT(uuid) FROM s:schema WHERE state = 5) AS failed
 			';
 			foreach ($this->storage->fetch($query, ['$query' => ['s' => JobSchema::class]]) as $stats) {
 				break;
