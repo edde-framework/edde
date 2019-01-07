@@ -69,6 +69,15 @@
 		public function state(string $job, int $state): IJobQueue;
 
 		/**
+		 * get a job by the given uuid
+		 *
+		 * @param string $uuid
+		 *
+		 * @return IEntity
+		 */
+		public function byUuid(string $uuid): IEntity;
+
+		/**
 		 * cleanup all (scheduled) jobs in a (persistent) queue
 		 *
 		 * @return IJobQueue

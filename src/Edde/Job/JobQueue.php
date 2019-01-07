@@ -72,11 +72,16 @@
 
 		/** @inheritdoc */
 		public function state(string $job, int $state): IJobQueue {
-			$job = $this->storage->load(JobSchema::class, $job);
+			$job = $this->byUuid($job);
 			$job['state'] = $state;
 			$job['stamp'] = new DateTime();
 			$this->storage->update($job);
 			return $this;
+		}
+
+		/** @inheritdoc */
+		public function byUuid(string $uuid): IEntity {
+			return $this->storage->load(JobSchema::class, $uuid);
 		}
 
 		/** @inheritdoc */

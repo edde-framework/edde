@@ -3,17 +3,16 @@
 	namespace Edde\Job;
 
 	use Edde\Configurable\IConfigurable;
-	use Edde\Message\IPacket;
 
 	interface IJobExecutor extends IConfigurable {
 		/**
-		 * execute should asynchronously execute given message (packet)
+		 * execute should (asynchronously) execute the given job
 		 *
-		 * @param IPacket $packet
+		 * @param string $job job uuid
 		 *
 		 * @return IJobExecutor
 		 *
-		 * @throws JobException if a job has not been successfully executed
+		 * @throws JobException
 		 */
-		public function execute(IPacket $packet): IJobExecutor;
+		public function execute(string $job): IJobExecutor;
 	}

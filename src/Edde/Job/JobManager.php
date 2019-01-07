@@ -5,12 +5,10 @@
 	use Edde\Edde;
 	use Edde\Service\Job\JobExecutor;
 	use Edde\Service\Job\JobQueue;
-	use Edde\Service\Message\MessageBus;
 
 	class JobManager extends Edde implements IJobManager {
 		use JobQueue;
 		use JobExecutor;
-		use MessageBus;
 
 		/** @inheritdoc */
 		public function run(): IJobManager {
