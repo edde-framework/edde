@@ -23,10 +23,10 @@
 	use Edde\Http\RequestService as HttpRequestService;
 	use Edde\Hydrator\HydratorManager;
 	use Edde\Hydrator\IHydratorManager;
+	use Edde\Job\HttpJobExecutor;
 	use Edde\Job\IJobExecutor;
 	use Edde\Job\IJobManager;
 	use Edde\Job\IJobQueue;
-	use Edde\Job\JobExecutor;
 	use Edde\Job\JobManager;
 	use Edde\Job\JobQueue;
 	use Edde\Log\ILogService;
@@ -232,38 +232,38 @@
 				/**
 				 * storage support
 				 */
-				IStorage::class            => PostgresStorage::class,
-				ITransaction::class        => IStorage::class,
-				IHydratorManager::class    => HydratorManager::class,
+				IStorage::class          => PostgresStorage::class,
+				ITransaction::class      => IStorage::class,
+				IHydratorManager::class  => HydratorManager::class,
 				/**
 				 * general filtering (data conversion) support
 				 */
-				IFilterManager::class      => FilterManager::class,
+				IFilterManager::class    => FilterManager::class,
 				/**
 				 * Message bus support
 				 */
-				IMessageBus::class         => MessageBus::class,
+				IMessageBus::class       => MessageBus::class,
 				/**
 				 * job queues support
 				 */
-				IJobQueue::class           => JobQueue::class,
-				IJobManager::class         => JobManager::class,
-				IJobExecutor::class        => JobExecutor::class,
+				IJobQueue::class         => JobQueue::class,
+				IJobManager::class       => JobManager::class,
+				IJobExecutor::class      => HttpJobExecutor::class,
 				/**
 				 * an application upgrades support
 				 */
-				IUpgradeManager::class     => UpgradeManager::class,
-				IVersionService::class     => VersionService::class,
+				IUpgradeManager::class   => UpgradeManager::class,
+				IVersionService::class   => VersionService::class,
 				/**
 				 * Xml support
 				 */
-				IXmlExportService::class   => XmlExportService::class,
-				IXmlParserService::class   => XmlParserService::class,
+				IXmlExportService::class => XmlExportService::class,
+				IXmlParserService::class => XmlParserService::class,
 				/**
 				 * simple scalar configuration support (should not be used
 				 * for any complex config as it's considered to be anti-pattern)
 				 */
-				IConfigService::class      => ConfigService::class,
+				IConfigService::class    => ConfigService::class,
 				IConfigLoader::class       => ConfigLoader::class,
 				/**
 				 * an application handles lifecycle workflow
