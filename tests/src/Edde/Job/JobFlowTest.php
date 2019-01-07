@@ -3,6 +3,7 @@
 	namespace Edde\Job;
 
 	use Edde\Message\Message;
+	use Edde\Message\Packet;
 	use Edde\Service\Job\JobManager;
 	use Edde\Service\Job\JobQueue;
 	use Edde\Service\Schema\SchemaManager;
@@ -28,15 +29,13 @@
 		 * @throws EmptyEntityException
 		 */
 		public function testJobFlow() {
-			$this->jobQueue->push(new Message('async', 'edde.message.common-message-service', ['foo' => 'bar']));
-			$this->jobQueue->push(new Message('async', 'edde.message.common-message-service', ['bar' => 'foo']));
+			$this->jobQueue->push((new Packet())->message(new Message('async', 'edde.message.common-message-service', ['foo' => 'bar'])));
+			$this->jobQueue->push((new Packet())->message(new Message('async', 'edde.message.common-message-service', ['bar' => 'foo'])));
 			$job1 = $this->jobQueue->enqueue();
 			$job2 = $this->jobQueue->enqueue();
 			self::assertNotEquals($job1, $job2);
 			self::assertEquals((object)['foo' => 'bar'], $job1['message']->attrs);
 			self::assertEquals((object)['bar' => 'foo'], $job2['message']->attrs);
-			self::assertEquals(JobSchema::STATE_ENQUEUED, $job1['state']);
-			self::assertEquals(JobSchema::STATE_ENQUEUED, $job2['state']);
 			$packet1 = $this->jobQueue->execute($job1['uuid']);
 			$packet2 = $this->jobQueue->execute($job2['uuid']);
 			$job1 = $this->jobQueue->byUuid($job1['uuid']);

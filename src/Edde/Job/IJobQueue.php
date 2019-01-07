@@ -4,7 +4,7 @@
 
 	use DateTime;
 	use Edde\Configurable\IConfigurable;
-	use Edde\Message\IMessage;
+	use Edde\Message\IPacket;
 	use Edde\Storage\EmptyEntityException;
 	use Edde\Storage\IEntity;
 
@@ -12,12 +12,22 @@
 		/**
 		 * send a message into queue
 		 *
-		 * @param IMessage $message a message going to queue
-		 * @param DateTime $time    if time is not set, message is executed "immediately" asynchronously
+		 * @param IPacket  $packet a message going to queue
+		 * @param DateTime $time   if time is not set, message is executed "immediately" asynchronously
 		 *
 		 * @return IJobQueue
 		 */
-		public function push(IMessage $message, DateTime $time = null): IEntity;
+		public function push(IPacket $packet, DateTime $time = null): IEntity;
+
+		/**
+		 * schedule the given packet; $diff is DateInterval parameter
+		 *
+		 * @param IPacket $packet
+		 * @param string  $diff
+		 *
+		 * @return IEntity
+		 */
+		public function schedule(IPacket $packet, string $diff): IEntity;
 
 		/**
 		 * enqueue a job (change it's state to ENQUEUED); this method should NOT be executed
@@ -30,18 +40,9 @@
 		public function enqueue(): IEntity;
 
 		/**
-		 * cleanup jobs already executed
+		 * cleanup all (scheduled) jobs in a (persistent) queue
 		 *
 		 * @return IJobQueue
 		 */
 		public function cleanup(): IJobQueue;
-
-		/**
-		 * get a job by an uuid
-		 *
-		 * @param string $uuid
-		 *
-		 * @return IEntity
-		 */
-		public function byUuid(string $uuid): IEntity;
 	}
