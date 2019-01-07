@@ -42,7 +42,9 @@
 		public function testGetSchemas() {
 			$expect = [
 				UpgradeSchema::class       => UpgradeSchema::class,
+				'upgrade'                  => UpgradeSchema::class,
 				JobSchema::class           => JobSchema::class,
+				'job'                      => JobSchema::class,
 				ProjectMemberSchema::class => ProjectMemberSchema::class,
 				'project-member'           => ProjectMemberSchema::class,
 				ProjectSchema::class       => ProjectSchema::class,
