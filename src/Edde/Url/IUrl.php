@@ -101,7 +101,7 @@
 		 *
 		 * @return IUrl
 		 */
-		public function setParameter(string $name, $value): IUrl;
+		public function setParam(string $name, $value): IUrl;
 
 		/**
 		 * @param string      $name
@@ -109,7 +109,7 @@
 		 *
 		 * @return string
 		 */
-		public function getParameter(string $name, $default = null);
+		public function getParam(string $name, $default = null);
 
 		/**
 		 * @return string

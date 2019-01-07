@@ -172,7 +172,7 @@
 		}
 
 		/** @inheritdoc */
-		public function setParameter(string $name, $value): IUrl {
+		public function setParam(string $name, $value): IUrl {
 			$this->params[$name] = $value;
 			return $this;
 		}
@@ -189,11 +189,8 @@
 		}
 
 		/** @inheritdoc */
-		public function getParameter(string $name, $default = null) {
-			if (isset($this->params[$name]) === false) {
-				return $default;
-			}
-			return $this->params[$name];
+		public function getParam(string $name, $default = null) {
+			return $this->params[$name] ?? $default;
 		}
 
 		/** @inheritdoc */
