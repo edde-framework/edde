@@ -32,11 +32,11 @@
 		/** @inheritdoc */
 		public function resolve(IMessage $message): IMessageService {
 			$resolve = [];
-			if (($target = $message->getTarget()) && ($target = $this->stringUtils->className($message->getTarget()))) {
+			if (($target = $message->getTarget()) && ($target = $this->stringUtils->className('pub.' . $message->getTarget()))) {
 				$resolve[] = $target;
 			}
-			$resolve[] = sprintf('Message\\%sMessageService', $this->stringUtils->className($message->getType()));
-			$resolve[] = sprintf('Message\\CommonMessageService');
+			$resolve[] = sprintf('Pub\\Message\\%sMessageService', $this->stringUtils->className($message->getType()));
+			$resolve[] = sprintf('Pub\\Message\\CommonMessageService');
 			/** @var $service string */
 			$service = null;
 			foreach ($resolve as $name) {
