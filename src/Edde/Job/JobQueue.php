@@ -33,23 +33,22 @@
 		public function pick(): IEntity {
 			try {
 				$job = $this->storage->single(JobSchema::class, '
-				SELECT
-					*
-				FROM
-					j:schema
-				WHERE
-					state = :state AND
-					stamp <= NOW()
-				ORDER BY
-					stamp ASC
-				LIMIT
-					1
-			', [
+					SELECT
+						*
+					FROM
+						j:schema
+					WHERE
+						stamp <= NOW()
+					ORDER BY
+						stamp ASC
+					LIMIT
+						1
+				', [
 					'$query' => [
 						'j' => JobSchema::class,
 					],
-					'state'  => JobSchema::STATE_CREATED,
 				]);
+				$this->storage->delete($job);
 			} catch (EmptyEntityException $exception) {
 				throw new HolidayException('Nothing to do, bro!');
 			}

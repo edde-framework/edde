@@ -29,7 +29,7 @@
 				/**
 				 * heartbeat rate to keep stuff on rails
 				 */
-				usleep(750 * 1000);
+				usleep(250 * 1000);
 			}
 			return $this;
 		}
