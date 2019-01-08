@@ -222,6 +222,11 @@
 							const current = ' . json_encode($stats) . ';
 							const config = ' . json_encode($config) . ';
 							const root = document.querySelector("#stats-root");
+							
+							function format(value, section) {
+								return section.float ? parseFloat(value).toFixed(section.float) : value;
+							}
+							
 							for (var k in current) {
 								const row = document.createElement("tr");
 								const section = config[k];
@@ -241,9 +246,9 @@
 								}
 								row.innerHTML = `
 									<td class="stat-name"><span>${k}</span></td>
-									<td class="stat-current"><span>${section.float ? parseFloat(current[k]).toFixed(section.float) : current[k]}</span></td>
-									<td class="stat-previous"><span>${previous[k] ? (section.float ? parseFloat(previous[k]).toFixed(section.float) : previous[k]) : "-"}</span></td>
-									<td class="stat-diff"><span>${diff !== false ? (section.float ? parseFloat(diff).toFixed(section.float) : diff) : "-"}</span></td>
+									<td class="stat-current"><span>${format(current[k], section)}</span></td>
+									<td class="stat-previous"><span>${previous[k] ? format(previous[k], section) : "-"}</span></td>
+									<td class="stat-diff"><span>${diff !== false ? format(diff, section) : "-"}</span></td>
 								`;
 								root.appendChild(row);
 							}
