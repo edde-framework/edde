@@ -52,6 +52,7 @@
 		}
 
 		public function actionStats(): void {
+			$stats = $this->jobQueue->stats();
 			$config = [
 				'Enqueued'        => [
 					'diff'     => true,
@@ -116,17 +117,22 @@
 					'positive' => 1,
 				],
 				'Stats'           => [
-					'diff'     => false,
-					'positive' => null,
+					'ignore' => true,
 				],
 			];
+			$refresh = 5;
 			$html = '
 				<!DOCTYPE html>
 				<html lang="en">
 					<head>
 						<title>Job Stats</title>
 						<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+						<meta http-equiv="refresh" content="' . $refresh . '">
 						<style>
+							html * {
+								box-sizing: border-box;
+							}
+						
 							.container {
 								width: 64%;
 								margin: 0 auto;
@@ -134,7 +140,20 @@
 							
 							#stats {
 								width: 100%;
+								margin-bottom: 12px;
 							}
+							
+							#stats .stat-name {
+								width: 17.5%;
+							}
+							
+							#stats .stat-current, #stats th.stat-previous {
+								width: 37.5%;
+							}
+
+							#stats .stat-diff {
+								width: 7.5%;
+							}							
 							
 							#stats tbody tr {
 								cursor: pointer;
@@ -149,11 +168,11 @@
 							}
 							
 							#stats tbody tr.good {
-								background-color: #0F4;
+								background-color: #6aff20;
 							}
 							
 							#stats tbody tr.bad {
-								background-color: #F04;
+								background-color: #ff8120;
 							}
 							
 							#stats tbody tr:hover {
@@ -163,32 +182,49 @@
 							#stats tbody td {
 								padding: 4px 6px;
 							}
+							
+							.progressbar-wrap {
+								border: 1px solid #333;							
+							}
+							
+							.progressbar {
+								height: 64px;
+								background-color: #73ff67;
+							}
 						</style>
 					</head>
 					<body>
 						<div class="container">
 							<h1>Job Stats</h1>
+							<h4>' . date('Y-m-d H:i:s') . ', auto-refresh by ' . $refresh . 'sec</h4>
 							<table id="stats">
 								<thead>
 									<tr>
-										<th class="stat"><span>Name</span></th>
-										<th class="stat"><span>Current</span></th>
-										<th class="stat"><span>Previous</span></th>
-										<th class="stat"><span>Diff</span></th>
+										<th class="stat stat-name"><span>Name</span></th>
+										<th class="stat stat-current"><span>Current</span></th>
+										<th class="stat stat-previous"><span>Previous</span></th>
+										<th class="stat stat-diff"><span>Diff</span></th>
 									</tr>
 								</thead>
 								<tbody id="stats-root">
 								</tbody>
 							</table>
+							<div class="progressbar-wrap">
+								<div class="progressbar" style="width: ' . $stats['Progress'] . '%"></div>
+							</div>
 						</div>
 						<script>
 							const previous = JSON.parse(window.localStorage.getItem("previous") || "{}");
-							const current = ' . json_encode($this->jobQueue->stats()) . ';
+							const current = ' . json_encode($stats) . ';
 							const config = ' . json_encode($config) . ';
 							const root = document.querySelector("#stats-root");
 							for (var k in current) {
 								const row = document.createElement("tr");
 								const section = config[k];
+								if (section.ignore){
+									continue;
+								}
+								
 								let diff = false;
 								if (section.diff === true && previous[k]) {
 									diff = current[k] - previous[k];
