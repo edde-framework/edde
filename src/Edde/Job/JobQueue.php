@@ -181,12 +181,12 @@
 			foreach ($this->storage->fetch($query, ['$query' => ['s' => JobSchema::class]]) as $stats) {
 				break;
 			}
-			$stats['Progress'] = ($stats['Enqueued'] / max($stats['Sum'], 1)) * 100;
+			$stats['Progress'] = (100 / $stats['Sum']) * $stats['Finished'];
 			$stats['Stats'] = vsprintf('%d of %d done (%.2f%%), remaining %d', [
 				$stats['Finished'],
 				$stats['Sum'],
 				$stats['Progress'],
-				$stats['Enqueued'],
+				$stats['Enqueued'] + $stats['Reset'] + $stats['Scheduled'] + $stats['Running'],
 			]);
 			return $stats;
 		}
