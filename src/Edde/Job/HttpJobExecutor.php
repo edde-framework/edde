@@ -18,7 +18,7 @@
 		/** @inheritdoc */
 		public function execute(string $job): IJobExecutor {
 			$this->storage->transaction(function () use ($job) {
-				$this->jobQueue->state(($job = $this->jobQueue->byUuid($job))['uuid'], JobSchema::STATE_SCHEDULED);
+				$job = $this->jobQueue->state($job, JobSchema::STATE_SCHEDULED);
 				$url = Url::create($this->url)->setParams([
 					'job'   => $job['uuid'],
 					'reset' => $job['state'] === JobSchema::STATE_RESET,
