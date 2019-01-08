@@ -103,18 +103,22 @@
 				'AvgRuntime'      => [
 					'diff'     => true,
 					'positive' => -1,
+					'float'    => 2,
 				],
 				'ShortestRuntime' => [
 					'diff'     => true,
 					'positive' => null,
+					'float'    => 2,
 				],
 				'LongestRuntime'  => [
 					'diff'     => true,
 					'positive' => null,
+					'float'    => 2,
 				],
 				'Progress'        => [
 					'diff'     => true,
 					'positive' => 1,
+					'float'    => 2,
 				],
 				'Stats'           => [
 					'ignore' => true,
@@ -237,9 +241,9 @@
 								}
 								row.innerHTML = `
 									<td class="stat-name"><span>${k}</span></td>
-									<td class="stat-current"><span>${current[k]}</span></td>
-									<td class="stat-previous"><span>${previous[k] || "-"}</span></td>
-									<td class="stat-diff"><span>${diff !== false ? diff : "-"}</span></td>
+									<td class="stat-current"><span>${section.float ? parseFloat(current[k]).toFixed(section.float) : current[k]}</span></td>
+									<td class="stat-previous"><span>${previous[k] ? (section.float ? parseFloat(previous[k]).toFixed(section.float) : previous[k]) : "-"}</span></td>
+									<td class="stat-diff"><span>${diff !== false ? (section.float ? parseFloat(diff).toFixed(section.float) : diff) : "-"}</span></td>
 								`;
 								root.appendChild(row);
 							}
