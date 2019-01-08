@@ -20,8 +20,7 @@
 			$this->storage->transaction(function () use ($job) {
 				$job = $this->jobQueue->state($job, JobSchema::STATE_SCHEDULED);
 				$url = Url::create($this->url)->setParams([
-					'job'   => $job['uuid'],
-					'reset' => $job['state'] === JobSchema::STATE_RESET,
+					'job' => $job['uuid'],
 				]);
 				if (($socket = fsockopen($url->getHost(), $url->getPort(80), $status, $error, 15)) === false) {
 					throw new JobException(sprintf('Cannot connect to [%s].', $this->url));
