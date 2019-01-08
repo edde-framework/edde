@@ -43,13 +43,17 @@
 		public function schedule(): DateTime;
 
 		/**
-		 * packet to be processed
+		 * message to be processed
 		 */
-		public function packet($type = 'json');
+		public function message($type = 'json');
 
 		/**
 		 * timestamp of last change; if state is 0, than job has been created by
 		 * "stamp" time and so on
 		 */
 		public function stamp(): DateTime;
+
+		public function result(): ?string;
+
+		public function runtime(): ?float;
 	}
