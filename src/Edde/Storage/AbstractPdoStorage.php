@@ -327,7 +327,7 @@
 			$this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 			$this->pdo->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_EMPTY_STRING);
 			$this->pdo->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
-			$this->pdo->setAttribute(PDO::ATTR_TIMEOUT, 120);
+			$this->pdo->setAttribute(PDO::ATTR_TIMEOUT, $this->section->optional('timeout', 5));
 		}
 
 		/**
