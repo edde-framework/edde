@@ -6,7 +6,6 @@
 	use DateTime;
 	use Edde\Edde;
 	use Edde\Message\IMessage;
-	use Edde\Message\IPacket;
 	use Edde\Service\Message\MessageBus;
 	use Edde\Service\Storage\Storage;
 	use Edde\Storage\EmptyEntityException;
@@ -19,26 +18,16 @@
 		use MessageBus;
 
 		/** @inheritdoc */
-		public function packet(IPacket $packet, DateTime $time = null): IEntity {
+		public function message(IMessage $message, DateTime $time = null): IEntity {
 			return $this->storage->insert(new Entity(JobSchema::class, [
 				'schedule' => $time ?? new DateTime(),
 				'stamp'    => new DateTime(),
-				'packet'   => $packet->export(),
+				'message'  => $message->export(),
 			]));
 		}
 
 		/** @inheritdoc */
-		public function message(IMessage $message, DateTime $time = null): IEntity {
-			return $this->packet($this->messageBus->createPacket()->message($message), $time);
-		}
-
-		/** @inheritdoc */
-		public function schedulePacket(IPacket $packet, string $diff): IEntity {
-			return $this->packet($packet, (new DateTime())->add(new DateInterval($diff)));
-		}
-
-		/** @inheritdoc */
-		public function scheduleMessage(IMessage $message, string $diff): IEntity {
+		public function schedule(IMessage $message, string $diff): IEntity {
 			return $this->message($message, (new DateTime())->add(new DateInterval($diff)));
 		}
 

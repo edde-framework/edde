@@ -5,20 +5,9 @@
 	use DateTime;
 	use Edde\Configurable\IConfigurable;
 	use Edde\Message\IMessage;
-	use Edde\Message\IPacket;
 	use Edde\Storage\IEntity;
 
 	interface IJobQueue extends IConfigurable {
-		/**
-		 * send a message into queue
-		 *
-		 * @param IPacket  $packet a message going to queue
-		 * @param DateTime $time   if time is not set, message is executed "immediately" asynchronously
-		 *
-		 * @return IJobQueue
-		 */
-		public function packet(IPacket $packet, DateTime $time = null): IEntity;
-
 		/**
 		 * push a new message
 		 *
@@ -30,16 +19,6 @@
 		public function message(IMessage $message, DateTime $time = null): IEntity;
 
 		/**
-		 * schedule the given packet; $diff is DateInterval parameter
-		 *
-		 * @param IPacket $packet
-		 * @param string  $diff
-		 *
-		 * @return IEntity
-		 */
-		public function schedulePacket(IPacket $packet, string $diff): IEntity;
-
-		/**
 		 * schedule the given message; $diff is DateInterval parameter
 		 *
 		 * @param IMessage $message
@@ -47,7 +26,7 @@
 		 *
 		 * @return IEntity
 		 */
-		public function scheduleMessage(IMessage $message, string $diff): IEntity;
+		public function schedule(IMessage $message, string $diff): IEntity;
 
 		/**
 		 * pick a job (should be removed from source queue)
