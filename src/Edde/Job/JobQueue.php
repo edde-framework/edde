@@ -68,7 +68,9 @@
 			$job = $this->byUuid($job);
 			$job['state'] = $state;
 			$job['stamp'] = new DateTime();
-			$job['result'] = $result;
+			if ($result) {
+				$job['result'] = $result;
+			}
 			return $this->update($job);
 		}
 

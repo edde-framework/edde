@@ -34,7 +34,7 @@
 				);
 				$this->jobQueue->state($job['uuid'], JobSchema::STATE_SUCCESS);
 			} catch (Throwable $exception) {
-				$this->jobQueue->state($job['uuid'], JobSchema::STATE_FAILED, $exception->getMessage());
+				$job = $this->jobQueue->state($job['uuid'], JobSchema::STATE_FAILED, $exception->getMessage());
 				throw $exception;
 			} finally {
 				$job['runtime'] = (microtime(true) - $time) * 1000;
