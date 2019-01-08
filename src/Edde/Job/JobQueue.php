@@ -169,6 +169,7 @@
 					(SELECT COUNT(uuid) FROM s:schema WHERE state = 3) AS Running:delimit,
 					(SELECT COUNT(uuid) FROM s:schema WHERE state = 4) AS Success:delimit,
 					(SELECT COUNT(uuid) FROM s:schema WHERE state = 5) AS Failed:delimit,
+					(SELECT COUNT(uuid) FROM s:schema) AS Sum:delimit,
 					(SELECT COUNT(uuid) FROM s:schema WHERE state >= 4) AS Finished:delimit,
 					(SELECT AVG(stamp-schedule) FROM s:schema WHERE state = 4) AS Average:delimit,
 					(SELECT MIN(stamp-schedule) FROM s:schema WHERE state = 4) AS Shortest:delimit,
@@ -180,6 +181,13 @@
 			foreach ($this->storage->fetch($query, ['$query' => ['s' => JobSchema::class]]) as $stats) {
 				break;
 			}
+			$stats['Progress'] = ($stats['Enqueued'] / max($stats['Sum'], 1)) * 100;
+			$stats['Stats'] = vsprintf('%d of %d done (%.2f%%), remaining %d', [
+				$stats['Finished'],
+				$stats['Sum'],
+				$stats['Progress'],
+				$stats['Enqueued'],
+			]);
 			return $stats;
 		}
 	}
