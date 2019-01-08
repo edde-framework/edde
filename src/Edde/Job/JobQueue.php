@@ -64,12 +64,17 @@
 		}
 
 		/** @inheritdoc */
-		public function state(string $job, int $state): IJobQueue {
+		public function state(string $job, int $state, string $result = null): IEntity {
 			$job = $this->byUuid($job);
 			$job['state'] = $state;
 			$job['stamp'] = new DateTime();
-			$this->storage->update($job);
-			return $this;
+			$job['result'] = $result;
+			return $this->update($job);
+		}
+
+		/** @inheritdoc */
+		public function update(IEntity $entity): IEntity {
+			return $this->storage->update($entity);
 		}
 
 		/** @inheritdoc */

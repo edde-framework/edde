@@ -11,6 +11,7 @@
 	use Edde\Url\UrlException;
 	use Throwable;
 	use function implode;
+	use function microtime;
 
 	class ManagerController extends RestController {
 		use JobQueue;
@@ -23,17 +24,21 @@
 		 * @throws UrlException
 		 */
 		public function actionExecute(): void {
-			$this->jobQueue->state($job = $this->getParams()['job'], JobSchema::STATE_RUNNING);
+			$time = microtime(true);
+			$job = $this->jobQueue->state($this->getParams()['job'], JobSchema::STATE_RUNNING);
 			try {
-				$this->messageBus->packet(
-					$this->messageBus->importPacket(
-						$this->jobQueue->byUuid($job)['packet']
+				$this->messageBus->execute(
+					$this->messageBus->importMessage(
+						$job['message']
 					)
 				);
-				$this->jobQueue->state($job, JobSchema::STATE_SUCCESS);
+				$this->jobQueue->state($job['uuid'], JobSchema::STATE_SUCCESS);
 			} catch (Throwable $exception) {
-				$this->jobQueue->state($job, JobSchema::STATE_FAILED);
+				$this->jobQueue->state($job['uuid'], JobSchema::STATE_FAILED, $exception->getMessage());
 				throw $exception;
+			} finally {
+				$job['runtime'] = (microtime(true) - $time) * 1000;
+				$this->jobQueue->update($job);
 			}
 			$this->textResponse(sprintf('job done [%s]', $job))->execute();
 		}

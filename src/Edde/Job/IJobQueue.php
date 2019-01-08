@@ -43,9 +43,18 @@
 		 * @param string $job
 		 * @param int    $state
 		 *
-		 * @return IJobQueue
+		 * @return IEntity updated job
 		 */
-		public function state(string $job, int $state): IJobQueue;
+		public function state(string $job, int $state, string $result = null): IEntity;
+
+		/**
+		 * update the given job
+		 *
+		 * @param IEntity $entity
+		 *
+		 * @return IEntity
+		 */
+		public function update(IEntity $entity): IEntity;
 
 		/**
 		 * get a job by the given uuid
