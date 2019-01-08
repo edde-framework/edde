@@ -26,19 +26,22 @@
 		public function actionExecute(): void {
 			$time = microtime(true);
 			$job = $this->jobQueue->state($this->getParams()['job'], JobSchema::STATE_RUNNING);
+			$state = JobSchema::STATE_SUCCESS;
+			$result = null;
 			try {
 				$this->messageBus->execute(
 					$this->messageBus->importMessage(
 						$job['message']
 					)
 				);
-				$this->jobQueue->state($job['uuid'], JobSchema::STATE_SUCCESS);
 			} catch (Throwable $exception) {
-				$job = $this->jobQueue->state($job['uuid'], JobSchema::STATE_FAILED, $exception->getMessage());
+				$state = JobSchema::STATE_FAILED;
+				$result = $exception->getMessage();
 				throw $exception;
 			} finally {
 				$job['runtime'] = (microtime(true) - $time) * 1000;
 				$this->jobQueue->update($job);
+				$this->jobQueue->state($job['uuid'], $state, $result);
 			}
 			$this->textResponse(sprintf('job done [%s]', $job))->execute();
 		}
