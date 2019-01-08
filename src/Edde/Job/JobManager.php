@@ -12,15 +12,26 @@
 		use JobExecutor;
 		use ConfigService;
 		protected $limit;
+		protected $rate;
+		protected $sleep;
 
 		/** @inheritdoc */
 		public function run(): IJobManager {
+			/**
+			 * it's expected that job manager runs as a deamon, thus
+			 * it's necessary to reset pending jobs
+			 */
+			$this->jobQueue->reset();
+			/**
+			 * execute never-ending story here; because job manager is run through system process manager,
+			 * it doesn't matter if it fails, because it will be REBORN!
+			 */
 			while (true) {
 				if ($this->jobQueue->countLimit() >= $this->limit) {
 					/**
 					 * sleep a bit more if limit is reached
 					 */
-					usleep(1000 * 1000);
+					usleep($this->sleep * 1000);
 					continue;
 				}
 				/**
@@ -37,7 +48,7 @@
 				/**
 				 * heartbeat rate to keep stuff on rails
 				 */
-				usleep(250 * 1000);
+				usleep($this->rate * 1000);
 			}
 			return $this;
 		}
@@ -52,5 +63,7 @@
 			parent::handleInit();
 			$section = $this->configService->optional('job-manager');
 			$this->limit = $section->optional('limit', 8);
+			$this->rate = $section->optional('rate', 100);
+			$this->sleep = $section->optional('rate', 5000);
 		}
 	}
