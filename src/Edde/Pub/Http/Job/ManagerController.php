@@ -43,7 +43,7 @@
 				$this->jobQueue->update($job);
 				$this->jobQueue->state($job['uuid'], $state, $result);
 			}
-			$this->textResponse(sprintf('job done [%s]', $job))->execute();
+			$this->textResponse(sprintf('job done [%s]', $job['uuid']))->execute();
 		}
 
 		public function actionCleanup(): void {
