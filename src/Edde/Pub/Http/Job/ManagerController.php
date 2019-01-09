@@ -193,7 +193,7 @@
 							}
 							
 							.progressbar {
-								height: 64px;
+								height: 24px;
 								background-color: #73ff67;
 							}
 						</style>
