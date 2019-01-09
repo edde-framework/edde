@@ -56,7 +56,8 @@
 			$config = [
 				'Enqueued'        => [
 					'diff'     => true,
-					'positive' => null,
+					'positive' => true,
+					'abs'      => true,
 				],
 				'Reset'           => [
 					'display'  => false,
