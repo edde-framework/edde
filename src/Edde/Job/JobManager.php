@@ -6,8 +6,11 @@
 	use Edde\Service\Config\ConfigService;
 	use Edde\Service\Job\JobExecutor;
 	use Edde\Service\Job\JobQueue;
+	use Edde\Service\Storage\Storage;
+	use Edde\Storage\IEntity;
 
 	class JobManager extends Edde implements IJobManager {
+		use Storage;
 		use JobQueue;
 		use JobExecutor;
 		use ConfigService;
@@ -27,7 +30,7 @@
 			 * it doesn't matter if it fails, because it will be REBORN!
 			 */
 			while (true) {
-				if ($this->jobQueue->countLimit() >= $this->limit) {
+				if ($this->isPaused() || $this->jobQueue->countLimit() >= $this->limit) {
 					/**
 					 * sleep a bit more if limit is reached
 					 */
@@ -57,6 +60,27 @@
 		public function tick(): IJobManager {
 			$this->jobExecutor->execute($this->jobQueue->pick()['uuid']);
 			return $this;
+		}
+
+		/** @inheritdoc */
+		public function isPaused(): bool {
+			return $this->getEntity()['paused'] === true;
+		}
+
+		/** @inheritdoc */
+		public function pause(bool $pause = true): IJobManager {
+			$this->update(['paused' => $pause]);
+			return $this;
+		}
+
+		protected function update(array $update): void {
+			$jobManager = $this->getEntity();
+			$jobManager->put($update);
+			$this->storage->update($jobManager);
+		}
+
+		protected function getEntity(): IEntity {
+			return $this->storage->single(JobManagerSchema::class, 'SELECT * FROM s:schema LIMIT 1', ['$query' => ['s' => JobManagerSchema::class]]);
 		}
 
 		protected function handleInit(): void {

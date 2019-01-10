@@ -25,4 +25,16 @@
 		 * @throws MessageException
 		 */
 		public function tick(): IJobManager;
+
+		/**
+		 * @return bool
+		 */
+		public function isPaused(): bool;
+
+		/**
+		 * @param bool $pause
+		 *
+		 * @return IJobManager
+		 */
+		public function pause(bool $pause = true): IJobManager;
 	}

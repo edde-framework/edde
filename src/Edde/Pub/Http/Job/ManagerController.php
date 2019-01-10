@@ -6,6 +6,7 @@
 	use Edde\Controller\RestController;
 	use Edde\Job\JobSchema;
 	use Edde\Runtime\RuntimeException;
+	use Edde\Service\Job\JobManager;
 	use Edde\Service\Job\JobQueue;
 	use Edde\Service\Message\MessageBus;
 	use Edde\Url\UrlException;
@@ -15,7 +16,18 @@
 
 	class ManagerController extends RestController {
 		use JobQueue;
+		use JobManager;
 		use MessageBus;
+
+		public function actionPause(): void {
+			$this->jobManager->pause();
+			$this->textResponse('ok')->execute();
+		}
+
+		public function actionUnpause(): void {
+			$this->jobManager->pause(false);
+			$this->textResponse('ok')->execute();
+		}
 
 		/**
 		 * @throws Throwable

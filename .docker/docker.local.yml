@@ -34,7 +34,7 @@ services:
             networks:
                 - edde-network
 
-        adminer:
+        edde-adminer:
             image: adminer:latest
             ports:
                 - "8080:8080"

@@ -13,6 +13,15 @@
 		public function getSchema(): string;
 
 		/**
+		 * put (merge) values in an entity
+		 *
+		 * @param array $put
+		 *
+		 * @return IEntity
+		 */
+		public function put(array $put): IEntity;
+
+		/**
 		 * return internal source
 		 *
 		 * @return array

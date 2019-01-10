@@ -4,6 +4,7 @@
 
 	use Edde\SimpleObject;
 	use function array_key_exists;
+	use function array_merge;
 
 	class Entity extends SimpleObject implements IEntity {
 		/** @var string */
@@ -23,6 +24,12 @@
 		/** @inheritdoc */
 		public function getSchema(): string {
 			return $this->schema;
+		}
+
+		/** @inheritdoc */
+		public function put(array $put): IEntity {
+			$this->source = array_merge($this->source, $put);
+			return $this;
 		}
 
 		/** @inheritdoc */
