@@ -3,6 +3,7 @@
 	namespace Edde\Schema;
 
 	use Edde\Configurable\AbstractConfigurator;
+	use Edde\Job\JobManagerSchema;
 	use Edde\Job\JobSchema;
 	use Edde\Upgrade\UpgradeSchema;
 
@@ -17,6 +18,7 @@
 			$instance->loads([
 				UpgradeSchema::class,
 				JobSchema::class,
+				JobManagerSchema::class,
 			]);
 		}
 	}
