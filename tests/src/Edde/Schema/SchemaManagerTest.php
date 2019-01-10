@@ -46,7 +46,7 @@
 				'upgrade'                  => UpgradeSchema::class,
 				JobSchema::class           => JobSchema::class,
 				'job'                      => JobSchema::class,
-				JobSchema::class           => JobManagerSchema::class,
+				JobManagerSchema::class    => JobManagerSchema::class,
 				'job-manager'              => JobManagerSchema::class,
 				ProjectMemberSchema::class => ProjectMemberSchema::class,
 				'project-member'           => ProjectMemberSchema::class,
