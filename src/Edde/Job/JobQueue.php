@@ -159,6 +159,12 @@
 		}
 
 		/** @inheritdoc */
+		public function clear(): IJobQueue {
+			$this->storage->exec('DELETE FROM s:schema', ['$query' => ['s' => JobSchema::class]]);
+			return $this;
+		}
+
+		/** @inheritdoc */
 		public function stats(): array {
 			$stats = [];
 			$query = '

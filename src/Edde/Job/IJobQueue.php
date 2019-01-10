@@ -90,6 +90,13 @@
 		public function cleanup(): IJobQueue;
 
 		/**
+		 * drop all jobs (basically table trunc)
+		 *
+		 * @return IJobQueue
+		 */
+		public function clear(): IJobQueue;
+
+		/**
 		 * return array of state counts
 		 *
 		 * @return array

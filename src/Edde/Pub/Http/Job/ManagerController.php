@@ -19,16 +19,6 @@
 		use JobManager;
 		use MessageBus;
 
-		public function actionPause(): void {
-			$this->jobManager->pause();
-			$this->textResponse('ok')->execute();
-		}
-
-		public function actionUnpause(): void {
-			$this->jobManager->pause(false);
-			$this->textResponse('ok')->execute();
-		}
-
 		/**
 		 * @throws Throwable
 		 * @throws RouterException
@@ -56,11 +46,6 @@
 				$this->jobQueue->state($job['uuid'], $state, $result);
 			}
 			$this->textResponse(sprintf('job done [%s]', $job['uuid']))->execute();
-		}
-
-		public function actionCleanup(): void {
-			$this->jobQueue->cleanup();
-			$this->textResponse('ok')->execute();
 		}
 
 		public function actionStats(): void {

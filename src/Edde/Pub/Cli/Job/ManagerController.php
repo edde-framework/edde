@@ -16,6 +16,18 @@
 			$this->printf('Job: Finished');
 		}
 
+		public function actionPause(): void {
+			$this->printf('Pausing JobManager');
+			$this->jobManager->pause();
+			$this->printf('Done');
+		}
+
+		public function actionUnpause(): void {
+			$this->printf('Resuming JobManager');
+			$this->jobManager->pause(false);
+			$this->printf('Done');
+		}
+
 		public function actionReset(): void {
 			$this->printf('Resetting dead jobs');
 			$this->jobQueue->reset();
@@ -25,6 +37,12 @@
 		public function actionCleanup(): void {
 			$this->printf('Cleaning up');
 			$this->jobQueue->cleanup();
+			$this->printf('Done');
+		}
+
+		public function actionClear(): void {
+			$this->printf('Clearing whole job queue');
+			$this->jobQueue->clear();
 			$this->printf('Done');
 		}
 	}
