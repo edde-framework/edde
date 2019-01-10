@@ -36,7 +36,7 @@
 			[$message] = $response->messages();
 			self::assertEquals([
 				'message' => $input->export(),
-				'text'    => 'Cannot handle message [kaboom] in [Edde\Pub\Message\CommonMessageService]. Please implement Edde\Pub\Message\CommonMessageService::onKaboomMessage($message, $packet) method.',
+				'text'    => 'Cannot handle message [kaboom] in [Edde\Pub\Message\KaboomMessageService]. Please implement Edde\Pub\Message\KaboomMessageService::onKaboomMessage($message, $packet) method.',
 			], $message->getAttrs());
 		}
 
