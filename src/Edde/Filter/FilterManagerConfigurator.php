@@ -33,6 +33,9 @@
 				'int'              => $filter = new IntFilter(),
 				'storage:int'      => $filter,
 				'storage:json'     => new JsonFilter(),
+				'base64'           => $filter = new Base64Filter(),
+				'storage:binary'   => $filter,
+				'storage:base64'   => $filter,
 				'binary-uuid'      => new BinaryUuidFilter(),
 			]);
 		}

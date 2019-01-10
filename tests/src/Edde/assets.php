@@ -228,3 +228,7 @@
 	interface JsonSchema extends UuidSchema {
 		public function someJson($type = 'json');
 	}
+
+	interface Base64Schema extends UuidSchema {
+		public function someBinary($type = 'binary');
+	}

@@ -3,6 +3,7 @@
 	namespace Edde\Schema;
 
 	use Edde\Container\ContainerException;
+	use Edde\Job\JobManagerSchema;
 	use Edde\Job\JobSchema;
 	use Edde\Service\Schema\SchemaManager;
 	use Edde\TestCase;
@@ -45,6 +46,8 @@
 				'upgrade'                  => UpgradeSchema::class,
 				JobSchema::class           => JobSchema::class,
 				'job'                      => JobSchema::class,
+				JobSchema::class           => JobManagerSchema::class,
+				'job-manager'              => JobManagerSchema::class,
 				ProjectMemberSchema::class => ProjectMemberSchema::class,
 				'project-member'           => ProjectMemberSchema::class,
 				ProjectSchema::class       => ProjectSchema::class,

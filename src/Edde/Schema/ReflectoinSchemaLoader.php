@@ -145,6 +145,7 @@
 						case 'uuid':
 						case 'datetime':
 						case 'json':
+						case 'binary':
 						case DateTime::class:
 							$attributeBuilder->filter('type', $propertyType);
 							$attributeBuilder->validator($propertyType);

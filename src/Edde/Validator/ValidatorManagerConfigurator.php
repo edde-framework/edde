@@ -10,6 +10,7 @@
 		 */
 		public function configure($instance) {
 			parent::configure($instance);
+			$dummy = new DummyValidator();
 			$instance->registerValidators([
 				'int'              => $validator = new IntValidator(),
 				'storage:int'      => $validator,
@@ -25,7 +26,9 @@
 				'storage:DateTime' => $validator,
 				'uuid'             => $validator = new UuidValidator(),
 				'storage:uuid'     => $validator,
-				'storage:json'     => new JsonValidator(),
+				'storage:json'     => $dummy,
+				'storage:binary'   => $dummy,
+				'storage:base64'   => $dummy,
 			]);
 		}
 	}

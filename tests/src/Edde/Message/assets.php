@@ -1,7 +1,12 @@
 <?php
-	namespace Edde\Message;
+	namespace Edde\Pub\Message;
 
 	use Edde\Edde;
+	use Edde\Message\AbstractMessageService;
+	use Edde\Message\IMessage;
+	use Edde\Message\IMessageService;
+	use Edde\Message\IPacket;
+	use Edde\Message\Message;
 
 	class CommonMessageService extends AbstractMessageService {
 		/** @inheritdoc */

@@ -8,6 +8,7 @@
 	use Edde\Container\ContainerException;
 	use Edde\Container\ContainerFactory;
 	use Edde\Container\IAutowire;
+	use Edde\Factory\CascadeFactory;
 	use Edde\Factory\ClassFactory;
 	use Edde\Service\Container\Container;
 	use PHPUnit\Framework\TestCase as PhpUnitTestCase;
@@ -24,6 +25,9 @@
 		protected function setUp() {
 			ContainerFactory::inject($this, [
 				new ClassFactory(),
+				new CascadeFactory([
+					'Edde',
+				]),
 			], [
 				IConfigLoader::class => new class() extends AbstractConfigurator {
 					/**

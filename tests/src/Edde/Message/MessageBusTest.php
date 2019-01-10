@@ -13,7 +13,7 @@
 		 */
 		public function testResolveException() {
 			$this->expectException(MessageException::class);
-			$this->expectExceptionMessage('Cannot resolve Message Service for message [nope] for target [boom]; please register one of [Boom, Message\NopeMessageService, Message\CommonMessageService] (Edde\Message\IMessageService).');
+			$this->expectExceptionMessage('Cannot resolve Message Service for message [nope] for target [boom]; please register one of [Pub\BoomMessageService, Pub\Boom, Pub\Message\NopeMessageService, Pub\Message\CommonMessageService] (Edde\Message\IMessageService).');
 			$this->messageBus->resolve($this->messageBus->createMessage('nope', 'boom'));
 		}
 
@@ -22,7 +22,7 @@
 		 */
 		public function testResolveInterfaceException() {
 			$this->expectException(MessageException::class);
-			$this->expectExceptionMessage('Cannot resolve Message Service for message [dummy] for target [- no target -]; please register one of [Message\DummyMessageService, Message\CommonMessageService] (Edde\Message\IMessageService).');
+			$this->expectExceptionMessage('Cannot resolve Message Service for message [dummy] for target [- no target -]; please register one of [Pub\Message\DummyMessageService, Pub\Message\CommonMessageService] (Edde\Message\IMessageService).');
 			$this->messageBus->resolve($this->messageBus->createMessage('dummy'));
 		}
 
@@ -30,13 +30,13 @@
 		 * @throws MessageException
 		 */
 		public function testMissingMethodException() {
-			$response = $this->messageBus->packet($this->messageBus->createPacket()->message($input = $this->messageBus->createMessage('kaboom', 'edde.message.common-message-service')));
+			$response = $this->messageBus->packet($this->messageBus->createPacket()->message($input = $this->messageBus->createMessage('kaboom', 'common-message-service')));
 			self::assertInstanceOf(IPacket::class, $response);
 			self::assertCount(1, $response->messages());
 			[$message] = $response->messages();
 			self::assertEquals([
 				'message' => $input->export(),
-				'text'    => 'Cannot handle message [kaboom] in [Edde\Message\CommonMessageService]. Please implement Edde\Message\CommonMessageService::onKaboomMessage($message, $packet) method.',
+				'text'    => 'Cannot handle message [kaboom] in [Edde\Pub\Message\CommonMessageService]. Please implement Edde\Pub\Message\CommonMessageService::onKaboomMessage($message, $packet) method.',
 			], $message->getAttrs());
 		}
 

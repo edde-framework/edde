@@ -2,6 +2,7 @@
 	declare(strict_types=1);
 	namespace Edde\Storage;
 
+	use Base64Schema;
 	use DateTime;
 	use DefaultFloatValueSchema;
 	use Edde\Container\ContainerException;
@@ -9,6 +10,7 @@
 	use Edde\Schema\SchemaException;
 	use Edde\Service\Container\Container;
 	use Edde\Service\Schema\SchemaManager;
+	use Edde\Service\Security\RandomService;
 	use Edde\Service\Storage\Storage;
 	use Edde\TestCase;
 	use Edde\Transaction\TransactionException;
@@ -29,6 +31,7 @@
 		use Container;
 		use Storage;
 		use SchemaManager;
+		use RandomService;
 
 		public function testPrepareDatabase() {
 		}
@@ -47,6 +50,7 @@
 				IssueSchema::class,
 				DefaultFloatValueSchema::class,
 				JsonSchema::class,
+				Base64Schema::class,
 			]);
 			self::assertTrue(true, 'everything is ok');
 		}
@@ -628,6 +632,14 @@
 			self::assertEquals($entity, $entity2);
 		}
 
+		public function testBase64() {
+			$entity = $this->storage->save(new Entity(Base64Schema::class, [
+				'someBinary' => $binary = $this->randomService->bytes(256),
+			]));
+			$entity2 = $this->storage->load(Base64Schema::class, $entity['uuid']);
+			self::assertEquals($entity, $entity2);
+		}
+
 		/**
 		 * @throws ContainerException
 		 * @throws SchemaException
@@ -643,6 +655,7 @@
 				ShittyTypeSchema::class,
 				DefaultFloatValueSchema::class,
 				JsonSchema::class,
+				Base64Schema::class,
 			]);
 		}
 	}
