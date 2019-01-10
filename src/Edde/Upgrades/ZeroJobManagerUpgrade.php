@@ -3,20 +3,17 @@
 	namespace Edde\Upgrades;
 
 	use Edde\Job\JobManagerSchema;
-	use Edde\Job\JobSchema;
+	use Edde\Storage\Entity;
 	use Edde\Upgrade\AbstractUpgrade;
 
-	class JobUpgrade extends AbstractUpgrade {
+	class ZeroJobManagerUpgrade extends AbstractUpgrade {
 		/** @inheritdoc */
 		public function getVersion(): string {
-			return 'job';
+			return 'zero-job-manager';
 		}
 
 		/** @inheritdoc */
 		public function upgrade(): void {
-			$this->storage->creates([
-				JobSchema::class,
-				JobManagerSchema::class,
-			]);
+			$this->storage->insert(new Entity(JobManagerSchema::class, ['paused' => false]));
 		}
 	}
