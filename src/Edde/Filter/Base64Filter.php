@@ -8,11 +8,11 @@
 	class Base64Filter extends AbstractFilter {
 		/** @inheritdoc */
 		public function input($value, ?array $options = null) {
-			return base64_decode($value);
+			return $value !== null ? base64_decode($value) : null;
 		}
 
 		/** @inheritdoc */
 		public function output($value, ?array $options = null) {
-			return base64_encode($value);
+			return $value !== null ? base64_encode($value) : null;
 		}
 	}
