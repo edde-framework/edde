@@ -9,12 +9,17 @@
 	use Edde\Service\Job\JobManager;
 	use Edde\Service\Job\JobQueue;
 	use Edde\Service\Message\MessageBus;
+	use Edde\Service\Storage\Storage;
 	use Edde\Url\UrlException;
 	use Throwable;
+	use function implode;
+	use function json_decode;
 	use function json_encode;
 	use function microtime;
+	use const JSON_PRETTY_PRINT;
 
 	class ManagerController extends RestController {
+		use Storage;
 		use JobQueue;
 		use JobManager;
 		use MessageBus;
@@ -46,6 +51,14 @@
 				$this->jobQueue->state($job['uuid'], $state, $result);
 			}
 			$this->textResponse(sprintf('job done [%s]', $job['uuid']))->execute();
+		}
+
+		public function actionCurrent(): void {
+			$items = [];
+			foreach ($this->storage->schema(JobSchema::class, 'SELECT * FROM s:schema WHERE state = 0 ORDER BY schedule ASC LIMIT 24', ['$query' => ['s' => JobSchema::class]]) as $entity) {
+				$items[] = json_encode(json_decode($entity['message']), JSON_PRETTY_PRINT);
+			}
+			$this->textResponse(implode("\n", $items))->execute();
 		}
 
 		public function actionStats(): void {
