@@ -54,7 +54,7 @@
 
 		public function actionCurrent(): void {
 			$items = [];
-			foreach ($this->storage->schema(JobSchema::class, 'SELECT * FROM s:schema WHERE state = 0 ORDER BY schedule ASC LIMIT 24', ['$query' => ['s' => JobSchema::class]]) as $entity) {
+			foreach ($this->storage->schema(JobSchema::class, 'SELECT * FROM s:schema WHERE state = 0 ORDER BY schedule ASC LIMIT 8', ['$query' => ['s' => JobSchema::class]]) as $entity) {
 				$items[] = json_encode($entity['message'], JSON_PRETTY_PRINT);
 			}
 			$this->textResponse(implode("\n", $items))->execute();
