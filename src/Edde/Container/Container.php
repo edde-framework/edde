@@ -87,7 +87,7 @@
 				 * and autowire rest of dependencies (property/method/lazy injects); the factory also could save current
 				 * instance under given id
 				 */
-				return $factory->push($this, $this->dependency($instance = $factory->factory($this, $params, $reflection = $factory->getReflection($this, $name), $name), $reflection));
+				return $factory->push($this, $this->dependency($factory->factory($this, $params, $reflection = $factory->getReflection($this, $name), $name), $reflection));
 			} finally {
 				$this->stack->pop();
 			}
