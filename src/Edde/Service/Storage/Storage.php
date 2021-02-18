@@ -1,17 +1,18 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Storage;
+declare(strict_types=1);
 
-	use Edde\Storage\IStorage;
+namespace Edde\Service\Storage;
 
-	trait Storage {
-		/** @var IStorage */
-		protected $storage;
+use Edde\Storage\IStorage;
 
-		/**
-		 * @param IStorage $storage
-		 */
-		public function injectStorage(IStorage $storage): void {
-			$this->storage = $storage;
-		}
-	}
+trait Storage {
+    /** @var IStorage */
+    protected $storage;
+
+    /**
+     * @param IStorage $storage
+     */
+    public function injectStorage(IStorage $storage): void {
+        $this->storage = $storage;
+    }
+}

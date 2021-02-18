@@ -1,38 +1,39 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Message;
+declare(strict_types=1);
 
-	use ArrayAccess;
-	use stdClass;
+namespace Edde\Message;
 
-	/**
-	 * Basic element of the whole concept of Message Bus; a message
-	 * is an individual piece to be processed on the line.
-	 */
-	interface IMessage extends ArrayAccess {
-		/**
-		 * return type of a message
-		 *
-		 * @return string
-		 */
-		public function getType(): string;
+use ArrayAccess;
+use stdClass;
 
-		/**
-		 * return message optional target (used for routing if necessary)
-		 *
-		 * @return string
-		 */
-		public function getTarget(): ?string;
+/**
+ * Basic element of the whole concept of Message Bus; a message
+ * is an individual piece to be processed on the line.
+ */
+interface IMessage extends ArrayAccess {
+    /**
+     * return type of a message
+     *
+     * @return string
+     */
+    public function getType(): string;
 
-		/**
-		 * @return array
-		 */
-		public function getAttrs(): ?array;
+    /**
+     * return message optional target (used for routing if necessary)
+     *
+     * @return string
+     */
+    public function getTarget(): ?string;
 
-		/**
-		 * export message as an standard object (to be serialized)
-		 *
-		 * @return stdClass
-		 */
-		public function export(): stdClass;
-	}
+    /**
+     * @return array
+     */
+    public function getAttrs(): ?array;
+
+    /**
+     * export message as an standard object (to be serialized)
+     *
+     * @return stdClass
+     */
+    public function export(): stdClass;
+}

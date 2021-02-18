@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Xml;
+declare(strict_types=1);
 
-	use Edde\Edde;
+namespace Edde\Xml;
 
-	abstract class AbstractXmlHandler extends Edde implements IXmlHandler {
-	}
+use Edde\Edde;
+
+abstract class AbstractXmlHandler extends Edde implements IXmlHandler {
+}

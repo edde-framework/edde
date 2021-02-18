@@ -1,38 +1,39 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Message;
+declare(strict_types=1);
 
-	use Edde\Configurable\IConfigurable;
-	use stdClass;
+namespace Edde\Message;
 
-	interface IMessageService extends IConfigurable {
-		/**
-		 * handle incoming message
-		 *
-		 * @param IMessage $message message being processed
-		 * @param IPacket  $packet  output packet (response)
-		 *
-		 * @return IMessageService
-		 *
-		 * @throws MessageException
-		 */
-		public function message(IMessage $message, IPacket $packet): IMessageService;
+use Edde\Configurable\IConfigurable;
+use stdClass;
 
-		/**
-		 * @param string     $type
-		 * @param string     $target
-		 * @param array|null $attrs
-		 *
-		 * @return IMessage
-		 */
-		public function createMessage(string $type, string $target = null, array $attrs = null): IMessage;
+interface IMessageService extends IConfigurable {
+    /**
+     * handle incoming message
+     *
+     * @param IMessage $message message being processed
+     * @param IPacket  $packet  output packet (response)
+     *
+     * @return IMessageService
+     *
+     * @throws MessageException
+     */
+    public function message(IMessage $message, IPacket $packet): IMessageService;
 
-		/**
-		 * @param stdClass $stdClass
-		 *
-		 * @return IMessage
-		 *
-		 * @throws MessageException
-		 */
-		public function importMessage(stdClass $stdClass): IMessage;
-	}
+    /**
+     * @param string     $type
+     * @param string     $target
+     * @param array|null $attrs
+     *
+     * @return IMessage
+     */
+    public function createMessage(string $type, string $target = null, array $attrs = null): IMessage;
+
+    /**
+     * @param stdClass $stdClass
+     *
+     * @return IMessage
+     *
+     * @throws MessageException
+     */
+    public function importMessage(stdClass $stdClass): IMessage;
+}

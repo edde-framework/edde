@@ -1,6 +1,7 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Storage;
+declare(strict_types=1);
 
-	class EmptyEntityException extends StorageException {
-	}
+namespace Edde\Storage;
+
+class EmptyEntityException extends StorageException {
+}

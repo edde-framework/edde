@@ -1,15 +1,18 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Transaction;
+declare(strict_types=1);
 
-	trait Transaction {
-		/** @var \Edde\Transaction\ITransaction */
-		protected $transaction;
+namespace Edde\Service\Transaction;
 
-		/**
-		 * @param \Edde\Transaction\ITransaction $transaction
-		 */
-		public function injectTransaction(\Edde\Transaction\ITransaction $transaction): void {
-			$this->transaction = $transaction;
-		}
-	}
+use Edde\Transaction\ITransaction;
+
+trait Transaction {
+    /** @var ITransaction */
+    protected $transaction;
+
+    /**
+     * @param ITransaction $transaction
+     */
+    public function injectTransaction(ITransaction $transaction): void {
+        $this->transaction = $transaction;
+    }
+}

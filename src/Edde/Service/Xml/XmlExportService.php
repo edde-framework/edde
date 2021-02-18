@@ -1,17 +1,18 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Xml;
+declare(strict_types=1);
 
-	use Edde\Xml\IXmlExportService;
+namespace Edde\Service\Xml;
 
-	trait XmlExportService {
-		/** @var IXmlExportService */
-		protected $xmlExportService;
+use Edde\Xml\IXmlExportService;
 
-		/**
-		 * @param IXmlExportService $xmlExportService
-		 */
-		public function injectXmlExportService(IXmlExportService $xmlExportService): void {
-			$this->xmlExportService = $xmlExportService;
-		}
-	}
+trait XmlExportService {
+    /** @var IXmlExportService */
+    protected $xmlExportService;
+
+    /**
+     * @param IXmlExportService $xmlExportService
+     */
+    public function injectXmlExportService(IXmlExportService $xmlExportService): void {
+        $this->xmlExportService = $xmlExportService;
+    }
+}

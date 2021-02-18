@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Configurable;
+declare(strict_types=1);
 
-	use Edde\EddeException;
+namespace Edde\Configurable;
 
-	class ConfigurableException extends EddeException {
-	}
+use Edde\EddeException;
+
+class ConfigurableException extends EddeException {
+}

@@ -1,29 +1,30 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Application;
+declare(strict_types=1);
 
-	use Edde\Edde;
-	use Throwable;
+namespace Edde\Application;
 
-	abstract class AbstractRouterService extends Edde implements IRouterService {
-		/** @var IRequest */
-		protected $default;
-		/** @var Throwable */
-		protected $exception;
+use Edde\Edde;
+use Throwable;
 
-		/** @inheritdoc */
-		public function default(IRequest $request): IRouterService {
-			$this->default = $request;
-			return $this;
-		}
+abstract class AbstractRouterService extends Edde implements IRouterService {
+    /** @var IRequest */
+    protected $default;
+    /** @var Throwable */
+    protected $exception;
 
-		/** @inheritdoc */
-		public function hasException(): bool {
-			return $this->exception !== null;
-		}
+    /** @inheritdoc */
+    public function default(IRequest $request): IRouterService {
+        $this->default = $request;
+        return $this;
+    }
 
-		/** @inheritdoc */
-		public function getException(): Throwable {
-			return $this->exception;
-		}
-	}
+    /** @inheritdoc */
+    public function hasException(): bool {
+        return $this->exception !== null;
+    }
+
+    /** @inheritdoc */
+    public function getException(): Throwable {
+        return $this->exception;
+    }
+}

@@ -1,22 +1,23 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Filter;
+declare(strict_types=1);
 
-	use Edde\Service\Security\RandomService;
+namespace Edde\Filter;
 
-	class UuidFilter extends AbstractFilter {
-		use RandomService;
+use Edde\Service\Security\RandomService;
 
-		/** @inheritdoc */
-		public function input($value, ?array $options = null) {
-			return $value;
-		}
+class UuidFilter extends AbstractFilter {
+    use RandomService;
 
-		/** @inheritdoc */
-		public function output($value, ?array $options = null) {
-			if (empty($value) === false) {
-				return $value;
-			}
-			return $this->randomService->uuid($options['seed'] ?? null);
-		}
-	}
+    /** @inheritdoc */
+    public function input($value, ?array $options = null) {
+        return $value;
+    }
+
+    /** @inheritdoc */
+    public function output($value, ?array $options = null) {
+        if (empty($value) === false) {
+            return $value;
+        }
+        return $this->randomService->uuid($options['seed'] ?? null);
+    }
+}

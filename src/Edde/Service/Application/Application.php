@@ -1,17 +1,18 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Application;
+declare(strict_types=1);
 
-	use Edde\Application\IApplication;
+namespace Edde\Service\Application;
 
-	trait Application {
-		/** @var IApplication */
-		protected $application;
+use Edde\Application\IApplication;
 
-		/**
-		 * @param IApplication $application
-		 */
-		public function injectApplication(IApplication $application) {
-			$this->application = $application;
-		}
-	}
+trait Application {
+    /** @var IApplication */
+    protected $application;
+
+    /**
+     * @param IApplication $application
+     */
+    public function injectApplication(IApplication $application) {
+        $this->application = $application;
+    }
+}

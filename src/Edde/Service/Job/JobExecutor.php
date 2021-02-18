@@ -1,17 +1,18 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Job;
+declare(strict_types=1);
 
-	use Edde\Job\IJobExecutor;
+namespace Edde\Service\Job;
 
-	trait JobExecutor {
-		/** @var IJobExecutor */
-		protected $jobExecutor;
+use Edde\Job\IJobExecutor;
 
-		/**
-		 * @param IJobExecutor $jobExecutor
-		 */
-		public function injectJobExecutor(IJobExecutor $jobExecutor): void {
-			$this->jobExecutor = $jobExecutor;
-		}
-	}
+trait JobExecutor {
+    /** @var IJobExecutor */
+    protected $jobExecutor;
+
+    /**
+     * @param IJobExecutor $jobExecutor
+     */
+    public function injectJobExecutor(IJobExecutor $jobExecutor): void {
+        $this->jobExecutor = $jobExecutor;
+    }
+}

@@ -1,128 +1,129 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\File;
+declare(strict_types=1);
 
-	use IteratorAggregate;
-	use SplFileInfo;
+namespace Edde\File;
 
-	interface IDirectory extends IteratorAggregate {
-		/**
-		 * return string path of this directory (can be non-existent)
-		 *
-		 * @return string
-		 */
-		public function getPath(): string;
+use IteratorAggregate;
+use SplFileInfo;
 
-		/**
-		 * return directory name
-		 *
-		 * @return string
-		 */
-		public function getName(): string;
+interface IDirectory extends IteratorAggregate {
+    /**
+     * return string path of this directory (can be non-existent)
+     *
+     * @return string
+     */
+    public function getPath(): string;
 
-		/**
-		 * return iterator over file list in the current directory
-		 *
-		 * @return SplFileInfo[]
-		 */
-		public function getFiles();
+    /**
+     * return directory name
+     *
+     * @return string
+     */
+    public function getName(): string;
 
-		/**
-		 * return recursive iterator over all available objects in directory tree
-		 *
-		 * @return SplFileInfo[]
-		 */
-		public function iterator();
+    /**
+     * return iterator over file list in the current directory
+     *
+     * @return SplFileInfo[]
+     */
+    public function getFiles();
 
-		/**
-		 * create a file with the given name in this directory
-		 *
-		 * @param string $file
-		 * @param string $content
-		 *
-		 * @return IFile
-		 *
-		 * @throws FileException
-		 */
-		public function save(string $file, string $content): IFile;
+    /**
+     * return recursive iterator over all available objects in directory tree
+     *
+     * @return SplFileInfo[]
+     */
+    public function iterator();
 
-		/**
-		 * create filename (shortcut for $this->getDirectory.'\\'.$file)
-		 *
-		 * @param string $file
-		 *
-		 * @return string
-		 */
-		public function filename(string $file): string;
+    /**
+     * create a file with the given name in this directory
+     *
+     * @param string $file
+     * @param string $content
+     *
+     * @return IFile
+     *
+     * @throws FileException
+     */
+    public function save(string $file, string $content): IFile;
 
-		/**
-		 * return a File object
-		 *
-		 * @param string $file
-		 *
-		 * @return IFile
-		 */
-		public function file(string $file): IFile;
+    /**
+     * create filename (shortcut for $this->getDirectory.'\\'.$file)
+     *
+     * @param string $file
+     *
+     * @return string
+     */
+    public function filename(string $file): string;
 
-		/**
-		 * create all directories until the current one
-		 *
-		 * @param int $chmod
-		 *
-		 * @return IDirectory
-		 *
-		 * @throws FileException
-		 */
-		public function create(int $chmod = 0777): IDirectory;
+    /**
+     * return a File object
+     *
+     * @param string $file
+     *
+     * @return IFile
+     */
+    public function file(string $file): IFile;
 
-		/**
-		 * @return int
-		 *
-		 * @throws FileException
-		 */
-		public function getPermission(): int;
+    /**
+     * create all directories until the current one
+     *
+     * @param int $chmod
+     *
+     * @return IDirectory
+     *
+     * @throws FileException
+     */
+    public function create(int $chmod = 0777): IDirectory;
 
-		/**
-		 * recreate directory in place effectively clean all it's contents
-		 *
-		 * @return IDirectory
-		 *
-		 * @throws FileException
-		 */
-		public function purge(): IDirectory;
+    /**
+     * @return int
+     *
+     * @throws FileException
+     */
+    public function getPermission(): int;
 
-		/**
-		 * physically remove the directory
-		 *
-		 * @return IDirectory
-		 *
-		 * @throws FileException
-		 */
-		public function delete(): IDirectory;
+    /**
+     * recreate directory in place effectively clean all it's contents
+     *
+     * @return IDirectory
+     *
+     * @throws FileException
+     */
+    public function purge(): IDirectory;
 
-		/**
-		 * @return bool
-		 */
-		public function exists(): bool;
+    /**
+     * physically remove the directory
+     *
+     * @return IDirectory
+     *
+     * @throws FileException
+     */
+    public function delete(): IDirectory;
 
-		/**
-		 * return directory based on a current path
-		 *
-		 * @param string $directory
-		 *
-		 * @return IDirectory
-		 */
-		public function directory(string $directory): IDirectory;
+    /**
+     * @return bool
+     */
+    public function exists(): bool;
 
-		/**
-		 * return parent directory
-		 *
-		 * @return IDirectory
-		 */
-		public function parent(): IDirectory;
+    /**
+     * return directory based on a current path
+     *
+     * @param string $directory
+     *
+     * @return IDirectory
+     */
+    public function directory(string $directory): IDirectory;
 
-		/**
-		 * @return IFile[]
-		 */
-		public function getIterator();
-	}
+    /**
+     * return parent directory
+     *
+     * @return IDirectory
+     */
+    public function parent(): IDirectory;
+
+    /**
+     * @return IFile[]
+     */
+    public function getIterator();
+}

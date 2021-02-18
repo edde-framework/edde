@@ -1,14 +1,15 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Controller;
+declare(strict_types=1);
 
-	use Edde\Edde;
-	use Edde\Service\Application\RouterService;
+namespace Edde\Controller;
 
-	abstract class AbstractController extends Edde implements IController {
-		use RouterService;
+use Edde\Edde;
+use Edde\Service\Application\RouterService;
 
-		protected function getParams(): array {
-			return $this->routerService->request()->getParams();
-		}
-	}
+abstract class AbstractController extends Edde implements IController {
+    use RouterService;
+
+    protected function getParams(): array {
+        return $this->routerService->request()->getParams();
+    }
+}

@@ -1,30 +1,31 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Storage;
+declare(strict_types=1);
 
-	use ArrayAccess;
+namespace Edde\Storage;
 
-	interface IEntity extends ArrayAccess {
-		/**
-		 * return schema name of this entity
-		 *
-		 * @return string
-		 */
-		public function getSchema(): string;
+use ArrayAccess;
 
-		/**
-		 * put (merge) values in an entity
-		 *
-		 * @param array $put
-		 *
-		 * @return IEntity
-		 */
-		public function put(array $put): IEntity;
+interface IEntity extends ArrayAccess {
+    /**
+     * return schema name of this entity
+     *
+     * @return string
+     */
+    public function getSchema(): string;
 
-		/**
-		 * return internal source
-		 *
-		 * @return array
-		 */
-		public function toArray(): array;
-	}
+    /**
+     * put (merge) values in an entity
+     *
+     * @param array $put
+     *
+     * @return IEntity
+     */
+    public function put(array $put): IEntity;
+
+    /**
+     * return internal source
+     *
+     * @return array
+     */
+    public function toArray(): array;
+}

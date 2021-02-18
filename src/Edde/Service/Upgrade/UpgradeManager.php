@@ -1,17 +1,18 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Upgrade;
+declare(strict_types=1);
 
-	use Edde\Upgrade\IUpgradeManager;
+namespace Edde\Service\Upgrade;
 
-	trait UpgradeManager {
-		/** @var IUpgradeManager */
-		protected $upgradeManager;
+use Edde\Upgrade\IUpgradeManager;
 
-		/**
-		 * @param IUpgradeManager $upgradeManager
-		 */
-		public function injectUpgradeManager(IUpgradeManager $upgradeManager) {
-			$this->upgradeManager = $upgradeManager;
-		}
-	}
+trait UpgradeManager {
+    /** @var IUpgradeManager */
+    protected $upgradeManager;
+
+    /**
+     * @param IUpgradeManager $upgradeManager
+     */
+    public function injectUpgradeManager(IUpgradeManager $upgradeManager) {
+        $this->upgradeManager = $upgradeManager;
+    }
+}

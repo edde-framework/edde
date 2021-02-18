@@ -1,18 +1,19 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Job;
+declare(strict_types=1);
 
-	use Edde\Configurable\IConfigurable;
+namespace Edde\Job;
 
-	interface IJobExecutor extends IConfigurable {
-		/**
-		 * execute should (asynchronously) execute the given job
-		 *
-		 * @param string $job job uuid
-		 *
-		 * @return IJobExecutor
-		 *
-		 * @throws JobException
-		 */
-		public function execute(string $job): IJobExecutor;
-	}
+use Edde\Configurable\IConfigurable;
+
+interface IJobExecutor extends IConfigurable {
+    /**
+     * execute should (asynchronously) execute the given job
+     *
+     * @param string $job job uuid
+     *
+     * @return IJobExecutor
+     *
+     * @throws JobException
+     */
+    public function execute(string $job): IJobExecutor;
+}

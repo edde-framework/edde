@@ -1,6 +1,7 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Upgrade;
+declare(strict_types=1);
 
-	class CurrentVersionException extends UpgradeException {
-	}
+namespace Edde\Upgrade;
+
+class CurrentVersionException extends UpgradeException {
+}

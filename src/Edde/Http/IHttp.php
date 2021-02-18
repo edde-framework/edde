@@ -1,50 +1,51 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Http;
+declare(strict_types=1);
 
-	use Edde\Content\IContent;
+namespace Edde\Http;
 
-	/**
-	 * "Abstract" interface holding common stuff between request and response.
-	 */
-	interface IHttp {
-		/**
-		 * @return IHeaders
-		 */
-		public function getHeaders(): IHeaders;
+use Edde\Content\IContent;
 
-		/**
-		 * shortcut to header list; this will add a new header (not replace)
-		 *
-		 * @param string $header
-		 * @param string $value
-		 *
-		 * @return $this
-		 */
-		public function header(string $header, string $value): IHttp;
+/**
+ * "Abstract" interface holding common stuff between request and response.
+ */
+interface IHttp {
+    /**
+     * @return IHeaders
+     */
+    public function getHeaders(): IHeaders;
 
-		/**
-		 * add an array of headers at once
-		 *
-		 * @param array $headers
-		 *
-		 * @return $this
-		 */
-		public function headers(array $headers): IHttp;
+    /**
+     * shortcut to header list; this will add a new header (not replace)
+     *
+     * @param string $header
+     * @param string $value
+     *
+     * @return $this
+     */
+    public function header(string $header, string $value): IHttp;
 
-		/**
-		 * set content of the request/response
-		 *
-		 * @param IContent|null $content
-		 *
-		 * @return $this
-		 */
-		public function setContent(IContent $content = null): IHttp;
+    /**
+     * add an array of headers at once
+     *
+     * @param array $headers
+     *
+     * @return $this
+     */
+    public function headers(array $headers): IHttp;
 
-		/**
-		 * retrieve current content
-		 *
-		 * @return IContent|null
-		 */
-		public function getContent(): ?IContent;
-	}
+    /**
+     * set content of the request/response
+     *
+     * @param IContent|null $content
+     *
+     * @return $this
+     */
+    public function setContent(IContent $content = null): IHttp;
+
+    /**
+     * retrieve current content
+     *
+     * @return IContent|null
+     */
+    public function getContent(): ?IContent;
+}

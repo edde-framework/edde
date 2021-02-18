@@ -1,17 +1,18 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Hydrator;
+declare(strict_types=1);
 
-	use Edde\Hydrator\IHydratorManager;
+namespace Edde\Service\Hydrator;
 
-	trait HydratorManager {
-		/** @var IHydratorManager */
-		protected $hydratorManager;
+use Edde\Hydrator\IHydratorManager;
 
-		/**
-		 * @param IHydratorManager $hydratorManager
-		 */
-		public function injectHydratorManager(IHydratorManager $hydratorManager): void {
-			$this->hydratorManager = $hydratorManager;
-		}
-	}
+trait HydratorManager {
+    /** @var IHydratorManager */
+    protected $hydratorManager;
+
+    /**
+     * @param IHydratorManager $hydratorManager
+     */
+    public function injectHydratorManager(IHydratorManager $hydratorManager): void {
+        $this->hydratorManager = $hydratorManager;
+    }
+}

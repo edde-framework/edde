@@ -1,33 +1,34 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Upgrade;
+declare(strict_types=1);
 
-	use Edde\Configurable\IConfigurable;
-	use Edde\Storage\IEntity;
-	use Generator;
+namespace Edde\Upgrade;
 
-	interface IVersionService extends IConfigurable {
-		/**
-		 * return current version of the application; if null, the application is in zero-state (probably
-		 * not ready to be used)
-		 *
-		 * @return null|string
-		 */
-		public function getVersion(): ?string;
+use Edde\Configurable\IConfigurable;
+use Edde\Storage\IEntity;
+use Generator;
 
-		/**
-		 * given version will be current version of the application
-		 *
-		 * @param string $version
-		 *
-		 * @return IVersionService
-		 */
-		public function update(string $version): IVersionService;
+interface IVersionService extends IConfigurable {
+    /**
+     * return current version of the application; if null, the application is in zero-state (probably
+     * not ready to be used)
+     *
+     * @return null|string
+     */
+    public function getVersion(): ?string;
 
-		/**
-		 * return a generator of installed versions (upgrades)
-		 *
-		 * @return Generator|IEntity[]
-		 */
-		public function getCollection(): Generator;
-	}
+    /**
+     * given version will be current version of the application
+     *
+     * @param string $version
+     *
+     * @return IVersionService
+     */
+    public function update(string $version): IVersionService;
+
+    /**
+     * return a generator of installed versions (upgrades)
+     *
+     * @return Generator|IEntity[]
+     */
+    public function getCollection(): Generator;
+}

@@ -1,9 +1,10 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Job;
+declare(strict_types=1);
 
-	/**
-	 * When there are no jobs to do, it's Holiday!
-	 */
-	class HolidayException extends JobException {
-	}
+namespace Edde\Job;
+
+/**
+ * When there are no jobs to do, it's Holiday!
+ */
+class HolidayException extends JobException {
+}

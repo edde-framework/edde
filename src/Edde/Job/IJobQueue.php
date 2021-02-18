@@ -1,105 +1,106 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Job;
+declare(strict_types=1);
 
-	use DateTime;
-	use Edde\Configurable\IConfigurable;
-	use Edde\Message\IMessage;
-	use Edde\Storage\IEntity;
+namespace Edde\Job;
 
-	interface IJobQueue extends IConfigurable {
-		/**
-		 * push a new message
-		 *
-		 * @param IMessage      $message
-		 * @param DateTime|null $time
-		 *
-		 * @return IEntity
-		 */
-		public function message(IMessage $message, DateTime $time = null): IEntity;
+use DateTime;
+use Edde\Configurable\IConfigurable;
+use Edde\Message\IMessage;
+use Edde\Storage\IEntity;
 
-		/**
-		 * schedule the given message; $diff is DateInterval parameter
-		 *
-		 * @param IMessage $message
-		 * @param string   $diff
-		 *
-		 * @return IEntity
-		 */
-		public function schedule(IMessage $message, string $diff): IEntity;
+interface IJobQueue extends IConfigurable {
+    /**
+     * push a new message
+     *
+     * @param IMessage      $message
+     * @param DateTime|null $time
+     *
+     * @return IEntity
+     */
+    public function message(IMessage $message, DateTime $time = null): IEntity;
 
-		/**
-		 * pick a job (should be removed from source queue)
-		 *
-		 * @return IEntity
-		 *
-		 * @throws HolidayException
-		 */
-		public function pick(): IEntity;
+    /**
+     * schedule the given message; $diff is DateInterval parameter
+     *
+     * @param IMessage $message
+     * @param string   $diff
+     *
+     * @return IEntity
+     */
+    public function schedule(IMessage $message, string $diff): IEntity;
 
-		/**
-		 * update a state of the given job
-		 *
-		 * @param string $job
-		 * @param int    $state
-		 *
-		 * @return IEntity updated job
-		 */
-		public function state(string $job, int $state, string $result = null): IEntity;
+    /**
+     * pick a job (should be removed from source queue)
+     *
+     * @return IEntity
+     *
+     * @throws HolidayException
+     */
+    public function pick(): IEntity;
 
-		/**
-		 * update the given job
-		 *
-		 * @param IEntity $entity
-		 *
-		 * @return IEntity
-		 */
-		public function update(IEntity $entity): IEntity;
+    /**
+     * update a state of the given job
+     *
+     * @param string $job
+     * @param int    $state
+     *
+     * @return IEntity updated job
+     */
+    public function state(string $job, int $state, string $result = null): IEntity;
 
-		/**
-		 * get a job by the given uuid
-		 *
-		 * @param string $uuid
-		 *
-		 * @return IEntity
-		 */
-		public function byUuid(string $uuid): IEntity;
+    /**
+     * update the given job
+     *
+     * @param IEntity $entity
+     *
+     * @return IEntity
+     */
+    public function update(IEntity $entity): IEntity;
 
-		/**
-		 * return number of allocated jobs; this could be used for parallel
-		 * job limitation
-		 *
-		 * @return int
-		 */
-		public function countLimit(): int;
+    /**
+     * get a job by the given uuid
+     *
+     * @param string $uuid
+     *
+     * @return IEntity
+     */
+    public function byUuid(string $uuid): IEntity;
 
-		/**
-		 * reset "dead" jobs; this should be used when one is sure there is nothing actually
-		 * running, for example after a container restart; thus there are "dead" jobs in the queue
-		 * which has to be rescheduled
-		 *
-		 * @return IJobQueue
-		 */
-		public function reset(): IJobQueue;
+    /**
+     * return number of allocated jobs; this could be used for parallel
+     * job limitation
+     *
+     * @return int
+     */
+    public function countLimit(): int;
 
-		/**
-		 * cleanup all (scheduled) jobs in a (persistent) queue
-		 *
-		 * @return IJobQueue
-		 */
-		public function cleanup(): IJobQueue;
+    /**
+     * reset "dead" jobs; this should be used when one is sure there is nothing actually
+     * running, for example after a container restart; thus there are "dead" jobs in the queue
+     * which has to be rescheduled
+     *
+     * @return IJobQueue
+     */
+    public function reset(): IJobQueue;
 
-		/**
-		 * drop all jobs (basically table trunc)
-		 *
-		 * @return IJobQueue
-		 */
-		public function clear(): IJobQueue;
+    /**
+     * cleanup all (scheduled) jobs in a (persistent) queue
+     *
+     * @return IJobQueue
+     */
+    public function cleanup(): IJobQueue;
 
-		/**
-		 * return array of state counts
-		 *
-		 * @return array
-		 */
-		public function stats(): array;
-	}
+    /**
+     * drop all jobs (basically table trunc)
+     *
+     * @return IJobQueue
+     */
+    public function clear(): IJobQueue;
+
+    /**
+     * return array of state counts
+     *
+     * @return array
+     */
+    public function stats(): array;
+}

@@ -1,44 +1,45 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Upgrade;
+declare(strict_types=1);
 
-	use Edde\Configurable\IConfigurable;
-	use Exception;
-	use Throwable;
+namespace Edde\Upgrade;
 
-	interface IUpgrade extends IConfigurable {
-		/**
-		 * return a version of this upgrade; it could be arbitrary string as it
-		 * it's not used for ordering (should not be used)
-		 *
-		 * @return string
-		 */
-		public function getVersion(): string;
+use Edde\Configurable\IConfigurable;
+use Exception;
+use Throwable;
 
-		/**
-		 * do some stuff before actual upgrade is executed
-		 */
-		public function onStart(): void;
+interface IUpgrade extends IConfigurable {
+    /**
+     * return a version of this upgrade; it could be arbitrary string as it
+     * it's not used for ordering (should not be used)
+     *
+     * @return string
+     */
+    public function getVersion(): string;
 
-		/**
-		 * execute an upgrade procedure (there could be anything, file moves, cache
-		 * invalidation, database structure update, ...)
-		 *
-		 * @throws Exception
-		 */
-		public function upgrade(): void;
+    /**
+     * do some stuff before actual upgrade is executed
+     */
+    public function onStart(): void;
 
-		/**
-		 * do stuff when an upgrade is successful
-		 */
-		public function onSuccess(): void;
+    /**
+     * execute an upgrade procedure (there could be anything, file moves, cache
+     * invalidation, database structure update, ...)
+     *
+     * @throws Exception
+     */
+    public function upgrade(): void;
 
-		/**
-		 * what to do, when shit happens
-		 *
-		 * @param Throwable $throwable
-		 *
-		 * @throws Throwable
-		 */
-		public function onFail(Throwable $throwable): void;
-	}
+    /**
+     * do stuff when an upgrade is successful
+     */
+    public function onSuccess(): void;
+
+    /**
+     * what to do, when shit happens
+     *
+     * @param Throwable $throwable
+     *
+     * @throws Throwable
+     */
+    public function onFail(Throwable $throwable): void;
+}

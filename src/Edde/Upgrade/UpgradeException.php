@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Upgrade;
+declare(strict_types=1);
 
-	use Edde\EddeException;
+namespace Edde\Upgrade;
 
-	class UpgradeException extends EddeException {
-	}
+use Edde\EddeException;
+
+class UpgradeException extends EddeException {
+}

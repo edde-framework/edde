@@ -1,23 +1,16 @@
 {
-  "name": "edde",
-  "version": "1.0.0",
-  "description": "[![pipeline status](https://git.x32.cz/edde-framework/edde/badges/master/pipeline.svg)](https://git.x32.cz/edde-framework/edde/commits/master) [![coverage report](https://git.x32.cz/edde-framework/edde/badges/master/coverage.svg)](https://git.x32.cz/edde-framework/edde/commits/master)",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs",
-    "lib": "lib",
-    "test": "tests"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "ssh://git@git.x32.cz:4722/edde-framework/edde.git"
-  },
-  "author": "Marek Hanzal <marek.hanzal@x32.cz>",
-  "license": "Apache-2.0",
-  "dependencies": {
-    "@edde-js/sss": "^1.0.3"
+	"name": "edde",
+	"version": "1.0.0",
+	"description": "Documentation generator.",
+	"main": "index.js",
+	"directories": {
+		"doc": "docs",
+		"lib": "lib",
+		"test": "tests"
+	},
+	"author": "Marek Hanzal <marek.hanzal@x32.cz>",
+	"license": "Apache-2.0",
+	"dependencies": {
+		"@edde-js/sss": "^1.0.3"
   }
 }

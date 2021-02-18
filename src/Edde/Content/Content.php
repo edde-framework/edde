@@ -1,38 +1,39 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Content;
+declare(strict_types=1);
 
-	use Edde\Edde;
+namespace Edde\Content;
 
-	class Content extends Edde implements IContent {
-		/** @var mixed */
-		protected $content;
-		/** @var string */
-		protected $type;
+use Edde\Edde;
 
-		/**
-		 * @param mixed  $content
-		 * @param string $type
-		 */
-		public function __construct($content, string $type) {
-			$this->content = $content;
-			$this->type = $type;
-		}
+class Content extends Edde implements IContent {
+    /** @var mixed */
+    protected $content;
+    /** @var string */
+    protected $type;
 
-		/** @inheritdoc */
-		public function getContent() {
-			return $this->content;
-		}
+    /**
+     * @param mixed  $content
+     * @param string $type
+     */
+    public function __construct($content, string $type) {
+        $this->content = $content;
+        $this->type = $type;
+    }
 
-		/** @inheritdoc */
-		public function getType(): string {
-			return $this->type;
-		}
+    /** @inheritdoc */
+    public function getContent() {
+        return $this->content;
+    }
 
-		/**
-		 * simplest form of content throws just content outside
-		 */
-		public function getIterator() {
-			yield $this->content;
-		}
-	}
+    /** @inheritdoc */
+    public function getType(): string {
+        return $this->type;
+    }
+
+    /**
+     * simplest form of content throws just content outside
+     */
+    public function getIterator() {
+        yield $this->content;
+    }
+}

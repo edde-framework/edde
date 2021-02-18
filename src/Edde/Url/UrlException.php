@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Url;
+declare(strict_types=1);
 
-	use Edde\EddeException;
+namespace Edde\Url;
 
-	class UrlException extends EddeException {
-	}
+use Edde\EddeException;
+
+class UrlException extends EddeException {
+}

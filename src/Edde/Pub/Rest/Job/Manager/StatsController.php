@@ -1,14 +1,15 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Pub\Rest\Job\Manager;
+declare(strict_types=1);
 
-	use Edde\Controller\RestController;
-	use Edde\Service\Job\JobQueue;
+namespace Edde\Pub\Rest\Job\Manager;
 
-	class StatsController extends RestController {
-		use JobQueue;
+use Edde\Controller\RestController;
+use Edde\Service\Job\JobQueue;
 
-		public function actionGet() {
-			$this->jsonResponse($this->jobQueue->stats())->execute();
-		}
-	}
+class StatsController extends RestController {
+    use JobQueue;
+
+    public function actionGet() {
+        $this->jsonResponse($this->jobQueue->stats())->execute();
+    }
+}

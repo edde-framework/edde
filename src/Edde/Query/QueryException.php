@@ -1,11 +1,12 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Query;
+declare(strict_types=1);
 
-	use Edde\EddeException;
+namespace Edde\Query;
 
-	/**
-	 * Just to make one root for all related Query exceptions.
-	 */
-	class QueryException extends EddeException {
-	}
+use Edde\EddeException;
+
+/**
+ * Just to make one root for all related Query exceptions.
+ */
+class QueryException extends EddeException {
+}

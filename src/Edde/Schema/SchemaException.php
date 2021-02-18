@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Schema;
+declare(strict_types=1);
 
-	use Edde\EddeException;
+namespace Edde\Schema;
 
-	class SchemaException extends EddeException {
-	}
+use Edde\EddeException;
+
+class SchemaException extends EddeException {
+}

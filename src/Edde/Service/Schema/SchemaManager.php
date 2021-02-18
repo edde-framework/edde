@@ -1,17 +1,18 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Schema;
+declare(strict_types=1);
 
-	use Edde\Schema\ISchemaManager;
+namespace Edde\Service\Schema;
 
-	trait SchemaManager {
-		/** @var ISchemaManager */
-		protected $schemaManager;
+use Edde\Schema\ISchemaManager;
 
-		/**
-		 * @param ISchemaManager $schemaManager
-		 */
-		public function injectSchemaManager(ISchemaManager $schemaManager) {
-			$this->schemaManager = $schemaManager;
-		}
-	}
+trait SchemaManager {
+    /** @var ISchemaManager */
+    protected $schemaManager;
+
+    /**
+     * @param ISchemaManager $schemaManager
+     */
+    public function injectSchemaManager(ISchemaManager $schemaManager) {
+        $this->schemaManager = $schemaManager;
+    }
+}

@@ -1,17 +1,18 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Filter;
+declare(strict_types=1);
 
-	use Edde\Filter\IFilterManager;
+namespace Edde\Service\Filter;
 
-	trait FilterManager {
-		/** @var IFilterManager */
-		protected $filterManager;
+use Edde\Filter\IFilterManager;
 
-		/**
-		 * @param IFilterManager $filterManager
-		 */
-		public function injectFilterManager(IFilterManager $filterManager): void {
-			$this->filterManager = $filterManager;
-		}
-	}
+trait FilterManager {
+    /** @var IFilterManager */
+    protected $filterManager;
+
+    /**
+     * @param IFilterManager $filterManager
+     */
+    public function injectFilterManager(IFilterManager $filterManager): void {
+        $this->filterManager = $filterManager;
+    }
+}

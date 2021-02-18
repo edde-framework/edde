@@ -1,17 +1,18 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Schema;
+declare(strict_types=1);
 
-	use Edde\Schema\ISchemaLoader;
+namespace Edde\Service\Schema;
 
-	trait SchemaLoader {
-		/** @var ISchemaLoader */
-		protected $schemaLoader;
+use Edde\Schema\ISchemaLoader;
 
-		/**
-		 * @param ISchemaLoader $schemaLoader
-		 */
-		public function injectSchemaLoader(ISchemaLoader $schemaLoader): void {
-			$this->schemaLoader = $schemaLoader;
-		}
-	}
+trait SchemaLoader {
+    /** @var ISchemaLoader */
+    protected $schemaLoader;
+
+    /**
+     * @param ISchemaLoader $schemaLoader
+     */
+    public function injectSchemaLoader(ISchemaLoader $schemaLoader): void {
+        $this->schemaLoader = $schemaLoader;
+    }
+}

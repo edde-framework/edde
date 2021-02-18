@@ -1,20 +1,21 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Runtime;
+declare(strict_types=1);
 
-	use Edde\Runtime\IRuntime;
+namespace Edde\Service\Runtime;
 
-	/**
-	 * Lazy runtime dependency.
-	 */
-	trait Runtime {
-		/** @var IRuntime */
-		protected $runtime;
+use Edde\Runtime\IRuntime;
 
-		/**
-		 * @param IRuntime $runtime
-		 */
-		public function injectRuntime(IRuntime $runtime) {
-			$this->runtime = $runtime;
-		}
-	}
+/**
+ * Lazy runtime dependency.
+ */
+trait Runtime {
+    /** @var IRuntime */
+    protected $runtime;
+
+    /**
+     * @param IRuntime $runtime
+     */
+    public function injectRuntime(IRuntime $runtime) {
+        $this->runtime = $runtime;
+    }
+}

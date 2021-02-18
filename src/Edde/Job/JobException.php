@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Job;
+declare(strict_types=1);
 
-	use Edde\EddeException;
+namespace Edde\Job;
 
-	class JobException extends EddeException {
-	}
+use Edde\EddeException;
+
+class JobException extends EddeException {
+}

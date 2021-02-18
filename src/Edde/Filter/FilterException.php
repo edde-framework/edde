@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Filter;
+declare(strict_types=1);
 
-	use Edde\EddeException;
+namespace Edde\Filter;
 
-	class FilterException extends EddeException {
-	}
+use Edde\EddeException;
+
+class FilterException extends EddeException {
+}

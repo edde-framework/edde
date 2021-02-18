@@ -1,18 +1,19 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Filter;
+declare(strict_types=1);
 
-	use function filter_var;
-	use const FILTER_VALIDATE_BOOLEAN;
+namespace Edde\Filter;
 
-	class BoolIntFilter extends AbstractFilter {
-		/** @inheritdoc */
-		public function input($value, ?array $options = null) {
-			return filter_var($value, FILTER_VALIDATE_BOOLEAN);
-		}
+use function filter_var;
+use const FILTER_VALIDATE_BOOLEAN;
 
-		/** @inheritdoc */
-		public function output($value, ?array $options = null) {
-			return (int)$this->input($value);
-		}
-	}
+class BoolIntFilter extends AbstractFilter {
+    /** @inheritdoc */
+    public function input($value, ?array $options = null) {
+        return filter_var($value, FILTER_VALIDATE_BOOLEAN);
+    }
+
+    /** @inheritdoc */
+    public function output($value, ?array $options = null) {
+        return (int)$this->input($value);
+    }
+}

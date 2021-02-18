@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Content;
+declare(strict_types=1);
 
-	use Edde\EddeException;
+namespace Edde\Content;
 
-	class ContentException extends EddeException {
-	}
+use Edde\EddeException;
+
+class ContentException extends EddeException {
+}

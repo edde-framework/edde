@@ -1,40 +1,41 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Job;
+declare(strict_types=1);
 
-	use Edde\Configurable\IConfigurable;
-	use Edde\Message\MessageException;
+namespace Edde\Job;
 
-	interface IJobManager extends IConfigurable {
-		/**
-		 * executes infinite loop
-		 *
-		 * @return IJobManager
-		 *
-		 * @throws JobException
-		 */
-		public function run(): IJobManager;
+use Edde\Configurable\IConfigurable;
+use Edde\Message\MessageException;
 
-		/**
-		 * run one job if any
-		 *
-		 * @return IJobManager
-		 *
-		 * @throws HolidayException
-		 * @throws JobException
-		 * @throws MessageException
-		 */
-		public function tick(): IJobManager;
+interface IJobManager extends IConfigurable {
+    /**
+     * executes infinite loop
+     *
+     * @return IJobManager
+     *
+     * @throws JobException
+     */
+    public function run(): IJobManager;
 
-		/**
-		 * @return bool
-		 */
-		public function isPaused(): bool;
+    /**
+     * run one job if any
+     *
+     * @return IJobManager
+     *
+     * @throws HolidayException
+     * @throws JobException
+     * @throws MessageException
+     */
+    public function tick(): IJobManager;
 
-		/**
-		 * @param bool $pause
-		 *
-		 * @return IJobManager
-		 */
-		public function pause(bool $pause = true): IJobManager;
-	}
+    /**
+     * @return bool
+     */
+    public function isPaused(): bool;
+
+    /**
+     * @param bool $pause
+     *
+     * @return IJobManager
+     */
+    public function pause(bool $pause = true): IJobManager;
+}

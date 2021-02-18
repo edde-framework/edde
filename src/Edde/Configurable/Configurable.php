@@ -1,51 +1,52 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Configurable;
+declare(strict_types=1);
 
-	trait Configurable {
-		/** @var IConfigurator[] */
-		protected $tConfigurators = [];
-		/** @var bool */
-		protected $tState = 0;
+namespace Edde\Configurable;
 
-		/** @inheritdoc */
-		public function setConfigurators(array $configurators) {
-			$this->tConfigurators = $configurators;
-			return $this;
-		}
+trait Configurable {
+    /** @var IConfigurator[] */
+    protected $tConfigurators = [];
+    /** @var bool */
+    protected $tState = 0;
 
-		/** @inheritdoc */
-		public function init() {
-			if ($this->tState > 0) {
-				return $this;
-			}
-			$this->handleInit();
-			$this->tState++;
-			return $this;
-		}
+    /** @inheritdoc */
+    public function setConfigurators(array $configurators) {
+        $this->tConfigurators = $configurators;
+        return $this;
+    }
 
-		/** @inheritdoc */
-		public function setup() {
-			if ($this->tState > 1) {
-				return $this;
-			}
-			$this->init();
-			foreach ($this->tConfigurators as $configHandler) {
-				$configHandler->configure($this);
-			}
-			$this->handleSetup();
-			$this->tState++;
-			return $this;
-		}
+    /** @inheritdoc */
+    public function init() {
+        if ($this->tState > 0) {
+            return $this;
+        }
+        $this->handleInit();
+        $this->tState++;
+        return $this;
+    }
 
-		/** @inheritdoc */
-		public function isSetup(): bool {
-			return $this->tState > 1;
-		}
+    /** @inheritdoc */
+    public function setup() {
+        if ($this->tState > 1) {
+            return $this;
+        }
+        $this->init();
+        foreach ($this->tConfigurators as $configHandler) {
+            $configHandler->configure($this);
+        }
+        $this->handleSetup();
+        $this->tState++;
+        return $this;
+    }
 
-		protected function handleInit(): void {
-		}
+    /** @inheritdoc */
+    public function isSetup(): bool {
+        return $this->tState > 1;
+    }
 
-		protected function handleSetup(): void {
-		}
-	}
+    protected function handleInit(): void {
+    }
+
+    protected function handleSetup(): void {
+    }
+}

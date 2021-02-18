@@ -1,38 +1,39 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Config;
+declare(strict_types=1);
 
-	use Edde\Configurable\IConfigurable;
-	use stdClass;
+namespace Edde\Config;
 
-	interface IConfigLoader extends IConfigurable {
-		/**
-		 * @param string $config
-		 *
-		 * @return IConfigLoader
-		 */
-		public function require(string $config): IConfigLoader;
+use Edde\Configurable\IConfigurable;
+use stdClass;
 
-		/**
-		 * @param string $config
-		 *
-		 * @return IConfigLoader
-		 */
-		public function optional(string $config): IConfigLoader;
+interface IConfigLoader extends IConfigurable {
+    /**
+     * @param string $config
+     *
+     * @return IConfigLoader
+     */
+    public function require(string $config): IConfigLoader;
 
-		/**
-		 * clear all config files
-		 *
-		 * @return IConfigLoader
-		 */
-		public function clear(): IConfigLoader;
+    /**
+     * @param string $config
+     *
+     * @return IConfigLoader
+     */
+    public function optional(string $config): IConfigLoader;
 
-		/**
-		 * compile the stuff into an object
-		 *
-		 * @return stdClass
-		 *
-		 * @throws ConfigException
-		 */
-		public function compile(): stdClass;
-	}
+    /**
+     * clear all config files
+     *
+     * @return IConfigLoader
+     */
+    public function clear(): IConfigLoader;
+
+    /**
+     * compile the stuff into an object
+     *
+     * @return stdClass
+     *
+     * @throws ConfigException
+     */
+    public function compile(): stdClass;
+}

@@ -1,141 +1,142 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Pub\Http\Job;
+declare(strict_types=1);
 
-	use Edde\Application\RouterException;
-	use Edde\Controller\RestController;
-	use Edde\Job\JobSchema;
-	use Edde\Runtime\RuntimeException;
-	use Edde\Service\Job\JobManager;
-	use Edde\Service\Job\JobQueue;
-	use Edde\Service\Message\MessageBus;
-	use Edde\Service\Storage\Storage;
-	use Edde\Url\UrlException;
-	use Throwable;
-	use function implode;
-	use function json_encode;
-	use function microtime;
-	use const JSON_PRETTY_PRINT;
+namespace Edde\Pub\Http\Job;
 
-	class ManagerController extends RestController {
-		use Storage;
-		use JobQueue;
-		use JobManager;
-		use MessageBus;
+use Edde\Application\RouterException;
+use Edde\Controller\RestController;
+use Edde\Job\JobSchema;
+use Edde\Runtime\RuntimeException;
+use Edde\Service\Job\JobManager;
+use Edde\Service\Job\JobQueue;
+use Edde\Service\Message\MessageBus;
+use Edde\Service\Storage\Storage;
+use Edde\Url\UrlException;
+use Throwable;
+use function implode;
+use function json_encode;
+use function microtime;
+use const JSON_PRETTY_PRINT;
 
-		/**
-		 * @throws Throwable
-		 * @throws RouterException
-		 * @throws RuntimeException
-		 * @throws UrlException
-		 */
-		public function actionExecute(): void {
-			$time = microtime(true);
-			$job = $this->jobQueue->state($this->getParams()['job'], JobSchema::STATE_RUNNING);
-			$state = JobSchema::STATE_SUCCESS;
-			$result = null;
-			try {
-				$this->messageBus->execute(
-					$this->messageBus->importMessage(
-						$job['message']
-					)
-				);
-			} catch (Throwable $exception) {
-				$state = JobSchema::STATE_FAILED;
-				$result = $exception->getMessage();
-				throw $exception;
-			} finally {
-				$job['runtime'] = (microtime(true) - $time) * 1000;
-				$this->jobQueue->update($job);
-				$this->jobQueue->state($job['uuid'], $state, $result);
-			}
-			$this->textResponse(sprintf('job done [%s]', $job['uuid']))->execute();
-		}
+class ManagerController extends RestController {
+    use Storage;
+    use JobQueue;
+    use JobManager;
+    use MessageBus;
 
-		public function actionCurrent(): void {
-			$items = [];
-			foreach ($this->storage->schema(JobSchema::class, 'SELECT * FROM s:schema WHERE state = 0 ORDER BY schedule ASC LIMIT 8', ['$query' => ['s' => JobSchema::class]]) as $entity) {
-				$items[] = json_encode($entity['message'], JSON_PRETTY_PRINT);
-			}
-			$this->textResponse(implode("\n", $items))->execute();
-		}
+    /**
+     * @throws Throwable
+     * @throws RouterException
+     * @throws RuntimeException
+     * @throws UrlException
+     */
+    public function actionExecute(): void {
+        $time = microtime(true);
+        $job = $this->jobQueue->state($this->getParams()['job'], JobSchema::STATE_RUNNING);
+        $state = JobSchema::STATE_SUCCESS;
+        $result = null;
+        try {
+            $this->messageBus->execute(
+                $this->messageBus->importMessage(
+                    $job['message']
+                )
+            );
+        } catch (Throwable $exception) {
+            $state = JobSchema::STATE_FAILED;
+            $result = $exception->getMessage();
+            throw $exception;
+        } finally {
+            $job['runtime'] = (microtime(true) - $time) * 1000;
+            $this->jobQueue->update($job);
+            $this->jobQueue->state($job['uuid'], $state, $result);
+        }
+        $this->textResponse(sprintf('job done [%s]', $job['uuid']))->execute();
+    }
 
-		public function actionStats(): void {
-			$stats = $this->jobQueue->stats();
-			$config = [
-				'Enqueued'        => [
-					'diff'     => true,
-					'positive' => true,
-					'abs'      => true,
-				],
-				'Reset'           => [
-					'display'  => false,
-					'diff'     => false,
-					'positive' => null,
-				],
-				'Scheduled'       => [
-					'diff'     => true,
-					'positive' => 1,
-					'abs'      => true,
-				],
-				'Running'         => [
-					'diff'     => true,
-					'positive' => null,
-				],
-				'Success'         => [
-					'diff'     => true,
-					'positive' => 1,
-				],
-				'Failed'          => [
-					'diff'     => true,
-					'positive' => -1,
-				],
-				'Sum'             => [
-					'diff'     => true,
-					'positive' => null,
-				],
-				'Finished'        => [
-					'diff'     => true,
-					'positive' => null,
-				],
-				'Average'         => [
-					'diff'     => false,
-					'positive' => null,
-				],
-				'Shortest'        => [
-					'diff'     => false,
-					'positive' => null,
-				],
-				'Longest'         => [
-					'diff'     => false,
-					'positive' => null,
-				],
-				'AvgRuntime'      => [
-					'diff'     => true,
-					'positive' => -1,
-					'float'    => 2,
-				],
-				'ShortestRuntime' => [
-					'diff'     => true,
-					'positive' => null,
-					'float'    => 2,
-				],
-				'LongestRuntime'  => [
-					'diff'     => true,
-					'positive' => null,
-					'float'    => 2,
-				],
-				'Progress'        => [
-					'diff'     => true,
-					'positive' => 1,
-					'float'    => 2,
-				],
-				'Stats'           => [
-					'ignore' => true,
-				],
-			];
-			$refresh = 5;
-			$html = '
+    public function actionCurrent(): void {
+        $items = [];
+        foreach ($this->storage->schema(JobSchema::class, 'SELECT * FROM s:schema WHERE state = 0 ORDER BY schedule ASC LIMIT 8', ['$query' => ['s' => JobSchema::class]]) as $entity) {
+            $items[] = json_encode($entity['message'], JSON_PRETTY_PRINT);
+        }
+        $this->textResponse(implode("\n", $items))->execute();
+    }
+
+    public function actionStats(): void {
+        $stats = $this->jobQueue->stats();
+        $config = [
+            'Enqueued'        => [
+                'diff'     => true,
+                'positive' => true,
+                'abs'      => true,
+            ],
+            'Reset'           => [
+                'display'  => false,
+                'diff'     => false,
+                'positive' => null,
+            ],
+            'Scheduled'       => [
+                'diff'     => true,
+                'positive' => 1,
+                'abs'      => true,
+            ],
+            'Running'         => [
+                'diff'     => true,
+                'positive' => null,
+            ],
+            'Success'         => [
+                'diff'     => true,
+                'positive' => 1,
+            ],
+            'Failed'          => [
+                'diff'     => true,
+                'positive' => -1,
+            ],
+            'Sum'             => [
+                'diff'     => true,
+                'positive' => null,
+            ],
+            'Finished'        => [
+                'diff'     => true,
+                'positive' => null,
+            ],
+            'Average'         => [
+                'diff'     => false,
+                'positive' => null,
+            ],
+            'Shortest'        => [
+                'diff'     => false,
+                'positive' => null,
+            ],
+            'Longest'         => [
+                'diff'     => false,
+                'positive' => null,
+            ],
+            'AvgRuntime'      => [
+                'diff'     => true,
+                'positive' => -1,
+                'float'    => 2,
+            ],
+            'ShortestRuntime' => [
+                'diff'     => true,
+                'positive' => null,
+                'float'    => 2,
+            ],
+            'LongestRuntime'  => [
+                'diff'     => true,
+                'positive' => null,
+                'float'    => 2,
+            ],
+            'Progress'        => [
+                'diff'     => true,
+                'positive' => 1,
+                'float'    => 2,
+            ],
+            'Stats'           => [
+                'ignore' => true,
+            ],
+        ];
+        $refresh = 5;
+        $html = '
 				<!DOCTYPE html>
 				<html lang="en">
 					<head>
@@ -267,6 +268,6 @@
 					</body>
 				</html>
 			';
-			$this->htmlResponse($html)->execute();
-		}
-	}
+        $this->htmlResponse($html)->execute();
+    }
+}

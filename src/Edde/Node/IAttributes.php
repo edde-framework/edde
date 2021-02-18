@@ -1,22 +1,23 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Node;
+declare(strict_types=1);
 
-	use IteratorAggregate;
+namespace Edde\Node;
 
-	interface IAttributes extends IteratorAggregate {
-		/**
-		 * @param string     $name
-		 * @param mixed|null $default
-		 *
-		 * @return mixed
-		 */
-		public function get(string $name, $default = null);
+use IteratorAggregate;
 
-		/**
-		 * @param string $name
-		 *
-		 * @return bool
-		 */
-		public function hasAttributes(string $name): bool;
-	}
+interface IAttributes extends IteratorAggregate {
+    /**
+     * @param string     $name
+     * @param mixed|null $default
+     *
+     * @return mixed
+     */
+    public function get(string $name, $default = null);
+
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasAttributes(string $name): bool;
+}

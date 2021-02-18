@@ -1,17 +1,18 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Tick;
+declare(strict_types=1);
 
-	use Edde\Tick\ITickService;
+namespace Edde\Service\Tick;
 
-	trait TickService {
-		/** @var ITickService */
-		protected $tickService;
+use Edde\Tick\ITickService;
 
-		/**
-		 * @param ITickService $tickService
-		 */
-		public function lazyTickService(ITickService $tickService): void {
-			$this->tickService = $tickService;
-		}
-	}
+trait TickService {
+    /** @var ITickService */
+    protected $tickService;
+
+    /**
+     * @param ITickService $tickService
+     */
+    public function lazyTickService(ITickService $tickService): void {
+        $this->tickService = $tickService;
+    }
+}

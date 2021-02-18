@@ -1,40 +1,41 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Job;
+declare(strict_types=1);
 
-	use DateInterval;
-	use DateTime;
-	use Edde\Edde;
-	use Edde\Message\IMessage;
-	use Edde\Service\Message\MessageBus;
-	use Edde\Service\Storage\Storage;
-	use Edde\Storage\EmptyEntityException;
-	use Edde\Storage\Entity;
-	use Edde\Storage\IEntity;
-	use function date;
+namespace Edde\Job;
 
-	class JobQueue extends Edde implements IJobQueue {
-		use Storage;
-		use MessageBus;
+use DateInterval;
+use DateTime;
+use Edde\Edde;
+use Edde\Message\IMessage;
+use Edde\Service\Message\MessageBus;
+use Edde\Service\Storage\Storage;
+use Edde\Storage\EmptyEntityException;
+use Edde\Storage\Entity;
+use Edde\Storage\IEntity;
+use function date;
 
-		/** @inheritdoc */
-		public function message(IMessage $message, DateTime $time = null): IEntity {
-			return $this->storage->insert(new Entity(JobSchema::class, [
-				'schedule' => $time ?? new DateTime(),
-				'stamp'    => new DateTime(),
-				'message'  => $message->export(),
-			]));
-		}
+class JobQueue extends Edde implements IJobQueue {
+    use Storage;
+    use MessageBus;
 
-		/** @inheritdoc */
-		public function schedule(IMessage $message, string $diff): IEntity {
-			return $this->message($message, (new DateTime())->add(new DateInterval($diff)));
-		}
+    /** @inheritdoc */
+    public function message(IMessage $message, DateTime $time = null): IEntity {
+        return $this->storage->insert(new Entity(JobSchema::class, [
+            'schedule' => $time ?? new DateTime(),
+            'stamp'    => new DateTime(),
+            'message'  => $message->export(),
+        ]));
+    }
 
-		/** @inheritdoc */
-		public function pick(): IEntity {
-			try {
-				return $this->storage->single(JobSchema::class, '
+    /** @inheritdoc */
+    public function schedule(IMessage $message, string $diff): IEntity {
+        return $this->message($message, (new DateTime())->add(new DateInterval($diff)));
+    }
+
+    /** @inheritdoc */
+    public function pick(): IEntity {
+        try {
+            return $this->storage->single(JobSchema::class, '
 					SELECT
 						*
 					FROM
@@ -51,43 +52,43 @@
 					LIMIT
 						1
 				', [
-					'$query'   => [
-						'j' => JobSchema::class,
-					],
-					'enqueued' => JobSchema::STATE_ENQUEUED,
-					'reset'    => JobSchema::STATE_RESET,
-					'now'      => date('c'),
-				]);
-			} catch (EmptyEntityException $exception) {
-				throw new HolidayException('Nothing to do, bro!');
-			}
-		}
+                '$query'   => [
+                    'j' => JobSchema::class,
+                ],
+                'enqueued' => JobSchema::STATE_ENQUEUED,
+                'reset'    => JobSchema::STATE_RESET,
+                'now'      => date('c'),
+            ]);
+        } catch (EmptyEntityException $exception) {
+            throw new HolidayException('Nothing to do, bro!');
+        }
+    }
 
-		/** @inheritdoc */
-		public function state(string $job, int $state, string $result = null): IEntity {
-			$job = $this->byUuid($job);
-			$job['state'] = $state;
-			$job['stamp'] = new DateTime();
-			if ($result) {
-				$job['result'] = $result;
-			}
-			return $this->update($job);
-		}
+    /** @inheritdoc */
+    public function state(string $job, int $state, string $result = null): IEntity {
+        $job = $this->byUuid($job);
+        $job['state'] = $state;
+        $job['stamp'] = new DateTime();
+        if ($result) {
+            $job['result'] = $result;
+        }
+        return $this->update($job);
+    }
 
-		/** @inheritdoc */
-		public function update(IEntity $entity): IEntity {
-			return $this->storage->update($entity);
-		}
+    /** @inheritdoc */
+    public function update(IEntity $entity): IEntity {
+        return $this->storage->update($entity);
+    }
 
-		/** @inheritdoc */
-		public function byUuid(string $uuid): IEntity {
-			return $this->storage->load(JobSchema::class, $uuid);
-		}
+    /** @inheritdoc */
+    public function byUuid(string $uuid): IEntity {
+        return $this->storage->load(JobSchema::class, $uuid);
+    }
 
-		/** @inheritdoc */
-		public function countLimit(): int {
-			$count = 0;
-			$query = '
+    /** @inheritdoc */
+    public function countLimit(): int {
+        $count = 0;
+        $query = '
 				SELECT 
 					COUNT(uuid) as count 
 				FROM 
@@ -96,18 +97,22 @@
 					state = :scheduled OR
 					state = :running
 			';
-			foreach ($this->storage->value($query, ['scheduled' => JobSchema::STATE_SCHEDULED, 'running' => JobSchema::STATE_RUNNING, '$query' => ['s' => JobSchema::class]]) as $count) {
-				break;
-			}
-			return $count;
-		}
+        foreach ($this->storage->value($query, [
+            'scheduled' => JobSchema::STATE_SCHEDULED,
+            'running'   => JobSchema::STATE_RUNNING,
+            '$query'    => ['s' => JobSchema::class],
+        ]) as $count) {
+            break;
+        }
+        return $count;
+    }
 
-		/** @inheritdoc */
-		public function reset(): IJobQueue {
-			/**
-			 * the simple phase is to reset jobs just scheduled
-			 */
-			$this->storage->fetch('
+    /** @inheritdoc */
+    public function reset(): IJobQueue {
+        /**
+         * the simple phase is to reset jobs just scheduled
+         */
+        $this->storage->fetch('
 				UPDATE
 					s:schema
 				SET
@@ -116,17 +121,17 @@
 				WHERE
 					state = :scheduled
 			', [
-				'$query'    => [
-					's' => JobSchema::class,
-				],
-				'enqueued'  => JobSchema::STATE_ENQUEUED,
-				'scheduled' => JobSchema::STATE_SCHEDULED,
-				'stamp'     => date('c'),
-			]);
-			/**
-			 * a bit more complicated is to reset originally running jobs
-			 */
-			$this->storage->fetch('
+            '$query'    => [
+                's' => JobSchema::class,
+            ],
+            'enqueued'  => JobSchema::STATE_ENQUEUED,
+            'scheduled' => JobSchema::STATE_SCHEDULED,
+            'stamp'     => date('c'),
+        ]);
+        /**
+         * a bit more complicated is to reset originally running jobs
+         */
+        $this->storage->fetch('
 				UPDATE
 					s:schema
 				SET
@@ -135,39 +140,39 @@
 				WHERE
 					state = :running
 			', [
-				'$query'  => [
-					's' => JobSchema::class,
-				],
-				'reset'   => JobSchema::STATE_RESET,
-				'running' => JobSchema::STATE_RUNNING,
-				'stamp'   => date('c'),
-			]);
-			return $this;
-		}
+            '$query'  => [
+                's' => JobSchema::class,
+            ],
+            'reset'   => JobSchema::STATE_RESET,
+            'running' => JobSchema::STATE_RUNNING,
+            'stamp'   => date('c'),
+        ]);
+        return $this;
+    }
 
-		/** @inheritdoc */
-		public function cleanup(): IJobQueue {
-			$this->storage->fetch('
+    /** @inheritdoc */
+    public function cleanup(): IJobQueue {
+        $this->storage->fetch('
 				DELETE FROM s:schema WHERE state >= :state
 			', [
-				'state'  => JobSchema::STATE_SUCCESS,
-				'$query' => [
-					's' => JobSchema::class,
-				],
-			]);
-			return $this;
-		}
+            'state'  => JobSchema::STATE_SUCCESS,
+            '$query' => [
+                's' => JobSchema::class,
+            ],
+        ]);
+        return $this;
+    }
 
-		/** @inheritdoc */
-		public function clear(): IJobQueue {
-			$this->storage->exec('DELETE FROM s:schema', ['$query' => ['s' => JobSchema::class]]);
-			return $this;
-		}
+    /** @inheritdoc */
+    public function clear(): IJobQueue {
+        $this->storage->exec('DELETE FROM s:schema', ['$query' => ['s' => JobSchema::class]]);
+        return $this;
+    }
 
-		/** @inheritdoc */
-		public function stats(): array {
-			$stats = [];
-			$query = '
+    /** @inheritdoc */
+    public function stats(): array {
+        $stats = [];
+        $query = '
 				SELECT
 					(SELECT COUNT(uuid) FROM s:schema WHERE state = 0) AS Enqueued:delimit,
 					(SELECT COUNT(uuid) FROM s:schema WHERE state = 1) AS Reset:delimit,
@@ -185,16 +190,16 @@
 					(SELECT MAX(stamp-schedule) FROM s:schema WHERE state = 4) AS Longest:delimit
 					
 			';
-			foreach ($this->storage->fetch($query, ['$query' => ['s' => JobSchema::class]]) as $stats) {
-				break;
-			}
-			$stats['Progress'] = (100 / $stats['Sum']) * $stats['Finished'];
-			$stats['Stats'] = vsprintf('%d of %d done (%.2f%%), remaining %d', [
-				$stats['Finished'],
-				$stats['Sum'],
-				$stats['Progress'],
-				$stats['Enqueued'] + $stats['Reset'] + $stats['Scheduled'] + $stats['Running'],
-			]);
-			return $stats;
-		}
-	}
+        foreach ($this->storage->fetch($query, ['$query' => ['s' => JobSchema::class]]) as $stats) {
+            break;
+        }
+        $stats['Progress'] = (100 / $stats['Sum']) * $stats['Finished'];
+        $stats['Stats'] = vsprintf('%d of %d done (%.2f%%), remaining %d', [
+            $stats['Finished'],
+            $stats['Sum'],
+            $stats['Progress'],
+            $stats['Enqueued'] + $stats['Reset'] + $stats['Scheduled'] + $stats['Running'],
+        ]);
+        return $stats;
+    }
+}

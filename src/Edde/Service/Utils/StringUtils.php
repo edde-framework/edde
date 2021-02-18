@@ -1,17 +1,18 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Utils;
+declare(strict_types=1);
 
-	use Edde\Utils\IStringUtils;
+namespace Edde\Service\Utils;
 
-	trait StringUtils {
-		/** @var IStringUtils */
-		protected $stringUtils;
+use Edde\Utils\IStringUtils;
 
-		/**
-		 * @param IStringUtils $stringUtils
-		 */
-		public function injectStringUtils(IStringUtils $stringUtils) {
-			$this->stringUtils = $stringUtils;
-		}
-	}
+trait StringUtils {
+    /** @var IStringUtils */
+    protected $stringUtils;
+
+    /**
+     * @param IStringUtils $stringUtils
+     */
+    public function injectStringUtils(IStringUtils $stringUtils) {
+        $this->stringUtils = $stringUtils;
+    }
+}

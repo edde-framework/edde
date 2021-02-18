@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Validator;
+declare(strict_types=1);
 
-	use Edde\EddeException;
+namespace Edde\Validator;
 
-	class ValidatorException extends EddeException {
-	}
+use Edde\EddeException;
+
+class ValidatorException extends EddeException {
+}

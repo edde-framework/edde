@@ -1,48 +1,49 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Factory;
+declare(strict_types=1);
 
-	use Edde\Container\IContainer;
+namespace Edde\Factory;
 
-	class InstanceFactory extends ClassFactory {
-		/** @var string */
-		protected $name;
-		/** @var object */
-		protected $instance;
-		/** @var object */
-		protected $current;
+use Edde\Container\IContainer;
 
-		/**
-		 * @param string $name
-		 * @param object $instance
-		 */
-		public function __construct(string $name, $instance) {
-			$this->name = $name;
-			$this->instance = $instance;
-		}
+class InstanceFactory extends ClassFactory {
+    /** @var string */
+    protected $name;
+    /** @var object */
+    protected $instance;
+    /** @var object */
+    protected $current;
 
-		/** @inheritdoc */
-		public function getUuid(): ?string {
-			return $this->name;
-		}
+    /**
+     * @param string $name
+     * @param object $instance
+     */
+    public function __construct(string $name, $instance) {
+        $this->name = $name;
+        $this->instance = $instance;
+    }
 
-		/** @inheritdoc */
-		public function canHandle(IContainer $container, string $dependency): bool {
-			return $this->name === $dependency;
-		}
+    /** @inheritdoc */
+    public function getUuid(): ?string {
+        return $this->name;
+    }
 
-		/** @inheritdoc */
-		public function fetch(IContainer $container, string $name, array $params) {
-			return $this->current;
-		}
+    /** @inheritdoc */
+    public function canHandle(IContainer $container, string $dependency): bool {
+        return $this->name === $dependency;
+    }
 
-		/** @inheritdoc */
-		public function push(IContainer $container, $instance) {
-			return $this->current = $instance;
-		}
+    /** @inheritdoc */
+    public function fetch(IContainer $container, string $name, array $params) {
+        return $this->current;
+    }
 
-		/** @inheritdoc */
-		public function factory(IContainer $container, array $params, IReflection $dependency, string $name = null) {
-			return $this->instance;
-		}
-	}
+    /** @inheritdoc */
+    public function push(IContainer $container, $instance) {
+        return $this->current = $instance;
+    }
+
+    /** @inheritdoc */
+    public function factory(IContainer $container, array $params, IReflection $dependency, string $name = null) {
+        return $this->instance;
+    }
+}

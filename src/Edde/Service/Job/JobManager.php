@@ -1,17 +1,18 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Job;
+declare(strict_types=1);
 
-	use Edde\Job\IJobManager;
+namespace Edde\Service\Job;
 
-	trait JobManager {
-		/** @var IJobManager */
-		protected $jobManager;
+use Edde\Job\IJobManager;
 
-		/**
-		 * @param IJobManager $jobManager
-		 */
-		public function injectJobManager(IJobManager $jobManager): void {
-			$this->jobManager = $jobManager;
-		}
-	}
+trait JobManager {
+    /** @var IJobManager */
+    protected $jobManager;
+
+    /**
+     * @param IJobManager $jobManager
+     */
+    public function injectJobManager(IJobManager $jobManager): void {
+        $this->jobManager = $jobManager;
+    }
+}

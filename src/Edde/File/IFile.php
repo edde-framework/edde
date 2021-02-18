@@ -1,144 +1,145 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\File;
+declare(strict_types=1);
 
-	use IteratorAggregate;
+namespace Edde\File;
 
-	interface IFile extends IteratorAggregate {
-		/**
-		 * return full path with filename
-		 *
-		 * @return string
-		 */
-		public function getFile(): string;
+use IteratorAggregate;
 
-		/**
-		 * return just filename
-		 *
-		 * @return string
-		 */
-		public function getName(): string;
+interface IFile extends IteratorAggregate {
+    /**
+     * return full path with filename
+     *
+     * @return string
+     */
+    public function getFile(): string;
 
-		/**
-		 * return directory of this file
-		 *
-		 * @return IDirectory
-		 */
-		public function getDirectory(): IDirectory;
+    /**
+     * return just filename
+     *
+     * @return string
+     */
+    public function getName(): string;
 
-		/**
-		 * tells if file exists
-		 *
-		 * @return bool
-		 */
-		public function exists(): bool;
+    /**
+     * return directory of this file
+     *
+     * @return IDirectory
+     */
+    public function getDirectory(): IDirectory;
 
-		/**
-		 * create file handle; if the file is not available, exception should be thrown
-		 *
-		 * @param string $mode
-		 *
-		 * @return IFile
-		 *
-		 * @throws FileException
-		 */
-		public function open(string $mode): IFile;
+    /**
+     * tells if file exists
+     *
+     * @return bool
+     */
+    public function exists(): bool;
 
-		/**
-		 * @return bool
-		 */
-		public function isOpen(): bool;
+    /**
+     * create file handle; if the file is not available, exception should be thrown
+     *
+     * @param string $mode
+     *
+     * @return IFile
+     *
+     * @throws FileException
+     */
+    public function open(string $mode): IFile;
 
-		/**
-		 * read bunch of data
-		 *
-		 * @param int $length
-		 *
-		 * @return bool|string
-		 *
-		 * @throws FileException
-		 */
-		public function read(int $length = null);
+    /**
+     * @return bool
+     */
+    public function isOpen(): bool;
 
-		/**
-		 * write bunch of data
-		 *
-		 * @param mixed $write
-		 * @param int   $length
-		 *
-		 * @return bool|int
-		 *
-		 * @throws FileException
-		 */
-		public function write($write, int $length = null);
+    /**
+     * read bunch of data
+     *
+     * @param int $length
+     *
+     * @return bool|string
+     *
+     * @throws FileException
+     */
+    public function read(int $length = null);
 
-		/**
-		 * @return IFile
-		 *
-		 * @throws FileException
-		 */
-		public function rewind(): IFile;
+    /**
+     * write bunch of data
+     *
+     * @param mixed $write
+     * @param int   $length
+     *
+     * @return bool|int
+     *
+     * @throws FileException
+     */
+    public function write($write, int $length = null);
 
-		/**
-		 * return file's resource; if it is not open, exception should be thrown
-		 *
-		 * @return resource
-		 *
-		 * @throws FileException
-		 */
-		public function getHandle();
+    /**
+     * @return IFile
+     *
+     * @throws FileException
+     */
+    public function rewind(): IFile;
 
-		/**
-		 * close the current file handle
-		 *
-		 * @return IFile
-		 *
-		 * @throws FileException
-		 */
-		public function close(): IFile;
+    /**
+     * return file's resource; if it is not open, exception should be thrown
+     *
+     * @return resource
+     *
+     * @throws FileException
+     */
+    public function getHandle();
 
-		/**
-		 * @return IFile
-		 *
-		 * @throws FileException
-		 */
-		public function delete(): IFile;
+    /**
+     * close the current file handle
+     *
+     * @return IFile
+     *
+     * @throws FileException
+     */
+    public function close(): IFile;
 
-		/**
-		 * rename a file (in current directory, this does NOT move a file)
-		 *
-		 * @param string $rename
-		 *
-		 * @return IFile
-		 *
-		 * @throws FileException
-		 */
-		public function rename(string $rename): IFile;
+    /**
+     * @return IFile
+     *
+     * @throws FileException
+     */
+    public function delete(): IFile;
 
-		/**
-		 * override current file with the given content
-		 *
-		 * @param string $content
-		 *
-		 * @return IFile
-		 *
-		 * @throws FileException
-		 */
-		public function save(string $content): IFile;
+    /**
+     * rename a file (in current directory, this does NOT move a file)
+     *
+     * @param string $rename
+     *
+     * @return IFile
+     *
+     * @throws FileException
+     */
+    public function rename(string $rename): IFile;
 
-		/**
-		 * return whole content of a file; be careful as this involves memory limit
-		 *
-		 * @return string
-		 */
-		public function load(): string;
+    /**
+     * override current file with the given content
+     *
+     * @param string $content
+     *
+     * @return IFile
+     *
+     * @throws FileException
+     */
+    public function save(string $content): IFile;
 
-		/**
-		 * only creates an empty file
-		 *
-		 * @return IFile
-		 *
-		 * @throws FileException
-		 */
-		public function touch(): IFile;
-	}
+    /**
+     * return whole content of a file; be careful as this involves memory limit
+     *
+     * @return string
+     */
+    public function load(): string;
+
+    /**
+     * only creates an empty file
+     *
+     * @return IFile
+     *
+     * @throws FileException
+     */
+    public function touch(): IFile;
+}

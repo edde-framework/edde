@@ -1,17 +1,18 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Config;
+declare(strict_types=1);
 
-	use Edde\Config\IConfigLoader;
+namespace Edde\Service\Config;
 
-	trait ConfigLoader {
-		/** @var IConfigLoader */
-		protected $configLoader;
+use Edde\Config\IConfigLoader;
 
-		/**
-		 * @param IConfigLoader $configLoader
-		 */
-		public function injectConfigLoader(IConfigLoader $configLoader): void {
-			$this->configLoader = $configLoader;
-		}
-	}
+trait ConfigLoader {
+    /** @var IConfigLoader */
+    protected $configLoader;
+
+    /**
+     * @param IConfigLoader $configLoader
+     */
+    public function injectConfigLoader(IConfigLoader $configLoader): void {
+        $this->configLoader = $configLoader;
+    }
+}

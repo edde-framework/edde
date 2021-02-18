@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Transaction;
+declare(strict_types=1);
 
-	use Edde\EddeException;
+namespace Edde\Transaction;
 
-	class TransactionException extends EddeException {
-	}
+use Edde\EddeException;
+
+class TransactionException extends EddeException {
+}

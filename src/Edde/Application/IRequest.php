@@ -1,26 +1,27 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Application;
+declare(strict_types=1);
 
-	interface IRequest {
-		/**
-		 * get requested class
-		 *
-		 * @return string
-		 */
-		public function getService(): string;
+namespace Edde\Application;
 
-		/**
-		 * get requested method
-		 *
-		 * @return string
-		 */
-		public function getMethod(): string;
+interface IRequest {
+    /**
+     * get requested class
+     *
+     * @return string
+     */
+    public function getService(): string;
 
-		/**
-		 * parameters should be passed to requested method
-		 *
-		 * @return array
-		 */
-		public function getParams(): array;
-	}
+    /**
+     * get requested method
+     *
+     * @return string
+     */
+    public function getMethod(): string;
+
+    /**
+     * parameters should be passed to requested method
+     *
+     * @return array
+     */
+    public function getParams(): array;
+}

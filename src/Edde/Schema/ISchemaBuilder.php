@@ -1,49 +1,50 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Schema;
+declare(strict_types=1);
 
-	interface ISchemaBuilder {
-		/**
-		 * set alias to this schema; later in queries name or alias could be used
-		 *
-		 * @param string $alias
-		 *
-		 * @return ISchemaBuilder
-		 */
-		public function alias(string $alias): ISchemaBuilder;
+namespace Edde\Schema;
 
-		/**
-		 * set meta data for the schema
-		 *
-		 * @param array $meta
-		 *
-		 * @return ISchemaBuilder
-		 */
-		public function meta(array $meta): ISchemaBuilder;
+interface ISchemaBuilder {
+    /**
+     * set alias to this schema; later in queries name or alias could be used
+     *
+     * @param string $alias
+     *
+     * @return ISchemaBuilder
+     */
+    public function alias(string $alias): ISchemaBuilder;
 
-		/**
-		 * create a new property with the given name
-		 *
-		 * @param string $name
-		 *
-		 * @return IAttributeBuilder
-		 */
-		public function property(string $name): IAttributeBuilder;
+    /**
+     * set meta data for the schema
+     *
+     * @param array $meta
+     *
+     * @return ISchemaBuilder
+     */
+    public function meta(array $meta): ISchemaBuilder;
 
-		/**
-		 * mark this schema as a relation (source)->(target)
-		 *
-		 * @param string $source
-		 * @param string $target
-		 *
-		 * @return ISchemaBuilder
-		 */
-		public function relation(string $source, string $target): ISchemaBuilder;
+    /**
+     * create a new property with the given name
+     *
+     * @param string $name
+     *
+     * @return IAttributeBuilder
+     */
+    public function property(string $name): IAttributeBuilder;
 
-		/**
-		 * build and return a schema
-		 *
-		 * @return ISchema
-		 */
-		public function create(): ISchema;
-	}
+    /**
+     * mark this schema as a relation (source)->(target)
+     *
+     * @param string $source
+     * @param string $target
+     *
+     * @return ISchemaBuilder
+     */
+    public function relation(string $source, string $target): ISchemaBuilder;
+
+    /**
+     * build and return a schema
+     *
+     * @return ISchema
+     */
+    public function create(): ISchema;
+}

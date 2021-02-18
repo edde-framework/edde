@@ -1,17 +1,18 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Job;
+declare(strict_types=1);
 
-	use Edde\Job\IJobQueue;
+namespace Edde\Service\Job;
 
-	trait JobQueue {
-		/** @var IJobQueue */
-		protected $jobQueue;
+use Edde\Job\IJobQueue;
 
-		/**
-		 * @param IJobQueue $jobQueue
-		 */
-		public function injectJobQueue(IJobQueue $jobQueue): void {
-			$this->jobQueue = $jobQueue;
-		}
-	}
+trait JobQueue {
+    /** @var IJobQueue */
+    protected $jobQueue;
+
+    /**
+     * @param IJobQueue $jobQueue
+     */
+    public function injectJobQueue(IJobQueue $jobQueue): void {
+        $this->jobQueue = $jobQueue;
+    }
+}

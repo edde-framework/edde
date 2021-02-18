@@ -1,14 +1,15 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Upgrade;
+declare(strict_types=1);
 
-	use DateTime;
-	use Edde\Schema\UuidSchema;
+namespace Edde\Upgrade;
 
-	interface UpgradeSchema extends UuidSchema {
-		const alias = true;
+use DateTime;
+use Edde\Schema\UuidSchema;
 
-		public function version($unique): string;
+interface UpgradeSchema extends UuidSchema {
+    const alias = true;
 
-		public function stamp($generator = 'stamp'): DateTime;
-	}
+    public function version($unique): string;
+
+    public function stamp($generator = 'stamp'): DateTime;
+}

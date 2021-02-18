@@ -1,20 +1,21 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Filter;
+declare(strict_types=1);
 
-	use const FILTER_VALIDATE_FLOAT;
+namespace Edde\Filter;
 
-	class FloatFilter extends AbstractFilter {
-		/** @inheritdoc */
-		public function input($value, ?array $options = null) {
-			return $this->output($value, $options);
-		}
+use const FILTER_VALIDATE_FLOAT;
 
-		/** @inheritdoc */
-		public function output($value, ?array $options = null) {
-			if (($value = filter_var($value, FILTER_VALIDATE_FLOAT)) === false) {
-				return null;
-			}
-			return $value;
-		}
-	}
+class FloatFilter extends AbstractFilter {
+    /** @inheritdoc */
+    public function input($value, ?array $options = null) {
+        return $this->output($value, $options);
+    }
+
+    /** @inheritdoc */
+    public function output($value, ?array $options = null) {
+        if (($value = filter_var($value, FILTER_VALIDATE_FLOAT)) === false) {
+            return null;
+        }
+        return $value;
+    }
+}

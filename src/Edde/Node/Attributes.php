@@ -1,28 +1,29 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Node;
+declare(strict_types=1);
 
-	use Edde\Edde;
+namespace Edde\Node;
 
-	class Attributes extends Edde implements IAttributes {
-		protected $attributes;
+use Edde\Edde;
 
-		public function __construct(array $attributes = null) {
-			$this->attributes = $attributes ?? [];
-		}
+class Attributes extends Edde implements IAttributes {
+    protected $attributes;
 
-		/** @inheritdoc */
-		public function get(string $name, $default = null) {
-			return $this->attributes[$name] ?? $default;
-		}
+    public function __construct(array $attributes = null) {
+        $this->attributes = $attributes ?? [];
+    }
 
-		/** @inheritdoc */
-		public function hasAttributes(string $name): bool {
-			return isset($this->attributes[$name]) && $this->attributes[$name] instanceof IAttributes;
-		}
+    /** @inheritdoc */
+    public function get(string $name, $default = null) {
+        return $this->attributes[$name] ?? $default;
+    }
 
-		/** @inheritdoc */
-		public function getIterator() {
-			yield from $this->attributes;
-		}
-	}
+    /** @inheritdoc */
+    public function hasAttributes(string $name): bool {
+        return isset($this->attributes[$name]) && $this->attributes[$name] instanceof IAttributes;
+    }
+
+    /** @inheritdoc */
+    public function getIterator() {
+        yield from $this->attributes;
+    }
+}

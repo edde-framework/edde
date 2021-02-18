@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Hydrator;
+declare(strict_types=1);
 
-	use Edde\Edde;
+namespace Edde\Hydrator;
 
-	abstract class AbstractHydrator extends Edde implements IHydrator {
-	}
+use Edde\Edde;
+
+abstract class AbstractHydrator extends Edde implements IHydrator {
+}

@@ -1,17 +1,18 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Filter;
+declare(strict_types=1);
 
-	use const FILTER_VALIDATE_INT;
+namespace Edde\Filter;
 
-	class IntFilter extends AbstractFilter {
-		/** @inheritdoc */
-		public function input($value, ?array $options = null) {
-			return (int)filter_var($value, FILTER_VALIDATE_INT);
-		}
+use const FILTER_VALIDATE_INT;
 
-		/** @inheritdoc */
-		public function output($value, ?array $options = null) {
-			return $this->input($value);
-		}
-	}
+class IntFilter extends AbstractFilter {
+    /** @inheritdoc */
+    public function input($value, ?array $options = null) {
+        return (int)filter_var($value, FILTER_VALIDATE_INT);
+    }
+
+    /** @inheritdoc */
+    public function output($value, ?array $options = null) {
+        return $this->input($value);
+    }
+}

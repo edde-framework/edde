@@ -1,144 +1,145 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Controller;
+declare(strict_types=1);
 
-	use Edde\Application\ApplicationException;
-	use Edde\Content\GeneratorContent;
-	use Edde\Content\HtmlContent;
-	use Edde\Content\JsonContent;
-	use Edde\Content\NoContent;
-	use Edde\Content\TextContent;
-	use Edde\File\IFile;
-	use Edde\Http\EmptyBodyException;
-	use Edde\Http\IResponse;
-	use Edde\Http\Response;
-	use Edde\Service\Http\RequestService;
-	use Edde\Url\UrlException;
-	use Edde\Version;
-	use function json_decode;
+namespace Edde\Controller;
 
-	/**
-	 * Http control provides helpers for a http response style.
-	 */
-	class HttpController extends AbstractController {
-		use RequestService;
+use Edde\Application\ApplicationException;
+use Edde\Content\GeneratorContent;
+use Edde\Content\HtmlContent;
+use Edde\Content\JsonContent;
+use Edde\Content\NoContent;
+use Edde\Content\TextContent;
+use Edde\File\IFile;
+use Edde\Http\EmptyBodyException;
+use Edde\Http\IResponse;
+use Edde\Http\Response;
+use Edde\Service\Http\RequestService;
+use Edde\Url\UrlException;
+use Edde\Version;
+use function json_decode;
 
-		public function __call(string $name, $arguments) {
-			$response = new Response();
-			$response->setCode(IResponse::R400_BAD_REQUEST);
-			$response->execute();
-		}
+/**
+ * Http control provides helpers for a http response style.
+ */
+class HttpController extends AbstractController {
+    use RequestService;
 
-		/**
-		 * @param string $expected
-		 *
-		 * @return mixed
-		 *
-		 * @throws ApplicationException
-		 * @throws EmptyBodyException
-		 * @throws UrlException
-		 */
-		protected function getContent(string $expected) {
-			if (($content = $this->requestService->getContent())->getType() !== $expected) {
-				throw new ApplicationException(sprintf('Content mismatch: expected [%s], got [%s]', $expected, $content->getType()));
-			}
-			return $content->getContent();
-		}
+    public function __call(string $name, $arguments) {
+        $response = new Response();
+        $response->setCode(IResponse::R400_BAD_REQUEST);
+        $response->execute();
+    }
 
-		/**
-		 * @return mixed
-		 *
-		 * @throws ApplicationException
-		 * @throws EmptyBodyException
-		 * @throws UrlException
-		 */
-		protected function jsonRequest() {
-			return json_decode($this->getContent('application/json'));
-		}
+    /**
+     * @param string $expected
+     *
+     * @return mixed
+     *
+     * @throws ApplicationException
+     * @throws EmptyBodyException
+     * @throws UrlException
+     */
+    protected function getContent(string $expected) {
+        if (($content = $this->requestService->getContent())->getType() !== $expected) {
+            throw new ApplicationException(sprintf('Content mismatch: expected [%s], got [%s]', $expected, $content->getType()));
+        }
+        return $content->getContent();
+    }
 
-		/**
-		 * execute response with json based data
-		 *
-		 * @param mixed $content
-		 * @param int   $code
-		 *
-		 * @return IResponse
-		 */
-		protected function jsonResponse($content, int $code = IResponse::R200_OK): IResponse {
-			return $this->response(new Response(new JsonContent(json_encode($content))), $code);
-		}
+    /**
+     * @return mixed
+     *
+     * @throws ApplicationException
+     * @throws EmptyBodyException
+     * @throws UrlException
+     */
+    protected function jsonRequest() {
+        return json_decode($this->getContent('application/json'));
+    }
 
-		/**
-		 * execute response with html based data
-		 *
-		 * @param string|IFile $content
-		 * @param int          $code
-		 *
-		 * @return IResponse
-		 */
-		protected function htmlResponse($content, int $code = IResponse::R200_OK): IResponse {
-			return $this->response(new Response(new HtmlContent($content)), $code);
-		}
+    /**
+     * execute response with json based data
+     *
+     * @param mixed $content
+     * @param int   $code
+     *
+     * @return IResponse
+     */
+    protected function jsonResponse($content, int $code = IResponse::R200_OK): IResponse {
+        return $this->response(new Response(new JsonContent(json_encode($content))), $code);
+    }
 
-		/**
-		 * execute response with simple text content
-		 *
-		 * @param string|IFile $content
-		 * @param int          $code
-		 *
-		 * @return IResponse
-		 */
-		protected function textResponse($content, int $code = IResponse::R200_OK): IResponse {
-			return $this->response(new Response(new TextContent($content)), $code);
-		}
+    /**
+     * execute response with html based data
+     *
+     * @param string|IFile $content
+     * @param int          $code
+     *
+     * @return IResponse
+     */
+    protected function htmlResponse($content, int $code = IResponse::R200_OK): IResponse {
+        return $this->response(new Response(new HtmlContent($content)), $code);
+    }
 
-		/**
-		 * return no-content response
-		 */
-		protected function sendNoContent(): void {
-			$this->response(
-				new Response(new NoContent()),
-				IResponse::R200_NO_CONTENT
-			)->execute();
-		}
+    /**
+     * execute response with simple text content
+     *
+     * @param string|IFile $content
+     * @param int          $code
+     *
+     * @return IResponse
+     */
+    protected function textResponse($content, int $code = IResponse::R200_OK): IResponse {
+        return $this->response(new Response(new TextContent($content)), $code);
+    }
 
-		/**
-		 * return empty created response
-		 */
-		protected function sendCreated(): void {
-			$this->response(
-				new Response(new NoContent()),
-				IResponse::R200_OK_CREATED
-			)->execute();
-		}
+    /**
+     * return no-content response
+     */
+    protected function sendNoContent(): void {
+        $this->response(
+            new Response(new NoContent()),
+            IResponse::R200_NO_CONTENT
+        )->execute();
+    }
 
-		/**
-		 * @param callable $generator
-		 * @param string   $type
-		 * @param int      $code
-		 *
-		 * @return IResponse
-		 */
-		protected function generatorResponse(callable $generator, string $type = 'text/plain', int $code = IResponse::R200_OK): IResponse {
-			return $this->response(
-				new Response(new GeneratorContent($generator, $type)),
-				$code
-			);
-		}
+    /**
+     * return empty created response
+     */
+    protected function sendCreated(): void {
+        $this->response(
+            new Response(new NoContent()),
+            IResponse::R200_OK_CREATED
+        )->execute();
+    }
 
-		/**
-		 * just prepare response
-		 *
-		 * @param IResponse $response
-		 * @param int       $code
-		 *
-		 * @return IResponse
-		 */
-		protected function response(IResponse $response, int $code = IResponse::R200_OK) {
-			$response->header('X-Powered-By', 'Edde Framework "' . Version::$codename . '" ' . Version::$framework);
-			$response->header('Access-Control-Allow-Origin', '*');
-			$response->header('Access-Control-Expose-Headers', '*');
-			$response->setCode($code);
-			return $response;
-		}
-	}
+    /**
+     * @param callable $generator
+     * @param string   $type
+     * @param int      $code
+     *
+     * @return IResponse
+     */
+    protected function generatorResponse(callable $generator, string $type = 'text/plain', int $code = IResponse::R200_OK): IResponse {
+        return $this->response(
+            new Response(new GeneratorContent($generator, $type)),
+            $code
+        );
+    }
+
+    /**
+     * just prepare response
+     *
+     * @param IResponse $response
+     * @param int       $code
+     *
+     * @return IResponse
+     */
+    protected function response(IResponse $response, int $code = IResponse::R200_OK) {
+        $response->header('X-Powered-By', 'Edde Framework "' . Version::$codename . '" ' . Version::$framework);
+        $response->header('Access-Control-Allow-Origin', '*');
+        $response->header('Access-Control-Expose-Headers', '*');
+        $response->setCode($code);
+        return $response;
+    }
+}

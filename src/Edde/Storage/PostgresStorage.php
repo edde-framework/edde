@@ -1,45 +1,47 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Storage;
+declare(strict_types=1);
 
-	use Edde\Service\Container\Container;
-	use Throwable;
+namespace Edde\Storage;
 
-	class PostgresStorage extends AbstractPdoStorage {
-		use Container;
-		const TYPES = [
-			'string'   => 'CHARACTER VARYING(1024)',
-			'text'     => 'TEXT',
-			'json'     => 'TEXT',
-			'binary'   => 'TEXT',
-			'base64'   => 'TEXT',
-			'int'      => 'INTEGER',
-			'float'    => 'DOUBLE PRECISION',
-			'bool'     => 'SMALLINT',
-			'datetime' => 'TIMESTAMP(6)',
-			'uuid'     => 'UUID',
-		];
+use Edde\Service\Container\Container;
+use Throwable;
 
-		public function __construct(string $config = 'postgres') {
-			parent::__construct($config);
-		}
+class PostgresStorage extends AbstractPdoStorage {
+    use Container;
 
-		/** @inheritdoc */
-		public function delimit(string $string): string {
-			return '"' . str_replace('"', '"' . '"', $string) . '"';
-		}
+    const TYPES = [
+        'string'   => 'CHARACTER VARYING(1024)',
+        'text'     => 'TEXT',
+        'json'     => 'TEXT',
+        'binary'   => 'TEXT',
+        'base64'   => 'TEXT',
+        'int'      => 'INTEGER',
+        'float'    => 'DOUBLE PRECISION',
+        'bool'     => 'SMALLINT',
+        'datetime' => 'TIMESTAMP(6)',
+        'uuid'     => 'UUID',
+    ];
 
-		/** @inheritdoc */
-		public function exception(Throwable $throwable): Throwable {
-			if (stripos($message = $throwable->getMessage(), 'unique') !== false) {
-				return new DuplicateEntryException($message, 0, $throwable);
-			} else if (stripos($message, 'not null') !== false) {
-				return new NullValueException($message, 0, $throwable);
-			} else if (stripos($message, 'duplicate table') !== false) {
-				return new DuplicateTableException($message, 0, $throwable);
-			} else if (stripos($message, 'undefined table') !== false) {
-				return new UnknownTableException($message, 0, $throwable);
-			}
-			return $throwable;
-		}
-	}
+    public function __construct(string $config = 'postgres') {
+        parent::__construct($config);
+    }
+
+    /** @inheritdoc */
+    public function delimit(string $string): string {
+        return '"' . str_replace('"', '"' . '"', $string) . '"';
+    }
+
+    /** @inheritdoc */
+    public function exception(Throwable $throwable): Throwable {
+        if (stripos($message = $throwable->getMessage(), 'unique') !== false) {
+            return new DuplicateEntryException($message, 0, $throwable);
+        } else if (stripos($message, 'not null') !== false) {
+            return new NullValueException($message, 0, $throwable);
+        } else if (stripos($message, 'duplicate table') !== false) {
+            return new DuplicateTableException($message, 0, $throwable);
+        } else if (stripos($message, 'undefined table') !== false) {
+            return new UnknownTableException($message, 0, $throwable);
+        }
+        return $throwable;
+    }
+}

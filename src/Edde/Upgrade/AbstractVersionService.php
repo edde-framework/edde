@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Upgrade;
+declare(strict_types=1);
 
-	use Edde\Edde;
+namespace Edde\Upgrade;
 
-	abstract class AbstractVersionService extends Edde implements IVersionService {
-	}
+use Edde\Edde;
+
+abstract class AbstractVersionService extends Edde implements IVersionService {
+}

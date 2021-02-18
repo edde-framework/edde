@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Security;
+declare(strict_types=1);
 
-	use Edde\EddeException;
+namespace Edde\Security;
 
-	class SecurityException extends EddeException {
-	}
+use Edde\EddeException;
+
+class SecurityException extends EddeException {
+}

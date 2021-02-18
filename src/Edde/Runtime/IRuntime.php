@@ -1,19 +1,20 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Runtime;
+declare(strict_types=1);
 
-	interface IRuntime {
-		/***
-		 * @return bool
-		 */
-		public function isConsoleMode(): bool;
+namespace Edde\Runtime;
 
-		/**
-		 * return argument list
-		 *
-		 * @return array
-		 *
-		 * @throws RuntimeException
-		 */
-		public function getArguments(): array;
-	}
+interface IRuntime {
+    /***
+     * @return bool
+     */
+    public function isConsoleMode(): bool;
+
+    /**
+     * return argument list
+     *
+     * @return array
+     *
+     * @throws RuntimeException
+     */
+    public function getArguments(): array;
+}

@@ -1,20 +1,21 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Log;
+declare(strict_types=1);
 
-	use Edde\Log\ILogService;
+namespace Edde\Service\Log;
 
-	/**
-	 * Lazy log service dependency.
-	 */
-	trait LogService {
-		/** @var ILogService */
-		protected $logService;
+use Edde\Log\ILogService;
 
-		/**
-		 * @param ILogService $logService
-		 */
-		public function injectLogService(ILogService $logService) {
-			$this->logService = $logService;
-		}
-	}
+/**
+ * Lazy log service dependency.
+ */
+trait LogService {
+    /** @var ILogService */
+    protected $logService;
+
+    /**
+     * @param ILogService $logService
+     */
+    public function injectLogService(ILogService $logService) {
+        $this->logService = $logService;
+    }
+}

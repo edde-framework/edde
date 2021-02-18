@@ -1,11 +1,12 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Configurable;
+declare(strict_types=1);
 
-	use Edde\Edde;
+namespace Edde\Configurable;
 
-	abstract class AbstractConfigurator extends Edde implements IConfigurator {
-		/** @inheritdoc */
-		public function configure($instance) {
-		}
-	}
+use Edde\Edde;
+
+abstract class AbstractConfigurator extends Edde implements IConfigurator {
+    /** @inheritdoc */
+    public function configure($instance) {
+    }
+}

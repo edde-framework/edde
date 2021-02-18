@@ -1,17 +1,18 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Message;
+declare(strict_types=1);
 
-	use Edde\Message\IMessageBus;
+namespace Edde\Service\Message;
 
-	trait MessageBus {
-		/** @var IMessageBus */
-		protected $messageBus;
+use Edde\Message\IMessageBus;
 
-		/**
-		 * @param IMessageBus $messageBus
-		 */
-		public function injectMessageBus(IMessageBus $messageBus): void {
-			$this->messageBus = $messageBus;
-		}
-	}
+trait MessageBus {
+    /** @var IMessageBus */
+    protected $messageBus;
+
+    /**
+     * @param IMessageBus $messageBus
+     */
+    public function injectMessageBus(IMessageBus $messageBus): void {
+        $this->messageBus = $messageBus;
+    }
+}

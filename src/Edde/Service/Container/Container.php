@@ -1,20 +1,21 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Container;
+declare(strict_types=1);
 
-	use Edde\Container\IContainer;
+namespace Edde\Service\Container;
 
-	/**
-	 * Defines lazy dependency on a system dependency container.
-	 */
-	trait Container {
-		/** @var IContainer */
-		protected $container;
+use Edde\Container\IContainer;
 
-		/**
-		 * @param IContainer $container
-		 */
-		public function injectContainer(IContainer $container) {
-			$this->container = $container;
-		}
-	}
+/**
+ * Defines lazy dependency on a system dependency container.
+ */
+trait Container {
+    /** @var IContainer */
+    protected $container;
+
+    /**
+     * @param IContainer $container
+     */
+    public function injectContainer(IContainer $container) {
+        $this->container = $container;
+    }
+}

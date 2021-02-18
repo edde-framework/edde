@@ -1,6 +1,7 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde;
+declare(strict_types=1);
 
-	class ObjectException extends EddeException {
-	}
+namespace Edde;
+
+class ObjectException extends EddeException {
+}

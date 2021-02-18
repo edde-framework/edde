@@ -1,17 +1,18 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Application;
+declare(strict_types=1);
 
-	use Edde\Application\IRouterService;
+namespace Edde\Service\Application;
 
-	trait RouterService {
-		/** @var IRouterService */
-		protected $routerService;
+use Edde\Application\IRouterService;
 
-		/**
-		 * @param IRouterService $routerService
-		 */
-		public function injectRouterService(IRouterService $routerService): void {
-			$this->routerService = $routerService;
-		}
-	}
+trait RouterService {
+    /** @var IRouterService */
+    protected $routerService;
+
+    /**
+     * @param IRouterService $routerService
+     */
+    public function injectRouterService(IRouterService $routerService): void {
+        $this->routerService = $routerService;
+    }
+}

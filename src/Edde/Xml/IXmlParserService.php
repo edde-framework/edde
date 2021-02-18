@@ -1,49 +1,50 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Xml;
+declare(strict_types=1);
 
-	use Edde\File\FileException;
-	use Edde\File\IFile;
+namespace Edde\Xml;
 
-	/**
-	 * Event based xml parser.
-	 */
-	interface IXmlParserService {
-		/**
-		 * parse the given string
-		 *
-		 * @param string      $string
-		 * @param IXmlHandler $xmlHandler
-		 *
-		 * @return IXmlParserService
-		 *
-		 * @throws XmlException
-		 */
-		public function string(string $string, IXmlHandler $xmlHandler): IXmlParserService;
+use Edde\File\FileException;
+use Edde\File\IFile;
 
-		/**
-		 * shorthand for usage with files
-		 *
-		 * @param string      $file
-		 * @param IXmlHandler $xmlHandler
-		 *
-		 * @return IXmlParserService
-		 *
-		 * @throws XmlException
-		 * @throws FileException
-		 */
-		public function file(string $file, IXmlHandler $xmlHandler): IXmlParserService;
+/**
+ * Event based xml parser.
+ */
+interface IXmlParserService {
+    /**
+     * parse the given string
+     *
+     * @param string      $string
+     * @param IXmlHandler $xmlHandler
+     *
+     * @return IXmlParserService
+     *
+     * @throws XmlException
+     */
+    public function string(string $string, IXmlHandler $xmlHandler): IXmlParserService;
 
-		/**
-		 * parse the input stream and emit events to the given xml handler
-		 *
-		 * @param IFile       $file
-		 * @param IXmlHandler $xmlHandler
-		 *
-		 * @return IXmlParserService
-		 *
-		 * @throws XmlException
-		 * @throws FileException
-		 */
-		public function parse(IFile $file, IXmlHandler $xmlHandler): IXmlParserService;
-	}
+    /**
+     * shorthand for usage with files
+     *
+     * @param string      $file
+     * @param IXmlHandler $xmlHandler
+     *
+     * @return IXmlParserService
+     *
+     * @throws XmlException
+     * @throws FileException
+     */
+    public function file(string $file, IXmlHandler $xmlHandler): IXmlParserService;
+
+    /**
+     * parse the input stream and emit events to the given xml handler
+     *
+     * @param IFile       $file
+     * @param IXmlHandler $xmlHandler
+     *
+     * @return IXmlParserService
+     *
+     * @throws XmlException
+     * @throws FileException
+     */
+    public function parse(IFile $file, IXmlHandler $xmlHandler): IXmlParserService;
+}

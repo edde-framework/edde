@@ -1,45 +1,46 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Config;
+declare(strict_types=1);
 
-	use Edde\Edde;
-	use stdClass;
+namespace Edde\Config;
 
-	class Section extends Edde implements ISection {
-		/** @var string */
-		protected $name;
-		/** @var stdClass */
-		protected $section;
+use Edde\Edde;
+use stdClass;
 
-		/**
-		 * @param string   $name
-		 * @param stdClass $section
-		 */
-		public function __construct(string $name, stdClass $section) {
-			$this->name = $name;
-			$this->section = $section;
-		}
+class Section extends Edde implements ISection {
+    /** @var string */
+    protected $name;
+    /** @var stdClass */
+    protected $section;
 
-		/** @inheritdoc */
-		public function getName(): string {
-			return $this->name;
-		}
+    /**
+     * @param string   $name
+     * @param stdClass $section
+     */
+    public function __construct(string $name, stdClass $section) {
+        $this->name = $name;
+        $this->section = $section;
+    }
 
-		/** @inheritdoc */
-		public function require(string $name) {
-			if (isset($this->section->$name) === false) {
-				throw new ConfigException(sprintf('Required section value [%s::%s] is not available!', $this->name, $name));
-			}
-			return $this->section->$name;
-		}
+    /** @inheritdoc */
+    public function getName(): string {
+        return $this->name;
+    }
 
-		/** @inheritdoc */
-		public function optional(string $name, $default = null) {
-			return $this->section->$name ?? $default;
-		}
+    /** @inheritdoc */
+    public function require(string $name) {
+        if (isset($this->section->$name) === false) {
+            throw new ConfigException(sprintf('Required section value [%s::%s] is not available!', $this->name, $name));
+        }
+        return $this->section->$name;
+    }
 
-		/** @inheritdoc */
-		public function toObject(): stdClass {
-			return $this->section;
-		}
-	}
+    /** @inheritdoc */
+    public function optional(string $name, $default = null) {
+        return $this->section->$name ?? $default;
+    }
+
+    /** @inheritdoc */
+    public function toObject(): stdClass {
+        return $this->section;
+    }
+}

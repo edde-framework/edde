@@ -1,17 +1,18 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Security;
+declare(strict_types=1);
 
-	use Edde\Security\IRandomService;
+namespace Edde\Service\Security;
 
-	trait RandomService {
-		/** @var IRandomService */
-		protected $randomService;
+use Edde\Security\IRandomService;
 
-		/**
-		 * @param IRandomService $randomService
-		 */
-		public function injectRandomService(IRandomService $randomService) {
-			$this->randomService = $randomService;
-		}
-	}
+trait RandomService {
+    /** @var IRandomService */
+    protected $randomService;
+
+    /**
+     * @param IRandomService $randomService
+     */
+    public function injectRandomService(IRandomService $randomService) {
+        $this->randomService = $randomService;
+    }
+}

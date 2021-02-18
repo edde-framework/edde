@@ -1,6 +1,7 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Storage;
+declare(strict_types=1);
 
-	class DuplicateEntryException extends StorageException {
-	}
+namespace Edde\Storage;
+
+class DuplicateEntryException extends StorageException {
+}

@@ -1,15 +1,16 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Log;
+declare(strict_types=1);
 
-	use Edde\Configurable\AbstractConfigurator;
+namespace Edde\Log;
 
-	class LogServiceConfigurator extends AbstractConfigurator {
-		/**
-		 * @param ILogService $instance
-		 */
-		public function configure($instance) {
-			parent::configure($instance);
-			$instance->registerLogger(new StdLogger());
-		}
-	}
+use Edde\Configurable\AbstractConfigurator;
+
+class LogServiceConfigurator extends AbstractConfigurator {
+    /**
+     * @param ILogService $instance
+     */
+    public function configure($instance) {
+        parent::configure($instance);
+        $instance->registerLogger(new StdLogger());
+    }
+}

@@ -1,17 +1,18 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Config;
+declare(strict_types=1);
 
-	use Edde\Config\IConfigService;
+namespace Edde\Service\Config;
 
-	trait ConfigService {
-		/** @var IConfigService */
-		protected $configService;
+use Edde\Config\IConfigService;
 
-		/**
-		 * @param IConfigService $configService
-		 */
-		public function injectConfigService(IConfigService $configService): void {
-			$this->configService = $configService;
-		}
-	}
+trait ConfigService {
+    /** @var IConfigService */
+    protected $configService;
+
+    /**
+     * @param IConfigService $configService
+     */
+    public function injectConfigService(IConfigService $configService): void {
+        $this->configService = $configService;
+    }
+}

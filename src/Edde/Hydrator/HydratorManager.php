@@ -1,29 +1,31 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Hydrator;
+declare(strict_types=1);
 
-	use Edde\Edde;
-	use Edde\Service\Container\Container;
+namespace Edde\Hydrator;
 
-	class HydratorManager extends Edde implements IHydratorManager {
-		use Container;
-		/** @var IHydrator[] */
-		protected $schemas = [];
-		/** @var IHydrator */
-		protected $single;
+use Edde\Edde;
+use Edde\Service\Container\Container;
 
-		/** @inheritdoc */
-		public function schema(string $name = null): IHydrator {
-			if (isset($this->schemas[$name])) {
-				return $this->schemas[$name];
-			}
-			return $this->container->inject($this->schemas[$name] = new SchemaHydrator($name));
-		}
+class HydratorManager extends Edde implements IHydratorManager {
+    use Container;
 
-		/**
-		 * @return IHydrator
-		 */
-		public function single(): IHydrator {
-			return $this->single ?: $this->single = new SingleHydrator();
-		}
-	}
+    /** @var IHydrator[] */
+    protected $schemas = [];
+    /** @var IHydrator */
+    protected $single;
+
+    /** @inheritdoc */
+    public function schema(string $name = null): IHydrator {
+        if (isset($this->schemas[$name])) {
+            return $this->schemas[$name];
+        }
+        return $this->container->inject($this->schemas[$name] = new SchemaHydrator($name));
+    }
+
+    /**
+     * @return IHydrator
+     */
+    public function single(): IHydrator {
+        return $this->single ?: $this->single = new SingleHydrator();
+    }
+}

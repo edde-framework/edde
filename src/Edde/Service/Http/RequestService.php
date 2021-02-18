@@ -1,17 +1,18 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Http;
+declare(strict_types=1);
 
-	use Edde\Http\IRequestService;
+namespace Edde\Service\Http;
 
-	trait RequestService {
-		/** @var IRequestService */
-		protected $requestService;
+use Edde\Http\IRequestService;
 
-		/**
-		 * @param IRequestService $requestService
-		 */
-		public function injectRequestService(IRequestService $requestService) {
-			$this->requestService = $requestService;
-		}
-	}
+trait RequestService {
+    /** @var IRequestService */
+    protected $requestService;
+
+    /**
+     * @param IRequestService $requestService
+     */
+    public function injectRequestService(IRequestService $requestService) {
+        $this->requestService = $requestService;
+    }
+}

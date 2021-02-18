@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Schema;
+declare(strict_types=1);
 
-	use Edde\Edde;
+namespace Edde\Schema;
 
-	abstract class AbstractSchemaLoader extends Edde implements ISchemaLoader {
-	}
+use Edde\Edde;
+
+abstract class AbstractSchemaLoader extends Edde implements ISchemaLoader {
+}

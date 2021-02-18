@@ -1,6 +1,7 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Storage;
+declare(strict_types=1);
 
-	class UnknownTableException extends StorageException {
-	}
+namespace Edde\Storage;
+
+class UnknownTableException extends StorageException {
+}

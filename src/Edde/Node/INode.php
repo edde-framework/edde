@@ -1,141 +1,142 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Node;
+declare(strict_types=1);
 
-	use Traversable;
+namespace Edde\Node;
 
-	/**
-	 * INode is extended version of ITree which holds name, value, attributes and metadata; it can be used as
-	 * complex (tree) data structure holder. It is similar to XML node.
-	 */
-	interface INode extends ITree {
-		/**
-		 * @param string $name
-		 *
-		 * @return $this
-		 */
-		public function setName(?string $name): INode;
+use Traversable;
 
-		/**
-		 * @return string
-		 */
-		public function getName(): ?string;
+/**
+ * INode is extended version of ITree which holds name, value, attributes and metadata; it can be used as
+ * complex (tree) data structure holder. It is similar to XML node.
+ */
+interface INode extends ITree {
+    /**
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function setName(?string $name): INode;
 
-		/**
-		 * @param mixed $value
-		 *
-		 * @return $this
-		 */
-		public function setValue($value): INode;
+    /**
+     * @return string
+     */
+    public function getName(): ?string;
 
-		/**
-		 * @param mixed|null $default
-		 *
-		 * @return mixed
-		 */
-		public function getValue($default = null);
+    /**
+     * @param mixed $value
+     *
+     * @return $this
+     */
+    public function setValue($value): INode;
 
-		/**
-		 * return list of attributes for this node
-		 *
-		 * @return IAttributes
-		 */
-		public function getAttributes(): IAttributes;
+    /**
+     * @param mixed|null $default
+     *
+     * @return mixed
+     */
+    public function getValue($default = null);
 
-		/**
-		 * set attribute value or attribute list as a namespaced attribute
-		 *
-		 * @param string            $name
-		 * @param IAttributes|mixed $value
-		 *
-		 * @return INode
-		 */
-		public function setAttribute(string $name, $value): INode;
+    /**
+     * return list of attributes for this node
+     *
+     * @return IAttributes
+     */
+    public function getAttributes(): IAttributes;
 
-		/**
-		 * is the given attribute name present?
-		 *
-		 * @param string $name
-		 *
-		 * @return bool
-		 */
-		public function hasAttribute(string $name): bool;
+    /**
+     * set attribute value or attribute list as a namespaced attribute
+     *
+     * @param string            $name
+     * @param IAttributes|mixed $value
+     *
+     * @return INode
+     */
+    public function setAttribute(string $name, $value): INode;
 
-		/**
-		 * return attribute
-		 *
-		 * @param string $name
-		 * @param null   $default
-		 *
-		 * @return IAttributes|string|mixed
-		 */
-		public function getAttribute(string $name, $default = null);
+    /**
+     * is the given attribute name present?
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasAttribute(string $name): bool;
 
-		/**
-		 * return list of meta data
-		 *
-		 * @return IAttributes
-		 */
-		public function getMetas(): IAttributes;
+    /**
+     * return attribute
+     *
+     * @param string $name
+     * @param null   $default
+     *
+     * @return IAttributes|string|mixed
+     */
+    public function getAttribute(string $name, $default = null);
 
-		/**
-		 * @param string            $name
-		 * @param IAttributes|mixed $value
-		 *
-		 * @return INode
-		 */
-		public function setMeta(string $name, $value): INode;
+    /**
+     * return list of meta data
+     *
+     * @return IAttributes
+     */
+    public function getMetas(): IAttributes;
 
-		/**
-		 * @param string $name
-		 *
-		 * @return bool
-		 */
-		public function hasMeta(string $name): bool;
+    /**
+     * @param string            $name
+     * @param IAttributes|mixed $value
+     *
+     * @return INode
+     */
+    public function setMeta(string $name, $value): INode;
 
-		/**
-		 * get meta from node
-		 *
-		 * @param string $name
-		 * @param null   $default
-		 *
-		 * @return IAttributes|string|int|mixed
-		 */
-		public function getMeta(string $name, $default = null);
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasMeta(string $name): bool;
 
-		/**
-		 * generate materialized path from node names
-		 *
-		 * @return INode|null
-		 */
-		public function getParent(): ?ITree;
+    /**
+     * get meta from node
+     *
+     * @param string $name
+     * @param null   $default
+     *
+     * @return IAttributes|string|int|mixed
+     */
+    public function getMeta(string $name, $default = null);
 
-		/**
-		 * is node with the given name in current node list?
-		 *
-		 * @param string $name
-		 *
-		 * @return bool
-		 */
-		public function hasNode(string $name): bool;
+    /**
+     * generate materialized path from node names
+     *
+     * @return INode|null
+     */
+    public function getParent(): ?ITree;
 
-		/**
-		 * stranger between the others: get the node with the given name; if node does not
-		 * exists, new one is created
-		 *
-		 * @param string $name
-		 *
-		 * @return INode
-		 */
-		public function getNode(string $name): INode;
+    /**
+     * is node with the given name in current node list?
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasNode(string $name): bool;
 
-		/**
-		 * @return INode[]
-		 */
-		public function getTrees(): array;
+    /**
+     * stranger between the others: get the node with the given name; if node does not
+     * exists, new one is created
+     *
+     * @param string $name
+     *
+     * @return INode
+     */
+    public function getNode(string $name): INode;
 
-		/**
-		 * @return Traversable|INode[]
-		 */
-		public function getIterator();
-	}
+    /**
+     * @return INode[]
+     */
+    public function getTrees(): array;
+
+    /**
+     * @return Traversable|INode[]
+     */
+    public function getIterator();
+}

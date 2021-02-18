@@ -1,16 +1,17 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Content;
+declare(strict_types=1);
 
-	use ArrayIterator;
+namespace Edde\Content;
 
-	class NoContent extends Content {
-		public function __construct(string $type = 'text/plain') {
-			parent::__construct(null, $type);
-		}
+use ArrayIterator;
 
-		/** @inheritdoc */
-		public function getIterator() {
-			return new ArrayIterator([]);
-		}
-	}
+class NoContent extends Content {
+    public function __construct(string $type = 'text/plain') {
+        parent::__construct(null, $type);
+    }
+
+    /** @inheritdoc */
+    public function getIterator() {
+        return new ArrayIterator([]);
+    }
+}

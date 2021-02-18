@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Storage;
+declare(strict_types=1);
 
-	use Edde\EddeException;
+namespace Edde\Storage;
 
-	class StorageException extends EddeException {
-	}
+use Edde\EddeException;
+
+class StorageException extends EddeException {
+}

@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Message;
+declare(strict_types=1);
 
-	use Edde\EddeException;
+namespace Edde\Message;
 
-	class MessageException extends EddeException {
-	}
+use Edde\EddeException;
+
+class MessageException extends EddeException {
+}

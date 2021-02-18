@@ -1,60 +1,62 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Controller;
+declare(strict_types=1);
 
-	use DateTime;
-	use Edde\Service\Utils\StringUtils;
-	use ReflectionClass;
-	use ReflectionException;
-	use function vsprintf;
+namespace Edde\Controller;
 
-	/**
-	 * Control used for a command line content rendering.
-	 */
-	abstract class CliController extends AbstractController {
-		use StringUtils;
+use DateTime;
+use Edde\Service\Utils\StringUtils;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionMethod;
+use function vsprintf;
 
-		/**
-		 * @help show all available commands for a cli application
-		 *
-		 * @throws ReflectionException
-		 */
-		public function actionHelp() {
-			$this->help();
-		}
+/**
+ * Control used for a command line content rendering.
+ */
+abstract class CliController extends AbstractController {
+    use StringUtils;
 
-		/**
-		 * @param string $name
-		 * @param array  $arguments
-		 *
-		 * @throws ReflectionException
-		 */
-		public function __call(string $name, array $arguments) {
-			printf("Called unknown method on [%s::%s]\n", $this->stringUtils->extract(static::class), strtolower(str_replace('action', '', $name)));
-			$this->help();
-			printf("Please check your commandline arguments\n");
-		}
+    /**
+     * @help show all available commands for a cli application
+     *
+     * @throws ReflectionException
+     */
+    public function actionHelp() {
+        $this->help();
+    }
 
-		protected function printf(string $message, ...$params) {
-			/** @noinspection PhpUnhandledExceptionInspection */
-			printf("[%s] %s\n", (new DateTime())->format('Y-m-d H:i:s'), vsprintf($message, $params));
-		}
+    /**
+     * @param string $name
+     * @param array  $arguments
+     *
+     * @throws ReflectionException
+     */
+    public function __call(string $name, array $arguments) {
+        printf("Called unknown method on [%s::%s]\n", $this->stringUtils->extract(static::class), strtolower(str_replace('action', '', $name)));
+        $this->help();
+        printf("Please check your commandline arguments\n");
+    }
 
-		/**
-		 * @throws ReflectionException
-		 */
-		protected function help() {
-			printf("Available methods on %s:\n", $this->stringUtils->extract(static::class));
-			$reflectionClass = new ReflectionClass($this);
-			foreach ($reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $reflectionMethod) {
-				if (strpos($name = $reflectionMethod->getName(), 'action') !== false && strlen($name) > 6) {
-					printf("- %s:", strtolower(substr($name, 6)));
-					if (($match = $this->stringUtils->matchAll($reflectionMethod->getDocComment(), '~@help\s+(?<help>.*)~', true)) !== null) {
-						echo "\n\t";
-						echo implode("\n\t", $match['help']);
-					}
-					echo "\n\n";
-				}
-			}
-		}
-	}
+    protected function printf(string $message, ...$params) {
+        /** @noinspection PhpUnhandledExceptionInspection */
+        printf("[%s] %s\n", (new DateTime())->format('Y-m-d H:i:s'), vsprintf($message, $params));
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    protected function help() {
+        printf("Available methods on %s:\n", $this->stringUtils->extract(static::class));
+        $reflectionClass = new ReflectionClass($this);
+        foreach ($reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC) as $reflectionMethod) {
+            if (strpos($name = $reflectionMethod->getName(), 'action') !== false && strlen($name) > 6) {
+                printf("- %s:", strtolower(substr($name, 6)));
+                if (($match = $this->stringUtils->matchAll($reflectionMethod->getDocComment(), '~@help\s+(?<help>.*)~', true)) !== null) {
+                    echo "\n\t";
+                    echo implode("\n\t", $match['help']);
+                }
+                echo "\n\n";
+            }
+        }
+    }
+}

@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Filter;
+declare(strict_types=1);
 
-	use Edde\Edde;
+namespace Edde\Filter;
 
-	abstract class AbstractFilter extends Edde implements IFilter {
-	}
+use Edde\Edde;
+
+abstract class AbstractFilter extends Edde implements IFilter {
+}

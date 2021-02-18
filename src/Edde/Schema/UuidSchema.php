@@ -1,9 +1,10 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Schema;
+declare(strict_types=1);
 
-	interface UuidSchema {
-		const primary = 'uuid';
+namespace Edde\Schema;
 
-		public function uuid($type = 'uuid', $required = true);
-	}
+interface UuidSchema {
+    const primary = 'uuid';
+
+    public function uuid($type = 'uuid', $required = true);
+}

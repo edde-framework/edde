@@ -1,19 +1,20 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Factory;
+declare(strict_types=1);
 
-	interface IParameter {
-		/**
-		 * return name of a parameter
-		 *
-		 * @return string
-		 */
-		public function getName(): string;
+namespace Edde\Factory;
 
-		/**
-		 * return class name of the parameter
-		 *
-		 * @return string
-		 */
-		public function getClass(): string;
-	}
+interface IParameter {
+    /**
+     * return name of a parameter
+     *
+     * @return string
+     */
+    public function getName(): string;
+
+    /**
+     * return class name of the parameter
+     *
+     * @return string
+     */
+    public function getClass(): string;
+}

@@ -1,22 +1,23 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Upgrades;
+declare(strict_types=1);
 
-	use Edde\Job\JobManagerSchema;
-	use Edde\Job\JobSchema;
-	use Edde\Upgrade\AbstractUpgrade;
+namespace Edde\Upgrades;
 
-	class JobUpgrade extends AbstractUpgrade {
-		/** @inheritdoc */
-		public function getVersion(): string {
-			return 'job';
-		}
+use Edde\Job\JobManagerSchema;
+use Edde\Job\JobSchema;
+use Edde\Upgrade\AbstractUpgrade;
 
-		/** @inheritdoc */
-		public function upgrade(): void {
-			$this->storage->creates([
-				JobSchema::class,
-				JobManagerSchema::class,
-			]);
-		}
-	}
+class JobUpgrade extends AbstractUpgrade {
+    /** @inheritdoc */
+    public function getVersion(): string {
+        return 'job';
+    }
+
+    /** @inheritdoc */
+    public function upgrade(): void {
+        $this->storage->creates([
+            JobSchema::class,
+            JobManagerSchema::class,
+        ]);
+    }
+}

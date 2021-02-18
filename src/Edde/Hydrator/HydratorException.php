@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Hydrator;
+declare(strict_types=1);
 
-	use Edde\EddeException;
+namespace Edde\Hydrator;
 
-	class HydratorException extends EddeException {
-	}
+use Edde\EddeException;
+
+class HydratorException extends EddeException {
+}

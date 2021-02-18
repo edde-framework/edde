@@ -1,9 +1,10 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Controller;
+declare(strict_types=1);
 
-	/**
-	 * Formal check if the given service could be called; marker interface.
-	 */
-	interface IController {
-	}
+namespace Edde\Controller;
+
+/**
+ * Formal check if the given service could be called; marker interface.
+ */
+interface IController {
+}

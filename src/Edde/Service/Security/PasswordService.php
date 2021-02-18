@@ -1,17 +1,18 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Security;
+declare(strict_types=1);
 
-	use Edde\Security\IPasswordService;
+namespace Edde\Service\Security;
 
-	trait PasswordService {
-		/** @var IPasswordService */
-		protected $passwordService;
+use Edde\Security\IPasswordService;
 
-		/**
-		 * @param IPasswordService $passwordService
-		 */
-		public function injectPasswordService(IPasswordService $passwordService): void {
-			$this->passwordService = $passwordService;
-		}
-	}
+trait PasswordService {
+    /** @var IPasswordService */
+    protected $passwordService;
+
+    /**
+     * @param IPasswordService $passwordService
+     */
+    public function injectPasswordService(IPasswordService $passwordService): void {
+        $this->passwordService = $passwordService;
+    }
+}

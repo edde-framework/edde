@@ -1,17 +1,18 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Xml;
+declare(strict_types=1);
 
-	use Edde\Xml\IXmlParserService;
+namespace Edde\Service\Xml;
 
-	trait XmlParserService {
-		/** @var IXmlParserService */
-		protected $xmlParserService;
+use Edde\Xml\IXmlParserService;
 
-		/**
-		 * @param IXmlParserService $xmlParserService
-		 */
-		public function injectXmlParserService(IXmlParserService $xmlParserService): void {
-			$this->xmlParserService = $xmlParserService;
-		}
-	}
+trait XmlParserService {
+    /** @var IXmlParserService */
+    protected $xmlParserService;
+
+    /**
+     * @param IXmlParserService $xmlParserService
+     */
+    public function injectXmlParserService(IXmlParserService $xmlParserService): void {
+        $this->xmlParserService = $xmlParserService;
+    }
+}

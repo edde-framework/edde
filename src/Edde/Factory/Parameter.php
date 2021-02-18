@@ -1,31 +1,32 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Factory;
+declare(strict_types=1);
 
-	use Edde\SimpleObject;
+namespace Edde\Factory;
 
-	class Parameter extends SimpleObject implements IParameter {
-		/** @var string */
-		protected $name;
-		/** @var string */
-		protected $class;
+use Edde\SimpleObject;
 
-		/**
-		 * @param string $name
-		 * @param string $class
-		 */
-		public function __construct(string $name, string $class) {
-			$this->name = $name;
-			$this->class = $class;
-		}
+class Parameter extends SimpleObject implements IParameter {
+    /** @var string */
+    protected $name;
+    /** @var string */
+    protected $class;
 
-		/** @inheritdoc */
-		public function getName(): string {
-			return $this->name;
-		}
+    /**
+     * @param string $name
+     * @param string $class
+     */
+    public function __construct(string $name, string $class) {
+        $this->name = $name;
+        $this->class = $class;
+    }
 
-		/** @inheritdoc */
-		public function getClass(): string {
-			return $this->class;
-		}
-	}
+    /** @inheritdoc */
+    public function getName(): string {
+        return $this->name;
+    }
+
+    /** @inheritdoc */
+    public function getClass(): string {
+        return $this->class;
+    }
+}

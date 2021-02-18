@@ -1,17 +1,18 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Validator;
+declare(strict_types=1);
 
-	use Edde\Validator\IValidatorManager;
+namespace Edde\Service\Validator;
 
-	trait ValidatorManager {
-		/** @var IValidatorManager */
-		protected $validatorManager;
+use Edde\Validator\IValidatorManager;
 
-		/**
-		 * @param IValidatorManager $validatorManager
-		 */
-		public function injectValidatorManager(IValidatorManager $validatorManager): void {
-			$this->validatorManager = $validatorManager;
-		}
-	}
+trait ValidatorManager {
+    /** @var IValidatorManager */
+    protected $validatorManager;
+
+    /**
+     * @param IValidatorManager $validatorManager
+     */
+    public function injectValidatorManager(IValidatorManager $validatorManager): void {
+        $this->validatorManager = $validatorManager;
+    }
+}

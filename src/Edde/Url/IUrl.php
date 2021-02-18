@@ -1,144 +1,145 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Url;
+declare(strict_types=1);
 
-	interface IUrl {
-		/**
-		 * @return string
-		 */
-		public function getScheme();
+namespace Edde\Url;
 
-		/**
-		 * @return string
-		 */
-		public function getHost();
+interface IUrl {
+    /**
+     * @return string
+     */
+    public function getScheme();
 
-		/**
-		 * @return int
-		 */
-		public function getPort(int $default = 80): int;
+    /**
+     * @return string
+     */
+    public function getHost();
 
-		/**
-		 * set path path of an url
-		 *
-		 * @param string $path
-		 *
-		 * @return IUrl
-		 */
-		public function setPath(string $path): IUrl;
+    /**
+     * @return int
+     */
+    public function getPort(int $default = 80): int;
 
-		/**
-		 * @param bool $query
-		 *
-		 * @return string
-		 */
-		public function getPath(bool $query = true);
+    /**
+     * set path path of an url
+     *
+     * @param string $path
+     *
+     * @return IUrl
+     */
+    public function setPath(string $path): IUrl;
 
-		/**
-		 * @return string[]
-		 */
-		public function getPaths();
+    /**
+     * @param bool $query
+     *
+     * @return string
+     */
+    public function getPath(bool $query = true);
 
-		/**
-		 * return path without filename (simply throw away last part of url)
-		 *
-		 * @return string
-		 */
-		public function getBasePath(): string;
+    /**
+     * @return string[]
+     */
+    public function getPaths();
 
-		/**
-		 * return last part of path, if available, as resource name (commonly filename)
-		 *
-		 * @return string
-		 */
-		public function getResourceName(): string;
+    /**
+     * return path without filename (simply throw away last part of url)
+     *
+     * @return string
+     */
+    public function getBasePath(): string;
 
-		/**
-		 * a little tricky method - return extension (.something), if it is present in url
-		 *
-		 * @return string|null
-		 */
-		public function getExtension(): ?string;
+    /**
+     * return last part of path, if available, as resource name (commonly filename)
+     *
+     * @return string
+     */
+    public function getResourceName(): string;
 
-		/**
-		 * set query part of an url
-		 *
-		 * @param string $query
-		 *
-		 * @return IUrl
-		 */
-		public function setQuery(string $query): IUrl;
+    /**
+     * a little tricky method - return extension (.something), if it is present in url
+     *
+     * @return string|null
+     */
+    public function getExtension(): ?string;
 
-		/**
-		 * @return string
-		 */
-		public function getQuery();
+    /**
+     * set query part of an url
+     *
+     * @param string $query
+     *
+     * @return IUrl
+     */
+    public function setQuery(string $query): IUrl;
 
-		/**
-		 * @return array
-		 */
-		public function getParams(): array;
+    /**
+     * @return string
+     */
+    public function getQuery();
 
-		/**
-		 * @param array $params
-		 *
-		 * @return IUrl
-		 */
-		public function setParams(array $params): IUrl;
+    /**
+     * @return array
+     */
+    public function getParams(): array;
 
-		/**
-		 * @param array $params
-		 *
-		 * @return IUrl
-		 */
-		public function addParams(array $params): IUrl;
+    /**
+     * @param array $params
+     *
+     * @return IUrl
+     */
+    public function setParams(array $params): IUrl;
 
-		/**
-		 * update the given parameter
-		 *
-		 * @param string $name
-		 * @param        $value
-		 *
-		 * @return IUrl
-		 */
-		public function setParam(string $name, $value): IUrl;
+    /**
+     * @param array $params
+     *
+     * @return IUrl
+     */
+    public function addParams(array $params): IUrl;
 
-		/**
-		 * @param string      $name
-		 * @param string|null $default
-		 *
-		 * @return string
-		 */
-		public function getParam(string $name, $default = null);
+    /**
+     * update the given parameter
+     *
+     * @param string $name
+     * @param        $value
+     *
+     * @return IUrl
+     */
+    public function setParam(string $name, $value): IUrl;
 
-		/**
-		 * @return string
-		 */
-		public function getFragment();
+    /**
+     * @param string      $name
+     * @param string|null $default
+     *
+     * @return string
+     */
+    public function getParam(string $name, $default = null);
 
-		/**
-		 * @return string
-		 */
-		public function getAbsoluteUrl(): string;
+    /**
+     * @return string
+     */
+    public function getFragment();
 
-		/**
-		 * @param string $url
-		 *
-		 * @return $this
-		 *
-		 * @throws UrlException
-		 */
-		public function parse(string $url);
+    /**
+     * @return string
+     */
+    public function getAbsoluteUrl(): string;
 
-		/**
-		 * run regular expression against absolute url
-		 *
-		 * @param string $match
-		 * @param bool   $path === true, match only path
-		 *
-		 * @return array|null
-		 */
-		public function match(string $match, bool $path = true);
+    /**
+     * @param string $url
+     *
+     * @return $this
+     *
+     * @throws UrlException
+     */
+    public function parse(string $url);
 
-		public function __toString();
-	}
+    /**
+     * run regular expression against absolute url
+     *
+     * @param string $match
+     * @param bool   $path === true, match only path
+     *
+     * @return array|null
+     */
+    public function match(string $match, bool $path = true);
+
+    public function __toString();
+}

@@ -1,11 +1,12 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Job;
+declare(strict_types=1);
 
-	use Edde\Schema\UuidSchema;
+namespace Edde\Job;
 
-	interface JobManagerSchema extends UuidSchema {
-		const alias = true;
+use Edde\Schema\UuidSchema;
 
-		public function paused(): bool;
-	}
+interface JobManagerSchema extends UuidSchema {
+    const alias = true;
+
+    public function paused(): bool;
+}

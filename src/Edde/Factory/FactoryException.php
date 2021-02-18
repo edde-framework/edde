@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Factory;
+declare(strict_types=1);
 
-	use Edde\EddeException;
+namespace Edde\Factory;
 
-	class FactoryException extends EddeException {
-	}
+use Edde\EddeException;
+
+class FactoryException extends EddeException {
+}

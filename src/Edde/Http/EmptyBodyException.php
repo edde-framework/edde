@@ -1,6 +1,7 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Http;
+declare(strict_types=1);
 
-	class EmptyBodyException extends HttpException {
-	}
+namespace Edde\Http;
+
+class EmptyBodyException extends HttpException {
+}

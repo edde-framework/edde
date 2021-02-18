@@ -1,30 +1,31 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Factory;
+declare(strict_types=1);
 
-	use Edde\Container\IContainer;
-	use Edde\Edde;
+namespace Edde\Factory;
 
-	/**
-	 * Basic implementation for all dependency factories.
-	 */
-	abstract class AbstractFactory extends Edde implements IFactory {
-		/** @inheritdoc */
-		public function getUuid(): ?string {
-			return null;
-		}
+use Edde\Container\IContainer;
+use Edde\Edde;
 
-		/** @inheritdoc */
-		public function getFactory(IContainer $container): IFactory {
-			return $this;
-		}
+/**
+ * Basic implementation for all dependency factories.
+ */
+abstract class AbstractFactory extends Edde implements IFactory {
+    /** @inheritdoc */
+    public function getUuid(): ?string {
+        return null;
+    }
 
-		/** @inheritdoc */
-		public function fetch(IContainer $container, string $name, array $params) {
-		}
+    /** @inheritdoc */
+    public function getFactory(IContainer $container): IFactory {
+        return $this;
+    }
 
-		/** @inheritdoc */
-		public function push(IContainer $container, $instance) {
-			return $instance;
-		}
-	}
+    /** @inheritdoc */
+    public function fetch(IContainer $container, string $name, array $params) {
+    }
+
+    /** @inheritdoc */
+    public function push(IContainer $container, $instance) {
+        return $instance;
+    }
+}

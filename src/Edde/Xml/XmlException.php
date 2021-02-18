@@ -1,8 +1,9 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Xml;
+declare(strict_types=1);
 
-	use Edde\EddeException;
+namespace Edde\Xml;
 
-	class XmlException extends EddeException {
-	}
+use Edde\EddeException;
+
+class XmlException extends EddeException {
+}

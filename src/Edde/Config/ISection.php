@@ -1,42 +1,43 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Config;
+declare(strict_types=1);
 
-	use stdClass;
+namespace Edde\Config;
 
-	interface ISection {
-		/**
-		 * return section name
-		 *
-		 * @return string
-		 */
-		public function getName(): string;
+use stdClass;
 
-		/**
-		 * require the given value
-		 *
-		 * @param string $name
-		 *
-		 * @return mixed
-		 *
-		 * @throws ConfigException
-		 */
-		public function require(string $name);
+interface ISection {
+    /**
+     * return section name
+     *
+     * @return string
+     */
+    public function getName(): string;
 
-		/**
-		 * try to get a value or return default
-		 *
-		 * @param string $name
-		 * @param        $default
-		 *
-		 * @return mixed
-		 */
-		public function optional(string $name, $default = null);
+    /**
+     * require the given value
+     *
+     * @param string $name
+     *
+     * @return mixed
+     *
+     * @throws ConfigException
+     */
+    public function require(string $name);
 
-		/**
-		 * return section as an object
-		 *
-		 * @return stdClass
-		 */
-		public function toObject(): stdClass;
-	}
+    /**
+     * try to get a value or return default
+     *
+     * @param string $name
+     * @param        $default
+     *
+     * @return mixed
+     */
+    public function optional(string $name, $default = null);
+
+    /**
+     * return section as an object
+     *
+     * @return stdClass
+     */
+    public function toObject(): stdClass;
+}

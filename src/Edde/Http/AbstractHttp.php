@@ -1,48 +1,49 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Http;
+declare(strict_types=1);
 
-	use Edde\Content\IContent;
-	use Edde\Edde;
+namespace Edde\Http;
 
-	abstract class AbstractHttp extends Edde implements IHttp {
-		/** @var IHeaders */
-		protected $headers;
-		/** @var IContent|null */
-		protected $content;
+use Edde\Content\IContent;
+use Edde\Edde;
 
-		/**
-		 * @param IHeaders $headers
-		 */
-		public function __construct(IHeaders $headers) {
-			$this->headers = $headers;
-		}
+abstract class AbstractHttp extends Edde implements IHttp {
+    /** @var IHeaders */
+    protected $headers;
+    /** @var IContent|null */
+    protected $content;
 
-		/** @inheritdoc */
-		public function getHeaders(): IHeaders {
-			return $this->headers;
-		}
+    /**
+     * @param IHeaders $headers
+     */
+    public function __construct(IHeaders $headers) {
+        $this->headers = $headers;
+    }
 
-		/** @inheritdoc */
-		public function header(string $header, string $value): IHttp {
-			$this->headers->add($header, $value);
-			return $this;
-		}
+    /** @inheritdoc */
+    public function getHeaders(): IHeaders {
+        return $this->headers;
+    }
 
-		/** @inheritdoc */
-		public function headers(array $headers): IHttp {
-			$this->headers->put($headers);
-			return $this;
-		}
+    /** @inheritdoc */
+    public function header(string $header, string $value): IHttp {
+        $this->headers->add($header, $value);
+        return $this;
+    }
 
-		/** @inheritdoc */
-		public function setContent(IContent $content = null): IHttp {
-			$this->content = $content;
-			return $this;
-		}
+    /** @inheritdoc */
+    public function headers(array $headers): IHttp {
+        $this->headers->put($headers);
+        return $this;
+    }
 
-		/** @inheritdoc */
-		public function getContent(): ?IContent {
-			return $this->content;
-		}
-	}
+    /** @inheritdoc */
+    public function setContent(IContent $content = null): IHttp {
+        $this->content = $content;
+        return $this;
+    }
+
+    /** @inheritdoc */
+    public function getContent(): ?IContent {
+        return $this->content;
+    }
+}

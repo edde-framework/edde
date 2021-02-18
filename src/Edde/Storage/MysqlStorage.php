@@ -1,45 +1,47 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Storage;
+declare(strict_types=1);
 
-	use Edde\Service\Container\Container;
-	use Throwable;
+namespace Edde\Storage;
 
-	class MysqlStorage extends AbstractPdoStorage {
-		use Container;
-		const TYPES = [
-			'string'   => 'CHARACTER VARYING(1024)',
-			'text'     => 'LONGTEXT',
-			'json'     => 'LONGTEXT',
-			'binary'   => 'LONGTEXT',
-			'base64'   => 'LONGTEXT',
-			'int'      => 'INTEGER',
-			'float'    => 'DOUBLE PRECISION',
-			'bool'     => 'TINYINT',
-			'datetime' => 'DATETIME(6)',
-			'uuid'     => 'CHARACTER(36)',
-		];
+use Edde\Service\Container\Container;
+use Throwable;
 
-		public function __construct(string $config = 'mysql') {
-			parent::__construct($config);
-		}
+class MysqlStorage extends AbstractPdoStorage {
+    use Container;
 
-		/** @inheritdoc */
-		public function delimit(string $string): string {
-			return '`' . str_replace('`', '`' . '`', $string) . '`';
-		}
+    const TYPES = [
+        'string'   => 'CHARACTER VARYING(1024)',
+        'text'     => 'LONGTEXT',
+        'json'     => 'LONGTEXT',
+        'binary'   => 'LONGTEXT',
+        'base64'   => 'LONGTEXT',
+        'int'      => 'INTEGER',
+        'float'    => 'DOUBLE PRECISION',
+        'bool'     => 'TINYINT',
+        'datetime' => 'DATETIME(6)',
+        'uuid'     => 'CHARACTER(36)',
+    ];
 
-		/** @inheritdoc */
-		public function exception(Throwable $throwable): Throwable {
-			if (stripos($message = $throwable->getMessage(), 'duplicate') !== false) {
-				return new DuplicateEntryException($message, 0, $throwable);
-			} else if (stripos($message, 'cannot be null') !== false || stripos($message, 'have a default value') !== false) {
-				return new NullValueException($message, 0, $throwable);
-			} else if (stripos($message, 'table or view already exists') !== false) {
-				return new DuplicateTableException($message, 0, $throwable);
-			} else if (stripos($message, 'table or view not found') !== false) {
-				return new UnknownTableException($message, 0, $throwable);
-			}
-			return $throwable;
-		}
-	}
+    public function __construct(string $config = 'mysql') {
+        parent::__construct($config);
+    }
+
+    /** @inheritdoc */
+    public function delimit(string $string): string {
+        return '`' . str_replace('`', '`' . '`', $string) . '`';
+    }
+
+    /** @inheritdoc */
+    public function exception(Throwable $throwable): Throwable {
+        if (stripos($message = $throwable->getMessage(), 'duplicate') !== false) {
+            return new DuplicateEntryException($message, 0, $throwable);
+        } else if (stripos($message, 'cannot be null') !== false || stripos($message, 'have a default value') !== false) {
+            return new NullValueException($message, 0, $throwable);
+        } else if (stripos($message, 'table or view already exists') !== false) {
+            return new DuplicateTableException($message, 0, $throwable);
+        } else if (stripos($message, 'table or view not found') !== false) {
+            return new UnknownTableException($message, 0, $throwable);
+        }
+        return $throwable;
+    }
+}

@@ -1,12 +1,13 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Runtime;
+declare(strict_types=1);
 
-	use Edde\EddeException;
+namespace Edde\Runtime;
 
-	/**
-	 * Root exception for Runtime package; this exception should NOT be used
-	 * for general runtime faults, just for this package.
-	 */
-	class RuntimeException extends EddeException {
-	}
+use Edde\EddeException;
+
+/**
+ * Root exception for Runtime package; this exception should NOT be used
+ * for general runtime faults, just for this package.
+ */
+class RuntimeException extends EddeException {
+}

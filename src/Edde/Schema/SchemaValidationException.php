@@ -1,6 +1,7 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Schema;
+declare(strict_types=1);
 
-	class SchemaValidationException extends SchemaException {
-	}
+namespace Edde\Schema;
+
+class SchemaValidationException extends SchemaException {
+}

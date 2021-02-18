@@ -1,14 +1,15 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Content;
+declare(strict_types=1);
 
-	class GeneratorContent extends Content {
-		public function __construct(callable $content, string $type) {
-			parent::__construct($content, $type);
-		}
+namespace Edde\Content;
 
-		/** @inheritdoc */
-		public function getIterator() {
-			return ($this->content)();
-		}
-	}
+class GeneratorContent extends Content {
+    public function __construct(callable $content, string $type) {
+        parent::__construct($content, $type);
+    }
+
+    /** @inheritdoc */
+    public function getIterator() {
+        return ($this->content)();
+    }
+}

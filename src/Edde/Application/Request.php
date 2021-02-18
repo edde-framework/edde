@@ -1,40 +1,41 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Application;
+declare(strict_types=1);
 
-	use Edde\Edde;
+namespace Edde\Application;
 
-	class Request extends Edde implements IRequest {
-		/** @var string */
-		protected $service;
-		/** @var string */
-		protected $method;
-		/** @var array */
-		protected $params;
+use Edde\Edde;
 
-		/**
-		 * @param string $service
-		 * @param string $method
-		 * @param array  $params
-		 */
-		public function __construct(string $service, string $method, array $params = []) {
-			$this->service = $service;
-			$this->method = $method;
-			$this->params = $params;
-		}
+class Request extends Edde implements IRequest {
+    /** @var string */
+    protected $service;
+    /** @var string */
+    protected $method;
+    /** @var array */
+    protected $params;
 
-		/** @inheritdoc */
-		public function getService(): string {
-			return $this->service;
-		}
+    /**
+     * @param string $service
+     * @param string $method
+     * @param array  $params
+     */
+    public function __construct(string $service, string $method, array $params = []) {
+        $this->service = $service;
+        $this->method = $method;
+        $this->params = $params;
+    }
 
-		/** @inheritdoc */
-		public function getMethod(): string {
-			return $this->method;
-		}
+    /** @inheritdoc */
+    public function getService(): string {
+        return $this->service;
+    }
 
-		/** @inheritdoc */
-		public function getParams(): array {
-			return $this->params;
-		}
-	}
+    /** @inheritdoc */
+    public function getMethod(): string {
+        return $this->method;
+    }
+
+    /** @inheritdoc */
+    public function getParams(): array {
+        return $this->params;
+    }
+}

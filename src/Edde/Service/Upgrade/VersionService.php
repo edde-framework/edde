@@ -1,17 +1,18 @@
 <?php
-	declare(strict_types=1);
-	namespace Edde\Service\Upgrade;
+declare(strict_types=1);
 
-	use Edde\Upgrade\IVersionService;
+namespace Edde\Service\Upgrade;
 
-	trait VersionService {
-		/** @var IVersionService */
-		protected $versionService;
+use Edde\Upgrade\IVersionService;
 
-		/**
-		 * @param IVersionService $versionService
-		 */
-		public function injectVersionService(IVersionService $versionService): void {
-			$this->versionService = $versionService;
-		}
-	}
+trait VersionService {
+    /** @var IVersionService */
+    protected $versionService;
+
+    /**
+     * @param IVersionService $versionService
+     */
+    public function injectVersionService(IVersionService $versionService): void {
+        $this->versionService = $versionService;
+    }
+}
