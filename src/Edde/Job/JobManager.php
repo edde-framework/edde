@@ -3,27 +3,28 @@
 	namespace Edde\Job;
 
 	use Edde\Edde;
-	use Edde\Service\Config\ConfigService;
-	use Edde\Service\Job\JobExecutor;
-	use Edde\Service\Job\JobQueue;
-	use Edde\Service\Storage\Storage;
-	use Edde\Storage\IEntity;
+    use Edde\Service\Config\ConfigService;
+    use Edde\Service\Job\JobExecutor;
+    use Edde\Service\Job\JobQueue;
+    use Edde\Service\Storage\Storage;
+    use Edde\Storage\IEntity;
 
-	class JobManager extends Edde implements IJobManager {
-		use Storage;
-		use JobQueue;
-		use JobExecutor;
-		use ConfigService;
-		protected $limit;
-		protected $rate;
-		protected $sleep;
+    class JobManager extends Edde implements IJobManager {
+        use Storage;
+        use JobQueue;
+        use JobExecutor;
+        use ConfigService;
 
-		/** @inheritdoc */
-		public function run(): IJobManager {
-			/**
-			 * it's expected that job manager runs as a deamon, thus
-			 * it's necessary to reset pending jobs
-			 */
+        protected $limit;
+        protected $rate;
+        protected $sleep;
+
+        /** @inheritdoc */
+        public function run(): IJobManager {
+            /**
+             * it's expected that job manager runs as a daemon, thus
+             * it's necessary to reset pending jobs
+             */
 			$this->jobQueue->reset();
 			/**
 			 * execute never-ending story here; because job manager is run through system process manager,
