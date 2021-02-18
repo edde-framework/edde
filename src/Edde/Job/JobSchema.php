@@ -8,30 +8,6 @@ use Edde\Schema\UuidSchema;
 
 interface JobSchema extends UuidSchema {
     const alias = true;
-    /**
-     * a job is in queue; it's waiting for pickup (producer side)
-     */
-    const STATE_ENQUEUED = 0;
-    /**
-     * when message has been reset due restart or so (originally RUNNING messages)
-     */
-    const STATE_RESET = 1;
-    /**
-     * a job is scheduled and an executor should run the job (daemon side)
-     */
-    const STATE_SCHEDULED = 2;
-    /**
-     * a job has been started by a worker (worker side)
-     */
-    const STATE_RUNNING = 3;
-    /**
-     * a job has been successfully done (worker side)
-     */
-    const STATE_SUCCESS = 4;
-    /**
-     * a job has failed (worker/daemon side)
-     */
-    const STATE_FAILED = 5;
 
     /**
      * job state
